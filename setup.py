@@ -28,37 +28,43 @@ for (pkg, minversion) in dependencies:
         sys.exit(1)
 
 
-#This is a list of files to install, and where
-#(relative to the 'root' dir, where setup.py is)
-#You could be more specific.
+# This is a list of files to install, and where
+# (relative to the 'root' dir, where setup.py is)
+# You could be more specific.
 
 setup(
-    name = "pycraf",
-    version = "0.1",
-    description = "pycraf",
-    author = "Benjamin Winkel",
-    author_email = "bwinkel@mpifr.de",
-    url = "http://www.astro.uni-bonn.de/~bwinkel",
-    #Name the folder where your packages live:
-    #(If you have other packages (dirs) or modules (py files) then
-    #put them into the package directory - they will be found
-    #recursively.)
-    packages = [
-        'pycraf', 'pycraf.conversions'
+    name="pycraf",
+    version="0.1",
+    description="pycraf",
+    author="Benjamin Winkel",
+    author_email="bwinkel@mpifr.de",
+    url="http://www.astro.uni-bonn.de/~bwinkel",
+    # Name the folder where your packages live:
+    # (If you have other packages (dirs) or modules (py files) then
+    # put them into the package directory - they will be found
+    # recursively.)
+    packages=[
+        'pycraf', 'pycraf.conversions', 'pycraf.atm'
         ],
-    #'package' package must contain files (see list above)
-    #I called the package 'package' thus cleverly confusing the whole issue...
+    # 'package' package must contain files (see list above)
+    # I called the package 'package' thus cleverly confusing the whole issue...
     package_dir={
         'pycraf': 'src',
         'pycraf.conversions': 'src/conversions',
+        'pycraf.atm': 'src/atm',
         },
-    cmdclass = {'build_ext': build_ext},
-    ext_modules = [
+    cmdclass={'build_ext': build_ext},
+    ext_modules=[
         ],
-    #This dict maps the package name =to=> directories
-    #It says, package *needs* these files.
+    # This dict maps the package name =to=> directories
+    # It says, package *needs* these files.
     # note, wildcards are allowed
-    #package_data = {'pycraf' : ['', ''] },
-    long_description = """pycraf ... the CRAF library.
+    package_data={
+        'pycraf': [
+            'atm/data/R-REC-P.676-10-201309_table1.csv',
+            'atm/data/R-REC-P.676-10-201309_table2.csv'
+            ]
+        },
+    long_description="""pycraf ... the CRAF library.
     contains useful functions for the daily life"""
 )
