@@ -6,9 +6,6 @@ from __future__ import (
     absolute_import, unicode_literals, division, print_function
     )
 
-import math
-import matplotlib
-import matplotlib.pyplot as plt
 import numpy as np
 from astropy import units as apu
 from astropy.units.quantity import Quantity
@@ -120,7 +117,7 @@ def Ptx_from_Erx(Erx, d, Gtx):
     assert isinstance(d, Quantity), 'd must be an astropy Quantity object'
     assert isinstance(Gtx, Quantity), 'Gtx must be an astropy Quantity object'
 
-    return 4. * math.pi * d ** 2 / Gtx * Erx ** 2 / R0
+    return 4. * np.pi * d ** 2 / Gtx * Erx ** 2 / R0
 
 
 def Erx_from_Ptx(Ptx, d, Gtx):
@@ -144,7 +141,7 @@ def Erx_from_Ptx(Ptx, d, Gtx):
     assert isinstance(d, Quantity), 'd must be an astropy Quantity object'
     assert isinstance(Gtx, Quantity), 'Gtx must be an astropy Quantity object'
 
-    return (Ptx * Gtx / 4. / math.pi * R0) ** 0.5 / d
+    return (Ptx * Gtx / 4. / np.pi * R0) ** 0.5 / d
 
 
 def S_from_Ptx(Ptx, d, Gtx):
@@ -169,8 +166,8 @@ def S_from_Ptx(Ptx, d, Gtx):
     assert isinstance(Gtx, apu.Quantity), 'Gtx must be an astropy Quantity object'
 
     # log-units seem not yet flexible enough to make the simpler statement work:
-    # return Gtx * Ptx / 4. / math.pi / d ** 2
-    return Gtx.to(apu.Unit(1)) * Ptx.to(apu.Watt) / 4. / math.pi / d ** 2
+    # return Gtx * Ptx / 4. / np.pi / d ** 2
+    return Gtx.to(apu.Unit(1)) * Ptx.to(apu.Watt) / 4. / np.pi / d ** 2
 
 
 def Ptx_from_S(S, d, Gtx):
@@ -194,7 +191,7 @@ def Ptx_from_S(S, d, Gtx):
     assert isinstance(d, Quantity), 'd must be an astropy Quantity object'
     assert isinstance(Gtx, Quantity), 'Gtx must be an astropy Quantity object'
 
-    return S.to(apu.Watt / apu.m ** 2) * 4. * math.pi * d ** 2 / Gtx.to(apu.Unit(1))
+    return S.to(apu.Watt / apu.m ** 2) * 4. * np.pi * d ** 2 / Gtx.to(apu.Unit(1))
 
 
 def Prx_from_S(S, f, Grx):
@@ -219,7 +216,7 @@ def Prx_from_S(S, f, Grx):
     assert isinstance(Grx, Quantity), 'Grx must be an astropy Quantity object'
 
     return S.to(apu.Watt / apu.m ** 2) * Grx.to(apu.Unit(1)) * (
-        con.c ** 2 / 4. / math.pi / f ** 2
+        con.c ** 2 / 4. / np.pi / f ** 2
         )
 
 
@@ -245,7 +242,7 @@ def S_from_Prx(Prx, f, Grx):
     assert isinstance(Grx, Quantity), 'Grx must be an astropy Quantity object'
 
     return Prx.to(apu.Watt) / Grx.to(apu.Unit(1)) * (
-        4. * math.pi * f ** 2 / con.c ** 2
+        4. * np.pi * f ** 2 / con.c ** 2
         )
 
 
@@ -265,7 +262,7 @@ def free_space_loss(dist, freq):
     Free-space loss, FSPL
     '''
 
-    return (con.c / 4. / math.pi / freq / dist)  ** 2
+    return (con.c / 4. / np.pi / freq / dist)  ** 2
 
 
 # define some useful constants
