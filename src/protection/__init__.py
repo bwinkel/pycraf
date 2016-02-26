@@ -4,4 +4,5 @@
 
 
 from .ra769 import *
+from .cispr import *
 

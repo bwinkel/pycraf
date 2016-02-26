@@ -48,8 +48,8 @@ Erx_unit = (1 * apu.watt / 4. / np.pi * R0) ** 0.5 / (1 * apu.km)
 
 def Aeff_from_Ageom(Ageom, eta_a):
 
-    assert isinstance(Ageom, apu.Quantity), 'Ageom must be an astropy Quantity object'
-    assert isinstance(eta_a, apu.Quantity), 'eta_a must be an astropy Quantity object'
+    assert isinstance(Ageom, Quantity), 'Ageom must be an astropy Quantity object'
+    assert isinstance(eta_a, Quantity), 'eta_a must be an astropy Quantity object'
 
     return Ageom * eta_a
 
@@ -197,9 +197,9 @@ def S_from_Ptx(Ptx, d, Gtx):
     Power flux density, S (at receiver location)
     '''
 
-    assert isinstance(Ptx, apu.Quantity), 'Ptx must be an astropy Quantity object'
-    assert isinstance(d, apu.Quantity), 'd must be an astropy Quantity object'
-    assert isinstance(Gtx, apu.Quantity), 'Gtx must be an astropy Quantity object'
+    assert isinstance(Ptx, Quantity), 'Ptx must be an astropy Quantity object'
+    assert isinstance(d, Quantity), 'd must be an astropy Quantity object'
+    assert isinstance(Gtx, Quantity), 'Gtx must be an astropy Quantity object'
 
     # log-units seem not yet flexible enough to make the simpler statement work:
     # return Gtx * Ptx / 4. / np.pi / d ** 2
