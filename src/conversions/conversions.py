@@ -8,9 +8,14 @@ from __future__ import (
 
 import numpy as np
 from astropy import units as apu
-from astropy.units.quantity import Quantity
+from astropy.units import Quantity, UnitsError
 import astropy.constants as con
 
+
+__units__ = [
+    'dimless', 'dB', 'dB_W', 'dB_W_Hz', 'dB_W_m2', 'dB_W_m2_Hz', 'dB_Jy_Hz',
+    'dB_mW', 'dB_uV_m',
+    ]
 
 __all__ = [
     'Aeff_from_Ageom', 'Ageom_from_Aeff',
@@ -19,9 +24,26 @@ __all__ = [
     'Ptx_from_Erx', 'Erx_from_Ptx',
     'S_from_Ptx', 'Ptx_from_S',
     'Prx_from_S', 'S_from_Prx',
+    'Prx_from_Ptx', 'Ptx_from_Prx',
     'free_space_loss',
-    'Erx_unit', 'R0', 'dB_W', 'dB_mW', 'db_uV_m'
-    ]
+    'Erx_unit', 'R0',
+    ] + __units__
+
+
+# define some useful dB-Scales
+dimless = apu.Unit(1)
+dB = apu.dB(dimless)
+dB_W = apu.dB(apu.watt)
+dB_W_Hz = apu.dB(apu.watt / apu.Hz)
+dB_W_m2 = apu.dB(apu.watt / apu.m ** 2)
+dB_W_m2_Hz = apu.dB(apu.watt / apu.Hz / apu.m ** 2)
+dB_Jy_Hz = apu.dB(apu.jansky * apu.Hz)
+dB_mW = apu.dB(apu.milliwatt)
+dB_uV_m = apu.dB(apu.microvolt ** 2 / apu.meter ** 2)
+
+# define some useful constants
+R0 = 1. * (con.mu0 / con.eps0)  ** 0.5
+Erx_unit = (1 * apu.watt / 4. / np.pi * R0) ** 0.5 / (1 * apu.km)
 
 
 def Aeff_from_Ageom(Ageom, eta_a):
@@ -73,7 +95,11 @@ def S_from_E(E):
 
     assert isinstance(E, Quantity), 'E must be an astropy Quantity object'
 
-    return E ** 2 / R0
+    # if Erx is in dB_uV_m units, we have to sqrt it first
+    try:
+        return E.to(apu.microvolt / apu.meter) ** 2 / R0
+    except UnitsError:
+        return E.to(apu.microvolt ** 2 / apu.meter ** 2) / R0
 
 
 def E_from_S(S):
@@ -117,7 +143,17 @@ def Ptx_from_Erx(Erx, d, Gtx):
     assert isinstance(d, Quantity), 'd must be an astropy Quantity object'
     assert isinstance(Gtx, Quantity), 'Gtx must be an astropy Quantity object'
 
-    return 4. * np.pi * d ** 2 / Gtx * Erx ** 2 / R0
+    # if Erx is in dB_uV_m units, we have to sqrt it first
+    try:
+        return (
+            4. * np.pi * d ** 2 / Gtx.to(dimless) *
+            Erx.to(apu.microvolt / apu.meter) ** 2 / R0
+            )
+    except UnitsError:
+        return (
+            4. * np.pi * d ** 2 / Gtx.to(dimless) *
+            Erx.to(apu.microvolt ** 2 / apu.meter ** 2) / R0
+            )
 
 
 def Erx_from_Ptx(Ptx, d, Gtx):
@@ -141,7 +177,7 @@ def Erx_from_Ptx(Ptx, d, Gtx):
     assert isinstance(d, Quantity), 'd must be an astropy Quantity object'
     assert isinstance(Gtx, Quantity), 'Gtx must be an astropy Quantity object'
 
-    return (Ptx * Gtx / 4. / np.pi * R0) ** 0.5 / d
+    return (Ptx.to(apu.Watt) * Gtx.to(dimless) / 4. / np.pi * R0) ** 0.5 / d
 
 
 def S_from_Ptx(Ptx, d, Gtx):
@@ -167,7 +203,7 @@ def S_from_Ptx(Ptx, d, Gtx):
 
     # log-units seem not yet flexible enough to make the simpler statement work:
     # return Gtx * Ptx / 4. / np.pi / d ** 2
-    return Gtx.to(apu.Unit(1)) * Ptx.to(apu.Watt) / 4. / np.pi / d ** 2
+    return Gtx.to(dimless) * Ptx.to(apu.Watt) / 4. / np.pi / d ** 2
 
 
 def Ptx_from_S(S, d, Gtx):
@@ -191,7 +227,7 @@ def Ptx_from_S(S, d, Gtx):
     assert isinstance(d, Quantity), 'd must be an astropy Quantity object'
     assert isinstance(Gtx, Quantity), 'Gtx must be an astropy Quantity object'
 
-    return S.to(apu.Watt / apu.m ** 2) * 4. * np.pi * d ** 2 / Gtx.to(apu.Unit(1))
+    return S.to(apu.Watt / apu.m ** 2) * 4. * np.pi * d ** 2 / Gtx.to(dimless)
 
 
 def Prx_from_S(S, f, Grx):
@@ -215,7 +251,7 @@ def Prx_from_S(S, f, Grx):
     assert isinstance(f, Quantity), 'f must be an astropy Quantity object'
     assert isinstance(Grx, Quantity), 'Grx must be an astropy Quantity object'
 
-    return S.to(apu.Watt / apu.m ** 2) * Grx.to(apu.Unit(1)) * (
+    return S.to(apu.Watt / apu.m ** 2) * Grx.to(dimless) * (
         con.c ** 2 / 4. / np.pi / f ** 2
         )
 
@@ -241,7 +277,7 @@ def S_from_Prx(Prx, f, Grx):
     assert isinstance(f, Quantity), 'f must be an astropy Quantity object'
     assert isinstance(Grx, Quantity), 'Grx must be an astropy Quantity object'
 
-    return Prx.to(apu.Watt) / Grx.to(apu.Unit(1)) * (
+    return Prx.to(apu.Watt) / Grx.to(dimless) * (
         4. * np.pi * f ** 2 / con.c ** 2
         )
 
@@ -262,17 +298,68 @@ def free_space_loss(dist, freq):
     Free-space loss, FSPL
     '''
 
+    assert isinstance(dist, Quantity), 'dist must be an astropy Quantity object'
+    assert isinstance(freq, Quantity), 'freq must be an astropy Quantity object'
+
     return (con.c / 4. / np.pi / freq / dist)  ** 2
 
 
-# define some useful constants
-R0 = 1. * (con.mu0 / con.eps0)  ** 0.5
-Erx_unit = Erx_from_Ptx(1 * apu.watt, 1 * apu.km, 1 * apu.Unit(1))
+def Prx_from_Ptx(Ptx, Gtx, Grx, dist, freq):
+    '''
+    Calculate received power, Prx, from transmitted power.
 
-# define some useful dB-Scales
-dB_W = apu.dB(apu.watt)
-dB_mW = apu.dB(apu.milliwatt)
-db_uV_m = apu.dB(apu.microvolt ** 2 / apu.meter ** 2)
+    Note: All quantities must be astropy Quantities (astropy.units.quantity.Quantity).
+
+    Parameters
+    ----------
+    Ptx - Transmitter power
+    Gtx - Gain of transmitter
+    Grx - Gain of receiver
+    dist - Distance between transmitter and receiver
+    freq - Frequency of radiation
+
+    Returns
+    -------
+    Received power, Prx
+    '''
+
+    assert isinstance(Ptx, Quantity), 'Ptx must be an astropy Quantity object'
+    assert isinstance(Gtx, Quantity), 'Gtx must be an astropy Quantity object'
+    assert isinstance(Grx, Quantity), 'Grx must be an astropy Quantity object'
+
+    return (
+        Ptx.to(apu.W) * Gtx.to(dimless) * Grx.to(dimless) *
+        free_space_loss(dist, freq).to(dimless)
+        )
+
+
+def Ptx_from_Prx(Prx, Gtx, Grx, dist, freq):
+    '''
+    Calculate transmitted power, Prx, from received power.
+
+    Note: All quantities must be astropy Quantities (astropy.units.quantity.Quantity).
+
+    Parameters
+    ----------
+    Prx - Received power
+    Gtx - Gain of transmitter
+    Grx - Gain of receiver
+    dist - Distance between transmitter and receiver
+    freq - Frequency of radiation
+
+    Returns
+    -------
+    Transmitter power, Ptx
+    '''
+
+    assert isinstance(Prx, Quantity), 'Prx must be an astropy Quantity object'
+    assert isinstance(Gtx, Quantity), 'Gtx must be an astropy Quantity object'
+    assert isinstance(Grx, Quantity), 'Grx must be an astropy Quantity object'
+
+    return (
+        Prx.to(apu.W) / Gtx.to(dimless) / Grx.to(dimless) /
+        free_space_loss(dist, freq).to(dimless)
+        )
 
 
 if __name__ == '__main__':
