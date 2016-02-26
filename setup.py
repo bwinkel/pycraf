@@ -44,7 +44,7 @@ setup(
     # put them into the package directory - they will be found
     # recursively.)
     packages=[
-        'pycraf', 'pycraf.conversions', 'pycraf.atm'
+        'pycraf', 'pycraf.conversions', 'pycraf.atm', 'pycraf.protection'
         ],
     # 'package' package must contain files (see list above)
     # I called the package 'package' thus cleverly confusing the whole issue...
@@ -52,6 +52,7 @@ setup(
         'pycraf': 'src',
         'pycraf.conversions': 'src/conversions',
         'pycraf.atm': 'src/atm',
+        'pycraf.protection': 'src/protection',
         },
     cmdclass={'build_ext': build_ext},
     ext_modules=[
@@ -62,7 +63,9 @@ setup(
     package_data={
         'pycraf': [
             'atm/data/R-REC-P.676-10-201309_table1.csv',
-            'atm/data/R-REC-P.676-10-201309_table2.csv'
+            'atm/data/R-REC-P.676-10-201309_table2.csv',
+            'protection/data/ra_769_table1_limits_continuum.csv',
+            'protection/data/ra_769_table2_limits_spectroscopy.csv',
             ]
         },
     long_description="""pycraf ... the CRAF library.
