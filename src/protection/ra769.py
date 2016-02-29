@@ -11,7 +11,7 @@ import numpy as np
 from astropy import units as apu
 from astropy.units import Quantity, UnitsError
 import astropy.constants as con
-from astropy.table import QTable
+from astropy.table import QTable, Table
 from ..conversions import *
 
 
@@ -42,25 +42,63 @@ def protection_limits(mode='continuum'):
     qtab['T_rms'] = (
         (qtab['T_A'] + qtab['T_rx']) /
         np.sqrt(2000. * apu.s * qtab['bandwidth'])
-        )
-    qtab['P_rms_nu'] = con.k_B * qtab['T_rms']
-    qtab['Plim'] = 0.1 * qtab['P_rms_nu'] * qtab['bandwidth']
+        ).to(apu.mK)
+    qtab['P_rms_nu'] = (con.k_B * qtab['T_rms']).to(apu.Watt / apu.Hz)
+    qtab['Plim'] = (0.1 * qtab['P_rms_nu'] * qtab['bandwidth']).to(apu.Watt)
     qtab['Slim'] = (
         4. * np.pi / con.c ** 2 * qtab['frequency'] ** 2 * qtab['Plim']
-        )
-    qtab['Slim_nu'] = qtab['Slim'] / qtab['bandwidth']
+        ).to(apu.Jy * apu.Hz)
+    qtab['Slim_nu'] = (qtab['Slim'] / qtab['bandwidth']).to(apu.Jy)
 
     # field strength from full bandwidth:
-    qtab['Efield'] = np.sqrt(R0 * qtab['Slim'])
-    qtab['Efield2'] = (qtab['Efield'] ** 2).to(dB_uV_m)
+    qtab['Efield'] = (np.sqrt(R0 * qtab['Slim'])).to(apu.microvolt / apu.m)
+    # qtab['Efield2'] = (qtab['Efield'] ** 2).to(dB_uV_m)
 
     # now normalize for 1 MHz BW for comparison with spectroscopy
     # TODO: is this correct???
     qtab['Efield_norm'] = np.sqrt(R0 * qtab['Slim'] *
         apu.MHz / qtab['bandwidth'].to(apu.MHz)
-        )
-    qtab['Efield2_norm'] = (qtab['Efield_norm'] ** 2).to(dB_uV_m)
+        ).to(apu.microvolt / apu.m)
+    # qtab['Efield2_norm'] = (qtab['Efield_norm'] ** 2).to(dB_uV_m)
 
-    return qtab
+    qtab_dB = QTable(meta={'name': 'RA.769 {} limits'.format(mode)})
+    qtab_dB['frequency'] = qtab['frequency']
+    qtab_dB['bandwidth'] = qtab['bandwidth']
+    qtab_dB['T_A'] = qtab['T_A']
+    qtab_dB['T_rx'] = qtab['T_rx']
+    qtab_dB['T_rms'] = qtab['T_rms']
+    qtab_dB['P_rms_nu'] = qtab['P_rms_nu']
+    qtab_dB['Plim'] = qtab['Plim'].to(dB_W)
+    qtab_dB['Slim'] = qtab['Slim'].to(dB_W_m2)
+    qtab_dB['Slim_nu'] = qtab['Slim_nu'].to(dB_W_m2_Hz)
+    qtab_dB['Efield'] = (qtab['Efield'] ** 2).to(dB_uV_m)
+    qtab_dB['Efield_norm'] = (qtab['Efield_norm'] ** 2).to(dB_uV_m)
+
+    # table formatting doesn't seem to work for QTable, so we convert
+
+    tab = Table(qtab)
+    tab_dB = Table(qtab_dB)
+
+    for col in ['frequency', 'bandwidth', 'T_A', 'T_rx']:
+        tab[col].format = '%.0f'
+        tab_dB[col].format = '%.0f'
+
+    for col in ['T_rms']:
+        tab[col].format = '%.3f'
+        tab_dB[col].format = '%.3f'
+
+    for col in [
+            'P_rms_nu', 'Plim', 'Slim', 'Slim_nu', 'Efield', 'Efield_norm'
+            ]:
+        tab[col].format = '%.1e'
+
+    for col in [
+            'Plim', 'Slim', 'Slim_nu', 'Efield', 'Efield_norm'
+            ]:
+        tab_dB[col].format = '%.1f'
+
+    tab_dB['P_rms_nu'].format = '%.1f'
+
+    return tab, tab_dB
 
 
