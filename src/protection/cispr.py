@@ -1,6 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Licensed under GPL v2 - see LICENSE
 
 from __future__ import (
     absolute_import, unicode_literals, division, print_function
@@ -38,7 +37,7 @@ def _cispr_limits(
     subtract 5.5 dB.
     '''
 
-    assert isinstance(freq, Quantity), 'freq must be an astropy Quantity object'
+    assert isinstance(freq, Quantity), 'freq must be astropy Quantity object'
     assert params is not None
 
     assert detector_type in ['QP', 'RMS']
@@ -67,7 +66,7 @@ def _cispr_limits(
         params['meas_bw']
         )
 
-cispr11_params = {
+CISPR11_PARAMS = {
     'lims': [
         (0 * apu.MHz, 230 * apu.MHz, 30 * dB_uV_m),
         (230 * apu.MHz, 1e20 * apu.MHz, 37 * dB_uV_m)
@@ -75,9 +74,9 @@ cispr11_params = {
     'dist': 30 * apu.meter,
     'meas_bw': 120 * apu.kHz
     }
-cispr11_limits = partial(_cispr_limits, params=cispr11_params)
+cispr11_limits = partial(_cispr_limits, params=CISPR11_PARAMS)
 
-cispr22_params = {
+CISPR22_PARAMS = {
     'lims': [
         (0 * apu.MHz, 230 * apu.MHz, 40 * dB_uV_m),
         (230 * apu.MHz, 1000 * apu.MHz, 47 * dB_uV_m),
@@ -87,4 +86,4 @@ cispr22_params = {
     'dist': 30 * apu.meter,
     'meas_bw': 120 * apu.kHz  # is this correct?
     }
-cispr22_limits = partial(_cispr_limits, params=cispr22_params)
+cispr22_limits = partial(_cispr_limits, params=CISPR22_PARAMS)

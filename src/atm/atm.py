@@ -1,6 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Licensed under GPL v2 - see LICENSE
 
 from __future__ import (
     absolute_import, unicode_literals, division, print_function
@@ -31,8 +30,12 @@ __all__ = [
 
 
 this_dir, this_filename = os.path.split(__file__)
-fname_oxygen = os.path.join(this_dir, 'data', 'R-REC-P.676-10-201309_table1.csv')
-fname_water = os.path.join(this_dir, 'data', 'R-REC-P.676-10-201309_table2.csv')
+fname_oxygen = os.path.join(
+    this_dir, 'data', 'R-REC-P.676-10-201309_table1.csv'
+    )
+fname_water = os.path.join(
+    this_dir, 'data', 'R-REC-P.676-10-201309_table2.csv'
+    )
 
 oxygen_dtype = np.dtype([
     (str(s), np.float64) for s in ['f0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6']
@@ -176,7 +179,7 @@ def humidity_from_pressure_water(
         temperature, pressure, wet_type=wet_type
         )
 
-    humidity  = 100. * pressure_water / e_s
+    humidity = 100. * pressure_water / e_s
 
     return humidity
 
@@ -248,7 +251,6 @@ def standard_profile(height):
     # to make this work with numpy arrays
     # lets first find the correct index for every height
 
-
     layer_heights = np.array([0., 11., 20., 32., 47., 51., 71., 85.])
     indices = np.zeros(_height.shape, dtype=np.int32)
     for i, lh in enumerate(layer_heights[0:-1]):
@@ -263,11 +265,11 @@ def standard_profile(height):
     layer_start_pressures = [P0]
     for i in range(1, len(layer_heights) - 1):
 
-        dh = layer_heights[i] - layer_heights[i-1]
-        Ti = layer_start_temperatures[i-1]
-        Li = layer_temp_gradients[i-1]
-        Pi = layer_start_pressures[i-1]
-        #print i, Ti, Li, Pi, i - 1 not in [1, 4]
+        dh = layer_heights[i] - layer_heights[i - 1]
+        Ti = layer_start_temperatures[i - 1]
+        Li = layer_temp_gradients[i - 1]
+        Pi = layer_start_pressures[i - 1]
+        # print(i, Ti, Li, Pi, i - 1 not in [1, 4])
         layer_start_temperatures.append(Ti + dh * Li)
         layer_start_pressures.append(
             Pi * (
@@ -344,8 +346,10 @@ def _profile_helper(
     Parameters
     ----------
     height - height above ground (km, array or scalar)
-    [temp,press,rho]_heights - list of height steps for which piece-wise functions are defined
-    [temp,press,rho]_funcs - list of functions valid for the according height interval
+    [temp,press,rho]_heights - list of height steps for which piece-wise
+        functions are defined
+    [temp,press,rho]_funcs - list of functions valid for the according height
+        interval
 
     Returns
     -------
@@ -421,7 +425,7 @@ def _profile_helper(
 
 def low_latitude_profile(height):
     '''
-    Compute "low latitude" height profile functions according to ITU R-P.835-5.
+    Compute "low latitude" height profiles according to ITU R-P.835-5.
 
     Valid for geographic latitudes |phi| < 22 deg.
 
@@ -459,7 +463,10 @@ def low_latitude_profile(height):
     rho_heights = [0., 15., 100.]
     rho_funcs = [
         lambda h: 19.6542 * np.exp(
-            -0.2313 * h - 0.1122 * h ** 2 + 0.01351 * h ** 3 - 0.0005923 * h ** 4
+            -0.2313 * h -
+            0.1122 * h ** 2 +
+            0.01351 * h ** 3 -
+            0.0005923 * h ** 4
             ),
         lambda h: 0.,
         ]
@@ -474,7 +481,7 @@ def low_latitude_profile(height):
 
 def mid_latitude_summer_profile(height):
     '''
-    Compute "mid latitude summer" height profile functions according to ITU R-P.835-5.
+    Compute "mid latitude summer" height profiles according to ITU R-P.835-5.
 
     Valid for geographic latitudes 22 deg < |phi| < 45 deg.
 
@@ -528,7 +535,7 @@ def mid_latitude_summer_profile(height):
 
 def mid_latitude_winter_profile(height):
     '''
-    Compute "mid latitude winter" height profile functions according to ITU R-P.835-5.
+    Compute "mid latitude winter" height profiles according to ITU R-P.835-5.
 
     Valid for geographic latitudes 22 deg < |phi| < 45 deg.
 
@@ -582,7 +589,7 @@ def mid_latitude_winter_profile(height):
 
 def high_latitude_summer_profile(height):
     '''
-    Compute "high latitude summer" height profile functions according to ITU R-P.835-5.
+    Compute "high latitude summer" height profiles according to ITU R-P.835-5.
 
     Valid for geographic latitudes |phi| > 45 deg.
 
@@ -636,7 +643,7 @@ def high_latitude_summer_profile(height):
 
 def high_latitude_winter_profile(height):
     '''
-    Compute "high latitude winter" height profile functions according to ITU R-P.835-5.
+    Compute "high latitude winter" height profiles according to ITU R-P.835-5.
 
     Valid for geographic latitudes |phi| > 45 deg.
 
@@ -707,7 +714,11 @@ def _S_oxygen(pressure_dry, temperature):
     theta = 300. / temperature
     factor = 1.e-7 * pressure_dry * theta ** 3
 
-    return resonances_oxygen['a1'] * factor * np.exp(resonances_oxygen['a2'] * (1. - theta))
+    return (
+        resonances_oxygen['a1'] *
+        factor *
+        np.exp(resonances_oxygen['a2'] * (1. - theta))
+        )
 
 
 def _S_water(pressure_water, temperature):
@@ -730,12 +741,16 @@ def _S_water(pressure_water, temperature):
     theta = 300. / temperature
     factor = 1.e-1 * pressure_water * theta ** 3.5
 
-    return resonances_water['b1'] * factor * np.exp(resonances_water['b2'] * (1. - theta))
+    return (
+        resonances_water['b1'] *
+        factor *
+        np.exp(resonances_water['b2'] * (1. - theta))
+        )
 
 
 def _Delta_f_oxygen(pressure_dry, pressure_water, temperature):
     '''
-    Calculate line width for all oxygen resonances (Equation [P.676-10: 6a/b]).
+    Calculate line width for all oxygen resonances (Eq. [P.676-10: 6a/b]).
 
     Parameters
     ----------
@@ -760,7 +775,7 @@ def _Delta_f_oxygen(pressure_dry, pressure_water, temperature):
 
 def _Delta_f_water(pressure_dry, pressure_water, temperature):
     '''
-    Calculate line width for all water vapor resonances (Equation [P.676-10: 6a/b]).
+    Calculate line width for all water resonances (Eq. [P.676-10: 6a/b]).
 
     Parameters
     ----------
@@ -776,7 +791,10 @@ def _Delta_f_water(pressure_dry, pressure_water, temperature):
     '''
 
     theta = 300. / temperature
-    f0, b3, b4, b5, b6 = (resonances_water[b] for b in ['f0', 'b3', 'b4', 'b5', 'b6'])
+    f0, b3, b4, b5, b6 = (
+        resonances_water[b]
+        for b in ['f0', 'b3', 'b4', 'b5', 'b6']
+        )
 
     df = b3 * 1.e-4 * (
         pressure_dry * theta ** b4 +
@@ -789,7 +807,7 @@ def _Delta_f_water(pressure_dry, pressure_water, temperature):
 
 def _delta_oxygen(pressure_dry, pressure_water, temperature):
     '''
-    Calculate shape correction factor for all oxygen resonances (Equation [P.676-10: 7]).
+    Calculate shape correction for all oxygen resonances (Eq. [P.676-10: 7]).
 
     Parameters
     ----------
@@ -821,23 +839,25 @@ def _delta_water():
 
 def _F(freq_grid, f_i, Delta_f, delta):
     '''
-    Calculate line-profile shapes for all resonances at the freq_grid positions.
+    Calculate line-profiles for all resonances at the freq_grid positions.
     (Equation [P.676-10: 5])
-
 
     Parameters
     ----------
     freq_grid - Frequencies (GHz) at which to calculate line-width shapes
     f_i - Resonance line frequencies (GHz)
     Delta_f - line widths of all resonances
-    delta - correction factors to account for interference effects in oxygen lines
+    delta - correction factors to account for interference effects in oxygen
+        lines
 
     Returns
     -------
-    m x n Array with the line-shape values (n = len(freq_grid), m = len(Delta_f))
+    m x n Array with the line-shape values
+        (n = len(freq_grid), m = len(Delta_f))
 
-    Note: no integration is done between freq_grid positions, so if you're interested
-    in high accuracy near resonance lines, make your freq_grid sufficiently fine.
+    Note: no integration is done between freq_grid positions, so if you're
+    interested in high accuracy near resonance lines, make your freq_grid
+    sufficiently fine.
     '''
 
     _freq_grid = freq_grid[np.newaxis]
@@ -855,7 +875,8 @@ def _F(freq_grid, f_i, Delta_f, delta):
 
 def _N_D_prime2(freq_grid, pressure_dry, pressure_water, temperature):
     '''
-    Compute dry air continuum absorption, aka Debye spectrum (Equation [P.676-10: 8/9])
+    Compute dry air continuum absorption, aka Debye spectrum
+    (Equation [P.676-10: 8/9])
 
     Parameters
     ----------
@@ -878,9 +899,12 @@ def _N_D_prime2(freq_grid, pressure_dry, pressure_water, temperature):
     return freq_grid * pressure_dry * theta ** 2 * (sum_1 + sum_2)
 
 
-def specific_attenuation_annex1(freq_grid, pressure_dry, pressure_water, temperature):
+def specific_attenuation_annex1(
+        freq_grid, pressure_dry, pressure_water, temperature
+        ):
     '''
-    Compute specific (one layer) atmospheric attenuation according to ITU-R P.676-10, annex 1.
+    Compute specific (one layer) atmospheric attenuation according to
+    ITU-R P.676-10, annex 1.
 
     Parameters
     ----------
@@ -902,7 +926,9 @@ def specific_attenuation_annex1(freq_grid, pressure_dry, pressure_water, tempera
     F_o2 = _F(freq_grid, f_i, Delta_f, delta)
 
     atten_o2 = np.sum(S_o2[:, np.newaxis] * F_o2, axis=0)
-    atten_o2 += _N_D_prime2(freq_grid, pressure_dry, pressure_water, temperature)
+    atten_o2 += _N_D_prime2(
+        freq_grid, pressure_dry, pressure_water, temperature
+        )
 
     # now, wet contribution
     S_h2o = _S_water(pressure_water, temperature)
@@ -918,8 +944,8 @@ def specific_attenuation_annex1(freq_grid, pressure_dry, pressure_water, tempera
 
 def terrestrial_attenuation(specific_atten, path_length):
     '''
-    Calculate total path attenuation for a path close to the ground (i.e., one layer).
-    According to ITU-R P.676-10, annex 1.
+    Calculate total path attenuation for a path close to the ground
+    (i.e., one layer), according to ITU-R P.676-10, annex 1.
 
     Parameters
     ----------
@@ -936,27 +962,29 @@ def terrestrial_attenuation(specific_atten, path_length):
 
 def _prepare_path(elevation, obs_alt, profile_func, max_path_length=1000.):
     '''
-    Helper function to construct the path parameters. See ITU-R P.676-10, annex 1.
+    Helper function to construct the path parameters.
+    See ITU-R P.676-10, annex 1.
 
     Parameters
     ----------
     elevation - (Apparent) elevation of source as seen from observer (degrees)
     obs_alt - Height of observer above sea-level (m)
-    profile_func - function having height (above sea-level in km) as parameter, and
-        that returns
+    profile_func - function having height (above sea-level in km) as
+        parameter, and that returns
             - Temperature (K)
             - Total pressure (hPa)
             - Water vapor density (g / m**3)
             - Water vapor partial pressure (hPa)
             - Refractive index (dimensionless)
-            - Relative humidity (%) if water vapour was in form of liquid water
+            - Relative humidity (%) if water vapour was in form of liquid
+              water
             - Relative humidity (%) if water vapour was in form of ice
-        for that height. Note, this function must have the same signature as the
-        standardized atmospheric height profiles, but since only temperature,
-        total pressure and water vapor pressure are needed here, you can return
-        dummy values for the rest.
-    max_path_length - Maximal length of path (km) before stopping iteration (default: 1000 km)
-        (useful for terrestrial paths)
+        for that height. Note, this function must have the same signature as
+        the standardized atmospheric height profiles, but since only
+        temperature, total pressure and water vapor pressure are needed here,
+        you can return dummy values for the rest.
+    max_path_length - Maximal length of path (km) before stopping iteration
+        (default: 1000 km; useful for terrestrial paths)
 
     Returns
     -------
@@ -971,18 +999,19 @@ def _prepare_path(elevation, obs_alt, profile_func, max_path_length=1000.):
             (aka projected angular distance to starting point)
         beta_n - entry angle
         h_n - height above sea-level (km)
-    Refraction - Offset w.r.t. to a hypothetical straight path, i.e., the correction
-        between real and apparent source elevation (degrees)
+    Refraction - Offset w.r.t. to a hypothetical straight path, i.e., the
+        correction between real and apparent source elevation (degrees)
     '''
 
     # construct height layers
-    # deltas = 0.0001 * np.exp(np.arange(922) / 100.)  # atm profiles only up to 80 km...
+    # deltas = 0.0001 * np.exp(np.arange(922) / 100.)
+    # atm profiles only up to 80 km...
     deltas = 0.0001 * np.exp(np.arange(899) / 100.)
     heights = np.cumsum(deltas)
 
     # radius calculation
     # TODO: do we need to account for non-spherical Earth?
-    #       probably not - some tests suggest that the relative error is < 1e-6
+    # probably not - some tests suggest that the relative error is < 1e-6
     earth_radius = 6371. + obs_alt / 1000.
     radii = earth_radius + heights  # distance Earth-center to layers
 
@@ -1012,9 +1041,11 @@ def _prepare_path(elevation, obs_alt, profile_func, max_path_length=1000.):
     # all angles in rad
     beta_n = beta_0 = np.radians(90. - elevation)  # initial value
 
-    # we will store a_n, gamma_n, and temperature for each layer, to allow Tebb calculation
+    # we will store a_n, gamma_n, and temperature for each layer, to allow
+    # Tebb calculation
     path_params = []
-    delta_n = 0  # angle of the normal vector (r_n) at current layer w.r.t. zenith (r_1)
+    # angle of the normal vector (r_n) at current layer w.r.t. zenith (r_1):
+    delta_n = 0
     path_length = 0
 
     for i in range(len(heights) - 1):
@@ -1028,20 +1059,23 @@ def _prepare_path(elevation, obs_alt, profile_func, max_path_length=1000.):
             (-a_n ** 2 - 2 * r_n * d_n - d_n ** 2) / 2. / a_n / (r_n + d_n)
             ))
         delta_n += beta_n - alpha_n
-        beta_n = np.arcsin(fix_arg(ref_index[i] / ref_index[i+1] * np.sin(alpha_n)))
+        beta_n = np.arcsin(
+            fix_arg(ref_index[i] / ref_index[i + 1] * np.sin(alpha_n))
+            )
 
-        h_n = 0.5 * (heights[i] + heights[i+1])
-        press_n = 0.5 * (pressure[i] + pressure[i+1])
-        press_w_n = 0.5 * (pressure_water[i] + pressure_water[i+1])
-        temp_n = 0.5 * (temperature[i] + temperature[i+1])
+        h_n = 0.5 * (heights[i] + heights[i + 1])
+        press_n = 0.5 * (pressure[i] + pressure[i + 1])
+        press_w_n = 0.5 * (pressure_water[i] + pressure_water[i + 1])
+        temp_n = 0.5 * (temperature[i] + temperature[i + 1])
 
         path_length += a_n
         if path_length > max_path_length:
             break
 
-        path_params.append(
-            (press_n, press_w_n, temp_n, a_n, r_n, alpha_n, delta_n, beta_n, h_n)
-            )
+        path_params.append(tuple(
+            press_n, press_w_n, temp_n,
+            a_n, r_n, alpha_n, delta_n, beta_n, h_n
+            ))
 
     refraction = - np.degrees(beta_n + delta_n - beta_0)
 
@@ -1049,7 +1083,8 @@ def _prepare_path(elevation, obs_alt, profile_func, max_path_length=1000.):
 
 
 def slant_attenuation_annex1(
-        freq_grid, elevation, obs_alt, profile_func, t_bg=2.73, max_path_length=1000.
+        freq_grid, elevation, obs_alt, profile_func,
+        t_bg=2.73, max_path_length=1000.
         ):
     '''
     Calculate path attenuation for a slant path through full atmosphere.
@@ -1060,31 +1095,33 @@ def slant_attenuation_annex1(
     freq_grid - Frequencies (GHz) at which to calculate line-width shapes
     elevation - (Apparent) elevation of source as seen from observer (degrees)
     obs_alt - Height of observer above sea-level (m)
-    profile_func - function having height (above sea-level in km) as parameter, and
-        that returns
+    profile_func - function having height (above sea-level in km) as
+        parameter, and that returns
             - Temperature (K)
             - Total pressure (hPa)
             - Water vapor density (g / m**3)
             - Water vapor partial pressure (hPa)
             - Refractive index (dimensionless)
-            - Relative humidity (%) if water vapour was in form of liquid water
+            - Relative humidity (%) if water vapour was in form of liquid
+              water
             - Relative humidity (%) if water vapour was in form of ice
-        for that height. Note, this function must have the same signature as the
-        standardized atmospheric height profiles, but since only temperature,
-        total pressure and water vapor pressure are needed here, you can return
-        dummy values for the rest.
-    t_bg - background temperature (or temperature just after the last layer, default: 2.73 K)
-        This is needed for accurate Tebb calculation, usually this is the temperature
-        of the CMB (if Earth-Space path), but at lower frequencies, Galactic
-        foreground contribution might play a role.
-    max_path_length - Maximal length of path (km) before stopping iteration (default: 1000 km)
-        (useful for terrestrial paths)
+        for that height. Note, this function must have the same signature as
+        the standardized atmospheric height profiles, but since only
+        temperature, total pressure and water vapor pressure are needed here,
+        you can return dummy values for the rest.
+    t_bg - background temperature (or temperature just after the last layer,
+        default: 2.73 K)
+        This is needed for accurate Tebb calculation, usually this is the
+        temperature of the CMB (if Earth-Space path), but at lower
+        frequencies, Galactic foreground contribution might play a role.
+    max_path_length - Maximal length of path (km) before stopping iteration
+        (default: 1000 km; useful for terrestrial paths)
 
     Returns
     -------
     Total attenuation along path (dB)
-    Refraction - Offset w.r.t. to a hypothetical straight path, i.e., the correction
-        between real and apparent source elevation (degrees)
+    Refraction - Offset w.r.t. to a hypothetical straight path, i.e., the
+        correction between real and apparent source elevation (degrees)
     Tebb (K) - Equivalent black body temperature of the atmosphere (accounting
         for any outside contribution, e.g., from CMB)
     '''
@@ -1124,7 +1161,8 @@ def _phi_helper(r_p, r_t, args):
         c * (1. - r_p) + d * (1. - r_t)
         )
 
-_helper_params = {
+
+_HELPER_PARAMS = {
     'xi1': (1., 0.0717, -1.8132, 0.0156, -1.6515),
     'xi2': (1., 0.5146, -4.6368, -0.1921, -5.7416),
     'xi3': (1., 0.3414, -6.5851, 0.2130, -8.5854),
@@ -1141,12 +1179,17 @@ _helper_params = {
     'delta': (-0.00306, 3.211, -14.94, 1.583, -16.37),
     }
 
-_helper_funcs = dict((k, partial(_phi_helper, args=v)) for k, v in _helper_params.iteritems())
+
+_helper_funcs = dict(
+    (k, partial(_phi_helper, args=v))
+    for k, v in _HELPER_PARAMS.items()
+    )
 
 
 def specific_attenuation_annex2(freq_grid, temperature, pressure, rho_water):
     '''
-    Calculate specific attenuation using a simplified algorithm (ITU-R P.676-10 Annex 2.1).
+    Calculate specific attenuation using a simplified algorithm
+    (ITU-R P.676-10 Annex 2.1).
 
     Parameters
     ----------
@@ -1170,7 +1213,10 @@ def specific_attenuation_annex2(freq_grid, temperature, pressure, rho_water):
     atten_dry = np.empty_like(freq_grid)
     atten_wet = np.zeros_like(freq_grid)
 
-    h = dict((k, func(r_p, r_t)) for k, func in _helper_funcs.iteritems())
+    h = dict(
+        (k, func(r_p, r_t))
+        for k, func in _helper_funcs.items()
+        )
 
     # calculate dry attenuation, depending on frequency
     mask = freq_grid <= 54
@@ -1190,7 +1236,9 @@ def specific_attenuation_annex2(freq_grid, temperature, pressure, rho_water):
 
     mask = (freq_grid > 60) & (freq_grid <= 62)
     f = freq_grid[mask]
-    atten_dry[mask] = h['gamma60'] + (h['gamma62'] - h['gamma60']) * (f - 60.) / 2.
+    atten_dry[mask] = (
+        h['gamma60'] + (h['gamma62'] - h['gamma60']) * (f - 60.) / 2.
+        )
 
     mask = (freq_grid > 62) & (freq_grid <= 66)
     f = freq_grid[mask]
@@ -1204,16 +1252,21 @@ def specific_attenuation_annex2(freq_grid, temperature, pressure, rho_water):
     f = freq_grid[mask]
     atten_dry[mask] = f ** 2 * r_p ** 2 * 1.e-3 * (
         3.02e-4 * r_t ** 3.5 +
-        0.283 * r_t ** 3.8 / ((f - 118.75) ** 2 + 2.91 * r_p ** 2 * r_t ** 1.6) +
-        0.502 * h['xi6'] * (1. - 0.0163 * h['xi7'] * (f - 66.)) /
-        ((f - 66.) ** (1.4346 * h['xi4']) + 1.15 * h['xi5'])
+        0.283 * r_t ** 3.8 / (
+            (f - 118.75) ** 2 + 2.91 * r_p ** 2 * r_t ** 1.6
+            ) +
+        0.502 * h['xi6'] * (1. - 0.0163 * h['xi7'] * (f - 66.)) / (
+            (f - 66.) ** (1.4346 * h['xi4']) + 1.15 * h['xi5']
+            )
         )
 
     mask = (freq_grid > 120) & (freq_grid <= 350)
     f = freq_grid[mask]
     atten_dry[mask] = h['delta'] + f ** 2 * r_p ** 3.5 * 1.e-3 * (
         3.02e-4 / (1. + 1.9e-5 * f ** 1.5) +
-        0.283 * r_t ** 0.3 / ((f - 118.75) ** 2 + 2.91 * r_p ** 2 * r_t ** 1.6)
+        0.283 * r_t ** 0.3 / (
+            (f - 118.75) ** 2 + 2.91 * r_p ** 2 * r_t ** 1.6
+            )
         )
 
     # calculate wet attenuation, depending on frequency
@@ -1275,7 +1328,7 @@ def _equivalent_height_dry(freq_grid, pressure):
 
     f = np.atleast_1d(freq_grid).astype(dtype=np.float64, copy=False)
 
-    t_1 = 4.64 / (1. + 0.066 * r_p ** -2.3) *np.exp(
+    t_1 = 4.64 / (1. + 0.066 * r_p ** -2.3) * np.exp(
         - ((f - 59.7) / (2.87 + 12.4 * np.exp(-7.9 * r_p))) ** 2
         )
 
@@ -1318,7 +1371,8 @@ def _equivalent_height_wet(freq_grid, pressure):
 
     s_w = 1.013 / (1. + np.exp(-8.6 * (r_p - 0.57)))
 
-    _helper = lambda a, b, c: a * s_w / ((f - b) ** 2 + c * s_w)
+    def _helper(a, b, c):
+        a * s_w / ((f - b) ** 2 + c * s_w)
 
     h_w = 1.66 * (
         1. +
@@ -1332,7 +1386,7 @@ def _equivalent_height_wet(freq_grid, pressure):
 
 def slant_attenuation_annex2(gamma_dry, gamma_wet, h_0, h_w, elevation):
     '''
-    Calculate simple path attenuation for a slant path through full atmosphere.
+    Calculate simple path attenuation for slant path through full atmosphere.
     (P.676-10: 28])
 
     Parameters

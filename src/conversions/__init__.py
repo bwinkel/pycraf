@@ -1,7 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Licensed under GPL v2 - see LICENSE
-
 
 from .conversions import *
-

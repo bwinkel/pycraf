@@ -1,6 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Licensed under GPL v2 - see LICENSE
 
 from __future__ import (
     absolute_import, unicode_literals, division, print_function
@@ -9,7 +8,7 @@ from __future__ import (
 import os
 import numpy as np
 from astropy import units as apu
-from astropy.units import Quantity, UnitsError
+# from astropy.units import Quantity, UnitsError
 import astropy.constants as con
 from astropy.table import QTable, Table
 from ..conversions import *
@@ -56,8 +55,8 @@ def protection_limits(mode='continuum'):
 
     # now normalize for 1 MHz BW for comparison with spectroscopy
     # TODO: is this correct???
-    qtab['Efield_norm'] = np.sqrt(R0 * qtab['Slim'] *
-        apu.MHz / qtab['bandwidth'].to(apu.MHz)
+    qtab['Efield_norm'] = np.sqrt(
+        R0 * qtab['Slim'] * apu.MHz / qtab['bandwidth'].to(apu.MHz)
         ).to(apu.microvolt / apu.m)
     # qtab['Efield2_norm'] = (qtab['Efield_norm'] ** 2).to(dB_uV_m)
 
@@ -100,5 +99,3 @@ def protection_limits(mode='continuum'):
     tab_dB['P_rms_nu'].format = '%.1f'
 
     return tab, tab_dB
-
-

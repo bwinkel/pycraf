@@ -34,6 +34,6 @@ setup(
             'protection/data/ra_769_table2_limits_spectroscopy.csv',
             ]
         },
-    long_description="""pycraf ... the CRAF library.
-    contains useful functions for the daily life"""
+    long_description='''pycraf ... the CRAF library.
+    contains useful functions for the daily life'''
 )
