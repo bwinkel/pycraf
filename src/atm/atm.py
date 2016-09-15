@@ -1227,25 +1227,25 @@ def specific_attenuation_annex2(freq_grid, temperature, pressure, rho_water):
 
         return 1. + ((f - f_i) / (f + f_i)) ** 2
 
-    def _helper(a, b, c, d, do_g):
+    def _helper(a, eta, b, c, d, do_g):
 
         return (
-            a * eta_1 * np.exp(b * (1 - r_t)) /
-            ((f - c) ** 2 + d * eta_1 ** 2) *
+            a * eta * np.exp(b * (1 - r_t)) /
+            ((f - c) ** 2 + d * eta ** 2) *
             (g(f, int(c + 0.5)) if do_g else 1.)
             )
 
     for a, b, c, d, do_g in [
-        (3.98, 2.23, 22.235, 9.42, True),
-        (11.96, 0.7, 183.31, 11.14, False),
-        (0.081, 6.44, 321.226, 6.29, False),
-        (3.66, 1.6, 325.153, 9.22, False),
-        (25.37, 1.09, 380, 0, False),
-        (17.4, 1.46, 448, 0, False),
-        (844.6, 0.17, 557, 0, True),
-        (290., 0.41, 752, 0, True),
-        (83328., 0.99, 1780, 0, True),
-        ]:
+            (3.98, eta_1, 2.23, 22.235, 9.42, True),
+            (11.96, eta_1, 0.7, 183.31, 11.14, False),
+            (0.081, eta_1, 6.44, 321.226, 6.29, False),
+            (3.66, eta_1, 1.6, 325.153, 9.22, False),
+            (25.37, eta_1, 1.09, 380, 0, False),
+            (17.4, eta_1, 1.46, 448, 0, False),
+            (844.6, eta_1, 0.17, 557, 0, True),
+            (290., eta_1, 0.41, 752, 0, True),
+            (83328., eta_2, 0.99, 1780, 0, True),
+            ]:
 
         atten_wet += _helper(a, b, c, d, do_g)
 
