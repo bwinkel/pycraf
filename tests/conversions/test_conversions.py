@@ -95,14 +95,18 @@ class TestConversions:
 
         # first test, if assert Quantity works
         with pytest.raises(TypeError):
-
             cnv.Aeff_from_Ageom(1., 50 * apu.percent)
+
+        with pytest.raises(TypeError):
             cnv.Aeff_from_Ageom(1. * apu.m ** 2, 0.5)
+
+        with pytest.raises(TypeError):
             cnv.Aeff_from_Ageom(1., 0.5)
 
         with pytest.raises(apu.UnitsError):
-
             cnv.Aeff_from_Ageom(1. * apu.Hz, 50 * apu.percent)
+
+        with pytest.raises(apu.UnitsError):
             cnv.Aeff_from_Ageom(1. * apu.m ** 2, 0.5 * apu.m)
 
         Ageom = 50. * apu.m ** 2
@@ -122,14 +126,18 @@ class TestConversions:
 
         # first test, if assert Quantity works
         with pytest.raises(TypeError):
-
             cnv.Ageom_from_Aeff(1., 50 * apu.percent)
+
+        with pytest.raises(TypeError):
             cnv.Ageom_from_Aeff(1. * apu.m ** 2, 0.5)
+
+        with pytest.raises(TypeError):
             cnv.Ageom_from_Aeff(1., 0.5)
 
         with pytest.raises(apu.UnitsError):
-
             cnv.Ageom_from_Aeff(1. * apu.Hz, 50 * apu.percent)
+
+        with pytest.raises(apu.UnitsError):
             cnv.Ageom_from_Aeff(1. * apu.m ** 2, 0.5 * apu.m)
 
         Ageom = 50. * apu.m ** 2
@@ -149,14 +157,18 @@ class TestConversions:
 
         # first test, if assert Quantity works
         with pytest.raises(TypeError):
-
             cnv.Gain_from_Aeff(1., 50 * apu.Hz)
+
+        with pytest.raises(TypeError):
             cnv.Gain_from_Aeff(1. * apu.m ** 2, 0.5)
+
+        with pytest.raises(TypeError):
             cnv.Gain_from_Aeff(1., 0.5)
 
         with pytest.raises(apu.UnitsError):
-
             cnv.Gain_from_Aeff(1. * apu.Hz, 50 * apu.Hz)
+
+        with pytest.raises(apu.UnitsError):
             cnv.Gain_from_Aeff(1. * apu.m ** 2, 0.5 * apu.m)
 
         assert_quantity_allclose(
@@ -173,14 +185,15 @@ class TestConversions:
 
         # first test, if assert Quantity works
         with pytest.raises(TypeError):
-
             cnv.Aeff_from_Gain(1., 50 * apu.Hz)
+
+        with pytest.raises(TypeError):
             cnv.Aeff_from_Gain(1. * cnv.dB, 0.5)
-            cnv.Aeff_from_Gain(1. * apu.Hz, 0.5)
 
         with pytest.raises(apu.UnitsError):
-
             cnv.Aeff_from_Gain(1. * apu.Hz, 50 * apu.Hz)
+
+        with pytest.raises(apu.UnitsError):
             cnv.Aeff_from_Gain(1. * cnv.dB, 0.5 * apu.m)
 
         assert_quantity_allclose(
@@ -196,11 +209,9 @@ class TestConversions:
 
         # first test, if assert Quantity works
         with pytest.raises(TypeError):
-
             cnv.S_from_E(1.)
 
         with pytest.raises(apu.UnitsError):
-
             cnv.S_from_E(1. * apu.Hz)
 
         assert_quantity_allclose(
@@ -221,11 +232,9 @@ class TestConversions:
 
         # first test, if assert Quantity works
         with pytest.raises(TypeError):
-
             cnv.E_from_S(1.)
 
         with pytest.raises(apu.UnitsError):
-
             cnv.E_from_S(1. * apu.Hz)
 
         assert_quantity_allclose(
@@ -241,15 +250,21 @@ class TestConversions:
 
         # first test, if assert Quantity works
         with pytest.raises(TypeError):
-
             cnv.Ptx_from_Erx(1, 1 * apu.km, 20 * cnv.dBi)
+
+        with pytest.raises(TypeError):
             cnv.Ptx_from_Erx(1 * cnv.dB_uV_m, 1, 20 * cnv.dBi)
+
+        with pytest.raises(TypeError):
             cnv.Ptx_from_Erx(1 * cnv.dB_uV_m, 1 * apu.km, 20)
 
         with pytest.raises(apu.UnitsError):
-
             cnv.Ptx_from_Erx(1 * apu.Hz, 1 * apu.km, 20 * cnv.dBi)
+
+        with pytest.raises(apu.UnitsError):
             cnv.Ptx_from_Erx(1 * cnv.dB_uV_m, 1 * apu.Hz, 20 * cnv.dBi)
+
+        with pytest.raises(apu.UnitsError):
             cnv.Ptx_from_Erx(1 * cnv.dB_uV_m, 1 * apu.km, 20 * apu.Hz)
 
         assert_quantity_allclose(
@@ -272,15 +287,21 @@ class TestConversions:
 
         # first test, if assert Quantity works
         with pytest.raises(TypeError):
-
             cnv.Erx_from_Ptx(1, 1 * apu.km, 20 * cnv.dBi)
+
+        with pytest.raises(TypeError):
             cnv.Erx_from_Ptx(1 * cnv.dB_W, 1, 20 * cnv.dBi)
+
+        with pytest.raises(TypeError):
             cnv.Erx_from_Ptx(1 * cnv.dB_W, 1 * apu.km, 20)
 
         with pytest.raises(apu.UnitsError):
-
             cnv.Erx_from_Ptx(1 * apu.Hz, 1 * apu.km, 20 * cnv.dBi)
+
+        with pytest.raises(apu.UnitsError):
             cnv.Erx_from_Ptx(1 * cnv.dB_W, 1 * apu.Hz, 20 * cnv.dBi)
+
+        with pytest.raises(apu.UnitsError):
             cnv.Erx_from_Ptx(1 * cnv.dB_W, 1 * apu.km, 20 * apu.Hz)
 
         assert_quantity_allclose(
@@ -296,15 +317,21 @@ class TestConversions:
 
         # first test, if assert Quantity works
         with pytest.raises(TypeError):
-
             cnv.S_from_Ptx(1, 1 * apu.km, 20 * cnv.dBi)
+
+        with pytest.raises(TypeError):
             cnv.S_from_Ptx(1 * cnv.dB_W, 1, 20 * cnv.dBi)
+
+        with pytest.raises(TypeError):
             cnv.S_from_Ptx(1 * cnv.dB_W, 1 * apu.km, 20)
 
         with pytest.raises(apu.UnitsError):
-
             cnv.S_from_Ptx(1 * apu.Hz, 1 * apu.km, 20 * cnv.dBi)
+
+        with pytest.raises(apu.UnitsError):
             cnv.S_from_Ptx(1 * cnv.dB_W, 1 * apu.Hz, 20 * cnv.dBi)
+
+        with pytest.raises(apu.UnitsError):
             cnv.S_from_Ptx(1 * cnv.dB_W, 1 * apu.km, 20 * apu.Hz)
 
         assert_quantity_allclose(
@@ -320,15 +347,21 @@ class TestConversions:
 
         # first test, if assert Quantity works
         with pytest.raises(TypeError):
-
             cnv.Ptx_from_S(1, 1 * apu.km, 20 * cnv.dBi)
+
+        with pytest.raises(TypeError):
             cnv.Ptx_from_S(1 * cnv.dB_W_m2, 1, 20 * cnv.dBi)
+
+        with pytest.raises(TypeError):
             cnv.Ptx_from_S(1 * cnv.dB_W_m2, 1 * apu.km, 20)
 
         with pytest.raises(apu.UnitsError):
-
             cnv.Ptx_from_S(1 * apu.Hz, 1 * apu.km, 20 * cnv.dBi)
+
+        with pytest.raises(apu.UnitsError):
             cnv.Ptx_from_S(1 * cnv.dB_W_m2, 1 * apu.Hz, 20 * cnv.dBi)
+
+        with pytest.raises(apu.UnitsError):
             cnv.Ptx_from_S(1 * cnv.dB_W_m2, 1 * apu.km, 20 * apu.Hz)
 
         assert_quantity_allclose(
@@ -344,15 +377,21 @@ class TestConversions:
 
         # first test, if assert Quantity works
         with pytest.raises(TypeError):
-
             cnv.S_from_Prx(1, 1 * apu.GHz, 20 * cnv.dBi)
+
+        with pytest.raises(TypeError):
             cnv.S_from_Prx(1 * cnv.dB_W, 1, 20 * cnv.dBi)
+
+        with pytest.raises(TypeError):
             cnv.S_from_Prx(1 * cnv.dB_W, 1 * apu.GHz, 20)
 
         with pytest.raises(apu.UnitsError):
-
             cnv.S_from_Prx(1 * apu.Hz, 1 * apu.GHz, 20 * cnv.dBi)
+
+        with pytest.raises(apu.UnitsError):
             cnv.S_from_Prx(1 * cnv.dB_W, 1 * apu.km, 20 * cnv.dBi)
+
+        with pytest.raises(apu.UnitsError):
             cnv.S_from_Prx(1 * cnv.dB_W, 1 * apu.GHz, 20 * apu.Hz)
 
         assert_quantity_allclose(
@@ -368,15 +407,21 @@ class TestConversions:
 
         # first test, if assert Quantity works
         with pytest.raises(TypeError):
-
             cnv.Prx_from_S(1, 1 * apu.Hz, 20 * cnv.dBi)
+
+        with pytest.raises(TypeError):
             cnv.Prx_from_S(1 * cnv.dB_W_m2, 1, 20 * cnv.dBi)
+
+        with pytest.raises(TypeError):
             cnv.Prx_from_S(1 * cnv.dB_W_m2, 1 * apu.Hz, 20)
 
         with pytest.raises(apu.UnitsError):
-
             cnv.Prx_from_S(1 * apu.Hz, 1 * apu.Hz, 20 * cnv.dBi)
+
+        with pytest.raises(apu.UnitsError):
             cnv.Prx_from_S(1 * cnv.dB_W_m2, 1 * apu.m, 20 * cnv.dBi)
+
+        with pytest.raises(apu.UnitsError):
             cnv.Prx_from_S(1 * cnv.dB_W_m2, 1 * apu.Hz, 20 * apu.Hz)
 
         assert_quantity_allclose(
@@ -394,13 +439,15 @@ class TestConversions:
 
         # first test, if assert Quantity works
         with pytest.raises(TypeError):
-
             cnv.free_space_loss(1, 1 * apu.Hz)
+
+        with pytest.raises(TypeError):
             cnv.free_space_loss(1 * apu.m, 1)
 
         with pytest.raises(apu.UnitsError):
-
             cnv.free_space_loss(1 * apu.Hz, 1 * apu.Hz)
+
+        with pytest.raises(apu.UnitsError):
             cnv.free_space_loss(1 * apu.m, 1 * apu.m)
 
         assert_quantity_allclose(
@@ -412,37 +459,51 @@ class TestConversions:
 
         # first test, if assert Quantity works
         with pytest.raises(TypeError):
-
             cnv.Prx_from_Ptx(
                 1, 5 * cnv.dBi, 5 * cnv.dBi, 1 * apu.m, 1 * apu.GHz
                 )
+
+        with pytest.raises(TypeError):
             cnv.Prx_from_Ptx(
                 1 * cnv.dB_W, 5, 5 * cnv.dBi, 1 * apu.m, 1 * apu.GHz
                 )
+
+        with pytest.raises(TypeError):
             cnv.Prx_from_Ptx(
                 1 * cnv.dB_W, 5 * cnv.dBi, 5, 1 * apu.m, 1 * apu.GHz
                 )
+
+        with pytest.raises(TypeError):
             cnv.Prx_from_Ptx(
                 1 * cnv.dB_W, 5 * cnv.dBi, 5 * cnv.dBi, 1, 1 * apu.GHz
                 )
+
+        with pytest.raises(TypeError):
             cnv.Prx_from_Ptx(
                 1 * cnv.dB_W, 5 * cnv.dBi, 5 * cnv.dBi, 1 * apu.m, 1
                 )
 
         with pytest.raises(apu.UnitsError):
-
             cnv.Prx_from_Ptx(
                 1 * apu.V, 5 * cnv.dBi, 5 * cnv.dBi, 1 * apu.m, 1 * apu.GHz
                 )
+
+        with pytest.raises(apu.UnitsError):
             cnv.Prx_from_Ptx(
                 1 * cnv.dB_W, 5 * apu.V, 5 * cnv.dBi, 1 * apu.m, 1 * apu.GHz
                 )
+
+        with pytest.raises(apu.UnitsError):
             cnv.Prx_from_Ptx(
                 1 * cnv.dB_W, 5 * cnv.dBi, 5 * apu.V, 1 * apu.m, 1 * apu.GHz
                 )
+
+        with pytest.raises(apu.UnitsError):
             cnv.Prx_from_Ptx(
                 1 * cnv.dB_W, 5 * cnv.dBi, 5 * cnv.dBi, 1 * apu.V, 1 * apu.GHz
                 )
+
+        with pytest.raises(apu.UnitsError):
             cnv.Prx_from_Ptx(
                 1 * cnv.dB_W, 5 * cnv.dBi, 5 * cnv.dBi, 1 * apu.m, 1 * apu.V
                 )
@@ -468,37 +529,51 @@ class TestConversions:
 
         # first test, if assert Quantity works
         with pytest.raises(TypeError):
-
             cnv.Ptx_from_Prx(
                 1, 5 * cnv.dBi, 5 * cnv.dBi, 1 * apu.m, 1 * apu.GHz
                 )
+
+        with pytest.raises(TypeError):
             cnv.Ptx_from_Prx(
                 1 * cnv.dB_W, 5, 5 * cnv.dBi, 1 * apu.m, 1 * apu.GHz
                 )
+
+        with pytest.raises(TypeError):
             cnv.Ptx_from_Prx(
                 1 * cnv.dB_W, 5 * cnv.dBi, 5, 1 * apu.m, 1 * apu.GHz
                 )
+
+        with pytest.raises(TypeError):
             cnv.Ptx_from_Prx(
                 1 * cnv.dB_W, 5 * cnv.dBi, 5 * cnv.dBi, 1, 1 * apu.GHz
                 )
+
+        with pytest.raises(TypeError):
             cnv.Ptx_from_Prx(
                 1 * cnv.dB_W, 5 * cnv.dBi, 5 * cnv.dBi, 1 * apu.m, 1
                 )
 
         with pytest.raises(apu.UnitsError):
-
             cnv.Ptx_from_Prx(
                 1 * apu.V, 5 * cnv.dBi, 5 * cnv.dBi, 1 * apu.m, 1 * apu.GHz
                 )
+
+        with pytest.raises(apu.UnitsError):
             cnv.Ptx_from_Prx(
                 1 * cnv.dB_W, 5 * apu.V, 5 * cnv.dBi, 1 * apu.m, 1 * apu.GHz
                 )
+
+        with pytest.raises(apu.UnitsError):
             cnv.Ptx_from_Prx(
                 1 * cnv.dB_W, 5 * cnv.dBi, 5 * apu.V, 1 * apu.m, 1 * apu.GHz
                 )
+
+        with pytest.raises(apu.UnitsError):
             cnv.Ptx_from_Prx(
                 1 * cnv.dB_W, 5 * cnv.dBi, 5 * cnv.dBi, 1 * apu.V, 1 * apu.GHz
                 )
+
+        with pytest.raises(apu.UnitsError):
             cnv.Ptx_from_Prx(
                 1 * cnv.dB_W, 5 * cnv.dBi, 5 * cnv.dBi, 1 * apu.m, 1 * apu.V
                 )

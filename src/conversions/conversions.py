@@ -309,7 +309,7 @@ def Ptx_from_S(S, d, Gtx):
         ).to(apu.W)
 
 
-@apu.quantity_input(Prx=dB_W, f=apu.Hz, Gtx=dBi)
+@apu.quantity_input(Prx=dB_W, f=apu.Hz, Grx=dBi)
 def S_from_Prx(Prx, f, Grx):
     '''
     Calculate power flux density, S, from received power.
@@ -335,7 +335,7 @@ def S_from_Prx(Prx, f, Grx):
         ).to(apu.W / apu.m ** 2)
 
 
-@apu.quantity_input(S=dB_W_m2, f=apu.Hz, Gtx=dBi)
+@apu.quantity_input(S=dB_W_m2, f=apu.Hz, Grx=dBi)
 def Prx_from_S(S, f, Grx):
     '''
     Calculate received power, Prx, from power flux density.
