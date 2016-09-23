@@ -7,7 +7,10 @@ from __future__ import (
 
 import os
 from functools import partial
+import collections
 import numpy as np
+from astropy import units as apu
+from .. import conversions as cnv
 
 
 __all__ = [
@@ -18,8 +21,8 @@ __all__ = [
     'mid_latitude_summer_profile', 'mid_latitude_winter_profile',
     'high_latitude_summer_profile', 'high_latitude_winter_profile',
     'resonances_oxygen', 'resonances_water',
-    'atten_linear_from_atten_log', 'atten_log_from_atten_linear',
-    'opacity_from_atten_linear', 'atten_linear_from_opacity',
+    # 'atten_linear_from_atten_log', 'atten_log_from_atten_linear',
+    'opacity_from_atten', 'atten_from_opacity',
     'specific_attenuation_annex1',
     'terrestrial_attenuation', 'slant_attenuation_annex1',
     'specific_attenuation_annex2',
@@ -51,28 +54,73 @@ resonances_water = np.genfromtxt(
     )
 
 
-def atten_linear_from_atten_log(atten_db):
+# not necessary, if we consequently work with astropy.units
+# def atten_linear_from_atten_log(atten_db):
 
-    return 10 ** (atten_db / 10.)
-
-
-def atten_log_from_atten_linear(atten):
-
-    return 10 * np.log10(atten)
+#     return 10 ** (atten_db / 10.)
 
 
-def opacity_from_atten_linear(atten, elevation):
+# def atten_log_from_atten_linear(atten):
 
-    AM_inv = np.sin(np.radians(elevation))
-    return -AM_inv * np.log(atten)
-
-
-def atten_linear_from_opacity(opacity, elevation):
-
-    AM = 1. / np.sin(np.radians(elevation))
-    return np.exp(-opacity * AM)
+#     return 10 * np.log10(atten)
 
 
+@apu.quantity_input(atten=cnv.dB, elevation=apu.deg)
+def opacity_from_atten(atten, elevation):
+    '''
+    Calculate atmospheric opacity from attenuation.
+
+    Note: All quantities must be astropy Quantities
+          (astropy.units.quantity.Quantity).
+
+    Parameters
+    ----------
+    Atmospheric attenuation [dB or dimless]
+        BEWARE: if given in dB, value should be greater than zero
+    Elevation [deg]
+
+    Returns
+    -------
+    Atmospheric opacity [dimless aka neper]
+    '''
+
+    assert np.all(atten.to(cnv.dB).value > 1.e-30), (
+        'attenuation must be positive value (on dB scale)'
+        )
+    AM_inv = np.sin(elevation.to(apu.rad))
+
+    return (AM_inv * np.log(atten.to(cnv.dimless))).to(cnv.dimless)
+
+
+@apu.quantity_input(opacity=cnv.dimless, elevation=apu.deg)
+def atten_from_opacity(opacity, elevation):
+    '''
+    Calculate atmospheric attenuation from opacity.
+
+    Note: All quantities must be astropy Quantities
+          (astropy.units.quantity.Quantity).
+
+    Parameters
+    ----------
+    Atmospheric opacity [dimless aka neper]
+    Elevation [deg]
+
+    Returns
+    -------
+    Atmospheric attenuation [dB]
+    '''
+
+    assert np.all(opacity.to(cnv.dimless).value > 1.e-30), (
+        'opacity must be positive value'
+        )
+    AM = 1. / np.sin(elevation.to(apu.rad))
+
+    return np.exp(opacity.to(cnv.dimless) * AM).to(cnv.dB)
+
+
+@apu.quantity_input(
+    temperature=apu.K, pressure=apu.hPa, pressure_water=apu.hPa
+    )
 def refractive_index(temperature, pressure, pressure_water):
     '''
     Calculate refractive index according to ITU-R P.453-10.
@@ -85,14 +133,30 @@ def refractive_index(temperature, pressure, pressure_water):
 
     Returns
     -------
-    Refractive index (dimensionless)
+    Refractive index (dimless)
     '''
 
-    return 1 + 77.6e-6 / temperature * (
-        pressure + 4810. * pressure_water / temperature
+    _temp = temperature.to(apu.K).value
+    _press = pressure.to(apu.hPa).value
+    _press_w = pressure_water.to(apu.hPa).value
+
+    assert np.all(_temp > 1.e-30), (
+        'temperature must be positive value'
+        )
+    assert np.all(_press > 1.e-30), (
+        'pressure must be positive value'
+        )
+    assert np.all(_press_w > 1.e-30), (
+        'pressure_water must be positive value'
+        )
+
+    return apu.Quantity(
+        1 + 77.6e-6 / _temp * (_press + 4810. * _press_w / _temp),
+        cnv.dimless
         )
 
 
+@apu.quantity_input(temperature=apu.K, pressure=apu.hPa)
 def saturation_water_pressure(temperature, pressure, wet_type='water'):
     '''
     Calculate saturation water pressure according to ITU-R P.453-10.
@@ -108,14 +172,22 @@ def saturation_water_pressure(temperature, pressure, wet_type='water'):
     Saturation water vapor pressure, e_s (hPa)
     '''
 
-    assert wet_type in ['water', 'ice']
+    # _temp_C is temperature in Celcius
+    _temp_C = temperature.to(apu.K).value - 273.15
+    _press = pressure.to(apu.hPa).value
 
-    t = temperature - 273.15  # t is temperature in Celcius
+    assert wet_type in ['water', 'ice']
+    assert np.all(_temp_C > 1.e-30 - 273.15), (
+        'temperature must be larger than -273.15'
+        )
+    assert np.all(_press > 1.e-30), (
+        'pressure must be positive value'
+        )
 
     EF = (
-        1. + 1.e-4 * (7.2 + pressure * (0.00320 + 5.9e-7 * t ** 2))
+        1. + 1.e-4 * (7.2 + _press * (0.00320 + 5.9e-7 * _temp_C ** 2))
         if wet_type == 'water' else
-        1. + 1.e-4 * (2.2 + pressure * (0.00382 + 6.4e-7 * t ** 2))
+        1. + 1.e-4 * (2.2 + _press * (0.00382 + 6.4e-7 * _temp_C ** 2))
         )
 
     a, b, c, d = (
@@ -123,11 +195,12 @@ def saturation_water_pressure(temperature, pressure, wet_type='water'):
         if wet_type == 'water' else
         (6.1115, 23.036, 279.82, 333.7)
         )
-    e_s = EF * a * np.exp((b - t / d) * t / (c + t))
+    e_s = EF * a * np.exp((b - _temp_C / d) * _temp_C / (c + _temp_C))
 
-    return e_s
+    return apu.Quantity(e_s, apu.hPa)
 
 
+@apu.quantity_input(temperature=apu.K, pressure=apu.hPa, humidity=apu.percent)
 def pressure_water_from_humidity(
         temperature, pressure, humidity, wet_type='water'
         ):
@@ -146,15 +219,24 @@ def pressure_water_from_humidity(
     Water vapor partial pressure (hPa)
     '''
 
+    _humid = humidity.to(apu.percent).value
+
+    assert np.all((_humid >= 0.) & (_humid <= 100.)), (
+        'humidity must be in range 0 to 100'
+        )
+
     e_s = saturation_water_pressure(
         temperature, pressure, wet_type=wet_type
         )
 
-    pressure_water = humidity / 100. * e_s
+    pressure_water = humidity.to(cnv.dimless) * e_s
 
-    return pressure_water
+    return pressure_water  # is alread hPa (because e_s has unit)
 
 
+@apu.quantity_input(
+    temperature=apu.K, pressure=apu.hPa, pressure_water=apu.hPa
+    )
 def humidity_from_pressure_water(
         temperature, pressure, pressure_water, wet_type='water'
         ):
@@ -175,15 +257,24 @@ def humidity_from_pressure_water(
     Relative humidity %)
     '''
 
+    _press_w = pressure_water.to(apu.hPa).value
+
+    assert np.all(_press_w > 1.e-30), (
+        'pressure_water must be positive value'
+        )
+
     e_s = saturation_water_pressure(
         temperature, pressure, wet_type=wet_type
         )
 
-    humidity = 100. * pressure_water / e_s
+    humidity = pressure_water / e_s
 
-    return humidity
+    return humidity.to(apu.percent)
 
 
+@apu.quantity_input(
+    temperature=apu.K, rho_water=apu.g / apu.m ** 3
+    )
 def pressure_water_from_rho_water(temperature, rho_water):
     '''
     Calculate water pressure according to ITU-R P.453-10.
@@ -198,10 +289,21 @@ def pressure_water_from_rho_water(temperature, rho_water):
     Water vapor partial pressure (hPa)
     '''
 
-    pressure_water = rho_water * temperature / 216.7
-    return pressure_water
+    _temp = temperature.to(apu.K).value
+    _rho_w = rho_water.to(apu.g / apu.m ** 3).value
+
+    assert np.all(_temp > 1.e-30), (
+        'temperature must be positive value'
+        )
+    assert np.all(_rho_w > 1.e-30), (
+        'rho_water must be positive value'
+        )
+    pressure_water = _rho_w * _temp / 216.7
+
+    return apu.Quantity(pressure_water, apu.hPa)
 
 
+@apu.quantity_input(temperature=apu.K, pressure_water=apu.hPa)
 def rho_water_from_pressure_water(temperature, pressure_water):
     '''
     Calculate water density according to ITU-R P.453-10.
@@ -216,10 +318,22 @@ def rho_water_from_pressure_water(temperature, pressure_water):
     Water vapor density (g / m**3)
     '''
 
-    rho_water = pressure_water * 216.7 / temperature
-    return rho_water
+    _temp = temperature.to(apu.K).value
+    _press_w = pressure_water.to(apu.hPa).value
+
+    assert np.all(_temp > 1.e-30), (
+        'temperature must be positive value'
+        )
+    assert np.all(_press_w > 1.e-30), (
+        'pressure_water must be positive value'
+        )
+
+    rho_water = _press_w * 216.7 / _temp
+
+    return apu.Quantity(rho_water, apu.g / apu.m ** 3)
 
 
+@apu.quantity_input(height=apu.km)
 def standard_profile(height):
     '''
     Compute temperature and pressure according to ITU R-P.835-5, Annex 1.
@@ -242,8 +356,9 @@ def standard_profile(height):
     Relative humidity (%) if water vapour was in form of ice
     '''
 
-    height = np.asarray(height)  # this is not sufficient for masking :-(
-    _height = np.atleast_1d(height).astype(np.float64, copy=False)
+    # height = np.asarray(height)  # this is not sufficient for masking :-(
+    height = np.atleast_1d(height)
+    _height = height.to(apu.km).value.flatten()
 
     assert np.all(_height < 85), 'profile only defined below 85 km height!'
     assert np.all(_height >= 0), 'profile only defined above 0 km height!'
@@ -252,7 +367,7 @@ def standard_profile(height):
     # lets first find the correct index for every height
 
     layer_heights = np.array([0., 11., 20., 32., 47., 51., 71., 85.])
-    indices = np.zeros(_height.shape, dtype=np.int32)
+    indices = np.zeros(_height.size, dtype=np.int32)
     for i, lh in enumerate(layer_heights[0:-1]):
         indices[_height > lh] = i
 
@@ -314,6 +429,15 @@ def standard_profile(height):
     pressures_water[mask] = pressures[mask] * 2.e-6
     rho_water[mask] = pressures_water[mask] / temperatures[mask] * 216.7
 
+    temperatures = apu.Quantity(temperatures.reshape(height.shape), apu.K)
+    pressures = apu.Quantity(pressures.reshape(height.shape), apu.hPa)
+    pressures_water = apu.Quantity(
+        pressures_water.reshape(height.shape), apu.hPa
+        )
+    rho_water = apu.Quantity(
+        rho_water.reshape(height.shape), apu.g / apu.m ** 3
+        )
+
     ref_indices = refractive_index(temperatures, pressures, pressures_water)
     humidities_water = humidity_from_pressure_water(
         temperatures, pressures, pressures_water, wet_type='water'
@@ -331,9 +455,12 @@ def standard_profile(height):
         humidities_water,
         humidities_ice,
         )
-    return tuple(v.reshape(height.shape) for v in result)
+
+    # return tuple(v.reshape(height.shape) for v in result)
+    return result
 
 
+@apu.quantity_input(height=apu.km)
 def _profile_helper(
         height,
         temp_heights, temp_funcs,
@@ -363,11 +490,12 @@ def _profile_helper(
     '''
 
     height = np.atleast_1d(height)
+    _height = height.to(apu.km).value
 
-    assert np.all(height < temp_heights[-1]), (
+    assert np.all(_height < temp_heights[-1]), (
         'profile only defined below {} km height!'.format(temp_heights[-1])
         )
-    assert np.all(height >= temp_heights[0]), (
+    assert np.all(_height >= temp_heights[0]), (
         'profile only defined above {} km height!'.format(temp_heights[0])
         )
 
@@ -383,26 +511,35 @@ def _profile_helper(
     # calculate temperature profile
     for i in range(len(temp_heights) - 1):
         hmin, hmax = temp_heights[i], temp_heights[i + 1]
-        mask = (height >= hmin) & (height < hmax)
-        temperature[mask] = (temp_funcs[i])(height[mask])
+        mask = (_height >= hmin) & (_height < hmax)
+        temperature[mask] = (temp_funcs[i])(_height[mask])
 
     # calculate pressure profile
     for i in range(len(press_heights) - 1):
         hmin, hmax = press_heights[i], press_heights[i + 1]
-        mask = (height >= hmin) & (height < hmax)
-        pressure[mask] = (press_funcs[i])(Pstarts[i], height[mask])
+        mask = (_height >= hmin) & (_height < hmax)
+        pressure[mask] = (press_funcs[i])(Pstarts[i], _height[mask])
 
     # calculate rho profile
     for i in range(len(rho_heights) - 1):
         hmin, hmax = rho_heights[i], rho_heights[i + 1]
-        mask = (height >= hmin) & (height < hmax)
-        rho_water[mask] = (rho_funcs[i])(height[mask])
+        mask = (_height >= hmin) & (_height < hmax)
+        rho_water[mask] = (rho_funcs[i])(_height[mask])
 
     # calculate pressure_water profile
     pressure_water = rho_water * temperature / 216.7
     mask = (pressure_water / pressure) < 2.e-6
     pressure_water[mask] = pressure[mask] * 2.e-6
     rho_water[mask] = pressure_water[mask] / temperature[mask] * 216.7
+
+    temperature = apu.Quantity(temperature.reshape(height.shape), apu.K)
+    pressure = apu.Quantity(pressure.reshape(height.shape), apu.hPa)
+    pressure_water = apu.Quantity(
+        pressure_water.reshape(height.shape), apu.hPa
+        )
+    rho_water = apu.Quantity(
+        rho_water.reshape(height.shape), apu.g / apu.m ** 3
+        )
 
     ref_index = refractive_index(temperature, pressure, pressure_water)
     humidity_water = humidity_from_pressure_water(
@@ -894,12 +1031,14 @@ def _N_D_prime2(freq_grid, pressure_dry, pressure_water, temperature):
     d = 5.6e-4 * (pressure_dry + pressure_water) * theta ** 0.8
 
     sum_1 = 6.14e-5 / d / (1 + (freq_grid / d) ** 2)
-    sum_2 = 1.4e-12 * pressure_dry * theta ** 1.5 / (1 + 1.9e-5 * freq_grid ** 1.5)
+    sum_2 = 1.4e-12 * pressure_dry * theta ** 1.5 / (
+        1 + 1.9e-5 * freq_grid ** 1.5
+        )
 
     return freq_grid * pressure_dry * theta ** 2 * (sum_1 + sum_2)
 
 
-def specific_attenuation_annex1(
+def _specific_attenuation_annex1(
         freq_grid, pressure_dry, pressure_water, temperature
         ):
     '''
@@ -942,6 +1081,60 @@ def specific_attenuation_annex1(
     return atten_o2 * 0.182 * freq_grid, atten_h2o * 0.182 * freq_grid
 
 
+@apu.quantity_input(
+    freq_grid=apu.GHz, pressure_dry=apu.hPa,
+    pressure_water=apu.hPa, temperature=apu.K
+    )
+def specific_attenuation_annex1(
+        freq_grid, pressure_dry, pressure_water, temperature
+        ):
+    '''
+    Compute specific (one layer) atmospheric attenuation according to
+    ITU-R P.676-10, annex 1.
+
+    Parameters
+    ----------
+    freq_grid - Frequencies (GHz) at which to calculate specific attenuation
+    pressure_dry - dry air pressure (~oxygen) (hPa)
+    pressure_water - water vapor partial pressure (hPa)
+    temperature - temperature (K)
+
+    Returns
+    -------
+    dry_attenuation, wet_attenuation (dB / km)
+    '''
+
+    freq_grid = np.atleast_1d(freq_grid)
+    assert pressure_dry.size == 1, 'pressure_dry must be scalar'
+    assert pressure_water.size == 1, 'pressure_water must be scalar'
+    assert temperature.size == 1, 'temperature must be scalar'
+
+    _freq = freq_grid.to(apu.GHz).value
+    _press_o = pressure_dry.to(apu.hPa).value
+    _press_w = pressure_water.to(apu.hPa).value
+    _temp = temperature.to(apu.K).value
+
+    assert _temp > 1.e-30, (
+        'temperature must be positive value'
+        )
+    assert _press_o > 1.e-30, (
+        'pressure_dry must be positive value'
+        )
+    assert _press_w > 1.e-30, (
+        'pressure_water must be positive value'
+        )
+    assert np.all(_freq > 1.e-30), (
+        'freq_grid must be positive value'
+        )
+
+    res = _specific_attenuation_annex1(_freq, _press_o, _press_w, _temp)
+    return (
+        apu.Quantity(res[0], cnv.dB / apu.km),
+        apu.Quantity(res[1], cnv.dB / apu.km),
+        )
+
+
+@apu.quantity_input(specific_atten=cnv.dB / apu.km, path_length=apu.km)
 def terrestrial_attenuation(specific_atten, path_length):
     '''
     Calculate total path attenuation for a path close to the ground
@@ -957,7 +1150,18 @@ def terrestrial_attenuation(specific_atten, path_length):
     Total attenuation along path (dB)
     '''
 
-    return specific_atten * path_length
+    _atten = specific_atten.to(cnv.dB / apu.km).value
+    _plen = path_length.to(apu.km).value
+
+    assert np.all(_atten > 1.e-30), (
+        'specific_atten must be positive value (on dB scale)'
+        )
+    assert np.all(_plen > 1.e-30), (
+        'path_length must be positive value'
+        )
+
+    # for some reason, this doesn't work, if working with original units
+    return apu.Quantity(_atten * _plen, cnv.dB)
 
 
 def _prepare_path(elevation, obs_alt, profile_func, max_path_length=1000.):
@@ -1003,6 +1207,36 @@ def _prepare_path(elevation, obs_alt, profile_func, max_path_length=1000.):
         correction between real and apparent source elevation (degrees)
     '''
 
+    # checking signatures is more complicated, than this... will
+    # need to look into this later
+    # # first check if profile_func has correct signature (input *and* output)
+    # @apu.quantity_input(
+    #     temperature=apu.K, pressure=apu.hPa,
+    #     rho_water=apu.g / apu.m ** 3, pressure_water=apu.hPa,
+    #     ref_index=cnv.dimless,
+    #     humidity_water=apu.percent, humidity_ice=apu.percent
+    #     )
+    # def atmospheric_profile_func_check(
+    #         temperature, pressure, rho_water, pressure_water,
+    #         ref_index, humidity_water, humidity_ice
+    #         ):
+
+    #     return None
+
+    # _ret = profile_func(10 * apu.km)  # checks input
+    # # check, if _ret is an iterable, otherwise (*_ret) won't work
+    # # assert isinstance(_ret, collections.Iterable), (
+    # #     'profile_func must return an iterable'
+    # #     )
+    # # unfortunately, if _ret is a (scalar) apu.Quantity, the __iter__()
+    # # method is defined, but will raise a TypeError
+    # # better check for tuple, although it is unnecessarily strict
+    # assert isinstance(_ret, tuple), (
+    #     'profile_func must return a tuple'
+    #     )
+
+    # atmospheric_profile_func_check(*_ret)  # checks output
+
     # construct height layers
     # deltas = 0.0001 * np.exp(np.arange(922) / 100.)
     # atm profiles only up to 80 km...
@@ -1023,7 +1257,15 @@ def _prepare_path(elevation, obs_alt, profile_func, max_path_length=1000.):
         ref_index,
         humidity_water,
         humidity_ice
-        ) = profile_func(heights)
+        ) = profile_func(apu.Quantity(heights, apu.km))
+    # handle units
+    temperature = temperature.to(apu.K).value
+    pressure = pressure.to(apu.hPa).value
+    rho_water = rho_water.to(apu.g / apu.m ** 3).value
+    pressure_water = pressure_water.to(apu.hPa).value
+    ref_index = ref_index.to(cnv.dimless).value
+    humidity_water = humidity_water.to(apu.percent).value
+    humidity_ice = humidity_ice.to(apu.percent).value
 
     def fix_arg(arg):
         '''
@@ -1048,6 +1290,7 @@ def _prepare_path(elevation, obs_alt, profile_func, max_path_length=1000.):
     delta_n = 0
     path_length = 0
 
+    # TODO: this is certainly a case for cython
     for i in range(len(heights) - 1):
 
         r_n = radii[i]
@@ -1072,7 +1315,7 @@ def _prepare_path(elevation, obs_alt, profile_func, max_path_length=1000.):
         if path_length > max_path_length:
             break
 
-        path_params.append(tuple(
+        path_params.append((
             press_n, press_w_n, temp_n,
             a_n, r_n, alpha_n, delta_n, beta_n, h_n
             ))
@@ -1082,9 +1325,13 @@ def _prepare_path(elevation, obs_alt, profile_func, max_path_length=1000.):
     return path_params, refraction
 
 
+@apu.quantity_input(
+    freq_grid=apu.GHz, elevation=apu.deg, obs_alt=apu.m,
+    t_bg=apu.K, max_path_length=apu.km
+    )
 def slant_attenuation_annex1(
         freq_grid, elevation, obs_alt, profile_func,
-        t_bg=2.73, max_path_length=1000.
+        t_bg=2.73 * apu.K, max_path_length=1000. * apu.km
         ):
     '''
     Calculate path attenuation for a slant path through full atmosphere.
@@ -1108,7 +1355,8 @@ def slant_attenuation_annex1(
         for that height. Note, this function must have the same signature as
         the standardized atmospheric height profiles, but since only
         temperature, total pressure and water vapor pressure are needed here,
-        you can return dummy values for the rest.
+        you can return dummy values for the rest (as long as they have
+        proper units).
     t_bg - background temperature (or temperature just after the last layer,
         default: 2.73 K)
         This is needed for accurate Tebb calculation, usually this is the
@@ -1126,19 +1374,47 @@ def slant_attenuation_annex1(
         for any outside contribution, e.g., from CMB)
     '''
 
+    assert elevation.size == 1, 'elevation must be scalar'
+    assert obs_alt.size == 1, 'obs_alt must be scalar'
+    assert t_bg.size == 1, 't_bg must be scalar'
+    assert max_path_length.size == 1, 'max_path_length must be scalar'
+
+    freq_grid = np.atleast_1d(freq_grid)
+    _freq = freq_grid.to(apu.GHz).value
+    _elev = elevation.to(apu.deg).value
+    _alt = obs_alt.to(apu.m).value
+    _t_bg = t_bg.to(apu.K).value
+    _max_plen = max_path_length.to(apu.km).value
+
+    assert np.all(_freq > 1.e-30), (
+        'freq_grid must all be positive values'
+        )
+    assert _elev >= -90 and _elev <= 90, (
+        'elevation must be within -90d..+90d'
+        )
+    assert _alt > 1.e-30, (
+        'obs_alt must be positive value'
+        )
+    assert _t_bg > 1.e-30, (
+        't_bg must be positive value'
+        )
+    assert _max_plen > 1.e-30, (
+        'max_path_length must be positive value'
+        )
+
     total_atten_db = np.zeros(freq_grid.shape, dtype=np.float64)
-    tebb = np.ones(freq_grid.shape, dtype=np.float64) * t_bg
+    tebb = np.ones(freq_grid.shape, dtype=np.float64) * _t_bg
 
     path_params, refraction = _prepare_path(
-        elevation, obs_alt, profile_func, max_path_length=max_path_length
+        _elev, _alt, profile_func, max_path_length=_max_plen
         )
 
     # do backward raytracing (to allow tebb calculation)
 
     for press_n, press_w_n, temp_n, a_n, _, _, _, _, _ in path_params[::-1]:
 
-        atten_dry, atten_wet = specific_attenuation_annex1(
-            freq_grid, press_n, press_w_n, temp_n
+        atten_dry, atten_wet = _specific_attenuation_annex1(
+            _freq, press_n, press_w_n, temp_n
         )
         gamma_n = atten_dry + atten_wet
         total_atten_db += gamma_n * a_n
@@ -1148,7 +1424,11 @@ def slant_attenuation_annex1(
         tebb *= gamma_n_lin
         tebb += (1. - gamma_n_lin) * temp_n
 
-    return total_atten_db, refraction, tebb
+    return (
+        apu.Quantity(total_atten_db, cnv.dB),
+        apu.Quantity(refraction, apu.deg),
+        apu.Quantity(tebb, apu.K),
+        )
 
 
 def _phi_helper(r_p, r_t, args):
@@ -1186,7 +1466,11 @@ _helper_funcs = dict(
     )
 
 
-def specific_attenuation_annex2(freq_grid, temperature, pressure, rho_water):
+@apu.quantity_input(
+    freq_grid=apu.GHz, pressure=apu.hPa,
+    rho_water=apu.g / apu.m ** 3, temperature=apu.K
+    )
+def specific_attenuation_annex2(freq_grid, pressure, rho_water, temperature):
     '''
     Calculate specific attenuation using a simplified algorithm
     (ITU-R P.676-10 Annex 2.1).
@@ -1194,24 +1478,43 @@ def specific_attenuation_annex2(freq_grid, temperature, pressure, rho_water):
     Parameters
     ----------
     freq_grid - Frequencies (GHz)
-    temperature - temperature (K)
     pressure - total air pressure (dry + wet) (hPa)
     rho_water - water vapor density (g / m^3)
+    temperature - temperature (K)
 
     Returns
     -------
     dry_attenuation, wet_attenuation (dB / km)
     '''
 
-    r_p = pressure / 1013.
-    r_t = 288. / (temperature - 0.15)
+    freq_grid = np.atleast_1d(freq_grid)
+    assert pressure.size == 1, 'pressure must be scalar'
+    assert rho_water.size == 1, 'rho_water must be scalar'
+    assert temperature.size == 1, 'temperature must be scalar'
 
-    assert np.all(freq_grid > 0.)
-    assert np.all(freq_grid <= 350.)
+    _freq = freq_grid.to(apu.GHz).value
+    _press = pressure.to(apu.hPa).value
+    _rho_w = rho_water.to(apu.g / apu.m ** 3).value
+    _temp = temperature.to(apu.K).value
 
-    freq_grid = np.atleast_1d(freq_grid).astype(np.float64, copy=False)
-    atten_dry = np.empty_like(freq_grid)
-    atten_wet = np.zeros_like(freq_grid)
+    assert _temp > 1.e-30, (
+        'temperature must be positive value'
+        )
+    assert _press > 1.e-30, (
+        'pressure must be positive value'
+        )
+    assert _rho_w > 1.e-30, (
+        'rho_water must be positive value'
+        )
+    assert np.all((_freq > 1.e-30) & (_freq < 350.)), (
+        'freq_grid must be within 0 and 350 GHz'
+        )
+
+    r_p = _press / 1013.
+    r_t = 288. / (_temp - 0.15)
+
+    atten_dry = np.empty_like(_freq)
+    atten_wet = np.zeros_like(_freq)
 
     h = dict(
         (k, func(r_p, r_t))
@@ -1219,37 +1522,37 @@ def specific_attenuation_annex2(freq_grid, temperature, pressure, rho_water):
         )
 
     # calculate dry attenuation, depending on frequency
-    mask = freq_grid <= 54
-    f = freq_grid[mask]
+    mask = _freq <= 54
+    f = _freq[mask]
     atten_dry[mask] = f ** 2 * r_p ** 2 * 1.e-3 * (
         7.2 * r_t ** 2.8 / (f ** 2 + 0.34 * r_p ** 2 * r_t ** 1.6) +
         0.62 * h['xi3'] / ((54. - f) ** (1.16 * h['xi1']) + 0.83 * h['xi2'])
         )
 
-    mask = (freq_grid > 54) & (freq_grid <= 60)
-    f = freq_grid[mask]
+    mask = (_freq > 54) & (_freq <= 60)
+    f = _freq[mask]
     atten_dry[mask] = np.exp(
         np.log(h['gamma54']) / 24. * (f - 58.) * (f - 60.) -
         np.log(h['gamma58']) / 8. * (f - 54.) * (f - 60.) +
         np.log(h['gamma60']) / 12. * (f - 54.) * (f - 58.)
         )
 
-    mask = (freq_grid > 60) & (freq_grid <= 62)
-    f = freq_grid[mask]
+    mask = (_freq > 60) & (_freq <= 62)
+    f = _freq[mask]
     atten_dry[mask] = (
         h['gamma60'] + (h['gamma62'] - h['gamma60']) * (f - 60.) / 2.
         )
 
-    mask = (freq_grid > 62) & (freq_grid <= 66)
-    f = freq_grid[mask]
+    mask = (_freq > 62) & (_freq <= 66)
+    f = _freq[mask]
     atten_dry[mask] = np.exp(
         np.log(h['gamma62']) / 8. * (f - 64.) * (f - 66.) -
         np.log(h['gamma64']) / 4. * (f - 62.) * (f - 66.) +
         np.log(h['gamma66']) / 8. * (f - 62.) * (f - 64.)
         )
 
-    mask = (freq_grid > 66) & (freq_grid <= 120)
-    f = freq_grid[mask]
+    mask = (_freq > 66) & (_freq <= 120)
+    f = _freq[mask]
     atten_dry[mask] = f ** 2 * r_p ** 2 * 1.e-3 * (
         3.02e-4 * r_t ** 3.5 +
         0.283 * r_t ** 3.8 / (
@@ -1260,8 +1563,8 @@ def specific_attenuation_annex2(freq_grid, temperature, pressure, rho_water):
             )
         )
 
-    mask = (freq_grid > 120) & (freq_grid <= 350)
-    f = freq_grid[mask]
+    mask = (_freq > 120) & (_freq <= 350)
+    f = _freq[mask]
     atten_dry[mask] = h['delta'] + f ** 2 * r_p ** 3.5 * 1.e-3 * (
         3.02e-4 / (1. + 1.9e-5 * f ** 1.5) +
         0.283 * r_t ** 0.3 / (
@@ -1271,10 +1574,10 @@ def specific_attenuation_annex2(freq_grid, temperature, pressure, rho_water):
 
     # calculate wet attenuation, depending on frequency
 
-    eta_1 = 0.955 * r_p * r_t ** 0.68 + 0.006 * rho_water
-    eta_2 = 0.735 * r_p * r_t ** 0.5 + 0.0353 * r_t ** 4 * rho_water
+    eta_1 = 0.955 * r_p * r_t ** 0.68 + 0.006 * _rho_w
+    eta_2 = 0.735 * r_p * r_t ** 0.5 + 0.0353 * r_t ** 4 * _rho_w
 
-    f = freq_grid
+    f = _freq
 
     def g(f, f_i):
 
@@ -1288,7 +1591,7 @@ def specific_attenuation_annex2(freq_grid, temperature, pressure, rho_water):
             (g(f, int(c + 0.5)) if do_g else 1.)
             )
 
-    for a, b, c, d, do_g in [
+    for args in [
             (3.98, eta_1, 2.23, 22.235, 9.42, True),
             (11.96, eta_1, 0.7, 183.31, 11.14, False),
             (0.081, eta_1, 6.44, 321.226, 6.29, False),
@@ -1300,11 +1603,14 @@ def specific_attenuation_annex2(freq_grid, temperature, pressure, rho_water):
             (83328., eta_2, 0.99, 1780, 0, True),
             ]:
 
-        atten_wet += _helper(a, b, c, d, do_g)
+        atten_wet += _helper(*args)
 
-    atten_wet *= f ** 2 * r_t ** 2.5 * rho_water * 1.e-4
+    atten_wet *= f ** 2 * r_t ** 2.5 * _rho_w * 1.e-4
 
-    return atten_dry, atten_wet
+    return (
+        apu.Quantity(atten_dry, cnv.dB / apu.km),
+        apu.Quantity(atten_wet, cnv.dB / apu.km),
+        )
 
 
 def _equivalent_height_dry(freq_grid, pressure):
@@ -1384,7 +1690,11 @@ def _equivalent_height_wet(freq_grid, pressure):
     return h_w
 
 
-def slant_attenuation_annex2(gamma_dry, gamma_wet, h_0, h_w, elevation):
+@apu.quantity_input(
+    atten_dry=cnv.dB / apu.km, atten_wet=cnv.dB / apu.km,
+    h_dry=apu.m, h_wet=apu.m, elevation=apu.deg
+    )
+def slant_attenuation_annex2(atten_dry, atten_wet, h_dry, h_wet, elevation):
     '''
     Calculate simple path attenuation for slant path through full atmosphere.
     (P.676-10: 28])
@@ -1392,10 +1702,10 @@ def slant_attenuation_annex2(gamma_dry, gamma_wet, h_0, h_w, elevation):
     Parameters
     ----------
     freq_grid - Frequencies (GHz)
-    gamma_dry - Specific attenuation for dry air (dB / km)
-    gamma_wet - Specific attenuation for wet air (dB / km)
-    h_0 - Equivalent height for dry air (km)
-    h_w - Equivalent height for wet air (km)
+    atten_dry - Specific attenuation for dry air (dB / km)
+    atten_wet - Specific attenuation for wet air (dB / km)
+    h_dry - Equivalent height for dry air (km)
+    h_wet - Equivalent height for wet air (km)
     elevation - Elevation of source as seen from observer (degrees)
 
     Returns
@@ -1403,5 +1713,32 @@ def slant_attenuation_annex2(gamma_dry, gamma_wet, h_0, h_w, elevation):
     Total attenuation along path (dB)
     '''
 
-    AM = 1. / np.sin(np.radians(elevation))
-    return AM * (gamma_dry * h_0 + gamma_wet * h_w)
+    assert h_dry.size == 1, 'h_dry must be scalar'
+    assert h_wet.size == 1, 'h_wet must be scalar'
+    assert elevation.size == 1, 'elevation must be scalar'
+
+    _atten_d = atten_dry.to(cnv.dB / apu.km).value
+    _atten_w = atten_wet.to(cnv.dB / apu.km).value
+    _h_dry = h_dry.to(apu.km).value
+    _h_wet = h_wet.to(apu.km).value
+    _elev = elevation.to(apu.deg).value
+
+    assert np.all(_atten_d > 1.e-30), (
+        'atten_dry must be positive value (on dB scale)'
+        )
+    assert np.all(_atten_w > 1.e-30), (
+        'atten_wet must be positive value (on dB scale)'
+        )
+    assert _h_dry > 1.e-30, (
+        'h_dry must be positive value'
+        )
+    assert _h_wet > 1.e-30, (
+        'h_wet must be positive value'
+        )
+    assert _elev >= -90 and _elev <= 90, (
+        'elevation must be within -90d..+90d'
+        )
+
+    AM = 1. / np.sin(np.radians(_elev))
+
+    return apu.Quantity(AM * (_atten_d * _h_dry + _atten_w * _h_wet), cnv.dB)
