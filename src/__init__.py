@@ -3,4 +3,5 @@
 
 from . import atm
 from . import conversions
+from . import geospatial
 from . import protection
