@@ -93,8 +93,8 @@ def wgs84_to_utm(glon, glat, zone, south=False):
 
 
 # This is for Western Germany (Effelsberg)
-utm_to_wgs84_32N = partial(utm_to_wgs84, zone='32N', south=False)
-wgs84_to_utm_32N = partial(wgs84_to_utm, zone='32N', south=False)
+utm_to_wgs84_32N = partial(utm_to_wgs84, zone=32, south=False)
+wgs84_to_utm_32N = partial(wgs84_to_utm, zone=32, south=False)
 
 
 def etrs89_to_wgs84(elon, elat):
