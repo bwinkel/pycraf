@@ -7,7 +7,18 @@ from __future__ import (
 
 from functools import partial, lru_cache
 # import numpy as np
+import numbers
 import pyproj
+
+
+# Note: UTM zones extend over 6d in longitude and a full hemisphere in
+# latitude. However, the NATO system further refines the zones by
+# putting them into latitude zones, to form a grid. pyproj uses the former
+# approach, though. See "https://en.wikipedia.org/wiki/
+# Universal_Transverse_Mercator_coordinate_system" for further details.
+# In the following, we use "N" and "S" to make a distinction between
+# Northern and Southern hemisphere. Don't mix this up with the grid
+# nomenclature (where xxS is a cell on the Northern hemisphere...).
 
 
 __all__ = [
@@ -24,6 +35,9 @@ def _create_proj(sys1, sys2, zone=None, south=False):
 
     if sys1 == 'UTM' and sys2 == 'WGS84':
 
+        if not isinstance(zone, numbers.Integral):
+            raise TypeError('zone must be an integer')
+
         _proj_str = (
             '+proj=utm +ellps=WGS84 +datum=WGS84 +units=m +no_defs '
             '+zone={:d}'.format(zone)
@@ -36,6 +50,10 @@ def _create_proj(sys1, sys2, zone=None, south=False):
         _proj_str = (
             '+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 '
             '+ellps=GRS80 +units=m +no_defs'
+            )
+    else:
+        raise AssertionError(
+            'requested conversion not supported {} {}'.format(sys1, sys2)
             )
 
     return pyproj.Proj(_proj_str)
@@ -59,7 +77,7 @@ def utm_to_wgs84(ulon, ulat, zone, south=False):
     -----
     Uses
         +proj=utm +zone=xx +ellps=WGS84 +datum=WGS84 +units=m +no_defs [+south]
-    for pyproj setup.
+    for pyproj setup. Only one zone per function call is allowed.
     '''
 
     _proj = _create_proj('UTM', 'WGS84', zone, south)
