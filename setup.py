@@ -6,13 +6,14 @@ from setuptools import setup
 
 setup(
     name="pycraf",
-    version="0.2",
+    version="0.21",
     description="pycraf",
     author="Benjamin Winkel",
     author_email="bwinkel@mpifr.de",
     url="http://www.astro.uni-bonn.de/~bwinkel",
     packages=[
         'pycraf',
+        'pycraf.antenna',
         'pycraf.atm',
         'pycraf.conversions',
         'pycraf.geospatial',
@@ -26,6 +27,7 @@ setup(
     ],
     package_dir={
         'pycraf': 'src',
+        'pycraf.antenna': 'src/antenna',
         'pycraf.atm': 'src/atm',
         'pycraf.conversions': 'src/conversions',
         'pycraf.geospatial': 'src/geospatial',
