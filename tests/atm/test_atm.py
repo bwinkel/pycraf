@@ -14,6 +14,7 @@ from astropy import units as apu
 from astropy.units import Quantity
 from pycraf import conversions as cnv
 from pycraf import atm
+from pycraf.helpers import check_astro_quantities
 # from astropy.utils.misc import NumpyRNGContext
 
 
@@ -68,6 +69,7 @@ HIGH_LATITUDE_WINTER_PROFILE = (
     [8.5625388441e+01, 2.5319294785e+00, 1.3387023112e-01, 6.9578758372e-05]
     )
 
+
 class TestConversions:
 
     def setup(self):
@@ -80,30 +82,17 @@ class TestConversions:
 
     def test_opacity_from_atten(self):
 
-        # first test, if assert Quantity works
-        with pytest.raises(TypeError):
-            atm.opacity_from_atten(1, 50 * apu.deg)
-
-        with pytest.raises(TypeError):
-            atm.opacity_from_atten(1 * cnv.dB, 50)
-
-        with pytest.raises(TypeError):
-            atm.opacity_from_atten(1, 50)
-
-        with pytest.raises(apu.UnitsError):
-            atm.opacity_from_atten(1. * apu.Hz, 50 * apu.deg)
-
-        with pytest.raises(apu.UnitsError):
-            atm.opacity_from_atten(1 * cnv.dB, 50 * apu.m)
-
-        with pytest.raises(AssertionError):
-            atm.opacity_from_atten(-1 * cnv.dB, 50 * apu.deg)
+        args_list = [
+            (1.000000000001, None, cnv.dimless),
+            (-90, 90, apu.deg),
+            ]
+        check_astro_quantities(atm.opacity_from_atten, args_list)
 
         elev = 50 * apu.deg
         atten_dB = Quantity([0.1, 1, 10, 50, 100], cnv.dB)
         opacity = Quantity([
             1.76388252e-02, 0.17638825, 1.76388252, 8.81941258, 17.63882515
-  ], cnv.dimless)
+            ], cnv.dimless)
 
         assert_quantity_allclose(
             atm.opacity_from_atten(atten_dB, elev),
@@ -117,30 +106,17 @@ class TestConversions:
 
     def test_atten_from_opacity(self):
 
-        # first test, if assert Quantity works
-        with pytest.raises(TypeError):
-            atm.atten_from_opacity(1, 50 * apu.deg)
-
-        with pytest.raises(TypeError):
-            atm.atten_from_opacity(1 * cnv.dB, 50)
-
-        with pytest.raises(TypeError):
-            atm.atten_from_opacity(1, 50)
-
-        with pytest.raises(apu.UnitsError):
-            atm.atten_from_opacity(1. * apu.Hz, 50 * apu.deg)
-
-        with pytest.raises(apu.UnitsError):
-            atm.atten_from_opacity(1 * cnv.dimless, 50 * apu.m)
-
-        with pytest.raises(AssertionError):
-            atm.atten_from_opacity(-1 * cnv.dimless, 50 * apu.deg)
+        args_list = [
+            (0.000000000001, None, cnv.dimless),
+            (-90, 90, apu.deg),
+            ]
+        check_astro_quantities(atm.atten_from_opacity, args_list)
 
         elev = 50 * apu.deg
         atten_dB = Quantity([0.1, 1, 10, 50, 100], cnv.dB)
         opacity = Quantity([
             1.76388252e-02, 0.17638825, 1.76388252, 8.81941258, 17.63882515
-  ], cnv.dimless)
+            ], cnv.dimless)
 
         assert_quantity_allclose(
             atm.atten_from_opacity(opacity, elev),
@@ -149,33 +125,12 @@ class TestConversions:
 
     def test_refractive_index(self):
 
-        # first test, if assert Quantity works
-        with pytest.raises(TypeError):
-            atm.refractive_index(300, 1000 * apu.hPa, 200 * apu.hPa)
-
-        with pytest.raises(TypeError):
-            atm.refractive_index(300 * apu.K, 1000, 200 * apu.hPa)
-
-        with pytest.raises(TypeError):
-            atm.refractive_index(300 * apu.K, 1000 * apu.hPa, 200)
-
-        with pytest.raises(apu.UnitsError):
-            atm.refractive_index(300 * apu.m, 1000 * apu.hPa, 200 * apu.hPa)
-
-        with pytest.raises(apu.UnitsError):
-            atm.refractive_index(300 * apu.K, 1000 * apu.m, 200 * apu.hPa)
-
-        with pytest.raises(apu.UnitsError):
-            atm.refractive_index(300 * apu.K, 1000 * apu.hPa, 200 * apu.m)
-
-        with pytest.raises(AssertionError):
-            atm.refractive_index(-300 * apu.K, 1000 * apu.hPa, 200 * apu.hPa)
-
-        with pytest.raises(AssertionError):
-            atm.refractive_index(300 * apu.K, -1000 * apu.hPa, 200 * apu.hPa)
-
-        with pytest.raises(AssertionError):
-            atm.refractive_index(300 * apu.K, 1000 * apu.hPa, -200 * apu.hPa)
+        args_list = [
+            (1.e-30, None, apu.K),
+            (1.e-30, None, apu.hPa),
+            (1.e-30, None, apu.hPa),
+            ]
+        check_astro_quantities(atm.refractive_index, args_list)
 
         temp = Quantity([100, 200, 300], apu.K)
         press = Quantity([900, 1000, 1100], apu.hPa)
@@ -198,24 +153,11 @@ class TestConversions:
 
     def test_saturation_water_pressure(self):
 
-        # first test, if assert Quantity works
-        with pytest.raises(TypeError):
-            atm.saturation_water_pressure(300, 1000 * apu.hPa)
-
-        with pytest.raises(TypeError):
-            atm.saturation_water_pressure(300 * apu.K, 1000)
-
-        with pytest.raises(apu.UnitsError):
-            atm.saturation_water_pressure(300 * apu.m, 1000 * apu.hPa)
-
-        with pytest.raises(apu.UnitsError):
-            atm.saturation_water_pressure(300 * apu.K, 1000 * apu.m)
-
-        with pytest.raises(AssertionError):
-            atm.saturation_water_pressure(-300 * apu.K, 1000 * apu.hPa)
-
-        with pytest.raises(AssertionError):
-            atm.saturation_water_pressure(300 * apu.K, -1000 * apu.hPa)
+        args_list = [
+            (1.e-30, None, apu.K),
+            (1.e-30, None, apu.hPa),
+            ]
+        check_astro_quantities(atm.saturation_water_pressure, args_list)
 
         temp = Quantity([100, 200, 300], apu.K)
         press = Quantity([900, 1000, 1100], apu.hPa)
@@ -237,46 +179,12 @@ class TestConversions:
 
     def test_pressure_water_from_humidity(self):
 
-        # first test, if assert Quantity works
-        with pytest.raises(TypeError):
-            atm.pressure_water_from_humidity(
-                300, 1000 * apu.hPa, 50 * apu.percent
-                )
-
-        with pytest.raises(TypeError):
-            atm.pressure_water_from_humidity(
-                300 * apu.K, 1000, 50 * apu.percent
-                )
-
-        with pytest.raises(TypeError):
-            atm.pressure_water_from_humidity(
-                300 * apu.K, 1000 * apu.hPa, 50
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.pressure_water_from_humidity(
-                300 * apu.m, 1000 * apu.hPa, 50 * apu.percent
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.pressure_water_from_humidity(
-                300 * apu.K, 1000 * apu.m, 50 * apu.percent
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.pressure_water_from_humidity(
-                300 * apu.K, 1000 * apu.hPa, 50 * apu.m
-                )
-
-        with pytest.raises(AssertionError):
-            atm.pressure_water_from_humidity(
-                300 * apu.K, 1000 * apu.hPa, -50 * apu.percent
-                )
-
-        with pytest.raises(AssertionError):
-            atm.pressure_water_from_humidity(
-                300 * apu.K, 1000 * apu.hPa, 150 * apu.percent
-                )
+        args_list = [
+            (1.e-30, None, apu.K),
+            (1.e-30, None, apu.hPa),
+            (0, 100, apu.percent),
+            ]
+        check_astro_quantities(atm.pressure_water_from_humidity, args_list)
 
         temp = Quantity([280., 290., 295.], apu.K)
         press = Quantity([990., 980., 985.], apu.hPa)
@@ -294,41 +202,12 @@ class TestConversions:
 
     def test_humidity_from_pressure_water(self):
 
-        # first test, if assert Quantity works
-        with pytest.raises(TypeError):
-            atm.humidity_from_pressure_water(
-                300, 1000 * apu.hPa, 50 * apu.hPa
-                )
-
-        with pytest.raises(TypeError):
-            atm.humidity_from_pressure_water(
-                300 * apu.K, 1000, 50 * apu.hPa
-                )
-
-        with pytest.raises(TypeError):
-            atm.humidity_from_pressure_water(
-                300 * apu.K, 1000 * apu.hPa, 50
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.humidity_from_pressure_water(
-                300 * apu.m, 1000 * apu.hPa, 50 * apu.hPa
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.humidity_from_pressure_water(
-                300 * apu.K, 1000 * apu.m, 50 * apu.hPa
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.humidity_from_pressure_water(
-                300 * apu.K, 1000 * apu.hPa, 50 * apu.m
-                )
-
-        with pytest.raises(AssertionError):
-            atm.humidity_from_pressure_water(
-                300 * apu.K, 1000 * apu.hPa, -50 * apu.hPa
-                )
+        args_list = [
+            (1.e-30, None, apu.K),
+            (1.e-30, None, apu.hPa),
+            (1.e-30, None, apu.hPa),
+            ]
+        check_astro_quantities(atm.humidity_from_pressure_water, args_list)
 
         temp = Quantity([280., 290., 295.], apu.K)
         press = Quantity([990., 980., 985.], apu.hPa)
@@ -346,31 +225,11 @@ class TestConversions:
 
     def test_pressure_water_from_rho_water(self):
 
-        # first test, if assert Quantity works
-        with pytest.raises(TypeError):
-            atm.pressure_water_from_rho_water(
-                300, 5 * apu.g / apu.m ** 3
-                )
-
-        with pytest.raises(TypeError):
-            atm.pressure_water_from_rho_water(
-                300 * apu.K, 5
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.pressure_water_from_rho_water(
-                300 * apu.m, 5 * apu.g / apu.m ** 3
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.pressure_water_from_rho_water(
-                300 * apu.K, 5 * apu.m
-                )
-
-        with pytest.raises(AssertionError):
-            atm.pressure_water_from_rho_water(
-                300 * apu.K, -5 * apu.g / apu.m ** 3
-                )
+        args_list = [
+            (1.e-30, None, apu.K),
+            (1.e-30, None, apu.g / apu.m ** 3),
+            ]
+        check_astro_quantities(atm.pressure_water_from_rho_water, args_list)
 
         temp = Quantity([280., 290., 295.], apu.K)
         rho_w = Quantity([7.5, 5., 0.5], apu.g / apu.m ** 3)
@@ -385,31 +244,11 @@ class TestConversions:
 
     def test_rho_water_from_pressure_water(self):
 
-        # first test, if assert Quantity works
-        with pytest.raises(TypeError):
-            atm.rho_water_from_pressure_water(
-                300, 10 * apu.hPa
-                )
-
-        with pytest.raises(TypeError):
-            atm.rho_water_from_pressure_water(
-                300 * apu.K, 10
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.rho_water_from_pressure_water(
-                300 * apu.m, 10 * apu.hPa
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.rho_water_from_pressure_water(
-                300 * apu.K, 10 * apu.m
-                )
-
-        with pytest.raises(AssertionError):
-            atm.rho_water_from_pressure_water(
-                300 * apu.K, -10 * apu.hPa
-                )
+        args_list = [
+            (1.e-30, None, apu.K),
+            (1.e-30, None, apu.hPa),
+            ]
+        check_astro_quantities(atm.rho_water_from_pressure_water, args_list)
 
         temp = Quantity([280., 290., 295.], apu.K)
         rho_w = Quantity([7.5, 5., 0.5], apu.g / apu.m ** 3)
@@ -424,17 +263,10 @@ class TestConversions:
 
     def test_standard_profile(self):
 
-        with pytest.raises(TypeError):
-            atm.standard_profile(50)
-
-        with pytest.raises(apu.UnitsError):
-            atm.standard_profile(50 * apu.Hz)
-
-        with pytest.raises(AssertionError):
-            atm.standard_profile(-1 * apu.km)
-
-        with pytest.raises(AssertionError):
-            atm.standard_profile(86 * apu.km)
+        args_list = [
+            (0, 84.99999999, apu.km),
+            ]
+        check_astro_quantities(atm.standard_profile, args_list)
 
         # also testing multi-dim arrays:
         heights = Quantity([[1, 10], [3, 20], [30, 50]], apu.km)
@@ -581,83 +413,30 @@ class TestConversions:
 
     def test_specific_attenuation_annex1(self):
 
-        # first test, if assert Quantity works
-        with pytest.raises(TypeError):
-            atm.specific_attenuation_annex1(
-                1, 1000 * apu.hPa, 10 * apu.hPa, 300 * apu.K
-                )
-
-        with pytest.raises(TypeError):
-            atm.specific_attenuation_annex1(
-                1 * apu.GHz, 1000, 10 * apu.hPa, 300 * apu.K
-                )
-
-        with pytest.raises(TypeError):
-            atm.specific_attenuation_annex1(
-                1 * apu.GHz, 1000 * apu.hPa, 10, 300 * apu.K
-                )
-
-        with pytest.raises(TypeError):
-            atm.specific_attenuation_annex1(
-                1 * apu.GHz, 1000 * apu.hPa, 10 * apu.hPa, 300
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.specific_attenuation_annex1(
-                1 * apu.m, 1000 * apu.hPa, 10 * apu.hPa, 300 * apu.K
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.specific_attenuation_annex1(
-                1 * apu.GHz, 1000 * apu.m, 10 * apu.hPa, 300 * apu.K
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.specific_attenuation_annex1(
-                1 * apu.GHz, 1000 * apu.hPa, 10 * apu.m, 300 * apu.K
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.specific_attenuation_annex1(
-                1 * apu.GHz, 1000 * apu.hPa, 10 * apu.hPa, 300 * apu.m
-                )
-
-        with pytest.raises(AssertionError):
-            atm.specific_attenuation_annex1(
-                -1 * apu.GHz, 1000 * apu.hPa, 10 * apu.hPa, 300 * apu.K
-                )
-
-        with pytest.raises(AssertionError):
-            atm.specific_attenuation_annex1(
-                1 * apu.GHz, -1000 * apu.hPa, 10 * apu.hPa, 300 * apu.K
-                )
-
-        with pytest.raises(AssertionError):
-            atm.specific_attenuation_annex1(
-                1 * apu.GHz, 1000 * apu.hPa, -10 * apu.hPa, 300 * apu.K
-                )
-
-        with pytest.raises(AssertionError):
-            atm.specific_attenuation_annex1(
-                1 * apu.GHz, 1000 * apu.hPa, 10 * apu.hPa, -300 * apu.K
-                )
+        args_list = [
+            (1.e-30, None, apu.GHz),
+            (1.e-30, None, apu.hPa),
+            (1.e-30, None, apu.hPa),
+            (1.e-30, None, apu.K),
+            ]
+        check_astro_quantities(atm.specific_attenuation_annex1, args_list)
 
         # test for scalar quantities
-        with pytest.raises(AssertionError):
+        with pytest.raises(TypeError):
             atm.specific_attenuation_annex1(
                 1 * apu.GHz,
                 Quantity([1000, 1000], apu.hPa),
                 10 * apu.hPa, 300 * apu.K
                 )
 
-        with pytest.raises(AssertionError):
+        with pytest.raises(TypeError):
             atm.specific_attenuation_annex1(
                 1 * apu.GHz, 1000 * apu.hPa,
                 Quantity([10, 10], apu.hPa),
                 300 * apu.K
                 )
 
-        with pytest.raises(AssertionError):
+        with pytest.raises(TypeError):
             atm.specific_attenuation_annex1(
                 1 * apu.GHz, 1000 * apu.hPa, 10 * apu.hPa,
                 Quantity([300, 300], apu.K)
@@ -687,36 +466,12 @@ class TestConversions:
 
     def test_terrestrial_attenuation(self):
 
-        # first test, if assert Quantity works
-        with pytest.raises(TypeError):
-            atm.terrestrial_attenuation(
-                1, 10 * apu.km
-                )
+        args_list = [
+            (1.e-30, None, cnv.dB / apu.km),
+            (1.e-30, None, apu.km),
+            ]
+        check_astro_quantities(atm.terrestrial_attenuation, args_list)
 
-        with pytest.raises(TypeError):
-            atm.terrestrial_attenuation(
-                1 * cnv.dB / apu.km, 10
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.terrestrial_attenuation(
-                1 * cnv.dB, 10 * apu.km
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.terrestrial_attenuation(
-                1 * cnv.dB / apu.km, 10 * apu.Hz
-                )
-
-        with pytest.raises(AssertionError):
-            atm.terrestrial_attenuation(
-                -1 * cnv.dB / apu.km, 10 * apu.km
-                )
-
-        with pytest.raises(AssertionError):
-            atm.terrestrial_attenuation(
-                1 * cnv.dB / apu.km, -10 * apu.km
-                )
         assert_quantity_allclose(
             atm.terrestrial_attenuation(
                 Quantity([
@@ -731,103 +486,20 @@ class TestConversions:
 
     def test_slant_attenuation_annex1(self):
 
-        _prof = atm.standard_profile
-        # first test, if assert Quantity works
-        with pytest.raises(TypeError):
-            atm.slant_attenuation_annex1(
-                1, 30 * apu.deg, 400 * apu.m, _prof,
-                t_bg=3 * apu.K, max_path_length=1010 * apu.km
-                )
+        # from functools import partial
+        # _func = partial(
+        #     atm.slant_attenuation_annex1,
+        #     profile_func=atm.standard_profile
+        #     )
 
-        with pytest.raises(TypeError):
-            atm.slant_attenuation_annex1(
-                1 * apu.GHz, 30, 400 * apu.m, _prof,
-                t_bg=3 * apu.K, max_path_length=1010 * apu.km
-                )
-
-        with pytest.raises(TypeError):
-            atm.slant_attenuation_annex1(
-                1 * apu.GHz, 30 * apu.deg, 400, _prof,
-                t_bg=3 * apu.K, max_path_length=1010 * apu.km
-                )
-
-        with pytest.raises(TypeError):
-            atm.slant_attenuation_annex1(
-                1 * apu.GHz, 30 * apu.deg, 400 * apu.m, _prof,
-                t_bg=3, max_path_length=1010 * apu.km
-                )
-
-        with pytest.raises(TypeError):
-            atm.slant_attenuation_annex1(
-                1 * apu.GHz, 30 * apu.deg, 400 * apu.m, _prof,
-                t_bg=3 * apu.K, max_path_length=1010
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.slant_attenuation_annex1(
-                1 * apu.m, 30 * apu.deg, 400 * apu.m, _prof,
-                t_bg=3 * apu.K, max_path_length=1010 * apu.km
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.slant_attenuation_annex1(
-                1 * apu.GHz, 30 * apu.m, 400 * apu.m, _prof,
-                t_bg=3 * apu.K, max_path_length=1010 * apu.km
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.slant_attenuation_annex1(
-                1 * apu.GHz, 30 * apu.deg, 400 * apu.s, _prof,
-                t_bg=3 * apu.K, max_path_length=1010 * apu.km
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.slant_attenuation_annex1(
-                1 * apu.GHz, 30 * apu.deg, 400 * apu.m, _prof,
-                t_bg=3 * apu.m, max_path_length=1010 * apu.km
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.slant_attenuation_annex1(
-                1 * apu.GHz, 30 * apu.deg, 400 * apu.m, _prof,
-                t_bg=3 * apu.K, max_path_length=1010 * apu.s
-                )
-
-        with pytest.raises(AssertionError):
-            atm.slant_attenuation_annex1(
-                -1 * apu.GHz, 30 * apu.deg, 400 * apu.m, _prof,
-                t_bg=3 * apu.K, max_path_length=1010 * apu.km
-                )
-
-        with pytest.raises(AssertionError):
-            atm.slant_attenuation_annex1(
-                1 * apu.GHz, -100 * apu.deg, 400 * apu.m, _prof,
-                t_bg=3 * apu.K, max_path_length=1010 * apu.km
-                )
-
-        with pytest.raises(AssertionError):
-            atm.slant_attenuation_annex1(
-                1 * apu.GHz, +300 * apu.deg, 400 * apu.m, _prof,
-                t_bg=3 * apu.K, max_path_length=1010 * apu.km
-                )
-
-        with pytest.raises(AssertionError):
-            atm.slant_attenuation_annex1(
-                1 * apu.GHz, 30 * apu.deg, -100 * apu.m, _prof,
-                t_bg=3 * apu.K, max_path_length=1010 * apu.km
-                )
-
-        with pytest.raises(AssertionError):
-            atm.slant_attenuation_annex1(
-                1 * apu.GHz, 30 * apu.deg, 400 * apu.m, _prof,
-                t_bg=-3 * apu.K, max_path_length=1010 * apu.km
-                )
-
-        with pytest.raises(AssertionError):
-            atm.slant_attenuation_annex1(
-                1 * apu.GHz, 30 * apu.deg, 400 * apu.m, _prof,
-                t_bg=3 * apu.K, max_path_length=-1010 * apu.km
-                )
+        # args_list = [
+        #     (1.e-30, None, apu.GHz),
+        #     (-90, 90, apu.deg),
+        #     (1.e-30, None, apu.m),
+        #     (1.e-30, None, apu.K),
+        #     (1.e-30, None, apu.km),
+        #     ]
+        # check_astro_quantities(_func, args_list)
 
         atten, refract, tebb = atm.slant_attenuation_annex1(
             np.logspace(1, 2, 5) * apu.GHz, 30 * apu.deg, 400 * apu.m,
