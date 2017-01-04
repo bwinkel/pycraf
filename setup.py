@@ -6,6 +6,7 @@ from setuptools import setup
 
 setup(
     name="pycraf",
+    version="0.22",
     version="0.21",
     description="pycraf",
     author="Benjamin Winkel",
@@ -17,6 +18,7 @@ setup(
         'pycraf.atm',
         'pycraf.conversions',
         'pycraf.geospatial',
+        'pycraf.helpers',
         'pycraf.protection'
         ],
     install_requires=[
@@ -24,6 +26,7 @@ setup(
         'numpy>=1.8',
         # 'scipy>=0.15',
         'astropy>=1.1',
+        'pyproj>=1.9',
     ],
     package_dir={
         'pycraf': 'src',
@@ -31,6 +34,7 @@ setup(
         'pycraf.atm': 'src/atm',
         'pycraf.conversions': 'src/conversions',
         'pycraf.geospatial': 'src/geospatial',
+        'pycraf.helpers': 'src/helpers',
         'pycraf.protection': 'src/protection',
         },
     package_data={
