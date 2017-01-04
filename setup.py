@@ -7,7 +7,6 @@ from setuptools import setup
 setup(
     name="pycraf",
     version="0.22",
-    version="0.21",
     description="pycraf",
     author="Benjamin Winkel",
     author_email="bwinkel@mpifr.de",
@@ -19,7 +18,8 @@ setup(
         'pycraf.conversions',
         'pycraf.geospatial',
         'pycraf.helpers',
-        'pycraf.protection'
+        'pycraf.pathprof',
+        'pycraf.protection',
         ],
     install_requires=[
         'setuptools',
@@ -35,6 +35,7 @@ setup(
         'pycraf.conversions': 'src/conversions',
         'pycraf.geospatial': 'src/geospatial',
         'pycraf.helpers': 'src/helpers',
+        'pycraf.pathprof': 'src/pathprof',
         'pycraf.protection': 'src/protection',
         },
     package_data={
@@ -43,6 +44,7 @@ setup(
             'atm/data/R-REC-P.676-10-201309_table2.csv',
             'protection/data/ra_769_table1_limits_continuum.csv',
             'protection/data/ra_769_table2_limits_spectroscopy.csv',
+            'pathprof/data/refract_map.npy.npz',
             ]
         },
     long_description='''pycraf ... the CRAF library.

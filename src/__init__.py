@@ -6,4 +6,5 @@ from . import atm
 from . import conversions
 from . import geospatial
 from . import helpers
+from . import pathprof
 from . import protection
