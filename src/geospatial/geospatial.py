@@ -65,13 +65,13 @@ def utm_to_wgs84(ulon, ulat, zone, south=False):
 
     Parameters
     ----------
-    ulon, ulat - UTM longitude and latitude
+    ulon, ulat - UTM longitude and latitude [deg]
     zone - UTM zone (e.g., 32 for Effelsberg, with south == False)
     south - set to True if on southern hemisphere
 
     Returns
     -------
-    glon, glat - GPS/WGS84 longitude and latitude
+    glon, glat - GPS/WGS84 longitude and latitude [deg]
 
     Notes
     -----
@@ -91,12 +91,12 @@ def wgs84_to_utm(glon, glat, zone, south=False):
 
     Parameters
     ----------
-    glon, glat - GPS/WGS84 longitude and latitude
+    glon, glat - GPS/WGS84 longitude and latitude [deg]
     zone - UTM zone (e.g., 32 for Effelsberg)
 
     Returns
     -------
-    ulon, ulat - UTM longitude and latitude
+    ulon, ulat - UTM longitude and latitude [deg]
 
     Notes
     -----
@@ -124,11 +124,11 @@ def etrs89_to_wgs84(elon, elat):
 
     Parameters
     ----------
-    elon, elat - ETRS89 longitude and latitude
+    elon, elat - ETRS89 longitude and latitude [deg]
 
     Returns
     -------
-    glon, glat - GPS/WGS84 longitude and latitude
+    glon, glat - GPS/WGS84 longitude and latitude [deg]
 
     Notes
     -----
@@ -152,11 +152,11 @@ def wgs84_to_etrs89(glon, glat):
 
     Parameters
     ----------
-    glon, glat - GPS/WGS84 longitude and latitude
+    glon, glat - GPS/WGS84 longitude and latitude [deg]
 
     Returns
     -------
-    elon, elat - ETRS89 longitude and latitude
+    elon, elat - ETRS89 longitude and latitude [deg]
 
     Notes
     -----

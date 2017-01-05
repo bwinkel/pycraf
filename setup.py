@@ -44,7 +44,7 @@ setup(
             'atm/data/R-REC-P.676-10-201309_table2.csv',
             'protection/data/ra_769_table1_limits_continuum.csv',
             'protection/data/ra_769_table2_limits_spectroscopy.csv',
-            'pathprof/data/refract_map.npy.npz',
+            'pathprof/data/refract_map.npz',
             ]
         },
     long_description='''pycraf ... the CRAF library.

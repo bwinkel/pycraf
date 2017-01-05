@@ -30,10 +30,10 @@ def main():
         'dn50': dn50.astype(np.float32),
         'n050': n050.astype(np.float32),
         }
-    np.savez('refract_map.npy', **save_kwargs)
+    np.savez('refract_map', **save_kwargs)
 
     # read using:
-    # dat = np.load('refract_map.npy.npz')
+    # dat = np.load('refract_map.npz')
 
 
 if __name__ == '__main__':

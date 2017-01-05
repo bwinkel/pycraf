@@ -56,3 +56,70 @@ class TestHelper:
             p,
             **TOL_KWARGS
             )
+
+    def test_radiomet_data_for_pathcenter(self):
+
+        pfunc = pathprof.radiomet_data_for_pathcenter
+        args_list = [
+            (0, 360, apu.deg),
+            (-90, 90, apu.deg),
+            (0, None, apu.km),
+            (0, None, apu.km),
+            ]
+        check_astro_quantities(pfunc, args_list)
+
+        lon = Quantity([0.01, 10., 20., 20., 50., 359.], apu.deg)
+        lat = Quantity([30., 50., -50., 50, 40., 40.], apu.deg)
+        d_tm = Quantity([0.1, 1., 10., 10., 0., 100.], apu.km)
+        d_lm = Quantity([0.1, 1., 10., 10., 0., 100.], apu.km)
+
+        DN, beta_0, N0 = pfunc(lon, lat, d_tm, d_lm)
+
+        print(DN)
+        print(beta_0)
+        print(N0)
+
+        assert_quantity_allclose(
+            DN,
+            Quantity([
+                33.82150749, 36.5930002, 44.36488936, 35.57166629,
+                40.73833338, 44.74622175], cnv.dimless / apu.km),
+            )
+
+        assert_quantity_allclose(
+            beta_0,
+            Quantity([
+                16.57415849, 8.10024667, 6.27440928, 6.27440928,
+                11.7549507, 2.60825487], apu.percent),
+            )
+
+        assert_quantity_allclose(
+            N0,
+            Quantity([
+                304.58966064, 323.69878472, 319.52155219, 322.11834378,
+                326.14456177, 329.69577705], cnv.dimless),
+            )
+
+    def test_median_effective_earth_radius(self):
+
+        pfunc = pathprof.median_effective_earth_radius
+        args_list = [
+            (0, 360, apu.deg),
+            (-90, 90, apu.deg),
+            ]
+        check_astro_quantities(pfunc, args_list)
+
+        lon = Quantity([0.01, 10., 20., 20., 50., 359.], apu.deg)
+        lat = Quantity([30., 50., -50., 50, 40., 40.], apu.deg)
+
+        a_e = pfunc(lon, lat)
+
+        print(a_e)
+
+        assert_quantity_allclose(
+            a_e,
+            Quantity([
+                8120.30557961, 8307.21637166, 8880.41920755, 8237.34436165,
+                8603.41184774, 8910.586491], apu.km),
+            )
+
