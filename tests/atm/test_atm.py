@@ -528,83 +528,30 @@ class TestConversions:
 
     def test_specific_attenuation_annex2(self):
 
-        # first test, if assert Quantity works
-        with pytest.raises(TypeError):
-            atm.specific_attenuation_annex2(
-                1, 1000 * apu.hPa, 10 * apu.g / apu.m ** 3, 300 * apu.K
-                )
-
-        with pytest.raises(TypeError):
-            atm.specific_attenuation_annex2(
-                1 * apu.GHz, 1000, 10 * apu.g / apu.m ** 3, 300 * apu.K
-                )
-
-        with pytest.raises(TypeError):
-            atm.specific_attenuation_annex2(
-                1 * apu.GHz, 1000 * apu.hPa, 10, 300 * apu.K
-                )
-
-        with pytest.raises(TypeError):
-            atm.specific_attenuation_annex2(
-                1 * apu.GHz, 1000 * apu.hPa, 10 * apu.g / apu.m ** 3, 300
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.specific_attenuation_annex2(
-                1 * apu.m, 1000 * apu.hPa, 10 * apu.g / apu.m ** 3, 300 * apu.K
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.specific_attenuation_annex2(
-                1 * apu.GHz, 1000 * apu.m, 10 * apu.g / apu.m ** 3, 300 * apu.K
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.specific_attenuation_annex2(
-                1 * apu.GHz, 1000 * apu.hPa, 10 * apu.m, 300 * apu.K
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.specific_attenuation_annex2(
-                1 * apu.GHz, 1000 * apu.hPa, 10 * apu.g / apu.m ** 3, 300 * apu.m
-                )
-
-        with pytest.raises(AssertionError):
-            atm.specific_attenuation_annex2(
-                -1 * apu.GHz, 1000 * apu.hPa, 10 * apu.g / apu.m ** 3, 300 * apu.K
-                )
-
-        with pytest.raises(AssertionError):
-            atm.specific_attenuation_annex2(
-                1 * apu.GHz, -1000 * apu.hPa, 10 * apu.g / apu.m ** 3, 300 * apu.K
-                )
-
-        with pytest.raises(AssertionError):
-            atm.specific_attenuation_annex2(
-                1 * apu.GHz, 1000 * apu.hPa, -10 * apu.g / apu.m ** 3, 300 * apu.K
-                )
-
-        with pytest.raises(AssertionError):
-            atm.specific_attenuation_annex2(
-                1 * apu.GHz, 1000 * apu.hPa, 10 * apu.g / apu.m ** 3, -300 * apu.K
-                )
+        args_list = [
+            (1.e-30, None, apu.GHz),
+            (1.e-30, None, apu.hPa),
+            (1.e-30, None, apu.g / apu.m ** 3),
+            (1.e-30, None, apu.K),
+            ]
+        check_astro_quantities(atm.specific_attenuation_annex2, args_list)
 
         # test for scalar quantities
-        with pytest.raises(AssertionError):
+        with pytest.raises(TypeError):
             atm.specific_attenuation_annex2(
                 1 * apu.GHz,
                 Quantity([1000, 1000], apu.hPa),
                 10 * apu.g / apu.m ** 3, 300 * apu.K
                 )
 
-        with pytest.raises(AssertionError):
+        with pytest.raises(TypeError):
             atm.specific_attenuation_annex2(
                 1 * apu.GHz, 1000 * apu.hPa,
                 Quantity([10, 10], apu.g / apu.m ** 3),
                 300 * apu.K
                 )
 
-        with pytest.raises(AssertionError):
+        with pytest.raises(TypeError):
             atm.specific_attenuation_annex2(
                 1 * apu.GHz, 1000 * apu.hPa, 10 * apu.g / apu.m ** 3,
                 Quantity([300, 300], apu.K)
@@ -632,108 +579,87 @@ class TestConversions:
                 ], cnv.dB / apu.km)
             )
 
+    def test_equivalent_height_dry(self):
+
+        args_list = [
+            (1.e-30, None, apu.GHz),
+            (1.e-30, None, apu.hPa),
+            ]
+        check_astro_quantities(atm.equivalent_height_dry, args_list)
+
+        height = atm.equivalent_height_dry(
+            np.logspace(1, 2, 5) * apu.GHz,
+            980 * apu.hPa,
+            )
+        print(height)
+
+        assert_quantity_allclose(
+            height,
+            Quantity([
+                5.17174463, 5.15765153, 5.12390758, 10.2730745, 5.38128124
+                ], apu.km)
+            )
+
+    def test_equivalent_height_wet(self):
+
+        args_list = [
+            (1.e-30, None, apu.GHz),
+            (1.e-30, None, apu.hPa),
+            ]
+        check_astro_quantities(atm.equivalent_height_wet, args_list)
+
+        height = atm.equivalent_height_wet(
+            np.logspace(1, 2, 5) * apu.GHz,
+            980 * apu.hPa,
+            )
+        print(height)
+
+        assert_quantity_allclose(
+            height,
+            Quantity([
+                1.67507787, 1.7615659, 1.68523706, 1.66232892, 1.66121491
+                ], apu.km)
+            )
+
     def test_slant_attenuation_annex2(self):
 
-        # first test, if assert Quantity works
-        with pytest.raises(TypeError):
-            atm.slant_attenuation_annex2(
-                1, 1 * cnv.dB / apu.km,
-                1 * apu.km, 1 * apu.km, 30 * apu.deg
-                )
+        args_list = [
+            (1.e-30, None, cnv.dB / apu.km),
+            (1.e-30, None, cnv.dB / apu.km),
+            (1.e-30, None, apu.km),
+            (1.e-30, None, apu.km),
+            (-90, 90, apu.deg),
+            ]
+        check_astro_quantities(atm.slant_attenuation_annex2, args_list)
 
-        with pytest.raises(TypeError):
-            atm.slant_attenuation_annex2(
-                1 * cnv.dB / apu.km, 1,
-                1 * apu.km, 1 * apu.km, 30 * apu.deg
-                )
-
+        # test for scalar quantities
         with pytest.raises(TypeError):
             atm.slant_attenuation_annex2(
                 1 * cnv.dB / apu.km, 1 * cnv.dB / apu.km,
-                1, 1 * apu.km, 30 * apu.deg
+                Quantity([1, 1], apu.km), 1 * apu.km, 30 * apu.deg
                 )
 
         with pytest.raises(TypeError):
             atm.slant_attenuation_annex2(
                 1 * cnv.dB / apu.km, 1 * cnv.dB / apu.km,
-                1 * apu.km, 1, 30 * apu.deg
+                1 * apu.km, Quantity([1, 1], apu.km), 30 * apu.deg
                 )
 
         with pytest.raises(TypeError):
             atm.slant_attenuation_annex2(
                 1 * cnv.dB / apu.km, 1 * cnv.dB / apu.km,
-                1 * apu.km, 1 * apu.km, 30
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.slant_attenuation_annex2(
-                1 * apu.km, 1 * cnv.dB / apu.km,
-                1 * apu.km, 1 * apu.km, 30 * apu.deg
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.slant_attenuation_annex2(
-                1 * cnv.dB / apu.km, 1 * apu.km,
-                1 * apu.km, 1 * apu.km, 30 * apu.deg
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.slant_attenuation_annex2(
-                1 * cnv.dB / apu.km, 1 * cnv.dB / apu.km,
-                1 * apu.s, 1 * apu.km, 30 * apu.deg
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.slant_attenuation_annex2(
-                1 * cnv.dB / apu.km, 1 * cnv.dB / apu.km,
-                1 * apu.km, 1 * apu.s, 30 * apu.deg
-                )
-
-        with pytest.raises(apu.UnitsError):
-            atm.slant_attenuation_annex2(
-                1 * cnv.dB / apu.km, 1 * cnv.dB / apu.km,
-                1 * apu.km, 1 * apu.km, 30 * apu.s
-                )
-
-        with pytest.raises(AssertionError):
-            atm.slant_attenuation_annex2(
-                -1 * cnv.dB / apu.km, 1 * cnv.dB / apu.km,
-                1 * apu.km, 1 * apu.km, 30 * apu.deg
-                )
-
-        with pytest.raises(AssertionError):
-            atm.slant_attenuation_annex2(
-                1 * cnv.dB / apu.km, -1 * cnv.dB / apu.km,
-                1 * apu.km, 1 * apu.km, 30 * apu.deg
-                )
-
-        with pytest.raises(AssertionError):
-            atm.slant_attenuation_annex2(
-                1 * cnv.dB / apu.km, 1 * cnv.dB / apu.km,
-                -1 * apu.km, 1 * apu.km, 30 * apu.deg
-                )
-
-        with pytest.raises(AssertionError):
-            atm.slant_attenuation_annex2(
-                1 * cnv.dB / apu.km, 1 * cnv.dB / apu.km,
-                1 * apu.km, -1 * apu.km, 30 * apu.deg
-                )
-
-        with pytest.raises(AssertionError):
-            atm.slant_attenuation_annex2(
-                1 * cnv.dB / apu.km, 1 * cnv.dB / apu.km,
-                1 * apu.km, 1 * apu.km, 130 * apu.deg
+                1 * apu.km, 1 * apu.km, Quantity([30, 30], apu.deg)
                 )
 
         atten_dry = Quantity([
-                0.006643591, 0.008556794, 0.0200009175, 6.5824558517,
-                0.0215553521
-                ], cnv.dB / apu.km)
+            0.006643591, 0.008556794, 0.0200009175, 6.5824558517,
+            0.0215553521
+            ], cnv.dB / apu.km)
 
         atten_wet = Quantity([
-                0.0082768112, 0.0599180804, 0.096043373, 0.1902800424,
-                0.5888230557
-                ], cnv.dB / apu.km)
+            0.0082768112, 0.0599180804, 0.096043373, 0.1902800424,
+            0.5888230557
+            ], cnv.dB / apu.km)
 
         atten_tot = atm.slant_attenuation_annex2(
             atten_dry, atten_wet,

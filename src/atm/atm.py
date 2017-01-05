@@ -29,8 +29,8 @@ __all__ = [
     'terrestrial_attenuation', 'slant_attenuation_annex1',
     'specific_attenuation_annex2',
     'slant_attenuation_annex2',
-    '_equivalent_height_dry', '_equivalent_height_wet',
-    '_prepare_path'
+    'equivalent_height_dry', 'equivalent_height_wet',
+    # '_prepare_path'
     ]
 
 
@@ -1048,7 +1048,7 @@ def _specific_attenuation_annex1(
 
 
 @helpers.ranged_quantity_input(
-    freq_grid=(1.e-30, None, apu.GHz),
+    freq_grid=(1.e-30, 1000, apu.GHz),
     pressure_dry=(1.e-30, None, apu.hPa),
     pressure_water=(1.e-30, None, apu.hPa),
     temperature=(1.e-30, None, apu.K),
@@ -1097,7 +1097,7 @@ def specific_attenuation_annex1(
 def terrestrial_attenuation(specific_atten, path_length):
     '''
     Calculate total path attenuation for a path close to the ground
-    (i.e., one layer), according to ITU-R P.676-10, annex 1.
+    (i.e., one layer), according to ITU-R P.676-10, annex 1 + 2.
 
     Parameters
     ----------
@@ -1274,7 +1274,7 @@ def _prepare_path(elevation, obs_alt, profile_func, max_path_length=1000.):
 
 
 @helpers.ranged_quantity_input(
-    freq_grid=(1.e-30, None, apu.GHz),
+    freq_grid=(1.e-30, 1000, apu.GHz),
     elevation=(-90, 90, apu.deg),
     obs_alt=(1.e-30, None, apu.m),
     t_bg=(1.e-30, None, apu.K),
@@ -1406,9 +1406,12 @@ _helper_funcs = dict(
     )
 
 
-@apu.quantity_input(
-    freq_grid=apu.GHz, pressure=apu.hPa,
-    rho_water=apu.g / apu.m ** 3, temperature=apu.K
+@helpers.ranged_quantity_input(
+    freq_grid=(1.e-30, 350., apu.GHz),
+    pressure=(1.e-30, None, apu.hPa),
+    rho_water=(1.e-30, None, apu.g / apu.m ** 3),
+    temperature=(1.e-30, None, apu.K),
+    strip_input_units=True, output_unit=(cnv.dB / apu.km, cnv.dB / apu.km)
     )
 def specific_attenuation_annex2(freq_grid, pressure, rho_water, temperature):
     '''
@@ -1428,27 +1431,18 @@ def specific_attenuation_annex2(freq_grid, pressure, rho_water, temperature):
     '''
 
     freq_grid = np.atleast_1d(freq_grid)
-    assert pressure.size == 1, 'pressure must be scalar'
-    assert rho_water.size == 1, 'rho_water must be scalar'
-    assert temperature.size == 1, 'temperature must be scalar'
 
-    _freq = freq_grid.to(apu.GHz).value
-    _press = pressure.to(apu.hPa).value
-    _rho_w = rho_water.to(apu.g / apu.m ** 3).value
-    _temp = temperature.to(apu.K).value
+    if not isinstance(pressure, numbers.Real):
+        raise TypeError('pressure must be a scalar float')
+    if not isinstance(rho_water, numbers.Real):
+        raise TypeError('rho_water must be a scalar float')
+    if not isinstance(temperature, numbers.Real):
+        raise TypeError('temperature must be a scalar float')
 
-    assert _temp > 1.e-30, (
-        'temperature must be positive value'
-        )
-    assert _press > 1.e-30, (
-        'pressure must be positive value'
-        )
-    assert _rho_w > 1.e-30, (
-        'rho_water must be positive value'
-        )
-    assert np.all((_freq > 1.e-30) & (_freq < 350.)), (
-        'freq_grid must be within 0 and 350 GHz'
-        )
+    _freq = freq_grid
+    _press = pressure
+    _rho_w = rho_water
+    _temp = temperature
 
     r_p = _press / 1013.
     r_t = 288. / (_temp - 0.15)
@@ -1547,13 +1541,15 @@ def specific_attenuation_annex2(freq_grid, pressure, rho_water, temperature):
 
     atten_wet *= f ** 2 * r_t ** 2.5 * _rho_w * 1.e-4
 
-    return (
-        apu.Quantity(atten_dry, cnv.dB / apu.km),
-        apu.Quantity(atten_wet, cnv.dB / apu.km),
-        )
+    return atten_dry, atten_wet
 
 
-def _equivalent_height_dry(freq_grid, pressure):
+@helpers.ranged_quantity_input(
+    freq_grid=(1.e-30, 350., apu.GHz),
+    pressure=(1.e-30, None, apu.hPa),
+    strip_input_units=True, output_unit=apu.km
+    )
+def equivalent_height_dry(freq_grid, pressure):
     '''
     Calculate equivalent height for dry air (ITU-R P.676-10 Annex 2.2).
 
@@ -1568,9 +1564,6 @@ def _equivalent_height_dry(freq_grid, pressure):
     '''
 
     r_p = pressure / 1013.
-
-    assert np.all(freq_grid > 0.)
-    assert np.all(freq_grid <= 350.)
 
     f = np.atleast_1d(freq_grid).astype(dtype=np.float64, copy=False)
 
@@ -1594,7 +1587,12 @@ def _equivalent_height_dry(freq_grid, pressure):
     return h_0
 
 
-def _equivalent_height_wet(freq_grid, pressure):
+@helpers.ranged_quantity_input(
+    freq_grid=(1.e-30, 350., apu.GHz),
+    pressure=(1.e-30, None, apu.hPa),
+    strip_input_units=True, output_unit=apu.km
+    )
+def equivalent_height_wet(freq_grid, pressure):
     '''
     Calculate equivalent height for wet air (ITU-R P.676-10 Annex 2.2).
 
@@ -1610,15 +1608,12 @@ def _equivalent_height_wet(freq_grid, pressure):
 
     r_p = pressure / 1013.
 
-    assert np.all(freq_grid > 0.)
-    assert np.all(freq_grid <= 350.)
-
     f = np.atleast_1d(freq_grid).astype(dtype=np.float64, copy=False)
 
     s_w = 1.013 / (1. + np.exp(-8.6 * (r_p - 0.57)))
 
     def _helper(a, b, c):
-        a * s_w / ((f - b) ** 2 + c * s_w)
+        return a * s_w / ((f - b) ** 2 + c * s_w)
 
     h_w = 1.66 * (
         1. +
@@ -1630,9 +1625,13 @@ def _equivalent_height_wet(freq_grid, pressure):
     return h_w
 
 
-@apu.quantity_input(
-    atten_dry=cnv.dB / apu.km, atten_wet=cnv.dB / apu.km,
-    h_dry=apu.m, h_wet=apu.m, elevation=apu.deg
+@helpers.ranged_quantity_input(
+    atten_dry=(1.e-30, None, cnv.dB / apu.km),
+    atten_wet=(1.e-30, None, cnv.dB / apu.km),
+    h_dry=(1.e-30, None, apu.km),
+    h_wet=(1.e-30, None, apu.km),
+    elevation=(-90, 90, apu.deg),
+    strip_input_units=True, output_unit=cnv.dB
     )
 def slant_attenuation_annex2(atten_dry, atten_wet, h_dry, h_wet, elevation):
     '''
@@ -1641,7 +1640,6 @@ def slant_attenuation_annex2(atten_dry, atten_wet, h_dry, h_wet, elevation):
 
     Parameters
     ----------
-    freq_grid - Frequencies (GHz)
     atten_dry - Specific attenuation for dry air (dB / km)
     atten_wet - Specific attenuation for wet air (dB / km)
     h_dry - Equivalent height for dry air (km)
@@ -1651,34 +1649,20 @@ def slant_attenuation_annex2(atten_dry, atten_wet, h_dry, h_wet, elevation):
     Returns
     -------
     Total attenuation along path (dB)
+
+    Notes
+    -----
+    You can use the helper functions equivalent_height_[dry,wet] to infer
+    the equivalent heights from the total (wet+dry) air pressure.
     '''
 
-    assert h_dry.size == 1, 'h_dry must be scalar'
-    assert h_wet.size == 1, 'h_wet must be scalar'
-    assert elevation.size == 1, 'elevation must be scalar'
+    if not isinstance(h_dry, numbers.Real):
+        raise TypeError('h_dry must be a scalar float')
+    if not isinstance(h_wet, numbers.Real):
+        raise TypeError('h_wet must be a scalar float')
+    if not isinstance(elevation, numbers.Real):
+        raise TypeError('elevation must be a scalar float')
 
-    _atten_d = atten_dry.to(cnv.dB / apu.km).value
-    _atten_w = atten_wet.to(cnv.dB / apu.km).value
-    _h_dry = h_dry.to(apu.km).value
-    _h_wet = h_wet.to(apu.km).value
-    _elev = elevation.to(apu.deg).value
+    AM = 1. / np.sin(np.radians(elevation))
 
-    assert np.all(_atten_d > 1.e-30), (
-        'atten_dry must be positive value (on dB scale)'
-        )
-    assert np.all(_atten_w > 1.e-30), (
-        'atten_wet must be positive value (on dB scale)'
-        )
-    assert _h_dry > 1.e-30, (
-        'h_dry must be positive value'
-        )
-    assert _h_wet > 1.e-30, (
-        'h_wet must be positive value'
-        )
-    assert _elev >= -90 and _elev <= 90, (
-        'elevation must be within -90d..+90d'
-        )
-
-    AM = 1. / np.sin(np.radians(_elev))
-
-    return apu.Quantity(AM * (_atten_d * _h_dry + _atten_w * _h_wet), cnv.dB)
+    return AM * (atten_dry * h_dry + atten_wet * h_wet)
