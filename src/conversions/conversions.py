@@ -9,6 +9,7 @@ import numpy as np
 from astropy import units as apu
 from astropy.units import Quantity, UnitsError
 import astropy.constants as con
+from .. import helpers
 
 
 UNITS = [
@@ -35,6 +36,7 @@ __all__ = [
     'free_space_loss',
     'Erx_unit', 'R0', 'E_field_equivalency',
     ] + UNITS
+
 
 
 # define some useful dB-Scales
@@ -80,9 +82,16 @@ R0 = (
 Erx_unit = (
     (1 * apu.W / 4. / np.pi * R0) ** 0.5 / (1 * apu.km)
     ).to(apu.uV / apu.m)
+C_VALUE = con.c.to(apu.m / apu.s).value
+R0_VALUE = R0.to(apu.Ohm).value
+ERX_VALUE = Erx_unit.to(apu.V / apu.m).value
 
 
-@apu.quantity_input(Ageom=apu.m ** 2, eta_a=dimless)
+@helpers.ranged_quantity_input(
+    Ageom=(0, None, apu.m ** 2),
+    eta_a=(0, 100, apu.percent),
+    strip_input_units=True, output_unit=apu.m ** 2
+    )
 def Aeff_from_Ageom(Ageom, eta_a):
     '''
     Calculate effective ant. area from geometric area, given ant. efficiency.
@@ -100,10 +109,14 @@ def Aeff_from_Ageom(Ageom, eta_a):
     Effective antenna area, Aeff [m**2]
     '''
 
-    return Ageom * eta_a.to(dimless)
+    return Ageom * eta_a / 100.
 
 
-@apu.quantity_input(Aeff=apu.m ** 2, eta_a=dimless)
+@helpers.ranged_quantity_input(
+    Aeff=(0, None, apu.m ** 2),
+    eta_a=(0, 100, apu.percent),
+    strip_input_units=True, output_unit=apu.m ** 2
+    )
 def Ageom_from_Aeff(Aeff, eta_a):
     '''
     Calculate geometric ant. area from effective area, given ant. efficiency.
@@ -121,10 +134,14 @@ def Ageom_from_Aeff(Aeff, eta_a):
     Geometric antenna area, Ageom [m**2]
     '''
 
-    return Aeff / eta_a.to(dimless)
+    return Aeff / eta_a * 100.
 
 
-@apu.quantity_input(Aeff=apu.m ** 2, f=apu.Hz)
+@helpers.ranged_quantity_input(
+    Aeff=(0, None, apu.m ** 2),
+    f=(0, None, apu.Hz),
+    strip_input_units=True, output_unit=dBi
+    )
 def Gain_from_Aeff(Aeff, f):
     '''
     Calculate antenna gain from effective antenna area, given frequency.
@@ -142,10 +159,16 @@ def Gain_from_Aeff(Aeff, f):
     Antenna gain, G [dBi]
     '''
 
-    return (4. * np.pi * Aeff * (f / con.c) ** 2).to(dBi)
+    return 10 * np.log10(
+        4. * np.pi * Aeff * (f / C_VALUE) ** 2
+        )
 
 
-@apu.quantity_input(G=dBi, f=apu.Hz)
+@helpers.ranged_quantity_input(
+    G=(1.e-30, None, dimless),
+    f=(0, None, apu.Hz),
+    strip_input_units=True, output_unit=apu.m ** 2
+    )
 def Aeff_from_Gain(G, f):
     '''
     Calculate effective antenna area from antenna gain, given frequency.
@@ -163,11 +186,14 @@ def Aeff_from_Gain(G, f):
     Effective antenna area, Aeff [m**2]
     '''
 
-    return (G.to(dimless) * (con.c / f) ** 2 / 4. / np.pi).to(apu.m ** 2)
+    return G * (C_VALUE / f) ** 2 / 4. / np.pi
 
 
 # @apu.quantity_input(E=dB_uV_m, equivalencies=E_field_equivalency())
-@apu.quantity_input(E=dB_uV_m)
+@helpers.ranged_quantity_input(
+    E=(1.e-30, None, apu.V / apu.meter),
+    strip_input_units=True, output_unit=apu.W / apu.m ** 2
+    )
 def S_from_E(E):
     '''
     Calculate power flux density, S, from field strength.
@@ -184,10 +210,13 @@ def S_from_E(E):
     Power flux density, S [dB_W_m2 or W/m**2]
     '''
 
-    return (E.to(apu.uV / apu.meter) ** 2 / R0).to(apu.W / apu.m ** 2)
+    return E ** 2 / R0_VALUE
 
 
-@apu.quantity_input(S=dB_W_m2)
+@helpers.ranged_quantity_input(
+    S=(None, None, apu.W / apu.m ** 2),
+    strip_input_units=True, output_unit=apu.uV / apu.meter
+    )
 def E_from_S(S):
     '''
     Calculate field strength, E, from power flux density.
@@ -204,10 +233,16 @@ def E_from_S(S):
     Received E-field strength, E [uV/m]
     '''
 
-    return (np.sqrt(S.to(apu.W / apu.m ** 2) * R0)).to(apu.uV / apu.meter)
+    # return np.sqrt(np.power(10., 0.1 * S) * R0_VALUE) * 1.e6
+    return np.sqrt(S * R0_VALUE) * 1.e6
 
 
-@apu.quantity_input(Erx=dB_uV_m, d=apu.m, Gtx=dBi)
+@helpers.ranged_quantity_input(
+    Erx=(1.e-30, None, apu.V / apu.meter),
+    d=(1.e-30, None, apu.m),
+    Gtx=(1.e-30, None, dimless),
+    strip_input_units=True, output_unit=apu.W
+    )
 def Ptx_from_Erx(Erx, d, Gtx):
     '''
     Calculate transmitter power, Ptx, from received field strength.
@@ -226,13 +261,15 @@ def Ptx_from_Erx(Erx, d, Gtx):
     Transmitter power, Ptx [W]
     '''
 
-    return (
-        4. * np.pi * d ** 2 / Gtx.to(dimless) *
-        Erx.to(apu.uV / apu.meter) ** 2 / R0
-        ).to(apu.W)
+    return 4. * np.pi * d ** 2 / Gtx * Erx ** 2 / R0_VALUE
 
 
-@apu.quantity_input(Ptx=dB_W, d=apu.m, Gtx=dBi)
+@helpers.ranged_quantity_input(
+    Ptx=(1.e-30, None, apu.W),
+    d=(1.e-30, None, apu.m),
+    Gtx=(1.e-30, None, dimless),
+    strip_input_units=True, output_unit=apu.uV / apu.meter
+    )
 def Erx_from_Ptx(Ptx, d, Gtx):
     '''
     Calculate received field strength, Erx, from transmitter power.
@@ -251,12 +288,15 @@ def Erx_from_Ptx(Ptx, d, Gtx):
     Received E-field strength, Erx [uV/m]
     '''
 
-    return (
-        (Ptx.to(apu.W) * Gtx.to(dimless) / 4. / np.pi * R0) ** 0.5 / d
-        ).to(apu.uV / apu.meter)
+    return (Ptx * Gtx / 4. / np.pi * R0_VALUE) ** 0.5 / d * 1.e6
 
 
-@apu.quantity_input(Ptx=dB_W, d=apu.m, Gtx=dBi)
+@helpers.ranged_quantity_input(
+    Ptx=(1.e-30, None, apu.W),
+    d=(1.e-30, None, apu.m),
+    Gtx=(1.e-30, None, dimless),
+    strip_input_units=True, output_unit=apu.W / apu.m ** 2
+    )
 def S_from_Ptx(Ptx, d, Gtx):
     '''
     Calculate power flux density, S, from transmitter power.
@@ -280,12 +320,15 @@ def S_from_Ptx(Ptx, d, Gtx):
     # return Gtx * Ptx / 4. / np.pi / d ** 2
     # (would be doable with apu.logarithmic() environment)
 
-    return (
-        Gtx.to(dimless) * Ptx.to(apu.W) / 4. / np.pi / d ** 2
-        ).to(apu.W / apu.m ** 2)
+    return Gtx * Ptx / 4. / np.pi / d ** 2
 
 
-@apu.quantity_input(S=dB_W_m2, d=apu.m, Gtx=dBi)
+@helpers.ranged_quantity_input(
+    S=(1.e-30, None, apu.W / apu.m ** 2),
+    d=(1.e-30, None, apu.m),
+    Gtx=(1.e-30, None, dimless),
+    strip_input_units=True, output_unit=apu.W
+    )
 def Ptx_from_S(S, d, Gtx):
     '''
     Calculate transmitter power, Ptx, from power flux density.
@@ -304,12 +347,15 @@ def Ptx_from_S(S, d, Gtx):
     Transmitter power, Ptx [W]
     '''
 
-    return (
-        S.to(apu.W / apu.m ** 2) * 4. * np.pi * d ** 2 / Gtx.to(dimless)
-        ).to(apu.W)
+    return S * 4. * np.pi * d ** 2 / Gtx
 
 
-@apu.quantity_input(Prx=dB_W, f=apu.Hz, Grx=dBi)
+@helpers.ranged_quantity_input(
+    Prx=(1.e-30, None, apu.W),
+    f=(1.e-30, None, apu.Hz),
+    Grx=(1.e-30, None, dimless),
+    strip_input_units=True, output_unit=apu.W / apu.m ** 2
+    )
 def S_from_Prx(Prx, f, Grx):
     '''
     Calculate power flux density, S, from received power.
@@ -328,14 +374,17 @@ def S_from_Prx(Prx, f, Grx):
     Power flux density, S (at receiver location) [W]
     '''
 
-    return (
-        Prx.to(apu.W) / Grx.to(dimless) * (
-            4. * np.pi * f ** 2 / con.c ** 2
-            )
-        ).to(apu.W / apu.m ** 2)
+    return Prx / Grx * (
+        4. * np.pi * f ** 2 / C_VALUE ** 2
+        )
 
 
-@apu.quantity_input(S=dB_W_m2, f=apu.Hz, Grx=dBi)
+@helpers.ranged_quantity_input(
+    S=(1.e-30, None, apu.W / apu.m ** 2),
+    f=(1.e-30, None, apu.Hz),
+    Grx=(1.e-30, None, dimless),
+    strip_input_units=True, output_unit=apu.W
+    )
 def Prx_from_S(S, f, Grx):
     '''
     Calculate received power, Prx, from power flux density.
@@ -354,14 +403,21 @@ def Prx_from_S(S, f, Grx):
     Received power, Prx [W]
     '''
 
-    return (
-        S.to(apu.W / apu.m ** 2) * Grx.to(dimless) * (
-            con.c ** 2 / 4. / np.pi / f ** 2
-            )
-        ).to(apu.W)
+    return S * Grx * (
+        C_VALUE ** 2 / 4. / np.pi / f ** 2
+        )
 
 
-@apu.quantity_input(d=apu.m, f=apu.Hz)
+def _free_space_loss(d, f):
+
+    return (C_VALUE / 4. / np.pi / f / d) ** 2
+
+
+@helpers.ranged_quantity_input(
+    d=(1.e-30, None, apu.m),
+    f=(1.e-30, None, apu.Hz),
+    strip_input_units=True, output_unit=dB
+    )
 def free_space_loss(d, f):
     '''
     Calculate the free space loss of a propagating radio wave.
@@ -379,10 +435,17 @@ def free_space_loss(d, f):
     Free-space loss, FSPL [dB]
     '''
 
-    return ((con.c / 4. / np.pi / f / d) ** 2).to(dB)
+    return 10. * np.log10(_free_space_loss(f, d))
 
 
-@apu.quantity_input(Ptx=dB_W, Gtx=dBi, Grx=dBi, d=apu.m, f=apu.Hz)
+@helpers.ranged_quantity_input(
+    Ptx=(1.e-30, None, apu.W),
+    Gtx=(1.e-30, None, dimless),
+    Grx=(1.e-30, None, dimless),
+    d=(1.e-30, None, apu.m),
+    f=(1.e-30, None, apu.Hz),
+    strip_input_units=True, output_unit=apu.W
+    )
 def Prx_from_Ptx(Ptx, Gtx, Grx, d, f):
     '''
     Calculate received power, Prx, from transmitted power.
@@ -403,13 +466,17 @@ def Prx_from_Ptx(Ptx, Gtx, Grx, d, f):
     Received power, Prx [W]
     '''
 
-    return (
-        Ptx.to(apu.W) * Gtx.to(dimless) * Grx.to(dimless) *
-        free_space_loss(d, f).to(dimless)
-        ).to(apu.W)
+    return Ptx * Gtx * Grx * _free_space_loss(d, f)
 
 
-@apu.quantity_input(Prx=dB_W, Gtx=dBi, Grx=dBi, d=apu.m, f=apu.Hz)
+@helpers.ranged_quantity_input(
+    Prx=(1.e-30, None, apu.W),
+    Gtx=(1.e-30, None, dimless),
+    Grx=(1.e-30, None, dimless),
+    d=(1.e-30, None, apu.m),
+    f=(1.e-30, None, apu.Hz),
+    strip_input_units=True, output_unit=apu.W
+    )
 def Ptx_from_Prx(Prx, Gtx, Grx, d, f):
     '''
     Calculate transmitted power, Prx, from received power.
@@ -430,10 +497,7 @@ def Ptx_from_Prx(Prx, Gtx, Grx, d, f):
     Transmitter power, Ptx [W]
     '''
 
-    return (
-        Prx.to(apu.W) / Gtx.to(dimless) / Grx.to(dimless) /
-        free_space_loss(d, f).to(dimless)
-        ).to(apu.W)
+    return Prx / Gtx / Grx / _free_space_loss(d, f)
 
 
 if __name__ == '__main__':
