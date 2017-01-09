@@ -5,6 +5,7 @@ from __future__ import (
     absolute_import, unicode_literals, division, print_function
     )
 
+from copy import deepcopy
 import pytest
 from astropy import units as apu
 import numpy as np
@@ -26,11 +27,17 @@ def tiny_fraction(num, digit=6):
     return 10 ** (np.log10(num) - digit)
 
 
-def check_astro_quantities(func, args_list, invalid_unit=apu.byte):
+def check_astro_quantities(
+        func, args_list, kwargs_list=None, invalid_unit=apu.byte
+        ):
 
-    def make_args(alist):
+    if kwargs_list is None:
+        kwargs_list = []
+
+    def make_args(alist, klist):
 
         args = []
+        kwargs = {}
         for lowval, hival, unit in args_list:
 
             if lowval is None and hival is not None:
@@ -42,46 +49,92 @@ def check_astro_quantities(func, args_list, invalid_unit=apu.byte):
 
             args.append(np.mean((lowval, hival)) * unit)
 
-        return args
+        for var, lowval, hival, unit in kwargs_list:
 
-    for case in range(len(args_list)):
+            if lowval is None and hival is not None:
+                lowval = hival
+            elif lowval is not None and hival is None:
+                hival = lowval
+            elif lowval is None and hival is None:
+                lowval = hival = 0.
 
-        args = make_args(args_list)
+            kwargs[var] = np.mean((lowval, hival)) * unit
+
+        return args, kwargs
+
+    args, kwargs = make_args(args_list, kwargs_list)
+
+    for case, argtup in enumerate(args_list):
 
         # test for value ranges
+        _args = deepcopy(args)
 
-        inv_lowval = args_list[case][0]
+        inv_lowval = argtup[0]
         if inv_lowval is not None:
             inv_lowval -= tiny_fraction(inv_lowval)
-            args[case] = inv_lowval * args[case].unit
+            _args[case] = inv_lowval * _args[case].unit
 
             with pytest.raises(AssertionError):
-                func(*args)
+                func(*_args, **kwargs)
 
-            args[case] = args_list[case][0] * args[case].unit
+        _args = deepcopy(args)
 
-        inv_hival = args_list[case][1]
+        inv_hival = argtup[1]
         if inv_hival is not None:
             inv_hival += tiny_fraction(inv_hival)
-            args[case] = inv_hival * args[case].unit
+            _args[case] = inv_hival * _args[case].unit
 
             with pytest.raises(AssertionError):
-                func(*args)
-
-            args[case] = args_list[case][1] * args[case].unit
-
-    for case in range(len(args_list)):
-
-        args = make_args(args_list)
+                func(*_args, **kwargs)
 
         # test for wrong unit
-        args[case] = args[case].value * invalid_unit
+        _args = deepcopy(args)
+
+        _args[case] = _args[case].value * invalid_unit
 
         with pytest.raises(apu.UnitsError):
-            func(*args)
+            func(*_args, **kwargs)
 
         # test for missing unit
-        args[case] = args[case].value
+        _args[case] = _args[case].value
 
         with pytest.raises(TypeError):
-            func(*args)
+            func(*_args, **kwargs)
+
+    for argtup in kwargs_list:
+
+        # test for value ranges
+        _kwargs = deepcopy(kwargs)
+        var = argtup[0]
+
+        inv_lowval = argtup[1]
+        if inv_lowval is not None:
+            inv_lowval -= tiny_fraction(inv_lowval)
+            _kwargs[var] = inv_lowval * _kwargs[var].unit
+
+            with pytest.raises(AssertionError):
+                func(*args, **_kwargs)
+
+        _kwargs = deepcopy(kwargs)
+
+        inv_hival = argtup[2]
+        if inv_hival is not None:
+            inv_hival += tiny_fraction(inv_hival)
+            _kwargs[var] = inv_hival * _kwargs[var].unit
+
+            with pytest.raises(AssertionError):
+                func(*args, **_kwargs)
+
+        # test for wrong unit
+        _kwargs = deepcopy(kwargs)
+
+        _kwargs[var] = _kwargs[var].value * invalid_unit
+
+        with pytest.raises(apu.UnitsError):
+            func(*args, **_kwargs)
+
+        # test for missing unit
+        _kwargs[var] = _kwargs[var].value
+
+        with pytest.raises(TypeError):
+            func(*args, **_kwargs)
