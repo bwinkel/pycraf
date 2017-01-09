@@ -90,7 +90,7 @@ class TestHelper:
             beta_0,
             Quantity([
                 16.57415849, 8.10024667, 6.27440928, 6.27440928,
-                11.7549507, 2.60825487], apu.percent),
+                11.74897555, 2.60825487], apu.percent),
             )
 
         assert_quantity_allclose(
@@ -121,5 +121,80 @@ class TestHelper:
             Quantity([
                 8120.30557961, 8307.21637166, 8880.41920755, 8237.34436165,
                 8603.41184774, 8910.586491], apu.km),
+            )
+
+
+class TestPropagation:
+
+    def setup(self):
+
+        pass
+
+    def teardown(self):
+
+        pass
+
+    def test_free_space_loss_bfsg(self):
+
+        pfunc = pathprof.free_space_loss_bfsg
+        args_list = [
+            (1.e-30, None, apu.m),
+            (1.e-30, None, apu.Hz),
+            (0, 100, apu.percent),
+            (0, None, apu.K),
+            (0, None, apu.hPa),
+            ]
+        kwargs_list = [
+            ('d_lt', 0, None, apu.m),
+            ('d_lr', 0, None, apu.m),
+            ('time_percent', 0, 100, apu.percent),
+            ]
+        check_astro_quantities(pfunc, args_list, kwargs_list)
+
+        # first, test without corrections
+        dist = Quantity([1., 2., 5., 10., 50., 50.], apu.km)
+        freq = Quantity([1., 1., 0.5, 10., 2., 2.], apu.GHz)
+        omega = Quantity([0., 0., 0., 0., 0., 50.], apu.percent)
+        tamb = Quantity([270., 280., 280., 300., 300., 300.], apu.K)
+        pressure = Quantity([1000., 1010., 990., 990., 1000., 1000.], apu.hPa)
+
+        Lbfsg_annex1 = Quantity(
+            [
+                92.50615024, 98.53204435, 100.47441164, 132.62854741,
+                132.7989964, 132.80053965
+                ], cnv.dB
+            )
+        assert_quantity_allclose(
+            pfunc(dist, freq, omega, tamb, pressure, atm_method='annex1'),
+            Lbfsg_annex1,
+            )
+
+        Lbfsg_annex2 = Quantity(
+            [
+                92.50622914, 98.5321929, 100.47467167, 132.6272019,
+                132.8020698, 132.80412104
+                ], cnv.dB
+            )
+        assert_quantity_allclose(
+            pfunc(dist, freq, omega, tamb, pressure, atm_method='annex2'),
+            Lbfsg_annex2,
+            )
+
+        # test broadcasting
+        dist = Quantity([1., 10., 20.], apu.km)
+        freq = Quantity([1., 2., 22.], apu.GHz)
+        omega = Quantity(0., apu.percent)
+        tamb = Quantity(300., apu.K)
+        pressure = Quantity(1013., apu.hPa)
+        Lbfsg_annex1 = Quantity(
+            [
+                [92.5048683, 98.52672276, 119.53615245],
+                [112.54868299, 118.58182837, 141.22544192],
+                [118.61796588, 124.66365675, 149.12303013],
+                ], cnv.dB
+            )
+        assert_quantity_allclose(
+            pfunc(dist[:, np.newaxis], freq, omega, tamb, pressure),
+            Lbfsg_annex1,
             )
 

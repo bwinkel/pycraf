@@ -1023,6 +1023,17 @@ def _specific_attenuation_annex1(
     dry_attenuation, wet_attenuation (dB / km)
     '''
 
+    freq_grid = np.atleast_1d(freq_grid)
+    # assert pressure_dry.size == 1, 'pressure_dry must be scalar'
+    # assert pressure_water.size == 1, 'pressure_water must be scalar'
+    # assert temperature.size == 1, 'temperature must be scalar'
+    if not isinstance(pressure_dry, numbers.Real):
+        raise TypeError('pressure_dry must be a scalar float')
+    if not isinstance(pressure_water, numbers.Real):
+        raise TypeError('pressure_water must be a scalar float')
+    if not isinstance(temperature, numbers.Real):
+        raise TypeError('temperature must be a scalar float')
+
     # first calculate dry attenuation (oxygen lines + N_D_prime2)
     S_o2 = _S_oxygen(pressure_dry, temperature)
     f_i = resonances_oxygen['f0']
@@ -1072,17 +1083,6 @@ def specific_attenuation_annex1(
     -------
     dry_attenuation, wet_attenuation (dB / km)
     '''
-
-    freq_grid = np.atleast_1d(freq_grid)
-    # assert pressure_dry.size == 1, 'pressure_dry must be scalar'
-    # assert pressure_water.size == 1, 'pressure_water must be scalar'
-    # assert temperature.size == 1, 'temperature must be scalar'
-    if not isinstance(pressure_dry, numbers.Real):
-        raise TypeError('pressure_dry must be a scalar float')
-    if not isinstance(pressure_water, numbers.Real):
-        raise TypeError('pressure_water must be a scalar float')
-    if not isinstance(temperature, numbers.Real):
-        raise TypeError('temperature must be a scalar float')
 
     return _specific_attenuation_annex1(
         freq_grid, pressure_dry, pressure_water, temperature
@@ -1406,14 +1406,7 @@ _helper_funcs = dict(
     )
 
 
-@helpers.ranged_quantity_input(
-    freq_grid=(1.e-30, 350., apu.GHz),
-    pressure=(1.e-30, None, apu.hPa),
-    rho_water=(1.e-30, None, apu.g / apu.m ** 3),
-    temperature=(1.e-30, None, apu.K),
-    strip_input_units=True, output_unit=(cnv.dB / apu.km, cnv.dB / apu.km)
-    )
-def specific_attenuation_annex2(freq_grid, pressure, rho_water, temperature):
+def _specific_attenuation_annex2(freq_grid, pressure, rho_water, temperature):
     '''
     Calculate specific attenuation using a simplified algorithm
     (ITU-R P.676-10 Annex 2.1).
@@ -1542,6 +1535,35 @@ def specific_attenuation_annex2(freq_grid, pressure, rho_water, temperature):
     atten_wet *= f ** 2 * r_t ** 2.5 * _rho_w * 1.e-4
 
     return atten_dry, atten_wet
+
+
+@helpers.ranged_quantity_input(
+    freq_grid=(1.e-30, 350., apu.GHz),
+    pressure=(1.e-30, None, apu.hPa),
+    rho_water=(1.e-30, None, apu.g / apu.m ** 3),
+    temperature=(1.e-30, None, apu.K),
+    strip_input_units=True, output_unit=(cnv.dB / apu.km, cnv.dB / apu.km)
+    )
+def specific_attenuation_annex2(freq_grid, pressure, rho_water, temperature):
+    '''
+    Calculate specific attenuation using a simplified algorithm
+    (ITU-R P.676-10 Annex 2.1).
+
+    Parameters
+    ----------
+    freq_grid - Frequencies (GHz)
+    pressure - total air pressure (dry + wet) (hPa)
+    rho_water - water vapor density (g / m^3)
+    temperature - temperature (K)
+
+    Returns
+    -------
+    dry_attenuation, wet_attenuation (dB / km)
+    '''
+
+    return _specific_attenuation_annex2(
+        freq_grid, pressure, rho_water, temperature
+        )
 
 
 @helpers.ranged_quantity_input(

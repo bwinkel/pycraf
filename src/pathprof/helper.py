@@ -170,6 +170,7 @@ def radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm):
     _a = np.power(10, -d_tm / (16. - 6.6 * _tau))
     _b = np.power(10, -5 * (0.496 + 0.354 * _tau))
     _mu1 = np.power(_a + _b, 0.2)
+    _mu1 = np.where(_mu1 <= 1, _mu1, 1.)
     _log_mu1 = np.log10(_mu1)
 
     _phi_cond = _absphi <= 70.
