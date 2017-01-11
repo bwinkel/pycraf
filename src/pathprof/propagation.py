@@ -17,7 +17,7 @@ import ipdb
 
 
 __all__ = [
-    'free_space_loss_bfsg',
+    'free_space_loss_bfsg', 'tropospheric_scatter_loss_bs',
     ]
 
 
@@ -103,7 +103,7 @@ def free_space_loss_bfsg(
 
     Returns
     -------
-    Free-space loss, FSPL [dB]
+    Free-space loss, L_bfsg [dB]
         If do_corrections is set to True, this contains either E_sp or E_sβ,
         depending on which quantity was used for time_percent.
 
@@ -179,39 +179,37 @@ def tropospheric_scatter_loss_bs(
         atm_method='annex1',
         ):
     '''
-    Calculate the free space loss, L_bfsg, of a propagating radio wave
-    according to ITU-R P.452-16 Eq. (8-12).
+    Calculate the tropospheric scatter loss, L_bs, of a propagating radio wave
+    according to ITU-R P.452-16 Eq. (45).
 
     Note: All quantities must be astropy Quantities
           (astropy.units.quantity.Quantity).
 
     Parameters
     ----------
-    dist - Distance between transmitter and receiver [m]
-    freq - Frequency of radiation [Hz]
-    omega - fraction of the path over water [%] (see Table 3)
+    dist - Distance between transmitter and receiver [km]
+    freq - Frequency of radiation [GHz]
     temperature - ambient temperature in relevant layer [K]
     pressure - total air pressure (dry + wet) in relevant layer [hPa]
-    atm_method - which annex to use for atm model P.676, ['annex1'/'annex2']
-    do_corrections - whether to apply focusing/multipath corrections
-        Default: False; if set to True, you need to provide the following:
-    d_lt, d_lr - distance to horizon (for transmitter/receiver) [km]
-        (For a LoS path, use distance to Bullington point, inferred from
-        diffraction method for 50% time.)
+    N_0 - sea-level surface refractivity at path center [N-units]
+    a_e - median effective Earth radius at path center [km]
+    theta_t, theta_r - for a transhorizon path, transmit and receive horizon
+        elevation angles; for a LoS path, the elevation
+        angle to the other terminal [mrad]
+    G_t, G_r - Antenna gain (transmitter, receiver) in the direction of the
+        horizon(!) along the great-circle interference path [dBi]
     time_percent - time percentage [%]
         (for average month, this is just p, for worst-month, this is β_0)
+    atm_method - which annex to use for atm model P.676, ['annex1'/'annex2']
 
     Returns
     -------
-    Free-space loss, FSPL [dB]
-        If do_corrections is set to True, this contains either E_sp or E_sβ,
-        depending on which quantity was used for time_percent.
+    Tropospheric scatter loss, L_bs [dB]
 
     Notes
     -----
-    - This is similar to conversions.free_space_loss function but additionally
-      accounts for athmospheric absorption and allows to correct
-      for focusing and multipath effects.
+    - Path profile parameters (theta_{t,r}, N_0, a_e) can be derived using
+      the [TODO] helper functions.
     '''
 
     assert atm_method in ['annex1', 'annex2'], (
@@ -233,14 +231,16 @@ def tropospheric_scatter_loss_bs(
 
     A_g = (atten_dry_dB + atten_wet_dB) * dist
     L_f = 25 * np.log10(freq) - 2.5 * np.log10(0.5 * freq) ** 2
+
+    # TODO: why is toposcatter depending on gains towards horizon???
     L_c = 0.051 * np.exp(0.055 * (G_t + G_r))
 
-    # theta is in mrad (therefore we don't need to divide dist by 1000)
+    # theta is in mrad
     theta = 1e3 * dist / a_e + theta_t + theta_r
 
     L_bs = (
-        190. + L_f + 20 * np.log10(dist * 1.e-3) + 0.573 * theta -
-        0.15 * N_0 + L_c + A_g - 10.1 * np.log10(time_percent / 50.) ** 0.7
+        190. + L_f + 20 * np.log10(dist) + 0.573 * theta -
+        0.15 * N_0 + L_c + A_g - 10.1 * (-np.log10(time_percent / 50.)) ** 0.7
         )
 
     return L_bs

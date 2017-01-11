@@ -138,8 +138,8 @@ class TestPropagation:
 
         pfunc = pathprof.free_space_loss_bfsg
         args_list = [
-            (1.e-30, None, apu.m),
-            (1.e-30, None, apu.Hz),
+            (1.e-30, None, apu.km),
+            (1.e-30, None, apu.GHz),
             (0, 100, apu.percent),
             (0, None, apu.K),
             (0, None, apu.hPa),
@@ -196,5 +196,70 @@ class TestPropagation:
         assert_quantity_allclose(
             pfunc(dist[:, np.newaxis], freq, omega, tamb, pressure),
             Lbfsg_annex1,
+            )
+
+    def test_tropospheric_scatter_loss_bs(self):
+
+        pfunc = pathprof.tropospheric_scatter_loss_bs
+        args_list = [
+            (1.e-30, None, apu.km),
+            (1.e-30, None, apu.GHz),
+            (0, None, apu.K),
+            (0, None, apu.hPa),
+            (1.e-30, None, cnv.dimless),
+            (1.e-30, None, apu.km),
+            (None, None, apu.mrad),
+            (None, None, apu.mrad),
+            (0, None, cnv.dBi),
+            (0, None, cnv.dBi),
+            (0, 100, apu.percent),
+            ]
+        check_astro_quantities(pfunc, args_list)
+
+        dist = Quantity([1., 2., 5., 10., 50., 50.], apu.km)
+        freq = Quantity([1., 1., 0.5, 10., 2., 2.], apu.GHz)
+        tamb = Quantity([270., 280., 280., 300., 300., 300.], apu.K)
+        pressure = Quantity([1000., 1010., 990., 990., 1000., 1000.], apu.hPa)
+
+        lon = Quantity([50., 50., 51., 51., 52., 52.], apu.deg)
+        lat = Quantity([6., 7., 6., 7., 6., 7.], apu.deg)
+        d_tm = d_lm = dist
+        delta_N, beta_0, N_0 = pathprof.radiomet_data_for_pathcenter(
+            lon, lat, d_tm, d_lm
+            )
+        a_e = pathprof.median_effective_earth_radius(lon, lat)
+
+        # 1 mrad ~= 0.06 deg
+        theta_t = Quantity([4., 3., 2., 1., 1., 1.], apu.mrad)
+        theta_r = Quantity([-5., -4., -3., 1., 1., 1.], apu.mrad)
+
+        G_t = Quantity([0., 0., 20., 20., 0., 0.], cnv.dBi)
+        G_r = Quantity([0., 0., 0., 10., 0., 0.], cnv.dBi)
+
+        time_percent = 50. * apu.percent
+
+        L_bs = Quantity([
+            134.34727553, 140.62529652, 140.30808769, 180.93589722,
+            180.63083783, 180.82137118
+            ], cnv.dB)
+
+        L_bs_f = pfunc(
+            dist,
+            freq,
+            tamb,
+            pressure,
+            N_0,
+            a_e,
+            theta_t,
+            theta_r,
+            G_t,
+            G_r,
+            time_percent,
+            )
+        print(L_bs_f)
+
+        assert_quantity_allclose(
+            L_bs_f,
+            L_bs,
             )
 

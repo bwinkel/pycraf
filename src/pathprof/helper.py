@@ -256,7 +256,7 @@ def median_effective_earth_radius(lon, lat):
 
     Returns
     -------
-    k50 - median effective Earth radius factor [dimless]
+    a_e - median effective Earth radius [km]
 
     Notes
     -----
