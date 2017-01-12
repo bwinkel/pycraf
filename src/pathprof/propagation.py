@@ -17,7 +17,9 @@ import ipdb
 
 
 __all__ = [
-    'free_space_loss_bfsg', 'tropospheric_scatter_loss_bs',
+    'free_space_loss_bfsg',
+    'tropospheric_scatter_loss_bs',
+    'ducting_loss_ba',
     ]
 
 
@@ -89,21 +91,21 @@ def free_space_loss_bfsg(
     ----------
     dist - Distance between transmitter and receiver [km]
     freq - Frequency of radiation [GHz]
-    omega - fraction of the path over water [%] (see Table 3)
-    temperature - ambient temperature in relevant layer [K]
-    pressure - total air pressure (dry + wet) in relevant layer [hPa]
-    atm_method - which annex to use for atm model P.676, ['annex1'/'annex2']
-    do_corrections - whether to apply focusing/multipath corrections
+    omega - Fraction of the path over water [%] (see Table 3)
+    temperature - Ambient temperature in relevant layer [K]
+    pressure - Total air pressure (dry + wet) in relevant layer [hPa]
+    atm_method - Which annex to use for atm model P.676, ['annex1'/'annex2']
+    do_corrections - Whether to apply focusing/multipath corrections
         Default: False; if set to True, you need to provide the following:
-    d_lt, d_lr - distance to horizon (for transmitter/receiver) [km]
+    d_lt, d_lr - Distance to horizon (for transmitter/receiver) [km]
         (For a LoS path, use distance to Bullington point, inferred from
         diffraction method for 50% time.)
-    time_percent - time percentage [%]
+    time_percent - Time percentage [%]
         (for average month, this is just p, for worst-month, this is β_0)
 
     Returns
     -------
-    Free-space loss, L_bfsg [dB]
+    L_bfsg - Free-space loss [dB]
         If do_corrections is set to True, this contains either E_sp or E_sβ,
         depending on which quantity was used for time_percent.
 
@@ -189,22 +191,22 @@ def tropospheric_scatter_loss_bs(
     ----------
     dist - Distance between transmitter and receiver [km]
     freq - Frequency of radiation [GHz]
-    temperature - ambient temperature in relevant layer [K]
-    pressure - total air pressure (dry + wet) in relevant layer [hPa]
-    N_0 - sea-level surface refractivity at path center [N-units]
-    a_e - median effective Earth radius at path center [km]
-    theta_t, theta_r - for a transhorizon path, transmit and receive horizon
-        elevation angles; for a LoS path, the elevation
-        angle to the other terminal [mrad]
+    temperature - Ambient temperature in relevant layer [K]
+    pressure - Total air pressure (dry + wet) in relevant layer [hPa]
+    N_0 - Sea-level surface refractivity at path center [N-units]
+    a_e - Median effective Earth radius at path center [km]
+    theta_t, theta_r - For a transhorizon path, transmit and receive horizon
+        elevation angles; for a LoS path, the elevation angle to the other
+        terminal [mrad]
     G_t, G_r - Antenna gain (transmitter, receiver) in the direction of the
         horizon(!) along the great-circle interference path [dBi]
-    time_percent - time percentage [%]
+    time_percent - Time percentage [%]
         (for average month, this is just p, for worst-month, this is β_0)
-    atm_method - which annex to use for atm model P.676, ['annex1'/'annex2']
+    atm_method - Which annex to use for atm model P.676, ['annex1'/'annex2']
 
     Returns
     -------
-    Tropospheric scatter loss, L_bs [dB]
+    L_bs - Tropospheric scatter loss [dB]
 
     Notes
     -----
@@ -244,6 +246,214 @@ def tropospheric_scatter_loss_bs(
         )
 
     return L_bs
+
+
+@helpers.ranged_quantity_input(
+    dist=(1.e-30, None, apu.km),
+    freq=(1.e-30, None, apu.GHz),
+    omega=(0, 100, apu.percent),
+    temperature=(0, None, apu.K),
+    pressure=(0, None, apu.hPa),
+    N_0=(1.e-30, None, cnv.dimless),
+    a_e=(1.e-30, None, apu.km),
+    h_ts=(0, None, apu.m),
+    h_rs=(0, None, apu.m),
+    h_te=(0, None, apu.m),
+    h_re=(0, None, apu.m),
+    h_m=(0, None, apu.m),
+    d_lt=(0, None, apu.km),
+    d_lr=(0, None, apu.km),
+    d_ct=(0, None, apu.km),
+    d_cr=(0, None, apu.km),
+    d_lm=(0, None, apu.km),
+    theta_t=(None, None, apu.mrad),  # TODO: proper ranges
+    theta_r=(None, None, apu.mrad),  # TODO: proper ranges
+    G_t=(0, None, cnv.dBi),
+    G_r=(0, None, cnv.dBi),
+    beta_0=(0, 100, apu.percent),
+    time_percent=(0, 100, apu.percent),
+    strip_input_units=True, output_unit=cnv.dB
+    )
+def ducting_loss_ba(
+        dist,
+        freq,
+        omega,
+        temperature,
+        pressure,
+        N_0,
+        a_e,
+        h_ts,
+        h_rs,
+        h_te,
+        h_re,
+        h_m,
+        d_lt,
+        d_lr,
+        d_ct,
+        d_cr,
+        d_lm,
+        theta_t,
+        theta_r,
+        G_t,
+        G_r,
+        beta_0,
+        time_percent,
+        atm_method='annex1',
+        ):
+    '''
+    Calculate the ducting/layer reflection loss, L_ba, of a propagating radio
+    wave according to ITU-R P.452-16 Eq. (46-56).
+
+    Note: All quantities must be astropy Quantities
+          (astropy.units.quantity.Quantity).
+
+    Parameters
+    ----------
+    dist - Distance between transmitter and receiver [km]
+    freq - Frequency of radiation [GHz]
+    omega - Fraction of the path over water [%] (see Table 3)
+    temperature - Ambient temperature in relevant layer [K]
+    pressure - Total air pressure (dry + wet) in relevant layer [hPa]
+    N_0 - Sea-level surface refractivity at path center [N-units]
+    a_e - Median effective Earth radius at path center [km]
+    h_ts, h_rs - Transmitter/receiver antenna center height above mean
+        sea level [m]
+    h_te, h_re - Effective heights of transmitter/receiver antennas above
+        terrain [m]
+    h_m - Terrain roughness [m]
+    d_lt, d_lr - Distance to horizon (for transmitter/receiver) [km]
+        (For a LoS path, use distance to Bullington point, inferred from
+        diffraction method for 50% time.)
+    d_ct, d_cr - Distance over land from transmit/receive antenna to the coast
+        along great circle interference path [km]
+        (set to zero for terminal on ship/sea platform; only relevant if less
+        than 5 km)
+    d_lm - Longest continuous inland section of the great-circle path [km]
+    theta_t, theta_r - For a transhorizon path, transmit and receive horizon
+        elevation angles; for a LoS path, the elevation angle to the other
+        terminal [mrad]
+    G_t, G_r - Antenna gain (transmitter, receiver) in the direction of the
+        horizon(!) along the great-circle interference path [dBi]
+    beta_0 - The time percentage for which refractive index lapse-rates
+        exceeding 100 N-units/km can be expected in the first 100 m
+        of the lower atmosphere [%]
+    time_percent - Time percentage [%]
+        (for average month, this is just p, for worst-month, this is β_0)
+    atm_method - Which annex to use for atm model P.676, ['annex1'/'annex2']
+
+    Returns
+    -------
+    L_ba - Ducting/layer reflection loss [dB]
+
+    Notes
+    -----
+    - Path profile parameters (h_xx, d_xx, theta_x, N_0, a_e) can be derived
+      using the [path analysis] helper functions.
+    '''
+
+    assert atm_method in ['annex1', 'annex2'], (
+        'atm_method must be one of "annex1" or "annex2"'
+        )
+
+    # bin omega to improve specific_attenuation caching
+    omega_b = np.int32(omega + 0.5)
+
+    rho_water = 7.5 + 2.5 * omega_b / 100.
+    pressure_water = rho_water * temperature / 216.7
+    pressure_dry = pressure - pressure_water
+
+    if atm_method == 'annex1':
+        atten_dry_dB, atten_wet_dB = _vectorized_specific_attenuation_annex1(
+            freq, pressure_dry, pressure_water, temperature
+            )
+    else:
+        atten_dry_dB, atten_wet_dB = _vectorized_specific_attenuation_annex2(
+            freq, pressure, rho_water, temperature
+            )
+
+    theta_t_prime = np.where(theta_t <= 0.1 * d_lt, theta_t, 0.1 * d_lt)
+    theta_r_prime = np.where(theta_r <= 0.1 * d_lr, theta_r, 0.1 * d_lr)
+
+    theta_t_prime2 = theta_t - 0.1 * d_lt
+    theta_r_prime2 = theta_r - 0.1 * d_lr
+
+    theta_prime = 1e3 * dist / a_e + theta_t_prime + theta_r_prime
+
+    gamma_d = 5.e-5 * a_e * np.power(freq, 1. / 3.)
+
+    tau = 1. - np.exp(-4.12e-4 * np.power(d_lm, 2.41))
+    eps = 3.5
+    alpha = -0.6 - eps * 1.e-9 * np.power(dist, 3.1) * tau
+    alpha = np.where(alpha < -3.4, -3.4, alpha)
+
+    mu_2 = np.power(
+        500. * dist ** 2 / a_e / (np.sqrt(h_te) + np.sqrt(h_re)) ** 2,
+        alpha
+        )
+    mu_2 = np.where(mu_2 > 1., 1., mu_2)
+
+    d_I = dist - d_lt - d_lr
+    d_I = np.where(d_I > 40, 40, d_I)
+
+    mu_3 = np.where(
+        h_m <= 10.,
+        1.,
+        np.exp(-4.6e-5 * (h_m - 10.) * (43. + 6. * d_I))
+
+        )
+
+    beta = beta_0 * mu_2 * mu_3
+
+    Gamma = 1.076 / np.power(2.0058 - np.log10(beta), 1.012) * np.exp(
+        -(9.51 - 4.8 * np.log10(beta) + 0.198 * np.log10(beta) ** 2) *
+        1.e-6 * np.power(dist, 1.13)
+        )
+
+    A_lf = np.where(
+        freq < 0.5,
+        45.375 - 137. * freq + 92.5 * freq ** 2,
+        0.,
+        )
+
+    def A_s(f, d_l, theta_prime2):
+
+        return np.where(
+            theta_prime2 <= 0,
+            0.,
+            20 * np.log10(1 + 0.361 * theta_prime2 * np.sqrt(f * d_l)) +
+            0.264 * theta_prime2 * np.power(f, 1. / 3.)
+            )
+
+    A_st = A_s(freq, d_lt, theta_t_prime2)
+    A_sr = A_s(freq, d_lr, theta_r_prime2)
+
+    def A_c(d_l, d_c, h_s, om):
+
+        return np.where(
+            (om >= 0.75) & (d_c <= d_l) & (d_c <= 5.),
+            -3 * np.exp(-0.25 * d_c ** 2) * (1. + np.tanh(3.5 - 0.07 * h_s)),
+            0.
+            )
+
+    A_ct = A_c(d_lt, d_ct, h_ts, omega)
+    A_cr = A_c(d_lr, d_cr, h_rs, omega)
+
+    A_f = (
+        102.45 + 20 * np.log10(freq) + 20 * np.log10(d_lt + d_lr) +
+        A_lf + A_st + A_sr + A_ct + A_cr
+        )
+
+    A_p = (
+        -12 +
+        (1.2 + 3.7e-3 * dist) * np.log10(time_percent / beta) +
+        12. * np.power(time_percent / beta, Gamma)
+        )
+
+    A_d = gamma_d * theta_prime + A_p
+
+    A_g = (atten_dry_dB + atten_wet_dB) * dist
+
+    return A_f + A_d + A_g
 
 
 if __name__ == '__main__':

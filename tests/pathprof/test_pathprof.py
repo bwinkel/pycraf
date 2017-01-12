@@ -155,7 +155,7 @@ class TestPropagation:
         dist = Quantity([1., 2., 5., 10., 50., 50.], apu.km)
         freq = Quantity([1., 1., 0.5, 10., 2., 2.], apu.GHz)
         omega = Quantity([0., 0., 0., 0., 0., 50.], apu.percent)
-        tamb = Quantity([270., 280., 280., 300., 300., 300.], apu.K)
+        temperature = Quantity([270., 280., 280., 300., 300., 300.], apu.K)
         pressure = Quantity([1000., 1010., 990., 990., 1000., 1000.], apu.hPa)
 
         Lbfsg_annex1 = Quantity(
@@ -165,7 +165,9 @@ class TestPropagation:
                 ], cnv.dB
             )
         assert_quantity_allclose(
-            pfunc(dist, freq, omega, tamb, pressure, atm_method='annex1'),
+            pfunc(
+                dist, freq, omega, temperature, pressure, atm_method='annex1'
+                ),
             Lbfsg_annex1,
             )
 
@@ -176,7 +178,9 @@ class TestPropagation:
                 ], cnv.dB
             )
         assert_quantity_allclose(
-            pfunc(dist, freq, omega, tamb, pressure, atm_method='annex2'),
+            pfunc(
+                dist, freq, omega, temperature, pressure, atm_method='annex2'
+                ),
             Lbfsg_annex2,
             )
 
@@ -184,7 +188,7 @@ class TestPropagation:
         dist = Quantity([1., 10., 20.], apu.km)
         freq = Quantity([1., 2., 22.], apu.GHz)
         omega = Quantity(0., apu.percent)
-        tamb = Quantity(300., apu.K)
+        temperature = Quantity(300., apu.K)
         pressure = Quantity(1013., apu.hPa)
         Lbfsg_annex1 = Quantity(
             [
@@ -194,7 +198,7 @@ class TestPropagation:
                 ], cnv.dB
             )
         assert_quantity_allclose(
-            pfunc(dist[:, np.newaxis], freq, omega, tamb, pressure),
+            pfunc(dist[:, np.newaxis], freq, omega, temperature, pressure),
             Lbfsg_annex1,
             )
 
@@ -218,7 +222,7 @@ class TestPropagation:
 
         dist = Quantity([1., 2., 5., 10., 50., 50.], apu.km)
         freq = Quantity([1., 1., 0.5, 10., 2., 2.], apu.GHz)
-        tamb = Quantity([270., 280., 280., 300., 300., 300.], apu.K)
+        temperature = Quantity([270., 280., 280., 300., 300., 300.], apu.K)
         pressure = Quantity([1000., 1010., 990., 990., 1000., 1000.], apu.hPa)
 
         lon = Quantity([50., 50., 51., 51., 52., 52.], apu.deg)
@@ -246,7 +250,7 @@ class TestPropagation:
         L_bs_f = pfunc(
             dist,
             freq,
-            tamb,
+            temperature,
             pressure,
             N_0,
             a_e,
@@ -262,4 +266,107 @@ class TestPropagation:
             L_bs_f,
             L_bs,
             )
+
+    def test_ducting_loss_ba(self):
+
+        pfunc = pathprof.ducting_loss_ba
+        args_list = [
+            (1.e-30, None, apu.km),
+            (1.e-30, None, apu.GHz),
+            (0, 100, apu.percent),
+            (0, None, apu.K),
+            (0, None, apu.hPa),
+            (1.e-30, None, cnv.dimless),
+            (1.e-30, None, apu.km),
+            (0, None, apu.m),
+            (0, None, apu.m),
+            (0, None, apu.m),
+            (0, None, apu.m),
+            (0, None, apu.m),
+            (0, None, apu.km),
+            (0, None, apu.km),
+            (0, None, apu.km),
+            (0, None, apu.km),
+            (0, None, apu.km),
+            (None, None, apu.mrad),
+            (None, None, apu.mrad),
+            (0, None, cnv.dBi),
+            (0, None, cnv.dBi),
+            (0, 100, apu.percent),
+            (0, 100, apu.percent),
+            ]
+        check_astro_quantities(pfunc, args_list)
+
+        # numbers below fully consistent with Excel sheet
+        dist = Quantity(22.2, apu.km)
+        freq = Quantity(2., apu.GHz)
+        omega = Quantity(0., apu.percent)
+        temperature = Quantity(293., apu.K)
+        pressure = Quantity(1013., apu.hPa)
+
+        lon = Quantity(6., apu.deg)
+        lat = Quantity(50., apu.deg)
+        d_tm = d_lm = dist
+        delta_N, beta_0, N_0 = pathprof.radiomet_data_for_pathcenter(
+            lon, lat, d_tm, d_lm
+            )
+        a_e = pathprof.median_effective_earth_radius(lon, lat)
+
+        # 1 mrad ~= 0.06 deg
+        theta_t = Quantity(-9.5, apu.mrad)
+        theta_r = Quantity(-9.5, apu.mrad)
+
+        G_t = Quantity(0., cnv.dBi)
+        G_r = Quantity(0., cnv.dBi)
+
+        h_ts = Quantity(210., apu.m)
+        h_rs = Quantity(210., apu.m)
+        h_te = Quantity(200., apu.m)
+        h_re = Quantity(200., apu.m)
+        h_m = Quantity(29.8, apu.m)
+
+        d_lt = Quantity(11.1, apu.km)
+        d_lr = Quantity(11.1, apu.km)
+        d_ct = Quantity(1000., apu.km)
+        d_cr = Quantity(1000., apu.km)
+        d_lm = Quantity(22.2, apu.km)
+
+        time_percent = Quantity(50., apu.percent)
+
+        L_ba = Quantity(199.59448682, cnv.dB)
+
+        L_ba_f = pfunc(
+            dist,
+            freq,
+            omega,
+            temperature,
+            pressure,
+            N_0,
+            a_e,
+            h_ts,
+            h_rs,
+            h_te,
+            h_re,
+            h_m,
+            d_lt,
+            d_lr,
+            d_ct,
+            d_cr,
+            d_lm,
+            theta_t,
+            theta_r,
+            G_t,
+            G_r,
+            beta_0,
+            time_percent,
+            atm_method='annex1',
+            )
+        print(L_ba_f)
+
+        assert_quantity_allclose(
+            L_ba_f,
+            L_ba,
+            )
+
+        # TODO: add further test cases (once path analysis is ready)
 
