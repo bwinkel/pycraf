@@ -27,6 +27,7 @@ setup(
         # 'scipy>=0.15',
         'astropy>=1.1',
         'pyproj>=1.9',
+        'geographiclib>=1.46',
     ],
     package_dir={
         'pycraf': 'src',
