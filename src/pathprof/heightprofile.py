@@ -13,7 +13,8 @@ from functools import lru_cache
 from astropy import units as apu
 import numpy as np
 from scipy.interpolate import RegularGridInterpolator
-from geographiclib.geodesic import Geodesic
+# from geographiclib.geodesic import Geodesic
+from . import geodesics
 from .. import conversions as cnv
 from .. import helpers
 
@@ -121,6 +122,37 @@ def _get_interpolated_data(lons, lats):
     return heights
 
 
+def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
+
+    # first find start bearing (and backward bearing for the curious people)
+    # and distance
+
+    distance, bearing_1, bearing_2 = geodesics.inverse(
+        lon_t, lat_t, lon_r, lat_r
+        )
+    back_bearing = bearing_1 % 360. - 180.
+
+    distances = np.arange(0., distance + step, step)  # [m]
+    lons = np.empty_like(distances)
+    lats = np.empty_like(distances)
+
+    for idx, d in enumerate(distances):
+        # TODO: build a numpy interface in Geodesics
+        lons[idx], lats[idx], _ = geodesics.direct(lon_t, lat_t, bearing_1, d)
+
+    heights = _get_interpolated_data(lons, lats)
+
+    return (
+        lons,
+        lats,
+        distances * 1.e-3,
+        heights,
+        bearing_1,
+        back_bearing,
+        distance * 1.e-3,
+        )
+
+
 @helpers.ranged_quantity_input(
     lon_t=(0, 360, apu.deg),
     lat_t=(-90, 90, apu.deg),
@@ -148,48 +180,7 @@ def srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
     - d_vec contains distances from Transmitter.
     '''
 
-    # first find start bearing (and backward bearing for the curious people)
-    # and distance
-
-    import time
-    _time = time.time()
-
-    aux = Geodesic.WGS84.Inverse(lat_t, lon_t, lat_r, lon_r)
-    bearing_1, distance = aux['azi1'], aux['s12']
-    bearing_2 = bearing_1 % 360. - 180.
-
-    # Note: use Geodesic.WGS84.Direct() to find the coordinates of a point
-    # given bearing/distance
-
-    caps = Geodesic.LATITUDE | Geodesic.LONGITUDE | Geodesic.DISTANCE_IN
-    line = Geodesic.WGS84.Line(lat_t, lon_t, bearing_1, caps=caps)
-    distances = np.arange(0., distance + step, step)  # [m]
-    lons = np.empty_like(distances)
-    lats = np.empty_like(distances)
-
-    for idx, d in enumerate(distances):
-
-        # unfortunately, geographiclib does not allow arrays
-        # is there a better alternative?
-        pos = line.Position(d)
-        lons[idx] = pos['lon2']
-        lats[idx] = pos['lat2']
-
-    print(time.time() - _time)
-    _time = time.time()
-
-    heights = _get_interpolated_data(lons, lats)
-    print(time.time() - _time)
-
-    return (
-        lons,
-        lats,
-        distances * 1.e-3,
-        heights,
-        bearing_1,
-        bearing_2,
-        distance * 1.e-3,
-        )
+    return _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step)
 
 
 if __name__ == '__main__':
