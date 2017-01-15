@@ -10,6 +10,7 @@ import os
 from functools import lru_cache
 from astropy import units as apu
 import numpy as np
+from . import heightprofile
 from .. import conversions as cnv
 from .. import atm
 from .. import helpers
@@ -55,6 +56,181 @@ _vectorized_specific_attenuation_annex1 = np.vectorize(
 _vectorized_specific_attenuation_annex2 = np.vectorize(
     _cached_specific_attenuation_annex2
     )
+
+
+def J_bull(nu):
+
+    return 6.9 + 20 * np.log10(
+        np.sqrt((nu - 0.1) ** 2 + 1) + nu - 0.1
+        )
+
+
+@helpers.ranged_quantity_input(
+    freq=(1.e-30, None, apu.GHz),
+    lon_t=(0, 360, apu.deg),
+    lat_t=(-90, 90, apu.deg),
+    lon_r=(0, 360, apu.deg),
+    lat_r=(-90, 90, apu.deg),
+    h_tg=(0, None, apu.m),
+    h_rg=(0, None, apu.m),
+    hprof_step=(0, None, apu.m),
+    strip_input_units=True,
+    output_unit=(
+        apu.deg,  # lon_mid
+        apu.deg,  # lat_mid
+        apu.km,  # distance
+        apu.deg,  # bearing
+        apu.deg,  # backbearing
+        apu.km,  # a_e
+        apu.m,  # h_ts
+        apu.m,  # h_rs
+        apu.m,  # h_st
+        apu.m,  # h_sr
+        apu.m,  # h_te
+        apu.m,  # h_re
+        apu.m,  # h_m
+        apu.km,  # d_lt
+        apu.km,  # d_lr
+        apu.mrad,  # theta_t
+        apu.mrad,  # theta_r
+        apu.mrad,  # theta
+        apu.dimless,  # nu_b
+        apu.km,  # distances of height profile
+        apu.m,  # heights of height profile
+        None,  # path type (0 - LOS, 1 - transhorizon)
+        )
+    )
+def path_properties(
+        freq,
+        lon_t, lat_t,
+        lon_r, lat_r,
+        h_tg, h_rg,
+        hprof_step,
+        ):
+
+    lam = 299792458.0 / freq  # wavelength in meter
+
+    (
+        lons,
+        lats,
+        distances,
+        heights,
+        bearing,
+        back_bearing,
+        distance,
+        ) = heightprofile.srtm_height_profile(
+            lon_t, lat_t, lon_r, lat_r, hprof_step
+            )
+
+    mid_idx = lons.size // 2
+    # Note, for *very* few profile points, this is somewhat inaccurate
+    # but, for real-world applications, this won't matter
+    # (for even lenght, one would need to calculate average (non-trivial on
+    # sphere!))
+    lon_mid, lat_mid = lons[mid_idx], lats[mid_idx]
+
+    h_ts = heights[0] + h_tg
+    h_rs = heights[-1] + h_rg
+
+    a_e = helpers.median_effective_earth_radius(lon_mid, lat_mid)
+
+    d = distance
+    d_i = distances[1:-1]
+    h_i = heights[1:-1]
+
+    theta_i = 1000. * np.arctan(
+        (h_i - h_ts) / 1.e3 / d_i - d_i / 2. / a_e
+        )
+    max_idx = np.argmax(theta_i)
+    theta_max = theta_i[max_idx]
+    theta_td = 1000. * np.arctan(
+        (h_rs - h_ts) / 1.e3 / d - d / 2. / a_e
+        )
+
+    path_type = 1 if theta_max > theta_td else 0
+
+    # alternative method from Diffraction analysis (Bullington point)
+    # are they consistent???
+    C_e500 = 500. / a_e
+    # not quite sure, why we don't use theta_i here?
+    slope_i = (
+        h_i - h_ts +
+        C_e500 * d_i * (d - d_i)
+        ) / d_i
+    S_tim = np.max(slope_i)
+    S_tr = slope_i[-1]
+
+    assert (theta_max > theta_td) and (S_tim >= S_tr), (
+        'whoops, inconsistency in P.452???'
+        )
+
+    if path_type == 1:
+        # transhorizon
+
+        theta_t = theta_max
+        d_lt = d_i[max_idx]
+
+        theta_j = 1000. * np.arctan(
+            (h_i - h_rs) / 1.e3 / (d - d_i) -
+            (d - d_i) / 2. / a_e
+            )
+        max_idx = np.argmax(theta_j)
+        theta_r = theta_j[max_idx]
+        d_lr = d - d_i[max_idx]
+
+        theta = 1.e3 * d / a_e + theta_t + theta_r
+
+        # find Bullington point, etc.
+        slope_j = (
+            h_i - h_rs +
+            C_e500 * (d - d_i) * d_i
+            ) / (d - d_i)
+        S_rim = np.max(slope_j)
+        d_bp = (h_rs - h_ts + S_rim * d) / (S_tim + S_rim)
+
+        nu_bull = (
+            h_ts + S_tim * d_bp - (
+                h_ts * (d - d_bp) + h_rs * d_bp
+                ) / d
+            ) * np.sqrt(
+                0.002 * d / lam / d_bp / (d - d_bp)
+                )
+
+    else:
+        # LOS
+
+        theta_t = theta_td
+        # d_lt = distance to bullington point
+
+        theta_r = 1000. * np.arctan(
+            # h_rs <-> h_ts; distance --> -distance
+            (h_rs - h_ts) / 1.e3 / d + d / 2. / a_e
+            )
+
+        theta = 1.e3 * d / a_e + theta_t + theta_r  # is this correct?
+
+        # find Bullington point, etc.
+
+        # diffraction parameter
+        nu_i = (
+            h_i - h_ts +
+            C_e500 * d_i * (d - d_i) -
+            (h_ts * (d - d_i) + h_rs * d_i ) / d
+            ) * np.sqrt(
+                0.002 * d / lam / d_i / (d - d_i)
+                )
+
+        nu_bull_idx = np.argmax(nu_i)
+        nu_bull = nu_i(nu_bull_idx)
+
+        # horizon distance for LOS paths has to be set to distance to
+        # Bullington point in diffraction method
+        d_lt = d_i[nu_bull_idx]
+        d_lr = d - d_i[nu_bull_idx]
+
+
+
+
 
 
 @helpers.ranged_quantity_input(

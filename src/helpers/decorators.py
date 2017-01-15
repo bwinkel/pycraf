@@ -175,11 +175,15 @@ class RangedQuantityInput(object):
                 try:
                     # test, if return values are a tuple
                     return tuple(
-                        Quantity(r, u)
+                        r if u is None else Quantity(r, u)
                         for r, u in zip(result, self.output_unit)
                         )
                 except TypeError:
-                    return Quantity(result, self.output_unit)
+                    return (
+                        result
+                        if self.output_unit is None else
+                        Quantity(result, self.output_unit)
+                        )
             else:
                 return result
 
