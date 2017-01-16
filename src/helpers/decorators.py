@@ -10,6 +10,7 @@ from __future__ import (
 
 __all__ = ['ranged_quantity_input']
 
+from collections import namedtuple
 import numpy as np
 from astropy.utils.decorators import wraps
 from astropy.utils.compat import funcsigs
@@ -172,13 +173,23 @@ class RangedQuantityInput(object):
                     )
 
             if self.output_unit is not None:
+                # # test, if return values are tuple-like
                 try:
-                    # test, if return values are a tuple
-                    return tuple(
-                        r if u is None else Quantity(r, u)
-                        for r, u in zip(result, self.output_unit)
-                        )
+                    # make namedtuples work (as well as tuples)
+
+                    if hasattr(result, '_fields'):
+                        cls = result.__class__
+                        return cls(*(
+                            r if u is None else Quantity(r, u)
+                            for r, u in zip(result, self.output_unit)
+                            ))
+                    else:
+                        return tuple(
+                            r if u is None else Quantity(r, u)
+                            for r, u in zip(result, self.output_unit)
+                            )
                 except TypeError:
+
                     return (
                         result
                         if self.output_unit is None else

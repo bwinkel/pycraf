@@ -296,79 +296,193 @@ class TestPropagation:
 
     def setup(self):
 
-        pass
+        # TODO: add further test cases
+
+        self.freq = 2. * apu.GHz
+        self.lon_t, self.lat_t = 6 * apu.deg, 50 * apu.deg
+        self.lon_r, self.lat_r = 6.1 * apu.deg, 50.25 * apu.deg
+        self.hprof_step = 100 * apu.m
+
+        self.omega = 0. * apu.percent
+        self.temperature = (273.15 + 15.) * apu.K  # as in Excel sheet
+        self.pressure = 1013. * apu.hPa
+        self.time_percent = 50. * apu.percent
+
+        # transhorizon numbers:
+        self.h_tg_trans, self.h_rg_trans = 50 * apu.m, 90 * apu.m
+
+        self.pathprop_trans = pathprof.path_properties(
+            self.freq,
+            self.lon_t, self.lat_t,
+            self.lon_r, self.lat_r,
+            self.h_tg_trans, self.h_rg_trans,
+            self.hprof_step,
+            )
+
+        # LOS numbers:
+        self.h_tg_los, self.h_rg_los = 200 * apu.m, 200 * apu.m
+
+        self.pathprop_los = pathprof.path_properties(
+            self.freq,
+            self.lon_t, self.lat_t,
+            self.lon_r, self.lat_r,
+            self.h_tg_los, self.h_rg_los,
+            self.hprof_step,
+            )
 
     def teardown(self):
 
         pass
 
+    def test_path_properties(self):
+
+        pfunc = pathprof.path_properties_with_units
+        args_list = [
+            (1.e-30, None, apu.GHz),
+            (0, 360, apu.deg),
+            (-90, 90, apu.deg),
+            (0, 360, apu.deg),
+            (-90, 90, apu.deg),
+            (0, None, apu.m),
+            (0, None, apu.m),
+            (0, None, apu.m),
+            ]
+        check_astro_quantities(pfunc, args_list)
+
+        pathprop_trans = pfunc(
+            self.freq,
+            self.lon_t, self.lat_t,
+            self.lon_r, self.lat_r,
+            self.h_tg_trans, self.h_rg_trans,
+            self.hprof_step,
+            )
+
+        pathprop_trans_true = pathprof.PathProps(
+            lon_mid=Quantity(6.050021979477151, apu.deg),
+            lat_mid=Quantity(50.125392608270644, apu.deg),
+            delta_N=Quantity(39.276915092335486, 1 / apu.km),
+            N0=Quantity(325.48649839940964, cnv.dimless),
+            distance=Quantity(28.712600748321183, apu.km),
+            bearing=Quantity(14.383138371761586, apu.deg),
+            back_bearing=Quantity(-165.6168616282384, apu.deg),
+            a_e=Quantity(8496.60880688387, apu.km),
+            h0=Quantity(391.0, apu.m),
+            hn=Quantity(514.5184936523438, apu.m),
+            h_ts=Quantity(441.0, apu.m),
+            h_rs=Quantity(604.5184936523438, apu.m),
+            h_st=Quantity(391.0, apu.m),
+            h_sr=Quantity(475.1045924277951, apu.m),
+            h_std=Quantity(391.0, apu.m),
+            h_srd=Quantity(468.3875514121701, apu.m),
+            h_te=Quantity(50.0, apu.m),
+            h_re=Quantity(129.41390122454862, apu.m),
+            h_m=Quantity(96.53708718864101, apu.m),
+            d_lt=Quantity(9.6, apu.km),
+            d_lr=Quantity(19.112600748321185, apu.km),
+            theta_t=Quantity(7.211744865969712, apu.mrad),
+            theta_r=Quantity(-5.77400698654872, apu.mrad),
+            theta=Quantity(4.8170391278271225, apu.mrad),
+            nu_bull=Quantity(4.447997244685067e-05, cnv.dimless),
+            path_type=1,
+            )
+
+        for t1, t2 in zip(pathprop_trans, pathprop_trans_true):
+            assert_quantity_allclose(t1, t2)
+
+        # LOS path
+        pathprop_los = pfunc(
+            self.freq,
+            self.lon_t, self.lat_t,
+            self.lon_r, self.lat_r,
+            self.h_tg_los, self.h_rg_los,
+            self.hprof_step,
+            )
+
+        pathprop_los_true = pathprof.PathProps(
+            lon_mid=Quantity(6.050021979477151, apu.deg),
+            lat_mid=Quantity(50.125392608270644, apu.deg),
+            delta_N=Quantity(39.276915092335486, 1. / apu.km),
+            N0=Quantity(325.48649839940964, cnv.dimless),
+            distance=Quantity(28.712600748321183, apu.km),
+            bearing=Quantity(14.383138371761586, apu.deg),
+            back_bearing=Quantity(-165.6168616282384, apu.deg),
+            a_e=Quantity(8496.60880688387, apu.km),
+            h0=Quantity(391.0, apu.m),
+            hn=Quantity(514.5184936523438, apu.m),
+            h_ts=Quantity(591.0, apu.m),
+            h_rs=Quantity(714.5184936523438, apu.m),
+            h_st=Quantity(391.0, apu.m),
+            h_sr=Quantity(475.1045924277951, apu.m),
+            h_std=Quantity(391.0, apu.m),
+            h_srd=Quantity(475.1045924277951, apu.m),
+            h_te=Quantity(200.0, apu.m),
+            h_re=Quantity(239.41390122454862, apu.m),
+            h_m=Quantity(96.53708718864101, apu.m),
+            d_lt=Quantity(9.6, apu.km),
+            d_lr=Quantity(19.112600748321185, apu.km),
+            theta_t=Quantity(2.6122349531799145, apu.mrad),
+            theta_r=Quantity(-5.991470448965087, apu.mrad),
+            theta=Quantity(6.575262095775969e-05, apu.mrad),
+            nu_bull=Quantity(-0.0010069216849574996, cnv.dimless),
+            path_type=0,
+            )
+
+        for t1, t2 in zip(pathprop_los, pathprop_los_true):
+            assert_quantity_allclose(t1, t2)
+
     def test_free_space_loss_bfsg(self):
 
         pfunc = pathprof.free_space_loss_bfsg
-        args_list = [
-            (1.e-30, None, apu.km),
-            (1.e-30, None, apu.GHz),
-            (0, 100, apu.percent),
-            (0, None, apu.K),
-            (0, None, apu.hPa),
-            ]
-        kwargs_list = [
-            ('d_lt', 0, None, apu.m),
-            ('d_lr', 0, None, apu.m),
-            ('time_percent', 0, 100, apu.percent),
-            ]
-        check_astro_quantities(pfunc, args_list, kwargs_list)
+        # args_list = [
+        #     (None, None, None),
+        #     (1.e-30, None, apu.GHz),
+        #     (0, 100, apu.percent),
+        #     (0, None, apu.K),
+        #     (0, None, apu.hPa),
+        #     (0, 100, apu.percent),
+        #     ]
+        # check_astro_quantities(pfunc, args_list)
 
-        # first, test without corrections
-        dist = Quantity([1., 2., 5., 10., 50., 50.], apu.km)
-        freq = Quantity([1., 1., 0.5, 10., 2., 2.], apu.GHz)
-        omega = Quantity([0., 0., 0., 0., 0., 50.], apu.percent)
-        temperature = Quantity([270., 280., 280., 300., 300., 300.], apu.K)
-        pressure = Quantity([1000., 1010., 990., 990., 1000., 1000.], apu.hPa)
+        # trans == los:
+        # Lbfsg_trans = pfunc(
+        #     self.pathprop_trans, self.freq, self.omega,
+        #     self.temperature, self.pressure, self.time_percent
+        #     )
+        # Lbfsg_trans_true = 127.879838 * cnv.dB
 
-        Lbfsg_annex1 = Quantity(
-            [
-                92.50615024, 98.53204435, 100.47441164, 132.62854741,
-                132.7989964, 132.80053965
-                ], cnv.dB
+        # assert_quantity_allclose(
+        #     Lbfsg_trans,
+        #     Lbfsg_trans_true,
+        #     )
+
+        Lbfsg_los = pfunc(
+            self.pathprop_los, self.freq, self.omega,
+            self.temperature, self.pressure, self.time_percent
             )
+        Lbfsg_los_true = 127.879838 * cnv.dB
+
         assert_quantity_allclose(
-            pfunc(
-                dist, freq, omega, temperature, pressure, atm_method='annex1'
-                ),
-            Lbfsg_annex1,
+            Lbfsg_los,
+            Lbfsg_los_true,
             )
 
-        Lbfsg_annex2 = Quantity(
-            [
-                92.50622914, 98.5321929, 100.47467167, 132.6272019,
-                132.8020698, 132.80412104
-                ], cnv.dB
-            )
-        assert_quantity_allclose(
-            pfunc(
-                dist, freq, omega, temperature, pressure, atm_method='annex2'
-                ),
-            Lbfsg_annex2,
-            )
-
-        # test broadcasting
-        dist = Quantity([1., 10., 20.], apu.km)
-        freq = Quantity([1., 2., 22.], apu.GHz)
-        omega = Quantity(0., apu.percent)
-        temperature = Quantity(300., apu.K)
-        pressure = Quantity(1013., apu.hPa)
-        Lbfsg_annex1 = Quantity(
-            [
-                [92.5048683, 98.52672276, 119.53615245],
-                [112.54868299, 118.58182837, 141.22544192],
-                [118.61796588, 124.66365675, 149.12303013],
-                ], cnv.dB
-            )
-        assert_quantity_allclose(
-            pfunc(dist[:, np.newaxis], freq, omega, temperature, pressure),
-            Lbfsg_annex1,
-            )
+        # # test broadcasting
+        # dist = Quantity([1., 10., 20.], apu.km)
+        # freq = Quantity([1., 2., 22.], apu.GHz)
+        # omega = Quantity(0., apu.percent)
+        # temperature = Quantity(300., apu.K)
+        # pressure = Quantity(1013., apu.hPa)
+        # Lbfsg_annex1 = Quantity(
+        #     [
+        #         [92.5048683, 98.52672276, 119.53615245],
+        #         [112.54868299, 118.58182837, 141.22544192],
+        #         [118.61796588, 124.66365675, 149.12303013],
+        #         ], cnv.dB
+        #     )
+        # assert_quantity_allclose(
+        #     pfunc(dist[:, np.newaxis], freq, omega, temperature, pressure),
+        #     Lbfsg_annex1,
+        #     )
 
     def test_tropospheric_scatter_loss_bs(self):
 

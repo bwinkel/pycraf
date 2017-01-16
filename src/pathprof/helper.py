@@ -121,6 +121,35 @@ def _N_from_map(lon, lat):
     return _DN, _N0
 
 
+def _radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm):
+    _DN = _DN_interpolator((lon, lat))
+    _N0 = _N0_interpolator((lon, lat))
+
+    _tau = 1. - np.exp(-4.12e-4 * np.power(d_lm, 2.41))
+    _absphi = np.abs(lat)
+
+    _a = np.power(10, -d_tm / (16. - 6.6 * _tau))
+    _b = np.power(10, -5 * (0.496 + 0.354 * _tau))
+    _mu1 = np.power(_a + _b, 0.2)
+    _mu1 = np.where(_mu1 <= 1, _mu1, 1.)
+    _log_mu1 = np.log10(_mu1)
+
+    _phi_cond = _absphi <= 70.
+    _mu4 = np.where(
+        _phi_cond,
+        np.power(10, (-0.935 + 0.0176 * _absphi) * _log_mu1),
+        np.power(10, 0.3 * _log_mu1)
+        )
+
+    beta_0 = np.where(
+        _phi_cond,
+        np.power(10, -0.015 * _absphi + 1.67) * _mu1 * _mu4,
+        4.17 * _mu1 * _mu4
+        )
+
+    return _DN, beta_0, _N0
+
+
 @helpers.ranged_quantity_input(
     lon=(0, 360, apu.deg),
     lat=(-90, 90, apu.deg),
@@ -161,32 +190,7 @@ def radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm):
       In this case, d_tm = d_lm = d.
     '''
 
-    _DN = _DN_interpolator((lon, lat))
-    _N0 = _N0_interpolator((lon, lat))
-
-    _tau = 1. - np.exp(-4.12e-4 * np.power(d_lm, 2.41))
-    _absphi = np.abs(lat)
-
-    _a = np.power(10, -d_tm / (16. - 6.6 * _tau))
-    _b = np.power(10, -5 * (0.496 + 0.354 * _tau))
-    _mu1 = np.power(_a + _b, 0.2)
-    _mu1 = np.where(_mu1 <= 1, _mu1, 1.)
-    _log_mu1 = np.log10(_mu1)
-
-    _phi_cond = _absphi <= 70.
-    _mu4 = np.where(
-        _phi_cond,
-        np.power(10, (-0.935 + 0.0176 * _absphi) * _log_mu1),
-        np.power(10, 0.3 * _log_mu1)
-        )
-
-    beta_0 = np.where(
-        _phi_cond,
-        np.power(10, -0.015 * _absphi + 1.67) * _mu1 * _mu4,
-        4.17 * _mu1 * _mu4
-        )
-
-    return _DN, beta_0, _N0
+    return _radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm)
 
 
 @helpers.ranged_quantity_input(
@@ -239,6 +243,11 @@ def effective_earth_radius_factor_beta():
     return K_BETA_VALUE
 
 
+def _median_effective_earth_radius(lon, lat):
+
+    return R_E_VALUE * 157. / (157. - _DN_interpolator((lon, lat)))
+
+
 @helpers.ranged_quantity_input(
     lon=(0, 360, apu.deg),
     lat=(-90, 90, apu.deg),
@@ -264,7 +273,7 @@ def median_effective_earth_radius(lon, lat):
       bilinear interpolation.
     '''
 
-    return R_E_VALUE * 157. / (157. - _DN_interpolator((lon, lat)))
+    return _median_effective_earth_radius(lon, lat)
 
 
 @helpers.ranged_quantity_input(
