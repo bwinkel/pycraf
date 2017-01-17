@@ -1001,5 +1001,111 @@ def ducting_loss_ba(
         )
 
 
+def _diffraction_bullington_helper(
+        dist, nu_bull
+        ):
+
+    L_uc = J_bull(nu_bull)
+    L_bull = L_uc + (1 - np.exp(-L_uc / 6.)) * (10 + 0.02 * dist)
+
+    return L_bull
+
+
+def _L_dft(a_dft, dist, freq, h_te, h_re, omega, pol):
+
+    def _func(eps_r, sigma):
+
+        assert pol in ['horizontal', 'vertical']
+
+        K = 0.036 * np.power(a_dft * freq, -1. / 3.) * np.power(
+            (eps_r - 1) ** 2 + (18. * sigma / freq) ** 2, -0.25
+            )
+
+        if pol == 'vertical':
+
+            K *= np.power(eps_r ** 2 + (18. * sigma / freq) ** 2, 0.5)
+
+        K2 = K * K
+        K4 = K2 * K2
+        beta_dft = (1. + 1.6 * K2 + 0.67 * K4) / (1. + 4.5 * K2 + 1.53 * K4)
+
+        X = 21.88 * beta_dft * np.power(freq / a_dft ** 2, 1. / 3.) * dist
+        Y = 0.9575 * beta_dft * np.power(freq ** 2 / a_dft, 1. / 3.)
+        Y_t = Y * h_te
+        Y_r = Y * h_re
+
+        if X >= 1.6:
+            F_X = 11. + 10 * np.log10(X) - 17.6 * X
+        else:
+            F_X = -20 * np.log10(X) - 5.6488 * np.power(X, 1.425)
+
+        def G(Y):
+
+            B = beta_dft * Y
+            if B > 2:
+                res = 17.6 * np.sqrt(B - 1.1) - 5 * np.log10(B - 1.1) - 8
+            else:
+                res = 20 * np.log10(B + 0.1 * B ** 3)
+
+            return max(2 + 20 * np.log10(K), res)
+
+        return -F_X - G(Y_t) - G(Y_r)
+
+    L_dft_land = _func(22., 0.003)
+    L_dft_sea = _func(80., 5.0)
+
+    L_dft = omega * L_dft_sea + (1. - omega) * L_dft_land
+
+    return L_dft
+
+
+def _diffraction_spherical_earth_loss_helper(
+        dist, freq, a_p, h_te, h_re, omega, pol
+        ):
+
+    wavelen = 0.299792458 / freq
+    d_los = np.sqrt(2 * a_p) * (np.sqrt(0.001 * h_te) + np.sqrt(0.001 * h_re))
+
+    if dist >= d_los:
+
+        a_dft = a_p
+        return _L_dft(a_dft, dist, freq, h_te, h_re, omega, pol)
+
+    else:
+
+        c = (h_te - h_re) / (h_te + h_re)
+        m = 250. * dist ** 2 / a_p / (h_te + h_re)
+
+        b = 2 * np.sqrt((m + 1.) / 3. / m) * np.cos(
+            np.pi / 3. +
+            1. / 3. * np.arccos(3. * c / 2. * np.sqrt(3. * m / (m + 1.) ** 3))
+            )
+
+        d_se1 = 0.5 * dist * (1. + b)
+        d_se2 = dist - d_se1
+
+        h_se = (
+            (h_te - 500 * d_se1 ** 2 / a_p) * d_se2 +
+            (h_re - 500 * d_se2 ** 2 / a_p) * d_se1
+            ) / dist
+
+        h_req = 17.456 * np.sqrt(d_se1 * d_se2 * wavelen / dist)
+
+        if h_se > h_req:
+
+            return 0.
+
+        a_em = 500. * (dist / (np.sqrt(h_te) + np.sqrt(h_re))) ** 2
+        a_dft = a_em
+
+        L_dft = _L_dft(a_dft, dist, freq, h_te, h_re, omega, pol)
+
+        if L_dft < 0:
+            return 0.
+
+        L_dsph = (1. - h_se / h_req) * L_dft
+        return L_dsph
+
+
 if __name__ == '__main__':
     print('This not a standalone python program! Use as module.')
