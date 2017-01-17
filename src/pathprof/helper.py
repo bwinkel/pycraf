@@ -15,7 +15,7 @@ from .. import helpers
 
 
 __all__ = [
-    'R_E', 'K_BETA',
+    'R_E', 'K_BETA', 'A_BETA_VALUE',
     'anual_time_percentage_from_worst_month',
     'radiomet_data_for_pathcenter',
     'median_effective_earth_radius_factor',

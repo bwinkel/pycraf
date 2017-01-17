@@ -68,6 +68,7 @@ HGT_DICT = _find_hgt_files()
 
 @lru_cache(maxsize=30, typed=False)
 def _get_tile_data(ilon, ilat):
+    # angles in deg
 
     hgt_file = HGT_DICT[ilon, ilat]
 
@@ -87,6 +88,7 @@ def _get_tile_data(ilon, ilat):
 
 @lru_cache(maxsize=30, typed=False)
 def _get_tile_interpolator(ilon, ilat):
+    # angles in deg
 
     lons, lats, tile = _get_tile_data(ilon, ilat)
 
@@ -98,6 +100,7 @@ def _get_tile_interpolator(ilon, ilat):
 
 
 def _get_interpolated_data(lons, lats):
+    # angles in deg, heights in m
 
     # coordinates could span different tiles, so first get the unique list
     lons = np.atleast_1d(lons)
@@ -123,6 +126,7 @@ def _get_interpolated_data(lons, lats):
 
 
 def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
+    # angles in deg; step and heights in m
 
     # first find start bearing (and backward bearing for the curious people)
     # and distance

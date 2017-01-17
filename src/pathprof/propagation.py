@@ -63,12 +63,23 @@ _vectorized_specific_attenuation_annex2 = np.vectorize(
 
 def J_bull(nu):
 
-    return 6.9 + 20 * np.log10(
-        np.sqrt((nu - 0.1) ** 2 + 1) + nu - 0.1
-        )
+    if nu < -0.78:
+        return 0.
+    else:
+        return (
+            6.9 + 20 * np.log10(
+                np.sqrt((nu - 0.1) ** 2 + 1) + nu - 0.1
+                )
+            )
 
 
 _PATH_PROPS = (  # pc = path center
+
+    ('freq', apu.GHz),
+    ('wavelen', apu.m),
+    ('p', apu.percent),
+    ('beta0', apu.percent),
+    ('omega', apu.percent),
     ('lon_mid', apu.deg),
     ('lat_mid', apu.deg),
     ('delta_N', cnv.dimless / apu.km),
@@ -76,7 +87,6 @@ _PATH_PROPS = (  # pc = path center
     ('distance', apu.km),
     ('bearing', apu.deg),
     ('back_bearing', apu.deg),
-    ('a_e', apu.km),
     ('h0', apu.m),
     ('hn', apu.m),
     ('h_ts', apu.m),
@@ -87,16 +97,30 @@ _PATH_PROPS = (  # pc = path center
     ('h_srd', apu.m),
     ('h_te', apu.m),
     ('h_re', apu.m),
-    ('h_m', apu.m),
-    ('d_lt', apu.km),
-    ('d_lr', apu.km),
+    ('d_lm', apu.km),
+    ('d_tm', apu.km),
+    ('d_ct', apu.km),
+    ('d_cr', apu.km),
+    # ('hprof_dist', apu.km),  # distances of height profile
+    # ('hprof_heights', apu.m),  # heights of height profile
+    ('a_e', apu.km),
+    ('path_type', None),  # (0 - LOS, 1 - transhorizon)
     ('theta_t', apu.mrad),
     ('theta_r', apu.mrad),
     ('theta', apu.mrad),
+    ('d_lt', apu.km),
+    ('d_lr', apu.km),
     ('nu_bull', cnv.dimless),
-    # ('hprof_dist', apu.km),  # distances of height profile
-    # ('hprof_heights', apu.m),  # heights of height profile
-    ('path_type', None),  # (0 - LOS, 1 - transhorizon)
+    ('h_m', apu.m),
+    ('a_e_b0', apu.km),
+    ('path_type_b0', None),  # (0 - LOS, 1 - transhorizon)
+    ('theta_t_b0', apu.mrad),
+    ('theta_r_b0', apu.mrad),
+    ('theta_b0', apu.mrad),
+    ('d_lt_b0', apu.km),
+    ('d_lr_b0', apu.km),
+    ('nu_bull_b0', cnv.dimless),
+    ('h_m_b0', apu.m),
     )
 
 PathProps = namedtuple('PathProps', (tup[0] for tup in _PATH_PROPS))
@@ -104,6 +128,13 @@ PathPropsUnits = tuple(tup[1] for tup in _PATH_PROPS)
 # PathProps.__new__.__defaults__ = (None,) * len(PathProps._fields)
 
 PathProps.__doc__ = '''
+    freq - Frequency [GHz]
+    wavelen - Wavelength [m]
+    p - Time percent [%]
+    beta0 - the time percentage for which refractive index lapse-rates
+        exceeding 100 N-units/km can be expected in the first 100 m
+        of the lower atmosphere [%]
+    omega - Fraction of the path over water [%] (see Table 3)
     lon_mid - Path center longitude [deg]
     lat_mid - Path center latitude [deg]
     delta_N - Average radio-refractive index lapse-rate through the
@@ -112,7 +143,6 @@ PathProps.__doc__ = '''
     distance - Distance between transmitter and receiver [km]
     bearing - Bearing from transmitter to receiver [deg]
     back_bearing - Bearing from receiver to transmitter [deg]
-    a_e - Median effective Earth radius at path center [km]
     h0 - Profile height at transmitter position [m]
     hn - Profile height at receiver position [m]
     h_ts - Transmitter antenna center height amsl [m]
@@ -123,19 +153,34 @@ PathProps.__doc__ = '''
     h_srd - Smooth-Earth height amsl, at the receiver [m]
     h_te - Effective heights of transmitter antennas above terrain [m]
     h_re - Effective heights of receiver antennas above terrain [m]
-    h_m - Terrain roughness [m]
-    d_lt - Distance to horizon (for transmitter) [km]
-    d_lr - Distance to horizon (for receiver) [km]
+    d_tm - longest continuous land (inland + coastal) section of the
+        great-circle path [km]
+    d_lm - longest continuous inland section of the great-circle path [km]
+    d_ct, d_cr - Distance over land from transmit/receive antenna to the coast
+        along great circle interference path [km]
+        (set to zero for terminal on ship/sea platform; only relevant if less
+        than 5 km)
+
+    --- The values below are present twice, once without subscript
+    --- for the median Earth radius and once with subscript "_b0" for
+    --- the beta_0 "version" of the Earth radius
+    a_e[_beta0] - Median effective Earth radius at path center [km]
+    path_type[_beta0] - 0: LOS; 1: transhorizon
+    theta_t[_beta0] - For a transhorizon path, transmit horizon elevation
+        angle; for a LoS path, the elevation angle to the receiver
+        terminal [mrad]
+    theta_r[_beta0] - For a transhorizon path, receiver horizon elevation
+        angle; for a LoS path, the elevation angle to the transmitter
+        terminal [mrad]
+    theta[_beta0] - Path angular distance [mrad]
+    d_lt[_beta0] - Distance to horizon (for transmitter) [km]
+    d_lr[_beta0] - Distance to horizon (for receiver) [km]
+    nu_bull[_beta0] - Bullington-point diffraction parameter (for
+        transhorizon) or highest diffraction parameter of the profile (for
+        LOS) [dimless]
+    h_m[_beta0] - Terrain roughness [m]
         (For a LoS path, use distance to Bullington point, inferred from
         diffraction method for 50% time.)
-    theta_t - For a transhorizon path, transmit horizon elevation angle;
-        for a LoS path, the elevation angle to the receiver terminal [mrad]
-    theta_r - For a transhorizon path, receiver horizon elevation angle;
-        for a LoS path, the elevation angle to the transmitter terminal [mrad]
-    theta - Path angular distance [mrad]
-    nu_bull - Bullington-point diffraction parameter (for transhorizon)
-        or highest diffraction parameter of the profile (for LOS) [dimless]
-    path_type - 0: LOS; 1: transhorizon
 
     (amsl - above mean sea level)
     '''
@@ -202,89 +247,38 @@ def _effective_antenna_heights(distances, heights, h_ts, h_rs, h_st, h_sr):
     return h_std, h_srd
 
 
-@helpers.ranged_quantity_input(
-    freq=(1.e-30, None, apu.GHz),
-    lon_t=(0, 360, apu.deg),
-    lat_t=(-90, 90, apu.deg),
-    lon_r=(0, 360, apu.deg),
-    lat_r=(-90, 90, apu.deg),
-    h_tg=(0, None, apu.m),
-    h_rg=(0, None, apu.m),
-    hprof_step=(0, None, apu.m),
-    strip_input_units=True,
-    output_unit=None,
-    )
-def path_properties(
-        freq,
-        lon_t, lat_t,
-        lon_r, lat_r,
-        h_tg, h_rg,
-        hprof_step,
-        ):
-    pathprops = {}
-
-    lam = 299792458.0 / freq  # wavelength in meter
-
-    (
-        lons,
-        lats,
+def _diffraction_helper(
+        a_p,
         distances,
         heights,
-        bearing,
-        back_bearing,
         distance,
-        ) = heightprofile._srtm_height_profile(
-            lon_t, lat_t, lon_r, lat_r, hprof_step
-            )
+        h_ts,
+        h_rs,
+        h_st,
+        duct_slope,
+        wavelen,
+        ):
 
-    pathprops['distance'] = distance
-    pathprops['bearing'] = bearing
-    pathprops['back_bearing'] = back_bearing
-
-    mid_idx = lons.size // 2
-    # Note, for *very* few profile points, this is somewhat inaccurate
-    # but, for real-world applications, this won't matter
-    # (for even lenght, one would need to calculate average (non-trivial on
-    # sphere!))
-    lon_mid, lat_mid = lons[mid_idx], lats[mid_idx]
-    pathprops['lon_mid'] = lon_mid
-    pathprops['lat_mid'] = lat_mid
-
-    delta_N, N0 = helper._N_from_map(lon_mid, lat_mid)
-    pathprops['delta_N'] = delta_N
-    pathprops['N0'] = N0
-
-    h0 = heights[0]
-    hn = heights[-1]
-    pathprops['h0'] = h0
-    pathprops['hn'] = hn
-    h_ts = h0 + h_tg
-    h_rs = hn + h_rg
-    pathprops['h_ts'] = h_ts
-    pathprops['h_rs'] = h_rs
-
-    a_e = helper._median_effective_earth_radius(lon_mid, lat_mid)
-    pathprops['a_e'] = a_e
-
+    lam = wavelen
     d = distance
     d_i = distances[1:-1]
     h_i = heights[1:-1]
+    m = duct_slope
 
     theta_i = 1000. * np.arctan(
-        (h_i - h_ts) / 1.e3 / d_i - d_i / 2. / a_e
+        (h_i - h_ts) / 1.e3 / d_i - d_i / 2. / a_p
         )
     lt_idx = np.argmax(theta_i)
     theta_max = theta_i[lt_idx]
     theta_td = 1000. * np.arctan(
-        (h_rs - h_ts) / 1.e3 / d - d / 2. / a_e
+        (h_rs - h_ts) / 1.e3 / d - d / 2. / a_p
         )
 
     path_type = 1 if theta_max > theta_td else 0
-    pathprops['path_type'] = path_type
 
     # alternative method from Diffraction analysis (Bullington point)
     # are they consistent???
-    C_e500 = 500. / a_e
+    C_e500 = 500. / a_p
     # not quite sure, why we don't use theta_i here?
     slope_i = (
         h_i - h_ts +
@@ -310,13 +304,13 @@ def path_properties(
 
         theta_j = 1000. * np.arctan(
             (h_i - h_rs) / 1.e3 / (d - d_i) -
-            (d - d_i) / 2. / a_e
+            (d - d_i) / 2. / a_p
             )
         lr_idx = np.argmax(theta_j)
         theta_r = theta_j[lr_idx]
         d_lr = d - d_i[lr_idx]
 
-        theta = 1.e3 * d / a_e + theta_t + theta_r
+        theta = 1.e3 * d / a_p + theta_t + theta_r
 
         # find Bullington point, etc.
         slope_j = (
@@ -341,10 +335,10 @@ def path_properties(
 
         theta_r = 1000. * np.arctan(
             # h_rs <-> h_ts
-            (h_ts - h_rs) / 1.e3 / d - d / 2. / a_e
+            (h_ts - h_rs) / 1.e3 / d - d / 2. / a_p
             )
 
-        theta = 1.e3 * d / a_e + theta_t + theta_r  # is this correct?
+        theta = 1.e3 * d / a_p + theta_t + theta_r  # is this correct?
 
         # find Bullington point, etc.
 
@@ -365,12 +359,131 @@ def path_properties(
         d_lt = d_i[bull_idx]
         d_lr = d - d_i[bull_idx]
 
-    pathprops['theta_t'] = theta_t
-    pathprops['theta_r'] = theta_r
-    pathprops['theta'] = theta
-    pathprops['d_lt'] = d_lt
-    pathprops['d_lr'] = d_lr
-    pathprops['nu_bull'] = nu_bull
+    if path_type == 1:
+        # transhorizon
+        _sl = slice(lt_idx, lr_idx + 1)
+        h_m = np.max(h_i[_sl] - (h_st + m * d_i[_sl]))
+
+    else:
+        # LOS
+        # it seems, that h_m is calculated just from the profile height
+        # at the Bullington point???
+        h_m = h_i[bull_idx] - (h_st + m * d_i[bull_idx])
+
+    subprops = {}
+    subprops['a_e'] = a_p
+    subprops['path_type'] = path_type
+    subprops['theta_t'] = theta_t
+    subprops['theta_r'] = theta_r
+    subprops['theta'] = theta
+    subprops['d_lt'] = d_lt
+    subprops['d_lr'] = d_lr
+    subprops['nu_bull'] = nu_bull
+    subprops['h_m'] = h_m
+
+    return subprops
+
+
+def path_properties(
+        freq,
+        lon_t, lat_t,
+        lon_r, lat_r,
+        h_tg, h_rg,
+        hprof_step,
+        time_percent,
+        omega=0,
+        d_tm=-1, d_lm=-1,
+        d_ct=50000, d_cr=50000,
+        ):
+    '''
+    Calculate path profile properties.
+
+    Note: This is the unit-less version (for speed). Use
+    path_properties_with_units() if you want astropy-units interface.
+
+    Parameters
+    ----------
+    freq - Frequency of radiation [GHz]
+    lon_t, lat_t - Transmitter coordinates [deg]
+    lon_r, lat_r - Receiver coordinates [deg]
+    h_tg, h_rg - Transmitter/receiver heights over ground [m]
+    hprof_step - Distance resolution of height profile along path [m]
+    time_percent - Time percentage [%]
+    omega - Fraction of the path over water [%] (see Table 3)
+    d_tm - longest continuous land (inland + coastal) section of the
+        great-circle path [km]
+    d_lm - longest continuous inland section of the great-circle path [km]
+    d_ct, d_cr - Distance over land from transmit/receive antenna to the coast
+        along great circle interference path [km]
+        (set to zero for terminal on ship/sea platform; only relevant if less
+        than 5 km)
+
+    Returns
+    -------
+    Path Properties (as a namedtuple)
+    '''
+
+    pathprops = {}
+    pathprops['freq'] = freq
+    pathprops['p'] = time_percent
+
+    lam = 0.299792458 / freq   # wavelength in meter
+    pathprops['wavelen'] = lam
+
+    (
+        lons,
+        lats,
+        distances,
+        heights,
+        bearing,
+        back_bearing,
+        distance,
+        ) = heightprofile._srtm_height_profile(
+            lon_t, lat_t, lon_r, lat_r, hprof_step
+            )
+
+    pathprops['distance'] = distance
+    pathprops['bearing'] = bearing
+    pathprops['back_bearing'] = back_bearing
+
+    if d_tm < 0:
+        d_tm = distance
+    if d_lm < 0:
+        d_lm = distance
+    # TODO: add functionality to produce next 5 parameters programmatically
+    pathprops['d_tm'] = d_tm
+    pathprops['d_lm'] = d_lm
+    pathprops['omega'] = omega
+    pathprops['d_ct'] = d_ct
+    pathprops['d_cr'] = d_cr
+
+    mid_idx = lons.size // 2
+    # Note, for *very* few profile points, this is somewhat inaccurate
+    # but, for real-world applications, this won't matter
+    # (for even lenght, one would need to calculate average (non-trivial on
+    # sphere!))
+    lon_mid, lat_mid = lons[mid_idx], lats[mid_idx]
+    pathprops['lon_mid'] = lon_mid
+    pathprops['lat_mid'] = lat_mid
+
+    delta_N, beta_0, N0 = helper._radiomet_data_for_pathcenter(
+        lon_mid, lat_mid, d_tm, d_lm
+        )
+    pathprops['delta_N'] = delta_N
+    pathprops['beta0'] = beta_0
+    pathprops['N0'] = N0
+
+    d = distance
+    # d_i = distances[1:-1]
+    # h_i = heights[1:-1]
+    h0 = heights[0]
+    hn = heights[-1]
+    pathprops['h0'] = h0
+    pathprops['hn'] = hn
+    h_ts = h0 + h_tg
+    h_rs = hn + h_rg
+    pathprops['h_ts'] = h_ts
+    pathprops['h_rs'] = h_rs
 
     # smooth-earth height profile
     h_st, h_sr, h_si = _smooth_earth_heights(distances, heights)
@@ -388,25 +501,37 @@ def path_properties(
     pathprops['h_st'] = h_st
     pathprops['h_sr'] = h_sr
 
-    m = (h_sr - h_st) / d
+    duct_slope = (h_sr - h_st) / d  # == m
 
     h_te = h_tg + h0 - h_st
     h_re = h_rg + hn - h_sr
     pathprops['h_te'] = h_te
     pathprops['h_re'] = h_re
 
-    if path_type == 1:
-        # transhorizon
-        _sl = slice(lt_idx, lr_idx+1)
-        h_m = np.max(h_i[_sl] - (h_st + m * d_i[_sl]))
+    # the next part depends on whether the median or beta_0 Earth radius
+    # is to be used; to avoid running the whole function twice
+    # we just add all related quantities twice with subscript
 
-    else:
-        # LOS
-        # it seems, that h_m is calculated just from the profile height
-        # at the Bullington point???
-        h_m = h_i[bull_idx] - (h_st + m * d_i[bull_idx])
+    args = (
+        distances,
+        heights,
+        distance,
+        h_ts,
+        h_rs,
+        h_st,
+        duct_slope,
+        lam,
+        )
 
-    pathprops['h_m'] = h_m
+    a_e_50 = helper._median_effective_earth_radius(lon_mid, lat_mid)
+    subprops_50 = _diffraction_helper(a_e_50, *args)
+    a_e_b0 = helper.A_BETA_VALUE
+    subprops_b0 = _diffraction_helper(a_e_b0, *args)
+
+    # subprops_50 = dict((k + '_50', v) for k, v in subprops_50.items())
+    subprops_b0 = dict((k + '_b0', v) for k, v in subprops_b0.items())
+    pathprops.update(subprops_50)
+    pathprops.update(subprops_b0)
 
     return PathProps(**pathprops)
 
@@ -420,7 +545,12 @@ def path_properties(
     h_tg=(0, None, apu.m),
     h_rg=(0, None, apu.m),
     hprof_step=(0, None, apu.m),
-    strip_input_units=False,
+    d_tm=(0, None, apu.km),
+    d_lm=(0, None, apu.km),
+    d_ct=(0, None, apu.km),
+    d_cr=(0, None, apu.km),
+    time_percent=(0, 100, apu.percent),
+    strip_input_units=True,
     output_unit=PathPropsUnits
     )
 def path_properties_with_units(
@@ -429,9 +559,37 @@ def path_properties_with_units(
         lon_r, lat_r,
         h_tg, h_rg,
         hprof_step,
+        time_percent,
+        omega=0. * apu.percent,
+        d_tm=-1 * apu.km, d_lm=-1 * apu.km,
+        d_ct=50000 * apu.km, d_cr=50000 * apu.km,
         ):
     '''
-    TODO
+    Calculate path profile properties.
+
+    Note: All quantities must be astropy Quantities
+          (astropy.units.quantity.Quantity).
+
+    Parameters
+    ----------
+    freq - Frequency of radiation [GHz]
+    lon_t, lat_t - Transmitter coordinates [deg]
+    lon_r, lat_r - Receiver coordinates [deg]
+    h_tg, h_rg - Transmitter/receiver heights over ground [m]
+    hprof_step - Distance resolution of height profile along path [m]
+    time_percent - Time percentage [%]
+    omega - Fraction of the path over water [%] (see Table 3)
+    d_tm - longest continuous land (inland + coastal) section of the
+        great-circle path [km]
+    d_lm - longest continuous inland section of the great-circle path [km]
+    d_ct, d_cr - Distance over land from transmit/receive antenna to the coast
+        along great circle interference path [km]
+        (set to zero for terminal on ship/sea platform; only relevant if less
+        than 5 km)
+
+    Returns
+    -------
+    Path Properties (as a namedtuple)
     '''
 
     return path_properties(
@@ -440,63 +598,26 @@ def path_properties_with_units(
         lon_r, lat_r,
         h_tg, h_rg,
         hprof_step,
+        time_percent,
+        omega,
+        d_tm, d_lm,
         )
 
 
-@helpers.ranged_quantity_input(
-    freq=(1.e-30, None, apu.GHz),
-    omega=(0, 100, apu.percent),
-    temperature=(0, None, apu.K),
-    pressure=(0, None, apu.hPa),
-    time_percent=(0, 100, apu.percent),
-    strip_input_units=True, output_unit=cnv.dB
-    )
-def free_space_loss_bfsg(
+def _free_space_loss_bfsg(
         pathprop,
-        freq,
-        omega,
         temperature,
         pressure,
-        time_percent,
         atm_method='annex2',
         ):
-    '''
-    Calculate the free space loss, L_bfsg, of a propagating radio wave
-    according to ITU-R P.452-16 Eq. (8-12).
 
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
-
-    Parameters
-    ----------
-    pathprop - PathProps object, obtained from path_properties function.
-        (See PathProps documentation.)
-    freq - Frequency of radiation [GHz]
-    omega - Fraction of the path over water [%] (see Table 3)
-    temperature - Ambient temperature in relevant layer [K]
-    pressure - Total air pressure (dry + wet) in relevant layer [hPa]
-    atm_method - Which annex to use for atm model P.676, ['annex1'/'annex2']
-    time_percent - Time percentage [%]
-        (for average month, this is just p, for worst-month, this is β_0)
-
-    Returns
-    -------
-    L_bfsg - Free-space loss [dB]
-        This contains either E_sp or E_sβ, depending on which quantity was
-        used for time_percent.
-
-    Notes
-    -----
-    - Path profile parameters (PathProps object) can be derived using the
-        path_properties helper function.
-    - This is similar to conversions.free_space_loss function but additionally
-      accounts for athmospheric absorption and corrects for focusing and
-      multipath effects.
-      '''
-
+    freq = pathprop.freq
     dist = pathprop.distance
     d_lt = pathprop.d_lt
     d_lr = pathprop.d_lr
+    time_percent = pathprop.p
+    beta0 = pathprop.beta0
+    omega = pathprop.omega
 
     assert atm_method in ['annex1', 'annex2'], (
         'atm_method must be one of "annex1" or "annex2"'
@@ -526,35 +647,30 @@ def free_space_loss_bfsg(
     L_bfsg = 92.5 + 20 * np.log10(freq) + 20 * np.log10(dist)
     L_bfsg += A_g
 
-    L_bfsg += 2.6 * (
+    E_sp = 2.6 * (
         1. - np.exp(-0.1 * (d_lt + d_lr))
         ) * np.log10(time_percent / 50.)
+    E_beta = 2.6 * (
+        1. - np.exp(-0.1 * (d_lt + d_lr))
+        ) * np.log10(beta0 / 50.)
 
-    return L_bfsg
+    return L_bfsg, E_sp, E_beta
 
 
 @helpers.ranged_quantity_input(
-    freq=(1.e-30, None, apu.GHz),
     temperature=(0, None, apu.K),
     pressure=(0, None, apu.hPa),
-    G_t=(0, None, cnv.dBi),
-    G_r=(0, None, cnv.dBi),
-    time_percent=(0, 100, apu.percent),
-    strip_input_units=True, output_unit=cnv.dB
+    strip_input_units=True, output_unit=(cnv.dB, cnv.dB, cnv.dB),
     )
-def tropospheric_scatter_loss_bs(
+def free_space_loss_bfsg(
         pathprop,
-        freq,
         temperature,
         pressure,
-        G_t,
-        G_r,
-        time_percent,
         atm_method='annex2',
         ):
     '''
-    Calculate the tropospheric scatter loss, L_bs, of a propagating radio wave
-    according to ITU-R P.452-16 Eq. (45).
+    Calculate the free space loss, L_bfsg, of a propagating radio wave
+    according to ITU-R P.452-16 Eq. (8-12).
 
     Note: All quantities must be astropy Quantities
           (astropy.units.quantity.Quantity).
@@ -563,30 +679,54 @@ def tropospheric_scatter_loss_bs(
     ----------
     pathprop - PathProps object, obtained from path_properties function.
         (See PathProps documentation.)
-    freq - Frequency of radiation [GHz]
     temperature - Ambient temperature in relevant layer [K]
     pressure - Total air pressure (dry + wet) in relevant layer [hPa]
-    G_t, G_r - Antenna gain (transmitter, receiver) in the direction of the
-        horizon(!) along the great-circle interference path [dBi]
-    time_percent - Time percentage [%]
-        (for average month, this is just p, for worst-month, this is β_0)
     atm_method - Which annex to use for atm model P.676, ['annex1'/'annex2']
 
     Returns
     -------
-    L_bs - Tropospheric scatter loss [dB]
+    (L_bfsg, E_sp, E_sβ) - tuple
+        L_bfsg - Free-space loss [dB]
+        E_sp - focussing/multipath correction for p% [dB]
+        E_sβ - focussing/multipath correction for β0% [dB]
+
+        with these, one can form
+        L_b0p = L_bfsg + E_sp [dB]
+        L_b0beta = L_bfsg + E_sβ [dB]
 
     Notes
     -----
     - Path profile parameters (PathProps object) can be derived using the
         path_properties helper function.
-    '''
+    - This is similar to conversions.free_space_loss function but additionally
+      accounts for athmospheric absorption and corrects for focusing and
+      multipath effects.
+      '''
 
+    return _free_space_loss_bfsg(
+        pathprop,
+        temperature,
+        pressure,
+        atm_method=atm_method,
+        )
+
+
+def _tropospheric_scatter_loss_bs(
+        pathprop,
+        temperature,
+        pressure,
+        G_t,
+        G_r,
+        atm_method='annex2',
+        ):
+
+    freq = pathprop.freq
     dist = pathprop.distance
     N_0 = pathprop.N0
     a_e = pathprop.a_e
     theta_t = pathprop.theta_t
     theta_r = pathprop.theta_r
+    time_percent = pathprop.p
 
     assert atm_method in ['annex1', 'annex2'], (
         'atm_method must be one of "annex1" or "annex2"'
@@ -623,37 +763,23 @@ def tropospheric_scatter_loss_bs(
 
 
 @helpers.ranged_quantity_input(
-    freq=(1.e-30, None, apu.GHz),
-    omega=(0, 100, apu.percent),
     temperature=(0, None, apu.K),
     pressure=(0, None, apu.hPa),
-    d_ct=(0, None, apu.km),
-    d_cr=(0, None, apu.km),
-    d_lm=(0, None, apu.km),
     G_t=(0, None, cnv.dBi),
     G_r=(0, None, cnv.dBi),
-    beta_0=(0, 100, apu.percent),
-    time_percent=(0, 100, apu.percent),
     strip_input_units=True, output_unit=cnv.dB
     )
-def ducting_loss_ba(
+def tropospheric_scatter_loss_bs(
         pathprop,
-        freq,
-        omega,
         temperature,
         pressure,
-        d_ct,
-        d_cr,
-        d_lm,
         G_t,
         G_r,
-        beta_0,
-        time_percent,
         atm_method='annex2',
         ):
     '''
-    Calculate the ducting/layer reflection loss, L_ba, of a propagating radio
-    wave according to ITU-R P.452-16 Eq. (46-56).
+    Calculate the tropospheric scatter loss, L_bs, of a propagating radio wave
+    according to ITU-R P.452-16 Eq. (45).
 
     Note: All quantities must be astropy Quantities
           (astropy.units.quantity.Quantity).
@@ -662,27 +788,15 @@ def ducting_loss_ba(
     ----------
     pathprop - PathProps object, obtained from path_properties function.
         (See PathProps documentation.)
-    freq - Frequency of radiation [GHz]
-    omega - Fraction of the path over water [%] (see Table 3)
     temperature - Ambient temperature in relevant layer [K]
     pressure - Total air pressure (dry + wet) in relevant layer [hPa]
-    d_ct, d_cr - Distance over land from transmit/receive antenna to the coast
-        along great circle interference path [km]
-        (set to zero for terminal on ship/sea platform; only relevant if less
-        than 5 km)
-    d_lm - Longest continuous inland section of the great-circle path [km]
     G_t, G_r - Antenna gain (transmitter, receiver) in the direction of the
         horizon(!) along the great-circle interference path [dBi]
-    beta_0 - The time percentage for which refractive index lapse-rates
-        exceeding 100 N-units/km can be expected in the first 100 m
-        of the lower atmosphere [%]
-    time_percent - Time percentage [%]
-        (for average month, this is just p, for worst-month, this is β_0)
     atm_method - Which annex to use for atm model P.676, ['annex1'/'annex2']
 
     Returns
     -------
-    L_ba - Ducting/layer reflection loss [dB]
+    L_bs - Tropospheric scatter loss [dB]
 
     Notes
     -----
@@ -690,6 +804,26 @@ def ducting_loss_ba(
         path_properties helper function.
     '''
 
+    return _tropospheric_scatter_loss_bs(
+        pathprop,
+        temperature,
+        pressure,
+        G_t,
+        G_r,
+        atm_method=atm_method,
+        )
+
+
+def _ducting_loss_ba(
+        pathprop,
+        temperature,
+        pressure,
+        G_t,
+        G_r,
+        atm_method='annex2',
+        ):
+
+    freq = pathprop.freq
     dist = pathprop.distance
     # N_0 = pathprop.N0
     a_e = pathprop.a_e
@@ -700,8 +834,15 @@ def ducting_loss_ba(
     h_m = pathprop.h_m
     d_lt = pathprop.d_lt
     d_lr = pathprop.d_lr
+    d_ct = pathprop.d_ct
+    d_cr = pathprop.d_cr
+    d_lm = pathprop.d_lm
+    omega = pathprop.omega
+
     theta_t = pathprop.theta_t
     theta_r = pathprop.theta_r
+    time_percent = pathprop.p
+    beta_0 = pathprop.beta0
 
     assert atm_method in ['annex1', 'annex2'], (
         'atm_method must be one of "annex1" or "annex2"'
@@ -806,6 +947,58 @@ def ducting_loss_ba(
     A_g = (atten_dry_dB + atten_wet_dB) * dist
 
     return A_f + A_d + A_g
+
+
+@helpers.ranged_quantity_input(
+    temperature=(0, None, apu.K),
+    pressure=(0, None, apu.hPa),
+    G_t=(0, None, cnv.dBi),
+    G_r=(0, None, cnv.dBi),
+    strip_input_units=True, output_unit=cnv.dB
+    )
+def ducting_loss_ba(
+        pathprop,
+        temperature,
+        pressure,
+        G_t,
+        G_r,
+        atm_method='annex2',
+        ):
+    '''
+    Calculate the ducting/layer reflection loss, L_ba, of a propagating radio
+    wave according to ITU-R P.452-16 Eq. (46-56).
+
+    Note: All quantities must be astropy Quantities
+          (astropy.units.quantity.Quantity).
+
+    Parameters
+    ----------
+    pathprop - PathProps object, obtained from path_properties function.
+        (See PathProps documentation.)
+    temperature - Ambient temperature in relevant layer [K]
+    pressure - Total air pressure (dry + wet) in relevant layer [hPa]
+    G_t, G_r - Antenna gain (transmitter, receiver) in the direction of the
+        horizon(!) along the great-circle interference path [dBi]
+    atm_method - Which annex to use for atm model P.676, ['annex1'/'annex2']
+
+    Returns
+    -------
+    L_ba - Ducting/layer reflection loss [dB]
+
+    Notes
+    -----
+    - Path profile parameters (PathProps object) can be derived using the
+        path_properties helper function.
+    '''
+
+    return _ducting_loss_ba(
+        pathprop,
+        temperature,
+        pressure,
+        G_t,
+        G_r,
+        atm_method=atm_method,
+        )
 
 
 if __name__ == '__main__':

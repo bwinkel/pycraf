@@ -311,7 +311,7 @@ class TestPropagation:
         # transhorizon numbers:
         self.h_tg_trans, self.h_rg_trans = 50 * apu.m, 90 * apu.m
 
-        self.pathprop_trans = pathprof.path_properties(
+        self.pathprop_trans = pathprof.path_properties_with_units(
             self.freq,
             self.lon_t, self.lat_t,
             self.lon_r, self.lat_r,
@@ -322,7 +322,7 @@ class TestPropagation:
         # LOS numbers:
         self.h_tg_los, self.h_rg_los = 200 * apu.m, 200 * apu.m
 
-        self.pathprop_los = pathprof.path_properties(
+        self.pathprop_los = pathprof.path_properties_with_units(
             self.freq,
             self.lon_t, self.lat_t,
             self.lon_r, self.lat_r,
@@ -382,7 +382,7 @@ class TestPropagation:
             theta_t=Quantity(7.211744865969712, apu.mrad),
             theta_r=Quantity(-5.77400698654872, apu.mrad),
             theta=Quantity(4.8170391278271225, apu.mrad),
-            nu_bull=Quantity(4.447997244685067e-05, cnv.dimless),
+            nu_bull=Quantity(1.4065802319358092, cnv.dimless),
             path_type=1,
             )
 
@@ -423,7 +423,7 @@ class TestPropagation:
             theta_t=Quantity(2.6122349531799145, apu.mrad),
             theta_r=Quantity(-5.991470448965087, apu.mrad),
             theta=Quantity(6.575262095775969e-05, apu.mrad),
-            nu_bull=Quantity(-0.0010069216849574996, cnv.dimless),
+            nu_bull=Quantity(-31.84165949880204, cnv.dimless),
             path_type=0,
             )
 
