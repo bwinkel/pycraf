@@ -103,24 +103,37 @@ _PATH_PROPS = (  # pc = path center
     ('d_cr', apu.km),
     # ('hprof_dist', apu.km),  # distances of height profile
     # ('hprof_heights', apu.m),  # heights of height profile
-    ('a_e', apu.km),
     ('path_type', None),  # (0 - LOS, 1 - transhorizon)
     ('theta_t', apu.mrad),
     ('theta_r', apu.mrad),
     ('theta', apu.mrad),
     ('d_lt', apu.km),
     ('d_lr', apu.km),
-    ('nu_bull', cnv.dimless),
     ('h_m', apu.m),
+    ('a_e_50', apu.km),
+    ('path_type_50', None),  # (0 - LOS, 1 - transhorizon)
+    ('nu_bull_50', cnv.dimless),
+    ('nu_bull_idx_50', cnv.dimless),
+    ('S_tim_50', apu.m / apu.km),
+    ('S_tr_50', apu.m / apu.km),
     ('a_e_b0', apu.km),
     ('path_type_b0', None),  # (0 - LOS, 1 - transhorizon)
-    ('theta_t_b0', apu.mrad),
-    ('theta_r_b0', apu.mrad),
-    ('theta_b0', apu.mrad),
-    ('d_lt_b0', apu.km),
-    ('d_lr_b0', apu.km),
     ('nu_bull_b0', cnv.dimless),
-    ('h_m_b0', apu.m),
+    ('nu_bull_idx_b0', cnv.dimless),
+    ('S_tim_b0', apu.m / apu.km),
+    ('S_tr_b0', apu.m / apu.km),
+    ('a_e_zh_50', apu.km),
+    ('path_type_zh_50', None),  # (0 - LOS, 1 - transhorizon)
+    ('nu_bull_zh_50', cnv.dimless),
+    ('nu_bull_idx_zh_50', cnv.dimless),
+    ('S_tim_zh_50', apu.m / apu.km),
+    ('S_tr_zh_50', apu.m / apu.km),
+    ('a_e_zh_b0', apu.km),
+    ('path_type_zh_b0', None),  # (0 - LOS, 1 - transhorizon)
+    ('nu_bull_zh_b0', cnv.dimless),
+    ('nu_bull_idx_zh_b0', cnv.dimless),
+    ('S_tim_zh_b0', apu.m / apu.km),
+    ('S_tr_zh_b0', apu.m / apu.km),
     )
 
 PathProps = namedtuple('PathProps', (tup[0] for tup in _PATH_PROPS))
@@ -160,27 +173,33 @@ PathProps.__doc__ = '''
         along great circle interference path [km]
         (set to zero for terminal on ship/sea platform; only relevant if less
         than 5 km)
-
-    --- The values below are present twice, once without subscript
-    --- for the median Earth radius and once with subscript "_b0" for
-    --- the beta_0 "version" of the Earth radius
-    a_e[_beta0] - Median effective Earth radius at path center [km]
-    path_type[_beta0] - 0: LOS; 1: transhorizon
-    theta_t[_beta0] - For a transhorizon path, transmit horizon elevation
+    theta_t - For a transhorizon path, transmit horizon elevation
         angle; for a LoS path, the elevation angle to the receiver
         terminal [mrad]
-    theta_r[_beta0] - For a transhorizon path, receiver horizon elevation
+    theta_r - For a transhorizon path, receiver horizon elevation
         angle; for a LoS path, the elevation angle to the transmitter
         terminal [mrad]
-    theta[_beta0] - Path angular distance [mrad]
-    d_lt[_beta0] - Distance to horizon (for transmitter) [km]
-    d_lr[_beta0] - Distance to horizon (for receiver) [km]
-    nu_bull[_beta0] - Bullington-point diffraction parameter (for
-        transhorizon) or highest diffraction parameter of the profile (for
-        LOS) [dimless]
-    h_m[_beta0] - Terrain roughness [m]
+    theta - Path angular distance [mrad]
+    d_lt - Distance to horizon (for transmitter) [km]
+    d_lr - Distance to horizon (for receiver) [km]
+    h_m - Terrain roughness [m]
         (For a LoS path, use distance to Bullington point, inferred from
         diffraction method for 50% time.)
+
+    --- The values below are present four times, once with subscript "_50"
+    --- for the median Earth radius and proper height profile, once with
+    --- subscript "_b0" for the beta_0 "version" of the Earth radius; then
+    --- the same for the height profile put to zero with addition subscript
+    --- "_zh"
+    a_e - Median effective Earth radius at path center [km]
+    path_type - 0: LOS; 1: transhorizon
+    nu_bull - Bullington-point diffraction parameter (for
+        transhorizon) or highest diffraction parameter of the profile (for
+        LOS) [dimless]
+    nu_bull_idx - Index of the Bullington point in the height profile
+        (only for LOS, for transhorizon this is set to a dummy value, -1)
+    S_tim - Highest-slope parameter of the profile w.r.t. transmitter [m / km]
+    S_tr - Transmitter-receiver slope parameter [m / km]
 
     (amsl - above mean sea level)
     '''
@@ -254,8 +273,6 @@ def _diffraction_helper(
         distance,
         h_ts,
         h_rs,
-        h_st,
-        duct_slope,
         wavelen,
         ):
 
@@ -263,18 +280,6 @@ def _diffraction_helper(
     d = distance
     d_i = distances[1:-1]
     h_i = heights[1:-1]
-    m = duct_slope
-
-    theta_i = 1000. * np.arctan(
-        (h_i - h_ts) / 1.e3 / d_i - d_i / 2. / a_p
-        )
-    lt_idx = np.argmax(theta_i)
-    theta_max = theta_i[lt_idx]
-    theta_td = 1000. * np.arctan(
-        (h_rs - h_ts) / 1.e3 / d - d / 2. / a_p
-        )
-
-    path_type = 1 if theta_max > theta_td else 0
 
     # alternative method from Diffraction analysis (Bullington point)
     # are they consistent???
@@ -287,31 +292,13 @@ def _diffraction_helper(
     S_tim = np.max(slope_i)
     S_tr = slope_i[-1]
 
-    # For LOS this leads to inconsistency???
-    # assert (theta_max > theta_td) == (S_tim >= S_tr), (
-    #     'whoops, inconsistency in P.452???'
-    #     )
-    # works, if we modify the latter
-    assert (theta_max > theta_td) == (S_tim > S_tr), (
-        'whoops, inconsistency in P.452???'
-        )
+    if S_tim <= S_tr:
+        path_type = 0
+    else:
+        path_type = 1
 
     if path_type == 1:
         # transhorizon
-
-        theta_t = theta_max
-        d_lt = d_i[lt_idx]
-
-        theta_j = 1000. * np.arctan(
-            (h_i - h_rs) / 1.e3 / (d - d_i) -
-            (d - d_i) / 2. / a_p
-            )
-        lr_idx = np.argmax(theta_j)
-        theta_r = theta_j[lr_idx]
-        d_lr = d - d_i[lr_idx]
-
-        theta = 1.e3 * d / a_p + theta_t + theta_r
-
         # find Bullington point, etc.
         slope_j = (
             h_i - h_rs +
@@ -327,18 +314,10 @@ def _diffraction_helper(
             ) * np.sqrt(
                 0.002 * d / lam / d_bp / (d - d_bp)
                 )
+        nu_bull_idx = -1  # dummy value
 
     else:
         # LOS
-
-        theta_t = theta_td
-
-        theta_r = 1000. * np.arctan(
-            # h_rs <-> h_ts
-            (h_ts - h_rs) / 1.e3 / d - d / 2. / a_p
-            )
-
-        theta = 1.e3 * d / a_p + theta_t + theta_r  # is this correct?
 
         # find Bullington point, etc.
 
@@ -351,37 +330,83 @@ def _diffraction_helper(
                 0.002 * d / lam / d_i / (d - d_i)
                 )
 
-        bull_idx = np.argmax(nu_i)
-        nu_bull = nu_i[bull_idx]
+        nu_bull_idx = np.argmax(nu_i)
+        nu_bull = nu_i[nu_bull_idx]
 
-        # horizon distance for LOS paths has to be set to distance to
-        # Bullington point in diffraction method
-        d_lt = d_i[bull_idx]
-        d_lr = d - d_i[bull_idx]
+    return path_type, nu_bull, nu_bull_idx, S_tim, S_tr
+
+
+def _path_geometry_helper(
+        a_e,
+        distances,
+        heights,
+        distance,
+        h_ts,
+        h_rs,
+        h_st,
+        nu_bull_idx,
+        duct_slope,
+        ):
+
+    d = distance
+    d_i = distances[1:-1]
+    h_i = heights[1:-1]
+    m = duct_slope
+
+    theta_i = 1000. * np.arctan(
+        (h_i - h_ts) / 1.e3 / d_i - d_i / 2. / a_e
+        )
+    lt_idx = np.argmax(theta_i)
+    theta_max = theta_i[lt_idx]
+    theta_td = 1000. * np.arctan(
+        (h_rs - h_ts) / 1.e3 / d - d / 2. / a_e
+        )
+
+    path_type = 1 if theta_max > theta_td else 0
 
     if path_type == 1:
         # transhorizon
+
+        theta_t = theta_max
+        d_lt = d_i[lt_idx]
+
+        theta_j = 1000. * np.arctan(
+            (h_i - h_rs) / 1.e3 / (d - d_i) -
+            (d - d_i) / 2. / a_e
+            )
+        lr_idx = np.argmax(theta_j)
+        theta_r = theta_j[lr_idx]
+        d_lr = d - d_i[lr_idx]
+
+        theta = 1.e3 * d / a_e + theta_t + theta_r
+
+        # calc h_m
         _sl = slice(lt_idx, lr_idx + 1)
         h_m = np.max(h_i[_sl] - (h_st + m * d_i[_sl]))
 
     else:
         # LOS
+
+        theta_t = theta_td
+
+        theta_r = 1000. * np.arctan(
+            # h_rs <-> h_ts
+            (h_ts - h_rs) / 1.e3 / d - d / 2. / a_e
+            )
+
+        theta = 1.e3 * d / a_e + theta_t + theta_r  # is this correct?
+
+        # horizon distance for LOS paths has to be set to distance to
+        # Bullington point in diffraction method
+        d_lt = d_i[nu_bull_idx]
+        d_lr = d - d_i[nu_bull_idx]
+
+        # calc h_m
         # it seems, that h_m is calculated just from the profile height
         # at the Bullington point???
-        h_m = h_i[bull_idx] - (h_st + m * d_i[bull_idx])
+        h_m = h_i[nu_bull_idx] - (h_st + m * d_i[nu_bull_idx])
 
-    subprops = {}
-    subprops['a_e'] = a_p
-    subprops['path_type'] = path_type
-    subprops['theta_t'] = theta_t
-    subprops['theta_r'] = theta_r
-    subprops['theta'] = theta
-    subprops['d_lt'] = d_lt
-    subprops['d_lr'] = d_lr
-    subprops['nu_bull'] = nu_bull
-    subprops['h_m'] = h_m
-
-    return subprops
+    return path_type, theta_t, theta_r, theta, d_lt, d_lr, h_m
 
 
 def path_properties(
@@ -408,7 +433,7 @@ def path_properties(
     lon_r, lat_r - Receiver coordinates [deg]
     h_tg, h_rg - Transmitter/receiver heights over ground [m]
     hprof_step - Distance resolution of height profile along path [m]
-    time_percent - Time percentage [%]
+    time_percent - Time percentage [%] (maximal 50%)
     omega - Fraction of the path over water [%] (see Table 3)
     d_tm - longest continuous land (inland + coastal) section of the
         great-circle path [km]
@@ -422,6 +447,8 @@ def path_properties(
     -------
     Path Properties (as a namedtuple)
     '''
+
+    assert time_percent <= 50.
 
     pathprops = {}
     pathprops['freq'] = freq
@@ -469,9 +496,9 @@ def path_properties(
     delta_N, beta_0, N0 = helper._radiomet_data_for_pathcenter(
         lon_mid, lat_mid, d_tm, d_lm
         )
-    pathprops['delta_N'] = delta_N
-    pathprops['beta0'] = beta_0
-    pathprops['N0'] = N0
+    pathprops['delta_N'] = float(delta_N)
+    pathprops['beta0'] = float(beta_0)
+    pathprops['N0'] = float(N0)
 
     d = distance
     # d_i = distances[1:-1]
@@ -509,8 +536,8 @@ def path_properties(
     pathprops['h_re'] = h_re
 
     # the next part depends on whether the median or beta_0 Earth radius
-    # is to be used; to avoid running the whole function twice
-    # we just add all related quantities twice with subscript
+    # is to be used; to avoid running the whole path_properties function twice
+    # we just add all related quantities with subscripts
 
     args = (
         distances,
@@ -518,20 +545,98 @@ def path_properties(
         distance,
         h_ts,
         h_rs,
-        h_st,
-        duct_slope,
         lam,
         )
 
     a_e_50 = helper._median_effective_earth_radius(lon_mid, lat_mid)
-    subprops_50 = _diffraction_helper(a_e_50, *args)
-    a_e_b0 = helper.A_BETA_VALUE
-    subprops_b0 = _diffraction_helper(a_e_b0, *args)
+    pathprops['a_e_50'] = a_e_50
 
-    # subprops_50 = dict((k + '_50', v) for k, v in subprops_50.items())
-    subprops_b0 = dict((k + '_b0', v) for k, v in subprops_b0.items())
-    pathprops.update(subprops_50)
-    pathprops.update(subprops_b0)
+    (
+        path_type, nu_bull, nu_bull_idx, S_tim, S_tr
+        ) = _diffraction_helper(a_e_50, *args)
+
+    pathprops['path_type_50'] = path_type
+    pathprops['nu_bull_50'] = nu_bull
+    pathprops['nu_bull_idx_50'] = nu_bull_idx
+    pathprops['S_tim_50'] = S_tim
+    pathprops['S_tr_50'] = S_tr
+
+    a_e_b0 = helper.A_BETA_VALUE
+    pathprops['a_e_b0'] = a_e_b0
+
+    (
+        path_type, nu_bull, nu_bull_idx, S_tim, S_tr
+        ) = _diffraction_helper(a_e_b0, *args)
+
+    pathprops['path_type_b0'] = path_type
+    pathprops['nu_bull_b0'] = nu_bull
+    pathprops['nu_bull_idx_b0'] = nu_bull_idx
+    pathprops['S_tim_b0'] = S_tim
+    pathprops['S_tr_b0'] = S_tr
+
+    # similarly, we have to repeat the game with heights set to zero
+    args = (
+        distances,
+        np.zeros_like(heights),
+        distance,
+        h_ts - h_std,
+        h_rs - h_srd,
+        lam,
+        )
+    (
+        path_type, nu_bull, nu_bull_idx, S_tim, S_tr
+        ) = _diffraction_helper(a_e_50, *args)
+
+    pathprops['a_e_zh_50'] = a_e_50
+    pathprops['path_type_zh_50'] = path_type
+    pathprops['nu_bull_zh_50'] = nu_bull
+    pathprops['nu_bull_idx_zh_50'] = nu_bull_idx
+    pathprops['S_tim_zh_50'] = S_tim
+    pathprops['S_tr_zh_50'] = S_tr
+
+    (
+        path_type, nu_bull, nu_bull_idx, S_tim, S_tr
+        ) = _diffraction_helper(a_e_b0, *args)
+
+    pathprops['a_e_zh_b0'] = a_e_50
+    pathprops['path_type_zh_b0'] = path_type
+    pathprops['nu_bull_zh_b0'] = nu_bull
+    pathprops['nu_bull_idx_zh_b0'] = nu_bull_idx
+    pathprops['S_tim_zh_b0'] = S_tim
+    pathprops['S_tr_zh_b0'] = S_tr
+
+    # finally, determine remaining path geometry properties
+    # note, this can depend on the bullington point (index) derived in
+    # _diffraction_helper for 50%
+
+    (
+        path_type, theta_t, theta_r, theta, d_lt, d_lr, h_m
+        ) = _path_geometry_helper(
+        a_e_50,
+        distances,
+        heights,
+        distance,
+        h_ts,
+        h_rs,
+        h_st,
+        nu_bull_idx,
+        duct_slope,
+        )
+
+    pathprops['path_type'] = path_type
+    pathprops['theta_t'] = theta_t
+    pathprops['theta_r'] = theta_r
+    pathprops['theta'] = theta
+    pathprops['d_lt'] = d_lt
+    pathprops['d_lr'] = d_lr
+    pathprops['h_m'] = h_m
+
+    # Sanity check: path type from _path_geometry_helper should be the same
+    # as from diffraction_helper (50% case)
+
+    assert path_type == pathprops['path_type_50'], (
+        'whoops, inconsistency in P.452???'
+        )
 
     return PathProps(**pathprops)
 
@@ -838,6 +943,7 @@ def _ducting_loss_ba(
     d_cr = pathprop.d_cr
     d_lm = pathprop.d_lm
     omega = pathprop.omega
+    omega_frac = omega / 100.
 
     theta_t = pathprop.theta_t
     theta_r = pathprop.theta_r
@@ -928,8 +1034,8 @@ def _ducting_loss_ba(
             0.
             )
 
-    A_ct = A_c(d_lt, d_ct, h_ts, omega)
-    A_cr = A_c(d_lr, d_cr, h_rs, omega)
+    A_ct = A_c(d_lt, d_ct, h_ts, omega_frac)
+    A_cr = A_c(d_lr, d_cr, h_rs, omega_frac)
 
     A_f = (
         102.45 + 20 * np.log10(freq) + 20 * np.log10(d_lt + d_lr) +
@@ -1014,8 +1120,6 @@ def _diffraction_bullington_helper(
 def _L_dft(a_dft, dist, freq, h_te, h_re, omega, pol):
 
     def _func(eps_r, sigma):
-
-        assert pol in ['horizontal', 'vertical']
 
         K = 0.036 * np.power(a_dft * freq, -1. / 3.) * np.power(
             (eps_r - 1) ** 2 + (18. * sigma / freq) ** 2, -0.25
@@ -1105,6 +1209,107 @@ def _diffraction_spherical_earth_loss_helper(
 
         L_dsph = (1. - h_se / h_req) * L_dft
         return L_dsph
+
+
+def _delta_bullington_loss(pathprop, pol, do_beta):
+
+    # assert pol in ['horizontal', 'vertical']
+
+    dist = pathprop.distance
+
+    # median Earth radius, with height profile:
+
+    if do_beta:
+        nu_bull = pathprop.nu_bull_b0
+        nu_bull_zh = pathprop.nu_bull_zh_b0
+        a_p = pathprop.a_e_b0
+    else:
+        nu_bull = pathprop.nu_bull_50
+        nu_bull_zh = pathprop.nu_bull_zh_50
+        a_p = pathprop.a_e_50
+
+    L_bulla = _diffraction_bullington_helper(
+        dist, nu_bull
+        )
+    L_bulls = _diffraction_bullington_helper(
+        dist, nu_bull_zh
+        )
+
+    freq = pathprop.freq
+    h_te = pathprop.h_ts - pathprop.h_std  # != pathprop.h_te
+    h_re = pathprop.h_rs - pathprop.h_srd  # != pathprop.h_re
+    omega_frac = pathprop.omega / 100.
+    L_dsph = _diffraction_spherical_earth_loss_helper(
+        dist, freq, a_p, h_te, h_re, omega_frac, pol
+        )
+
+    L_d = L_bulla + max(L_dsph - L_bulls, 0)
+
+    return L_d
+
+
+def _bullington_loss_complete(
+        pathprop,
+        temperature,
+        pressure,
+        atm_method='annex2',
+        pol='vertical',
+        ):
+
+    def I_helper(x):
+
+        C0 = 2.515516698
+        C1 = 0.802853
+        C2 = 0.010328
+        D1 = 1.432788
+        D2 = 0.189269
+        D3 = 0.001308
+
+        T = np.sqrt(-2 * np.log(x))
+        Z = (
+            (
+                ((C2 * T + C1) * T) + C0
+                ) /
+            (
+                ((D3 * T + D2) * T + D1) * T + 1.
+                )
+            )
+        return Z - T
+
+    assert pol in ['horizontal', 'vertical']
+
+    time_percent = pathprop.p
+    beta0 = pathprop.beta0
+
+    L_d_50 = _delta_bullington_loss(pathprop, pol, False)
+
+    if time_percent == 50:
+
+        L_dp = L_d_50
+
+    else:
+
+        L_d_beta = _delta_bullington_loss(pathprop, pol, True)
+
+        if time_percent > beta0:
+            F_i = I_helper(time_percent / 100.) / I_helper(beta0 / 100.)
+        else:
+            F_i = 1.
+
+        L_dp = L_d_50 + F_i * (L_d_beta - L_d_50)
+
+    L_bfsg, E_sp, E_beta = _free_space_loss_bfsg(
+        pathprop,
+        temperature,
+        pressure,
+        atm_method=atm_method,
+        )
+
+    L_b0p = float(L_bfsg) + float(E_sp)
+    L_bd_50 = float(L_bfsg) + L_d_50
+    L_bd = L_b0p + L_dp
+
+    return L_dp, L_bd_50, L_bd
 
 
 if __name__ == '__main__':
