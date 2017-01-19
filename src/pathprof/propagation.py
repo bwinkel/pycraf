@@ -22,6 +22,7 @@ import ipdb
 __all__ = [
     'PathProps', 'path_properties', 'path_properties_with_units',
     'free_space_loss_bfsg',
+    'bullington_loss_complete',
     'tropospheric_scatter_loss_bs',
     'ducting_loss_ba',
     ]
@@ -282,17 +283,15 @@ def _diffraction_helper(
     h_i = heights[1:-1]
 
     # alternative method from Diffraction analysis (Bullington point)
-    # are they consistent???
+    # but is path-type classification consistent with the method in appendix?
     C_e500 = 500. / a_p
-    # not quite sure, why we don't use theta_i here?
     slope_i = (
-        h_i - h_ts +
-        C_e500 * d_i * (d - d_i)
+        h_i + C_e500 * d_i * (d - d_i) - h_ts
         ) / d_i
     S_tim = np.max(slope_i)
-    S_tr = slope_i[-1]
+    S_tr = (h_rs - h_ts) / d
 
-    if S_tim <= S_tr:
+    if S_tim < S_tr:
         path_type = 0
     else:
         path_type = 1
@@ -301,19 +300,19 @@ def _diffraction_helper(
         # transhorizon
         # find Bullington point, etc.
         slope_j = (
-            h_i - h_rs +
-            C_e500 * (d - d_i) * d_i
+            h_i + C_e500 * d_i * (d - d_i) - h_rs
             ) / (d - d_i)
         S_rim = np.max(slope_j)
         d_bp = (h_rs - h_ts + S_rim * d) / (S_tim + S_rim)
 
         nu_bull = (
-            h_ts + S_tim * d_bp - (
+            h_ts + S_tim * d_bp -
+            (
                 h_ts * (d - d_bp) + h_rs * d_bp
                 ) / d
             ) * np.sqrt(
                 0.002 * d / lam / d_bp / (d - d_bp)
-                )
+                )  # == nu_b in Eq. 20
         nu_bull_idx = -1  # dummy value
 
     else:
@@ -323,7 +322,7 @@ def _diffraction_helper(
 
         # diffraction parameter
         nu_i = (
-            h_i - h_ts +
+            h_i +
             C_e500 * d_i * (d - d_i) -
             (h_ts * (d - d_i) + h_rs * d_i) / d
             ) * np.sqrt(
@@ -331,7 +330,7 @@ def _diffraction_helper(
                 )
 
         nu_bull_idx = np.argmax(nu_i)
-        nu_bull = nu_i[nu_bull_idx]
+        nu_bull = nu_i[nu_bull_idx]  # == nu_max in Eq. 16
 
     return path_type, nu_bull, nu_bull_idx, S_tim, S_tr
 
@@ -758,11 +757,11 @@ def _free_space_loss_bfsg(
     E_sp = 2.6 * (
         1. - np.exp(-0.1 * (d_lt + d_lr))
         ) * np.log10(time_percent / 50.)
-    E_beta = 2.6 * (
+    E_sbeta = 2.6 * (
         1. - np.exp(-0.1 * (d_lt + d_lr))
         ) * np.log10(beta0 / 50.)
 
-    return L_bfsg, E_sp, E_beta
+    return L_bfsg, E_sp, E_sbeta
 
 
 @helpers.ranged_quantity_input(
@@ -831,7 +830,7 @@ def _tropospheric_scatter_loss_bs(
     freq = pathprop.freq
     dist = pathprop.distance
     N_0 = pathprop.N0
-    a_e = pathprop.a_e
+    a_e = pathprop.a_e_50
     theta_t = pathprop.theta_t
     theta_r = pathprop.theta_r
     time_percent = pathprop.p
@@ -926,15 +925,13 @@ def _ducting_loss_ba(
         pathprop,
         temperature,
         pressure,
-        G_t,
-        G_r,
         atm_method='annex2',
         ):
 
     freq = pathprop.freq
     dist = pathprop.distance
     # N_0 = pathprop.N0
-    a_e = pathprop.a_e
+    a_e = pathprop.a_e_50
     h_ts = pathprop.h_ts
     h_rs = pathprop.h_rs
     h_te = pathprop.h_te
@@ -1017,13 +1014,13 @@ def _ducting_loss_ba(
         0.,
         )
 
-    def A_s(f, d_l, theta_prime2):
+    def A_s(f, d_l, tp2):
 
         return np.where(
-            theta_prime2 <= 0,
+            tp2 > 0,
+            20 * np.log10(1 + 0.361 * tp2 * np.sqrt(f * d_l)) +
+            0.264 * tp2 * np.power(f, 1. / 3.),
             0.,
-            20 * np.log10(1 + 0.361 * theta_prime2 * np.sqrt(f * d_l)) +
-            0.264 * theta_prime2 * np.power(f, 1. / 3.)
             )
 
     A_st = A_s(freq, d_lt, theta_t_prime2)
@@ -1055,14 +1052,14 @@ def _ducting_loss_ba(
 
     A_g = (atten_dry_dB + atten_wet_dB) * dist
 
-    return A_f + A_d + A_g
+    L_ba = A_f + A_d + A_g
+
+    return L_ba
 
 
 @helpers.ranged_quantity_input(
     temperature=(0, None, apu.K),
     pressure=(0, None, apu.hPa),
-    G_t=(0, None, cnv.dBi),
-    G_r=(0, None, cnv.dBi),
     strip_input_units=True, output_unit=cnv.dB
     )
 def ducting_loss_ba(
@@ -1086,8 +1083,6 @@ def ducting_loss_ba(
         (See PathProps documentation.)
     temperature - Ambient temperature in relevant layer [K]
     pressure - Total air pressure (dry + wet) in relevant layer [hPa]
-    G_t, G_r - Antenna gain (transmitter, receiver) in the direction of the
-        horizon(!) along the great-circle interference path [dBi]
     atm_method - Which annex to use for atm model P.676, ['annex1'/'annex2']
 
     Returns
@@ -1247,6 +1242,7 @@ def _delta_bullington_loss(pathprop, pol, do_beta):
         )
 
     L_d = L_bulla + max(L_dsph - L_bulls, 0)
+    print(L_d, L_bulla, L_dsph, L_bulls, nu_bull, nu_bull_zh)
 
     return L_d
 
@@ -1283,8 +1279,15 @@ def _bullington_loss_complete(
 
     time_percent = pathprop.p
     beta0 = pathprop.beta0
+    omega = pathprop.omega
+    omega_frac = omega / 100.
 
     L_d_50 = _delta_bullington_loss(pathprop, pol, False)
+
+    if time_percent > beta0:
+        F_i = I_helper(time_percent / 100.) / I_helper(beta0 / 100.)
+    else:
+        F_i = 1.
 
     if time_percent == 50:
 
@@ -1294,14 +1297,9 @@ def _bullington_loss_complete(
 
         L_d_beta = _delta_bullington_loss(pathprop, pol, True)
 
-        if time_percent > beta0:
-            F_i = I_helper(time_percent / 100.) / I_helper(beta0 / 100.)
-        else:
-            F_i = 1.
-
         L_dp = L_d_50 + F_i * (L_d_beta - L_d_50)
 
-    L_bfsg, E_sp, E_beta = _free_space_loss_bfsg(
+    L_bfsg, E_sp, E_sbeta = _free_space_loss_bfsg(
         pathprop,
         temperature,
         pressure,
@@ -1309,16 +1307,29 @@ def _bullington_loss_complete(
         )
 
     L_b0p = float(L_bfsg) + float(E_sp)
+    L_b0beta = float(L_bfsg) + float(E_sbeta)
     L_bd_50 = float(L_bfsg) + L_d_50
     L_bd = L_b0p + L_dp
 
-    return L_d_50, L_dp, L_bd_50, L_bd
+    # also calculate notional minimum basic transmission loss associated with
+    # LoS propagation and over-sea sub-path diffraction;
+    # this is needed for overall path attenuation calculation, but needs
+    # the F_i factor, so we do it here
+
+    if time_percent < beta0:
+        L_min_b0p = L_b0p + (1. - omega_frac) * L_dp
+    else:
+        L_min_b0p = L_bd_50 + F_i * (
+            L_b0beta + (1. - omega_frac) * L_dp - L_bd_50
+            )
+
+    return L_d_50, L_dp, L_bd_50, L_bd, L_min_b0p
 
 
 @helpers.ranged_quantity_input(
     temperature=(0, None, apu.K),
     pressure=(0, None, apu.hPa),
-    strip_input_units=True, output_unit=(cnv.dB, cnv.dB, cnv.dB, cnv.dB)
+    strip_input_units=True, output_unit=(cnv.dB, ) * 5
     )
 def bullington_loss_complete(
         pathprop,
@@ -1346,13 +1357,15 @@ def bullington_loss_complete(
 
     Returns
     -------
-    (L_d_50, L_dp, L_bd_50, L_bd)
+    (L_d_50, L_dp, L_bd_50, L_bd, L_min_b0p)
         L_d_50 - Median diffraction loss [dB]
         L_dp - Diffraction loss not exceeded for p% time, [dB]
         L_bd_50 - Median basic transmission loss associated with
             diffraction [dB]; L_bd_50 = L_bfsg + L_d50
         L_bd - Basic transmission loss associated with diffraction not
             exceeded for p% time [dB]; L_bd = L_b0p + L_dp
+        L_min_b0p - Notional minimum basic transmission loss associated with
+            LoS propagation and over-sea sub-path diffraction
         Note: L_d_50 and L_dp are just intermediary values; the complete
             diffraction loss is L_bd_50 or L_bd, respectively (taking into
             account a free-space loss component for the diffraction path)
@@ -1370,6 +1383,95 @@ def bullington_loss_complete(
         atm_method=atm_method,
         pol=pol,
         )
+
+
+def _path_attenuation_complete(
+        pathprop,
+        temperature,
+        pressure,
+        G_t,
+        G_r,
+        atm_method='annex2',
+        pol='vertical',
+        ):
+
+    _THETA = 0.3  # mrad
+    _ZETA = 0.8
+
+    _D_SW = 20  # km
+    _KAPPA = 0.5
+
+    _ETA = 2.5
+
+    dist = pathprop.distance
+    S_tim_50 = pathprop.S_tim_50
+    S_tr_50 = pathprop.S_tr_50
+
+    # not sure, if the 50% S_tim and S_tr values are to be used here...
+    F_j = 1 - 0.5 * (1. + np.tanh(
+        3. * _ZETA * (S_tim_50 - S_tr_50) / _THETA
+        ))
+    F_k = 1 - 0.5 * (1. + np.tanh(
+        3. * _KAPPA * (dist - _D_SW) / _D_SW
+        ))
+
+    # free-space loss is not needed as an ingredient for final calculation
+    # in itself (is included in diffraction part)
+    # we use it here for debugging/informational aspects
+    L_bfsg, E_sp, E_sbeta = _free_space_loss_bfsg(
+        pathprop,
+        temperature,
+        pressure,
+        atm_method=atm_method,
+        )
+    L_bfsg, E_sp, E_sbeta = float(L_bfsg), float(E_sp), float(E_sbeta)
+    L_b0p = L_bfsg + E_sp
+    # L_b0beta = L_bfsg + E_sbeta
+
+    L_bs = _tropospheric_scatter_loss_bs(
+        pathprop,
+        temperature,
+        pressure,
+        G_t,
+        G_r,
+        atm_method=atm_method,
+        )
+    L_bs = float(L_bs)
+
+    L_ba = _ducting_loss_ba(
+        pathprop,
+        temperature,
+        pressure,
+        atm_method=atm_method,
+        )
+    L_ba = float(L_ba)
+
+    L_d_50, L_dp, L_bd_50, L_bd, L_min_b0p = _bullington_loss_complete(
+        pathprop,
+        temperature,
+        pressure,
+        atm_method=atm_method,
+        pol=pol,
+        )
+
+    L_min_bap = _ETA * np.log(np.exp(L_ba / _ETA) + np.exp(L_b0p / _ETA))
+
+    if L_bd < L_min_bap:
+        L_bda = L_bd
+    else:
+        L_bda = L_min_bap + (L_bd - L_min_bap) * F_k
+
+    L_bam = L_bda + (L_min_b0p - L_bda) * F_j
+
+    A_ht, A_hr = 0., 0.  # TODO: local clutter
+
+    L_b = -5 * np.log10(
+        np.power(10, -0.2 * L_bs) +
+        np.power(10, -0.2 * L_bam)
+        ) + A_ht + A_hr
+
+    # ipdb.set_trace()
+    return L_bfsg, L_bd, L_bs, L_ba, L_b
 
 
 if __name__ == '__main__':
