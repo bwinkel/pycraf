@@ -634,9 +634,12 @@ def path_properties(
     # Sanity check: path type from _path_geometry_helper should be the same
     # as from diffraction_helper (50% case)
 
-    assert path_type == pathprops['path_type_50'], (
-        'whoops, inconsistency in P.452???'
-        )
+    # Hmm, from various tests: this is not always true
+    # the 50% diffraction method sometimes leads to different path
+    # classification
+    # assert path_type == pathprops['path_type_50'], (
+    #     'whoops, inconsistency in P.452???'
+    #     )
 
     return PathProps(**pathprops)
 
@@ -1309,7 +1312,64 @@ def _bullington_loss_complete(
     L_bd_50 = float(L_bfsg) + L_d_50
     L_bd = L_b0p + L_dp
 
-    return L_dp, L_bd_50, L_bd
+    return L_d_50, L_dp, L_bd_50, L_bd
+
+
+@helpers.ranged_quantity_input(
+    temperature=(0, None, apu.K),
+    pressure=(0, None, apu.hPa),
+    strip_input_units=True, output_unit=(cnv.dB, cnv.dB, cnv.dB, cnv.dB)
+    )
+def bullington_loss_complete(
+        pathprop,
+        temperature,
+        pressure,
+        atm_method='annex2',
+        pol='vertical',
+        ):
+    '''
+    Calculate the Diffraction loss of a propagating radio
+    wave according to ITU-R P.452-16 Eq. (14-44).
+
+    Note: All quantities must be astropy Quantities
+          (astropy.units.quantity.Quantity).
+
+    Parameters
+    ----------
+    pathprop - PathProps object, obtained from path_properties function.
+        (See PathProps documentation.)
+    temperature - Ambient temperature in relevant layer [K]
+    pressure - Total air pressure (dry + wet) in relevant layer [hPa]
+    atm_method - Which annex to use for atm model P.676, ['annex1'/'annex2']
+    pol - Polarization direction ['vertical'/'horizontal']
+        (Above ~300 MHz the difference is marginal.)
+
+    Returns
+    -------
+    (L_d_50, L_dp, L_bd_50, L_bd)
+        L_d_50 - Median diffraction loss [dB]
+        L_dp - Diffraction loss not exceeded for p% time, [dB]
+        L_bd_50 - Median basic transmission loss associated with
+            diffraction [dB]; L_bd_50 = L_bfsg + L_d50
+        L_bd - Basic transmission loss associated with diffraction not
+            exceeded for p% time [dB]; L_bd = L_b0p + L_dp
+        Note: L_d_50 and L_dp are just intermediary values; the complete
+            diffraction loss is L_bd_50 or L_bd, respectively (taking into
+            account a free-space loss component for the diffraction path)
+
+    Notes
+    -----
+    - Path profile parameters (PathProps object) can be derived using the
+        path_properties helper function.
+    '''
+
+    return _bullington_loss_complete(
+        pathprop,
+        temperature,
+        pressure,
+        atm_method=atm_method,
+        pol=pol,
+        )
 
 
 if __name__ == '__main__':
