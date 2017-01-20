@@ -304,6 +304,9 @@ def _diffraction_helper(
             ) / (d - d_i)
         S_rim = np.max(slope_j)
         d_bp = (h_rs - h_ts + S_rim * d) / (S_tim + S_rim)
+        # i_idx = np.argmax(slope_i)
+        # j_idx = np.argmax(slope_j)
+        # print(d_i[i_idx], d_i[j_idx], S_tim, S_rim, S_tr, d_bp)
 
         nu_bull = (
             h_ts + S_tim * d_bp -
@@ -1242,7 +1245,10 @@ def _delta_bullington_loss(pathprop, pol, do_beta):
         )
 
     L_d = L_bulla + max(L_dsph - L_bulls, 0)
-    print(L_d, L_bulla, L_dsph, L_bulls, nu_bull, nu_bull_zh)
+    # print(L_d, L_bulla, L_dsph, L_bulls, nu_bull, nu_bull_zh)
+    # print('{:7.3f} {:7.3f} {:7.3f} {:7.3f} {:7.3f}'.format(
+    #     pathprop.distance, L_d, L_bulla, L_dsph, L_bulls
+    #     ))
 
     return L_d
 
