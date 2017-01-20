@@ -24,6 +24,9 @@ __all__ = [
     ]
 
 
+_HGT_RES = 90.  # m; equivalent to 3 arcsec resolution
+
+
 def _extract_hgt_coords(hgt_name):
     '''
     Extract coordinates from hgt-filename (lower left corner).
@@ -142,9 +145,35 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
 
     for idx, d in enumerate(distances):
         # TODO: build a numpy interface in Geodesics
-        lons[idx], lats[idx], _ = geodesics.direct(lon_t, lat_t, bearing_1, d)
+        lons[idx], lats[idx], _ = geodesics.direct(
+            lon_t, lat_t, bearing_1, d
+            )
+    # important: unless the requested resolution is super-fine, we always
+    # have to query the raw height profile data using sufficient resolution,
+    # to acquire all features
+    # only afterwards, we may smooth the data to the desired distance-step
+    # resolution
 
-    heights = _get_interpolated_data(lons, lats)
+    if step > _HGT_RES / 1.5:
+        hdistances = np.arange(0., distance + _HGT_RES / 3., _HGT_RES / 3.)
+        hlons = np.empty_like(hdistances)
+        hlats = np.empty_like(hdistances)
+        for idx, d in enumerate(hdistances):
+            hlons[idx], hlats[idx], _ = geodesics.direct(
+                lon_t, lat_t, bearing_1, d
+                )
+
+        hheights = _get_interpolated_data(hlons, hlats).astype(np.float64)
+        heights = np.empty_like(distances)
+        # now smooth/interpolate this to the desired step width
+        geodesics.regrid1d_with_x(
+            hdistances, hheights, distances, heights,
+            step / 2.35, regular=True
+            )
+
+    else:
+
+        heights = _get_interpolated_data(lons, lats).astype(np.float64)
 
     return (
         lons,

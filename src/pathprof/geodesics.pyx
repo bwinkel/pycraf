@@ -18,7 +18,7 @@ import numpy as np
 
 np.import_array()
 
-__all__ = ['inverse', 'direct']
+__all__ = ['inverse', 'direct', 'regrid1d_with_x']
 
 
 cdef double WGS_a = 6378137.0
@@ -279,3 +279,146 @@ def direct(
         lon2_deg = (lon2_deg + 180.) % 360. - 180.
 
     return lon2_deg, lat2_deg, bearing2_deg
+
+
+cdef inline int find_in_ordered(
+        cython.floating[:] x,
+        cython.floating x0,
+        ) nogil:
+    '''
+    Find index of x0 in ordered vector x.
+
+    Using a divide-and-conquer style algorithm.
+    '''
+
+    cdef:
+        int l, h, i
+        int length = x.shape[0]
+
+    l = 0
+    h = length - 1
+
+    while x[l] <= x0 and x[h] >= x0:
+
+        i = l + <int> ((x0 - x[l]) / (x[h] - x[l]) * (h - l))
+
+        if x[i] < x0:
+            l = i + 1
+        elif x[i] > x0:
+            h = i - 1
+        else:
+            return i
+
+    return l
+
+
+cdef inline double gauss1d(double offset, double s):
+
+    return exp(-0.5 * offset * offset / s / s)
+
+
+def regrid1d_with_x(
+        cython.floating[:] x not None,
+        cython.floating[:] y not None,
+        cython.floating[:] x_new not None,
+        cython.floating[:] y_new not None,  # output
+        cython.floating width,
+        bint regular=False,
+        bint ordered=True,
+        ):
+    '''
+    from pycraf.pathprof import regrid1d_with_x
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    x = np.linspace(1., 0., 100)
+    x_new = np.linspace(0., 1., 128)
+    y_ = np.random.normal(0., 1., 100)
+    y_[50] = 10
+
+    y = np.empty_like(x)
+    y_new = np.empty_like(x_new)
+
+    regrid1d_with_x(x[::-1], y_[::-1], x, y, 0.005)
+    regrid1d_with_x(x[::-1], y_[::-1], x_new, y_new, 0.005)
+
+    plt.close()
+    plt.plot(x, y_, 'k-')
+    plt.plot(x, y, 'r-')
+    plt.plot(x_new, y_new, 'b-')
+    plt.show()
+
+    # Note: there seems to be a bug in find_in_ordered:
+
+    x = np.linspace(0, 1, 100)
+    y = np.sqrt(x)
+    x_new = np.linspace(0, 1, 1000)
+    y_new = np.empty_like(x_new)
+    regrid1d_with_x(x, y, x_new, y_new, 0.1)
+    print(y_new)  # <-- some entries are zero???
+    '''
+
+    cdef:
+
+        double this_x, kv, ssum, norm
+
+        int i, j, s, e
+        int length = x.size
+        int length_new = x_new.size
+
+        double dx = fabs(x[0] - x[length - 1]) / length
+
+    assert x.size == y.size, 'x and y must have equal size'
+
+    for i in range(length_new):
+
+        this_x = x_new[i]
+
+        # find optimal s, e (if in ordered mode)
+        if regular:
+
+            s = int((this_x - 5. * width) / dx - 0.5)
+            e = int((this_x + 5. * width) / dx + 1.5)
+            if s < 0:
+                s = 0
+            if e >= length:
+                e = length
+
+        elif ordered:
+            s = find_in_ordered(x, this_x)
+            e = s + 1
+
+            while True:
+                s -= 1
+                if s < 1:
+                    s = 0
+                    break
+                if fabs(x[s] - this_x) > 5. * width:
+                    break
+
+            while True:
+                e += 1
+                if e >= length:
+                    e = length
+                    break
+                if fabs(x[e - 1] - this_x) > 5. * width:
+                    break
+
+        else:
+            s = 0
+            e = length
+
+        # print(i, s, e)
+
+        norm = 0.
+        ssum = 0.
+        for j in range(s, e):
+            kv = gauss1d(x[j] - this_x, width)
+            ssum += kv * y[j]
+            norm += kv
+
+        # print(i, s, e, norm, ssum)
+        if fabs(norm) < 1.e-12:
+            y_new[i] = 0.
+        else:
+            y_new[i] = ssum / norm
