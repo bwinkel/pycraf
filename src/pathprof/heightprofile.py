@@ -96,7 +96,7 @@ def _get_tile_interpolator(ilon, ilat):
     lons, lats, tile = _get_tile_data(ilon, ilat)
 
     _tile_interpolator = RegularGridInterpolator(
-        (lons[:, 0], lats[0]), tile
+        (lons[:, 0], lats[0]), tile.T
         )
 
     return _tile_interpolator
