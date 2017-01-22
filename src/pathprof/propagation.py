@@ -116,24 +116,28 @@ _PATH_PROPS = (  # pc = path center
     ('nu_bull_50', cnv.dimless),
     ('nu_bull_idx_50', cnv.dimless),
     ('S_tim_50', apu.m / apu.km),
+    ('S_rim_50', apu.m / apu.km),
     ('S_tr_50', apu.m / apu.km),
     ('a_e_b0', apu.km),
     ('path_type_b0', None),  # (0 - LOS, 1 - transhorizon)
     ('nu_bull_b0', cnv.dimless),
     ('nu_bull_idx_b0', cnv.dimless),
     ('S_tim_b0', apu.m / apu.km),
+    ('S_rim_b0', apu.m / apu.km),
     ('S_tr_b0', apu.m / apu.km),
     ('a_e_zh_50', apu.km),
     ('path_type_zh_50', None),  # (0 - LOS, 1 - transhorizon)
     ('nu_bull_zh_50', cnv.dimless),
     ('nu_bull_idx_zh_50', cnv.dimless),
     ('S_tim_zh_50', apu.m / apu.km),
+    ('S_rim_zh_50', apu.m / apu.km),
     ('S_tr_zh_50', apu.m / apu.km),
     ('a_e_zh_b0', apu.km),
     ('path_type_zh_b0', None),  # (0 - LOS, 1 - transhorizon)
     ('nu_bull_zh_b0', cnv.dimless),
     ('nu_bull_idx_zh_b0', cnv.dimless),
     ('S_tim_zh_b0', apu.m / apu.km),
+    ('S_rim_zh_b0', apu.m / apu.km),
     ('S_tr_zh_b0', apu.m / apu.km),
     )
 
@@ -200,6 +204,8 @@ PathProps.__doc__ = '''
     nu_bull_idx - Index of the Bullington point in the height profile
         (only for LOS, for transhorizon this is set to a dummy value, -1)
     S_tim - Highest-slope parameter of the profile w.r.t. transmitter [m / km]
+    S_rim - Highest-slope parameter of the profile w.r.t. receiver [m / km]
+        (== NaN if LOS path)
     S_tr - Transmitter-receiver slope parameter [m / km]
 
     (amsl - above mean sea level)
@@ -304,9 +310,13 @@ def _diffraction_helper(
             ) / (d - d_i)
         S_rim = np.max(slope_j)
         d_bp = (h_rs - h_ts + S_rim * d) / (S_tim + S_rim)
-        # i_idx = np.argmax(slope_i)
-        # j_idx = np.argmax(slope_j)
-        # print(d_i[i_idx], d_i[j_idx], S_tim, S_rim, S_tr, d_bp)
+
+        # test:
+
+        # zeta_m = np.cos(np.arctan2(1.e-3 * (h_rs - h_ts), d))
+        i_idx = np.argmax(slope_i)
+        j_idx = np.argmax(slope_j)
+        print(d_i[i_idx], d_i[j_idx], S_tim, S_rim, S_tr, d_bp)  # , zeta_m
 
         nu_bull = (
             h_ts + S_tim * d_bp -
@@ -335,7 +345,9 @@ def _diffraction_helper(
         nu_bull_idx = np.argmax(nu_i)
         nu_bull = nu_i[nu_bull_idx]  # == nu_max in Eq. 16
 
-    return path_type, nu_bull, nu_bull_idx, S_tim, S_tr
+        S_rim = np.nan
+
+    return path_type, nu_bull, nu_bull_idx, S_tim, S_rim, S_tr
 
 
 def _path_geometry_helper(
@@ -554,26 +566,28 @@ def path_properties(
     pathprops['a_e_50'] = a_e_50
 
     (
-        path_type, nu_bull, nu_bull_idx, S_tim, S_tr
+        path_type, nu_bull, nu_bull_idx, S_tim, S_rim, S_tr
         ) = _diffraction_helper(a_e_50, *args)
 
     pathprops['path_type_50'] = path_type
     pathprops['nu_bull_50'] = nu_bull
     pathprops['nu_bull_idx_50'] = nu_bull_idx
     pathprops['S_tim_50'] = S_tim
+    pathprops['S_rim_50'] = S_rim
     pathprops['S_tr_50'] = S_tr
 
     a_e_b0 = helper.A_BETA_VALUE
     pathprops['a_e_b0'] = a_e_b0
 
     (
-        path_type, nu_bull, nu_bull_idx, S_tim, S_tr
+        path_type, nu_bull, nu_bull_idx, S_tim, S_rim, S_tr
         ) = _diffraction_helper(a_e_b0, *args)
 
     pathprops['path_type_b0'] = path_type
     pathprops['nu_bull_b0'] = nu_bull
     pathprops['nu_bull_idx_b0'] = nu_bull_idx
     pathprops['S_tim_b0'] = S_tim
+    pathprops['S_rim_b0'] = S_rim
     pathprops['S_tr_b0'] = S_tr
 
     # similarly, we have to repeat the game with heights set to zero
@@ -586,7 +600,7 @@ def path_properties(
         lam,
         )
     (
-        path_type, nu_bull, nu_bull_idx, S_tim, S_tr
+        path_type, nu_bull, nu_bull_idx, S_tim, S_rim, S_tr
         ) = _diffraction_helper(a_e_50, *args)
 
     pathprops['a_e_zh_50'] = a_e_50
@@ -594,10 +608,11 @@ def path_properties(
     pathprops['nu_bull_zh_50'] = nu_bull
     pathprops['nu_bull_idx_zh_50'] = nu_bull_idx
     pathprops['S_tim_zh_50'] = S_tim
+    pathprops['S_rim_zh_50'] = S_rim
     pathprops['S_tr_zh_50'] = S_tr
 
     (
-        path_type, nu_bull, nu_bull_idx, S_tim, S_tr
+        path_type, nu_bull, nu_bull_idx, S_tim, S_rim, S_tr
         ) = _diffraction_helper(a_e_b0, *args)
 
     pathprops['a_e_zh_b0'] = a_e_50
@@ -605,6 +620,7 @@ def path_properties(
     pathprops['nu_bull_zh_b0'] = nu_bull
     pathprops['nu_bull_idx_zh_b0'] = nu_bull_idx
     pathprops['S_tim_zh_b0'] = S_tim
+    pathprops['S_rim_zh_b0'] = S_rim
     pathprops['S_tr_zh_b0'] = S_tr
 
     # finally, determine remaining path geometry properties
@@ -1170,6 +1186,7 @@ def _diffraction_spherical_earth_loss_helper(
 
     wavelen = 0.299792458 / freq
     d_los = np.sqrt(2 * a_p) * (np.sqrt(0.001 * h_te) + np.sqrt(0.001 * h_re))
+    print('d_los', d_los)
 
     if dist >= d_los:
 
@@ -1245,10 +1262,10 @@ def _delta_bullington_loss(pathprop, pol, do_beta):
         )
 
     L_d = L_bulla + max(L_dsph - L_bulls, 0)
-    # print(L_d, L_bulla, L_dsph, L_bulls, nu_bull, nu_bull_zh)
-    # print('{:7.3f} {:7.3f} {:7.3f} {:7.3f} {:7.3f}'.format(
-    #     pathprop.distance, L_d, L_bulla, L_dsph, L_bulls
-    #     ))
+    print(L_d, L_bulla, L_dsph, L_bulls, nu_bull, nu_bull_zh)
+    print('{:7.3f} {:7.3f} {:7.3f} {:7.3f} {:7.3f}'.format(
+        pathprop.distance, L_d, L_bulla, L_dsph, L_bulls
+        ))
 
     return L_d
 
