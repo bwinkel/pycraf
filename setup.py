@@ -6,6 +6,17 @@ from setuptools.extension import Extension
 from Cython.Distutils import build_ext
 import numpy as np
 
+
+ext_module_pathprof_cyprop = Extension(
+    "pycraf.pathprof.cyprop",
+    ["src/pathprof/cyprop.pyx"],
+    extra_compile_args=['-fopenmp', '-O3'],
+    extra_link_args=['-fopenmp'],
+    libraries=["m"],
+    include_dirs=[np.get_include()],
+)
+
+
 ext_module_pathprof_geodesics = Extension(
     "pycraf.pathprof.geodesics",
     ["src/pathprof/geodesics.pyx"],
@@ -52,6 +63,7 @@ setup(
         },
     cmdclass={'build_ext': build_ext},
     ext_modules=[
+        ext_module_pathprof_cyprop,
         ext_module_pathprof_geodesics,
         ],
     package_data={
