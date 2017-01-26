@@ -22,7 +22,7 @@ import ipdb
 __all__ = [
     'PathProps', 'path_properties', 'path_properties_with_units',
     'free_space_loss_bfsg',
-    'bullington_loss_complete',
+    'diffraction_loss_complete',
     'tropospheric_scatter_loss_bs',
     'ducting_loss_ba',
     ]
@@ -1270,7 +1270,7 @@ def _delta_bullington_loss(pathprop, pol, do_beta):
     return L_d
 
 
-def _bullington_loss_complete(
+def _diffraction_loss_complete(
         pathprop,
         temperature,
         pressure,
@@ -1354,7 +1354,7 @@ def _bullington_loss_complete(
     pressure=(0, None, apu.hPa),
     strip_input_units=True, output_unit=(cnv.dB, ) * 5
     )
-def bullington_loss_complete(
+def diffraction_loss_complete(
         pathprop,
         temperature,
         pressure,
@@ -1399,7 +1399,7 @@ def bullington_loss_complete(
         path_properties helper function.
     '''
 
-    return _bullington_loss_complete(
+    return _diffraction_loss_complete(
         pathprop,
         temperature,
         pressure,
@@ -1469,7 +1469,7 @@ def _path_attenuation_complete(
         )
     L_ba = float(L_ba)
 
-    L_d_50, L_dp, L_bd_50, L_bd, L_min_b0p = _bullington_loss_complete(
+    L_d_50, L_dp, L_bd_50, L_bd, L_min_b0p = _diffraction_loss_complete(
         pathprop,
         temperature,
         pressure,

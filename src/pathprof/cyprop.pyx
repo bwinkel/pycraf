@@ -26,7 +26,7 @@ __all__ = [
     'PathProp',
     'specific_attenuation_annex2',
     'free_space_loss_bfsg_cython', 'tropospheric_scatter_loss_bs_cython',
-    'ducting_loss_ba_cython', 'bullington_loss_complete_cython',
+    'ducting_loss_ba_cython', 'diffraction_loss_complete_cython',
     'path_attenuation_complete_cython',
     ]
 
@@ -34,7 +34,8 @@ __all__ = [
 cdef double NAN = np.nan
 
 
-cdef object PARAMETERS = [
+cdef object PARAMETERS_BASIC = [
+    ('version', '12d', '(P.452 version; 14 or 16)'),
     ('freq', '12.6f', 'GHz'),
     ('wavelen', '12.6f', 'm'),
     ('polarization', '12d', '(0 - horizontal, 1 - vertical)'),
@@ -78,29 +79,33 @@ cdef object PARAMETERS = [
     ('d_lt', '12.6f', 'km'),
     ('d_lr', '12.6f', 'km'),
     ('h_m', '12.6f', 'm'),
-    ('a_e_50', '12.6f', 'km'),
     ('duct_slope', '12.6f', 'm / km'),
+    ('a_e_50', '12.6f', 'km'),
+    ('a_e_b0', '12.6f', 'km'),
+    ]
+
+
+cdef object PARAMETERS_V16 = [
     ('path_type_50', '12d', '(0 - LOS, 1 - transhoriz)'),
     ('nu_bull_50', '12.6f', 'dimless'),
     ('nu_bull_idx_50', '12d', 'dimless'),
     ('S_tim_50', '12.6f', 'm / km'),
     ('S_rim_50', '12.6f', 'm / km'),
     ('S_tr_50', '12.6f', 'm / km'),
-    ('a_e_b0', '12.6f', 'km'),
     ('path_type_b0', '12d', '(0 - LOS, 1 - transhoriz)'),
     ('nu_bull_b0', '12.6f', 'dimless'),
     ('nu_bull_idx_b0', '12d', 'dimless'),
     ('S_tim_b0', '12.6f', 'm / km'),
     ('S_rim_b0', '12.6f', 'm / km'),
     ('S_tr_b0', '12.6f', 'm / km'),
-    ('a_e_zh_50', '12.6f', 'km'),
+    # ('a_e_zh_50', '12.6f', 'km'),
     ('path_type_zh_50', '12d', '(0 - LOS, 1 - transhoriz)'),
     ('nu_bull_zh_50', '12.6f', 'dimless'),
     ('nu_bull_idx_zh_50', '12d', 'dimless'),
     ('S_tim_zh_50', '12.6f', 'm / km'),
     ('S_rim_zh_50', '12.6f', 'm / km'),
     ('S_tr_zh_50', '12.6f', 'm / km'),
-    ('a_e_zh_b0', '12.6f', 'km'),
+    # ('a_e_zh_b0', '12.6f', 'km'),
     ('path_type_zh_b0', '12d', '(0 - LOS, 1 - transhoriz)'),
     ('nu_bull_zh_b0', '12.6f', 'dimless'),
     ('nu_bull_idx_zh_b0', '12d', 'dimless'),
@@ -109,7 +114,25 @@ cdef object PARAMETERS = [
     ('S_tr_zh_b0', '12.6f', 'm / km'),
     ]
 
+
+cdef object PARAMETERS_V14 = [
+    ('zeta_m', '12.6f', 'dimless'),
+    ('nu_m50', '12.6f', 'dimless'),
+    ('nu_mbeta', '12.6f', 'dimless'),
+    ('i_m50', '12d', 'dimless'),
+    ('zeta_t', '12.6f', 'dimless'),
+    ('nu_t50', '12.6f', 'dimless'),
+    ('nu_tbeta', '12.6f', 'dimless'),
+    ('i_t50', '12d', 'dimless'),
+    ('zeta_r', '12.6f', 'dimless'),
+    ('nu_r50', '12.6f', 'dimless'),
+    ('nu_rbeta', '12.6f', 'dimless'),
+    ('i_r50', '12d', 'dimless'),
+    ]
+
+
 cdef struct _PathProp:
+    int version  # P.452 version (14 or 16)
     double freq  # GHz
     double wavelen  # m
     int polarization  # 0 - horizontal, 1 - vertical
@@ -153,35 +176,54 @@ cdef struct _PathProp:
     double d_lt  # km
     double d_lr  # km
     double h_m  # m
-    double a_e_50  # km
     double duct_slope  # m / km
+    double a_e_50  # km
+    double a_e_b0  # km
+
+    # V16 diffraction calculation parameters
     int path_type_50  # 0 - LOS, 1 - transhoriz
     double nu_bull_50  # dimless
     int nu_bull_idx_50  # dimless
     double S_tim_50  # m / km
     double S_rim_50  # m / km
     double S_tr_50  # m / km
-    double a_e_b0  # km
+
     int path_type_b0  # 0 - LOS, 1 - transhoriz
     double nu_bull_b0  # dimless
     int nu_bull_idx_b0  # dimless
     double S_tim_b0  # m / km
     double S_rim_b0  # m / km
     double S_tr_b0  # m / km
-    double a_e_zh_50  # km
+    # double a_e_zh_50  # km
+
     int path_type_zh_50  # 0 - LOS, 1 - transhoriz
     double nu_bull_zh_50  # dimless
     int nu_bull_idx_zh_50  # dimless
     double S_tim_zh_50  # m / km
     double S_rim_zh_50  # m / km
     double S_tr_zh_50  # m / km
-    double a_e_zh_b0  # km
+    # double a_e_zh_b0  # km
+
     int path_type_zh_b0  # 0 - LOS, 1 - transhoriz
     double nu_bull_zh_b0  # dimless
     int nu_bull_idx_zh_b0  # dimless
     double S_tim_zh_b0  # m / km
     double S_rim_zh_b0  # m / km
     double S_tr_zh_b0  # m / km
+
+    # V14 diffraction calculation parameters
+    double zeta_m  # dimless
+    double nu_m50  # dimless
+    double nu_mbeta  # dimless
+    int i_m50  # dimless
+    double zeta_t  # dimless
+    double nu_t50  # dimless
+    double nu_tbeta  # dimless
+    int i_t50  # dimless
+    double zeta_r  # dimless
+    double nu_r50  # dimless
+    double nu_rbeta  # dimless
+    int i_r50  # dimless
 
 
 cdef class PathProp(object):
@@ -230,10 +272,13 @@ cdef class PathProp(object):
             double d_tm=-1, double d_lm=-1,
             double d_ct=50000, double d_cr=50000,
             int polarization=0,
+            int version=16,
             ):
 
         assert time_percent <= 50.
+        assert version == 14 or version == 16
 
+        self._pp.version = version
         self._pp.freq = freq
         self._pp.wavelen = 0.299792458 / freq
         self._pp.temperature = temperature
@@ -263,6 +308,12 @@ cdef class PathProp(object):
 
     def __str__(self):
 
+        params = list(PARAMETERS_BASIC)  # make a copy
+        if self._pp.version == 14:
+            params += PARAMETERS_V14
+        elif self._pp.version == 16:
+            params += PARAMETERS_V16
+
         return '\n'.join(
             '{}: {{:{}}} {}'.format(
                 '{:15s}', p[1], '{:10s}'
@@ -270,14 +321,14 @@ cdef class PathProp(object):
                 p[0],
                 getattr(self, p[0]), p[2]
                 )
-            for p in PARAMETERS
+            for p in params
             )
 
     def _process_path(self):
 
         cdef:
 
-            int mid_idx
+            int mid_idx, diff_edge_idx
             int hsize
             double[::1] lons_view
             double[::1] lats_view
@@ -285,7 +336,8 @@ cdef class PathProp(object):
             double[::1] heights_view
             double[::1] zheights_view
 
-            double[::1] heights_si_view
+        # import time
+        # _time = time.time()
 
         # TODO: cythonize _srtm_height_profile
         (
@@ -302,13 +354,15 @@ cdef class PathProp(object):
                 self._pp.hprof_step
                 )
 
+        # print('_srtm_height_profile', time.time() - _time)
+        # _time = time.time()
+
         lons_view = lons
         lats_view = lats
         distances_view = distances
         heights_view = heights
 
         zheights_view = np.zeros_like(heights)
-        heights_si_view = np.empty_like(heights)
 
         self._pp.distance = distance
         self._pp.bearing = bearing
@@ -330,6 +384,9 @@ cdef class PathProp(object):
             self._pp.lon_mid, self._pp.lat_mid, self._pp.d_tm, self._pp.d_lm
             )
 
+        # print('_radiomet_data_for_pathcenter', time.time() - _time)
+        # _time = time.time()
+
         self._pp.delta_N = delta_N
         self._pp.beta0 = beta0
         self._pp.N0 = N0
@@ -342,8 +399,11 @@ cdef class PathProp(object):
 
         # smooth-earth height profile
         self._pp.h_st, self._pp.h_sr = _smooth_earth_heights(
-            self._pp.distance, distances_view, heights_view, heights_si_view
+            self._pp.distance, distances_view, heights_view,
             )
+
+        # print('_smooth_earth_heights', time.time() - _time)
+        # _time = time.time()
 
         # effective antenna heights for diffraction model
         self._pp.h_std, self._pp.h_srd = _effective_antenna_heights(
@@ -352,6 +412,9 @@ cdef class PathProp(object):
             self._pp.h_ts, self._pp.h_rs,
             self._pp.h_st, self._pp.h_sr
             )
+
+        # print('_effective_antenna_heights', time.time() - _time)
+        # _time = time.time()
 
         # parameters for ducting/layer-reflection model
         # (use these only for ducting or also for smooth-earth?)
@@ -367,62 +430,82 @@ cdef class PathProp(object):
         self._pp.a_e_50 = helper._median_effective_earth_radius(
             self._pp.lon_mid, self._pp.lat_mid
             )
-
-        (
-            self._pp.path_type_50, self._pp.nu_bull_50,
-            self._pp.nu_bull_idx_50,
-            self._pp.S_tim_50, self._pp.S_rim_50, self._pp.S_tr_50
-            ) = _diffraction_helper(
-            self._pp.a_e_50, self._pp.distance,
-            distances_view, heights_view,
-            self._pp.h_ts, self._pp.h_rs,
-            self._pp.wavelen,
-            )
-
         self._pp.a_e_b0 = helper.A_BETA_VALUE
 
-        (
-            self._pp.path_type_b0, self._pp.nu_bull_b0,
-            self._pp.nu_bull_idx_b0,
-            self._pp.S_tim_b0, self._pp.S_rim_b0, self._pp.S_tr_b0
-            ) = _diffraction_helper(
-            self._pp.a_e_b0, self._pp.distance,
-            distances_view, heights_view,
-            self._pp.h_ts, self._pp.h_rs,
-            self._pp.wavelen,
-            )
+        if self._pp.version == 16:
+            (
+                self._pp.path_type_50, self._pp.nu_bull_50,
+                self._pp.nu_bull_idx_50,
+                self._pp.S_tim_50, self._pp.S_rim_50, self._pp.S_tr_50
+                ) = _diffraction_helper_v16(
+                self._pp.a_e_50, self._pp.distance,
+                distances_view, heights_view,
+                self._pp.h_ts, self._pp.h_rs,
+                self._pp.wavelen,
+                )
 
-        # similarly, we have to repeat the game with heights set to zero
+            (
+                self._pp.path_type_b0, self._pp.nu_bull_b0,
+                self._pp.nu_bull_idx_b0,
+                self._pp.S_tim_b0, self._pp.S_rim_b0, self._pp.S_tr_b0
+                ) = _diffraction_helper_v16(
+                self._pp.a_e_b0, self._pp.distance,
+                distances_view, heights_view,
+                self._pp.h_ts, self._pp.h_rs,
+                self._pp.wavelen,
+                )
 
-        self._pp.a_e_zh_50 = self._pp.a_e_50
+            # similarly, we have to repeat the game with heights set to zero
 
-        (
-            self._pp.path_type_zh_50, self._pp.nu_bull_zh_50,
-            self._pp.nu_bull_idx_zh_50,
-            self._pp.S_tim_zh_50, self._pp.S_rim_zh_50, self._pp.S_tr_zh_50
-            ) = _diffraction_helper(
-            self._pp.a_e_zh_50, self._pp.distance,
-            distances_view, zheights_view,
-            self._pp.h_ts - self._pp.h_std, self._pp.h_rs - self._pp.h_srd,
-            self._pp.wavelen,
-            )
+            (
+                self._pp.path_type_zh_50, self._pp.nu_bull_zh_50,
+                self._pp.nu_bull_idx_zh_50,
+                self._pp.S_tim_zh_50, self._pp.S_rim_zh_50, self._pp.S_tr_zh_50
+                ) = _diffraction_helper_v16(
+                self._pp.a_e_50, self._pp.distance,
+                distances_view, zheights_view,
+                self._pp.h_ts - self._pp.h_std, self._pp.h_rs - self._pp.h_srd,
+                self._pp.wavelen,
+                )
 
-        self._pp.a_e_zh_b0 = self._pp.a_e_b0
+            (
+                self._pp.path_type_zh_b0, self._pp.nu_bull_zh_b0,
+                self._pp.nu_bull_idx_zh_b0,
+                self._pp.S_tim_zh_b0, self._pp.S_rim_zh_b0, self._pp.S_tr_zh_b0
+                ) = _diffraction_helper_v16(
+                self._pp.a_e_b0, self._pp.distance,
+                distances_view, zheights_view,
+                self._pp.h_ts - self._pp.h_std, self._pp.h_rs - self._pp.h_srd,
+                self._pp.wavelen,
+                )
 
-        (
-            self._pp.path_type_zh_b0, self._pp.nu_bull_zh_b0,
-            self._pp.nu_bull_idx_zh_b0,
-            self._pp.S_tim_zh_b0, self._pp.S_rim_zh_b0, self._pp.S_tr_zh_b0
-            ) = _diffraction_helper(
-            self._pp.a_e_zh_b0, self._pp.distance,
-            distances_view, zheights_view,
-            self._pp.h_ts - self._pp.h_std, self._pp.h_rs - self._pp.h_srd,
-            self._pp.wavelen,
-            )
+        if self._pp.version == 14:
+
+            (
+                self._pp.zeta_m, self._pp.i_m50, self._pp.nu_m50,
+                self._pp.nu_mbeta,
+                self._pp.zeta_t, self._pp.i_t50, self._pp.nu_t50,
+                self._pp.nu_tbeta,
+                self._pp.zeta_r, self._pp.i_r50, self._pp.nu_r50,
+                self._pp.nu_rbeta,
+                ) = _diffraction_helper_v14(
+                self._pp.a_e_50, self._pp.a_e_b0, self._pp.distance,
+                distances_view, heights_view,
+                self._pp.h_ts, self._pp.h_rs,
+                self._pp.wavelen,
+                )
+
+        # print('_diffraction_helpers', time.time() - _time)
+        # _time = time.time()
 
         # finally, determine remaining path geometry properties
         # note, this can depend on the bullington point (index) derived in
         # _diffraction_helper for 50%
+
+        if self._pp.version == 14:
+            diff_edge_idx = self._pp.i_m50
+        elif self._pp.version == 16:
+            diff_edge_idx = self._pp.nu_bull_idx_50
 
         (
             self._pp.path_type, self._pp.theta_t, self._pp.theta_r,
@@ -432,10 +515,17 @@ cdef class PathProp(object):
             self._pp.a_e_50, self._pp.distance,
             distances_view, heights_view,
             self._pp.h_ts, self._pp.h_rs, self._pp.h_st,
-            self._pp.nu_bull_idx_50, self._pp.duct_slope,
+            diff_edge_idx, self._pp.duct_slope,
             )
 
+        # print('_path_geometry_helper', time.time() - _time)
+        # _time = time.time()
+
     # How to do this programmatically?
+    @property
+    def version(self):
+        return self._pp.version
+
     @property
     def freq(self):
         return self._pp.freq
@@ -668,9 +758,9 @@ cdef class PathProp(object):
     def S_tr_b0(self):
         return self._pp.S_tr_b0
 
-    @property
-    def a_e_zh_50(self):
-        return self._pp.a_e_zh_50
+    # @property
+    # def a_e_zh_50(self):
+    #     return self._pp.a_e_zh_50
 
     @property
     def path_type_zh_50(self):
@@ -696,9 +786,9 @@ cdef class PathProp(object):
     def S_tr_zh_50(self):
         return self._pp.S_tr_zh_50
 
-    @property
-    def a_e_zh_b0(self):
-        return self._pp.a_e_zh_b0
+    # @property
+    # def a_e_zh_b0(self):
+    #     return self._pp.a_e_zh_b0
 
     @property
     def path_type_zh_b0(self):
@@ -724,26 +814,78 @@ cdef class PathProp(object):
     def S_tr_zh_b0(self):
         return self._pp.S_tr_zh_b0
 
-# Doesn't work :-(
-# for p in PARAMETERS:
-#     setattr(PathProp, p[0], property(lambda self: getattr(self, '_' + p[0])))
+    @property
+    def zeta_m(self):
+        return self._pp.zeta_m
 
-# PathProp.freq = property(lambda self: self._pp.freq)
+    @property
+    def nu_m50(self):
+        return self._pp.nu_m50
+
+    @property
+    def nu_mbeta(self):
+        return self._pp.nu_mbeta
+
+    @property
+    def i_m50(self):
+        return self._pp.i_m50
+
+    @property
+    def zeta_t(self):
+        return self._pp.zeta_t
+
+    @property
+    def nu_t50(self):
+        return self._pp.nu_t50
+
+    @property
+    def nu_tbeta(self):
+        return self._pp.nu_tbeta
+
+    @property
+    def i_t50(self):
+        return self._pp.i_t50
+
+    @property
+    def zeta_r(self):
+        return self._pp.zeta_r
+
+    @property
+    def nu_r50(self):
+        return self._pp.nu_r50
+
+    @property
+    def nu_rbeta(self):
+        return self._pp.nu_rbeta
+
+    @property
+    def i_r50(self):
+        return self._pp.i_r50
+
+
+# Doesn't work :-(
+# cannot assign attributes to C-level extension types at runtime
+# for p in PARAMETERS:
+#     setattr(PathProp, p[0], property(lambda self: getattr(self._pp, p[0])))
+
+# PathProp.freq2 = property(lambda self: self._pp.freq)
+
 
 cdef (double, double) _smooth_earth_heights(
         double distance,
         double[::1] d_v,
         double[::1] h_v,
-        double[::1] h_si_v,  # modified
         ) nogil:
 
     cdef:
         int i, dsize
         double d = distance, nu_1, nu_2
-        double h_st, h_sr, h_si
+        double h_st, h_sr
 
     dsize = d_v.shape[0]
 
+    nu_1 = 0.
+    nu_2 = 0.
     for i in range(1, dsize):
 
         nu_1 += (d_v[i] - d_v[i - 1]) * (h_v[i] + h_v[i - 1])
@@ -754,9 +896,6 @@ cdef (double, double) _smooth_earth_heights(
 
     h_st = (2 * nu_1 * d - nu_2) / d ** 2
     h_sr = (nu_2 - nu_1 * d) / d ** 2
-
-    for i in range(dsize):
-        h_si_v[i] = ((d - d_v[i]) * h_st + d_v[i] * h_sr) / d
 
     return (h_st, h_sr)
 
@@ -821,7 +960,7 @@ cdef (double, double) _effective_antenna_heights(
     return (h_std, h_srd)
 
 
-cdef (int, double, int, double, double, double) _diffraction_helper(
+cdef (int, double, int, double, double, double) _diffraction_helper_v16(
         double a_p,
         double distance,
         double[::1] d_v,
@@ -902,6 +1041,158 @@ cdef (int, double, int, double, double, double) _diffraction_helper(
                 nu_bull_idx = i
 
     return (path_type, nu_bull, nu_bull_idx, S_tim, S_rim, S_tr)
+
+
+cdef (
+        double, int, double, double,
+        double, int, double, double,
+        double, int, double, double,
+        ) _diffraction_helper_v14(
+        double a_e_50, double a_e_beta,
+        double distance,
+        double[::1] d_v,
+        double[::1] h_v,
+        double h_ts, double h_rs,
+        double wavelen,
+        ) nogil:
+
+    cdef:
+        int i, dsize
+        double d = distance, lam = wavelen
+        double C_e500 = 500. / a_e_50
+        double C_b500 = 500. / a_e_beta
+
+        double H_i, nu_i
+
+        double zeta_m = NAN, zeta_t = NAN, zeta_r = NAN
+        int i_m50 = -1, i_t50 = -1, i_r50 = -1
+        # put default nu values to -1 (which leads to J(-1) == 0)
+        double nu_m50 = -1.
+        double nu_mbeta = -1.
+        double nu_t50 = -1.
+        double nu_tbeta = -1.
+        double nu_r50 = -1.
+        double nu_rbeta = -1.
+
+        double h50, d50, ht50, dt50, hr50, dr50
+
+    dsize = d_v.shape[0]
+
+    # Eq 14-15
+    zeta_m = cos(atan(1.e-3 * (h_rs - h_ts) / d))
+
+    nu_m50 = -1.e31
+    for i in range(1, dsize - 1):
+
+        H_i = (
+            h_v[i] + C_e500 * d_v[i] * (d - d_v[i]) -
+            (h_ts * (d - d_v[i]) + h_rs * d_v[i]) / d
+            )
+        nu_i = zeta_m * H_i * sqrt(
+            0.002 * d / lam / d_v[i] / (d - d_v[i])
+            )
+        if nu_i > nu_m50:
+            nu_m50 = nu_i
+            i_m50 = i
+
+    if nu_m50 < -0.78:
+
+        # every L will be zero
+        return (
+            zeta_m, i_m50, nu_m50, nu_mbeta,
+            zeta_t, i_t50, nu_t50, nu_tbeta,
+            zeta_r, i_r50, nu_r50, nu_rbeta,
+            )
+
+    h50 = h_v[i_m50]
+    d50 = d_v[i_m50]
+
+    # calculate principle edge for beta
+    H_i = (
+        h50 + C_b500 * d50 * (d - d50) -
+        (h_ts * (d - d50) + h_rs * d50) / d
+        )
+    nu_mbeta = zeta_m * H_i * sqrt(
+        0.002 * d / lam / d50 / (d - d50)
+        )
+
+    if i_m50 > 1:
+
+        # calculate transmitter-side secondary edge
+
+        # Eq 17-18
+        zeta_t = cos(atan(1.e-3 * (h50 - h_ts) / d50))
+        nu_t50 = -1.e31
+        for i in range(1, i_m50):
+
+            H_i = (
+                h_v[i] + C_e500 * d_v[i] * (d50 - d_v[i]) -
+                (h_ts * (d50 - d_v[i]) + h50 * d_v[i]) / d50
+                )
+            nu_i = zeta_t * H_i * sqrt(
+                0.002 * d50 / lam / d_v[i] / (d50 - d_v[i])
+                )
+            if nu_i > nu_t50:
+                nu_t50 = nu_i
+                i_t50 = i
+
+        ht50 = h_v[i_t50]
+        dt50 = d_v[i_t50]
+
+        # calculate beta
+        H_i = (
+            ht50 + C_b500 * dt50 * (d50 - dt50) -
+            (h_ts * (d50 - dt50) + h50 * dt50) / d50
+            )
+        nu_tbeta = zeta_t * H_i * sqrt(
+            0.002 * d50 / lam / dt50 / (d50 - dt50)
+            )
+
+        # sanity:
+        if nu_t50 < -0.78:
+            nu_tbeta = -1.
+
+    if i_m50 + 1 < dsize - 1:
+
+        # calculate receiver-side secondary edge
+
+        # Eq 20-21
+        zeta_r = cos(atan(1.e-3 * (h_rs - h50) / (d - d50)))
+        nu_r50 = -1.e31
+        for i in range(i_m50 + 1, dsize - 1):
+
+            H_i = (
+                h_v[i] + C_e500 * (d_v[i] - d50) * (d - d_v[i]) -
+                (h50 * (d - d_v[i]) + h_rs * (d_v[i] - d50)) / (d - d50)
+                )
+            nu_i = zeta_r * H_i * sqrt(
+                0.002 * (d - d50) / lam / (d_v[i] - d50) / (d - d_v[i])
+                )
+            if nu_i > nu_r50:
+                nu_r50 = nu_i
+                i_r50 = i
+
+        hr50 = h_v[i_r50]
+        dr50 = d_v[i_r50]
+
+        # calculate beta
+        H_i = (
+            hr50 + C_e500 * (dr50 - d50) * (d - dr50) -
+            (h50 * (d - dr50) + h_rs * (dr50 - d50)) / (d - d50)
+            )
+        nu_rbeta = zeta_r * H_i * sqrt(
+            0.002 * (d - d50) / lam / (dr50 - d50) / (d - dr50)
+            )
+
+        # sanity:
+        if nu_r50 < -0.78:
+            nu_rbeta = -1.
+
+        return (
+            zeta_m, i_m50, nu_m50, nu_mbeta,
+            zeta_t, i_t50, nu_t50, nu_tbeta,
+            zeta_r, i_r50, nu_r50, nu_rbeta,
+            )
 
 
 cdef (int, double, double, double, double, double, double) _path_geometry_helper(
@@ -1274,7 +1565,7 @@ def ducting_loss_ba_cython(
     return _ducting_loss_ba_cython(pathprop._pp)
 
 
-cdef inline double _J_bull(double nu) nogil:
+cdef inline double _J_edgeknife(double nu) nogil:
 
     if nu < -0.78:
         return 0.
@@ -1286,11 +1577,26 @@ cdef inline double _J_bull(double nu) nogil:
             )
 
 
+cdef inline double _diffraction_deygout_helper(
+        double dist, double nu_m, double nu_t, double nu_r
+        ) nogil:
+
+    cdef:
+        double L_d
+        double L_m = _J_edgeknife(nu_m)
+        double L_t = _J_edgeknife(nu_t)
+        double L_r = _J_edgeknife(nu_r)
+
+    L_d = L_m + (1 - exp(-L_m / 6.)) * (L_t + L_r + 10 + 0.04 * dist)
+
+    return L_d
+
+
 cdef inline double _diffraction_bullington_helper(
         double dist, double nu_bull
         ) nogil:
 
-    cdef double L_uc = _J_bull(nu_bull)
+    cdef double L_uc = _J_edgeknife(nu_bull), L_bull
 
     L_bull = L_uc + (1 - exp(-L_uc / 6.)) * (10 + 0.02 * dist)
 
@@ -1505,7 +1811,7 @@ cdef inline double _I_helper(
     return Z - T
 
 
-cdef (double, double, double, double, double) _bullington_loss_complete_cython(
+cdef (double, double, double, double, double) _diffraction_loss_complete_cython(
         _PathProp pp,
         ) nogil:
 
@@ -1515,7 +1821,12 @@ cdef (double, double, double, double, double) _bullington_loss_complete_cython(
         double L_bfsg, E_sp, E_sbeta, L_min_b0p
         double F_i
 
-    L_d_50 = _delta_bullington_loss(pp, 0)
+    if pp.version == 16:
+        L_d_50 = _delta_bullington_loss(pp, 0)
+    elif pp.version == 14:
+        L_d_50 = _diffraction_deygout_helper(
+            pp.distance, pp.nu_m50, pp.nu_t50, pp.nu_r50
+            )
 
     if pp.time_percent > pp.beta0:
         F_i = _I_helper(pp.time_percent / 100.) / _I_helper(pp.beta0 / 100.)
@@ -1528,7 +1839,12 @@ cdef (double, double, double, double, double) _bullington_loss_complete_cython(
 
     else:
 
-        L_d_beta = _delta_bullington_loss(pp, 1)
+        if pp.version == 16:
+            L_d_beta = _delta_bullington_loss(pp, 1)
+        elif pp.version == 14:
+            L_d_beta = _diffraction_deygout_helper(
+                pp.distance, pp.nu_mbeta, pp.nu_tbeta, pp.nu_rbeta
+                )
 
         L_dp = L_d_50 + F_i * (L_d_beta - L_d_50)
 
@@ -1554,7 +1870,7 @@ cdef (double, double, double, double, double) _bullington_loss_complete_cython(
     return L_d_50, L_dp, L_bd_50, L_bd, L_min_b0p
 
 
-def bullington_loss_complete_cython(
+def diffraction_loss_complete_cython(
         PathProp pathprop
         ):
     '''
@@ -1586,7 +1902,7 @@ def bullington_loss_complete_cython(
         [TODO]
     '''
 
-    return _bullington_loss_complete_cython(pathprop._pp)
+    return _diffraction_loss_complete_cython(pathprop._pp)
 
 
 cdef (double, double, double, double, double) _path_attenuation_complete_cython(
@@ -1597,7 +1913,7 @@ cdef (double, double, double, double, double) _path_attenuation_complete_cython(
     cdef:
 
         double _THETA = 0.3  # mrad
-        double _ZETA = 0.8
+        double _XI = 0.8
 
         double _D_SW = 20  # km
         double _KAPPA = 0.5
@@ -1613,9 +1929,14 @@ cdef (double, double, double, double, double) _path_attenuation_complete_cython(
         double A_ht = 0., A_hr = 0.  # TODO: local clutter
 
     # not sure, if the 50% S_tim and S_tr values are to be used here...
-    F_j = 1 - 0.5 * (1. + tanh(
-        3. * _ZETA * (pp.S_tim_50 - pp.S_tr_50) / _THETA
-        ))
+    if pp.version == 16:
+        F_j = 1 - 0.5 * (1. + tanh(
+            3. * _XI * (pp.S_tim_50 - pp.S_tr_50) / _THETA
+            ))
+    elif pp.version == 14:
+        F_j = 1 - 0.5 * (1. + tanh(
+            3. * _XI * (pp.theta - _THETA) / _THETA
+            ))
     F_k = 1 - 0.5 * (1. + tanh(
         3. * _KAPPA * (pp.distance - _D_SW) / _D_SW
         ))
@@ -1629,7 +1950,7 @@ cdef (double, double, double, double, double) _path_attenuation_complete_cython(
     L_bs = _tropospheric_scatter_loss_bs_cython(pp, G_t, G_r)
     L_ba = _ducting_loss_ba_cython(pp)
 
-    L_d_50, L_dp, L_bd_50, L_bd, L_min_b0p = _bullington_loss_complete_cython(pp)
+    L_d_50, L_dp, L_bd_50, L_bd, L_min_b0p = _diffraction_loss_complete_cython(pp)
 
     L_min_bap = _ETA * log(exp(L_ba / _ETA) + exp(L_b0p / _ETA))
 
