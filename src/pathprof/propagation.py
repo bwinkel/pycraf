@@ -232,6 +232,7 @@ def _smooth_earth_heights(distances, heights):
     h_st = (2 * nu_1 * d - nu_2) / d ** 2
     h_sr = (nu_2 - nu_1 * d) / d ** 2
 
+    # where is this used???
     h_si = ((d - distances) * h_st + distances * h_sr) / d
 
     return h_st, h_sr, h_si
@@ -316,7 +317,7 @@ def _diffraction_helper(
         # zeta_m = np.cos(np.arctan2(1.e-3 * (h_rs - h_ts), d))
         i_idx = np.argmax(slope_i)
         j_idx = np.argmax(slope_j)
-        print(d_i[i_idx], d_i[j_idx], S_tim, S_rim, S_tr, d_bp)  # , zeta_m
+        # print(d_i[i_idx], d_i[j_idx], S_tim, S_rim, S_tr, d_bp)  # , zeta_m
 
         nu_bull = (
             h_ts + S_tim * d_bp -
@@ -1186,7 +1187,7 @@ def _diffraction_spherical_earth_loss_helper(
 
     wavelen = 0.299792458 / freq
     d_los = np.sqrt(2 * a_p) * (np.sqrt(0.001 * h_te) + np.sqrt(0.001 * h_re))
-    print('d_los', d_los)
+    # print('d_los', d_los)
 
     if dist >= d_los:
 
@@ -1262,10 +1263,10 @@ def _delta_bullington_loss(pathprop, pol, do_beta):
         )
 
     L_d = L_bulla + max(L_dsph - L_bulls, 0)
-    print(L_d, L_bulla, L_dsph, L_bulls, nu_bull, nu_bull_zh)
-    print('{:7.3f} {:7.3f} {:7.3f} {:7.3f} {:7.3f}'.format(
-        pathprop.distance, L_d, L_bulla, L_dsph, L_bulls
-        ))
+    # print(L_d, L_bulla, L_dsph, L_bulls, nu_bull, nu_bull_zh)
+    # print('{:7.3f} {:7.3f} {:7.3f} {:7.3f} {:7.3f}'.format(
+    #     pathprop.distance, L_d, L_bulla, L_dsph, L_bulls
+    #     ))
 
     return L_d
 

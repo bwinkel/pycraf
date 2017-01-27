@@ -136,6 +136,8 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
     # first find start bearing (and backward bearing for the curious people)
     # and distance
 
+    # import time
+    # t = time.time()
     distance, bearing_1, bearing_2 = geodesics.inverse(
         lon_t, lat_t, lon_r, lat_r
         )
@@ -155,6 +157,9 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
     # to acquire all features
     # only afterwards, we may smooth the data to the desired distance-step
     # resolution
+
+    # print(time.time() - t)
+    # t = time.time()
 
     if step > _HGT_RES / 1.5:
         hdistances = np.arange(0., distance + _HGT_RES / 3., _HGT_RES / 3.)
@@ -176,6 +181,8 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
     else:
 
         heights = _get_interpolated_data(lons, lats).astype(np.float64)
+
+    # print(time.time() - t)
 
     return (
         lons,
