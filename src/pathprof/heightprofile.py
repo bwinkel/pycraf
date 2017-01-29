@@ -94,6 +94,8 @@ def _get_tile_interpolator(ilon, ilat):
     # angles in deg
 
     lons, lats, tile = _get_tile_data(ilon, ilat)
+    # have to treat NaNs in some way; set to zero for now
+    tile = np.nan_to_num(tile)
 
     _tile_interpolator = RegularGridInterpolator(
         (lons[:, 0], lats[0]), tile.T
