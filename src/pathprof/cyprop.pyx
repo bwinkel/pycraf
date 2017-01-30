@@ -300,7 +300,31 @@ cdef class PathProp(object):
         self._pp.d_cr = d_cr
         self._pp.polarization = polarization
 
-        self._process_path()
+        (
+            lons,
+            lats,
+            distances,
+            heights,
+            bearing,
+            back_bearing,
+            distance,
+            ) = heightprofile._srtm_height_profile(
+                lon_t, lat_t,
+                lon_r, lat_r,
+                hprof_step
+                )
+        zheights = np.zeros_like(heights)
+        _process_path(
+            &self._pp,
+            lons,
+            lats,
+            distances,
+            heights,
+            zheights,
+            bearing,
+            back_bearing,
+            distance,
+            )
 
     def __repr__(self):
 
@@ -323,203 +347,6 @@ cdef class PathProp(object):
                 )
             for p in params
             )
-
-    def _process_path(self):
-
-        cdef:
-
-            int mid_idx, diff_edge_idx
-            int hsize
-            double[::1] lons_view
-            double[::1] lats_view
-            double[::1] distances_view
-            double[::1] heights_view
-            double[::1] zheights_view
-
-        # import time
-        # _time = time.time()
-
-        # TODO: cythonize _srtm_height_profile
-        (
-            lons,
-            lats,
-            distances,
-            heights,
-            bearing,
-            back_bearing,
-            distance,
-            ) = heightprofile._srtm_height_profile(
-                self._pp.lon_t, self._pp.lat_t,
-                self._pp.lon_r, self._pp.lat_r,
-                self._pp.hprof_step
-                )
-
-        # print('_srtm_height_profile', time.time() - _time)
-        # _time = time.time()
-
-        lons_view = lons
-        lats_view = lats
-        distances_view = distances
-        heights_view = heights
-
-        zheights_view = np.zeros_like(heights)
-
-        self._pp.distance = distance
-        self._pp.bearing = bearing
-        self._pp.back_bearing = back_bearing
-
-        if self._pp.d_tm < 0:
-            self._pp.d_tm = self._pp.distance
-        if self._pp.d_lm < 0:
-            self._pp.d_lm = self._pp.distance
-
-        hsize = lons_view.size
-        mid_idx = hsize // 2
-
-        self._pp.lon_mid = lons_view[mid_idx]
-        self._pp.lat_mid = lats_view[mid_idx]
-
-        # TODO: cythonize _radiomet_data_for_pathcenter
-        delta_N, beta0, N0 = helper._radiomet_data_for_pathcenter(
-            self._pp.lon_mid, self._pp.lat_mid, self._pp.d_tm, self._pp.d_lm
-            )
-
-        # print('_radiomet_data_for_pathcenter', time.time() - _time)
-        # _time = time.time()
-
-        self._pp.delta_N = delta_N
-        self._pp.beta0 = beta0
-        self._pp.N0 = N0
-
-        self._pp.h0 = heights_view[0]
-        self._pp.hn = heights_view[hsize - 1]
-
-        self._pp.h_ts = self._pp.h0 + self._pp.h_tg
-        self._pp.h_rs = self._pp.hn + self._pp.h_rg
-
-        # smooth-earth height profile
-        self._pp.h_st, self._pp.h_sr = _smooth_earth_heights(
-            self._pp.distance, distances_view, heights_view,
-            )
-
-        # print('_smooth_earth_heights', time.time() - _time)
-        # _time = time.time()
-
-        # effective antenna heights for diffraction model
-        self._pp.h_std, self._pp.h_srd = _effective_antenna_heights(
-            self._pp.distance,
-            distances_view, heights_view,
-            self._pp.h_ts, self._pp.h_rs,
-            self._pp.h_st, self._pp.h_sr
-            )
-
-        # print('_effective_antenna_heights', time.time() - _time)
-        # _time = time.time()
-
-        # parameters for ducting/layer-reflection model
-        # (use these only for ducting or also for smooth-earth?)
-        self._pp.h_st = min(self._pp.h_st, self._pp.h0)
-        self._pp.h_sr = min(self._pp.h_sr, self._pp.hn)
-
-        self._pp.duct_slope = (self._pp.h_sr - self._pp.h_st) / self._pp.distance
-
-        self._pp.h_te = self._pp.h_tg + self._pp.h0 - self._pp.h_st
-        self._pp.h_re = self._pp.h_rg + self._pp.hn - self._pp.h_sr
-
-        # TODO: cythonize _median_effective_earth_radius
-        self._pp.a_e_50 = helper._median_effective_earth_radius(
-            self._pp.lon_mid, self._pp.lat_mid
-            )
-        self._pp.a_e_b0 = helper.A_BETA_VALUE
-
-        if self._pp.version == 16:
-            (
-                self._pp.path_type_50, self._pp.nu_bull_50,
-                self._pp.nu_bull_idx_50,
-                self._pp.S_tim_50, self._pp.S_rim_50, self._pp.S_tr_50
-                ) = _diffraction_helper_v16(
-                self._pp.a_e_50, self._pp.distance,
-                distances_view, heights_view,
-                self._pp.h_ts, self._pp.h_rs,
-                self._pp.wavelen,
-                )
-
-            (
-                self._pp.path_type_b0, self._pp.nu_bull_b0,
-                self._pp.nu_bull_idx_b0,
-                self._pp.S_tim_b0, self._pp.S_rim_b0, self._pp.S_tr_b0
-                ) = _diffraction_helper_v16(
-                self._pp.a_e_b0, self._pp.distance,
-                distances_view, heights_view,
-                self._pp.h_ts, self._pp.h_rs,
-                self._pp.wavelen,
-                )
-
-            # similarly, we have to repeat the game with heights set to zero
-
-            (
-                self._pp.path_type_zh_50, self._pp.nu_bull_zh_50,
-                self._pp.nu_bull_idx_zh_50,
-                self._pp.S_tim_zh_50, self._pp.S_rim_zh_50, self._pp.S_tr_zh_50
-                ) = _diffraction_helper_v16(
-                self._pp.a_e_50, self._pp.distance,
-                distances_view, zheights_view,
-                self._pp.h_ts - self._pp.h_std, self._pp.h_rs - self._pp.h_srd,
-                self._pp.wavelen,
-                )
-
-            (
-                self._pp.path_type_zh_b0, self._pp.nu_bull_zh_b0,
-                self._pp.nu_bull_idx_zh_b0,
-                self._pp.S_tim_zh_b0, self._pp.S_rim_zh_b0, self._pp.S_tr_zh_b0
-                ) = _diffraction_helper_v16(
-                self._pp.a_e_b0, self._pp.distance,
-                distances_view, zheights_view,
-                self._pp.h_ts - self._pp.h_std, self._pp.h_rs - self._pp.h_srd,
-                self._pp.wavelen,
-                )
-
-        if self._pp.version == 14:
-
-            (
-                self._pp.zeta_m, self._pp.i_m50, self._pp.nu_m50,
-                self._pp.nu_mbeta,
-                self._pp.zeta_t, self._pp.i_t50, self._pp.nu_t50,
-                self._pp.nu_tbeta,
-                self._pp.zeta_r, self._pp.i_r50, self._pp.nu_r50,
-                self._pp.nu_rbeta,
-                ) = _diffraction_helper_v14(
-                self._pp.a_e_50, self._pp.a_e_b0, self._pp.distance,
-                distances_view, heights_view,
-                self._pp.h_ts, self._pp.h_rs,
-                self._pp.wavelen,
-                )
-
-        # print('_diffraction_helpers', time.time() - _time)
-        # _time = time.time()
-
-        # finally, determine remaining path geometry properties
-        # note, this can depend on the bullington point (index) derived in
-        # _diffraction_helper for 50%
-
-        if self._pp.version == 14:
-            diff_edge_idx = self._pp.i_m50
-        elif self._pp.version == 16:
-            diff_edge_idx = self._pp.nu_bull_idx_50
-
-        (
-            self._pp.path_type, self._pp.theta_t, self._pp.theta_r,
-            self._pp.theta,
-            self._pp.d_lt, self._pp.d_lr, self._pp.h_m
-            ) = _path_geometry_helper(
-            self._pp.a_e_50, self._pp.distance,
-            distances_view, heights_view,
-            self._pp.h_ts, self._pp.h_rs, self._pp.h_st,
-            diff_edge_idx, self._pp.duct_slope,
-            )
-
-        # print('_path_geometry_helper', time.time() - _time)
-        # _time = time.time()
 
     # How to do this programmatically?
     @property
@@ -869,6 +696,189 @@ cdef class PathProp(object):
 #     setattr(PathProp, p[0], property(lambda self: getattr(self._pp, p[0])))
 
 # PathProp.freq2 = property(lambda self: self._pp.freq)
+
+
+cdef void _process_path(
+        _PathProp *pp,
+        double[::1] lons_view,
+        double[::1] lats_view,
+        double[::1] distances_view,
+        double[::1] heights_view,
+        double[::1] zheights_view,
+        double bearing,
+        double back_bearing,
+        double distance,
+        ):
+
+    cdef:
+
+        int mid_idx, diff_edge_idx
+        int hsize
+
+    # import time
+    # _time = time.time()
+
+    # print('_srtm_height_profile', time.time() - _time)
+    # _time = time.time()
+
+    pp.distance = distance
+    pp.bearing = bearing
+    pp.back_bearing = back_bearing
+
+    if pp.d_tm < 0:
+        pp.d_tm = pp.distance
+    if pp.d_lm < 0:
+        pp.d_lm = pp.distance
+
+    hsize = lons_view.size
+    mid_idx = hsize // 2
+
+    pp.lon_mid = lons_view[mid_idx]
+    pp.lat_mid = lats_view[mid_idx]
+
+    # TODO: cythonize _radiomet_data_for_pathcenter
+    delta_N, beta0, N0 = helper._radiomet_data_for_pathcenter(
+        pp.lon_mid, pp.lat_mid, pp.d_tm, pp.d_lm
+        )
+
+    # print('_radiomet_data_for_pathcenter', time.time() - _time)
+    # _time = time.time()
+
+    pp.delta_N = delta_N
+    pp.beta0 = beta0
+    pp.N0 = N0
+
+    pp.h0 = heights_view[0]
+    pp.hn = heights_view[hsize - 1]
+
+    pp.h_ts = pp.h0 + pp.h_tg
+    pp.h_rs = pp.hn + pp.h_rg
+
+    # smooth-earth height profile
+    pp.h_st, pp.h_sr = _smooth_earth_heights(
+        pp.distance, distances_view, heights_view,
+        )
+
+    # print('_smooth_earth_heights', time.time() - _time)
+    # _time = time.time()
+
+    # effective antenna heights for diffraction model
+    pp.h_std, pp.h_srd = _effective_antenna_heights(
+        pp.distance,
+        distances_view, heights_view,
+        pp.h_ts, pp.h_rs,
+        pp.h_st, pp.h_sr
+        )
+
+    # print('_effective_antenna_heights', time.time() - _time)
+    # _time = time.time()
+
+    # parameters for ducting/layer-reflection model
+    # (use these only for ducting or also for smooth-earth?)
+    pp.h_st = min(pp.h_st, pp.h0)
+    pp.h_sr = min(pp.h_sr, pp.hn)
+
+    pp.duct_slope = (pp.h_sr - pp.h_st) / pp.distance
+
+    pp.h_te = pp.h_tg + pp.h0 - pp.h_st
+    pp.h_re = pp.h_rg + pp.hn - pp.h_sr
+
+    # TODO: cythonize _median_effective_earth_radius
+    pp.a_e_50 = helper._median_effective_earth_radius(
+        pp.lon_mid, pp.lat_mid
+        )
+    pp.a_e_b0 = helper.A_BETA_VALUE
+
+    if pp.version == 16:
+        (
+            pp.path_type_50, pp.nu_bull_50,
+            pp.nu_bull_idx_50,
+            pp.S_tim_50, pp.S_rim_50, pp.S_tr_50
+            ) = _diffraction_helper_v16(
+            pp.a_e_50, pp.distance,
+            distances_view, heights_view,
+            pp.h_ts, pp.h_rs,
+            pp.wavelen,
+            )
+
+        (
+            pp.path_type_b0, pp.nu_bull_b0,
+            pp.nu_bull_idx_b0,
+            pp.S_tim_b0, pp.S_rim_b0, pp.S_tr_b0
+            ) = _diffraction_helper_v16(
+            pp.a_e_b0, pp.distance,
+            distances_view, heights_view,
+            pp.h_ts, pp.h_rs,
+            pp.wavelen,
+            )
+
+        # similarly, we have to repeat the game with heights set to zero
+
+        (
+            pp.path_type_zh_50, pp.nu_bull_zh_50,
+            pp.nu_bull_idx_zh_50,
+            pp.S_tim_zh_50, pp.S_rim_zh_50, pp.S_tr_zh_50
+            ) = _diffraction_helper_v16(
+            pp.a_e_50, pp.distance,
+            distances_view, zheights_view,
+            pp.h_ts - pp.h_std, pp.h_rs - pp.h_srd,
+            pp.wavelen,
+            )
+
+        (
+            pp.path_type_zh_b0, pp.nu_bull_zh_b0,
+            pp.nu_bull_idx_zh_b0,
+            pp.S_tim_zh_b0, pp.S_rim_zh_b0, pp.S_tr_zh_b0
+            ) = _diffraction_helper_v16(
+            pp.a_e_b0, pp.distance,
+            distances_view, zheights_view,
+            pp.h_ts - pp.h_std, pp.h_rs - pp.h_srd,
+            pp.wavelen,
+            )
+
+    if pp.version == 14:
+
+        (
+            pp.zeta_m, pp.i_m50, pp.nu_m50,
+            pp.nu_mbeta,
+            pp.zeta_t, pp.i_t50, pp.nu_t50,
+            pp.nu_tbeta,
+            pp.zeta_r, pp.i_r50, pp.nu_r50,
+            pp.nu_rbeta,
+            ) = _diffraction_helper_v14(
+            pp.a_e_50, pp.a_e_b0, pp.distance,
+            distances_view, heights_view,
+            pp.h_ts, pp.h_rs,
+            pp.wavelen,
+            )
+
+    # print('_diffraction_helpers', time.time() - _time)
+    # _time = time.time()
+
+    # finally, determine remaining path geometry properties
+    # note, this can depend on the bullington point (index) derived in
+    # _diffraction_helper for 50%
+
+    if pp.version == 14:
+        diff_edge_idx = pp.i_m50
+    elif pp.version == 16:
+        diff_edge_idx = pp.nu_bull_idx_50
+
+    (
+        pp.path_type, pp.theta_t, pp.theta_r,
+        pp.theta,
+        pp.d_lt, pp.d_lr, pp.h_m
+        ) = _path_geometry_helper(
+        pp.a_e_50, pp.distance,
+        distances_view, heights_view,
+        pp.h_ts, pp.h_rs, pp.h_st,
+        diff_edge_idx, pp.duct_slope,
+        )
+
+    # print('_path_geometry_helper', time.time() - _time)
+    # _time = time.time()
+
+    return
 
 
 cdef (double, double) _smooth_earth_heights(
