@@ -28,6 +28,7 @@ __all__ = [
     'free_space_loss_bfsg_cython', 'tropospheric_scatter_loss_bs_cython',
     'ducting_loss_ba_cython', 'diffraction_loss_complete_cython',
     'path_attenuation_complete_cython',
+    'atten_map_fast',
     ]
 
 
@@ -314,16 +315,38 @@ cdef class PathProp(object):
                 hprof_step
                 )
         zheights = np.zeros_like(heights)
+
+        self._pp.distance = distance
+        self._pp.bearing = bearing
+        self._pp.back_bearing = back_bearing
+
+        if self._pp.d_tm < 0:
+            self._pp.d_tm = self._pp.distance
+        if self._pp.d_lm < 0:
+            self._pp.d_lm = self._pp.distance
+
+        hsize = lons.size
+        mid_idx = hsize // 2
+
+        self._pp.lon_mid = lons[mid_idx]
+        self._pp.lat_mid = lats[mid_idx]
+
+        # TODO: cythonize _radiomet_data_for_pathcenter
+        delta_N, beta0, N0 = helper._radiomet_data_for_pathcenter(
+            self._pp.lon_mid, self._pp.lat_mid, self._pp.d_tm, self._pp.d_lm
+            )
+
+        self._pp.delta_N = delta_N
+        self._pp.beta0 = beta0
+        self._pp.N0 = N0
+
         _process_path(
             &self._pp,
-            lons,
-            lats,
+            # lons,
+            # lats,
             distances,
             heights,
             zheights,
-            bearing,
-            back_bearing,
-            distance,
             )
 
     def __repr__(self):
@@ -700,53 +723,25 @@ cdef class PathProp(object):
 
 cdef void _process_path(
         _PathProp *pp,
-        double[::1] lons_view,
-        double[::1] lats_view,
+        # double[::1] lons_view,
+        # double[::1] lats_view,
         double[::1] distances_view,
         double[::1] heights_view,
         double[::1] zheights_view,
-        double bearing,
-        double back_bearing,
-        double distance,
-        ):
+        # double bearing,
+        # double back_bearing,
+        # double distance,
+        ) nogil:
+
+    # TODO: write down, which entries "pp" MUST have already
 
     cdef:
 
-        int mid_idx, diff_edge_idx
-        int hsize
+        int diff_edge_idx
+        int hsize = distances_view.shape[0]
 
     # import time
     # _time = time.time()
-
-    # print('_srtm_height_profile', time.time() - _time)
-    # _time = time.time()
-
-    pp.distance = distance
-    pp.bearing = bearing
-    pp.back_bearing = back_bearing
-
-    if pp.d_tm < 0:
-        pp.d_tm = pp.distance
-    if pp.d_lm < 0:
-        pp.d_lm = pp.distance
-
-    hsize = lons_view.size
-    mid_idx = hsize // 2
-
-    pp.lon_mid = lons_view[mid_idx]
-    pp.lat_mid = lats_view[mid_idx]
-
-    # TODO: cythonize _radiomet_data_for_pathcenter
-    delta_N, beta0, N0 = helper._radiomet_data_for_pathcenter(
-        pp.lon_mid, pp.lat_mid, pp.d_tm, pp.d_lm
-        )
-
-    # print('_radiomet_data_for_pathcenter', time.time() - _time)
-    # _time = time.time()
-
-    pp.delta_N = delta_N
-    pp.beta0 = beta0
-    pp.N0 = N0
 
     pp.h0 = heights_view[0]
     pp.hn = heights_view[hsize - 1]
@@ -783,11 +778,8 @@ cdef void _process_path(
     pp.h_te = pp.h_tg + pp.h0 - pp.h_st
     pp.h_re = pp.h_rg + pp.hn - pp.h_sr
 
-    # TODO: cythonize _median_effective_earth_radius
-    pp.a_e_50 = helper._median_effective_earth_radius(
-        pp.lon_mid, pp.lat_mid
-        )
-    pp.a_e_b0 = helper.A_BETA_VALUE
+    pp.a_e_50 = 6371. * 157. / (157. - pp.delta_N)
+    pp.a_e_b0 = 6371. * 3.
 
     if pp.version == 16:
         (
@@ -2011,6 +2003,253 @@ def path_attenuation_complete_cython(
     return _path_attenuation_complete_cython(pathprop._pp, G_t, G_r)
 
 
+
+# ############################################################################
+#
+# Attenuation map making (fast)
+#
+# ############################################################################
+#
+# Idea: only calculate Geodesics/height profiles to map edges and apply hashes
+#
+# ############################################################################
+
+
+def atten_map_fast(
+        double freq,
+        double temperature,
+        double pressure,
+        double lon_t, double lat_t,
+        double h_tg, double h_rg,
+        double hprof_step,
+        double time_percent,
+        double map_size_lon, double map_size_lat,
+        double map_resolution=3. / 3600.,
+        double omega=0,
+        double d_tm=-1, double d_lm=-1,
+        double d_ct=50000, double d_cr=50000,
+        int polarization=0,
+        int version=16,
+        int do_cos_delta=1
+        ):
+
+    assert time_percent <= 50.
+    assert version == 14 or version == 16
+
+    cdef:
+        _PathProp pp
+        double G_t = 0., G_r = 0.
+        int xi, yi, xlen, ylen, i
+        int eidx, didx
+
+        # (
+        #     np.ndarray, np.ndarray, np.ndarray, np.ndarray,
+        #     double, double, double
+        #     ) res
+
+        double L_bfsg, L_bd, L_bs, L_ba, L_b
+
+    pp.version = version
+    pp.freq = freq
+    pp.wavelen = 0.299792458 / freq
+    pp.temperature = temperature
+    pp.pressure = pressure
+    pp.lon_t = lon_t
+    pp.lat_t = lat_t
+    pp.h_tg = h_tg
+    pp.h_rg = h_rg
+    pp.hprof_step = hprof_step
+    pp.time_percent = time_percent
+    # TODO: add functionality to produce the following
+    # five parameters programmatically (using some kind of Geo-Data)
+    pp.omega = omega
+    pp.d_tm = d_tm
+    pp.d_lm = d_lm
+    pp.d_ct = d_ct
+    pp.d_cr = d_cr
+    pp.polarization = polarization
+
+    cosdelta = 1. / np.cos(np.radians(lat_t)) if do_cos_delta else 1.
+
+    # construction map arrays
+    xcoords = np.arange(
+        lon_t - cosdelta * map_size_lon / 2,
+        lon_t + cosdelta * map_size_lon / 2,
+        cosdelta * map_resolution,
+        )
+    ycoords = np.arange(
+        lat_t - map_size_lat / 2, lat_t + map_size_lat / 2, map_resolution,
+        )
+
+    print(xcoords[0], xcoords[len(xcoords) - 1], ycoords[0], ycoords[len(ycoords) - 1])
+
+    # atten_map stores path attenuation
+    atten_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
+
+    # path_idx_map stores the index of the edge-path that is closest
+    # to any given map pixel
+    path_idx_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.int32)
+
+    # to define and find closest paths, we store the true angular distance
+    # in pix_dist_map; Note, since distances are small, it is ok to do
+    # this on the sphere
+    pix_dist_map = np.ones((len(ycoords), len(xcoords)), dtype=np.float64)
+    pix_dist_map *= 1.e30
+
+    # dist_end_idx_map stores the (distance) index in the height profile
+    # of the closest edge path, such that one can use a slice (0, end_idx)
+    # to get a height profile approximately valid for any given pixel
+    dist_end_idx_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.int32)
+
+    # store lon_mid, lat_mid,
+    lon_mid_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
+    lat_mid_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
+    dist_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
+
+    # obtain all edge's height profiles
+    edge_coords = list(zip(
+        np.hstack([
+            xcoords, xcoords[len(xcoords) - 1] + 0. * xcoords,
+            xcoords[::-1], xcoords[0] + 0. * xcoords,
+            ]),
+        np.hstack([
+            ycoords[0] + 0. * ycoords, ycoords,
+            ycoords[len(ycoords) - 1] + 0. * ycoords, ycoords[::-1],
+            ]),
+        ))
+    refx, refy = edge_coords[0]
+    cdef dict dist_dict = {}, height_dict = {}
+
+    for eidx, (x, y) in enumerate(edge_coords):
+
+        res = heightprofile._srtm_height_profile(
+            lon_t, lat_t,
+            x, y,
+            hprof_step
+            )
+        lons, lats, dists, heights, _, _, _ = res
+        dist_dict[eidx] = dists
+        height_dict[eidx] = heights
+
+        for didx, (lon_r, lat_r) in enumerate(zip(lons, lats)):
+
+            # need to find closest pixel index in map
+            xidx = int((lon_r - refx) / cosdelta / map_resolution + 0.5)
+            yidx = int((lat_r - refy) / map_resolution + 0.5)
+            pdist = true_angular_distance(
+                xcoords[xidx], ycoords[yidx], lon_r, lat_r
+                )
+
+            if pdist < pix_dist_map[yidx, xidx]:
+                pix_dist_map[yidx, xidx] = pdist
+                path_idx_map[yidx, xidx] = eidx
+                dist_end_idx_map[yidx, xidx] = didx
+                mid_idx = didx // 2
+                lon_mid_map[yidx, xidx] = lons[mid_idx]
+                lat_mid_map[yidx, xidx] = lats[mid_idx]
+                dist_map[yidx, xidx] = dists[didx]
+
+    # store delta_N, beta0, N0
+    delta_N_map, beta0_map, N0_map = helper._radiomet_data_for_pathcenter(
+        lon_mid_map, lat_mid_map, dist_map, dist_map
+        )
+
+    cdef double[::1] xcoords_v = xcoords
+    cdef double[::1] ycoords_v = ycoords
+    cdef int[:, :] path_idx_map_v = path_idx_map
+    cdef int[:, :] dist_end_idx_map_v = dist_end_idx_map
+    cdef double[:, :] lon_mid_map_v = lon_mid_map
+    cdef double[:, :] lat_mid_map_v = lat_mid_map
+    cdef double[:, :] dist_map_v = dist_map
+    cdef double[:, :] delta_N_map_v = delta_N_map
+    cdef double[:, :] beta0_map_v = beta0_map
+    cdef double[:, :] N0_map_v = N0_map
+    cdef double[:, :] atten_map_v = atten_map
+
+    cdef double[::1] dists_v, heights_v, zheights_v
+
+    xlen = len(xcoords)
+    ylen = len(ycoords)
+
+    # dict access not possible within gil
+    # will store height profile dict in a 2D array, even though this
+    # needs somewhat more memory
+
+    # first, find max length that is needed:
+    proflengths = np.array([
+        len(dist_dict[k])
+        for k in sorted(dist_dict.keys())
+        ])
+    maxlen_idx = np.argmax(proflengths)
+    maxlen = proflengths[maxlen_idx]
+    print('maxlen', maxlen)
+
+    # we can re-use the distances vector, because of equal spacing
+    cdef double[::1] dist_prof_v = dist_dict[maxlen_idx]
+    cdef double[:, ::1] height_profs_v = np.zeros(
+        (len(height_dict), maxlen), dtype=np.float64
+        )
+    cdef double[::1] zheight_prof_v = np.zeros_like(dist_dict[maxlen_idx])
+
+    for eidx, prof in height_dict.items():
+        for i in range(len(prof)):
+            height_profs_v[eidx, i] = prof[i]
+
+    with nogil:
+    # if True:
+
+        for yi in range(ylen):
+
+            with gil:
+                print('yi', yi)
+
+            for xi in range(xlen):
+
+                # if yi == 60:
+                #     print('xi', xi)
+
+                eidx = path_idx_map_v[yi, xi]
+                didx = dist_end_idx_map_v[yi, xi]
+
+                if didx < 4:
+                    continue
+
+                pp.lon_r = xcoords_v[xi]
+                pp.lat_r = ycoords_v[yi]
+
+                dists_v = dist_prof_v[0:didx + 1]
+                heights_v = height_profs_v[eidx, 0:didx + 1]
+                zheights_v = zheight_prof_v[0:didx + 1]
+
+                pp.distance = dist_map_v[yi, xi]
+                pp.bearing = NAN
+                pp.back_bearing = NAN
+
+                pp.d_tm = pp.distance
+                pp.d_lm = pp.distance
+
+                pp.lon_mid = lon_mid_map_v[yi, xi]
+                pp.lat_mid = lat_mid_map_v[yi, xi]
+
+                pp.delta_N = delta_N_map_v[yi, xi]
+                pp.beta0 = beta0_map_v[yi, xi]
+                pp.N0 = N0_map_v[yi, xi]
+
+                _process_path(
+                    &pp,
+                    dists_v,
+                    heights_v,
+                    zheights_v,
+                    )
+
+                (
+                    L_bfsg, L_bd, L_bs, L_ba, L_b
+                    ) = _path_attenuation_complete_cython(pp, G_t, G_r)
+
+                atten_map_v[yi, xi] = L_b
+
+    return atten_map
+
 # ############################################################################
 # Atmospheric attenuation (Annex 2)
 # ############################################################################
@@ -2205,3 +2444,31 @@ def specific_attenuation_annex2(
     return _specific_attenuation_annex2(
         freq, pressure, rho_water, temperature
         )
+
+
+cdef double true_angular_distance(
+        double l1, double b1, double l2, double b2
+        ) nogil:
+    '''
+    Calculate true angular distance between two points on the sphere.
+
+    Parameters
+    ----------
+    l1, b1; l2, b2 : double
+        Longitude and latitude (in deg) of two points on the sphere.
+
+    Notes
+    -----
+    1. Based on Haversine formula. Good accuracy for distances < 2*pi
+     See http://en.wikipedia.org/wiki/Haversine_formula.
+
+    2. Cython-only to allow GIL-releasing.
+    '''
+
+    return 360. / M_PI * asin(sqrt(
+        sin((b1 - b2) * M_PI / 360.) ** 2 +
+        cos(b1 * M_PI / 180.) * cos(b2 * M_PI / 180.) *
+        sin((l1 - l2) * M_PI / 360.) ** 2
+        ))
+
+
