@@ -28,7 +28,7 @@ __all__ = [
     'free_space_loss_bfsg_cython', 'tropospheric_scatter_loss_bs_cython',
     'ducting_loss_ba_cython', 'diffraction_loss_complete_cython',
     'path_attenuation_complete_cython',
-    'atten_map_fast',
+    'atten_map_fast', 'beta_from_DN_N0',
     ]
 
 
@@ -274,6 +274,7 @@ cdef class PathProp(object):
             double d_ct=50000, double d_cr=50000,
             int polarization=0,
             int version=16,
+            tuple DN_N0=None,
             ):
 
         assert time_percent <= 50.
@@ -332,13 +333,23 @@ cdef class PathProp(object):
         self._pp.lat_mid = lats[mid_idx]
 
         # TODO: cythonize _radiomet_data_for_pathcenter
-        delta_N, beta0, N0 = helper._radiomet_data_for_pathcenter(
-            self._pp.lon_mid, self._pp.lat_mid, self._pp.d_tm, self._pp.d_lm
-            )
+        if DN_N0 is None:
+            delta_N, N0 = helper._N_from_map(
+                self._pp.lon_mid, self._pp.lat_mid
+                )
+        else:
+            delta_N, N0 = DN_N0
 
         self._pp.delta_N = delta_N
-        self._pp.beta0 = beta0
         self._pp.N0 = N0
+
+        beta0 = _beta_from_DN_N0(
+            self._pp.lat_mid,
+            self._pp.delta_N, self._pp.N0,
+            self._pp.d_tm, self._pp.d_lm
+            )
+
+        self._pp.beta0 = beta0
 
         _process_path(
             &self._pp,
@@ -719,6 +730,71 @@ cdef class PathProp(object):
 #     setattr(PathProp, p[0], property(lambda self: getattr(self._pp, p[0])))
 
 # PathProp.freq2 = property(lambda self: self._pp.freq)
+
+cdef double _beta_from_DN_N0(
+        double lat_mid, double DN, double N0, double d_tm, double d_lm
+        ) nogil:
+
+    cdef:
+        double tau, a, b, mu1, log_mu1, mu4, beta0
+
+    tau = 1. - exp(-4.12e-4 * cpower(d_lm, 2.41))
+    lat_mid = fabs(lat_mid)
+
+    a = cpower(10, -d_tm / (16. - 6.6 * tau))
+    b = cpower(10, -5 * (0.496 + 0.354 * tau))
+    mu1 = cpower(a + b, 0.2)
+    if mu1 > 1.:
+        mu1 = 1.
+    log_mu1 = log10(mu1)
+
+    if lat_mid <= 70.:
+        mu4 = cpower(10, (-0.935 + 0.0176 * lat_mid) * log_mu1)
+    else:
+        mu4 = cpower(10, 0.3 * log_mu1)
+
+    if lat_mid <= 70.:
+        beta_0 = cpower(10, -0.015 * lat_mid + 1.67) * mu1 * mu4
+    else:
+        beta_0 = 4.17 * mu1 * mu4
+
+    return beta_0
+
+
+def beta_from_DN_N0(
+        double lat_mid, double DN, double N0, double d_tm, double d_lm
+        ):
+    '''
+    Calculate radiometeorological data, beta0.
+
+    Parameters
+    ----------
+    lat - path center coordinates [deg]
+    delta_N - average radio-refractive index lapse-rate through the
+            lowest 1 km of the atmosphere [N-units/km]
+    N_0 - sea-level surface refractivity [N-units]
+    d_tm - longest continuous land (inland + coastal) section of the
+        great-circle path [km]
+    d_lm - longest continuous inland section of the great-circle path [km]
+
+    Returns
+    -------
+    beta_0 - the time percentage for which refractive index lapse-rates
+        exceeding 100 N-units/km can be expected in the first 100 m
+        of the lower atmosphere [%]
+
+    Notes
+    -----
+    - ΔN and N_0 can be derived from digitized maps (shipped with P.452).
+    - Radio-climaticzones can be queried from ITU Digitized World Map (IDWM).
+      For many applications, it is probably the case, that only inland
+      zones are present along the path of length d.
+      In this case, set d_tm = d_lm = d.
+    '''
+
+    return _beta_from_DN_N0(
+        lat_mid, DN, N0, d_tm, d_lm
+        )
 
 
 cdef void _process_path(
