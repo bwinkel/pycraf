@@ -274,7 +274,8 @@ cdef class PathProp(object):
             double d_ct=50000, double d_cr=50000,
             int polarization=0,
             int version=16,
-            tuple DN_N0=None,
+            tuple DN_N0=None,  # override if you don't want builtin method
+            tuple hprofdata=None,  # override if you don't want builtin method
             ):
 
         assert time_percent <= 50.
@@ -302,19 +303,28 @@ cdef class PathProp(object):
         self._pp.d_cr = d_cr
         self._pp.polarization = polarization
 
-        (
-            lons,
-            lats,
-            distances,
-            heights,
-            bearing,
-            back_bearing,
-            distance,
-            ) = heightprofile._srtm_height_profile(
-                lon_t, lat_t,
-                lon_r, lat_r,
-                hprof_step
-                )
+        if hprofdata is None:
+            (
+                lons,
+                lats,
+                distances,
+                heights,
+                bearing,
+                back_bearing,
+                distance,
+                ) = heightprofile._srtm_height_profile(
+                    lon_t, lat_t,
+                    lon_r, lat_r,
+                    hprof_step
+                    )
+        else:
+            distances, heights = hprofdata
+            distances = distances.astype(np.float64, order='C', copy=False)
+            heights = heights.astype(np.float64, order='C', copy=False)
+            hsize = distances.size
+            distance = distances[hsize - 1]
+            bearing, back_bearing = NAN, NAN
+
         zheights = np.zeros_like(heights)
 
         self._pp.distance = distance
@@ -326,11 +336,15 @@ cdef class PathProp(object):
         if self._pp.d_lm < 0:
             self._pp.d_lm = self._pp.distance
 
-        hsize = lons.size
+        hsize = distances.size
         mid_idx = hsize // 2
 
-        self._pp.lon_mid = lons[mid_idx]
-        self._pp.lat_mid = lats[mid_idx]
+        if hprofdata is None:
+            self._pp.lon_mid = lons[mid_idx]
+            self._pp.lat_mid = lats[mid_idx]
+        else:
+            self._pp.lon_mid = 0.5 * (lon_t + lon_r)
+            self._pp.lat_mid = 0.5 * (lat_t + lat_r)
 
         # TODO: cythonize _radiomet_data_for_pathcenter
         if DN_N0 is None:
