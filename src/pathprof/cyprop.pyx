@@ -2164,14 +2164,31 @@ def atten_map_fast(
     # construction map arrays
     xcoords = np.arange(
         lon_t - cosdelta * map_size_lon / 2,
-        lon_t + cosdelta * map_size_lon / 2,
+        lon_t + cosdelta * map_size_lon / 2 + 1.e-6,
         cosdelta * map_resolution,
         )
     ycoords = np.arange(
-        lat_t - map_size_lat / 2, lat_t + map_size_lat / 2, map_resolution,
+        lat_t - map_size_lat / 2,
+        lat_t + map_size_lat / 2 + 1.e-6,
+        map_resolution,
+        )
+    print(
+        xcoords[0], xcoords[len(xcoords) - 1],
+        ycoords[0], ycoords[len(ycoords) - 1]
         )
 
-    print(xcoords[0], xcoords[len(xcoords) - 1], ycoords[0], ycoords[len(ycoords) - 1])
+    # use a 3x higher resolution version for edge coords for better accuracy
+    xcoords_hi = np.arange(
+        lon_t - cosdelta * map_size_lon / 2,
+        lon_t + cosdelta * map_size_lon / 2 + 1.e-6,
+        cosdelta * map_resolution / 3,
+        )
+    ycoords_hi = np.arange(
+        lat_t - map_size_lat / 2,
+        lat_t + map_size_lat / 2 + 1.e-6,
+        map_resolution / 3,
+        )
+
 
     # atten_map stores path attenuation
     atten_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
@@ -2182,7 +2199,7 @@ def atten_map_fast(
 
     # to define and find closest paths, we store the true angular distance
     # in pix_dist_map; Note, since distances are small, it is ok to do
-    # this on the sphere
+    # this on the sphere (and not on geoid)
     pix_dist_map = np.ones((len(ycoords), len(xcoords)), dtype=np.float64)
     pix_dist_map *= 1.e30
 
@@ -2199,14 +2216,21 @@ def atten_map_fast(
     # obtain all edge's height profiles
     edge_coords = list(zip(
         np.hstack([
-            xcoords, xcoords[len(xcoords) - 1] + 0. * xcoords,
-            xcoords[::-1], xcoords[0] + 0. * xcoords,
+            xcoords_hi,
+            xcoords_hi[len(xcoords_hi) - 1] + 0. * xcoords_hi,
+            xcoords_hi[::-1],
+            xcoords_hi[0] + 0. * xcoords_hi,
             ]),
         np.hstack([
-            ycoords[0] + 0. * ycoords, ycoords,
-            ycoords[len(ycoords) - 1] + 0. * ycoords, ycoords[::-1],
+            ycoords_hi[0] + 0. * ycoords_hi,
+            ycoords_hi,
+            ycoords_hi[len(ycoords_hi) - 1] + 0. * ycoords_hi,
+            ycoords_hi[::-1],
             ]),
         ))
+
+    print('len(edge_coords)', len(edge_coords))
+
     refx, refy = edge_coords[0]
     cdef dict dist_dict = {}, height_dict = {}
 
@@ -2226,6 +2250,16 @@ def atten_map_fast(
             # need to find closest pixel index in map
             xidx = int((lon_r - refx) / cosdelta / map_resolution + 0.5)
             yidx = int((lat_r - refy) / map_resolution + 0.5)
+
+            if xidx < 0:
+                xidx = 0
+            if xidx >= len(xcoords):
+                xidx = len(xcoords) - 1
+            if yidx < 0:
+                yidx = 0
+            if yidx >= len(ycoords):
+                yidx = len(ycoords) - 1
+
             pdist = true_angular_distance(
                 xcoords[xidx], ycoords[yidx], lon_r, lat_r
                 )
@@ -2261,7 +2295,7 @@ def atten_map_fast(
     xlen = len(xcoords)
     ylen = len(ycoords)
 
-    # dict access not possible within gil
+    # dict access not possible with nogil
     # will store height profile dict in a 2D array, even though this
     # needs somewhat more memory
 
