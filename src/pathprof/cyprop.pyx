@@ -31,7 +31,7 @@ __all__ = [
     'free_space_loss_bfsg_cython', 'tropospheric_scatter_loss_bs_cython',
     'ducting_loss_ba_cython', 'diffraction_loss_complete_cython',
     'path_attenuation_complete_cython',
-    'atten_map_fast', 'beta_from_DN_N0',
+    'atten_map_fast', 'height_profile_data', 'beta_from_DN_N0',
     ]
 
 
@@ -2119,41 +2119,28 @@ def path_attenuation_complete_cython(
 # ############################################################################
 
 
-def atten_map_fast(
-        double freq,
-        double temperature,
-        double pressure,
-        double lon_t, double lat_t,
-        double h_tg, double h_rg,
-        double time_percent,
+def height_profile_data(
+        double lon_t, double lat_t, 
         double map_size_lon, double map_size_lat,
         double map_resolution=3. / 3600.,
-        double omega=0,
-        double d_tm=-1, double d_lm=-1,
-        double d_ct=50000, double d_cr=50000,
-        int polarization=0,
-        int version=16,
-        int do_cos_delta=1
+        int do_cos_delta=1,
         ):
 
-    assert time_percent <= 50.
-    assert version == 14 or version == 16
+    '''
+    Calculate height profiles and auxillary maps needed for atten_map_fast.
+
+    This can be used to cache height-profile data. Since it is independent
+    of frequency, time_percent, Tx and Rx heights, etc., one can re-use
+    it to save computing time when doing batch jobs.
+    '''
 
     cdef:
-        _PathProp *pp
-        double G_t = 0., G_r = 0.
-        int xi, yi, xlen, ylen, i
-        int eidx, didx
-        
+
         # need 3x better resolution than map_resolution
         double hprof_step = map_resolution * 3600. / 1. * 30. / 3.
-
-        # (
-        #     np.ndarray, np.ndarray, np.ndarray, np.ndarray,
-        #     double, double, double
-        #     ) res
-
-        double L_bfsg, L_bd, L_bs, L_ba, L_b
+        
+        int xi, yi, i
+        int eidx, didx
 
     print('using hprof_step = {:.1f} m'.format(hprof_step))
 
@@ -2187,9 +2174,6 @@ def atten_map_fast(
         map_resolution / 3,
         )
 
-
-    # atten_map stores path attenuation
-    atten_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
 
     # path_idx_map stores the index of the edge-path that is closest
     # to any given map pixel
@@ -2276,23 +2260,6 @@ def atten_map_fast(
         lon_mid_map, lat_mid_map, dist_map, dist_map
         )
 
-    cdef double[::1] xcoords_v = xcoords
-    cdef double[::1] ycoords_v = ycoords
-    cdef int[:, :] path_idx_map_v = path_idx_map
-    cdef int[:, :] dist_end_idx_map_v = dist_end_idx_map
-    cdef double[:, :] lon_mid_map_v = lon_mid_map
-    cdef double[:, :] lat_mid_map_v = lat_mid_map
-    cdef double[:, :] dist_map_v = dist_map
-    cdef double[:, :] delta_N_map_v = delta_N_map
-    cdef double[:, :] beta0_map_v = beta0_map
-    cdef double[:, :] N0_map_v = N0_map
-    cdef double[:, :] atten_map_v = atten_map
-
-    cdef double[::1] dists_v, heights_v, zheights_v
-
-    xlen = len(xcoords)
-    ylen = len(ycoords)
-
     # dict access not possible with nogil
     # will store height profile dict in a 2D array, even though this
     # needs somewhat more memory
@@ -2307,15 +2274,119 @@ def atten_map_fast(
     print('maxlen', maxlen)
 
     # we can re-use the distances vector, because of equal spacing
-    cdef double[::1] dist_prof_v = dist_dict[maxlen_idx]
-    cdef double[:, ::1] height_profs_v = np.zeros(
+    dist_prof = dist_dict[maxlen_idx]
+    height_profs = np.zeros(
         (len(height_dict), maxlen), dtype=np.float64
         )
-    cdef double[::1] zheight_prof_v = np.zeros_like(dist_dict[maxlen_idx])
+    zheight_prof = np.zeros_like(dist_dict[maxlen_idx])
+
+    cdef double[:, ::1] height_profs_v = height_profs
 
     for eidx, prof in height_dict.items():
         for i in range(len(prof)):
             height_profs_v[eidx, i] = prof[i]
+
+    hprof_data = {}
+    hprof_data['lon_t'] = lon_t
+    hprof_data['lat_t'] = lat_t
+    hprof_data['xcoords'] = xcoords
+    hprof_data['ycoords'] = ycoords
+    hprof_data['map_size_lon'] = map_size_lon
+    hprof_data['map_size_lat'] = map_size_lat
+    hprof_data['hprof_step'] = hprof_step
+    hprof_data['map_resolution'] = map_resolution
+    hprof_data['do_cos_delta'] = do_cos_delta
+    
+    hprof_data['path_idx_map'] = path_idx_map
+    hprof_data['pix_dist_map'] = pix_dist_map
+    hprof_data['dist_end_idx_map'] = dist_end_idx_map
+    hprof_data['lon_mid_map'] = lon_mid_map
+    hprof_data['lat_mid_map'] = lat_mid_map
+    hprof_data['dist_map'] = dist_map
+    
+    hprof_data['delta_N_map'] = delta_N_map
+    hprof_data['beta0_map'] = beta0_map
+    hprof_data['N0_map'] = N0_map
+
+    hprof_data['dist_prof'] = dist_prof
+    hprof_data['height_profs'] = height_profs
+    hprof_data['zheight_prof'] = zheight_prof
+
+    return hprof_data
+
+
+def atten_map_fast(
+        double freq,
+        double temperature,
+        double pressure,
+        double lon_t, double lat_t,
+        double h_tg, double h_rg,
+        double time_percent,
+        object hprof_data=None,  # dict_like
+        double map_size_lon=1., double map_size_lat=1.,
+        double map_resolution=3. / 3600.,
+        double omega=0,
+        double d_tm=-1, double d_lm=-1,
+        double d_ct=50000, double d_cr=50000,
+        int polarization=0,
+        int version=16,
+        int do_cos_delta=1
+        ):
+
+    assert time_percent <= 50.
+    assert version == 14 or version == 16
+
+    cdef:
+        _PathProp *pp
+        double G_t = 0., G_r = 0.
+        int xi, yi, xlen, ylen
+        int eidx, didx
+        
+        double L_bfsg, L_bd, L_bs, L_ba, L_b
+
+    if hprof_data is None:
+
+        hprof_data = height_profile_data(
+            lon_t, lat_t,
+            map_size_lon, map_size_lat, 
+            map_resolution, do_cos_delta
+            )
+
+    xcoords, ycoords = hprof_data['xcoords'], hprof_data['ycoords']
+
+    # atten_map stores path attenuation
+    atten_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
+
+    cdef:
+        double[:, :] atten_map_v = atten_map
+        
+        # since we allow all dict_like objects for hprof_data,
+        # we have to make sure, that arrays are numpy and contiguous
+        # (have in mind, that one might use hdf5 data sets)
+
+        _contigf = np.ascontiguousarray
+
+        double[::1] xcoords_v = _contigf(hprof_data['xcoords'])
+        double[::1] ycoords_v = _contigf(hprof_data['ycoords'])
+        double hprof_step = np.double(hprof_data['hprof_step'])
+
+        int[:, :] path_idx_map_v = _contigf(hprof_data['path_idx_map'])
+        int[:, :] dist_end_idx_map_v = _contigf(hprof_data['dist_end_idx_map'])
+        double[:, :] lon_mid_map_v = _contigf(hprof_data['lon_mid_map'])
+        double[:, :] lat_mid_map_v = _contigf(hprof_data['lat_mid_map'])
+        double[:, :] dist_map_v = _contigf(hprof_data['dist_map'])
+        double[:, :] delta_N_map_v = _contigf(hprof_data['delta_N_map'])
+        double[:, :] beta0_map_v = _contigf(hprof_data['beta0_map'])
+        double[:, :] N0_map_v = _contigf(hprof_data['N0_map'])
+
+        double[::1] dist_prof_v = _contigf(hprof_data['dist_prof'])
+        double[:, ::1] height_profs_v = _contigf(hprof_data['height_profs'])
+        double[::1] zheight_prof_v = _contigf(hprof_data['zheight_prof'])
+
+        # double[::1] dists_v, heights_v, zheights_v
+
+    xlen = len(xcoords)
+    ylen = len(ycoords)
 
     with nogil, parallel():
 
