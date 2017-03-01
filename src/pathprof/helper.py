@@ -21,6 +21,7 @@ __all__ = [
     'median_effective_earth_radius_factor',
     'effective_earth_radius_factor_beta',
     'median_effective_earth_radius', 'effective_earth_radius_beta',
+    'make_kmz',
     ]
 
 
@@ -32,6 +33,26 @@ K_BETA = K_BETA_VALUE * cnv.dimless  # eff. Earth radius factor for beta_0
 A_BETA_VALUE = 3. * R_E_VALUE
 A_BETA = K_BETA_VALUE * apu.km  # eff. Earth radius for beta_0
 
+KML_TEMPLATE = '''<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+    <Folder>
+    <name>Attenuation map</name>
+    <description>Results from pycraf package</description>
+    <GroundOverlay>
+        <name>Attenuation map on terrain</name>
+        <description>Results from the pycraf package</description>
+        <color>aaffffff</color>
+        <Icon><href>pycraf_atten_map_kmz.png</href></Icon>
+        <LatLonBox>
+            <east>{:.6f}</east>
+            <south>{:.6f}</south>
+            <west>{:.6f}</west>
+            <north>{:.6f}</north>
+        </LatLonBox> 
+    </GroundOverlay>
+    </Folder>
+</kml>
+'''
 
 # maybe, the following should only be computed on demand?
 this_dir, this_filename = os.path.split(__file__)
@@ -295,6 +316,65 @@ def effective_earth_radius_beta(lon, lat):
     '''
 
     return A_BETA_VALUE
+
+
+def make_kmz(
+        kmz_filename, atten_map, bbox, vmin=None, vmax=None, cmap='inferno_r'
+        ):
+    '''
+    Produce kmz file for use in GIS software (e.g., Google Earth).
+
+    Parameters
+    ----------
+    kmz_filename - output file name
+    atten_map - 2D array with path attenuation
+    bbox - tuple (east, south, west, north) edges of map [deg]
+    vmin, vmax - lower and upper colorbar bounds
+        if None, 2.5% and 97.5% percentiles of atten_map are used
+    cmap - matplotlib colormap
+    '''
+
+    # descriptive xml
+    kml = KML_TEMPLATE.format(*bbox)
+
+    # produce jpg, use python pillow for this; 
+    # however, we don't want this as global requirement, 
+    # therefore, just a local import
+    # from PIL import Image
+    # from matplotlib import colors, cm
+
+    if vmin is None:
+        vmin = np.percentile(atten_map.flatten(), 2.5)
+
+    if vmax is None:
+        vmax = np.percentile(atten_map.flatten(), 97.5)
+
+    # norm = colors.Normalize(vmin=vmin, vmax=vmax)
+    # csm = cm.ScalarMappable(norm=norm, cmap=cmap)
+
+    # rgba = csm.to_rgba(atten_map)
+    # jpeg = Image.fromarray(np.int32(255 * rgba + 0.5), mode='RGBA')
+
+    from matplotlib.image import imsave
+    from io import BytesIO
+
+    png_buf = BytesIO()
+
+    imsave(
+        png_buf, 
+        atten_map, 
+        vmin=vmin, vmax=vmax, cmap=cmap, 
+        origin='lower'
+        )
+
+    png_buf.seek(0)
+
+    # write as kmz (zip file)
+    import zipfile
+
+    with zipfile.ZipFile(kmz_filename, 'w') as myzip:
+        myzip.writestr('pycraf_atten_map_kmz.png', png_buf.read())
+        myzip.writestr('doc.kml', kml)
 
 
 if __name__ == '__main__':
