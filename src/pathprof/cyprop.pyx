@@ -10,7 +10,10 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 cimport cython
+from cython.parallel import prange, parallel
+from libc.stdlib cimport abort, malloc, free
 cimport numpy as np
+cimport openmp
 from libc.math cimport (
     exp, log, log10, sqrt, fabs, M_PI, floor, pow as cpower,
     sin, cos, tan, asin, acos, atan, atan2, tanh
@@ -23,7 +26,7 @@ np.import_array()
 
 
 __all__ = [
-    'PathProp',
+    'PathProp', 'set_num_threads',
     'specific_attenuation_annex2',
     'free_space_loss_bfsg_cython', 'tropospheric_scatter_loss_bs_cython',
     'ducting_loss_ba_cython', 'diffraction_loss_complete_cython',
@@ -225,6 +228,17 @@ cdef struct _PathProp:
     double nu_r50  # dimless
     double nu_rbeta  # dimless
     int i_r50  # dimless
+
+
+def set_num_threads(int nthreads):
+    '''
+    Change maximum number of threads to use.
+
+    This is a convenience function, to call omp_set_num_threads(),
+    which is not possible during runtime from python.
+    '''
+
+    openmp.omp_set_num_threads(nthreads)
 
 
 cdef class PathProp(object):
@@ -2111,7 +2125,6 @@ def atten_map_fast(
         double pressure,
         double lon_t, double lat_t,
         double h_tg, double h_rg,
-        double hprof_step,
         double time_percent,
         double map_size_lon, double map_size_lat,
         double map_resolution=3. / 3600.,
@@ -2127,10 +2140,13 @@ def atten_map_fast(
     assert version == 14 or version == 16
 
     cdef:
-        _PathProp pp
+        _PathProp *pp
         double G_t = 0., G_r = 0.
         int xi, yi, xlen, ylen, i
         int eidx, didx
+        
+        # need 3x better resolution than map_resolution
+        double hprof_step = map_resolution * 3600. / 1. * 30. / 3.
 
         # (
         #     np.ndarray, np.ndarray, np.ndarray, np.ndarray,
@@ -2139,25 +2155,7 @@ def atten_map_fast(
 
         double L_bfsg, L_bd, L_bs, L_ba, L_b
 
-    pp.version = version
-    pp.freq = freq
-    pp.wavelen = 0.299792458 / freq
-    pp.temperature = temperature
-    pp.pressure = pressure
-    pp.lon_t = lon_t
-    pp.lat_t = lat_t
-    pp.h_tg = h_tg
-    pp.h_rg = h_rg
-    pp.hprof_step = hprof_step
-    pp.time_percent = time_percent
-    # TODO: add functionality to produce the following
-    # five parameters programmatically (using some kind of Geo-Data)
-    pp.omega = omega
-    pp.d_tm = d_tm
-    pp.d_lm = d_lm
-    pp.d_ct = d_ct
-    pp.d_cr = d_cr
-    pp.polarization = polarization
+    print('using hprof_step = {:.1f} m'.format(hprof_step))
 
     cosdelta = 1. / np.cos(np.radians(lat_t)) if do_cos_delta else 1.
 
@@ -2231,7 +2229,7 @@ def atten_map_fast(
 
     print('len(edge_coords)', len(edge_coords))
 
-    refx, refy = edge_coords[0]
+    refx, refy = xcoords[0], ycoords[0]
     cdef dict dist_dict = {}, height_dict = {}
 
     for eidx, (x, y) in enumerate(edge_coords):
@@ -2319,18 +2317,36 @@ def atten_map_fast(
         for i in range(len(prof)):
             height_profs_v[eidx, i] = prof[i]
 
-    with nogil:
-    # if True:
+    with nogil, parallel():
 
-        for yi in range(ylen):
+        pp = <_PathProp *> malloc(sizeof(_PathProp))
+        if pp == NULL:
+            abort()
 
-            with gil:
-                print('yi', yi)
+        pp.version = version
+        pp.freq = freq
+        pp.wavelen = 0.299792458 / freq
+        pp.temperature = temperature
+        pp.pressure = pressure
+        pp.lon_t = lon_t
+        pp.lat_t = lat_t
+        pp.h_tg = h_tg
+        pp.h_rg = h_rg
+        pp.hprof_step = hprof_step
+        pp.time_percent = time_percent
+        # TODO: add functionality to produce the following
+        # five parameters programmatically (using some kind of Geo-Data)
+        pp.omega = omega
+        pp.d_tm = d_tm
+        pp.d_lm = d_lm
+        pp.d_ct = d_ct
+        pp.d_cr = d_cr
+        pp.polarization = polarization
+
+        for yi in prange(ylen, schedule='guided', chunksize=10):
+
 
             for xi in range(xlen):
-
-                # if yi == 60:
-                #     print('xi', xi)
 
                 eidx = path_idx_map_v[yi, xi]
                 didx = dist_end_idx_map_v[yi, xi]
@@ -2341,9 +2357,10 @@ def atten_map_fast(
                 pp.lon_r = xcoords_v[xi]
                 pp.lat_r = ycoords_v[yi]
 
-                dists_v = dist_prof_v[0:didx + 1]
-                heights_v = height_profs_v[eidx, 0:didx + 1]
-                zheights_v = zheight_prof_v[0:didx + 1]
+                # assigning not possible in prange, but can use directly below
+                # dists_v = dist_prof_v[0:didx + 1]
+                # heights_v = height_profs_v[eidx, 0:didx + 1]
+                # zheights_v = zheight_prof_v[0:didx + 1]
 
                 pp.distance = dist_map_v[yi, xi]
                 pp.bearing = NAN
@@ -2360,17 +2377,23 @@ def atten_map_fast(
                 pp.N0 = N0_map_v[yi, xi]
 
                 _process_path(
-                    &pp,
-                    dists_v,
-                    heights_v,
-                    zheights_v,
+                    # &pp,
+                    pp,
+                    # dists_v,
+                    # heights_v,
+                    # zheights_v,
+                    dist_prof_v[0:didx + 1],
+                    height_profs_v[eidx, 0:didx + 1],
+                    zheight_prof_v[0:didx + 1],
                     )
 
                 (
                     L_bfsg, L_bd, L_bs, L_ba, L_b
-                    ) = _path_attenuation_complete_cython(pp, G_t, G_r)
+                    ) = _path_attenuation_complete_cython(pp[0], G_t, G_r)
 
                 atten_map_v[yi, xi] = L_b
+
+        free(pp)
 
     return atten_map
 
