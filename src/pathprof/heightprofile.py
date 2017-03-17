@@ -141,17 +141,20 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
     distance, bearing_1, bearing_2 = geodesics.inverse(
         lon_t, lat_t, lon_r, lat_r
         )
-    back_bearing = bearing_1 % 360. - 180.
+    back_bearing = bearing_2 % 360. - 180.
 
     distances = np.arange(0., distance + step, step)  # [m]
     lons = np.empty_like(distances)
     lats = np.empty_like(distances)
+    bearing_2s = np.empty_like(distances)
 
     for idx, d in enumerate(distances):
         # TODO: build a numpy interface in Geodesics
-        lons[idx], lats[idx], _ = geodesics.direct(
+        lons[idx], lats[idx], bearing_2s[idx] = geodesics.direct(
             lon_t, lat_t, bearing_1, d
             )
+    back_bearings = bearing_2s % 360. - 180.
+
     # important: unless the requested resolution is super-fine, we always
     # have to query the raw height profile data using sufficient resolution,
     # to acquire all features
@@ -191,6 +194,7 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
         heights,
         bearing_1,
         back_bearing,
+        back_bearings,
         distance * 1.e-3,
         )
 
@@ -202,7 +206,9 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
     lat_r=(-90, 90, apu.deg),
     step=(1., 1.e5, apu.m),
     strip_input_units=True,
-    output_unit=(apu.deg, apu.deg, apu.km, apu.m, apu.deg, apu.deg, apu.km)
+    output_unit=(
+        apu.deg, apu.deg, apu.km, apu.m, apu.deg, apu.deg, apu.deg, apu.km
+        )
     )
 def srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
     '''

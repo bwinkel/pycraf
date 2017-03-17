@@ -79,6 +79,10 @@ cdef object PARAMETERS_BASIC = [
     ('path_type', '12d', '(0 - LOS, 1 - transhoriz)'),
     ('theta_t', '12.6f', 'mrad'),
     ('theta_r', '12.6f', 'mrad'),
+    ('alpha_tr', '12.6f', 'deg'),
+    ('alpha_rt', '12.6f', 'deg'),
+    ('eps_pt', '12.6f', 'deg'),
+    ('eps_pr', '12.6f', 'deg'),
     ('theta', '12.6f', 'mrad'),
     ('d_lt', '12.6f', 'km'),
     ('d_lr', '12.6f', 'km'),
@@ -176,6 +180,10 @@ cdef struct _PathProp:
     int path_type  # 0 - LOS, 1 - transhoriz
     double theta_t  # mrad
     double theta_r  # mrad
+    double alpha_tr  # deg == bearing
+    double alpha_rt  # deg == backbearing
+    double eps_pt  # deg, elevation angle of path at tx
+    double eps_pr  # deg, elevation angle of path at rx
     double theta  # mrad
     double d_lt  # km
     double d_lr  # km
@@ -290,6 +298,7 @@ cdef class PathProp(object):
             int version=16,
             tuple DN_N0=None,  # override if you don't want builtin method
             tuple hprofdata=None,  # override if you don't want builtin method
+            double bearing=NAN, double back_bearing=NAN,
             ):
 
         assert time_percent <= 50.
@@ -325,6 +334,7 @@ cdef class PathProp(object):
                 heights,
                 bearing,
                 back_bearing,
+                back_bearings,
                 distance,
                 ) = heightprofile._srtm_height_profile(
                     lon_t, lat_t,
@@ -337,13 +347,14 @@ cdef class PathProp(object):
             heights = heights.astype(np.float64, order='C', copy=False)
             hsize = distances.size
             distance = distances[hsize - 1]
-            bearing, back_bearing = NAN, NAN
 
         zheights = np.zeros_like(heights)
 
         self._pp.distance = distance
         self._pp.bearing = bearing
         self._pp.back_bearing = back_bearing
+        self._pp.alpha_tr = bearing
+        self._pp.alpha_rt = back_bearing
 
         if self._pp.d_tm < 0:
             self._pp.d_tm = self._pp.distance
@@ -570,6 +581,22 @@ cdef class PathProp(object):
     @property
     def theta_r(self):
         return self._pp.theta_r
+
+    @property
+    def alpha_tr(self):
+        return self._pp.alpha_tr
+
+    @property
+    def alpha_rt(self):
+        return self._pp.alpha_rt
+
+    @property
+    def eps_pt(self):
+        return self._pp.eps_pt
+
+    @property
+    def eps_pr(self):
+        return self._pp.eps_pr
 
     @property
     def theta(self):
@@ -961,7 +988,7 @@ cdef void _process_path(
         diff_edge_idx = pp.nu_bull_idx_50
 
     (
-        pp.path_type, pp.theta_t, pp.theta_r,
+        pp.path_type, pp.theta_t, pp.theta_r, pp.eps_pt, pp.eps_pr,
         pp.theta,
         pp.d_lt, pp.d_lr, pp.h_m
         ) = _path_geometry_helper(
@@ -1301,7 +1328,7 @@ cdef (
             )
 
 
-cdef (int, double, double, double, double, double, double) _path_geometry_helper(
+cdef (int, double, double, double, double, double, double, double, double) _path_geometry_helper(
         double a_e,
         double distance,
         double[::1] d_v,
@@ -1317,6 +1344,7 @@ cdef (int, double, double, double, double, double, double) _path_geometry_helper
 
         double theta_i, theta_j, theta_t, theta_r, theta
         double theta_i_max = -1.e31, theta_j_max = -1.e31, theta_td
+        double eps_pt, eps_pr
 
         int lt_idx, lr_idx
         double d_lt, d_lr
@@ -1363,6 +1391,10 @@ cdef (int, double, double, double, double, double, double) _path_geometry_helper
 
         theta = 1.e3 * d / a_e + theta_t + theta_r
 
+        # calculate elevation angles of path
+        eps_pt = theta_t * 1.e-3 * 180. / M_PI
+        eps_pr = theta_r * 1.e-3 * 180. / M_PI
+
         # calc h_m
         for i in range(lt_idx, lr_idx + 1):
             h_m_i = h_v[i] - (h_st + m * d_v[i])
@@ -1381,6 +1413,14 @@ cdef (int, double, double, double, double, double, double) _path_geometry_helper
 
         theta = 1.e3 * d / a_e + theta_t + theta_r  # is this correct?
 
+        # calculate elevation angles of path
+        eps_pt = (
+            (h_rs - h_ts) * 1.e-3 / d - d / 2. / a_e
+            ) * 180. / M_PI
+        eps_pr = (
+            (h_ts - h_rs) * 1.e-3 / d - d / 2. / a_e
+            ) * 180. / M_PI
+
         # horizon distance for LOS paths has to be set to distance to
         # Bullington point in diffraction method
         # assert (nu_bull_idx >= 0) and (nu_bull_idx < dsize)  # TODO
@@ -1392,7 +1432,9 @@ cdef (int, double, double, double, double, double, double) _path_geometry_helper
         # at the Bullington point???
         h_m = h_v[nu_bull_idx] - (h_st + m * d_v[nu_bull_idx])
 
-    return (path_type, theta_t, theta_r, theta, d_lt, d_lr, h_m)
+    return (
+        path_type, theta_t, theta_r, eps_pt, eps_pr, theta, d_lt, d_lr, h_m
+        )
 
 
 cdef (double, double, double) _free_space_loss_bfsg_cython(
@@ -2120,7 +2162,7 @@ def path_attenuation_complete_cython(
 
 
 def height_profile_data(
-        double lon_t, double lat_t, 
+        double lon_t, double lat_t,
         double map_size_lon, double map_size_lat,
         double map_resolution=3. / 3600.,
         int do_cos_delta=1,
@@ -2138,7 +2180,7 @@ def height_profile_data(
 
         # need 3x better resolution than map_resolution
         double hprof_step = map_resolution * 3600. / 1. * 30. / 3.
-        
+
         int xi, yi, i
         int eidx, didx
 
@@ -2195,6 +2237,10 @@ def height_profile_data(
     lat_mid_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
     dist_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
 
+    # store bearings
+    bearing_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
+    backbearing_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
+
     # obtain all edge's height profiles
     edge_coords = list(zip(
         np.hstack([
@@ -2223,7 +2269,10 @@ def height_profile_data(
             x, y,
             hprof_step
             )
-        lons, lats, dists, heights, _, _, _ = res
+        (
+            lons, lats, dists, heights,
+            bearing, back_bearing, back_bearings, _
+            ) = res
         dist_dict[eidx] = dists
         height_dict[eidx] = heights
 
@@ -2254,6 +2303,8 @@ def height_profile_data(
                 lon_mid_map[yidx, xidx] = lons[mid_idx]
                 lat_mid_map[yidx, xidx] = lats[mid_idx]
                 dist_map[yidx, xidx] = dists[didx]
+                bearing_map[yidx, xidx] = bearing
+                backbearing_map[yidx, xidx] = back_bearings[didx]
 
     # store delta_N, beta0, N0
     delta_N_map, beta0_map, N0_map = helper._radiomet_data_for_pathcenter(
@@ -2296,14 +2347,16 @@ def height_profile_data(
     hprof_data['hprof_step'] = hprof_step
     hprof_data['map_resolution'] = map_resolution
     hprof_data['do_cos_delta'] = do_cos_delta
-    
+
     hprof_data['path_idx_map'] = path_idx_map
     hprof_data['pix_dist_map'] = pix_dist_map
     hprof_data['dist_end_idx_map'] = dist_end_idx_map
     hprof_data['lon_mid_map'] = lon_mid_map
     hprof_data['lat_mid_map'] = lat_mid_map
     hprof_data['dist_map'] = dist_map
-    
+    hprof_data['bearing_map'] = bearing_map
+    hprof_data['back_bearing_map'] = backbearing_map
+
     hprof_data['delta_N_map'] = delta_N_map
     hprof_data['beta0_map'] = beta0_map
     hprof_data['N0_map'] = N0_map
@@ -2341,14 +2394,14 @@ def atten_map_fast(
         double G_t = 0., G_r = 0.
         int xi, yi, xlen, ylen
         int eidx, didx
-        
+
         double L_bfsg, L_bd, L_bs, L_ba, L_b
 
     if hprof_data is None:
 
         hprof_data = height_profile_data(
             lon_t, lat_t,
-            map_size_lon, map_size_lat, 
+            map_size_lon, map_size_lat,
             map_resolution, do_cos_delta
             )
 
@@ -2357,31 +2410,40 @@ def atten_map_fast(
     # atten_map stores path attenuation
     atten_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
 
+    # also store path elevation angles as seen at Rx/Tx
+    eps_pt_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
+    eps_pr_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
+
     cdef:
         double[:, :] atten_map_v = atten_map
-        
+        double[:, :] eps_pt_map_v = eps_pt_map
+        double[:, :] eps_pr_map_v = eps_pr_map
+
         # since we allow all dict_like objects for hprof_data,
         # we have to make sure, that arrays are numpy and contiguous
         # (have in mind, that one might use hdf5 data sets)
 
-        _contigf = np.ascontiguousarray
+        _cf = np.ascontiguousarray
 
-        double[::1] xcoords_v = _contigf(hprof_data['xcoords'])
-        double[::1] ycoords_v = _contigf(hprof_data['ycoords'])
+        double[::1] xcoords_v = _cf(hprof_data['xcoords'])
+        double[::1] ycoords_v = _cf(hprof_data['ycoords'])
         double hprof_step = np.double(hprof_data['hprof_step'])
 
-        int[:, :] path_idx_map_v = _contigf(hprof_data['path_idx_map'])
-        int[:, :] dist_end_idx_map_v = _contigf(hprof_data['dist_end_idx_map'])
-        double[:, :] lon_mid_map_v = _contigf(hprof_data['lon_mid_map'])
-        double[:, :] lat_mid_map_v = _contigf(hprof_data['lat_mid_map'])
-        double[:, :] dist_map_v = _contigf(hprof_data['dist_map'])
-        double[:, :] delta_N_map_v = _contigf(hprof_data['delta_N_map'])
-        double[:, :] beta0_map_v = _contigf(hprof_data['beta0_map'])
-        double[:, :] N0_map_v = _contigf(hprof_data['N0_map'])
+        int[:, :] path_idx_map_v = _cf(hprof_data['path_idx_map'])
+        int[:, :] dist_end_idx_map_v = _cf(hprof_data['dist_end_idx_map'])
+        double[:, :] lon_mid_map_v = _cf(hprof_data['lon_mid_map'])
+        double[:, :] lat_mid_map_v = _cf(hprof_data['lat_mid_map'])
+        double[:, :] dist_map_v = _cf(hprof_data['dist_map'])
+        double[:, :] delta_N_map_v = _cf(hprof_data['delta_N_map'])
+        double[:, :] beta0_map_v = _cf(hprof_data['beta0_map'])
+        double[:, :] N0_map_v = _cf(hprof_data['N0_map'])
 
-        double[::1] dist_prof_v = _contigf(hprof_data['dist_prof'])
-        double[:, ::1] height_profs_v = _contigf(hprof_data['height_profs'])
-        double[::1] zheight_prof_v = _contigf(hprof_data['zheight_prof'])
+        double[:, :] bearing_map_v = _cf(hprof_data['bearing_map'])
+        double[:, :] back_bearing_map_v = _cf(hprof_data['back_bearing_map'])
+
+        double[::1] dist_prof_v = _cf(hprof_data['dist_prof'])
+        double[:, ::1] height_profs_v = _cf(hprof_data['height_profs'])
+        double[::1] zheight_prof_v = _cf(hprof_data['zheight_prof'])
 
         # double[::1] dists_v, heights_v, zheights_v
 
@@ -2416,7 +2478,6 @@ def atten_map_fast(
 
         for yi in prange(ylen, schedule='guided', chunksize=10):
 
-
             for xi in range(xlen):
 
                 eidx = path_idx_map_v[yi, xi]
@@ -2434,8 +2495,8 @@ def atten_map_fast(
                 # zheights_v = zheight_prof_v[0:didx + 1]
 
                 pp.distance = dist_map_v[yi, xi]
-                pp.bearing = NAN
-                pp.back_bearing = NAN
+                pp.bearing = bearing_map_v[yi, xi]
+                pp.back_bearing = back_bearing_map_v[yi, xi]
 
                 pp.d_tm = pp.distance
                 pp.d_lm = pp.distance
@@ -2463,10 +2524,12 @@ def atten_map_fast(
                     ) = _path_attenuation_complete_cython(pp[0], G_t, G_r)
 
                 atten_map_v[yi, xi] = L_b
+                eps_pt_map_v[yi, xi] = pp.eps_pt
+                eps_pr_map_v[yi, xi] = pp.eps_pr
 
         free(pp)
 
-    return atten_map
+    return atten_map, eps_pt_map, eps_pr_map
 
 # ############################################################################
 # Atmospheric attenuation (Annex 2)
