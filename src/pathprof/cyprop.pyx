@@ -38,6 +38,7 @@ __all__ = [
 cdef double NAN = np.nan
 
 cpdef enum CLUTTER:
+    UNKNOWN = -1
     SPARSE = 0
     VILLAGE = 1
     DECIDIOUS_TREES = 2
@@ -90,8 +91,12 @@ cdef object PARAMETERS_BASIC = [
     ('bearing', '12.6f', 'deg'),
     ('back_bearing', '12.6f', 'deg'),
     ('hprof_step', '12.6f', 'm'),
+    ('zone_t', '12d', ''),
+    ('zone_r', '12d', ''),
     ('h_tg', '12.6f', 'm'),
     ('h_rg', '12.6f', 'm'),
+    ('h_tg_in', '12.6f', 'm'),
+    ('h_rg_in', '12.6f', 'm'),
     ('h0', '12.6f', 'm'),
     ('hn', '12.6f', 'm'),
     ('h_ts', '12.6f', 'm'),
@@ -191,8 +196,12 @@ cdef struct _PathProp:
     double bearing  # deg
     double back_bearing  # deg
     double hprof_step  # m
-    double h_tg  # m
-    double h_rg  # m
+    int zone_t  #  clutter zone code
+    int zone_r  #  clutter zone code
+    double h_tg  # m; clutter height, if appropriate
+    double h_rg  # m; clutter height, if appropriate
+    double h_tg_in  # m
+    double h_rg_in  # m
     double h0  # m
     double hn  # m
     double h_ts  # m
@@ -279,6 +288,15 @@ def set_num_threads(int nthreads):
     openmp.omp_set_num_threads(nthreads)
 
 
+cdef inline double f_max(double a, double b) nogil:
+
+    return a if a >= b else b
+
+cdef inline double f_min(double a, double b) nogil:
+
+    return a if a <= b else b
+
+
 cdef class PathProp(object):
     '''
     Calculate path profile properties.
@@ -324,6 +342,7 @@ cdef class PathProp(object):
             double omega=0,
             double d_tm=-1, double d_lm=-1,
             double d_ct=50000, double d_cr=50000,
+            int zone_t=CLUTTER.UNKNOWN, int zone_r=CLUTTER.UNKNOWN,
             int polarization=0,
             int version=16,
             tuple DN_N0=None,  # override if you don't want builtin method
@@ -334,6 +353,9 @@ cdef class PathProp(object):
         assert time_percent <= 50.
         assert version == 14 or version == 16
 
+        assert zone_t >= -1 and zone_t <= 11
+        assert zone_r >= -1 and zone_r <= 11
+
         self._pp.version = version
         self._pp.freq = freq
         self._pp.wavelen = 0.299792458 / freq
@@ -343,8 +365,19 @@ cdef class PathProp(object):
         self._pp.lat_t = lat_t
         self._pp.lon_r = lon_r
         self._pp.lat_r = lat_r
-        self._pp.h_tg = h_tg
-        self._pp.h_rg = h_rg
+        self._pp.zone_t = zone_t
+        self._pp.zone_r = zone_r
+        self._pp.h_tg_in = h_tg
+        self._pp.h_rg_in = h_rg
+        if zone_t == CLUTTER.UNKNOWN:
+            self._pp.h_tg = h_tg
+        else:
+            self._pp.h_tg = f_max(CLUTTER_DATA_V[zone_t, 0], h_tg)
+        if zone_r == CLUTTER.UNKNOWN:
+            self._pp.h_rg = h_rg
+        else:
+            self._pp.h_rg = f_max(CLUTTER_DATA_V[zone_r, 0], h_rg)
+
         self._pp.hprof_step = hprof_step
         self._pp.time_percent = time_percent
         # TODO: add functionality to produce the following
@@ -2083,7 +2116,7 @@ def diffraction_loss_complete_cython(
     return _diffraction_loss_complete_cython(pathprop._pp)
 
 
-cdef (double, double, double, double, double) _path_attenuation_complete_cython(
+cdef (double, double, double, double, double, double, double) _path_attenuation_complete_cython(
         _PathProp pp,
         double G_t, double G_r,
         ) nogil:
@@ -2102,9 +2135,18 @@ cdef (double, double, double, double, double) _path_attenuation_complete_cython(
 
         double L_bfsg, E_sp, E_sbeta, L_b0p, L_bs, L_ba
         double L_d_50, L_dp, L_bd_50, L_bd, L_min_b0p
-        double L_min_bap, L_bam, L_b
+        double L_min_bap, L_bam, L_b, L_b_corr
 
-        double A_ht = 0., A_hr = 0.  # TODO: local clutter
+        double A_ht = 0., A_hr = 0.
+
+    if pp.zone_t != CLUTTER.UNKNOWN:
+        A_ht = _clutter_correction_cython(
+            pp.h_tg_in, pp.zone_t, pp.freq
+            )
+    if pp.zone_r != CLUTTER.UNKNOWN:
+        A_hr = _clutter_correction_cython(
+            pp.h_rg_in, pp.zone_r, pp.freq
+            )
 
     # not sure, if the 50% S_tim and S_tr values are to be used here...
     if pp.version == 16:
@@ -2142,9 +2184,11 @@ cdef (double, double, double, double, double) _path_attenuation_complete_cython(
     L_b = -5 * log10(
         cpower(10, -0.2 * L_bs) +
         cpower(10, -0.2 * L_bam)
-        ) + A_ht + A_hr
+        )
+    L_b_corr = L_b + A_ht + A_hr
+    L = L_b_corr - G_t - G_r
 
-    return L_bfsg, L_bd, L_bs, L_ba, L_b
+    return L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L
 
 
 def path_attenuation_complete_cython(
@@ -2169,6 +2213,8 @@ def path_attenuation_complete_cython(
         L_bs - Tropospheric scatter loss [dB]
         L_ba - Ducting/layer reflection loss [dB]
         L_b - Complete path propagation loss [dB]
+        L_b_corr - As L_b but with clutter correction [dB]
+        L - As L_b_corr but with gain correction [dB]
 
     Notes
     -----
@@ -2179,36 +2225,30 @@ def path_attenuation_complete_cython(
     return _path_attenuation_complete_cython(pathprop._pp, G_t, G_r)
 
 
-cdef (double, double) _clutter_correction_cython(
-        _PathProp pp,
-        int zone_t, int zone_r,
+cdef double _clutter_correction_cython(
+        double h_g, int zone, double freq
         ) nogil:
 
     cdef:
 
-        double h_a_t, d_k_t, h_a_r, d_k_r
+        double h_a, d_k
         double F_fc
-        double A_h_t, A_h_r
+        double A_h
 
-    h_a_t = CLUTTER_DATA_V[zone_t, 0]
-    d_k_t = CLUTTER_DATA_V[zone_t, 1]
-    h_a_r = CLUTTER_DATA_V[zone_r, 0]
-    d_k_r = CLUTTER_DATA_V[zone_r, 1]
+    h_a = CLUTTER_DATA_V[zone, 0]
+    d_k = CLUTTER_DATA_V[zone, 1]
 
-    F_fc = 0.25 + 0.375 * (1. + tanh(7.5 * (pp.freq - 0.5)))
+    F_fc = 0.25 + 0.375 * (1. + tanh(7.5 * (freq - 0.5)))
 
-    A_h_t = 10.25 * F_fc * exp(-d_k_t) * (
-        1. - tanh(6 * (pp.h_tg / h_a_t - 0.625))
-        ) - 0.33
-    A_h_r = 10.25 * F_fc * exp(-d_k_r) * (
-        1. - tanh(6 * (pp.h_rg / h_a_r - 0.625))
+    A_h = 10.25 * F_fc * exp(-d_k) * (
+        1. - tanh(6 * (h_g / h_a - 0.625))
         ) - 0.33
 
-    return (A_h_t, A_h_r)
+    return A_h
 
 
 def clutter_correction_cython(
-        PathProp pathprop, int zone_t, int zone_r,
+        double h_g, int zone, double freq
         ):
     '''
     Calculate the Clutter loss of a propagating radio
@@ -2216,13 +2256,12 @@ def clutter_correction_cython(
 
     Parameters
     ----------
-    pathprop -
-    zone_t, zone_r - Clutter categories (see CLUTTER enum)
+    h_g - height above ground
+    zone - Clutter category (see CLUTTER enum)
 
     Returns
     -------
-    (A_h_t, A_h_r) - Clutter correction to path attenuation [dB]
-        (for transmitter/receiver)
+    A_h - Clutter correction to path attenuation [dB]
 
     Notes
     -----
@@ -2230,7 +2269,7 @@ def clutter_correction_cython(
         [TODO]
     '''
 
-    return _clutter_correction_cython(pathprop._pp, zone_t, zone_r)
+    return _clutter_correction_cython(h_g, zone, freq)
 
 
 # ############################################################################
@@ -2462,12 +2501,16 @@ def atten_map_fast(
         double map_size_lon=1., double map_size_lat=1.,
         double map_resolution=3. / 3600.,
         double omega=0,
+        int zone_t=CLUTTER.UNKNOWN, int zone_r=CLUTTER.UNKNOWN,
         double d_tm=-1, double d_lm=-1,
         double d_ct=50000, double d_cr=50000,
         int polarization=0,
         int version=16,
         int do_cos_delta=1
         ):
+
+    # TODO: implement map-based clutter handling; currently, only a single
+    # clutter zone type is possible for each of Tx and Rx
 
     assert time_percent <= 50.
     assert version == 14 or version == 16
@@ -2478,7 +2521,9 @@ def atten_map_fast(
         int xi, yi, xlen, ylen
         int eidx, didx
 
-        double L_bfsg, L_bd, L_bs, L_ba, L_b
+        double[:, ::1] clutter_data_v = CLUTTER_DATA
+
+        double L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L
 
     if hprof_data is None:
 
@@ -2491,14 +2536,14 @@ def atten_map_fast(
     xcoords, ycoords = hprof_data['xcoords'], hprof_data['ycoords']
 
     # atten_map stores path attenuation
-    atten_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
+    atten_map = np.zeros((7, len(ycoords), len(xcoords)), dtype=np.float64)
 
     # also store path elevation angles as seen at Rx/Tx
     eps_pt_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
     eps_pr_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
 
     cdef:
-        double[:, :] atten_map_v = atten_map
+        double[:, :, :] atten_map_v = atten_map
         double[:, :] eps_pt_map_v = eps_pt_map
         double[:, :] eps_pr_map_v = eps_pr_map
 
@@ -2548,6 +2593,21 @@ def atten_map_fast(
         pp.lat_t = lat_t
         pp.h_tg = h_tg
         pp.h_rg = h_rg
+        pp.zone_t = zone_t
+        pp.zone_r = zone_r
+        pp.h_tg_in = h_tg
+        pp.h_rg_in = h_rg
+
+        if zone_t == CLUTTER.UNKNOWN:
+            pp.h_tg = h_tg
+        else:
+            pp.h_tg = f_max(clutter_data_v[zone_t, 0], h_tg)
+
+        if zone_r == CLUTTER.UNKNOWN:
+            pp.h_rg = h_rg
+        else:
+            pp.h_rg = f_max(clutter_data_v[zone_r, 0], h_rg)
+
         pp.hprof_step = hprof_step
         pp.time_percent = time_percent
         # TODO: add functionality to produce the following
@@ -2603,10 +2663,16 @@ def atten_map_fast(
                     )
 
                 (
-                    L_bfsg, L_bd, L_bs, L_ba, L_b
+                    L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L
                     ) = _path_attenuation_complete_cython(pp[0], G_t, G_r)
 
-                atten_map_v[yi, xi] = L_b
+                atten_map_v[0, yi, xi] = L_bfsg
+                atten_map_v[1, yi, xi] = L_bd
+                atten_map_v[2, yi, xi] = L_bs
+                atten_map_v[3, yi, xi] = L_ba
+                atten_map_v[4, yi, xi] = L_b
+                atten_map_v[5, yi, xi] = L_b_corr
+                atten_map_v[6, yi, xi] = L
                 eps_pt_map_v[yi, xi] = pp.eps_pt
                 eps_pr_map_v[yi, xi] = pp.eps_pr
 
