@@ -26,17 +26,47 @@ np.import_array()
 
 
 __all__ = [
-    'PathProp', 'set_num_threads',
+    'CLUTTER', 'CLUTTER_DATA', 'PathProp', 'set_num_threads',
     'specific_attenuation_annex2',
     'free_space_loss_bfsg_cython', 'tropospheric_scatter_loss_bs_cython',
     'ducting_loss_ba_cython', 'diffraction_loss_complete_cython',
-    'path_attenuation_complete_cython',
+    'path_attenuation_complete_cython', 'clutter_correction_cython',
     'atten_map_fast', 'height_profile_data', 'beta_from_DN_N0',
     ]
 
 
 cdef double NAN = np.nan
 
+cpdef enum CLUTTER:
+    SPARSE = 0
+    VILLAGE = 1
+    DECIDIOUS_TREES = 2
+    CONIFEROUS_TREES = 3
+    TROPICAL_FOREST = 4
+    SUBURBAN = 5
+    DENSE_SUBURBAN = 6
+    URBAN = 7
+    DENSE_URBAN = 8
+    HIGH_URBAN = 9
+    INDUSTRIAL_ZONE = 10
+
+CLUTTER_DATA = np.array(
+    [
+        [4., 0.1],
+        [5., 0.07],
+        [15., 0.05],
+        [20., 0.05],
+        [20., 0.03],
+        [9., 0.025],
+        [12., 0.02],
+        [20., 0.02],
+        [25., 0.02],
+        [35., 0.02],
+        [20., 0.05],
+    ],
+    dtype=np.float64)
+
+cdef double[:, ::1] CLUTTER_DATA_V = CLUTTER_DATA
 
 cdef object PARAMETERS_BASIC = [
     ('version', '12d', '(P.452 version; 14 or 16)'),
@@ -2148,6 +2178,59 @@ def path_attenuation_complete_cython(
 
     return _path_attenuation_complete_cython(pathprop._pp, G_t, G_r)
 
+
+cdef (double, double) _clutter_correction_cython(
+        _PathProp pp,
+        int zone_t, int zone_r,
+        ) nogil:
+
+    cdef:
+
+        double h_a_t, d_k_t, h_a_r, d_k_r
+        double F_fc
+        double A_h_t, A_h_r
+
+    h_a_t = CLUTTER_DATA_V[zone_t, 0]
+    d_k_t = CLUTTER_DATA_V[zone_t, 1]
+    h_a_r = CLUTTER_DATA_V[zone_r, 0]
+    d_k_r = CLUTTER_DATA_V[zone_r, 1]
+
+    F_fc = 0.25 + 0.375 * (1. + tanh(7.5 * (pp.freq - 0.5)))
+
+    A_h_t = 10.25 * F_fc * exp(-d_k_t) * (
+        1. - tanh(6 * (pp.h_tg / h_a_t - 0.625))
+        ) - 0.33
+    A_h_r = 10.25 * F_fc * exp(-d_k_r) * (
+        1. - tanh(6 * (pp.h_rg / h_a_r - 0.625))
+        ) - 0.33
+
+    return (A_h_t, A_h_r)
+
+
+def clutter_correction_cython(
+        PathProp pathprop, int zone_t, int zone_r,
+        ):
+    '''
+    Calculate the Clutter loss of a propagating radio
+    wave according to ITU-R P.452-16 Eq. (57).
+
+    Parameters
+    ----------
+    pathprop -
+    zone_t, zone_r - Clutter categories (see CLUTTER enum)
+
+    Returns
+    -------
+    (A_h_t, A_h_r) - Clutter correction to path attenuation [dB]
+        (for transmitter/receiver)
+
+    Notes
+    -----
+    - Path profile parameters (PathProps object) can be derived using the
+        [TODO]
+    '''
+
+    return _clutter_correction_cython(pathprop._pp, zone_t, zone_r)
 
 
 # ############################################################################
