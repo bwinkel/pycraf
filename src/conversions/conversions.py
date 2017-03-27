@@ -21,7 +21,8 @@ UNITS = [
     'dB_W_m2',
     'dB_W_m2_Hz',
     'dB_Jy_Hz',
-    'dB_mW',
+    'dB_mW', 'dBm',
+    'dB_mW_MHz', 'dBm_MHz',  # this is often used in engineering (dBm/MHz)
     'dB_uV_m',
     ]
 
@@ -47,7 +48,8 @@ dB_W_Hz = apu.dB(apu.W / apu.Hz)
 dB_W_m2 = apu.dB(apu.W / apu.m ** 2)
 dB_W_m2_Hz = apu.dB(apu.W / apu.Hz / apu.m ** 2)
 dB_Jy_Hz = apu.dB(apu.Jy * apu.Hz)
-dB_mW = apu.dB(apu.mW)
+dBm = dB_mW = apu.dB(apu.mW)
+dBm_MHz = dB_mW_MHz = apu.dB(apu.mW / apu.MHz)
 dB_uV_m = apu.dB(apu.uV ** 2 / apu.m ** 2)
 
 

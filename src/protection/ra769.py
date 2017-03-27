@@ -44,9 +44,15 @@ def protection_limits(mode='continuum', scale='dB'):
         (qtab['T_A'] + qtab['T_rx']) /
         np.sqrt(2000. * apu.s * qtab['bandwidth'])
         ).to(apu.mK)
-    qtab['P_rms_nu'] = (con.k_B * qtab['T_rms']).to(apu.Watt / apu.Hz)
-    Plim = 0.1 * qtab['P_rms_nu'] * qtab['bandwidth']
+    P_rms_nu = con.k_B * qtab['T_rms']
+    qtab['P_rms_nu'] = P_rms_nu.to(
+        apu.Watt / apu.Hz if scale == 'linear' else cnv.dB_W_Hz
+        )
+    Plim = 0.1 * P_rms_nu * qtab['bandwidth']
     qtab['Plim'] = Plim.to(apu.Watt if scale == 'linear' else cnv.dB_W)
+    qtab['Plim_nu'] = (Plim / qtab['bandwidth']).to(
+        apu.W / apu.Hz if scale == 'linear' else cnv.dB_W_Hz
+        )
     Slim = 4. * np.pi / con.c ** 2 * qtab['frequency'] ** 2 * Plim
     qtab['Slim'] = Slim.to(
         (apu.Watt / apu.m ** 2) if scale == 'linear' else cnv.dB_W_m2
@@ -80,7 +86,9 @@ def protection_limits(mode='continuum', scale='dB'):
         tab[col].format = '%.3f'
 
     for col in [
-            'P_rms_nu', 'Plim', 'Slim', 'Slim_nu', 'Efield', 'Efield_norm'
+            'P_rms_nu',
+            'Plim', 'Plim_nu', 'Slim', 'Slim_nu',
+            'Efield', 'Efield_norm'
             ]:
         tab[col].format = '%.1e' if scale == 'linear' else '%.1f'
 
