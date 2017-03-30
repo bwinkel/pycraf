@@ -23,12 +23,14 @@ UNITS = [
     'dB_Jy_Hz',
     'dB_mW', 'dBm',
     'dB_mW_MHz', 'dBm_MHz',  # this is often used in engineering (dBm/MHz)
+    'dB_1_m',
     'dB_uV_m',
     ]
 
 __all__ = [
     'Aeff_from_Ageom', 'Ageom_from_Aeff',
     'Gain_from_Aeff', 'Aeff_from_Gain',
+    'Ant_factor_from_Gain', 'Gain_from_Ant_factor',
     'S_from_E', 'E_from_S',
     'Ptx_from_Erx', 'Erx_from_Ptx',
     'S_from_Ptx', 'Ptx_from_S',
@@ -51,6 +53,7 @@ dB_Jy_Hz = apu.dB(apu.Jy * apu.Hz)
 dBm = dB_mW = apu.dB(apu.mW)
 dBm_MHz = dB_mW_MHz = apu.dB(apu.mW / apu.MHz)
 dB_uV_m = apu.dB(apu.uV ** 2 / apu.m ** 2)
+dB_1_m = apu.dB(1. / apu.m)  # for antenna factor
 
 
 # Astropy.unit equivalency between linear and logscale field strength
@@ -189,6 +192,64 @@ def Aeff_from_Gain(G, f):
     '''
 
     return G * (C_VALUE / f) ** 2 / 4. / np.pi
+
+
+@helpers.ranged_quantity_input(
+    G=(1.e-30, None, dimless),
+    f=(0, None, apu.Hz),
+    Zi=(0, None, apu.Ohm),
+    strip_input_units=True, output_unit=dB_1_m
+    )
+def Ant_factor_from_Gain(G, f, Zi):
+    '''
+    Calculate antenna factor from antenna gain, given frequency and impedance.
+
+    Note: All quantities must be astropy Quantities
+          (astropy.units.quantity.Quantity).
+
+    Parameters
+    ----------
+    G - Antenna gain [dBi, or dimless]
+    f - Frequency [Hz]
+    Zi - Receiver impedance [Ohm]
+
+    Returns
+    -------
+    Antenna factor, Ka [dB(1/m)]
+    '''
+
+    return 10 * np.log10(np.sqrt(
+        4. * np.pi / G * (f / C_VALUE) ** 2 * R0_VALUE / Zi
+        ))
+
+
+@helpers.ranged_quantity_input(
+    Ka=(1.e-30, None, 1. / apu.m),
+    f=(0, None, apu.Hz),
+    Zi=(0, None, apu.Ohm),
+    strip_input_units=True, output_unit=dBi
+    )
+def Gain_from_Ant_factor(Ka, f, Zi):
+    '''
+    Calculate antenna gain from antenna factor, given frequency and impedance.
+
+    Note: All quantities must be astropy Quantities
+          (astropy.units.quantity.Quantity).
+
+    Parameters
+    ----------
+    Ka - Antenna factor, Ka [1/m]
+    f - Frequency [Hz]
+    Zi - Receiver impedance [Ohm]
+
+    Returns
+    -------
+    Antenna gain [dBi]
+    '''
+
+    return 10 * np.log10(
+        4. * np.pi / Ka ** 2 * (f / C_VALUE) ** 2 * R0_VALUE / Zi
+        )
 
 
 # @apu.quantity_input(E=dB_uV_m, equivalencies=E_field_equivalency())
