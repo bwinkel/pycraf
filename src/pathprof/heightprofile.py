@@ -73,15 +73,24 @@ HGT_DICT = _find_hgt_files()
 def _get_tile_data(ilon, ilat):
     # angles in deg
 
-    hgt_file = HGT_DICT[ilon, ilat]
-
     tile_size = 1201
     dx = dy = 1. / (tile_size - 1)
     x, y = np.ogrid[0:tile_size, 0:tile_size]
     lons, lats = x * dx + ilon, y * dy + ilat
 
-    tile = np.fromfile(hgt_file, dtype='>i2')
-    tile = tile.reshape((tile_size, tile_size))[::-1]
+    try:
+        hgt_file = HGT_DICT[ilon, ilat]
+        tile = np.fromfile(hgt_file, dtype='>i2')
+        tile = tile.reshape((tile_size, tile_size))[::-1]
+    except KeyError:
+        print(
+            'warning, no SRTM tile data found for '
+            'ilon, ilat = ({}, {})'.format(
+                ilon, ilat
+                )
+            )
+        tile = np.zeros(x.shape, dtype=np.int16)
+
     bad_mask = (tile == 32768) | (tile == -32768)
     tile = tile.astype(np.float32)
     tile[bad_mask] = np.nan
