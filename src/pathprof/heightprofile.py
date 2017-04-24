@@ -89,7 +89,7 @@ def _get_tile_data(ilon, ilat):
                 ilon, ilat
                 )
             )
-        tile = np.zeros(x.shape, dtype=np.int16)
+        tile = np.zeros((tile_size, tile_size), dtype=np.int16)
 
     bad_mask = (tile == 32768) | (tile == -32768)
     tile = tile.astype(np.float32)
