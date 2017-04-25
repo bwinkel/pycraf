@@ -48,7 +48,7 @@ KML_TEMPLATE = '''<?xml version="1.0" encoding="UTF-8"?>
             <south>{:.6f}</south>
             <west>{:.6f}</west>
             <north>{:.6f}</north>
-        </LatLonBox> 
+        </LatLonBox>
     </GroundOverlay>
     </Folder>
 </kml>
@@ -136,15 +136,15 @@ def _N_from_map(lon, lat):
         N_0 - sea-level surface refractivity in N-units
     '''
 
-    _DN = _DN_interpolator((lon, lat))
-    _N0 = _N0_interpolator((lon, lat))
+    _DN = _DN_interpolator((lon % 360, lat))
+    _N0 = _N0_interpolator((lon % 360, lat))
 
     return _DN, _N0
 
 
 def _radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm):
-    _DN = _DN_interpolator((lon, lat))
-    _N0 = _N0_interpolator((lon, lat))
+    _DN = _DN_interpolator((lon % 360, lat))
+    _N0 = _N0_interpolator((lon % 360, lat))
 
     _tau = 1. - np.exp(-4.12e-4 * np.power(d_lm, 2.41))
     _absphi = np.abs(lat)
@@ -239,7 +239,7 @@ def median_effective_earth_radius_factor(lon, lat):
       bilinear interpolation.
     '''
 
-    return 157. / (157. - _DN_interpolator((lon, lat)))
+    return 157. / (157. - _DN_interpolator((lon % 360, lat)))
 
 
 @helpers.ranged_quantity_input(
@@ -266,7 +266,7 @@ def effective_earth_radius_factor_beta():
 
 def _median_effective_earth_radius(lon, lat):
 
-    return R_E_VALUE * 157. / (157. - _DN_interpolator((lon, lat)))
+    return R_E_VALUE * 157. / (157. - _DN_interpolator((lon % 360, lat)))
 
 
 @helpers.ranged_quantity_input(
@@ -337,8 +337,8 @@ def make_kmz(
     # descriptive xml
     kml = KML_TEMPLATE.format(*bbox)
 
-    # produce jpg, use python pillow for this; 
-    # however, we don't want this as global requirement, 
+    # produce jpg, use python pillow for this;
+    # however, we don't want this as global requirement,
     # therefore, just a local import
     # from PIL import Image
     # from matplotlib import colors, cm
@@ -361,9 +361,9 @@ def make_kmz(
     png_buf = BytesIO()
 
     imsave(
-        png_buf, 
-        atten_map, 
-        vmin=vmin, vmax=vmax, cmap=cmap, 
+        png_buf,
+        atten_map,
+        vmin=vmin, vmax=vmax, cmap=cmap,
         origin='lower'
         )
 
