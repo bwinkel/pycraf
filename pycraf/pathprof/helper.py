@@ -57,7 +57,7 @@ KML_TEMPLATE = '''<?xml version="1.0" encoding="UTF-8"?>
 # maybe, the following should only be computed on demand?
 this_dir, this_filename = os.path.split(__file__)
 fname_refract_data = os.path.join(
-    this_dir, 'data', 'refract_map.npz'
+    this_dir, '../itudata/p.452-16', 'refract_map.npz'
     )
 _refract_data = np.load(fname_refract_data)
 

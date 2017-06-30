@@ -28,7 +28,7 @@ def protection_limits(mode='continuum', scale='dB'):
 
     csv_name = 'ra_769_table{}_limits_{}.csv'.format(midx + 1, mode)
     this_dir, this_filename = os.path.split(__file__)
-    csv_path = os.path.join(this_dir, 'data', csv_name)
+    csv_path = os.path.join(this_dir, '../itudata/ra.769-2', csv_name)
 
     csv_tab = np.genfromtxt(
         csv_path, delimiter=',', skip_header=1, names=True, dtype=np.float64

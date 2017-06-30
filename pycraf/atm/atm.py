@@ -36,10 +36,10 @@ __all__ = [
 
 this_dir, this_filename = os.path.split(__file__)
 fname_oxygen = os.path.join(
-    this_dir, 'data', 'R-REC-P.676-10-201309_table1.csv'
+    this_dir, '../itudata/p.676-10', 'R-REC-P.676-10-201309_table1.csv'
     )
 fname_water = os.path.join(
-    this_dir, 'data', 'R-REC-P.676-10-201309_table2.csv'
+    this_dir, '../itudata/p.676-10', 'R-REC-P.676-10-201309_table2.csv'
     )
 
 oxygen_dtype = np.dtype([

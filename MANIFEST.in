@@ -1,6 +1,3 @@
 include README.md
-recursive-include src *.py
-include atm/data/R-REC-P.676-10-201309_table1.csv
-include atm/data/R-REC-P.676-10-201309_table2.csv
-include protection/data/ra_769_table1_limits_continuum.csv
-include protection/data/ra_769_table2_limits_spectroscopy.csv
+recursive-include pycraf *.py
+recursive-include itudata *
