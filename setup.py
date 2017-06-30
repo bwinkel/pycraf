@@ -35,7 +35,8 @@ try:
         description="pycraf",
         author="Benjamin Winkel",
         author_email="bwinkel@mpifr.de",
-        url="http://www3.mpifr-bonn.mpg.de/staff/bwinkel/",
+        url="https://github.com/bwinkel/pycraf",
+        download_url="https://github.com/bwinkel/pycraf/archive/0.22.tar.gz",
         packages=[
             'pycraf',
             'pycraf.antenna',
@@ -88,7 +89,17 @@ try:
         long_description='''pycraf ... the CRAF library.
             Contains useful functions for the daily life of a spectrum manager
             in RAS.
-            '''
+            ''',
+        keywords=['pycraf', 'radio', 'compatibility study'],
+        classifiers=[
+            'Development Status :: 3 - Alpha',
+            'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+            'Operating System :: MacOS',
+            'Operating System :: POSIX :: Linux',
+            'Programming Language :: Python',
+            'Programming Language :: Cython',
+            'Topic :: Scientific/Engineering',
+            ],
         )
 finally:
     os.unlink('pycraf/itudata')
