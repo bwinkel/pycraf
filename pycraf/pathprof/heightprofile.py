@@ -50,6 +50,7 @@ def _find_hgt_files(basepath=None):
             basepath = os.environ['SRTMDATA']
         except KeyError:
             print('Warning, no SRTM data found.')
+            return {}
 
     hgt_files = glob.glob(
         os.path.join(basepath, '**', '*.hgt*'),

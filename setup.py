@@ -4,37 +4,55 @@
 from setuptools import setup
 from setuptools.extension import Extension
 from Cython.Distutils import build_ext
-import os
+import platform
 import numpy as np
 
 
+VERSION = '0.23.1'
+
+# need to handle compilation on windows machines:
+
+comp_args = {
+    'extra_compile_args': ['-fopenmp', '-O3'],
+    'extra_link_args': ['-fopenmp'],
+    'libraries': ['m'],
+    'include_dirs': [np.get_include()],
+    }
+
+if platform.system().lower() == 'windows':
+    comp_args = {
+        'extra_compile_args': ['/openmp'],
+        'include_dirs': [np.get_include()],
+        }
+else:
+    comp_args = {
+        'extra_compile_args': ['-fopenmp', '-O3'],
+        'extra_link_args': ['-fopenmp'],
+        'libraries': ['m'],
+        'include_dirs': [np.get_include()],
+        }
+
 ext_module_pathprof_cyprop = Extension(
-    "pycraf.pathprof.cyprop",
-    ["pycraf/pathprof/cyprop.pyx"],
-    extra_compile_args=['-fopenmp', '-O3'],
-    extra_link_args=['-fopenmp'],
-    libraries=["m"],
-    include_dirs=[np.get_include()],
+    'pycraf.pathprof.cyprop',
+    ['pycraf/pathprof/cyprop.pyx'],
+    **comp_args
     )
 
 
 ext_module_pathprof_geodesics = Extension(
-    "pycraf.pathprof.geodesics",
-    ["pycraf/pathprof/geodesics.pyx"],
-    extra_compile_args=['-fopenmp', '-O3'],
-    extra_link_args=['-fopenmp'],
-    libraries=["m"],
-    include_dirs=[np.get_include()],
+    'pycraf.pathprof.geodesics',
+    ['pycraf/pathprof/geodesics.pyx'],
+    **comp_args
     )
 
 setup(
-    name="pycraf",
-    version="0.23",
-    description="pycraf",
-    author="Benjamin Winkel",
-    author_email="bwinkel@mpifr.de",
-    url="https://github.com/bwinkel/pycraf",
-    download_url="https://github.com/bwinkel/pycraf/archive/0.23.tar.gz",
+    name='pycraf',
+    version=VERSION,
+    description='pycraf',
+    author='Benjamin Winkel',
+    author_email='bwinkel@mpifr.de',
+    url='https://github.com/bwinkel/pycraf',
+    download_url='https://github.com/bwinkel/pycraf/archive/{:s}.tar.gz'.format(VERSION),
     packages=[
         'pycraf',
         'pycraf.antenna',
@@ -92,6 +110,7 @@ setup(
     classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'Operating System :: Microsoft :: Windows',
         'Operating System :: MacOS',
         'Operating System :: POSIX :: Linux',
         'Programming Language :: Python',
