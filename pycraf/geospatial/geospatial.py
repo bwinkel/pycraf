@@ -24,6 +24,8 @@ import pyproj
 __all__ = [
     'utm_to_wgs84', 'wgs84_to_utm', 'utm_to_wgs84_32N',
     'etrs89_to_wgs84', 'wgs84_to_etrs89',
+    # 'itrf2005_to_wgs84',
+    'wgs84_to_itrf2005',
     ]
 
 
@@ -50,6 +52,12 @@ def _create_proj(sys1, sys2, zone=None, south=False):
         _proj_str = (
             '+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 '
             '+ellps=GRS80 +units=m +no_defs'
+            )
+    elif sys1 == 'ITRF05' and sys2 == 'WGS84':
+
+        _proj_str = (
+            '+proj=longlat +datum=WGS84 +no_defs'
+            '+to +proj=geocent +ellps=GRS80 +units=m +no_defs'
             )
     else:
         raise AssertionError(
@@ -167,6 +175,30 @@ def wgs84_to_etrs89(glon, glat):
     '''
 
     _proj = _create_proj('ETRS89', 'WGS84')
+
+    return _proj(glon, glat, inverse=False)
+
+
+def wgs84_to_itrf2005(glon, glat):
+    '''
+    Convert GPS/WGS84 coordinates to ITRF.
+
+    Parameters
+    ----------
+    glon, glat - GPS/WGS84 longitude and latitude [deg]
+
+    Returns
+    -------
+    x, y, z - ITRF cartesian coordinates, geocentric [m]
+
+    Notes
+    -----
+    Uses
+        +proj=utm +zone=xx +ellps=WGS84 +datum=WGS84 +units=m +no_defs [+south]
+    for pyproj setup.
+    '''
+
+    _proj = _create_proj('ITRF05', 'WGS84')
 
     return _proj(glon, glat, inverse=False)
 
