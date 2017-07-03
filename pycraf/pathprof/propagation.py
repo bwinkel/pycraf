@@ -21,7 +21,7 @@ from .. import helpers
 
 
 __all__ = [
-    'PathProps', 'path_properties', 'path_properties_with_units',
+    'PathProps', 'path_properties',
     'free_space_loss_bfsg',
     'diffraction_loss_complete',
     'tropospheric_scatter_loss_bs',
@@ -426,7 +426,7 @@ def _path_geometry_helper(
     return path_type, theta_t, theta_r, theta, d_lt, d_lr, h_m
 
 
-def path_properties(
+def _path_properties(
         freq,
         lon_t, lat_t,
         lon_r, lat_r,
@@ -439,9 +439,6 @@ def path_properties(
         ):
     '''
     Calculate path profile properties.
-
-    Note: This is the unit-less version (for speed). Use
-    path_properties_with_units() if you want astropy-units interface.
 
     Parameters
     ----------
@@ -481,6 +478,7 @@ def path_properties(
         heights,
         bearing,
         back_bearing,
+        back_bearings,
         distance,
         ) = heightprofile._srtm_height_profile(
             lon_t, lat_t, lon_r, lat_r, hprof_step
@@ -674,15 +672,15 @@ def path_properties(
     h_tg=(0, None, apu.m),
     h_rg=(0, None, apu.m),
     hprof_step=(0, None, apu.m),
-    d_tm=(0, None, apu.km),
-    d_lm=(0, None, apu.km),
+    time_percent=(0, 100, apu.percent),
+    d_tm=(-1, None, apu.km),
+    d_lm=(-1, None, apu.km),
     d_ct=(0, None, apu.km),
     d_cr=(0, None, apu.km),
-    time_percent=(0, 100, apu.percent),
     strip_input_units=True,
     output_unit=PathPropsUnits
     )
-def path_properties_with_units(
+def path_properties(
         freq,
         lon_t, lat_t,
         lon_r, lat_r,
@@ -721,15 +719,16 @@ def path_properties_with_units(
     Path Properties (as a namedtuple)
     '''
 
-    return path_properties(
+    return _path_properties(
         freq,
         lon_t, lat_t,
         lon_r, lat_r,
         h_tg, h_rg,
         hprof_step,
         time_percent,
-        omega,
-        d_tm, d_lm,
+        omega=omega,
+        d_tm=d_tm, d_lm=d_lm,
+        d_ct=d_ct, d_cr=d_cr,
         )
 
 

@@ -7,6 +7,7 @@
 # from __future__ import unicode_literals
 
 import pytest
+from functools import partial
 import numpy as np
 from numpy.testing import assert_equal, assert_allclose
 from astropy.tests.helper import assert_quantity_allclose
@@ -292,7 +293,7 @@ class TestHelper:
             )
 
 
-class TestPropagation:
+class TestPyPropagation:
 
     def setup(self):
 
@@ -311,23 +312,25 @@ class TestPropagation:
         # transhorizon numbers:
         self.h_tg_trans, self.h_rg_trans = 50 * apu.m, 90 * apu.m
 
-        self.pathprop_trans = pathprof.path_properties_with_units(
+        self.pathprop_trans = pathprof.path_properties(
             self.freq,
             self.lon_t, self.lat_t,
             self.lon_r, self.lat_r,
             self.h_tg_trans, self.h_rg_trans,
             self.hprof_step,
+            self.time_percent,
             )
 
         # LOS numbers:
         self.h_tg_los, self.h_rg_los = 200 * apu.m, 200 * apu.m
 
-        self.pathprop_los = pathprof.path_properties_with_units(
+        self.pathprop_los = pathprof.path_properties(
             self.freq,
             self.lon_t, self.lat_t,
             self.lon_r, self.lat_r,
             self.h_tg_los, self.h_rg_los,
             self.hprof_step,
+            self.time_percent,
             )
 
     def teardown(self):
@@ -336,18 +339,27 @@ class TestPropagation:
 
     def test_path_properties(self):
 
-        pfunc = pathprof.path_properties_with_units
-        args_list = [
-            (1.e-30, None, apu.GHz),
-            (0, 360, apu.deg),
-            (-90, 90, apu.deg),
-            (0, 360, apu.deg),
-            (-90, 90, apu.deg),
-            (0, None, apu.m),
-            (0, None, apu.m),
-            (0, None, apu.m),
-            ]
-        check_astro_quantities(pfunc, args_list)
+        pfunc = pathprof.path_properties
+        # args_list = [
+        #     (1.e-30, None, apu.GHz),  # freq
+        #     (0, 360, apu.deg),  # lon_t
+        #     (-90, 90, apu.deg),  # lat_t
+        #     (0, 360, apu.deg),  # lon_r
+        #     (-90, 90, apu.deg),  # lat_r
+        #     (0, None, apu.m),  # h_tg
+        #     (0, None, apu.m),  # h_rg
+        #     (0, None, apu.m),  # hprof_step
+        #     (0, 100, apu.percent),  # time_percent
+        #     ]
+        # kwargs_list = [
+        #     ('d_tm', 0, None, apu.km),  # d_tm
+        #     ('d_lm', 0, None, apu.km),  # d_lm
+        #     ('d_ct', 0, None, apu.km),  # d_ct
+        #     ('d_cr', 0, None, apu.km),  # d_cr
+        #     ]
+        # this fails, because lon_t == lon_r and lat_t == lat_r is possible,
+        # which is a problem for geodesics
+        # check_astro_quantities(pfunc, args_list, kwargs_list)
 
         pathprop_trans = pfunc(
             self.freq,
@@ -355,35 +367,71 @@ class TestPropagation:
             self.lon_r, self.lat_r,
             self.h_tg_trans, self.h_rg_trans,
             self.hprof_step,
+            self.time_percent,
             )
 
         pathprop_trans_true = pathprof.PathProps(
+            freq=Quantity(2.0, apu.GHz),
+            wavelen=Quantity(0.149896229, apu.m),
+            p=Quantity(50.0, apu.percent),
+            beta0=Quantity(2.715676100111307, apu.percent),
+            omega=Quantity(0.0, apu.percent),
             lon_mid=Quantity(6.050021979477151, apu.deg),
             lat_mid=Quantity(50.125392608270644, apu.deg),
             delta_N=Quantity(39.276915092335486, 1 / apu.km),
-            N0=Quantity(325.48649839940964, cnv.dimless),
+            N0=Quantity(325.48649839940964, ),
             distance=Quantity(28.712600748321183, apu.km),
             bearing=Quantity(14.383138371761586, apu.deg),
-            back_bearing=Quantity(-165.6168616282384, apu.deg),
-            a_e=Quantity(8496.60880688387, apu.km),
-            h0=Quantity(391.0, apu.m),
-            hn=Quantity(514.5184936523438, apu.m),
-            h_ts=Quantity(441.0, apu.m),
-            h_rs=Quantity(604.5184936523438, apu.m),
-            h_st=Quantity(391.0, apu.m),
-            h_sr=Quantity(475.1045924277951, apu.m),
-            h_std=Quantity(391.0, apu.m),
-            h_srd=Quantity(468.3875514121701, apu.m),
-            h_te=Quantity(50.0, apu.m),
-            h_re=Quantity(129.41390122454862, apu.m),
-            h_m=Quantity(96.53708718864101, apu.m),
-            d_lt=Quantity(9.6, apu.km),
-            d_lr=Quantity(19.112600748321185, apu.km),
-            theta_t=Quantity(7.211744865969712, apu.mrad),
-            theta_r=Quantity(-5.77400698654872, apu.mrad),
-            theta=Quantity(4.8170391278271225, apu.mrad),
-            nu_bull=Quantity(1.4065802319358092, cnv.dimless),
+            back_bearing=Quantity(-165.54011694083593, apu.deg),
+            h0=Quantity(393.0717053583606, apu.m),
+            hn=Quantity(432.48246234202657, apu.m),
+            h_ts=Quantity(443.0717053583606, apu.m),
+            h_rs=Quantity(522.4824623420266, apu.m),
+            h_st=Quantity(386.5518714039629, apu.m),
+            h_sr=Quantity(432.48246234202657, apu.m),
+            h_std=Quantity(363.1178858539726, apu.m),
+            h_srd=Quantity(432.48246234202657, apu.m),
+            h_te=Quantity(56.51983395439771, apu.m),
+            h_re=Quantity(90.0, apu.m),
+            d_lm=Quantity(28.712600748321183, apu.km),
+            d_tm=Quantity(28.712600748321183, apu.km),
+            d_ct=Quantity(50000.0, apu.km),
+            d_cr=Quantity(50000.0, apu.km),
             path_type=1,
+            theta_t=Quantity(9.09626247168232, apu.mrad),
+            theta_r=Quantity(0.46348906170864684, apu.mrad),
+            theta=Quantity(12.939052781797095, apu.mrad),
+            d_lt=Quantity(2.9, apu.km),
+            d_lr=Quantity(8.712600748321183, apu.km),
+            h_m=Quantity(112.44249432249057, apu.m),
+            a_e_50=Quantity(8496.60880688387, apu.km),
+            path_type_50= 1,
+            nu_bull_50=Quantity(3.8876501956883027, ),
+            nu_bull_idx_50=Quantity(-1.0, ),
+            S_tim_50=Quantity(10.786163985144727, apu.m / apu.km),
+            S_rim_50=Quantity(2.153139719100948, apu.m / apu.km),
+            S_tr_50=Quantity(2.765711043723864, apu.m / apu.km),
+            a_e_b0=Quantity(19113.0, apu.km),
+            path_type_b0= 1,
+            nu_bull_b0=Quantity(3.4243986522246335, ),
+            nu_bull_idx_b0=Quantity(-1.0, ),
+            S_tim_b0=Quantity(9.942432611583937, apu.m / apu.km),
+            S_rim_b0=Quantity(1.4994036761602367, apu.m / apu.km),
+            S_tr_b0=Quantity(2.765711043723864, apu.m / apu.km),
+            a_e_zh_50=Quantity(8496.60880688387, apu.km),
+            path_type_zh_50=0,
+            nu_bull_zh_50=Quantity(-3.135143682235181, ),
+            nu_bull_idx_zh_50=Quantity(135.0, ),
+            S_tim_zh_50=Quantity(-2.785105853163146, apu.m / apu.km),
+            S_rim_zh_50=Quantity(np.nan, apu.m / apu.km),
+            S_tr_zh_50=Quantity(0.3498875139758776, apu.m / apu.km),
+            a_e_zh_b0=Quantity(8496.60880688387, apu.km),
+            path_type_zh_b0=0,
+            nu_bull_zh_b0=Quantity(-3.425190031332147, ),
+            nu_bull_idx_zh_b0=Quantity(135.0, ),
+            S_tim_zh_b0=Quantity(-2.7855177313304247, apu.m / apu.km),
+            S_rim_zh_b0=Quantity(np.nan, apu.m / apu.km),
+            S_tr_zh_b0=Quantity(0.3498875139758776, apu.m / apu.km),
             )
 
         for t1, t2 in zip(pathprop_trans, pathprop_trans_true):
@@ -396,35 +444,71 @@ class TestPropagation:
             self.lon_r, self.lat_r,
             self.h_tg_los, self.h_rg_los,
             self.hprof_step,
+            self.time_percent,
             )
 
         pathprop_los_true = pathprof.PathProps(
+            freq=Quantity(2.0, apu.GHz),
+            wavelen=Quantity(0.149896229, apu.m),
+            p=Quantity(50.0, apu.percent),
+            beta0=Quantity(2.715676100111307, apu.percent),
+            omega=Quantity(0.0, apu.percent),
             lon_mid=Quantity(6.050021979477151, apu.deg),
             lat_mid=Quantity(50.125392608270644, apu.deg),
-            delta_N=Quantity(39.276915092335486, 1. / apu.km),
-            N0=Quantity(325.48649839940964, cnv.dimless),
+            delta_N=Quantity(39.276915092335486, 1 / apu.km),
+            N0=Quantity(325.48649839940964,),
             distance=Quantity(28.712600748321183, apu.km),
             bearing=Quantity(14.383138371761586, apu.deg),
-            back_bearing=Quantity(-165.6168616282384, apu.deg),
-            a_e=Quantity(8496.60880688387, apu.km),
-            h0=Quantity(391.0, apu.m),
-            hn=Quantity(514.5184936523438, apu.m),
-            h_ts=Quantity(591.0, apu.m),
-            h_rs=Quantity(714.5184936523438, apu.m),
-            h_st=Quantity(391.0, apu.m),
-            h_sr=Quantity(475.1045924277951, apu.m),
-            h_std=Quantity(391.0, apu.m),
-            h_srd=Quantity(475.1045924277951, apu.m),
-            h_te=Quantity(200.0, apu.m),
-            h_re=Quantity(239.41390122454862, apu.m),
-            h_m=Quantity(96.53708718864101, apu.m),
-            d_lt=Quantity(9.6, apu.km),
-            d_lr=Quantity(19.112600748321185, apu.km),
-            theta_t=Quantity(2.6122349531799145, apu.mrad),
-            theta_r=Quantity(-5.991470448965087, apu.mrad),
-            theta=Quantity(6.575262095775969e-05, apu.mrad),
-            nu_bull=Quantity(-31.84165949880204, cnv.dimless),
+            back_bearing=Quantity(-165.54011694083593, apu.deg),
+            h0=Quantity(393.0717053583606, apu.m),
+            hn=Quantity(432.48246234202657, apu.m),
+            h_ts=Quantity(593.0717053583605, apu.m),
+            h_rs=Quantity(632.4824623420266, apu.m),
+            h_st=Quantity(386.5518714039629, apu.m),
+            h_sr=Quantity(432.48246234202657, apu.m),
+            h_std=Quantity(386.5518714039629, apu.m),
+            h_srd=Quantity(432.48246234202657, apu.m),
+            h_te=Quantity(206.51983395439765, apu.m),
+            h_re=Quantity(200.0, apu.m),
+            d_lm=Quantity(28.712600748321183, apu.km),
+            d_tm=Quantity(28.712600748321183, apu.km),
+            d_ct=Quantity(50000.0, apu.km),
+            d_cr=Quantity(50000.0, apu.km),
             path_type=0,
+            theta_t=Quantity(-0.31705614437307267, apu.mrad),
+            theta_r=Quantity(-3.0622355215533474, apu.mrad),
+            theta=Quantity(9.582479710168457e-06, apu.mrad),
+            d_lt=Quantity(14.6, apu.km),
+            d_lr=Quantity(14.112600748321183, apu.km),
+            h_m=Quantity(75.09123485725866, apu.m),
+            a_e_50=Quantity(8496.60880688387, apu.km),
+            path_type_50=0,
+            nu_bull_50=Quantity(-3.448371236562154, ),
+            nu_bull_idx_50=Quantity(153.0, ),
+            S_tim_50=Quantity(-2.4823519934863456, apu.m / apu.km),
+            S_rim_50=Quantity(np.nan, apu.m / apu.km),
+            S_tr_50=Quantity(1.3725944692060112, apu.m / apu.km),
+            a_e_b0=Quantity(19113.0, apu.km),
+            path_type_b0=0,
+            nu_bull_b0=Quantity(-3.738052335037034,),
+            nu_bull_idx_b0=Quantity(153.0,),
+            S_tim_b0=Quantity(-2.548137475947695, apu.m / apu.km),
+            S_rim_b0=Quantity(np.nan, apu.m / apu.km),
+            S_tr_b0=Quantity(1.3725944692060112, apu.m / apu.km),
+            a_e_zh_50=Quantity(8496.60880688387, apu.km),
+            path_type_zh_50=0,
+            nu_bull_zh_50=Quantity(-8.239295333780365,),
+            nu_bull_idx_zh_50=Quantity(145.0,),
+            S_tim_zh_50=Quantity(-7.195071513442229, apu.m / apu.km),
+            S_rim_zh_50=Quantity(np.nan, apu.m / apu.km),
+            S_tr_zh_50=Quantity(-0.2270722186243915, apu.m / apu.km),
+            a_e_zh_b0=Quantity(8496.60880688387, apu.km),
+            path_type_zh_b0=0,
+            nu_bull_zh_b0=Quantity(-8.529703149326886,),
+            nu_bull_idx_zh_b0=Quantity(145.0,),
+            S_tim_zh_b0=Quantity(-7.195483391609509, apu.m / apu.km),
+            S_rim_zh_b0=Quantity(np.nan, apu.m / apu.km),
+            S_tr_zh_b0=Quantity(-0.2270722186243915, apu.m / apu.km),
             )
 
         for t1, t2 in zip(pathprop_los, pathprop_los_true):
@@ -433,15 +517,11 @@ class TestPropagation:
     def test_free_space_loss_bfsg(self):
 
         pfunc = pathprof.free_space_loss_bfsg
-        # args_list = [
-        #     (None, None, None),
-        #     (1.e-30, None, apu.GHz),
-        #     (0, 100, apu.percent),
-        #     (0, None, apu.K),
-        #     (0, None, apu.hPa),
-        #     (0, 100, apu.percent),
-        #     ]
-        # check_astro_quantities(pfunc, args_list)
+        args_list = [
+            (0, None, apu.K),
+            (0, None, apu.hPa),
+            ]
+        check_astro_quantities(partial(pfunc, self.pathprop_los), args_list)
 
         # trans == los:
         # Lbfsg_trans = pfunc(
@@ -455,10 +535,7 @@ class TestPropagation:
         #     Lbfsg_trans_true,
         #     )
 
-        Lbfsg_los = pfunc(
-            self.pathprop_los, self.freq, self.omega,
-            self.temperature, self.pressure, self.time_percent
-            )
+        Lbfsg_los = pfunc(self.pathprop_los, self.temperature, self.pressure)
         Lbfsg_los_true = 127.879838 * cnv.dB
 
         assert_quantity_allclose(

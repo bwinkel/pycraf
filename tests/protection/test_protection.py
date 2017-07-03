@@ -165,7 +165,7 @@ COL_UNITS_DB = [
     apu.K,
     apu.K,
     apu.mK,
-    apu.W / apu.Hz,
+    cnv.dB_W_Hz,
     cnv.dB_W,
     cnv.dB_W_m2,
     cnv.dB_W_m2_Hz,
