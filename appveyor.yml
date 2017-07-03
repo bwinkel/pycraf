@@ -1,0 +1,59 @@
+environment:
+  # In the Appveyor UI, add your PyPI password as TWINE_PASSWORD (click
+  # Settings > Environment > Add Variable...). Make sure to mark it as private!
+  TWINE_USERNAME: bwinkel
+
+  matrix:
+
+    # For Python versions available on Appveyor, see
+    # http://www.appveyor.com/docs/installed-software#python
+    # The list here is complete (excluding Python 2.6, which
+    # isn't covered by this document) at the time of writing.
+
+      # 3.5
+    # - PYTHON: "C:\\Miniconda35"
+      # 3.5 64-bit
+    - PYTHON: "C:\\Miniconda35-x64"
+      # 3.6
+    # - PYTHON: "C:\\Miniconda36"
+      # 3.6 64-bit
+    # - PYTHON: "C:\\Miniconda36-x64"
+
+
+install:
+  # Prepend chosen Python to the PATH of this build
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  # Check that we have the expected version and architecture for Python
+  - "python --version"
+  - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
+  # Install the conda supplied packages; msvc_runtime needed for py34
+  - "conda update -y conda"
+  - "conda install -y pip wheel numpy scipy astropy pytest cython"
+  - "conda install -y -c conda-forge pyproj geographiclib"
+
+build: off
+
+test_script:
+  # Put your test command here.
+  - "del /f pycraf\\*.c"
+  - "%PYTHON%\\python.exe setup.py install"
+  - cd tests
+  - "%PYTHON%\\python.exe -m pytest"
+  - cd ..
+
+after_test:
+  # This step builds your wheels.
+  - "%PYTHON%\\python.exe setup.py bdist_wheel"
+  - "%PYTHON%\\python.exe setup.py bdist_wininst"
+  - "%PYTHON%\\python.exe setup.py bdist_msi"
+
+artifacts:
+  # bdist_wheel puts your built wheel in the dist directory
+  - path: dist\*
+
+on_success:
+#  You can use this step to upload your artifacts to a public website.
+#  See Appveyor's documentation for more details. Or you can simply
+#  access your wheels from the Appveyor "artifacts" tab for your build.
+#  APPVEYOR_REPO_TAG is true only if commit is a tag
+  - ps: "If ($env:APPVEYOR_REPO_TAG -eq \"true\") {\n  python -m pip install twine\n  python -m twine upload (resolve-path dist\\*.whl)\n  }"

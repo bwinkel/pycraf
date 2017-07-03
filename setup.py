@@ -66,7 +66,7 @@ setup(
     install_requires=[
         'setuptools',
         'numpy>=1.8',
-        # 'scipy>=0.15',
+        'scipy>=0.15',
         'astropy>=1.1',
         'pyproj>=1.9',
         ],

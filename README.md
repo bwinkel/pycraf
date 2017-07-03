@@ -1,6 +1,6 @@
 # Introduction #
 
-- *Version*: 0.2
+- *Version*: 0.23
 - *Authors*: Benjamin Winkel
 
 # Disclaimer #
@@ -11,10 +11,11 @@ grateful for feedback. Note, that the documentation is still missing (but at
 least docstrings are provided).
 
 # Purpose #
-`pycraf` is a Python package that provides functions and procedures for various
-tasks in spectrum-management compatibility studies. A typical example would be
-to calculate the interference levels at a radio telescope produced from a radio
-broadcasting tower.
+
+`pycraf` is a Python package that provides functions and procedures for
+various tasks in spectrum-management compatibility studies. A typical example
+would be to calculate the interference levels at a radio telescope produced
+from a ratio broadcasting tower.
 
 # Features #
 
@@ -45,13 +46,11 @@ to just use pycraf without the need to manually download necessary data files.
 However, these data files are not free for commercial use. For details, please
 see the LICENSE.ITU file in the `itudata` directory of the package.
 
-We are very grateful for the kind support from ITU study groups and ITU's legal
-department.
+We are very grateful for the kind support from ITU study groups and ITU's
+legal department.
 
 
-# Usage #
-
-## Installation ##
+# Installation #
 
 The easiest way to install pycraf is via `pip`:
 
@@ -66,7 +65,31 @@ extract (or clone from GitHub) and simply execute
 python setup.py install
 ```
 
-### SRTM data ###
+## Dependencies ##
+
+We kept the dependencies as minimal as possible. The following packages are
+required:
+* `numpy 1.8` or later
+* `astropy 1.1` or later
+* `pyproj 1.9` or later
+
+## Windows machines ##
+
+Note, for Windows machines we provide a binary wheel (Python 3.5+ only).
+However, the `pyproj` package is a dependency and unfortunately, the official
+`pyproj` repository on PyPI contains only the sources. You can download a
+suitable wheel from [Christoph Gohlke's package site](http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyproj). Then use
+
+```
+pip install [path-to-wheel]\pyproj‑*.whl
+```
+
+If you're using Anaconda (recommended), it is much simpler:
+```
+conda install -c conda-forge pyproj
+```
+
+## SRTM data ##
 
 To make full use of the path attenuation calculations provided by `pycraf`
 (implements ITU-R Rec. P.452), we recommend to use NASA's [Shuttle Radar
@@ -82,20 +105,14 @@ large file sizes and legal reasons. But once you downloaded the necessary tiles
 environment variable `$SRTMDATA`, let it point to the folder containing the
 tiles, and `pycraf` will find the files when it is imported from Python.
 
-
-## Dependencies ##
-
-We kept the dependencies as minimal as possible. The following packages are
-required:
-* `numpy 1.8` or later
-* `astropy 1.1` or later
-* `pyproj 1.9` or later
+# Usage #
 
 ## Examples and Documentation ##
 
-Will follow asap. Sorry for the inconvenience!
+Will follow asap. Sorry for the inconvenience! You can find tutorials in the
+[`notebooks`](http://nbviewer.jupyter.org/github/bwinkel/pycraf/blob/master/notebooks/) directory on the pycraf repository.
 
-## Who do I talk to? ##
+# Who do I talk to? #
 
 If you encounter any problems or have questions, do not hesitate to raise an
 issue or make a pull request. Moreover, you can contact the devs directly:
