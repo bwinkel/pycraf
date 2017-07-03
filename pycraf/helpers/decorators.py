@@ -71,9 +71,11 @@ class RangedQuantityInput(object):
             return self
 
     def __init__(self, func=None, **kwargs):
+        self.kwargs = dict(kwargs)
         self.equivalencies = kwargs.pop('equivalencies', [])
         self.strip_input_units = kwargs.pop('strip_input_units', False)
         self.output_unit = kwargs.pop('output_unit', None)
+        self.allow_none = kwargs.pop('allow_none', None)
         self.decorator_kwargs = kwargs
 
     def __call__(self, wrapped_function):
@@ -111,6 +113,11 @@ class RangedQuantityInput(object):
                 # If the target unit is empty, then no unit was specified so we
                 # move past it
                 if target_unit is not funcsigs.Parameter.empty:
+
+                    # skip over None values, if desired
+                    if arg is None and self.allow_none:
+                        continue
+
                     try:
                         equivalent = arg.unit.is_equivalent(target_unit,
                                                   equivalencies=self.equivalencies)
@@ -164,7 +171,6 @@ class RangedQuantityInput(object):
                                 ).value
                             )
 
-            # ipdb.set_trace()
             # Call the original function with any equivalencies in force.
             with add_enabled_equivalencies(self.equivalencies):
                 # result = wrapped_function(*func_args, **func_kwargs)
@@ -172,6 +178,7 @@ class RangedQuantityInput(object):
                     *bound_args.args, **bound_args.kwargs
                     )
 
+            # import ipdb; ipdb.set_trace()
             if self.output_unit is not None:
                 # # test, if return values are tuple-like
                 try:
@@ -180,12 +187,16 @@ class RangedQuantityInput(object):
                     if hasattr(result, '_fields'):
                         cls = result.__class__
                         return cls(*(
-                            r if u is None else Quantity(r, u)
+                            # r if u is None else Quantity(r, u)
+                            # r if u is None else Quantity(r, u, subok=True)
+                            r if u is None else r * u  # astropy bug
                             for r, u in zip(result, self.output_unit)
                             ))
                     else:
                         return tuple(
-                            r if u is None else Quantity(r, u)
+                            # r if u is None else Quantity(r, u)
+                            # r if u is None else Quantity(r, u, subok=True)
+                            r if u is None else r * u  # astropy bug
                             for r, u in zip(result, self.output_unit)
                             )
                 except TypeError:
@@ -193,7 +204,9 @@ class RangedQuantityInput(object):
                     return (
                         result
                         if self.output_unit is None else
-                        Quantity(result, self.output_unit)
+                        # Quantity(result, self.output_unit)
+                        # Quantity(result, self.output_unit, subok=True)
+                        result * self.output_unit  # astropy bug
                         )
             else:
                 return result

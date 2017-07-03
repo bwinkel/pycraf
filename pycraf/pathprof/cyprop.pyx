@@ -19,19 +19,25 @@ from libc.math cimport (
     sin, cos, tan, asin, acos, atan, atan2, tanh
     )
 import numpy as np
+from astropy import units as apu
 from . import heightprofile
 from . import helper
+from .. import conversions as cnv
+from .. import helpers
 
 np.import_array()
 
 
 __all__ = [
-    'CLUTTER', 'CLUTTER_DATA', 'PathProp', 'set_num_threads',
-    'specific_attenuation_annex2',
-    'free_space_loss_bfsg_cython', 'tropospheric_scatter_loss_bs_cython',
-    'ducting_loss_ba_cython', 'diffraction_loss_complete_cython',
-    'path_attenuation_complete_cython', 'clutter_correction_cython',
-    'atten_map_fast', 'height_profile_data', 'beta_from_DN_N0',
+    'CLUTTER', 'CLUTTER_DATA',
+    'PARAMETERS_BASIC', 'PARAMETERS_V14', 'PARAMETERS_V16',
+    'PathProp', 'set_num_threads',
+    # 'specific_attenuation_annex2',
+    # 'free_space_loss_bfsg_cython', 'tropospheric_scatter_loss_bs_cython',
+    # 'ducting_loss_ba_cython', 'diffraction_loss_complete_cython',
+    # 'path_attenuation_complete_cython', 'clutter_correction_cython',
+    # 'atten_map_fast_cython', 'beta_from_DN_N0',
+    # 'height_profile_data_cython',
     ]
 
 
@@ -69,112 +75,115 @@ CLUTTER_DATA = np.array(
 
 cdef double[:, ::1] CLUTTER_DATA_V = CLUTTER_DATA
 
-cdef object PARAMETERS_BASIC = [
-    ('version', '12d', '(P.452 version; 14 or 16)'),
-    ('freq', '12.6f', 'GHz'),
-    ('wavelen', '12.6f', 'm'),
-    ('polarization', '12d', '(0 - horizontal, 1 - vertical)'),
-    ('temperature', '12.6f', 'K'),
-    ('pressure', '12.6f', 'hPa'),
-    ('time_percent', '12.6f', 'percent'),
-    ('beta0', '12.6f', 'percent'),
-    ('omega', '12.6f', 'percent'),
-    ('lon_t', '12.6f', 'deg'),
-    ('lat_t', '12.6f', 'deg'),
-    ('lon_r', '12.6f', 'deg'),
-    ('lat_r', '12.6f', 'deg'),
-    ('lon_mid', '12.6f', 'deg'),
-    ('lat_mid', '12.6f', 'deg'),
-    ('delta_N', '12.6f', 'dimless / km'),
-    ('N0', '12.6f', 'dimless'),
-    ('distance', '12.6f', 'km'),
-    ('bearing', '12.6f', 'deg'),
-    ('back_bearing', '12.6f', 'deg'),
-    ('hprof_step', '12.6f', 'm'),
-    ('zone_t', '12d', ''),
-    ('zone_r', '12d', ''),
-    ('h_tg', '12.6f', 'm'),
-    ('h_rg', '12.6f', 'm'),
-    ('h_tg_in', '12.6f', 'm'),
-    ('h_rg_in', '12.6f', 'm'),
-    ('h0', '12.6f', 'm'),
-    ('hn', '12.6f', 'm'),
-    ('h_ts', '12.6f', 'm'),
-    ('h_rs', '12.6f', 'm'),
-    ('h_st', '12.6f', 'm'),
-    ('h_sr', '12.6f', 'm'),
-    ('h_std', '12.6f', 'm'),
-    ('h_srd', '12.6f', 'm'),
-    ('h_te', '12.6f', 'm'),
-    ('h_re', '12.6f', 'm'),
-    ('d_lm', '12.6f', 'km'),
-    ('d_tm', '12.6f', 'km'),
-    ('d_ct', '12.6f', 'km'),
-    ('d_cr', '12.6f', 'km'),
-    ('path_type', '12d', '(0 - LOS, 1 - transhoriz)'),
-    ('theta_t', '12.6f', 'mrad'),
-    ('theta_r', '12.6f', 'mrad'),
-    ('alpha_tr', '12.6f', 'deg'),
-    ('alpha_rt', '12.6f', 'deg'),
-    ('eps_pt', '12.6f', 'deg'),
-    ('eps_pr', '12.6f', 'deg'),
-    ('theta', '12.6f', 'mrad'),
-    ('d_lt', '12.6f', 'km'),
-    ('d_lr', '12.6f', 'km'),
-    ('h_m', '12.6f', 'm'),
-    ('duct_slope', '12.6f', 'm / km'),
-    ('a_e_50', '12.6f', 'km'),
-    ('a_e_b0', '12.6f', 'km'),
+PARAMETERS_BASIC = [
+    ('version', '12d', '(P.452 version; 14 or 16)', cnv.dimless),
+    ('freq', '12.6f', 'GHz', apu.GHz),
+    ('wavelen', '12.6f', 'm', apu.m),
+    ('polarization', '12d', '(0 - horizontal, 1 - vertical)', cnv.dimless),
+    ('temperature', '12.6f', 'K', apu.K),
+    ('pressure', '12.6f', 'hPa', apu.hPa),
+    ('time_percent', '12.6f', 'percent', apu.percent),
+    ('beta0', '12.6f', 'percent', apu.percent),
+    ('omega', '12.6f', 'percent', apu.percent),
+    ('lon_t', '12.6f', 'deg', apu.deg),
+    ('lat_t', '12.6f', 'deg', apu.deg),
+    ('lon_r', '12.6f', 'deg', apu.deg),
+    ('lat_r', '12.6f', 'deg', apu.deg),
+    ('lon_mid', '12.6f', 'deg', apu.deg),
+    ('lat_mid', '12.6f', 'deg', apu.deg),
+    ('delta_N', '12.6f', 'dimless / km', cnv.dimless / apu.km),
+    ('N0', '12.6f', 'dimless', cnv.dimless),
+    ('distance', '12.6f', 'km', apu.km),
+    ('bearing', '12.6f', 'deg', apu.deg),
+    ('back_bearing', '12.6f', 'deg', apu.deg),
+    ('hprof_step', '12.6f', 'm', apu.m),
+    ('zone_t', '12d', '', cnv.dimless),
+    ('zone_r', '12d', '', cnv.dimless),
+    ('h_tg', '12.6f', 'm', apu.m),
+    ('h_rg', '12.6f', 'm', apu.m),
+    ('h_tg_in', '12.6f', 'm', apu.m),
+    ('h_rg_in', '12.6f', 'm', apu.m),
+    ('h0', '12.6f', 'm', apu.m),
+    ('hn', '12.6f', 'm', apu.m),
+    ('h_ts', '12.6f', 'm', apu.m),
+    ('h_rs', '12.6f', 'm', apu.m),
+    ('h_st', '12.6f', 'm', apu.m),
+    ('h_sr', '12.6f', 'm', apu.m),
+    ('h_std', '12.6f', 'm', apu.m),
+    ('h_srd', '12.6f', 'm', apu.m),
+    ('h_te', '12.6f', 'm', apu.m),
+    ('h_re', '12.6f', 'm', apu.m),
+    ('d_lm', '12.6f', 'km', apu.km),
+    ('d_tm', '12.6f', 'km', apu.km),
+    ('d_ct', '12.6f', 'km', apu.km),
+    ('d_cr', '12.6f', 'km', apu.km),
+    ('path_type', '12d', '(0 - LOS, 1 - transhoriz)', cnv.dimless),
+    ('theta_t', '12.6f', 'mrad', apu.mrad),
+    ('theta_r', '12.6f', 'mrad', apu.mrad),
+    ('alpha_tr', '12.6f', 'deg', apu.deg),
+    ('alpha_rt', '12.6f', 'deg', apu.deg),
+    ('eps_pt', '12.6f', 'deg', apu.deg),
+    ('eps_pr', '12.6f', 'deg', apu.deg),
+    ('theta', '12.6f', 'mrad', apu.mrad),
+    ('d_lt', '12.6f', 'km', apu.km),
+    ('d_lr', '12.6f', 'km', apu.km),
+    ('h_m', '12.6f', 'm', apu.m),
+    ('duct_slope', '12.6f', 'm / km', apu.m / apu.km),
+    ('a_e_50', '12.6f', 'km', apu.km),
+    ('a_e_b0', '12.6f', 'km', apu.km),
     ]
 
 
-cdef object PARAMETERS_V16 = [
-    ('path_type_50', '12d', '(0 - LOS, 1 - transhoriz)'),
-    ('nu_bull_50', '12.6f', 'dimless'),
-    ('nu_bull_idx_50', '12d', 'dimless'),
-    ('S_tim_50', '12.6f', 'm / km'),
-    ('S_rim_50', '12.6f', 'm / km'),
-    ('S_tr_50', '12.6f', 'm / km'),
-    ('path_type_b0', '12d', '(0 - LOS, 1 - transhoriz)'),
-    ('nu_bull_b0', '12.6f', 'dimless'),
-    ('nu_bull_idx_b0', '12d', 'dimless'),
-    ('S_tim_b0', '12.6f', 'm / km'),
-    ('S_rim_b0', '12.6f', 'm / km'),
-    ('S_tr_b0', '12.6f', 'm / km'),
-    # ('a_e_zh_50', '12.6f', 'km'),
-    ('path_type_zh_50', '12d', '(0 - LOS, 1 - transhoriz)'),
-    ('nu_bull_zh_50', '12.6f', 'dimless'),
-    ('nu_bull_idx_zh_50', '12d', 'dimless'),
-    ('S_tim_zh_50', '12.6f', 'm / km'),
-    ('S_rim_zh_50', '12.6f', 'm / km'),
-    ('S_tr_zh_50', '12.6f', 'm / km'),
-    # ('a_e_zh_b0', '12.6f', 'km'),
-    ('path_type_zh_b0', '12d', '(0 - LOS, 1 - transhoriz)'),
-    ('nu_bull_zh_b0', '12.6f', 'dimless'),
-    ('nu_bull_idx_zh_b0', '12d', 'dimless'),
-    ('S_tim_zh_b0', '12.6f', 'm / km'),
-    ('S_rim_zh_b0', '12.6f', 'm / km'),
-    ('S_tr_zh_b0', '12.6f', 'm / km'),
+PARAMETERS_V16 = [
+    ('path_type_50', '12d', '(0 - LOS, 1 - transhoriz)', cnv.dimless),
+    ('nu_bull_50', '12.6f', 'dimless', cnv.dimless),
+    ('nu_bull_idx_50', '12d', 'dimless', cnv.dimless),
+    ('S_tim_50', '12.6f', 'm / km', apu.m / apu.km),
+    ('S_rim_50', '12.6f', 'm / km', apu.m / apu.km),
+    ('S_tr_50', '12.6f', 'm / km', apu.m / apu.km),
+    ('path_type_b0', '12d', '(0 - LOS, 1 - transhoriz)', cnv.dimless),
+    ('nu_bull_b0', '12.6f', 'dimless', cnv.dimless),
+    ('nu_bull_idx_b0', '12d', 'dimless', cnv.dimless),
+    ('S_tim_b0', '12.6f', 'm / km', apu.m / apu.km),
+    ('S_rim_b0', '12.6f', 'm / km', apu.m / apu.km),
+    ('S_tr_b0', '12.6f', 'm / km', apu.m / apu.km),
+    # ('a_e_zh_50', '12.6f', 'km', apu.km),
+    ('path_type_zh_50', '12d', '(0 - LOS, 1 - transhoriz)', cnv.dimless),
+    ('nu_bull_zh_50', '12.6f', 'dimless', cnv.dimless),
+    ('nu_bull_idx_zh_50', '12d', 'dimless', cnv.dimless),
+    ('S_tim_zh_50', '12.6f', 'm / km', apu.m / apu.km),
+    ('S_rim_zh_50', '12.6f', 'm / km', apu.m / apu.km),
+    ('S_tr_zh_50', '12.6f', 'm / km', apu.m / apu.km),
+    # ('a_e_zh_b0', '12.6f', 'km', apu.km),
+    ('path_type_zh_b0', '12d', '(0 - LOS, 1 - transhoriz)', cnv.dimless),
+    ('nu_bull_zh_b0', '12.6f', 'dimless', cnv.dimless),
+    ('nu_bull_idx_zh_b0', '12d', 'dimless', cnv.dimless),
+    ('S_tim_zh_b0', '12.6f', 'm / km', apu.m / apu.km),
+    ('S_rim_zh_b0', '12.6f', 'm / km', apu.m / apu.km),
+    ('S_tr_zh_b0', '12.6f', 'm / km', apu.m / apu.km),
     ]
 
 
-cdef object PARAMETERS_V14 = [
-    ('zeta_m', '12.6f', 'dimless'),
-    ('nu_m50', '12.6f', 'dimless'),
-    ('nu_mbeta', '12.6f', 'dimless'),
-    ('i_m50', '12d', 'dimless'),
-    ('zeta_t', '12.6f', 'dimless'),
-    ('nu_t50', '12.6f', 'dimless'),
-    ('nu_tbeta', '12.6f', 'dimless'),
-    ('i_t50', '12d', 'dimless'),
-    ('zeta_r', '12.6f', 'dimless'),
-    ('nu_r50', '12.6f', 'dimless'),
-    ('nu_rbeta', '12.6f', 'dimless'),
-    ('i_r50', '12d', 'dimless'),
+PARAMETERS_V14 = [
+    ('zeta_m', '12.6f', 'dimless', cnv.dimless),
+    ('nu_m50', '12.6f', 'dimless', cnv.dimless),
+    ('nu_mbeta', '12.6f', 'dimless', cnv.dimless),
+    ('i_m50', '12d', 'dimless', cnv.dimless),
+    ('zeta_t', '12.6f', 'dimless', cnv.dimless),
+    ('nu_t50', '12.6f', 'dimless', cnv.dimless),
+    ('nu_tbeta', '12.6f', 'dimless', cnv.dimless),
+    ('i_t50', '12d', 'dimless', cnv.dimless),
+    ('zeta_r', '12.6f', 'dimless', cnv.dimless),
+    ('nu_r50', '12.6f', 'dimless', cnv.dimless),
+    ('nu_rbeta', '12.6f', 'dimless', cnv.dimless),
+    ('i_r50', '12d', 'dimless', cnv.dimless),
     ]
 
+# cdef object PARAMETERS_BASIC_V = PARAMETERS_BASIC
+# cdef object PARAMETERS_V14_V = PARAMETERS_V14
+# cdef object PARAMETERS_V16_V = PARAMETERS_V16
 
-cdef struct _PathProp:
+cdef struct ppstruct:
     int version  # P.452 version (14 or 16)
     double freq  # GHz
     double wavelen  # m
@@ -297,7 +306,7 @@ cdef inline double f_min(double a, double b) nogil:
     return a if a <= b else b
 
 
-cdef class PathProp(object):
+cdef class _PathProp(object):
     '''
     Calculate path profile properties.
 
@@ -327,7 +336,7 @@ cdef class PathProp(object):
     '''
 
     cdef:
-        _PathProp _pp
+        readonly ppstruct _pp
 
     def __init__(
             self,
@@ -339,15 +348,17 @@ cdef class PathProp(object):
             double h_tg, double h_rg,
             double hprof_step,
             double time_percent,
-            double omega=0,
-            double d_tm=-1, double d_lm=-1,
-            double d_ct=50000, double d_cr=50000,
-            int zone_t=CLUTTER.UNKNOWN, int zone_r=CLUTTER.UNKNOWN,
-            int polarization=0,
-            int version=16,
-            tuple DN_N0=None,  # override if you don't want builtin method
-            tuple hprofdata=None,  # override if you don't want builtin method
-            double bearing=NAN, double back_bearing=NAN,
+            double omega,
+            d_tm, d_lm,
+            d_ct, d_cr,
+            int zone_t, int zone_r,
+            int polarization,
+            int version,
+            # override if you don't want builtin method:
+            delta_N, N0,
+            # override if you don't want builtin method:
+            hprof_dists, hprof_heights,
+            bearing, back_bearing,
             ):
 
         assert time_percent <= 50.
@@ -355,6 +366,18 @@ cdef class PathProp(object):
 
         assert zone_t >= -1 and zone_t <= 11
         assert zone_r >= -1 and zone_r <= 11
+
+        assert (delta_N is None) == (N0 is None), (
+            'delta_N and N0 must both be None or both be provided'
+            )
+
+        assert (
+            (hprof_dists is None) == (hprof_heights is None) ==
+            (hprof_heights is None) == (hprof_heights is None)
+            ), (
+                'hprof_dists, hprof_heights, bearing, and back_bearing '
+                'must all be None or all be provided'
+                )
 
         self._pp.version = version
         self._pp.freq = freq
@@ -380,16 +403,9 @@ cdef class PathProp(object):
 
         self._pp.hprof_step = hprof_step
         self._pp.time_percent = time_percent
-        # TODO: add functionality to produce the following
-        # five parameters programmatically (using some kind of Geo-Data)
-        self._pp.omega = omega
-        self._pp.d_tm = d_tm
-        self._pp.d_lm = d_lm
-        self._pp.d_ct = d_ct
-        self._pp.d_cr = d_cr
         self._pp.polarization = polarization
 
-        if hprofdata is None:
+        if hprof_dists is None:
             (
                 lons,
                 lats,
@@ -405,9 +421,8 @@ cdef class PathProp(object):
                     hprof_step
                     )
         else:
-            distances, heights = hprofdata
-            distances = distances.astype(np.float64, order='C', copy=False)
-            heights = heights.astype(np.float64, order='C', copy=False)
+            distances = hprof_dists.astype(np.float64, order='C', copy=False)
+            heights = hprof_heights.astype(np.float64, order='C', copy=False)
             hsize = distances.size
             distance = distances[hsize - 1]
 
@@ -419,15 +434,27 @@ cdef class PathProp(object):
         self._pp.alpha_tr = bearing
         self._pp.alpha_rt = back_bearing
 
-        if self._pp.d_tm < 0:
-            self._pp.d_tm = self._pp.distance
-        if self._pp.d_lm < 0:
-            self._pp.d_lm = self._pp.distance
+        if d_tm is None:
+            d_tm = distance
+        if d_lm is None:
+            d_lm = distance
+        if d_ct is None:
+            d_ct = 50000.
+        if d_cr is None:
+            d_cr = 50000.
+
+        # TODO: add functionality to produce the following
+        # five parameters programmatically (using some kind of Geo-Data)
+        self._pp.omega = omega
+        self._pp.d_tm = d_tm
+        self._pp.d_lm = d_lm
+        self._pp.d_ct = d_ct
+        self._pp.d_cr = d_cr
 
         hsize = distances.size
         mid_idx = hsize // 2
 
-        if hprofdata is None:
+        if hprof_dists is None:
             self._pp.lon_mid = lons[mid_idx]
             self._pp.lat_mid = lats[mid_idx]
         else:
@@ -435,12 +462,10 @@ cdef class PathProp(object):
             self._pp.lat_mid = 0.5 * (lat_t + lat_r)
 
         # TODO: cythonize _radiomet_data_for_pathcenter
-        if DN_N0 is None:
+        if delta_N is None:
             delta_N, N0 = helper._N_from_map(
                 self._pp.lon_mid, self._pp.lat_mid
                 )
-        else:
-            delta_N, N0 = DN_N0
 
         self._pp.delta_N = delta_N
         self._pp.N0 = N0
@@ -462,392 +487,139 @@ cdef class PathProp(object):
             zheights,
             )
 
+
+# This is a wrapper class to expose the ppstruct members as attributes
+# (unfortunately, one cannot do dynamical attributes on cdef-classes)
+class PathProp(_PathProp):
+    '''
+    Calculate path profile properties.
+
+    Parameters
+    ----------
+    freq - Frequency of radiation [GHz]
+    temperature - Temperature (K)
+    pressure - Pressure (hPa)
+    lon_t, lat_t - Transmitter coordinates [deg]
+    lon_r, lat_r - Receiver coordinates [deg]
+    h_tg, h_rg - Transmitter/receiver heights over ground [m]
+    hprof_step - Distance resolution of height profile along path [m]
+    time_percent - Time percentage [%] (maximal 50%)
+    omega - Fraction of the path over water [%] (see Table 3)
+    d_tm - longest continuous land (inland + coastal) section of the
+        great-circle path [km]
+    d_lm - longest continuous inland section of the great-circle path [km]
+    d_ct, d_cr - Distance over land from transmit/receive antenna to the coast
+        along great circle interference path [km]
+        (set to zero for terminal on ship/sea platform; only relevant if less
+        than 5 km)
+    polarization - Polarization (0 - horizontal, 1 - vertical; default: 0)
+
+    Returns
+    -------
+    Path Properties object
+    '''
+
+    @helpers.ranged_quantity_input(
+        freq=(0.1, 100, apu.GHz),
+        temperature=(None, None, apu.K),
+        pressure=(None, None, apu.hPa),
+        lon_t=(0, 360, apu.deg),
+        lat_t=(-90, 90, apu.deg),
+        lon_r=(0, 360, apu.deg),
+        lat_r=(-90, 90, apu.deg),
+        h_tg=(None, None, apu.m),
+        h_rg=(None, None, apu.m),
+        hprof_step=(None, None, apu.m),
+        time_percent=(0, 50, apu.percent),
+        omega_percent=(0, 100, apu.percent),
+        d_tm=(None, None, apu.m),
+        d_lm=(None, None, apu.m),
+        d_ct=(None, None, apu.m),
+        d_cr=(None, None, apu.m),
+        delta_N=(None, None, cnv.dimless / apu.km),
+        N0=(None, None, cnv.dimless),
+        hprof_dists=(None, None, apu.km),
+        hprof_heights=(None, None, apu.m),
+        bearing=(None, None, apu.deg),
+        back_bearing=(None, None, apu.deg),
+        strip_input_units=True, allow_none=True, output_unit=None
+        )
+    def __init__(
+            self,
+            freq,
+            temperature,
+            pressure,
+            lon_t, lat_t,
+            lon_r, lat_r,
+            h_tg, h_rg,
+            hprof_step,
+            time_percent,
+            omega_percent=0 * apu.percent,
+            d_tm=None, d_lm=None,
+            d_ct=None, d_cr=None,
+            zone_t=CLUTTER.UNKNOWN, zone_r=CLUTTER.UNKNOWN,
+            polarization=0,
+            version=16,
+            # override if you don't want builtin method:
+            delta_N=None, N0=None,
+            # override if you don't want builtin method:
+            hprof_dists=None, hprof_heights=None,
+            bearing=None, back_bearing=None,
+            ):
+
+        super().__init__(
+            freq,
+            temperature,
+            pressure,
+            lon_t, lat_t,
+            lon_r, lat_r,
+            h_tg, h_rg,
+            hprof_step,
+            time_percent,
+            omega=omega_percent,
+            d_tm=d_tm, d_lm=d_lm,
+            d_ct=d_ct, d_cr=d_cr,
+            zone_t=zone_t, zone_r=zone_r,
+            polarization=polarization,
+            version=version,
+            delta_N=delta_N, N0=N0,
+            hprof_dists=hprof_dists, hprof_heights=hprof_heights,
+            bearing=bearing, back_bearing=back_bearing,
+            )
+
+        self.__params = list(PARAMETERS_BASIC)  # make a copy
+        if self._pp['version'] == 14:
+            self.__params += PARAMETERS_V14
+        elif self._pp['version'] == 16:
+            self.__params += PARAMETERS_V16
+
+        # no need to set property, as readonly and immutable
+        # can just copy to __dict__
+        # for p in self.__params:
+        #     setattr(
+        #         PathProp,
+        #         p[0],
+        #         property(lambda self: getattr(self._pp, p[0]))
+        #         )
+
+        for p in self.__params:
+            self.__dict__[p[0]] = self._pp[p[0]] * p[3]
+
     def __repr__(self):
 
-        return 'PathProp<Freq: {:.3f} GHz>'.format(self._pp.freq)
+        return 'PathProp<Freq: {:.3f} GHz>'.format(self.freq)
 
     def __str__(self):
-
-        params = list(PARAMETERS_BASIC)  # make a copy
-        if self._pp.version == 14:
-            params += PARAMETERS_V14
-        elif self._pp.version == 16:
-            params += PARAMETERS_V16
 
         return '\n'.join(
             '{}: {{:{}}} {}'.format(
                 '{:15s}', p[1], '{:10s}'
                 ).format(
-                p[0],
-                getattr(self, p[0]), p[2]
+                p[0], self._pp[p[0]], p[2]
                 )
-            for p in params
+            for p in self.__params
             )
 
-    # How to do this programmatically?
-    @property
-    def version(self):
-        return self._pp.version
-
-    @property
-    def freq(self):
-        return self._pp.freq
-
-    @property
-    def polarization(self):
-        return self._pp.polarization
-
-    @property
-    def temperature(self):
-        return self._pp.temperature
-
-    @property
-    def pressure(self):
-        return self._pp.pressure
-
-    @property
-    def wavelen(self):
-        return self._pp.wavelen
-
-    @property
-    def time_percent(self):
-        return self._pp.time_percent
-
-    @property
-    def beta0(self):
-        return self._pp.beta0
-
-    @property
-    def omega(self):
-        return self._pp.omega
-
-    @property
-    def lon_t(self):
-        return self._pp.lon_t
-
-    @property
-    def lat_t(self):
-        return self._pp.lat_t
-
-    @property
-    def lon_r(self):
-        return self._pp.lon_r
-
-    @property
-    def lat_r(self):
-        return self._pp.lat_r
-
-    @property
-    def lon_mid(self):
-        return self._pp.lon_mid
-
-    @property
-    def lat_mid(self):
-        return self._pp.lat_mid
-
-    @property
-    def delta_N(self):
-        return self._pp.delta_N
-
-    @property
-    def N0(self):
-        return self._pp.N0
-
-    @property
-    def distance(self):
-        return self._pp.distance
-
-    @property
-    def bearing(self):
-        return self._pp.bearing
-
-    @property
-    def back_bearing(self):
-        return self._pp.back_bearing
-
-    @property
-    def hprof_step(self):
-        return self._pp.hprof_step
-
-    @property
-    def h_tg(self):
-        return self._pp.h_tg
-
-    @property
-    def h_rg(self):
-        return self._pp.h_rg
-
-    @property
-    def h0(self):
-        return self._pp.h0
-
-    @property
-    def hn(self):
-        return self._pp.hn
-
-    @property
-    def h_ts(self):
-        return self._pp.h_ts
-
-    @property
-    def h_rs(self):
-        return self._pp.h_rs
-
-    @property
-    def h_st(self):
-        return self._pp.h_st
-
-    @property
-    def h_sr(self):
-        return self._pp.h_sr
-
-    @property
-    def h_std(self):
-        return self._pp.h_std
-
-    @property
-    def h_srd(self):
-        return self._pp.h_srd
-
-    @property
-    def h_te(self):
-        return self._pp.h_te
-
-    @property
-    def h_re(self):
-        return self._pp.h_re
-
-    @property
-    def d_lm(self):
-        return self._pp.d_lm
-
-    @property
-    def d_tm(self):
-        return self._pp.d_tm
-
-    @property
-    def d_ct(self):
-        return self._pp.d_ct
-
-    @property
-    def d_cr(self):
-        return self._pp.d_cr
-
-    @property
-    def path_type(self):
-        return self._pp.path_type
-
-    @property
-    def theta_t(self):
-        return self._pp.theta_t
-
-    @property
-    def theta_r(self):
-        return self._pp.theta_r
-
-    @property
-    def alpha_tr(self):
-        return self._pp.alpha_tr
-
-    @property
-    def alpha_rt(self):
-        return self._pp.alpha_rt
-
-    @property
-    def eps_pt(self):
-        return self._pp.eps_pt
-
-    @property
-    def eps_pr(self):
-        return self._pp.eps_pr
-
-    @property
-    def theta(self):
-        return self._pp.theta
-
-    @property
-    def d_lt(self):
-        return self._pp.d_lt
-
-    @property
-    def d_lr(self):
-        return self._pp.d_lr
-
-    @property
-    def h_m(self):
-        return self._pp.h_m
-
-    @property
-    def a_e_50(self):
-        return self._pp.a_e_50
-
-    @property
-    def duct_slope(self):
-        return self._pp.duct_slope
-
-    @property
-    def path_type_50(self):
-        return self._pp.path_type_50
-
-    @property
-    def nu_bull_50(self):
-        return self._pp.nu_bull_50
-
-    @property
-    def nu_bull_idx_50(self):
-        return self._pp.nu_bull_idx_50
-
-    @property
-    def S_tim_50(self):
-        return self._pp.S_tim_50
-
-    @property
-    def S_rim_50(self):
-        return self._pp.S_rim_50
-
-    @property
-    def S_tr_50(self):
-        return self._pp.S_tr_50
-
-    @property
-    def a_e_b0(self):
-        return self._pp.a_e_b0
-
-    @property
-    def path_type_b0(self):
-        return self._pp.path_type_b0
-
-    @property
-    def nu_bull_b0(self):
-        return self._pp.nu_bull_b0
-
-    @property
-    def nu_bull_idx_b0(self):
-        return self._pp.nu_bull_idx_b0
-
-    @property
-    def S_tim_b0(self):
-        return self._pp.S_tim_b0
-
-    @property
-    def S_rim_b0(self):
-        return self._pp.S_rim_b0
-
-    @property
-    def S_tr_b0(self):
-        return self._pp.S_tr_b0
-
-    # @property
-    # def a_e_zh_50(self):
-    #     return self._pp.a_e_zh_50
-
-    @property
-    def path_type_zh_50(self):
-        return self._pp.path_type_zh_50
-
-    @property
-    def nu_bull_zh_50(self):
-        return self._pp.nu_bull_zh_50
-
-    @property
-    def nu_bull_idx_zh_50(self):
-        return self._pp.nu_bull_idx_zh_50
-
-    @property
-    def S_tim_zh_50(self):
-        return self._pp.S_tim_zh_50
-
-    @property
-    def S_rim_zh_50(self):
-        return self._pp.S_rim_zh_50
-
-    @property
-    def S_tr_zh_50(self):
-        return self._pp.S_tr_zh_50
-
-    # @property
-    # def a_e_zh_b0(self):
-    #     return self._pp.a_e_zh_b0
-
-    @property
-    def path_type_zh_b0(self):
-        return self._pp.path_type_zh_b0
-
-    @property
-    def nu_bull_zh_b0(self):
-        return self._pp.nu_bull_zh_b0
-
-    @property
-    def nu_bull_idx_zh_b0(self):
-        return self._pp.nu_bull_idx_zh_b0
-
-    @property
-    def S_tim_zh_b0(self):
-        return self._pp.S_tim_zh_b0
-
-    @property
-    def S_rim_zh_b0(self):
-        return self._pp.S_rim_zh_b0
-
-    @property
-    def S_tr_zh_b0(self):
-        return self._pp.S_tr_zh_b0
-
-    @property
-    def zeta_m(self):
-        return self._pp.zeta_m
-
-    @property
-    def nu_m50(self):
-        return self._pp.nu_m50
-
-    @property
-    def nu_mbeta(self):
-        return self._pp.nu_mbeta
-
-    @property
-    def i_m50(self):
-        return self._pp.i_m50
-
-    @property
-    def zeta_t(self):
-        return self._pp.zeta_t
-
-    @property
-    def nu_t50(self):
-        return self._pp.nu_t50
-
-    @property
-    def nu_tbeta(self):
-        return self._pp.nu_tbeta
-
-    @property
-    def i_t50(self):
-        return self._pp.i_t50
-
-    @property
-    def zeta_r(self):
-        return self._pp.zeta_r
-
-    @property
-    def nu_r50(self):
-        return self._pp.nu_r50
-
-    @property
-    def nu_rbeta(self):
-        return self._pp.nu_rbeta
-
-    @property
-    def i_r50(self):
-        return self._pp.i_r50
-
-
-# Doesn't work :-(
-# cannot assign attributes to C-level extension types at runtime
-# for p in PARAMETERS:
-#     setattr(PathProp, p[0], property(lambda self: getattr(self._pp, p[0])))
-
-# PathProp.freq2 = property(lambda self: self._pp.freq)
 
 cdef double _beta_from_DN_N0(
         double lat_mid, double DN, double N0, double d_tm, double d_lm
@@ -916,7 +688,7 @@ def beta_from_DN_N0(
 
 
 cdef void _process_path(
-        _PathProp *pp,
+        ppstruct *pp,
         # double[::1] lons_view,
         # double[::1] lats_view,
         double[::1] distances_view,
@@ -1500,8 +1272,8 @@ cdef (int, double, double, double, double, double, double, double, double) _path
         )
 
 
-cdef (double, double, double) _free_space_loss_bfsg_cython(
-        _PathProp pp,
+cdef (double, double, double) _free_space_loss_bfsg(
+        ppstruct pp,
         ) nogil:
     # Better make this a member function?
 
@@ -1530,8 +1302,11 @@ cdef (double, double, double) _free_space_loss_bfsg_cython(
     return L_bfsg, E_sp, E_sbeta
 
 
+# @helpers.ranged_quantity_input(
+#     strip_input_units=True, output_unit=(cnv.dB, cnv.dB, cnv.dB)
+#     )
 def free_space_loss_bfsg_cython(
-        PathProp pathprop
+        _PathProp pathprop
         ):
     '''
     Calculate the free space loss, L_bfsg, of a propagating radio wave
@@ -1561,11 +1336,11 @@ def free_space_loss_bfsg_cython(
       multipath effects.
     '''
 
-    return _free_space_loss_bfsg_cython(pathprop._pp)
+    return _free_space_loss_bfsg(pathprop._pp)
 
 
-cdef double _tropospheric_scatter_loss_bs_cython(
-        _PathProp pp, double G_t, double G_r
+cdef double _tropospheric_scatter_loss_bs(
+        ppstruct pp, double G_t, double G_r
         ) nogil:
     # Better make this a member function?
 
@@ -1595,7 +1370,7 @@ cdef double _tropospheric_scatter_loss_bs_cython(
 
 
 def tropospheric_scatter_loss_bs_cython(
-        PathProp pathprop, double G_t=0., double G_r=0.
+        _PathProp pathprop, double G_t=0., double G_r=0.
         ):
     '''
     Calculate the tropospheric scatter loss, L_bs, of a propagating radio wave
@@ -1620,11 +1395,11 @@ def tropospheric_scatter_loss_bs_cython(
         [TODO].
     '''
 
-    return _tropospheric_scatter_loss_bs_cython(pathprop._pp, G_t, G_r)
+    return _tropospheric_scatter_loss_bs(pathprop._pp, G_t, G_r)
 
 
-cdef double _ducting_loss_ba_cython(
-        _PathProp pp
+cdef double _ducting_loss_ba(
+        ppstruct pp
         ) nogil:
     # Better make this a member function?
 
@@ -1750,7 +1525,7 @@ cdef double _ducting_loss_ba_cython(
 
 
 def ducting_loss_ba_cython(
-        PathProp pathprop
+        _PathProp pathprop
         ):
     '''
     Calculate the ducting/layer reflection loss, L_ba, of a propagating radio
@@ -1773,7 +1548,7 @@ def ducting_loss_ba_cython(
         [TODO.
     '''
 
-    return _ducting_loss_ba_cython(pathprop._pp)
+    return _ducting_loss_ba(pathprop._pp)
 
 
 cdef inline double _J_edgeknife(double nu) nogil:
@@ -1961,7 +1736,7 @@ cdef double _diffraction_spherical_earth_loss_helper(
 
 
 cdef double _delta_bullington_loss(
-        _PathProp pp,
+        ppstruct pp,
         int do_beta,
         ) nogil:
 
@@ -2022,8 +1797,8 @@ cdef inline double _I_helper(
     return Z - T
 
 
-cdef (double, double, double, double, double) _diffraction_loss_complete_cython(
-        _PathProp pp,
+cdef (double, double, double, double, double) _diffraction_loss_complete(
+        ppstruct pp,
         ) nogil:
 
     cdef:
@@ -2059,7 +1834,7 @@ cdef (double, double, double, double, double) _diffraction_loss_complete_cython(
 
         L_dp = L_d_50 + F_i * (L_d_beta - L_d_50)
 
-    L_bfsg, E_sp, E_sbeta = _free_space_loss_bfsg_cython(pp)
+    L_bfsg, E_sp, E_sbeta = _free_space_loss_bfsg(pp)
 
     L_b0p = L_bfsg + E_sp
     L_b0beta = L_bfsg + E_sbeta
@@ -2082,7 +1857,7 @@ cdef (double, double, double, double, double) _diffraction_loss_complete_cython(
 
 
 def diffraction_loss_complete_cython(
-        PathProp pathprop
+        _PathProp pathprop
         ):
     '''
     Calculate the Diffraction loss of a propagating radio
@@ -2113,11 +1888,11 @@ def diffraction_loss_complete_cython(
         [TODO]
     '''
 
-    return _diffraction_loss_complete_cython(pathprop._pp)
+    return _diffraction_loss_complete(pathprop._pp)
 
 
-cdef (double, double, double, double, double, double, double) _path_attenuation_complete_cython(
-        _PathProp pp,
+cdef (double, double, double, double, double, double, double) _path_attenuation_complete(
+        ppstruct pp,
         double G_t, double G_r,
         ) nogil:
 
@@ -2140,11 +1915,11 @@ cdef (double, double, double, double, double, double, double) _path_attenuation_
         double A_ht = 0., A_hr = 0.
 
     if pp.zone_t != CLUTTER.UNKNOWN:
-        A_ht = _clutter_correction_cython(
+        A_ht = _clutter_correction(
             pp.h_tg_in, pp.zone_t, pp.freq
             )
     if pp.zone_r != CLUTTER.UNKNOWN:
-        A_hr = _clutter_correction_cython(
+        A_hr = _clutter_correction(
             pp.h_rg_in, pp.zone_r, pp.freq
             )
 
@@ -2164,13 +1939,13 @@ cdef (double, double, double, double, double, double, double) _path_attenuation_
     # free-space loss is not needed as an ingredient for final calculation
     # in itself (is included in diffraction part)
     # we use it here for debugging/informational aspects
-    L_bfsg, E_sp, E_sbeta = _free_space_loss_bfsg_cython(pp)
+    L_bfsg, E_sp, E_sbeta = _free_space_loss_bfsg(pp)
     L_b0p = L_bfsg + E_sp
 
-    L_bs = _tropospheric_scatter_loss_bs_cython(pp, G_t, G_r)
-    L_ba = _ducting_loss_ba_cython(pp)
+    L_bs = _tropospheric_scatter_loss_bs(pp, G_t, G_r)
+    L_ba = _ducting_loss_ba(pp)
 
-    L_d_50, L_dp, L_bd_50, L_bd, L_min_b0p = _diffraction_loss_complete_cython(pp)
+    L_d_50, L_dp, L_bd_50, L_bd, L_min_b0p = _diffraction_loss_complete(pp)
 
     L_min_bap = _ETA * log(exp(L_ba / _ETA) + exp(L_b0p / _ETA))
 
@@ -2192,11 +1967,11 @@ cdef (double, double, double, double, double, double, double) _path_attenuation_
 
 
 def path_attenuation_complete_cython(
-        PathProp pathprop, double G_t=0., double G_r=0.
+        _PathProp pathprop, double G_t=0., double G_r=0.
         ):
     '''
-    Calculate the Diffraction loss of a propagating radio
-    wave according to ITU-R P.452-16 Eq. (14-44).
+    Calculate the total loss of a propagating radio
+    wave according to ITU-R P.452-16 Eq. (58-64).
 
     Parameters
     ----------
@@ -2222,10 +1997,10 @@ def path_attenuation_complete_cython(
         [TODO]
     '''
 
-    return _path_attenuation_complete_cython(pathprop._pp, G_t, G_r)
+    return _path_attenuation_complete(pathprop._pp, G_t, G_r)
 
 
-cdef double _clutter_correction_cython(
+cdef double _clutter_correction(
         double h_g, int zone, double freq
         ) nogil:
 
@@ -2256,8 +2031,9 @@ def clutter_correction_cython(
 
     Parameters
     ----------
-    h_g - height above ground
+    h_g - height above ground [m]
     zone - Clutter category (see CLUTTER enum)
+    freq - frequency [GHz]
 
     Returns
     -------
@@ -2269,7 +2045,7 @@ def clutter_correction_cython(
         [TODO]
     '''
 
-    return _clutter_correction_cython(h_g, zone, freq)
+    return _clutter_correction(h_g, zone, freq)
 
 
 # ############################################################################
@@ -2283,11 +2059,16 @@ def clutter_correction_cython(
 # ############################################################################
 
 
-def height_profile_data(
+# TODO: d_tm, d_lm, d_ct, and d_cr need to be calculated for each pixel!
+# Likewise for clutter zones.
+def height_profile_data_cython(
         double lon_t, double lat_t,
         double map_size_lon, double map_size_lat,
         double map_resolution=3. / 3600.,
         int do_cos_delta=1,
+        int zone_t=CLUTTER.UNKNOWN, int zone_r=CLUTTER.UNKNOWN,
+        d_tm=None, d_lm=None,
+        d_ct=None, d_cr=None,
         ):
 
     '''
@@ -2296,6 +2077,28 @@ def height_profile_data(
     This can be used to cache height-profile data. Since it is independent
     of frequency, time_percent, Tx and Rx heights, etc., one can re-use
     it to save computing time when doing batch jobs.
+
+    Note: Path attenuation is completely symmetric, i.e., it doesn't matter if
+    the transmitter or the receiver is situated in the map center.
+
+    Parameters
+    ----------
+    lon_t, lat_t - Transmitter coordinates [deg]
+    map_size_lon, map_size_lat - Map size [deg]
+    map_resolution - Pixel resolution of map [deg]
+    do_cos_delta - If True, divide map_size_lon by cos(latitude) for square map
+    zone_t, zone_r - Transmitter/receiver clutter zone codes.
+    d_tm - longest continuous land (inland + coastal) section of the
+        great-circle path [km]
+    d_lm - longest continuous inland section of the great-circle path [km]
+    d_ct, d_cr - Distance over land from transmit/receive antenna to the coast
+        along great circle interference path [km]
+        (set to zero for terminal on ship/sea platform; only relevant if less
+        than 5 km)
+
+    Returns
+    -------
+    Dictionary with height profiles and auxillary maps
     '''
 
     cdef:
@@ -2337,7 +2140,6 @@ def height_profile_data(
         lat_t + map_size_lat / 2 + 1.e-6,
         map_resolution / 3,
         )
-
 
     # path_idx_map stores the index of the edge-path that is closest
     # to any given map pixel
@@ -2433,6 +2235,31 @@ def height_profile_data(
         lon_mid_map, lat_mid_map, dist_map, dist_map
         )
 
+    # TODO: derive the following programmatically
+    zone_t_map = np.full_like(path_idx_map, zone_t)
+    zone_r_map = np.full_like(path_idx_map, zone_r)
+
+    # TODO: derive the following programmatically
+    if d_tm is None:
+        d_tm_map = dist_map
+    else:
+        d_tm_map = np.full_like(dist_map, d_tm)
+
+    if d_lm is None:
+        d_lm_map = dist_map
+    else:
+        d_lm_map = np.full_like(dist_map, d_lm)
+
+    if d_ct is None:
+        d_ct_map = np.full_like(dist_map, 50000.)
+    else:
+        d_ct_map = np.full_like(dist_map, d_ct)
+
+    if d_cr is None:
+        d_cr_map = np.full_like(dist_map, 50000.)
+    else:
+        d_cr_map = np.full_like(dist_map, d_cr)
+
     # dict access not possible with nogil
     # will store height profile dict in a 2D array, even though this
     # needs somewhat more memory
@@ -2483,6 +2310,14 @@ def height_profile_data(
     hprof_data['beta0_map'] = beta0_map
     hprof_data['N0_map'] = N0_map
 
+    hprof_data['zone_t_map'] = zone_t_map
+    hprof_data['zone_r_map'] = zone_r_map
+
+    hprof_data['d_tm_map'] = d_tm_map
+    hprof_data['d_lm_map'] = d_lm_map
+    hprof_data['d_ct_map'] = d_ct_map
+    hprof_data['d_cr_map'] = d_cr_map
+
     hprof_data['dist_prof'] = dist_prof
     hprof_data['height_profs'] = height_profs
     hprof_data['zheight_prof'] = zheight_prof
@@ -2490,24 +2325,50 @@ def height_profile_data(
     return hprof_data
 
 
-def atten_map_fast(
+def atten_map_fast_cython(
         double freq,
         double temperature,
         double pressure,
-        double lon_t, double lat_t,
         double h_tg, double h_rg,
         double time_percent,
-        object hprof_data=None,  # dict_like
-        double map_size_lon=1., double map_size_lat=1.,
-        double map_resolution=3. / 3600.,
+        object hprof_data not None,  # dict_like
         double omega=0,
-        int zone_t=CLUTTER.UNKNOWN, int zone_r=CLUTTER.UNKNOWN,
-        double d_tm=-1, double d_lm=-1,
-        double d_ct=50000, double d_cr=50000,
         int polarization=0,
         int version=16,
-        int do_cos_delta=1
         ):
+    '''
+    Calculate attenuation map using a fast method.
+
+    Parameters
+    ----------
+    freq - Frequency of radiation [GHz]
+    temperature - Temperature (K)
+    pressure - Pressure (hPa)
+    h_tg, h_rg - Transmitter/receiver heights over ground [m]
+    time_percent - Time percentage [%] (maximal 50%)
+    hprof_data - Dictionary with height profiles and auxillary maps as
+        calculated with height_profile_data_cython.
+    omega - Fraction of the path over water [%] (see Table 3)
+    polarization - Polarization (0 - horizontal, 1 - vertical; default: 0)
+    version - P.452 version to use (14 or 16)
+
+    Returns
+    -------
+    (atten_map, eps_pt_map, eps_pr_map) - tuple
+        atten_map - 3D array with attenuation maps
+            first dimension has length 6 and refers to:
+                0: L_bfsg - Free-space loss [dB]
+                1: L_bd - Basic transmission loss associated with diffraction
+                          not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
+                2: L_bs - Tropospheric scatter loss [dB]
+                3: L_ba - Ducting/layer reflection loss [dB]
+                4: L_b - Complete path propagation loss [dB]
+                5: L_b_corr - As L_b but with clutter correction [dB]
+            (i.e., the output of path_attenuation_complete_cython without
+            gain-corrected values)
+        eps_pt_map - 2D array with elevation angle of paths w.r.t. Tx [deg]
+        eps_pr_map - 2D array with elevation angle of paths w.r.t. Rx [deg]
+    '''
 
     # TODO: implement map-based clutter handling; currently, only a single
     # clutter zone type is possible for each of Tx and Rx
@@ -2516,27 +2377,20 @@ def atten_map_fast(
     assert version == 14 or version == 16
 
     cdef:
-        _PathProp *pp
+        # must set gains to zero, because gain is direction dependent
         double G_t = 0., G_r = 0.
+        ppstruct *pp
         int xi, yi, xlen, ylen
         int eidx, didx
 
         double[:, ::1] clutter_data_v = CLUTTER_DATA
 
-        double L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L
-
-    if hprof_data is None:
-
-        hprof_data = height_profile_data(
-            lon_t, lat_t,
-            map_size_lon, map_size_lat,
-            map_resolution, do_cos_delta
-            )
+        double L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
 
     xcoords, ycoords = hprof_data['xcoords'], hprof_data['ycoords']
 
     # atten_map stores path attenuation
-    atten_map = np.zeros((7, len(ycoords), len(xcoords)), dtype=np.float64)
+    atten_map = np.zeros((6, len(ycoords), len(xcoords)), dtype=np.float64)
 
     # also store path elevation angles as seen at Rx/Tx
     eps_pt_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
@@ -2555,6 +2409,8 @@ def atten_map_fast(
 
         double[::1] xcoords_v = _cf(hprof_data['xcoords'])
         double[::1] ycoords_v = _cf(hprof_data['ycoords'])
+        double lon_t = np.double(hprof_data['lon_t'])
+        double lat_t = np.double(hprof_data['lat_t'])
         double hprof_step = np.double(hprof_data['hprof_step'])
 
         int[:, :] path_idx_map_v = _cf(hprof_data['path_idx_map'])
@@ -2565,6 +2421,13 @@ def atten_map_fast(
         double[:, :] delta_N_map_v = _cf(hprof_data['delta_N_map'])
         double[:, :] beta0_map_v = _cf(hprof_data['beta0_map'])
         double[:, :] N0_map_v = _cf(hprof_data['N0_map'])
+
+        int[:, :] zone_t_map_v = _cf(hprof_data['zone_t_map'])
+        int[:, :] zone_r_map_v = _cf(hprof_data['zone_r_map'])
+        double[:, :] d_tm_map_v = _cf(hprof_data['d_tm_map'])
+        double[:, :] d_lm_map_v = _cf(hprof_data['d_lm_map'])
+        double[:, :] d_ct_map_v = _cf(hprof_data['d_ct_map'])
+        double[:, :] d_cr_map_v = _cf(hprof_data['d_cr_map'])
 
         double[:, :] bearing_map_v = _cf(hprof_data['bearing_map'])
         double[:, :] back_bearing_map_v = _cf(hprof_data['back_bearing_map'])
@@ -2580,7 +2443,7 @@ def atten_map_fast(
 
     with nogil, parallel():
 
-        pp = <_PathProp *> malloc(sizeof(_PathProp))
+        pp = <ppstruct *> malloc(sizeof(ppstruct))
         if pp == NULL:
             abort()
 
@@ -2593,30 +2456,14 @@ def atten_map_fast(
         pp.lat_t = lat_t
         pp.h_tg = h_tg
         pp.h_rg = h_rg
-        pp.zone_t = zone_t
-        pp.zone_r = zone_r
         pp.h_tg_in = h_tg
         pp.h_rg_in = h_rg
-
-        if zone_t == CLUTTER.UNKNOWN:
-            pp.h_tg = h_tg
-        else:
-            pp.h_tg = f_max(clutter_data_v[zone_t, 0], h_tg)
-
-        if zone_r == CLUTTER.UNKNOWN:
-            pp.h_rg = h_rg
-        else:
-            pp.h_rg = f_max(clutter_data_v[zone_r, 0], h_rg)
 
         pp.hprof_step = hprof_step
         pp.time_percent = time_percent
         # TODO: add functionality to produce the following
         # five parameters programmatically (using some kind of Geo-Data)
         pp.omega = omega
-        pp.d_tm = d_tm
-        pp.d_lm = d_lm
-        pp.d_ct = d_ct
-        pp.d_cr = d_cr
         pp.polarization = polarization
 
         for yi in prange(ylen, schedule='guided', chunksize=10):
@@ -2631,11 +2478,23 @@ def atten_map_fast(
 
                 pp.lon_r = xcoords_v[xi]
                 pp.lat_r = ycoords_v[yi]
+                pp.zone_t = zone_t_map_v[yi, xi]
+                pp.zone_r = zone_r_map_v[yi, xi]
 
-                # assigning not possible in prange, but can use directly below
-                # dists_v = dist_prof_v[0:didx + 1]
-                # heights_v = height_profs_v[eidx, 0:didx + 1]
-                # zheights_v = zheight_prof_v[0:didx + 1]
+                if pp.zone_t == CLUTTER.UNKNOWN:
+                    pp.h_tg = h_tg
+                else:
+                    pp.h_tg = f_max(clutter_data_v[pp.zone_t, 0], h_tg)
+
+                if pp.zone_r == CLUTTER.UNKNOWN:
+                    pp.h_rg = h_rg
+                else:
+                    pp.h_rg = f_max(clutter_data_v[pp.zone_r, 0], h_rg)
+
+                pp.d_tm = d_tm_map_v[yi, xi]
+                pp.d_lm = d_lm_map_v[yi, xi]
+                pp.d_ct = d_ct_map_v[yi, xi]
+                pp.d_cr = d_cr_map_v[yi, xi]
 
                 pp.distance = dist_map_v[yi, xi]
                 pp.bearing = bearing_map_v[yi, xi]
@@ -2651,8 +2510,12 @@ def atten_map_fast(
                 pp.beta0 = beta0_map_v[yi, xi]
                 pp.N0 = N0_map_v[yi, xi]
 
+                # assigning not possible in prange, but can use directly below
+                # dists_v = dist_prof_v[0:didx + 1]
+                # heights_v = height_profs_v[eidx, 0:didx + 1]
+                # zheights_v = zheight_prof_v[0:didx + 1]
+
                 _process_path(
-                    # &pp,
                     pp,
                     # dists_v,
                     # heights_v,
@@ -2663,8 +2526,8 @@ def atten_map_fast(
                     )
 
                 (
-                    L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L
-                    ) = _path_attenuation_complete_cython(pp[0], G_t, G_r)
+                    L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
+                    ) = _path_attenuation_complete(pp[0], G_t, G_r)
 
                 atten_map_v[0, yi, xi] = L_bfsg
                 atten_map_v[1, yi, xi] = L_bd
@@ -2672,7 +2535,6 @@ def atten_map_fast(
                 atten_map_v[3, yi, xi] = L_ba
                 atten_map_v[4, yi, xi] = L_b
                 atten_map_v[5, yi, xi] = L_b_corr
-                atten_map_v[6, yi, xi] = L
                 eps_pt_map_v[yi, xi] = pp.eps_pt
                 eps_pr_map_v[yi, xi] = pp.eps_pr
 

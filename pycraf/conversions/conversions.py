@@ -41,9 +41,9 @@ __all__ = [
     ] + UNITS
 
 
-
 # define some useful dB-Scales
-dimless = apu.Unit(1)
+# dimless = apu.Unit(1)
+dimless = apu.dimensionless_unscaled
 dB = dBi = apu.dB(dimless)
 dB_W = apu.dB(apu.W)
 dB_W_Hz = apu.dB(apu.W / apu.Hz)
@@ -77,7 +77,7 @@ def E_field_equivalency():
         )]
 
 
-apu.add_enabled_equivalencies(apu.logarithmic())
+# apu.add_enabled_equivalencies(apu.logarithmic())
 apu.add_enabled_equivalencies(E_field_equivalency())
 
 # define some useful constants

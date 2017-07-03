@@ -89,7 +89,8 @@ class TestConversions:
         check_astro_quantities(atm.opacity_from_atten, args_list)
 
         elev = 50 * apu.deg
-        atten_dB = Quantity([0.1, 1, 10, 50, 100], cnv.dB)
+        # atten_dB = Quantity([0.1, 1, 10, 50, 100], cnv.dB)  # astropy.bug
+        atten_dB = np.array([0.1, 1, 10, 50, 100]) * cnv.dB
         opacity = Quantity([
             1.76388252e-02, 0.17638825, 1.76388252, 8.81941258, 17.63882515
             ], cnv.dimless)
