@@ -632,25 +632,6 @@ class TestConversions:
             ]
         check_astro_quantities(atm.slant_attenuation_annex2, args_list)
 
-        # test for scalar quantities
-        with pytest.raises(TypeError):
-            atm.slant_attenuation_annex2(
-                1 * cnv.dB / apu.km, 1 * cnv.dB / apu.km,
-                Quantity([1, 1], apu.km), 1 * apu.km, 30 * apu.deg
-                )
-
-        with pytest.raises(TypeError):
-            atm.slant_attenuation_annex2(
-                1 * cnv.dB / apu.km, 1 * cnv.dB / apu.km,
-                1 * apu.km, Quantity([1, 1], apu.km), 30 * apu.deg
-                )
-
-        with pytest.raises(TypeError):
-            atm.slant_attenuation_annex2(
-                1 * cnv.dB / apu.km, 1 * cnv.dB / apu.km,
-                1 * apu.km, 1 * apu.km, Quantity([30, 30], apu.deg)
-                )
-
         atten_dry = Quantity([
             0.006643591, 0.008556794, 0.0200009175, 6.5824558517,
             0.0215553521

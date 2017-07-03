@@ -327,7 +327,8 @@ def standard_profile(height):
     '''
 
     # height = np.asarray(height)  # this is not sufficient for masking :-(
-    _height = np.atleast_1d(height).flatten()
+    height = np.atleast_1d(height)
+    _height = height.flatten()
 
     # to make this work with numpy arrays
     # lets first find the correct index for every height
@@ -413,13 +414,13 @@ def standard_profile(height):
         )
 
     result = (
-        temperatures,
-        pressures,
-        rho_water,
-        pressures_water,
-        ref_indices,
-        humidities_water,
-        humidities_ice,
+        temperatures.squeeze(),
+        pressures.squeeze(),
+        rho_water.squeeze(),
+        pressures_water.squeeze(),
+        ref_indices.squeeze(),
+        humidities_water.squeeze(),
+        humidities_ice.squeeze(),
         )
 
     # return tuple(v.reshape(height.shape) for v in result)
@@ -516,13 +517,13 @@ def _profile_helper(
         )
 
     return (
-        temperature,
-        pressure,
-        rho_water,
-        pressure_water,
-        ref_index,
-        humidity_water,
-        humidity_ice
+        temperature.squeeze(),
+        pressure.squeeze(),
+        rho_water.squeeze(),
+        pressure_water.squeeze(),
+        ref_index.squeeze(),
+        humidity_water.squeeze(),
+        humidity_ice.squeeze(),
         )
 
 
@@ -1606,7 +1607,7 @@ def equivalent_height_dry(freq_grid, pressure):
 
     h_0[(h_0 > 10.8 * r_p ** 0.3) & (f < 70.)] = 10.8 * r_p ** 0.3
 
-    return h_0
+    return h_0.squeeze()
 
 
 @helpers.ranged_quantity_input(
@@ -1644,7 +1645,7 @@ def equivalent_height_wet(freq_grid, pressure):
         _helper(1.58, 325.1, 2.89)
         )
 
-    return h_w
+    return h_w.squeeze()
 
 
 @helpers.ranged_quantity_input(
@@ -1677,13 +1678,6 @@ def slant_attenuation_annex2(atten_dry, atten_wet, h_dry, h_wet, elevation):
     You can use the helper functions equivalent_height_[dry,wet] to infer
     the equivalent heights from the total (wet+dry) air pressure.
     '''
-
-    if not isinstance(h_dry, numbers.Real):
-        raise TypeError('h_dry must be a scalar float')
-    if not isinstance(h_wet, numbers.Real):
-        raise TypeError('h_wet must be a scalar float')
-    if not isinstance(elevation, numbers.Real):
-        raise TypeError('elevation must be a scalar float')
 
     AM = 1. / np.sin(np.radians(elevation))
 

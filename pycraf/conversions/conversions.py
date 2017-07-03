@@ -77,7 +77,7 @@ def E_field_equivalency():
         )]
 
 
-# apu.add_enabled_equivalencies(apu.logarithmic())
+apu.add_enabled_equivalencies(apu.logarithmic())
 apu.add_enabled_equivalencies(E_field_equivalency())
 
 # define some useful constants
