@@ -114,7 +114,8 @@ class TestConversions:
         check_astro_quantities(atm.atten_from_opacity, args_list)
 
         elev = 50 * apu.deg
-        atten_dB = Quantity([0.1, 1, 10, 50, 100], cnv.dB)
+        # atten_dB = Quantity([0.1, 1, 10, 50, 100], cnv.dB)  # astropy.bug
+        atten_dB = np.array([0.1, 1, 10, 50, 100]) * cnv.dB
         opacity = Quantity([
             1.76388252e-02, 0.17638825, 1.76388252, 8.81941258, 17.63882515
             ], cnv.dimless)
@@ -480,9 +481,9 @@ class TestConversions:
                     ], cnv.dB / apu.km),
                 Quantity(10, apu.km),
                 ),
-            Quantity([
+            np.array([
                 0.057314491, 0.425094528, 0.665904646, 1.297056177
-                ], cnv.dB)
+                ]) * cnv.dB
             )
 
     def test_slant_attenuation_annex1(self):
@@ -509,10 +510,10 @@ class TestConversions:
 
         assert_quantity_allclose(
             atten,
-            Quantity([
+            np.array([
                 1.0279145660e-01, 2.6893903556e-01, 4.9024818093e-01,
                 1.5542565085e+02, 1.8943476778e+00
-                ], cnv.dB)
+                ]) * cnv.dB
             )
 
         assert_quantity_allclose(
@@ -650,8 +651,8 @@ class TestConversions:
 
         assert_quantity_allclose(
             atten_tot,
-            Quantity([
+            np.array([
                 0.1494254424, 0.2909720408, 0.592105096,
                 132.0296771188, 1.6087531534
-                ], cnv.dB)
+                ]) * cnv.dB
             )
