@@ -49,13 +49,17 @@ def _find_hgt_files(basepath=None):
         try:
             basepath = os.environ['SRTMDATA']
         except KeyError:
-            print('Warning, no SRTM data found.')
+            print('Warning, SRTMDATA environment variable not set.')
             return {}
 
     hgt_files = glob.glob(
         os.path.join(basepath, '**', '*.hgt*'),
         recursive=True
         )
+    if len(hgt_files) < 0:
+        print('Warning, no SRTM data found.')
+        print('Was looking in {} directory.')
+        return {}
 
     hgt_dict = {}
     for hgt_file in hgt_files:
@@ -84,6 +88,7 @@ def _get_tile_data(ilon, ilat):
         tile = np.fromfile(hgt_file, dtype='>i2')
         tile = tile.reshape((tile_size, tile_size))[::-1]
     except KeyError:
+        print(list(HGT_DICT.keys()))
         print(
             'warning, no SRTM tile data found for '
             'ilon, ilat = ({}, {})'.format(

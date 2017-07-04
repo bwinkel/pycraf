@@ -14,37 +14,59 @@ cache:
 #   only:
 #   - master
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - gcc-4.8
+# addons:
+#   apt:
+#     sources:
+#       - ubuntu-toolchain-r-test
+#     packages:
+#       - gcc-4.8
 
 env:
   global:
+    - SRTMDATA=${TRAVIS_BUILD_DIR}/tests/pathprof/srtm
     - OMP_NUM_THREADS=2
-    - CC=gcc-4.8
-    - LD=gcc-4.8
+    # - CC=gcc-4.8
+    # - LD=gcc-4.8
     - TWINE_USERNAME=bwinkel
     # Note: TWINE_PASSWORD is set in Travis settings
 
 python:
   - 3.5
-  # - 3.6
+  - 3.6
 
 # command to install dependencies
 install:
+  - ls ${TRAVIS_BUILD_DIR}/tests/pathprof/srtm
 #  - if [ "$CXX" = "g++" ]; then export CXX="g++-6" CC="gcc-6"; fi
   - gcc -v
-  - gcc-4.8 -v
-  - pip install -r pip-requirements-dev
-  - pip install .
+  # - gcc-4.8 -v
+#   - pip install -r pip-requirements-dev
+#   - pip install .
+  # - sudo apt-get update
+  # We do this conditionally because it saves us some downloading if the
+  # version is the same.
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+      wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
+    else
+      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+    fi
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  # Useful for debugging any issues with conda
+  - conda info -a
+
+  - conda update -y conda
+  - conda install -y pip wheel numpy scipy astropy pytest cython h5py
+  - conda install -y -c conda-forge pyproj geographiclib
+  - python setup.py install
 
 # command to run tests
 script:
   - cd tests
-  - nosetests
+  - pytest
   - cd ..
   # - pip install cibuildwheel
   # - cibuildwheel --output-dir wheelhouse

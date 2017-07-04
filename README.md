@@ -3,6 +3,11 @@
 - *Version*: 0.23
 - *Authors*: Benjamin Winkel
 
+[![PyPI version](https://img.shields.io/pypi/v/pycraf.svg)](https://pypi.python.org/pypi/pycraf)
+[![Build Status](https://travis-ci.org/bwinkel/pycraf.svg?branch=master)](https://travis-ci.org/bwinkel/pycraf)
+[![Build status](https://ci.appveyor.com/api/projects/status/tj7swn14t6bek3jr?svg=true)](https://ci.appveyor.com/project/bwinkel/pycraf)
+[![License](https://img.shields.io/badge/license-GPL-blue.svg)](https://www.github.com/bwinkel/pycraf/blob/master/COPYING)
+
 # Disclaimer #
 `pycraf` is still in the early-development stage. While much of the
 functionality is already working as intended, the API is not yet stable.

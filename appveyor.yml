@@ -2,6 +2,7 @@ environment:
   # In the Appveyor UI, add your PyPI password as TWINE_PASSWORD (click
   # Settings > Environment > Add Variable...). Make sure to mark it as private!
   TWINE_USERNAME: bwinkel
+  SRTMDATA: "%APPVEYOR_BUILD_FOLDER%\\tests\\pathprof\\srtm"
 
   matrix:
 
@@ -11,13 +12,13 @@ environment:
     # isn't covered by this document) at the time of writing.
 
       # 3.5
-    # - PYTHON: "C:\\Miniconda35"
+    - PYTHON: "C:\\Miniconda35"
       # 3.5 64-bit
     - PYTHON: "C:\\Miniconda35-x64"
       # 3.6
-    # - PYTHON: "C:\\Miniconda36"
+    - PYTHON: "C:\\Miniconda36"
       # 3.6 64-bit
-    # - PYTHON: "C:\\Miniconda36-x64"
+    - PYTHON: "C:\\Miniconda36-x64"
 
 
 install:
@@ -28,14 +29,16 @@ install:
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
   # Install the conda supplied packages; msvc_runtime needed for py34
   - "conda update -y conda"
-  - "conda install -y pip wheel numpy scipy astropy pytest cython"
+  - "conda install -y pip wheel numpy scipy astropy pytest cython h5py"
   - "conda install -y -c conda-forge pyproj geographiclib"
 
 build: off
 
 test_script:
   # Put your test command here.
-  - "del /f pycraf\\*.c"
+  - "echo %SRTMDATA%"
+  - "dir %SRTMDATA%"
+  - "del /f pycraf\\pathprof\\*.c"
   - "%PYTHON%\\python.exe setup.py install"
   - cd tests
   - "%PYTHON%\\python.exe -m pytest"

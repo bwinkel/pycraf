@@ -8,7 +8,7 @@ import platform
 import numpy as np
 
 
-VERSION = '0.23.1'
+VERSION = '0.23.2'
 
 # need to handle compilation on windows machines:
 
