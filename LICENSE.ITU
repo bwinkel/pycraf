@@ -1,0 +1,13 @@
+pycraf contains data copied from Recommendation ITU-R P.452, Recommendation
+ITU-R P.676, and Recommendation ITU-R RA.769 of the International
+Telecommunication Union (ITU). For the latest version of such data, please
+refer to ITU's website, www.itu.int. Use of such data in the pycraf package is
+made under permission by ITU. You may not use such data in any manner that is
+primarily intended for or directed toward financial gain or monetary
+compensation, including but not limited to, selling, renting or otherwise
+commercially exploiting such data. For any questions please contact ITU at
+jur@itu.int.
+
+ITU is not involved in the development or dissemination of pycraf and is not
+responsible for the accuracy of data contained in pycraf or for its
+performance.
