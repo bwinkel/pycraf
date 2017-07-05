@@ -59,7 +59,7 @@ install:
   - conda info -a
 
   - conda update -y conda
-  - conda install -y pip wheel numpy scipy astropy pytest cython h5py
+  - conda install -y pip wheel numpy scipy astropy pytest cython h5py matplotlib
   - conda install -y -c conda-forge pyproj geographiclib
   - python setup.py install
 

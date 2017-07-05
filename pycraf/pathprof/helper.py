@@ -9,6 +9,7 @@ from __future__ import (
 import os
 from astropy import units as apu
 import numpy as np
+import matplotlib
 from scipy.interpolate import RegularGridInterpolator
 from .. import conversions as cnv
 from .. import helpers
@@ -17,11 +18,11 @@ from .. import helpers
 __all__ = [
     'R_E', 'K_BETA', 'A_BETA_VALUE',
     'anual_time_percentage_from_worst_month',
-    'radiomet_data_for_pathcenter',
+    'deltaN_N0_from_map', 'radiomet_data_for_pathcenter',
     'median_effective_earth_radius_factor',
     'effective_earth_radius_factor_beta',
     'median_effective_earth_radius', 'effective_earth_radius_beta',
-    'make_kmz',
+    'make_kmz', 'terrain_cmap_factory',
     ]
 
 
@@ -140,6 +141,37 @@ def _N_from_map(lon, lat):
     _N0 = _N0_interpolator((lon % 360, lat))
 
     return _DN, _N0
+
+
+@helpers.ranged_quantity_input(
+    lon=(0, 360, apu.deg),
+    lat=(-90, 90, apu.deg),
+    strip_input_units=True,
+    output_unit=(cnv.dimless / apu.km, apu.percent, cnv.dimless),
+    )
+def deltaN_N0_from_map(lon, lat):
+    '''
+    Calculate radiometeorological data, ΔN and N_0, from path center
+    coordinates, according to ITU-R P.452-16 Eq. (2-4).
+
+    Parameters
+    ----------
+    lon, lat - path center coordinates [deg]
+
+    Returns
+    -------
+    delta_N, N_0 - radiometeorological data
+        delta_N - average radio-refractive index lapse-rate through the
+            lowest 1 km of the atmosphere [N-units/km]
+        N_0 - sea-level surface refractivity [N-units]
+
+    Notes
+    -----
+    - ΔN and N_0 are derived from digitized maps (shipped with P.452) by
+      bilinear interpolation.
+    '''
+
+    return _N_from_map(lon, lat)
 
 
 def _radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm):
@@ -375,6 +407,81 @@ def make_kmz(
     with zipfile.ZipFile(kmz_filename, 'w') as myzip:
         myzip.writestr('pycraf_atten_map_kmz.png', png_buf.read())
         myzip.writestr('doc.kml', kml)
+
+
+class FixPointNormalize(matplotlib.colors.Normalize):
+    '''
+    From http://stackoverflow.com/questions/40895021/python-equivalent-for-matlabs-demcmap-elevation-appropriate-colormap
+    by ImportanceOfBeingErnest
+
+    Inspired by http://stackoverflow.com/questions/20144529/shifted-colorbar-matplotlib
+    Subclassing Normalize to obtain a colormap with a fixpoint
+    somewhere in the middle of the colormap.
+
+    This may be useful for a `terrain` map, to set the 'sea level'
+    to a color in the blue/turquise range.
+    '''
+
+    def __init__(
+            self,
+            vmin=None, vmax=None, sealevel=0,
+            col_val=0.21875, clip=False
+            ):
+
+        # sealevel is the fix point of the colormap (in data units)
+        self.sealevel = sealevel
+        # col_val is the color value in the range [0, 1]
+        # that should represent the sealevel.
+        self.col_val = col_val
+        matplotlib.colors.Normalize.__init__(self, vmin, vmax, clip)
+
+    def __call__(self, value, clip=None):
+
+        x, y = [self.vmin, self.sealevel, self.vmax], [0, self.col_val, 1]
+        return np.ma.masked_array(np.interp(value, x, y))
+
+
+def terrain_cmap_factory(sealevel=0.5, vmax=1200):
+    '''
+    Produce terrain colormap and norm to be used in plt.imshow.
+
+    With this, one can adjust the colors in the cmap such that the sea level
+    is properly defined (blue).
+
+    Usage
+    -----
+    vmin, vmax = -20, 1200
+    terrain_cmap, terrain_norm = terrain_cmap_factory(vmax=vmax)
+    plt.imshow(
+        heights, cmap=terrain_cmap, norm=terrain_norm, vmin=vmin, vmax=vmax
+        )
+
+    Parameters
+    ----------
+    sealevel - the sealevel value
+    vmax - maximum height to cover in the colormap
+        (one should call plt.imshow the same vmax option!)
+
+    Returns
+    -------
+    terrain_cmap, terrain_norm
+    '''
+
+    # Combine the lower and upper range of the terrain colormap with a gap in
+    # the middle to let the coastline appear more prominently. Inspired by
+    # stackoverflow.com/questions/31051488/combining-two-matplotlib-colormaps
+
+    colors_undersea = matplotlib.pyplot.cm.terrain(np.linspace(0, 0.17, 56))
+    colors_land = matplotlib.pyplot.cm.terrain(np.linspace(0.25, 1, 200))
+
+    # combine them and build a new colormap
+    colors = np.vstack((colors_undersea, colors_land))
+    terrain_cmap = matplotlib.colors.LinearSegmentedColormap.from_list(
+        'terrain_normed', colors
+        )
+    terrain_norm = FixPointNormalize(sealevel=sealevel, vmax=vmax)
+
+    return terrain_cmap, terrain_norm
 
 
 if __name__ == '__main__':

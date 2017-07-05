@@ -338,7 +338,7 @@ def clutter_imt(
 
 # TODO: do we want to convert output dictionary arrays to quantities?
 @helpers.ranged_quantity_input(
-    lon_t=(0, 360, apu.deg),
+    lon_t=(-180, 180, apu.deg),
     lat_t=(-90, 90, apu.deg),
     map_size_lon=(0.002, 90, apu.deg),
     map_size_lat=(0.002, 90, apu.deg),

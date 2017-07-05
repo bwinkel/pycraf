@@ -29,7 +29,7 @@ install:
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
   # Install the conda supplied packages; msvc_runtime needed for py34
   - "conda update -y conda"
-  - "conda install -y pip wheel numpy scipy astropy pytest cython h5py"
+  - "conda install -y pip wheel numpy scipy astropy pytest cython h5py matplotlib"
   - "conda install -y -c conda-forge pyproj geographiclib"
 
 build: off

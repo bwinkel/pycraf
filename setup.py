@@ -69,6 +69,7 @@ setup(
         'scipy>=0.15',
         'astropy>=1.1',
         'pyproj>=1.9',
+        'matplotlib>=1.2',
         ],
     package_dir={
         'pycraf': 'pycraf',

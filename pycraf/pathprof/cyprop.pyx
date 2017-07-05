@@ -373,7 +373,7 @@ cdef class _PathProp(object):
 
         assert (
             (hprof_dists is None) == (hprof_heights is None) ==
-            (hprof_heights is None) == (hprof_heights is None)
+            (bearing is None) == (back_bearing is None)
             ), (
                 'hprof_dists, hprof_heights, bearing, and back_bearing '
                 'must all be None or all be provided'
@@ -523,9 +523,9 @@ class PathProp(_PathProp):
         freq=(0.1, 100, apu.GHz),
         temperature=(None, None, apu.K),
         pressure=(None, None, apu.hPa),
-        lon_t=(0, 360, apu.deg),
+        lon_t=(-180, 180, apu.deg),
         lat_t=(-90, 90, apu.deg),
-        lon_r=(0, 360, apu.deg),
+        lon_r=(-180, 180, apu.deg),
         lat_r=(-90, 90, apu.deg),
         h_tg=(None, None, apu.m),
         h_rg=(None, None, apu.m),
@@ -607,7 +607,7 @@ class PathProp(_PathProp):
 
     def __repr__(self):
 
-        return 'PathProp<Freq: {:.3f} GHz>'.format(self.freq)
+        return 'PathProp<Freq: {:.3f}>'.format(self.freq)
 
     def __str__(self):
 

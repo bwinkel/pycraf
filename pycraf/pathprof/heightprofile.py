@@ -20,7 +20,7 @@ from .. import helpers
 
 
 __all__ = [
-    'srtm_height_profile',
+    'srtm_height_profile', 'srtm_height_map',
     ]
 
 
@@ -215,9 +215,9 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
 
 
 @helpers.ranged_quantity_input(
-    lon_t=(0, 360, apu.deg),
+    lon_t=(-180, 180, apu.deg),
     lat_t=(-90, 90, apu.deg),
-    lon_r=(0, 360, apu.deg),
+    lon_r=(-180, 180, apu.deg),
     lat_r=(-90, 90, apu.deg),
     step=(1., 1.e5, apu.m),
     strip_input_units=True,
@@ -244,6 +244,80 @@ def srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
     '''
 
     return _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step)
+
+
+@helpers.ranged_quantity_input(
+    lon_t=(-180, 180, apu.deg),
+    lat_t=(-90, 90, apu.deg),
+    map_size_lon=(0.002, 90, apu.deg),
+    map_size_lat=(0.002, 90, apu.deg),
+    map_resolution=(0.0001, 0.1, apu.deg),
+    hprof_step=(0.01, 30, apu.km),
+    strip_input_units=True, allow_none=True,
+    output_unit=(apu.deg, apu.deg, apu.m)
+    )
+def srtm_height_map(
+        lon_t, lat_t,
+        map_size_lon, map_size_lat,
+        map_resolution=3. * apu.arcsec,
+        hprof_step=None,
+        do_cos_delta=True,
+        do_coords_2d=False,
+        ):
+    '''
+    Calculate height profiles and auxillary maps needed for atten_map_fast.
+
+    This can be used to cache height-profile data. Since it is independent
+    of frequency, time_percent, Tx and Rx heights, etc., one can re-use
+    it to save computing time when doing batch jobs.
+
+    Note: Path attenuation is completely symmetric, i.e., it doesn't matter if
+    the transmitter or the receiver is situated in the map center.
+
+    Parameters
+    ----------
+    lon_t, lat_t - Transmitter coordinates [deg]
+    map_size_lon, map_size_lat - Map size [deg]
+    map_resolution - Pixel resolution of map [deg]
+    hprof_step - Pixel resolution of map [m]
+        overrides map_resolution if given!
+    do_cos_delta - If True, divide map_size_lon by cos(lat_t) for square map
+    do_coords_2d - If True, return 2D lon and lat coordinate arrays
+
+    Returns
+    -------
+    (lons, lats, heights) - tuple
+        lons - Geographic longitudes [deg]
+        lats - Geographic latitudes [deg]
+        heights - Height map [deg]
+    '''
+
+    if hprof_step is None:
+        hprof_step = map_resolution * 3600. / 1. * 30.
+
+    cosdelta = 1. / np.cos(np.radians(lat_t)) if do_cos_delta else 1.
+
+    # construction map arrays
+    xcoords = np.arange(
+        lon_t - cosdelta * map_size_lon / 2,
+        lon_t + cosdelta * map_size_lon / 2 + 1.e-6,
+        cosdelta * map_resolution,
+        )
+    ycoords = np.arange(
+        lat_t - map_size_lat / 2,
+        lat_t + map_size_lat / 2 + 1.e-6,
+        map_resolution,
+        )
+    xcoords2d, ycoords2d = np.meshgrid(xcoords, ycoords)
+
+    heightmap = _get_interpolated_data(
+        xcoords2d.flatten(), ycoords2d.flatten()
+        ).reshape(xcoords2d.shape)
+
+    if do_coords_2d:
+        xcoords, ycoords = xcoords2d, ycoords2d
+
+    return xcoords, ycoords, heightmap
 
 
 if __name__ == '__main__':
