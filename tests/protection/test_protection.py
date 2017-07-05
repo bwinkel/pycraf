@@ -17,6 +17,9 @@ from pycraf import protection as prot
 # from astropy.utils.misc import NumpyRNGContext
 
 
+TOL_KWARGS = {'atol': 0., 'rtol': 1.e-6}
+
+
 def test_cispr_limits():
 
     _clims = prot.cispr._cispr_limits
@@ -196,7 +199,7 @@ def test_ras_protection_limits():
             (15, 'Slim_nu'),
             (20, 'Efield'),
             ]):
-        assert_allclose(cont_lims[row][col], CONT_LIMS_VALUES[idx])
+        assert_allclose(cont_lims[row][col], CONT_LIMS_VALUES[idx], **TOL_KWARGS)
         assert_allclose(cont_lims_dB[row][col], CONT_LIMS_DB_VALUES[idx])
 
     for idx, (row, col) in enumerate([
@@ -206,7 +209,7 @@ def test_ras_protection_limits():
             (9, 'Slim_nu'),
             (12, 'Efield'),
             ]):
-        assert_allclose(spec_lims[row][col], SPEC_LIMS_VALUES[idx])
+        assert_allclose(spec_lims[row][col], SPEC_LIMS_VALUES[idx], **TOL_KWARGS)
         assert_allclose(spec_lims_dB[row][col], SPEC_LIMS_DB_VALUES[idx])
 
     for colname, colunit in zip(COL_NAMES, COL_UNITS):
