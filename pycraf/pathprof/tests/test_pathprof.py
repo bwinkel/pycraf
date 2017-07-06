@@ -297,7 +297,8 @@ class TestPropagation:
                 # Note conversion to some ndarray type necessary, as h5py
                 # returns <HDF5 dataset> types
                 np.squeeze(hprof_data_cache[k]),
-                np.squeeze(hprof_data_cache_true[k])
+                np.squeeze(hprof_data_cache_true[k]),
+                atol=1.e-6,
                 )
 
     def test_fast_atten_map(self, tmpdir_factory):
