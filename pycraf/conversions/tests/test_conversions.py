@@ -12,8 +12,8 @@ from numpy.testing import assert_equal, assert_allclose
 from astropy.tests.helper import assert_quantity_allclose
 from astropy import units as apu
 from astropy.units import Quantity
-from pycraf import conversions as cnv
-from pycraf.helpers import check_astro_quantities
+from ... import conversions as cnv
+from ...utils import check_astro_quantities
 # from astropy.utils.misc import NumpyRNGContext
 
 

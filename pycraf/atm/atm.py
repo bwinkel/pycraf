@@ -12,7 +12,7 @@ import collections
 import numpy as np
 from astropy import units as apu
 from .. import conversions as cnv
-from .. import helpers
+from .. import utils
 
 
 __all__ = [
@@ -56,7 +56,7 @@ resonances_water = np.genfromtxt(
     )
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     atten=(1.000000000001, None, cnv.dimless), elevation=(-90, 90, apu.deg),
     strip_input_units=True, output_unit=cnv.dimless
     )
@@ -83,7 +83,7 @@ def opacity_from_atten(atten, elevation):
     return AM_inv * np.log(atten)
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     opacity=(0.000000000001, None, cnv.dimless), elevation=(-90, 90, apu.deg),
     strip_input_units=True, output_unit=cnv.dB
     )
@@ -109,7 +109,7 @@ def atten_from_opacity(opacity, elevation):
     return 10 * np.log10(np.exp(opacity * AM))
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     temperature=(1.e-30, None, apu.K),
     pressure=(1.e-30, None, apu.hPa),
     pressure_water=(1.e-30, None, apu.hPa),
@@ -137,7 +137,7 @@ def refractive_index(temperature, pressure, pressure_water):
         )
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     temperature=(1.e-30, None, apu.K),
     pressure=(1.e-30, None, apu.hPa),
     strip_input_units=True, output_unit=apu.hPa
@@ -184,7 +184,7 @@ def _saturation_water_pressure(temperature, pressure, wet_type):
     return e_s
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     temperature=(1.e-30, None, apu.K),
     pressure=(1.e-30, None, apu.hPa),
     humidity=(0, 100, apu.percent),
@@ -217,7 +217,7 @@ def pressure_water_from_humidity(
     return pressure_water
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     temperature=(1.e-30, None, apu.K),
     pressure=(1.e-30, None, apu.hPa),
     pressure_water=(1.e-30, None, apu.hPa),
@@ -252,7 +252,7 @@ def humidity_from_pressure_water(
     return humidity
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     temperature=(1.e-30, None, apu.K),
     rho_water=(1.e-30, None, apu.g / apu.m ** 3),
     strip_input_units=True, output_unit=apu.hPa
@@ -276,7 +276,7 @@ def pressure_water_from_rho_water(temperature, rho_water):
     return pressure_water
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     temperature=(1.e-30, None, apu.K),
     pressure_water=(1.e-30, None, apu.hPa),
     strip_input_units=True, output_unit=apu.g / apu.m ** 3
@@ -300,7 +300,7 @@ def rho_water_from_pressure_water(temperature, pressure_water):
     return rho_water
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     height=(0, 84.99999999, apu.km),
     strip_input_units=True, output_unit=None
     )
@@ -1059,7 +1059,7 @@ def _specific_attenuation_annex1(
     return atten_o2 * 0.182 * freq_grid, atten_h2o * 0.182 * freq_grid
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     freq_grid=(1.e-30, 1000, apu.GHz),
     pressure_dry=(1.e-30, None, apu.hPa),
     pressure_water=(1.e-30, None, apu.hPa),
@@ -1090,7 +1090,7 @@ def specific_attenuation_annex1(
         )
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     specific_atten=(1.e-30, None, cnv.dB / apu.km),
     path_length=(1.e-30, None, apu.km),
     strip_input_units=True, output_unit=cnv.dB
@@ -1274,7 +1274,7 @@ def _prepare_path(elevation, obs_alt, profile_func, max_path_length=1000.):
     return path_params, refraction
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     freq_grid=(1.e-30, 1000, apu.GHz),
     elevation=(-90, 90, apu.deg),
     obs_alt=(1.e-30, None, apu.m),
@@ -1538,7 +1538,7 @@ def _specific_attenuation_annex2(freq_grid, pressure, rho_water, temperature):
     return atten_dry, atten_wet
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     freq_grid=(1.e-30, 350., apu.GHz),
     pressure=(1.e-30, None, apu.hPa),
     rho_water=(1.e-30, None, apu.g / apu.m ** 3),
@@ -1567,7 +1567,7 @@ def specific_attenuation_annex2(freq_grid, pressure, rho_water, temperature):
         )
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     freq_grid=(1.e-30, 350., apu.GHz),
     pressure=(1.e-30, None, apu.hPa),
     strip_input_units=True, output_unit=apu.km
@@ -1610,7 +1610,7 @@ def equivalent_height_dry(freq_grid, pressure):
     return h_0.squeeze()
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     freq_grid=(1.e-30, 350., apu.GHz),
     pressure=(1.e-30, None, apu.hPa),
     strip_input_units=True, output_unit=apu.km
@@ -1648,7 +1648,7 @@ def equivalent_height_wet(freq_grid, pressure):
     return h_w.squeeze()
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     atten_dry=(1.e-30, None, cnv.dB / apu.km),
     atten_wet=(1.e-30, None, cnv.dB / apu.km),
     h_dry=(1.e-30, None, apu.km),

@@ -9,7 +9,7 @@ import numpy as np
 from astropy import units as apu
 from astropy.units import Quantity, UnitsError
 import astropy.constants as con
-from .. import helpers
+from .. import utils
 
 
 UNITS = [
@@ -92,7 +92,7 @@ R0_VALUE = R0.to(apu.Ohm).value
 ERX_VALUE = Erx_unit.to(apu.V / apu.m).value
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     Ageom=(0, None, apu.m ** 2),
     eta_a=(0, 100, apu.percent),
     strip_input_units=True, output_unit=apu.m ** 2
@@ -117,7 +117,7 @@ def Aeff_from_Ageom(Ageom, eta_a):
     return Ageom * eta_a / 100.
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     Aeff=(0, None, apu.m ** 2),
     eta_a=(0, 100, apu.percent),
     strip_input_units=True, output_unit=apu.m ** 2
@@ -142,7 +142,7 @@ def Ageom_from_Aeff(Aeff, eta_a):
     return Aeff / eta_a * 100.
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     Aeff=(0, None, apu.m ** 2),
     f=(0, None, apu.Hz),
     strip_input_units=True, output_unit=dBi
@@ -169,7 +169,7 @@ def Gain_from_Aeff(Aeff, f):
         )
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     G=(1.e-30, None, dimless),
     f=(0, None, apu.Hz),
     strip_input_units=True, output_unit=apu.m ** 2
@@ -194,7 +194,7 @@ def Aeff_from_Gain(G, f):
     return G * (C_VALUE / f) ** 2 / 4. / np.pi
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     G=(1.e-30, None, dimless),
     f=(0, None, apu.Hz),
     Zi=(0, None, apu.Ohm),
@@ -223,7 +223,7 @@ def Ant_factor_from_Gain(G, f, Zi):
         ))
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     Ka=(1.e-30, None, 1. / apu.m),
     f=(0, None, apu.Hz),
     Zi=(0, None, apu.Ohm),
@@ -253,7 +253,7 @@ def Gain_from_Ant_factor(Ka, f, Zi):
 
 
 # @apu.quantity_input(E=dB_uV_m, equivalencies=E_field_equivalency())
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     E=(1.e-30, None, apu.V / apu.meter),
     strip_input_units=True, output_unit=apu.W / apu.m ** 2
     )
@@ -276,7 +276,7 @@ def S_from_E(E):
     return E ** 2 / R0_VALUE
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     S=(None, None, apu.W / apu.m ** 2),
     strip_input_units=True, output_unit=apu.uV / apu.meter
     )
@@ -300,7 +300,7 @@ def E_from_S(S):
     return np.sqrt(S * R0_VALUE) * 1.e6
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     Erx=(1.e-30, None, apu.V / apu.meter),
     d=(1.e-30, None, apu.m),
     Gtx=(1.e-30, None, dimless),
@@ -327,7 +327,7 @@ def Ptx_from_Erx(Erx, d, Gtx):
     return 4. * np.pi * d ** 2 / Gtx * Erx ** 2 / R0_VALUE
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     Ptx=(1.e-30, None, apu.W),
     d=(1.e-30, None, apu.m),
     Gtx=(1.e-30, None, dimless),
@@ -354,7 +354,7 @@ def Erx_from_Ptx(Ptx, d, Gtx):
     return (Ptx * Gtx / 4. / np.pi * R0_VALUE) ** 0.5 / d * 1.e6
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     Ptx=(1.e-30, None, apu.W),
     d=(1.e-30, None, apu.m),
     Gtx=(1.e-30, None, dimless),
@@ -386,7 +386,7 @@ def S_from_Ptx(Ptx, d, Gtx):
     return Gtx * Ptx / 4. / np.pi / d ** 2
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     S=(1.e-30, None, apu.W / apu.m ** 2),
     d=(1.e-30, None, apu.m),
     Gtx=(1.e-30, None, dimless),
@@ -413,7 +413,7 @@ def Ptx_from_S(S, d, Gtx):
     return S * 4. * np.pi * d ** 2 / Gtx
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     Prx=(1.e-30, None, apu.W),
     f=(1.e-30, None, apu.Hz),
     Grx=(1.e-30, None, dimless),
@@ -442,7 +442,7 @@ def S_from_Prx(Prx, f, Grx):
         )
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     S=(1.e-30, None, apu.W / apu.m ** 2),
     f=(1.e-30, None, apu.Hz),
     Grx=(1.e-30, None, dimless),
@@ -476,7 +476,7 @@ def _free_space_loss(d, f):
     return (C_VALUE / 4. / np.pi / f / d) ** 2
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     d=(1.e-30, None, apu.m),
     f=(1.e-30, None, apu.Hz),
     strip_input_units=True, output_unit=dB
@@ -501,7 +501,7 @@ def free_space_loss(d, f):
     return 10. * np.log10(_free_space_loss(f, d))
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     Ptx=(1.e-30, None, apu.W),
     Gtx=(1.e-30, None, dimless),
     Grx=(1.e-30, None, dimless),
@@ -532,7 +532,7 @@ def Prx_from_Ptx(Ptx, Gtx, Grx, d, f):
     return Ptx * Gtx * Grx * _free_space_loss(d, f)
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     Prx=(1.e-30, None, apu.W),
     Gtx=(1.e-30, None, dimless),
     Grx=(1.e-30, None, dimless),

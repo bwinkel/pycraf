@@ -12,7 +12,7 @@ import numpy as np
 import matplotlib
 from scipy.interpolate import RegularGridInterpolator
 from .. import conversions as cnv
-from .. import helpers
+from .. import utils
 
 
 __all__ = [
@@ -73,7 +73,7 @@ _N0_interpolator = RegularGridInterpolator(
     )
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     p_w=(0, 100, apu.percent),
     phi=(-90, 90, apu.deg),
     omega=(0, 100, apu.percent),
@@ -143,7 +143,7 @@ def _N_from_map(lon, lat):
     return _DN, _N0
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     lon=(0, 360, apu.deg),
     lat=(-90, 90, apu.deg),
     strip_input_units=True,
@@ -203,7 +203,7 @@ def _radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm):
     return _DN, beta_0, _N0
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     lon=(0, 360, apu.deg),
     lat=(-90, 90, apu.deg),
     d_tm=(0, None, apu.km),
@@ -246,7 +246,7 @@ def radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm):
     return _radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm)
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     lon=(0, 360, apu.deg),
     lat=(-90, 90, apu.deg),
     strip_input_units=True,
@@ -274,7 +274,7 @@ def median_effective_earth_radius_factor(lon, lat):
     return 157. / (157. - _DN_interpolator((lon % 360, lat)))
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     strip_input_units=True,
     output_unit=cnv.dimless,
     )
@@ -301,7 +301,7 @@ def _median_effective_earth_radius(lon, lat):
     return R_E_VALUE * 157. / (157. - _DN_interpolator((lon % 360, lat)))
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     lon=(0, 360, apu.deg),
     lat=(-90, 90, apu.deg),
     strip_input_units=True,
@@ -329,7 +329,7 @@ def median_effective_earth_radius(lon, lat):
     return _median_effective_earth_radius(lon, lat)
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     strip_input_units=True,
     output_unit=apu.km,
     )

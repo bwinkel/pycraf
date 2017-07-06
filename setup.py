@@ -1,121 +1,159 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# Licensed under a 3-clause BSD style license - see LICENSE.rst
 
+
+'''
+Note: if you get an error:
+
+> error: [Errno 2] Could not find C/C++ file pycraf/pathprof/cyprop.(c/cpp)
+> for Cython file pycraf/pathprof/cyprop.pyx when building extension
+> pycraf.pathprof.cyprop. Cython must be installed to build from a git
+> checkout.: 'pycraf/pathprof/cyprop.c'
+
+Delete the file "pycraf/cython_version.py"
+
+'''
+
+import glob
+import os
+import sys
+
+import ah_bootstrap
 from setuptools import setup
-from setuptools.extension import Extension
-from Cython.Distutils import build_ext
-import platform
-import numpy as np
 
-
-VERSION = '0.23.2'
-
-# need to handle compilation on windows machines:
-
-comp_args = {
-    'extra_compile_args': ['-fopenmp', '-O3'],
-    'extra_link_args': ['-fopenmp'],
-    'libraries': ['m'],
-    'include_dirs': [np.get_include()],
-    }
-
-if platform.system().lower() == 'windows':
-    comp_args = {
-        'extra_compile_args': ['/openmp'],
-        'include_dirs': [np.get_include()],
-        }
+# A dirty hack to get around some early import/configurations ambiguities
+if sys.version_info[0] >= 3:
+    import builtins
 else:
-    comp_args = {
-        'extra_compile_args': ['-fopenmp', '-O3'],
-        'extra_link_args': ['-fopenmp'],
-        'libraries': ['m'],
-        'include_dirs': [np.get_include()],
-        }
+    import __builtin__ as builtins
+builtins._ASTROPY_SETUP_ = True
 
-ext_module_pathprof_cyprop = Extension(
-    'pycraf.pathprof.cyprop',
-    ['pycraf/pathprof/cyprop.pyx'],
-    **comp_args
-    )
+from astropy_helpers.setup_helpers import (
+  register_commands, get_debug_option, get_package_info
+  )
+from astropy_helpers.git_helpers import get_git_devstr
+from astropy_helpers.version_helpers import generate_version_py
+
+# Get some values from the setup.cfg
+try:
+    from ConfigParser import ConfigParser
+except ImportError:
+    from configparser import ConfigParser
+
+conf = ConfigParser()
+conf.read(['setup.cfg'])
+metadata = dict(conf.items('metadata'))
+
+PACKAGENAME = metadata.get('package_name', 'pycraf')
+DESCRIPTION = metadata.get('description', 'pycraf')
+AUTHOR = metadata.get('author', 'Benjamin Winkel')
+AUTHOR_EMAIL = metadata.get('author_email', 'bwinkel@mpifr.de')
+LICENSE = metadata.get('license', 'GPLv3')
+URL = metadata.get('url', 'https://github.com/bwinkel/pycraf')
+
+# order of priority for long_description:
+#   (1) set in setup.cfg,
+#   (2) load LONG_DESCRIPTION.rst,
+#   (3) load README.rst,
+#   (4) package docstring
+readme_glob = 'README*'
+_cfg_long_description = metadata.get('long_description', '')
+if _cfg_long_description:
+    LONG_DESCRIPTION = _cfg_long_description
+
+elif os.path.exists('LONG_DESCRIPTION.rst'):
+    with open('LONG_DESCRIPTION.rst') as f:
+        LONG_DESCRIPTION = f.read()
+
+elif len(glob.glob(readme_glob)) > 0:
+    with open(glob.glob(readme_glob)[0]) as f:
+        LONG_DESCRIPTION = f.read()
+
+else:
+    # Get the long description from the package's docstring
+    __import__(PACKAGENAME)
+    package = sys.modules[PACKAGENAME]
+    LONG_DESCRIPTION = package.__doc__
+
+# Store the package name in a built-in variable so it's easy
+# to get from other parts of the setup infrastructure
+builtins._ASTROPY_PACKAGE_NAME_ = PACKAGENAME
+
+# VERSION should be PEP440 compatible (http://www.python.org/dev/peps/pep-0440)
+VERSION = metadata.get('version', '0.0.24')
+
+# Indicates if this version is a release version
+RELEASE = 'dev' not in VERSION
+
+if not RELEASE:
+    VERSION += get_git_devstr(False)
+
+# Populate the dict of setup command overrides; this should be done before
+# invoking any other functionality from distutils since it can potentially
+# modify distutils' behavior.
+cmdclassd = register_commands(PACKAGENAME, VERSION, RELEASE)
+
+# Freeze build information in version.py
+generate_version_py(PACKAGENAME, VERSION, RELEASE,
+                    get_debug_option(PACKAGENAME))
+
+# Treat everything in scripts except README* as a script to be installed
+scripts = [fname for fname in glob.glob(os.path.join('scripts', '*'))
+           if not os.path.basename(fname).startswith('README')]
 
 
-ext_module_pathprof_geodesics = Extension(
-    'pycraf.pathprof.geodesics',
-    ['pycraf/pathprof/geodesics.pyx'],
-    **comp_args
-    )
+# Get configuration information from all of the various subpackages.
+# See the docstring for setup_helpers.update_package_files for more
+# details.
+package_info = get_package_info()
 
-setup(
-    name='pycraf',
-    version=VERSION,
-    description='pycraf',
-    author='Benjamin Winkel',
-    author_email='bwinkel@mpifr.de',
-    url='https://github.com/bwinkel/pycraf',
-    download_url='https://github.com/bwinkel/pycraf/archive/{:s}.tar.gz'.format(VERSION),
-    packages=[
-        'pycraf',
-        'pycraf.antenna',
-        'pycraf.atm',
-        'pycraf.conversions',
-        'pycraf.geospatial',
-        'pycraf.helpers',
-        'pycraf.pathprof',
-        'pycraf.protection',
-        ],
-    install_requires=[
-        'setuptools',
-        'numpy>=1.8',
-        'scipy>=0.15',
-        'astropy>=1.1',
-        'pyproj>=1.9',
-        'matplotlib>=1.2',
-        ],
-    package_dir={
-        'pycraf': 'pycraf',
-        'pycraf.antenna': 'pycraf/antenna',
-        'pycraf.atm': 'pycraf/atm',
-        'pycraf.conversions': 'pycraf/conversions',
-        'pycraf.geospatial': 'pycraf/geospatial',
-        'pycraf.helpers': 'pycraf/helpers',
-        'pycraf.pathprof': 'pycraf/pathprof',
-        'pycraf.protection': 'pycraf/protection',
-        },
-    cmdclass={'build_ext': build_ext},
-    ext_modules=[
-        ext_module_pathprof_cyprop,
-        ext_module_pathprof_geodesics,
-        ],
-    package_data={
-        'pycraf': [
-            'itudata/README.md',
-            'itudata/LICENSE.ITU',
-            'itudata/p.676-10/R-REC-P.676-10-201309_table1.csv',
-            'itudata/p.676-10/R-REC-P.676-10-201309_table2.csv',
-            'itudata/ra.769-2/ra_769_table1_limits_continuum.csv',
-            'itudata/ra.769-2/ra_769_table2_limits_spectroscopy.csv',
-            'itudata/p.452-16/refract_map.npz',
-            'itudata/p.452-16/make_npy.py',
-            'itudata/p.452-16/R-REC-P.452-16-201507/DN50.TXT',
-            'itudata/p.452-16/R-REC-P.452-16-201507/LAT.TXT',
-            'itudata/p.452-16/R-REC-P.452-16-201507/LON.TXT',
-            'itudata/p.452-16/R-REC-P.452-16-201507/N050.TXT',
-            'itudata/p.452-16/R-REC-P.452-16-201507/ReadMe.doc',
-            ]
-        },
-    long_description='''pycraf ... the CRAF library.
-        Contains useful functions for the daily life of a spectrum manager
-        in RAS.
-        ''',
-    keywords=['pycraf', 'radio', 'compatibility study'],
-    classifiers=[
-        'Development Status :: 3 - Alpha',
-        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
-        'Operating System :: Microsoft :: Windows',
-        'Operating System :: MacOS',
-        'Operating System :: POSIX :: Linux',
-        'Programming Language :: Python',
-        'Programming Language :: Cython',
-        'Topic :: Scientific/Engineering',
-        ],
-    )
+# Add the project-global data
+package_info['package_data'].setdefault(PACKAGENAME, [])
+package_info['package_data'][PACKAGENAME].append('data/*')
+package_info['package_data'][PACKAGENAME].append('itudata/*.*')
+package_info['package_data'][PACKAGENAME].append('itudata/p.452-16/*')
+package_info['package_data'][PACKAGENAME].append('itudata/p.452-16/R-REC-P.452-16-201507/*')
+package_info['package_data'][PACKAGENAME].append('itudata/p.676-10/*')
+package_info['package_data'][PACKAGENAME].append('itudata/ra.769-2/*')
+
+# Define entry points for command-line scripts
+entry_points = {'console_scripts': []}
+
+if conf.has_section('entry_points'):
+    entry_point_list = conf.items('entry_points')
+    for entry_point in entry_point_list:
+        entry_points['console_scripts'].append('{0} = {1}'.format(
+            entry_point[0], entry_point[1]))
+
+# Include all .c files, recursively, including those generated by
+# Cython, since we can not do this in MANIFEST.in with a "dynamic"
+# directory name.
+c_files = []
+for root, dirs, files in os.walk(PACKAGENAME):
+    for filename in files:
+        if filename.endswith('.c'):
+            c_files.append(
+                os.path.join(
+                    os.path.relpath(root, PACKAGENAME), filename))
+package_info['package_data'][PACKAGENAME].extend(c_files)
+
+# Note that requires and provides should not be included in the call to
+# ``setup``, since these are now deprecated. See this link for more details:
+# https://groups.google.com/forum/#!topic/astropy-dev/urYO8ckB2uM
+
+setup(name=PACKAGENAME,
+      version=VERSION,
+      description=DESCRIPTION,
+      scripts=scripts,
+      install_requires=metadata.get('install_requires', 'astropy').strip().split(),
+      author=AUTHOR,
+      author_email=AUTHOR_EMAIL,
+      license=LICENSE,
+      url=URL,
+      long_description=LONG_DESCRIPTION,
+      cmdclass=cmdclassd,
+      zip_safe=False,
+      use_2to3=False,
+      entry_points=entry_points,
+      **package_info
+)

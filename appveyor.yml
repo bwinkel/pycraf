@@ -1,62 +1,52 @@
+# AppVeyor.com is a Continuous Integration service to build and run tests under
+# Windows
+
 environment:
   # In the Appveyor UI, add your PyPI password as TWINE_PASSWORD (click
   # Settings > Environment > Add Variable...). Make sure to mark it as private!
   TWINE_USERNAME: bwinkel
-  SRTMDATA: "%APPVEYOR_BUILD_FOLDER%\\tests\\pathprof\\srtm"
+  SRTMDATA: "%APPVEYOR_BUILD_FOLDER%\\pycraf\\pathprof\\tests\\srtm"
+
+  global:
+      PYTHON: "C:\\conda"
+      MINICONDA_VERSION: "latest"
+      CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\ci-helpers\\appveyor\\windows_sdk.cmd"
+      PYTHON_ARCH: "64" # needs to be set for CMD_IN_ENV to succeed. If a mix
+                        # of 32 bit and 64 bit builds are needed, move this
+                        # to the matrix section.
+
+      # For this package-template, we include examples of Cython modules,
+      # so Cython is required for testing. If your package does not include
+      # Cython code, you can set CONDA_DEPENDENCIES=''
+      CONDA_DEPENDENCIES: "pip wheel numpy scipy astropy pytest cython h5py matplotlib pyproj geographiclib"
+
+      # Conda packages for affiliated packages are hosted in channel
+      # "astropy" while builds for astropy LTS with recent numpy versions
+      # are in astropy-ci-extras. If your package uses either of these,
+      # add the channels to CONDA_CHANNELS along with any other channels
+      # you want to use.
+      CONDA_CHANNELS: "astropy-ci-extras astropy conda-forge"
 
   matrix:
 
-    # For Python versions available on Appveyor, see
-    # http://www.appveyor.com/docs/installed-software#python
-    # The list here is complete (excluding Python 2.6, which
-    # isn't covered by this document) at the time of writing.
+      # We test Python 2.7 and 3.6 because 2.7 is the supported Python 2
+      # release of Astropy and Python 3.6 is the latest Python 3 release.
 
-      # 3.5
-    - PYTHON: "C:\\Miniconda35"
-      # 3.5 64-bit
-    - PYTHON: "C:\\Miniconda35-x64"
-      # 3.6
-    - PYTHON: "C:\\Miniconda36"
-      # 3.6 64-bit
-    - PYTHON: "C:\\Miniconda36-x64"
+      - PYTHON_VERSION: "3.6"
+        ASTROPY_VERSION: "stable"
+        NUMPY_VERSION: "stable"
 
+platform:
+    -x64
 
 install:
-  # Prepend chosen Python to the PATH of this build
-  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
-  # Check that we have the expected version and architecture for Python
-  - "python --version"
-  - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
-  # Install the conda supplied packages; msvc_runtime needed for py34
-  - "conda update -y conda"
-  - "conda install -y pip wheel numpy scipy astropy pytest cython h5py matplotlib"
-  - "conda install -y -c conda-forge pyproj geographiclib"
+    - "git clone git://github.com/astropy/ci-helpers.git"
+    - "powershell ci-helpers/appveyor/install-miniconda.ps1"
+    - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+    - "activate test"
 
-build: off
+# Not a .NET project, we build the package in the install step instead
+build: false
 
 test_script:
-  # Put your test command here.
-  - "echo %SRTMDATA%"
-  - "dir %SRTMDATA%"
-  - "del /f pycraf\\pathprof\\*.c"
-  - "%PYTHON%\\python.exe setup.py install"
-  - cd tests
-  - "%PYTHON%\\python.exe -m pytest"
-  - cd ..
-
-after_test:
-  # This step builds your wheels.
-  - "%PYTHON%\\python.exe setup.py bdist_wheel"
-  - "%PYTHON%\\python.exe setup.py bdist_wininst"
-  - "%PYTHON%\\python.exe setup.py bdist_msi"
-
-artifacts:
-  # bdist_wheel puts your built wheel in the dist directory
-  - path: dist\*
-
-on_success:
-#  You can use this step to upload your artifacts to a public website.
-#  See Appveyor's documentation for more details. Or you can simply
-#  access your wheels from the Appveyor "artifacts" tab for your build.
-#  APPVEYOR_REPO_TAG is true only if commit is a tag
-  - ps: "If ($env:APPVEYOR_REPO_TAG -eq \"true\") {\n  python -m pip install twine\n  python -m twine upload (resolve-path dist\\*.whl)\n  }"
+    - "%CMD_IN_ENV% python setup.py test"

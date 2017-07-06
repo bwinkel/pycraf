@@ -16,7 +16,7 @@ from scipy.interpolate import RegularGridInterpolator
 # from geographiclib.geodesic import Geodesic
 from . import geodesics
 from .. import conversions as cnv
-from .. import helpers
+from .. import utils
 
 
 __all__ = [
@@ -214,7 +214,7 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
         )
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     lon_t=(-180, 180, apu.deg),
     lat_t=(-90, 90, apu.deg),
     lon_r=(-180, 180, apu.deg),
@@ -246,7 +246,7 @@ def srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
     return _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step)
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     lon_t=(-180, 180, apu.deg),
     lat_t=(-90, 90, apu.deg),
     map_size_lon=(0.002, 90, apu.deg),

@@ -9,7 +9,7 @@ from __future__ import (
 from astropy import units as apu
 import numpy as np
 from .. import conversions as cnv
-from .. import helpers
+from .. import utils
 
 
 __all__ = [
@@ -17,7 +17,7 @@ __all__ = [
     ]
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     phi=(-180, 180, apu.deg),
     diameter=(0.1, 1000., apu.m),
     wavelength=(0.001, 2, apu.m),

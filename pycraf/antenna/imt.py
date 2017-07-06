@@ -8,7 +8,7 @@ from __future__ import (
 from astropy import units as apu
 import numpy as np
 from .. import conversions as cnv
-from .. import helpers
+from .. import utils
 
 
 __all__ = [
@@ -67,7 +67,7 @@ def _single_element_pattern(
         )
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     azim=(-180, 180, apu.deg),
     elev=(-90, 90, apu.deg),
     G_Emax=(None, None, cnv.dB),
@@ -159,7 +159,7 @@ def _composite_pattern(
     return A_E + 10 * np.log10(np.abs(tmp) ** 2)
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     azim=(-180, 180, apu.deg),
     elev=(-90, 90, apu.deg),
     azim_i=(-180, 180, apu.deg),

@@ -13,8 +13,8 @@ from astropy.tests.helper import assert_quantity_allclose
 from astropy import units as apu
 from astropy.units import Quantity
 from astropy.utils.misc import NumpyRNGContext
-from pycraf import conversions as cnv
-from pycraf import geospatial as gsp
+from ... import conversions as cnv
+from ... import geospatial as gsp
 import pyproj
 
 

@@ -23,7 +23,7 @@ from astropy import units as apu
 from . import heightprofile
 from . import helper
 from .. import conversions as cnv
-from .. import helpers
+from .. import utils
 
 np.import_array()
 
@@ -519,7 +519,7 @@ class PathProp(_PathProp):
     Path Properties object
     '''
 
-    @helpers.ranged_quantity_input(
+    @utils.ranged_quantity_input(
         freq=(0.1, 100, apu.GHz),
         temperature=(None, None, apu.K),
         pressure=(None, None, apu.hPa),
@@ -1302,7 +1302,7 @@ cdef (double, double, double) _free_space_loss_bfsg(
     return L_bfsg, E_sp, E_sbeta
 
 
-# @helpers.ranged_quantity_input(
+# @utils.ranged_quantity_input(
 #     strip_input_units=True, output_unit=(cnv.dB, cnv.dB, cnv.dB)
 #     )
 def free_space_loss_bfsg_cython(

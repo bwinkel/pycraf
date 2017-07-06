@@ -7,12 +7,6 @@
 # from __future__ import unicode_literals
 
 import os
-# we need to modify the SRTM search path, such that the tests can find
-# the hgt file in the test directory;
-# DO NOT change lon and lat coordinates to lie outside of the hgt tile
-this_dir, _ = os.path.split(__file__)
-os.environ['SRTMDATA'] = os.path.join(this_dir, 'srtm')
-
 import pytest
 from functools import partial
 import numpy as np
@@ -20,9 +14,9 @@ from numpy.testing import assert_equal, assert_allclose
 from astropy.tests.helper import assert_quantity_allclose
 from astropy import units as apu
 from astropy.units import Quantity
-from pycraf import conversions as cnv
-from pycraf import pathprof
-from pycraf.helpers import check_astro_quantities
+from ... import conversions as cnv
+from ... import pathprof
+from ...utils import check_astro_quantities, get_pkg_data_filename
 from astropy.utils.misc import NumpyRNGContext
 import json
 from itertools import product
@@ -56,18 +50,15 @@ class TestPropagation:
                 [(0, 0), (20, 30)],
             ))
 
-        self.pprop_template = os.path.join(
-            this_dir, 'cases',
-            'pprop_{:.2f}ghz_{:.2f}m_{:.2f}m_{:.2f}percent_v{:d}.json'
+        self.pprop_template = (
+            'cases/pprop_{:.2f}ghz_{:.2f}m_{:.2f}m_{:.2f}percent_v{:d}.json'
             )
-        self.loss_template = os.path.join(
-            this_dir, 'cases',
-            'loss_{:.2f}ghz_{:.2f}m_{:.2f}m_{:.2f}percent_'
+        self.loss_template = (
+            'cases/loss_{:.2f}ghz_{:.2f}m_{:.2f}m_{:.2f}percent_'
             '{:.2f}db_{:.2f}db_v{:d}.json'
             )
-        self.fastmap_template = os.path.join(
-            this_dir, 'fastmap',
-            'attens_{:.2f}ghz_{:.2f}m_{:.2f}m_{:.2f}percent_v{:d}.hdf5'
+        self.fastmap_template = (
+            'fastmap/attens_{:.2f}ghz_{:.2f}m_{:.2f}m_{:.2f}percent_v{:d}.hdf5'
             )
         self.pprops = []
         for case in self.cases:
@@ -154,9 +145,10 @@ class TestPropagation:
                 version=version,
                 )
 
-            pprop_name = self.pprop_template.format(
-                freq, h_tg, h_rg, time_percent, version
-                )
+            pprop_name = get_pkg_data_filename(
+                self.pprop_template.format(
+                    freq, h_tg, h_rg, time_percent, version
+                    ))
             pprop_true = json.load(open(pprop_name, 'r'))
 
             for k in pprop._pp:
@@ -173,9 +165,10 @@ class TestPropagation:
             losses['E_sp'] = los_loss[1].to(cnv.dB).value
             losses['E_sbeta'] = los_loss[2].to(cnv.dB).value
 
-            loss_name = self.loss_template.format(
-                freq, h_tg, h_rg, time_percent, version, G_t, G_r
-                )
+            loss_name = get_pkg_data_filename(
+                self.loss_template.format(
+                    freq, h_tg, h_rg, time_percent, version, G_t, G_r
+                    ))
             loss_true = json.load(open(loss_name, 'r'))
 
             for k in losses:
@@ -192,9 +185,10 @@ class TestPropagation:
             losses = {}
             losses['L_bs'] = tropo_loss.to(cnv.dB).value
 
-            loss_name = self.loss_template.format(
-                freq, h_tg, h_rg, time_percent, version, G_t, G_r
-                )
+            loss_name = get_pkg_data_filename(
+                self.loss_template.format(
+                    freq, h_tg, h_rg, time_percent, version, G_t, G_r
+                ))
             loss_true = json.load(open(loss_name, 'r'))
 
             for k in losses:
@@ -209,9 +203,10 @@ class TestPropagation:
             losses = {}
             losses['L_ba'] = duct_loss.to(cnv.dB).value
 
-            loss_name = self.loss_template.format(
-                freq, h_tg, h_rg, time_percent, version, G_t, G_r
-                )
+            loss_name = get_pkg_data_filename(
+                self.loss_template.format(
+                    freq, h_tg, h_rg, time_percent, version, G_t, G_r
+                ))
             loss_true = json.load(open(loss_name, 'r'))
 
             for k in losses:
@@ -230,9 +225,10 @@ class TestPropagation:
             losses['L_bd'] = diff_loss[3].to(cnv.dB).value
             losses['L_min_b0p'] = diff_loss[4].to(cnv.dB).value
 
-            loss_name = self.loss_template.format(
-                freq, h_tg, h_rg, time_percent, version, G_t, G_r
-                )
+            loss_name = get_pkg_data_filename(
+                self.loss_template.format(
+                    freq, h_tg, h_rg, time_percent, version, G_t, G_r
+                ))
             loss_true = json.load(open(loss_name, 'r'))
 
             for k in losses:
@@ -255,9 +251,10 @@ class TestPropagation:
             losses['L_b_corr_t'] = tot_loss[5].to(cnv.dB).value
             losses['L_t'] = tot_loss[6].to(cnv.dB).value
 
-            loss_name = self.loss_template.format(
-                freq, h_tg, h_rg, time_percent, version, G_t, G_r
-                )
+            loss_name = get_pkg_data_filename(
+                self.loss_template.format(
+                    freq, h_tg, h_rg, time_percent, version, G_t, G_r
+                ))
             loss_true = json.load(open(loss_name, 'r'))
 
             for k in losses:
@@ -292,7 +289,7 @@ class TestPropagation:
                 )
 
         # also test versus true results
-        tfile = os.path.join(this_dir, 'fastmap', 'hprof.hdf5')
+        tfile = get_pkg_data_filename('fastmap/hprof.hdf5')
         hprof_data_cache_true = h5py.File(tfile, 'r')
 
         for k in hprof_data_cache:
@@ -305,7 +302,7 @@ class TestPropagation:
 
     def test_fast_atten_map(self, tmpdir_factory):
 
-        tfile = os.path.join(this_dir, 'fastmap', 'hprof.hdf5')
+        tfile = get_pkg_data_filename('fastmap/hprof.hdf5')
         hprof_data_cache = h5py.File(tfile, 'r')
 
         for case in self.cases:
@@ -326,9 +323,10 @@ class TestPropagation:
             eps_pt_map = eps_pt_map.to(apu.deg).value
             eps_pr_map = eps_pr_map.to(apu.deg).value
 
-            tfile = self.fastmap_template.format(
-                freq, h_tg, h_rg, time_percent, version
-                )
+            tfile = get_pkg_data_filename(
+                self.fastmap_template.format(
+                    freq, h_tg, h_rg, time_percent, version
+                    ))
 
             # Warning: if uncommenting, the test cases will be overwritten
             # do this only, if you need to update the json files

@@ -11,7 +11,7 @@ import numpy as np
 
 from . import cyprop
 from .. import conversions as cnv
-from .. import helpers
+from .. import utils
 # import ipdb
 
 
@@ -27,7 +27,7 @@ __all__ = [
 # ranged_quantity_input fails)
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     output_unit=(cnv.dB, cnv.dB, cnv.dB)
     )
 def freespace_loss(pathprop):
@@ -62,7 +62,7 @@ def freespace_loss(pathprop):
     return cyprop.free_space_loss_bfsg_cython(pathprop)
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     G_t=(None, None, cnv.dBi),
     G_r=(None, None, cnv.dBi),
     strip_input_units=True, output_unit=cnv.dB
@@ -96,7 +96,7 @@ def troposcatter_loss(
     return cyprop.tropospheric_scatter_loss_bs_cython(pathprop, G_t, G_r)
 
 
-@helpers.ranged_quantity_input(output_unit=cnv.dB)
+@utils.ranged_quantity_input(output_unit=cnv.dB)
 def ducting_loss(pathprop):
     '''
     Calculate the ducting/layer reflection loss, L_ba, of a propagating radio
@@ -122,7 +122,7 @@ def ducting_loss(pathprop):
     return cyprop.ducting_loss_ba_cython(pathprop)
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     output_unit=(cnv.dB, cnv.dB, cnv.dB, cnv.dB, cnv.dB)
     )
 def diffraction_loss(pathprop):
@@ -158,7 +158,7 @@ def diffraction_loss(pathprop):
     return cyprop.diffraction_loss_complete_cython(pathprop)
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     G_t=(None, None, cnv.dBi),
     G_r=(None, None, cnv.dBi),
     strip_input_units=True,
@@ -198,7 +198,7 @@ def complete_loss(
     return cyprop.path_attenuation_complete_cython(pathprop, G_t, G_r)
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     h_g=(None, None, apu.m),
     freq=(None, None, apu.GHz),
     strip_input_units=True,
@@ -291,7 +291,7 @@ def _clutter_imt(
     return L_clutter
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     freq=(2, 67, apu.GHz),
     dist=(0.25, None, apu.km),
     location_percent=(0, 100, apu.percent),
@@ -337,7 +337,7 @@ def clutter_imt(
 
 
 # TODO: do we want to convert output dictionary arrays to quantities?
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     lon_t=(-180, 180, apu.deg),
     lat_t=(-90, 90, apu.deg),
     map_size_lon=(0.002, 90, apu.deg),
@@ -400,7 +400,7 @@ def height_profile_data(
         )
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     freq=(0.1, 100, apu.GHz),
     temperature=(None, None, apu.K),
     pressure=(None, None, apu.hPa),

@@ -7,6 +7,7 @@
 [![Build Status](https://travis-ci.org/bwinkel/pycraf.svg?branch=master)](https://travis-ci.org/bwinkel/pycraf)
 [![Build status](https://ci.appveyor.com/api/projects/status/tj7swn14t6bek3jr?svg=true)](https://ci.appveyor.com/project/bwinkel/pycraf)
 [![License](https://img.shields.io/badge/license-GPL-blue.svg)](https://www.github.com/bwinkel/pycraf/blob/master/COPYING)
+[![Coverage Status](https://coveralls.io/repos/github/bwinkel/pycraf/badge.svg?branch=master)](https://coveralls.io/github/bwinkel/pycraf?branch=master)
 
 # Disclaimer #
 `pycraf` is still in the early-development stage. While much of the

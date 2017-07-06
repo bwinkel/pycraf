@@ -9,7 +9,7 @@ from __future__ import (
 from astropy import units as apu
 import numpy as np
 from .. import conversions as cnv
-from .. import helpers
+from .. import utils
 
 
 __all__ = [
@@ -173,7 +173,7 @@ def _fl_pattern(phi, diameter, wavelength, G_max):
     return gain
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     phi=(-180, 180, apu.deg),
     diameter=(0.1, 1000., apu.m),
     wavelength=(0.001, 2, apu.m),
@@ -231,7 +231,7 @@ def _fl_hpbw_from_size(diameter, wavelength):
     return 70. * wavelength / diameter
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     diameter=(0.1, 1000., apu.m),
     wavelength=(0.001, 2, apu.m),
     strip_input_units=True, output_unit=apu.deg
@@ -262,7 +262,7 @@ def _fl_G_max_from_size(diameter, wavelength):
     return 20. * np.log10(diameter / wavelength) + 7.7
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     diameter=(0.1, 1000., apu.m),
     wavelength=(0.001, 2, apu.m),
     strip_input_units=True, output_unit=cnv.dBi
@@ -293,7 +293,7 @@ def _fl_G_max_from_hpbw(hpbw):
     return 44.5 - 20 * np.log10(hpbw)
 
 
-@helpers.ranged_quantity_input(
+@utils.ranged_quantity_input(
     hpbw=(1.e-3, 90., apu.deg),
     strip_input_units=True, output_unit=cnv.dBi
     )

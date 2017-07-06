@@ -398,8 +398,8 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__src__pathprof__geodesics
-#define __PYX_HAVE_API__src__pathprof__geodesics
+#define __PYX_HAVE__pycraf__pathprof__geodesics
+#define __PYX_HAVE_API__pycraf__pathprof__geodesics
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -645,9 +645,9 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "src/pathprof/geodesics.pyx",
+  "pycraf/pathprof/geodesics.pyx",
   "__init__.pxd",
-  "src/pathprof/stringsource",
+  "stringsource",
   "type.pxd",
 };
 /* MemviewSliceStruct.proto */
@@ -746,7 +746,7 @@ typedef volatile __pyx_atomic_int_type __pyx_atomic_int;
 #endif
 
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":725
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":725
  * # in Cython to enable them only on the right systems.
  * 
  * ctypedef npy_int8       int8_t             # <<<<<<<<<<<<<<
@@ -755,7 +755,7 @@ typedef volatile __pyx_atomic_int_type __pyx_atomic_int;
  */
 typedef npy_int8 __pyx_t_5numpy_int8_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":726
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":726
  * 
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t             # <<<<<<<<<<<<<<
@@ -764,7 +764,7 @@ typedef npy_int8 __pyx_t_5numpy_int8_t;
  */
 typedef npy_int16 __pyx_t_5numpy_int16_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":727
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":727
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t             # <<<<<<<<<<<<<<
@@ -773,7 +773,7 @@ typedef npy_int16 __pyx_t_5numpy_int16_t;
  */
 typedef npy_int32 __pyx_t_5numpy_int32_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":728
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":728
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t
  * ctypedef npy_int64      int64_t             # <<<<<<<<<<<<<<
@@ -782,7 +782,7 @@ typedef npy_int32 __pyx_t_5numpy_int32_t;
  */
 typedef npy_int64 __pyx_t_5numpy_int64_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":732
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":732
  * #ctypedef npy_int128     int128_t
  * 
  * ctypedef npy_uint8      uint8_t             # <<<<<<<<<<<<<<
@@ -791,7 +791,7 @@ typedef npy_int64 __pyx_t_5numpy_int64_t;
  */
 typedef npy_uint8 __pyx_t_5numpy_uint8_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":733
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":733
  * 
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t             # <<<<<<<<<<<<<<
@@ -800,7 +800,7 @@ typedef npy_uint8 __pyx_t_5numpy_uint8_t;
  */
 typedef npy_uint16 __pyx_t_5numpy_uint16_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":734
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":734
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t             # <<<<<<<<<<<<<<
@@ -809,7 +809,7 @@ typedef npy_uint16 __pyx_t_5numpy_uint16_t;
  */
 typedef npy_uint32 __pyx_t_5numpy_uint32_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":735
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":735
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t
  * ctypedef npy_uint64     uint64_t             # <<<<<<<<<<<<<<
@@ -818,7 +818,7 @@ typedef npy_uint32 __pyx_t_5numpy_uint32_t;
  */
 typedef npy_uint64 __pyx_t_5numpy_uint64_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":739
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":739
  * #ctypedef npy_uint128    uint128_t
  * 
  * ctypedef npy_float32    float32_t             # <<<<<<<<<<<<<<
@@ -827,7 +827,7 @@ typedef npy_uint64 __pyx_t_5numpy_uint64_t;
  */
 typedef npy_float32 __pyx_t_5numpy_float32_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":740
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":740
  * 
  * ctypedef npy_float32    float32_t
  * ctypedef npy_float64    float64_t             # <<<<<<<<<<<<<<
@@ -836,7 +836,7 @@ typedef npy_float32 __pyx_t_5numpy_float32_t;
  */
 typedef npy_float64 __pyx_t_5numpy_float64_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":749
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":749
  * # The int types are mapped a bit surprising --
  * # numpy.int corresponds to 'l' and numpy.long to 'q'
  * ctypedef npy_long       int_t             # <<<<<<<<<<<<<<
@@ -845,7 +845,7 @@ typedef npy_float64 __pyx_t_5numpy_float64_t;
  */
 typedef npy_long __pyx_t_5numpy_int_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":750
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":750
  * # numpy.int corresponds to 'l' and numpy.long to 'q'
  * ctypedef npy_long       int_t
  * ctypedef npy_longlong   long_t             # <<<<<<<<<<<<<<
@@ -854,7 +854,7 @@ typedef npy_long __pyx_t_5numpy_int_t;
  */
 typedef npy_longlong __pyx_t_5numpy_long_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":751
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":751
  * ctypedef npy_long       int_t
  * ctypedef npy_longlong   long_t
  * ctypedef npy_longlong   longlong_t             # <<<<<<<<<<<<<<
@@ -863,7 +863,7 @@ typedef npy_longlong __pyx_t_5numpy_long_t;
  */
 typedef npy_longlong __pyx_t_5numpy_longlong_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":753
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":753
  * ctypedef npy_longlong   longlong_t
  * 
  * ctypedef npy_ulong      uint_t             # <<<<<<<<<<<<<<
@@ -872,7 +872,7 @@ typedef npy_longlong __pyx_t_5numpy_longlong_t;
  */
 typedef npy_ulong __pyx_t_5numpy_uint_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":754
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":754
  * 
  * ctypedef npy_ulong      uint_t
  * ctypedef npy_ulonglong  ulong_t             # <<<<<<<<<<<<<<
@@ -881,7 +881,7 @@ typedef npy_ulong __pyx_t_5numpy_uint_t;
  */
 typedef npy_ulonglong __pyx_t_5numpy_ulong_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":755
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":755
  * ctypedef npy_ulong      uint_t
  * ctypedef npy_ulonglong  ulong_t
  * ctypedef npy_ulonglong  ulonglong_t             # <<<<<<<<<<<<<<
@@ -890,7 +890,7 @@ typedef npy_ulonglong __pyx_t_5numpy_ulong_t;
  */
 typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":757
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":757
  * ctypedef npy_ulonglong  ulonglong_t
  * 
  * ctypedef npy_intp       intp_t             # <<<<<<<<<<<<<<
@@ -899,7 +899,7 @@ typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
  */
 typedef npy_intp __pyx_t_5numpy_intp_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":758
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":758
  * 
  * ctypedef npy_intp       intp_t
  * ctypedef npy_uintp      uintp_t             # <<<<<<<<<<<<<<
@@ -908,7 +908,7 @@ typedef npy_intp __pyx_t_5numpy_intp_t;
  */
 typedef npy_uintp __pyx_t_5numpy_uintp_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":760
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":760
  * ctypedef npy_uintp      uintp_t
  * 
  * ctypedef npy_double     float_t             # <<<<<<<<<<<<<<
@@ -917,7 +917,7 @@ typedef npy_uintp __pyx_t_5numpy_uintp_t;
  */
 typedef npy_double __pyx_t_5numpy_float_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":761
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":761
  * 
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t             # <<<<<<<<<<<<<<
@@ -926,7 +926,7 @@ typedef npy_double __pyx_t_5numpy_float_t;
  */
 typedef npy_double __pyx_t_5numpy_double_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":762
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":762
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t
  * ctypedef npy_longdouble longdouble_t             # <<<<<<<<<<<<<<
@@ -965,7 +965,7 @@ struct __pyx_MemviewEnum_obj;
 struct __pyx_memoryview_obj;
 struct __pyx_memoryviewslice_obj;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":764
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":764
  * ctypedef npy_longdouble longdouble_t
  * 
  * ctypedef npy_cfloat      cfloat_t             # <<<<<<<<<<<<<<
@@ -974,7 +974,7 @@ struct __pyx_memoryviewslice_obj;
  */
 typedef npy_cfloat __pyx_t_5numpy_cfloat_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":765
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":765
  * 
  * ctypedef npy_cfloat      cfloat_t
  * ctypedef npy_cdouble     cdouble_t             # <<<<<<<<<<<<<<
@@ -983,7 +983,7 @@ typedef npy_cfloat __pyx_t_5numpy_cfloat_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_cdouble_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":766
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":766
  * ctypedef npy_cfloat      cfloat_t
  * ctypedef npy_cdouble     cdouble_t
  * ctypedef npy_clongdouble clongdouble_t             # <<<<<<<<<<<<<<
@@ -992,7 +992,7 @@ typedef npy_cdouble __pyx_t_5numpy_cdouble_t;
  */
 typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":768
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":768
  * ctypedef npy_clongdouble clongdouble_t
  * 
  * ctypedef npy_cdouble     complex_t             # <<<<<<<<<<<<<<
@@ -1953,16 +1953,16 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void); /*proto*/
 
 /* Module declarations from 'libc.math' */
 
-/* Module declarations from 'src.pathprof.geodesics' */
+/* Module declarations from 'pycraf.pathprof.geodesics' */
 static PyTypeObject *__pyx_array_type = 0;
 static PyTypeObject *__pyx_MemviewEnum_type = 0;
 static PyTypeObject *__pyx_memoryview_type = 0;
 static PyTypeObject *__pyx_memoryviewslice_type = 0;
-static double __pyx_v_3src_8pathprof_9geodesics_WGS_a;
-static double __pyx_v_3src_8pathprof_9geodesics_WGS_b;
-static double __pyx_v_3src_8pathprof_9geodesics_WGS_f;
-static double __pyx_v_3src_8pathprof_9geodesics_DEG2RAD;
-static double __pyx_v_3src_8pathprof_9geodesics_RAD2DEG;
+static double __pyx_v_6pycraf_8pathprof_9geodesics_WGS_a;
+static double __pyx_v_6pycraf_8pathprof_9geodesics_WGS_b;
+static double __pyx_v_6pycraf_8pathprof_9geodesics_WGS_f;
+static double __pyx_v_6pycraf_8pathprof_9geodesics_DEG2RAD;
+static double __pyx_v_6pycraf_8pathprof_9geodesics_RAD2DEG;
 static PyObject *generic = 0;
 static PyObject *strided = 0;
 static PyObject *indirect = 0;
@@ -1970,11 +1970,11 @@ static PyObject *contiguous = 0;
 static PyObject *indirect_contiguous = 0;
 static int __pyx_memoryview_thread_locks_used;
 static PyThread_type_lock __pyx_memoryview_thread_locks[8];
-static void __pyx_f_3src_8pathprof_9geodesics__inverse(double, double, double, double, double *, double *, double *, double, int); /*proto*/
-static void __pyx_f_3src_8pathprof_9geodesics__direct(double, double, double, double, double *, double *, double *, double, int); /*proto*/
-static CYTHON_INLINE double __pyx_f_3src_8pathprof_9geodesics_gauss1d(double, double); /*proto*/
-static CYTHON_INLINE int __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_ordered(__Pyx_memviewslice, float); /*proto*/
-static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_ordered(__Pyx_memviewslice, double); /*proto*/
+static void __pyx_f_6pycraf_8pathprof_9geodesics__inverse(double, double, double, double, double *, double *, double *, double, int); /*proto*/
+static void __pyx_f_6pycraf_8pathprof_9geodesics__direct(double, double, double, double, double *, double *, double *, double, int); /*proto*/
+static CYTHON_INLINE double __pyx_f_6pycraf_8pathprof_9geodesics_gauss1d(double, double); /*proto*/
+static CYTHON_INLINE int __pyx_fuse_0__pyx_f_6pycraf_8pathprof_9geodesics_find_in_ordered(__Pyx_memviewslice, float); /*proto*/
+static CYTHON_INLINE int __pyx_fuse_1__pyx_f_6pycraf_8pathprof_9geodesics_find_in_ordered(__Pyx_memviewslice, double); /*proto*/
 static struct __pyx_array_obj *__pyx_array_new(PyObject *, Py_ssize_t, char *, char *, char *); /*proto*/
 static void *__pyx_align_pointer(void *, size_t); /*proto*/
 static PyObject *__pyx_memoryview_new(PyObject *, int, int, __Pyx_TypeInfo *); /*proto*/
@@ -2009,10 +2009,10 @@ static void __pyx_memoryview_slice_assign_scalar(__Pyx_memviewslice *, int, size
 static void __pyx_memoryview__slice_assign_scalar(char *, Py_ssize_t *, Py_ssize_t *, int, size_t, void *); /*proto*/
 static __Pyx_TypeInfo __Pyx_TypeInfo_float = { "float", NULL, sizeof(float), { 0 }, 0, 'R', 0, 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_double = { "double", NULL, sizeof(double), { 0 }, 0, 'R', 0, 0 };
-#define __Pyx_MODULE_NAME "src.pathprof.geodesics"
-int __pyx_module_is_main_src__pathprof__geodesics = 0;
+#define __Pyx_MODULE_NAME "pycraf.pathprof.geodesics"
+int __pyx_module_is_main_pycraf__pathprof__geodesics = 0;
 
-/* Implementation of 'src.pathprof.geodesics' */
+/* Implementation of 'pycraf.pathprof.geodesics' */
 static PyObject *__pyx_builtin_ImportError;
 static PyObject *__pyx_builtin_AttributeError;
 static PyObject *__pyx_builtin_TypeError;
@@ -2126,11 +2126,11 @@ static const char __pyx_k_strided_and_direct[] = "<strided and direct>";
 static const char __pyx_k_strided_and_indirect[] = "<strided and indirect>";
 static const char __pyx_k_contiguous_and_direct[] = "<contiguous and direct>";
 static const char __pyx_k_MemoryView_of_r_object[] = "<MemoryView of %r object>";
-static const char __pyx_k_src_pathprof_geodesics[] = "src.pathprof.geodesics";
 static const char __pyx_k_MemoryView_of_r_at_0x_x[] = "<MemoryView of %r at 0x%x>";
 static const char __pyx_k_contiguous_and_indirect[] = "<contiguous and indirect>";
 static const char __pyx_k_Cannot_index_with_type_s[] = "Cannot index with type '%s'";
 static const char __pyx_k_Invalid_shape_in_axis_d_d[] = "Invalid shape in axis %d: %d.";
+static const char __pyx_k_pycraf_pathprof_geodesics[] = "pycraf.pathprof.geodesics";
 static const char __pyx_k_No_matching_signature_found[] = "No matching signature found";
 static const char __pyx_k_itemsize_0_for_cython_array[] = "itemsize <= 0 for cython.array";
 static const char __pyx_k_ndarray_is_not_C_contiguous[] = "ndarray is not C contiguous";
@@ -2138,7 +2138,7 @@ static const char __pyx_k_x_and_y_must_have_equal_size[] = "x and y must have eq
 static const char __pyx_k_Expected_at_least_d_arguments[] = "Expected at least %d arguments";
 static const char __pyx_k_unable_to_allocate_array_data[] = "unable to allocate array data.";
 static const char __pyx_k_strided_and_direct_or_indirect[] = "<strided and direct or indirect>";
-static const char __pyx_k_home_bwinkel_projects_pymodules[] = "/home/bwinkel/projects/pymodules/pycraf/src/pathprof/geodesics.pyx";
+static const char __pyx_k_home_bwinkel_projects_pymodules[] = "/home/bwinkel/projects/pymodules/pycraf/pycraf/pathprof/geodesics.pyx";
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
 static const char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
 static const char __pyx_k_Buffer_view_does_not_expose_stri[] = "Buffer view does not expose strides";
@@ -2257,6 +2257,7 @@ static PyObject *__pyx_kp_u_numpy_core_umath_failed_to_impor;
 static PyObject *__pyx_n_s_obj;
 static PyObject *__pyx_n_s_ordered;
 static PyObject *__pyx_n_s_pack;
+static PyObject *__pyx_n_s_pycraf_pathprof_geodesics;
 static PyObject *__pyx_n_s_pyx_getbuffer;
 static PyObject *__pyx_n_s_pyx_vtable;
 static PyObject *__pyx_n_s_range;
@@ -2268,7 +2269,6 @@ static PyObject *__pyx_n_s_shape;
 static PyObject *__pyx_n_s_signatures;
 static PyObject *__pyx_n_s_size;
 static PyObject *__pyx_n_s_split;
-static PyObject *__pyx_n_s_src_pathprof_geodesics;
 static PyObject *__pyx_n_s_ssum;
 static PyObject *__pyx_n_s_start;
 static PyObject *__pyx_n_s_step;
@@ -2292,13 +2292,13 @@ static PyObject *__pyx_n_s_x_new;
 static PyObject *__pyx_n_s_y;
 static PyObject *__pyx_n_s_y_new;
 static PyObject *__pyx_n_s_zip;
-static PyObject *__pyx_pf_3src_8pathprof_9geodesics_inverse(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_lon1_deg, double __pyx_v_lat1_deg, double __pyx_v_lon2_deg, double __pyx_v_lat2_deg, double __pyx_v_eps, int __pyx_v_maxiter); /* proto */
-static PyObject *__pyx_pf_3src_8pathprof_9geodesics_2direct(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_lon1_deg, double __pyx_v_lat1_deg, double __pyx_v_bearing1_deg, double __pyx_v_dist, double __pyx_v_eps, int __pyx_v_maxiter, PyObject *__pyx_v_wrap); /* proto */
-static PyObject *__pyx_pf_3src_8pathprof_9geodesics_4regrid1d_with_x(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_signatures, PyObject *__pyx_v_args, PyObject *__pyx_v_kwargs, CYTHON_UNUSED PyObject *__pyx_v_defaults); /* proto */
-static PyObject *__pyx_pf_3src_8pathprof_9geodesics_16__defaults__(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
-static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_x, __Pyx_memviewslice __pyx_v_y, __Pyx_memviewslice __pyx_v_x_new, __Pyx_memviewslice __pyx_v_y_new, float __pyx_v_width, int __pyx_v_regular, int __pyx_v_ordered); /* proto */
-static PyObject *__pyx_pf_3src_8pathprof_9geodesics_18__defaults__(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
-static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_x, __Pyx_memviewslice __pyx_v_y, __Pyx_memviewslice __pyx_v_x_new, __Pyx_memviewslice __pyx_v_y_new, double __pyx_v_width, int __pyx_v_regular, int __pyx_v_ordered); /* proto */
+static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_inverse(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_lon1_deg, double __pyx_v_lat1_deg, double __pyx_v_lon2_deg, double __pyx_v_lat2_deg, double __pyx_v_eps, int __pyx_v_maxiter); /* proto */
+static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_2direct(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_lon1_deg, double __pyx_v_lat1_deg, double __pyx_v_bearing1_deg, double __pyx_v_dist, double __pyx_v_eps, int __pyx_v_maxiter, PyObject *__pyx_v_wrap); /* proto */
+static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_4regrid1d_with_x(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_signatures, PyObject *__pyx_v_args, PyObject *__pyx_v_kwargs, CYTHON_UNUSED PyObject *__pyx_v_defaults); /* proto */
+static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_16__defaults__(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
+static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_x, __Pyx_memviewslice __pyx_v_y, __Pyx_memviewslice __pyx_v_x_new, __Pyx_memviewslice __pyx_v_y_new, float __pyx_v_width, int __pyx_v_regular, int __pyx_v_ordered); /* proto */
+static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_18__defaults__(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
+static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_x, __Pyx_memviewslice __pyx_v_y, __Pyx_memviewslice __pyx_v_x_new, __Pyx_memviewslice __pyx_v_y_new, double __pyx_v_width, int __pyx_v_regular, int __pyx_v_ordered); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __pyx_array_obj *__pyx_v_self, PyObject *__pyx_v_shape, Py_ssize_t __pyx_v_itemsize, PyObject *__pyx_v_format, PyObject *__pyx_v_mode, int __pyx_v_allocate_buffer); /* proto */
@@ -2378,7 +2378,7 @@ static PyObject *__pyx_codeobj__30;
 static PyObject *__pyx_codeobj__32;
 static PyObject *__pyx_codeobj__34;
 
-/* "src/pathprof/geodesics.pyx":33
+/* "pycraf/pathprof/geodesics.pyx":33
  * # see https://en.wikipedia.org/wiki/Vincenty's_formulae
  * 
  * cdef void _inverse(             # <<<<<<<<<<<<<<
@@ -2386,7 +2386,7 @@ static PyObject *__pyx_codeobj__34;
  *         double lon2_rad, double lat2_rad,
  */
 
-static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, double __pyx_v_lat1_rad, double __pyx_v_lon2_rad, double __pyx_v_lat2_rad, double *__pyx_v_dist, double *__pyx_v_bearing1_rad, double *__pyx_v_bearing2_rad, double __pyx_v_eps, int __pyx_v_maxiter) {
+static void __pyx_f_6pycraf_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, double __pyx_v_lat1_rad, double __pyx_v_lon2_rad, double __pyx_v_lat2_rad, double *__pyx_v_dist, double *__pyx_v_bearing1_rad, double *__pyx_v_bearing2_rad, double __pyx_v_eps, int __pyx_v_maxiter) {
   double __pyx_v_L;
   double __pyx_v_lam;
   double __pyx_v_last_lam;
@@ -2414,25 +2414,25 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
   int __pyx_t_1;
   int __pyx_t_2;
 
-  /* "src/pathprof/geodesics.pyx":52
+  /* "pycraf/pathprof/geodesics.pyx":52
  *         int _iter
  * 
  *     tan_U1 = (1 - WGS_f) * tan(lat1_rad)             # <<<<<<<<<<<<<<
  *     tan_U2 = (1 - WGS_f) * tan(lat2_rad)
  *     L = lon2_rad - lon1_rad
  */
-  __pyx_v_tan_U1 = ((1.0 - __pyx_v_3src_8pathprof_9geodesics_WGS_f) * tan(__pyx_v_lat1_rad));
+  __pyx_v_tan_U1 = ((1.0 - __pyx_v_6pycraf_8pathprof_9geodesics_WGS_f) * tan(__pyx_v_lat1_rad));
 
-  /* "src/pathprof/geodesics.pyx":53
+  /* "pycraf/pathprof/geodesics.pyx":53
  * 
  *     tan_U1 = (1 - WGS_f) * tan(lat1_rad)
  *     tan_U2 = (1 - WGS_f) * tan(lat2_rad)             # <<<<<<<<<<<<<<
  *     L = lon2_rad - lon1_rad
  * 
  */
-  __pyx_v_tan_U2 = ((1.0 - __pyx_v_3src_8pathprof_9geodesics_WGS_f) * tan(__pyx_v_lat2_rad));
+  __pyx_v_tan_U2 = ((1.0 - __pyx_v_6pycraf_8pathprof_9geodesics_WGS_f) * tan(__pyx_v_lat2_rad));
 
-  /* "src/pathprof/geodesics.pyx":54
+  /* "pycraf/pathprof/geodesics.pyx":54
  *     tan_U1 = (1 - WGS_f) * tan(lat1_rad)
  *     tan_U2 = (1 - WGS_f) * tan(lat2_rad)
  *     L = lon2_rad - lon1_rad             # <<<<<<<<<<<<<<
@@ -2441,7 +2441,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
   __pyx_v_L = (__pyx_v_lon2_rad - __pyx_v_lon1_rad);
 
-  /* "src/pathprof/geodesics.pyx":56
+  /* "pycraf/pathprof/geodesics.pyx":56
  *     L = lon2_rad - lon1_rad
  * 
  *     cos_U1 = 1. / sqrt(1 + tan_U1 ** 2)             # <<<<<<<<<<<<<<
@@ -2450,7 +2450,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
   __pyx_v_cos_U1 = (1. / sqrt((1.0 + pow(__pyx_v_tan_U1, 2.0))));
 
-  /* "src/pathprof/geodesics.pyx":57
+  /* "pycraf/pathprof/geodesics.pyx":57
  * 
  *     cos_U1 = 1. / sqrt(1 + tan_U1 ** 2)
  *     cos_U2 = 1. / sqrt(1 + tan_U2 ** 2)             # <<<<<<<<<<<<<<
@@ -2459,7 +2459,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
   __pyx_v_cos_U2 = (1. / sqrt((1.0 + pow(__pyx_v_tan_U2, 2.0))));
 
-  /* "src/pathprof/geodesics.pyx":58
+  /* "pycraf/pathprof/geodesics.pyx":58
  *     cos_U1 = 1. / sqrt(1 + tan_U1 ** 2)
  *     cos_U2 = 1. / sqrt(1 + tan_U2 ** 2)
  *     sin_U1 = tan_U1 * cos_U1             # <<<<<<<<<<<<<<
@@ -2468,7 +2468,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
   __pyx_v_sin_U1 = (__pyx_v_tan_U1 * __pyx_v_cos_U1);
 
-  /* "src/pathprof/geodesics.pyx":59
+  /* "pycraf/pathprof/geodesics.pyx":59
  *     cos_U2 = 1. / sqrt(1 + tan_U2 ** 2)
  *     sin_U1 = tan_U1 * cos_U1
  *     sin_U2 = tan_U2 * cos_U2             # <<<<<<<<<<<<<<
@@ -2477,7 +2477,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
   __pyx_v_sin_U2 = (__pyx_v_tan_U2 * __pyx_v_cos_U2);
 
-  /* "src/pathprof/geodesics.pyx":61
+  /* "pycraf/pathprof/geodesics.pyx":61
  *     sin_U2 = tan_U2 * cos_U2
  * 
  *     lam = last_lam = L             # <<<<<<<<<<<<<<
@@ -2487,7 +2487,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
   __pyx_v_lam = __pyx_v_L;
   __pyx_v_last_lam = __pyx_v_L;
 
-  /* "src/pathprof/geodesics.pyx":62
+  /* "pycraf/pathprof/geodesics.pyx":62
  * 
  *     lam = last_lam = L
  *     _iter = 0             # <<<<<<<<<<<<<<
@@ -2496,7 +2496,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
   __pyx_v__iter = 0;
 
-  /* "src/pathprof/geodesics.pyx":64
+  /* "pycraf/pathprof/geodesics.pyx":64
  *     _iter = 0
  * 
  *     while True:             # <<<<<<<<<<<<<<
@@ -2505,7 +2505,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
   while (1) {
 
-    /* "src/pathprof/geodesics.pyx":66
+    /* "pycraf/pathprof/geodesics.pyx":66
  *     while True:
  * 
  *         sin_lam = sin(lam)             # <<<<<<<<<<<<<<
@@ -2514,7 +2514,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
     __pyx_v_sin_lam = sin(__pyx_v_lam);
 
-    /* "src/pathprof/geodesics.pyx":67
+    /* "pycraf/pathprof/geodesics.pyx":67
  * 
  *         sin_lam = sin(lam)
  *         cos_lam = cos(lam)             # <<<<<<<<<<<<<<
@@ -2523,7 +2523,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
     __pyx_v_cos_lam = cos(__pyx_v_lam);
 
-    /* "src/pathprof/geodesics.pyx":69
+    /* "pycraf/pathprof/geodesics.pyx":69
  *         cos_lam = cos(lam)
  * 
  *         sin_s = sqrt(             # <<<<<<<<<<<<<<
@@ -2532,7 +2532,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
     __pyx_v_sin_s = sqrt((pow((__pyx_v_cos_U2 * __pyx_v_sin_lam), 2.0) + pow(((__pyx_v_cos_U1 * __pyx_v_sin_U2) - ((__pyx_v_sin_U1 * __pyx_v_cos_U2) * __pyx_v_cos_lam)), 2.0)));
 
-    /* "src/pathprof/geodesics.pyx":73
+    /* "pycraf/pathprof/geodesics.pyx":73
  *             (cos_U1 * sin_U2 - sin_U1 * cos_U2 * cos_lam) ** 2
  *             )
  *         cos_s = sin_U1 * sin_U2 + cos_U1 * cos_U2 * cos_lam             # <<<<<<<<<<<<<<
@@ -2541,7 +2541,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
     __pyx_v_cos_s = ((__pyx_v_sin_U1 * __pyx_v_sin_U2) + ((__pyx_v_cos_U1 * __pyx_v_cos_U2) * __pyx_v_cos_lam));
 
-    /* "src/pathprof/geodesics.pyx":74
+    /* "pycraf/pathprof/geodesics.pyx":74
  *             )
  *         cos_s = sin_U1 * sin_U2 + cos_U1 * cos_U2 * cos_lam
  *         s = atan2(sin_s, cos_s)             # <<<<<<<<<<<<<<
@@ -2550,7 +2550,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
     __pyx_v_s = atan2(__pyx_v_sin_s, __pyx_v_cos_s);
 
-    /* "src/pathprof/geodesics.pyx":75
+    /* "pycraf/pathprof/geodesics.pyx":75
  *         cos_s = sin_U1 * sin_U2 + cos_U1 * cos_U2 * cos_lam
  *         s = atan2(sin_s, cos_s)
  *         sin_a = cos_U1 * cos_U2 * sin_lam / sin_s             # <<<<<<<<<<<<<<
@@ -2559,7 +2559,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
     __pyx_v_sin_a = (((__pyx_v_cos_U1 * __pyx_v_cos_U2) * __pyx_v_sin_lam) / __pyx_v_sin_s);
 
-    /* "src/pathprof/geodesics.pyx":76
+    /* "pycraf/pathprof/geodesics.pyx":76
  *         s = atan2(sin_s, cos_s)
  *         sin_a = cos_U1 * cos_U2 * sin_lam / sin_s
  *         cos2_a = 1 - sin_a ** 2             # <<<<<<<<<<<<<<
@@ -2568,7 +2568,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
     __pyx_v_cos2_a = (1.0 - pow(__pyx_v_sin_a, 2.0));
 
-    /* "src/pathprof/geodesics.pyx":77
+    /* "pycraf/pathprof/geodesics.pyx":77
  *         sin_a = cos_U1 * cos_U2 * sin_lam / sin_s
  *         cos2_a = 1 - sin_a ** 2
  *         cos_2sm = cos_s - 2 * sin_U1 * sin_U2 / cos2_a             # <<<<<<<<<<<<<<
@@ -2577,7 +2577,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
     __pyx_v_cos_2sm = (__pyx_v_cos_s - (((2.0 * __pyx_v_sin_U1) * __pyx_v_sin_U2) / __pyx_v_cos2_a));
 
-    /* "src/pathprof/geodesics.pyx":78
+    /* "pycraf/pathprof/geodesics.pyx":78
  *         cos2_a = 1 - sin_a ** 2
  *         cos_2sm = cos_s - 2 * sin_U1 * sin_U2 / cos2_a
  *         cos2_2sm = cos_2sm ** 2             # <<<<<<<<<<<<<<
@@ -2586,25 +2586,25 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
     __pyx_v_cos2_2sm = pow(__pyx_v_cos_2sm, 2.0);
 
-    /* "src/pathprof/geodesics.pyx":80
+    /* "pycraf/pathprof/geodesics.pyx":80
  *         cos2_2sm = cos_2sm ** 2
  * 
  *         C = WGS_f / 16 * cos2_a * (4 + WGS_f * (4 - 3 * cos2_a))             # <<<<<<<<<<<<<<
  *         lam = L + (1 - C) * WGS_f * sin_a * (
  *             s + C * sin_s * (
  */
-    __pyx_v_C = (((__pyx_v_3src_8pathprof_9geodesics_WGS_f / 16.0) * __pyx_v_cos2_a) * (4.0 + (__pyx_v_3src_8pathprof_9geodesics_WGS_f * (4.0 - (3.0 * __pyx_v_cos2_a)))));
+    __pyx_v_C = (((__pyx_v_6pycraf_8pathprof_9geodesics_WGS_f / 16.0) * __pyx_v_cos2_a) * (4.0 + (__pyx_v_6pycraf_8pathprof_9geodesics_WGS_f * (4.0 - (3.0 * __pyx_v_cos2_a)))));
 
-    /* "src/pathprof/geodesics.pyx":81
+    /* "pycraf/pathprof/geodesics.pyx":81
  * 
  *         C = WGS_f / 16 * cos2_a * (4 + WGS_f * (4 - 3 * cos2_a))
  *         lam = L + (1 - C) * WGS_f * sin_a * (             # <<<<<<<<<<<<<<
  *             s + C * sin_s * (
  *                 cos_2sm + C * cos_s * (-1 + 2 * cos2_2sm)
  */
-    __pyx_v_lam = (__pyx_v_L + ((((1.0 - __pyx_v_C) * __pyx_v_3src_8pathprof_9geodesics_WGS_f) * __pyx_v_sin_a) * (__pyx_v_s + ((__pyx_v_C * __pyx_v_sin_s) * (__pyx_v_cos_2sm + ((__pyx_v_C * __pyx_v_cos_s) * (-1.0 + (2.0 * __pyx_v_cos2_2sm))))))));
+    __pyx_v_lam = (__pyx_v_L + ((((1.0 - __pyx_v_C) * __pyx_v_6pycraf_8pathprof_9geodesics_WGS_f) * __pyx_v_sin_a) * (__pyx_v_s + ((__pyx_v_C * __pyx_v_sin_s) * (__pyx_v_cos_2sm + ((__pyx_v_C * __pyx_v_cos_s) * (-1.0 + (2.0 * __pyx_v_cos2_2sm))))))));
 
-    /* "src/pathprof/geodesics.pyx":87
+    /* "pycraf/pathprof/geodesics.pyx":87
  *             )
  * 
  *         if fabs(lam - last_lam) < eps or _iter > maxiter:             # <<<<<<<<<<<<<<
@@ -2622,7 +2622,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
     __pyx_L6_bool_binop_done:;
     if (__pyx_t_1) {
 
-      /* "src/pathprof/geodesics.pyx":88
+      /* "pycraf/pathprof/geodesics.pyx":88
  * 
  *         if fabs(lam - last_lam) < eps or _iter > maxiter:
  *             break             # <<<<<<<<<<<<<<
@@ -2631,7 +2631,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
       goto __pyx_L4_break;
 
-      /* "src/pathprof/geodesics.pyx":87
+      /* "pycraf/pathprof/geodesics.pyx":87
  *             )
  * 
  *         if fabs(lam - last_lam) < eps or _iter > maxiter:             # <<<<<<<<<<<<<<
@@ -2640,7 +2640,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
     }
 
-    /* "src/pathprof/geodesics.pyx":90
+    /* "pycraf/pathprof/geodesics.pyx":90
  *             break
  * 
  *         _iter += 1             # <<<<<<<<<<<<<<
@@ -2649,7 +2649,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
     __pyx_v__iter = (__pyx_v__iter + 1);
 
-    /* "src/pathprof/geodesics.pyx":91
+    /* "pycraf/pathprof/geodesics.pyx":91
  * 
  *         _iter += 1
  *         last_lam = lam             # <<<<<<<<<<<<<<
@@ -2660,16 +2660,16 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
   }
   __pyx_L4_break:;
 
-  /* "src/pathprof/geodesics.pyx":93
+  /* "pycraf/pathprof/geodesics.pyx":93
  *         last_lam = lam
  * 
  *     u2 = cos2_a * (WGS_a ** 2 - WGS_b ** 2) / WGS_b ** 2             # <<<<<<<<<<<<<<
  *     A = 1 + u2 / 16384 * (4096 + u2 * (-768 + u2 * (320 - 175 * u2)))
  *     B = u2 / 1024 * (256 + u2 * (-128 + u2 * (74 - 47 * u2)))
  */
-  __pyx_v_u2 = ((__pyx_v_cos2_a * (pow(__pyx_v_3src_8pathprof_9geodesics_WGS_a, 2.0) - pow(__pyx_v_3src_8pathprof_9geodesics_WGS_b, 2.0))) / pow(__pyx_v_3src_8pathprof_9geodesics_WGS_b, 2.0));
+  __pyx_v_u2 = ((__pyx_v_cos2_a * (pow(__pyx_v_6pycraf_8pathprof_9geodesics_WGS_a, 2.0) - pow(__pyx_v_6pycraf_8pathprof_9geodesics_WGS_b, 2.0))) / pow(__pyx_v_6pycraf_8pathprof_9geodesics_WGS_b, 2.0));
 
-  /* "src/pathprof/geodesics.pyx":94
+  /* "pycraf/pathprof/geodesics.pyx":94
  * 
  *     u2 = cos2_a * (WGS_a ** 2 - WGS_b ** 2) / WGS_b ** 2
  *     A = 1 + u2 / 16384 * (4096 + u2 * (-768 + u2 * (320 - 175 * u2)))             # <<<<<<<<<<<<<<
@@ -2678,7 +2678,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
   __pyx_v_A = (1.0 + ((__pyx_v_u2 / 16384.0) * (4096.0 + (__pyx_v_u2 * (-768.0 + (__pyx_v_u2 * (320.0 - (175.0 * __pyx_v_u2))))))));
 
-  /* "src/pathprof/geodesics.pyx":95
+  /* "pycraf/pathprof/geodesics.pyx":95
  *     u2 = cos2_a * (WGS_a ** 2 - WGS_b ** 2) / WGS_b ** 2
  *     A = 1 + u2 / 16384 * (4096 + u2 * (-768 + u2 * (320 - 175 * u2)))
  *     B = u2 / 1024 * (256 + u2 * (-128 + u2 * (74 - 47 * u2)))             # <<<<<<<<<<<<<<
@@ -2687,7 +2687,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
   __pyx_v_B = ((__pyx_v_u2 / 1024.0) * (256.0 + (__pyx_v_u2 * (-128.0 + (__pyx_v_u2 * (74.0 - (47.0 * __pyx_v_u2)))))));
 
-  /* "src/pathprof/geodesics.pyx":97
+  /* "pycraf/pathprof/geodesics.pyx":97
  *     B = u2 / 1024 * (256 + u2 * (-128 + u2 * (74 - 47 * u2)))
  * 
  *     ds = B * sin_s * (             # <<<<<<<<<<<<<<
@@ -2696,16 +2696,16 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
   __pyx_v_ds = ((__pyx_v_B * __pyx_v_sin_s) * (__pyx_v_cos_2sm + ((0.25 * __pyx_v_B) * ((__pyx_v_cos_s * (-1.0 + (2.0 * __pyx_v_cos2_2sm))) - (((((1. / 6.) * __pyx_v_B) * __pyx_v_cos_2sm) * (-3.0 + (4.0 * pow(__pyx_v_sin_s, 2.0)))) * (-3.0 + (4.0 * __pyx_v_cos2_2sm)))))));
 
-  /* "src/pathprof/geodesics.pyx":104
+  /* "pycraf/pathprof/geodesics.pyx":104
  *         )
  * 
  *     dist[0] = WGS_b * A * (s - ds)             # <<<<<<<<<<<<<<
  *     bearing1_rad[0] = atan2(
  *         cos_U2 * sin_lam,
  */
-  (__pyx_v_dist[0]) = ((__pyx_v_3src_8pathprof_9geodesics_WGS_b * __pyx_v_A) * (__pyx_v_s - __pyx_v_ds));
+  (__pyx_v_dist[0]) = ((__pyx_v_6pycraf_8pathprof_9geodesics_WGS_b * __pyx_v_A) * (__pyx_v_s - __pyx_v_ds));
 
-  /* "src/pathprof/geodesics.pyx":105
+  /* "pycraf/pathprof/geodesics.pyx":105
  * 
  *     dist[0] = WGS_b * A * (s - ds)
  *     bearing1_rad[0] = atan2(             # <<<<<<<<<<<<<<
@@ -2714,7 +2714,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
   (__pyx_v_bearing1_rad[0]) = atan2((__pyx_v_cos_U2 * __pyx_v_sin_lam), ((__pyx_v_cos_U1 * __pyx_v_sin_U2) - ((__pyx_v_sin_U1 * __pyx_v_cos_U2) * __pyx_v_cos_lam)));
 
-  /* "src/pathprof/geodesics.pyx":109
+  /* "pycraf/pathprof/geodesics.pyx":109
  *         cos_U1 * sin_U2 - sin_U1 * cos_U2 * cos_lam
  *         )
  *     bearing2_rad[0] = atan2(             # <<<<<<<<<<<<<<
@@ -2723,7 +2723,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
   (__pyx_v_bearing2_rad[0]) = atan2((__pyx_v_cos_U1 * __pyx_v_sin_lam), (((-__pyx_v_sin_U1) * __pyx_v_cos_U2) + ((__pyx_v_cos_U1 * __pyx_v_sin_U2) * __pyx_v_cos_lam)));
 
-  /* "src/pathprof/geodesics.pyx":114
+  /* "pycraf/pathprof/geodesics.pyx":114
  *         )
  * 
  *     return             # <<<<<<<<<<<<<<
@@ -2732,7 +2732,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
   goto __pyx_L0;
 
-  /* "src/pathprof/geodesics.pyx":33
+  /* "pycraf/pathprof/geodesics.pyx":33
  * # see https://en.wikipedia.org/wiki/Vincenty's_formulae
  * 
  * cdef void _inverse(             # <<<<<<<<<<<<<<
@@ -2744,7 +2744,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
   __pyx_L0:;
 }
 
-/* "src/pathprof/geodesics.pyx":117
+/* "pycraf/pathprof/geodesics.pyx":117
  * 
  * 
  * def inverse(             # <<<<<<<<<<<<<<
@@ -2753,10 +2753,10 @@ static void __pyx_f_3src_8pathprof_9geodesics__inverse(double __pyx_v_lon1_rad, 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_8pathprof_9geodesics_1inverse(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_3src_8pathprof_9geodesics_inverse[] = "inverse(double lon1_deg, double lat1_deg, double lon2_deg, double lat2_deg, double eps=1e-12, int maxiter=50)";
-static PyMethodDef __pyx_mdef_3src_8pathprof_9geodesics_1inverse = {"inverse", (PyCFunction)__pyx_pw_3src_8pathprof_9geodesics_1inverse, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3src_8pathprof_9geodesics_inverse};
-static PyObject *__pyx_pw_3src_8pathprof_9geodesics_1inverse(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_6pycraf_8pathprof_9geodesics_1inverse(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_6pycraf_8pathprof_9geodesics_inverse[] = "inverse(double lon1_deg, double lat1_deg, double lon2_deg, double lat2_deg, double eps=1e-12, int maxiter=50)";
+static PyMethodDef __pyx_mdef_6pycraf_8pathprof_9geodesics_1inverse = {"inverse", (PyCFunction)__pyx_pw_6pycraf_8pathprof_9geodesics_1inverse, METH_VARARGS|METH_KEYWORDS, __pyx_doc_6pycraf_8pathprof_9geodesics_inverse};
+static PyObject *__pyx_pw_6pycraf_8pathprof_9geodesics_1inverse(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   double __pyx_v_lon1_deg;
   double __pyx_v_lat1_deg;
   double __pyx_v_lon2_deg;
@@ -2847,18 +2847,18 @@ static PyObject *__pyx_pw_3src_8pathprof_9geodesics_1inverse(PyObject *__pyx_sel
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("inverse", 0, 4, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 117, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("src.pathprof.geodesics.inverse", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pycraf.pathprof.geodesics.inverse", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3src_8pathprof_9geodesics_inverse(__pyx_self, __pyx_v_lon1_deg, __pyx_v_lat1_deg, __pyx_v_lon2_deg, __pyx_v_lat2_deg, __pyx_v_eps, __pyx_v_maxiter);
+  __pyx_r = __pyx_pf_6pycraf_8pathprof_9geodesics_inverse(__pyx_self, __pyx_v_lon1_deg, __pyx_v_lat1_deg, __pyx_v_lon2_deg, __pyx_v_lat2_deg, __pyx_v_eps, __pyx_v_maxiter);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_8pathprof_9geodesics_inverse(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_lon1_deg, double __pyx_v_lat1_deg, double __pyx_v_lon2_deg, double __pyx_v_lat2_deg, double __pyx_v_eps, int __pyx_v_maxiter) {
+static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_inverse(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_lon1_deg, double __pyx_v_lat1_deg, double __pyx_v_lon2_deg, double __pyx_v_lat2_deg, double __pyx_v_eps, int __pyx_v_maxiter) {
   double __pyx_v_lon1_rad;
   double __pyx_v_lat1_rad;
   double __pyx_v_lon2_rad;
@@ -2876,7 +2876,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_inverse(CYTHON_UNUSED PyObje
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("inverse", 0);
 
-  /* "src/pathprof/geodesics.pyx":129
+  /* "pycraf/pathprof/geodesics.pyx":129
  *         double lon2_rad, lat2_rad,
  * 
  *         double dist = 0.,             # <<<<<<<<<<<<<<
@@ -2885,7 +2885,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_inverse(CYTHON_UNUSED PyObje
  */
   __pyx_v_dist = 0.;
 
-  /* "src/pathprof/geodesics.pyx":130
+  /* "pycraf/pathprof/geodesics.pyx":130
  * 
  *         double dist = 0.,
  *         double bearing1_rad = 0., bearing1_deg = 0.             # <<<<<<<<<<<<<<
@@ -2895,7 +2895,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_inverse(CYTHON_UNUSED PyObje
   __pyx_v_bearing1_rad = 0.;
   __pyx_v_bearing1_deg = 0.;
 
-  /* "src/pathprof/geodesics.pyx":131
+  /* "pycraf/pathprof/geodesics.pyx":131
  *         double dist = 0.,
  *         double bearing1_rad = 0., bearing1_deg = 0.
  *         double bearing2_rad = 0., bearing2_deg = 0.             # <<<<<<<<<<<<<<
@@ -2905,70 +2905,70 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_inverse(CYTHON_UNUSED PyObje
   __pyx_v_bearing2_rad = 0.;
   __pyx_v_bearing2_deg = 0.;
 
-  /* "src/pathprof/geodesics.pyx":133
+  /* "pycraf/pathprof/geodesics.pyx":133
  *         double bearing2_rad = 0., bearing2_deg = 0.
  * 
  *     lon1_rad = DEG2RAD * lon1_deg             # <<<<<<<<<<<<<<
  *     lon2_rad = DEG2RAD * lon2_deg
  *     lat1_rad = DEG2RAD * lat1_deg
  */
-  __pyx_v_lon1_rad = (__pyx_v_3src_8pathprof_9geodesics_DEG2RAD * __pyx_v_lon1_deg);
+  __pyx_v_lon1_rad = (__pyx_v_6pycraf_8pathprof_9geodesics_DEG2RAD * __pyx_v_lon1_deg);
 
-  /* "src/pathprof/geodesics.pyx":134
+  /* "pycraf/pathprof/geodesics.pyx":134
  * 
  *     lon1_rad = DEG2RAD * lon1_deg
  *     lon2_rad = DEG2RAD * lon2_deg             # <<<<<<<<<<<<<<
  *     lat1_rad = DEG2RAD * lat1_deg
  *     lat2_rad = DEG2RAD * lat2_deg
  */
-  __pyx_v_lon2_rad = (__pyx_v_3src_8pathprof_9geodesics_DEG2RAD * __pyx_v_lon2_deg);
+  __pyx_v_lon2_rad = (__pyx_v_6pycraf_8pathprof_9geodesics_DEG2RAD * __pyx_v_lon2_deg);
 
-  /* "src/pathprof/geodesics.pyx":135
+  /* "pycraf/pathprof/geodesics.pyx":135
  *     lon1_rad = DEG2RAD * lon1_deg
  *     lon2_rad = DEG2RAD * lon2_deg
  *     lat1_rad = DEG2RAD * lat1_deg             # <<<<<<<<<<<<<<
  *     lat2_rad = DEG2RAD * lat2_deg
  * 
  */
-  __pyx_v_lat1_rad = (__pyx_v_3src_8pathprof_9geodesics_DEG2RAD * __pyx_v_lat1_deg);
+  __pyx_v_lat1_rad = (__pyx_v_6pycraf_8pathprof_9geodesics_DEG2RAD * __pyx_v_lat1_deg);
 
-  /* "src/pathprof/geodesics.pyx":136
+  /* "pycraf/pathprof/geodesics.pyx":136
  *     lon2_rad = DEG2RAD * lon2_deg
  *     lat1_rad = DEG2RAD * lat1_deg
  *     lat2_rad = DEG2RAD * lat2_deg             # <<<<<<<<<<<<<<
  * 
  *     _inverse(
  */
-  __pyx_v_lat2_rad = (__pyx_v_3src_8pathprof_9geodesics_DEG2RAD * __pyx_v_lat2_deg);
+  __pyx_v_lat2_rad = (__pyx_v_6pycraf_8pathprof_9geodesics_DEG2RAD * __pyx_v_lat2_deg);
 
-  /* "src/pathprof/geodesics.pyx":138
+  /* "pycraf/pathprof/geodesics.pyx":138
  *     lat2_rad = DEG2RAD * lat2_deg
  * 
  *     _inverse(             # <<<<<<<<<<<<<<
  *         lon1_rad, lat1_rad,
  *         lon2_rad, lat2_rad,
  */
-  __pyx_f_3src_8pathprof_9geodesics__inverse(__pyx_v_lon1_rad, __pyx_v_lat1_rad, __pyx_v_lon2_rad, __pyx_v_lat2_rad, (&__pyx_v_dist), (&__pyx_v_bearing1_rad), (&__pyx_v_bearing2_rad), __pyx_v_eps, __pyx_v_maxiter);
+  __pyx_f_6pycraf_8pathprof_9geodesics__inverse(__pyx_v_lon1_rad, __pyx_v_lat1_rad, __pyx_v_lon2_rad, __pyx_v_lat2_rad, (&__pyx_v_dist), (&__pyx_v_bearing1_rad), (&__pyx_v_bearing2_rad), __pyx_v_eps, __pyx_v_maxiter);
 
-  /* "src/pathprof/geodesics.pyx":147
+  /* "pycraf/pathprof/geodesics.pyx":147
  *         )
  * 
  *     bearing1_deg = RAD2DEG * bearing1_rad             # <<<<<<<<<<<<<<
  *     bearing2_deg = RAD2DEG * bearing2_rad
  * 
  */
-  __pyx_v_bearing1_deg = (__pyx_v_3src_8pathprof_9geodesics_RAD2DEG * __pyx_v_bearing1_rad);
+  __pyx_v_bearing1_deg = (__pyx_v_6pycraf_8pathprof_9geodesics_RAD2DEG * __pyx_v_bearing1_rad);
 
-  /* "src/pathprof/geodesics.pyx":148
+  /* "pycraf/pathprof/geodesics.pyx":148
  * 
  *     bearing1_deg = RAD2DEG * bearing1_rad
  *     bearing2_deg = RAD2DEG * bearing2_rad             # <<<<<<<<<<<<<<
  * 
  *     return dist, bearing1_deg, bearing2_deg
  */
-  __pyx_v_bearing2_deg = (__pyx_v_3src_8pathprof_9geodesics_RAD2DEG * __pyx_v_bearing2_rad);
+  __pyx_v_bearing2_deg = (__pyx_v_6pycraf_8pathprof_9geodesics_RAD2DEG * __pyx_v_bearing2_rad);
 
-  /* "src/pathprof/geodesics.pyx":150
+  /* "pycraf/pathprof/geodesics.pyx":150
  *     bearing2_deg = RAD2DEG * bearing2_rad
  * 
  *     return dist, bearing1_deg, bearing2_deg             # <<<<<<<<<<<<<<
@@ -2997,7 +2997,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_inverse(CYTHON_UNUSED PyObje
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "src/pathprof/geodesics.pyx":117
+  /* "pycraf/pathprof/geodesics.pyx":117
  * 
  * 
  * def inverse(             # <<<<<<<<<<<<<<
@@ -3011,7 +3011,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_inverse(CYTHON_UNUSED PyObje
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("src.pathprof.geodesics.inverse", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pycraf.pathprof.geodesics.inverse", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -3019,7 +3019,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_inverse(CYTHON_UNUSED PyObje
   return __pyx_r;
 }
 
-/* "src/pathprof/geodesics.pyx":153
+/* "pycraf/pathprof/geodesics.pyx":153
  * 
  * 
  * cdef void _direct(             # <<<<<<<<<<<<<<
@@ -3027,7 +3027,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_inverse(CYTHON_UNUSED PyObje
  *         double bearing1_rad,
  */
 
-static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, double __pyx_v_lat1_rad, double __pyx_v_bearing1_rad, double __pyx_v_dist, double *__pyx_v_lon2_rad, double *__pyx_v_lat2_rad, double *__pyx_v_bearing2_rad, double __pyx_v_eps, int __pyx_v_maxiter) {
+static void __pyx_f_6pycraf_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, double __pyx_v_lat1_rad, double __pyx_v_bearing1_rad, double __pyx_v_dist, double *__pyx_v_lon2_rad, double *__pyx_v_lat2_rad, double *__pyx_v_bearing2_rad, double __pyx_v_eps, int __pyx_v_maxiter) {
   double __pyx_v_L;
   double __pyx_v_lam;
   double __pyx_v_s;
@@ -3055,16 +3055,16 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
   int __pyx_t_2;
   int __pyx_t_3;
 
-  /* "src/pathprof/geodesics.pyx":173
+  /* "pycraf/pathprof/geodesics.pyx":173
  *         int _iter
  * 
  *     tan_U1 = (1 - WGS_f) * tan(lat1_rad)             # <<<<<<<<<<<<<<
  * 
  *     cos_U1 = 1. / sqrt(1 + tan_U1 ** 2)
  */
-  __pyx_v_tan_U1 = ((1.0 - __pyx_v_3src_8pathprof_9geodesics_WGS_f) * tan(__pyx_v_lat1_rad));
+  __pyx_v_tan_U1 = ((1.0 - __pyx_v_6pycraf_8pathprof_9geodesics_WGS_f) * tan(__pyx_v_lat1_rad));
 
-  /* "src/pathprof/geodesics.pyx":175
+  /* "pycraf/pathprof/geodesics.pyx":175
  *     tan_U1 = (1 - WGS_f) * tan(lat1_rad)
  * 
  *     cos_U1 = 1. / sqrt(1 + tan_U1 ** 2)             # <<<<<<<<<<<<<<
@@ -3073,7 +3073,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
   __pyx_v_cos_U1 = (1. / sqrt((1.0 + pow(__pyx_v_tan_U1, 2.0))));
 
-  /* "src/pathprof/geodesics.pyx":176
+  /* "pycraf/pathprof/geodesics.pyx":176
  * 
  *     cos_U1 = 1. / sqrt(1 + tan_U1 ** 2)
  *     sin_U1 = tan_U1 * cos_U1             # <<<<<<<<<<<<<<
@@ -3082,7 +3082,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
   __pyx_v_sin_U1 = (__pyx_v_tan_U1 * __pyx_v_cos_U1);
 
-  /* "src/pathprof/geodesics.pyx":177
+  /* "pycraf/pathprof/geodesics.pyx":177
  *     cos_U1 = 1. / sqrt(1 + tan_U1 ** 2)
  *     sin_U1 = tan_U1 * cos_U1
  *     sin_a1 = sin(bearing1_rad)             # <<<<<<<<<<<<<<
@@ -3091,7 +3091,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
   __pyx_v_sin_a1 = sin(__pyx_v_bearing1_rad);
 
-  /* "src/pathprof/geodesics.pyx":178
+  /* "pycraf/pathprof/geodesics.pyx":178
  *     sin_U1 = tan_U1 * cos_U1
  *     sin_a1 = sin(bearing1_rad)
  *     cos_a1 = cos(bearing1_rad)             # <<<<<<<<<<<<<<
@@ -3100,7 +3100,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
   __pyx_v_cos_a1 = cos(__pyx_v_bearing1_rad);
 
-  /* "src/pathprof/geodesics.pyx":180
+  /* "pycraf/pathprof/geodesics.pyx":180
  *     cos_a1 = cos(bearing1_rad)
  * 
  *     s1 = atan2(tan_U1, cos_a1)             # <<<<<<<<<<<<<<
@@ -3109,7 +3109,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
   __pyx_v_s1 = atan2(__pyx_v_tan_U1, __pyx_v_cos_a1);
 
-  /* "src/pathprof/geodesics.pyx":182
+  /* "pycraf/pathprof/geodesics.pyx":182
  *     s1 = atan2(tan_U1, cos_a1)
  * 
  *     sin_a = cos_U1 * sin_a1             # <<<<<<<<<<<<<<
@@ -3118,7 +3118,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
   __pyx_v_sin_a = (__pyx_v_cos_U1 * __pyx_v_sin_a1);
 
-  /* "src/pathprof/geodesics.pyx":183
+  /* "pycraf/pathprof/geodesics.pyx":183
  * 
  *     sin_a = cos_U1 * sin_a1
  *     sin2_a = sin_a ** 2             # <<<<<<<<<<<<<<
@@ -3127,7 +3127,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
   __pyx_v_sin2_a = pow(__pyx_v_sin_a, 2.0);
 
-  /* "src/pathprof/geodesics.pyx":184
+  /* "pycraf/pathprof/geodesics.pyx":184
  *     sin_a = cos_U1 * sin_a1
  *     sin2_a = sin_a ** 2
  *     cos2_a = 1 - sin2_a             # <<<<<<<<<<<<<<
@@ -3136,16 +3136,16 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
   __pyx_v_cos2_a = (1.0 - __pyx_v_sin2_a);
 
-  /* "src/pathprof/geodesics.pyx":186
+  /* "pycraf/pathprof/geodesics.pyx":186
  *     cos2_a = 1 - sin2_a
  * 
  *     u2 = cos2_a * (WGS_a ** 2 - WGS_b ** 2) / WGS_b ** 2             # <<<<<<<<<<<<<<
  *     A = 1 + u2 / 16384 * (4096 + u2 * (-768 + u2 * (320 - 175 * u2)))
  *     B = u2 / 1024 * (256 + u2 * (-128 + u2 * (74 - 47 * u2)))
  */
-  __pyx_v_u2 = ((__pyx_v_cos2_a * (pow(__pyx_v_3src_8pathprof_9geodesics_WGS_a, 2.0) - pow(__pyx_v_3src_8pathprof_9geodesics_WGS_b, 2.0))) / pow(__pyx_v_3src_8pathprof_9geodesics_WGS_b, 2.0));
+  __pyx_v_u2 = ((__pyx_v_cos2_a * (pow(__pyx_v_6pycraf_8pathprof_9geodesics_WGS_a, 2.0) - pow(__pyx_v_6pycraf_8pathprof_9geodesics_WGS_b, 2.0))) / pow(__pyx_v_6pycraf_8pathprof_9geodesics_WGS_b, 2.0));
 
-  /* "src/pathprof/geodesics.pyx":187
+  /* "pycraf/pathprof/geodesics.pyx":187
  * 
  *     u2 = cos2_a * (WGS_a ** 2 - WGS_b ** 2) / WGS_b ** 2
  *     A = 1 + u2 / 16384 * (4096 + u2 * (-768 + u2 * (320 - 175 * u2)))             # <<<<<<<<<<<<<<
@@ -3154,7 +3154,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
   __pyx_v_A = (1.0 + ((__pyx_v_u2 / 16384.0) * (4096.0 + (__pyx_v_u2 * (-768.0 + (__pyx_v_u2 * (320.0 - (175.0 * __pyx_v_u2))))))));
 
-  /* "src/pathprof/geodesics.pyx":188
+  /* "pycraf/pathprof/geodesics.pyx":188
  *     u2 = cos2_a * (WGS_a ** 2 - WGS_b ** 2) / WGS_b ** 2
  *     A = 1 + u2 / 16384 * (4096 + u2 * (-768 + u2 * (320 - 175 * u2)))
  *     B = u2 / 1024 * (256 + u2 * (-128 + u2 * (74 - 47 * u2)))             # <<<<<<<<<<<<<<
@@ -3163,18 +3163,18 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
   __pyx_v_B = ((__pyx_v_u2 / 1024.0) * (256.0 + (__pyx_v_u2 * (-128.0 + (__pyx_v_u2 * (74.0 - (47.0 * __pyx_v_u2)))))));
 
-  /* "src/pathprof/geodesics.pyx":190
+  /* "pycraf/pathprof/geodesics.pyx":190
  *     B = u2 / 1024 * (256 + u2 * (-128 + u2 * (74 - 47 * u2)))
  * 
  *     s = last_s = dist / WGS_b / A             # <<<<<<<<<<<<<<
  *     _iter = 0
  * 
  */
-  __pyx_t_1 = ((__pyx_v_dist / __pyx_v_3src_8pathprof_9geodesics_WGS_b) / __pyx_v_A);
+  __pyx_t_1 = ((__pyx_v_dist / __pyx_v_6pycraf_8pathprof_9geodesics_WGS_b) / __pyx_v_A);
   __pyx_v_s = __pyx_t_1;
   __pyx_v_last_s = __pyx_t_1;
 
-  /* "src/pathprof/geodesics.pyx":191
+  /* "pycraf/pathprof/geodesics.pyx":191
  * 
  *     s = last_s = dist / WGS_b / A
  *     _iter = 0             # <<<<<<<<<<<<<<
@@ -3183,7 +3183,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
   __pyx_v__iter = 0;
 
-  /* "src/pathprof/geodesics.pyx":193
+  /* "pycraf/pathprof/geodesics.pyx":193
  *     _iter = 0
  * 
  *     while True:             # <<<<<<<<<<<<<<
@@ -3192,7 +3192,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
   while (1) {
 
-    /* "src/pathprof/geodesics.pyx":195
+    /* "pycraf/pathprof/geodesics.pyx":195
  *     while True:
  * 
  *         cos_2sm = cos(2 * s1 + s)             # <<<<<<<<<<<<<<
@@ -3201,7 +3201,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
     __pyx_v_cos_2sm = cos(((2.0 * __pyx_v_s1) + __pyx_v_s));
 
-    /* "src/pathprof/geodesics.pyx":196
+    /* "pycraf/pathprof/geodesics.pyx":196
  * 
  *         cos_2sm = cos(2 * s1 + s)
  *         cos2_2sm = cos_2sm ** 2             # <<<<<<<<<<<<<<
@@ -3210,7 +3210,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
     __pyx_v_cos2_2sm = pow(__pyx_v_cos_2sm, 2.0);
 
-    /* "src/pathprof/geodesics.pyx":198
+    /* "pycraf/pathprof/geodesics.pyx":198
  *         cos2_2sm = cos_2sm ** 2
  * 
  *         sin_s = sin(s)             # <<<<<<<<<<<<<<
@@ -3219,7 +3219,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
     __pyx_v_sin_s = sin(__pyx_v_s);
 
-    /* "src/pathprof/geodesics.pyx":199
+    /* "pycraf/pathprof/geodesics.pyx":199
  * 
  *         sin_s = sin(s)
  *         cos_s = cos(s)             # <<<<<<<<<<<<<<
@@ -3228,7 +3228,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
     __pyx_v_cos_s = cos(__pyx_v_s);
 
-    /* "src/pathprof/geodesics.pyx":201
+    /* "pycraf/pathprof/geodesics.pyx":201
  *         cos_s = cos(s)
  * 
  *         ds = B * sin_s * (             # <<<<<<<<<<<<<<
@@ -3237,16 +3237,16 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
     __pyx_v_ds = ((__pyx_v_B * __pyx_v_sin_s) * (__pyx_v_cos_2sm + ((0.25 * __pyx_v_B) * ((__pyx_v_cos_s * (-1.0 + (2.0 * __pyx_v_cos2_2sm))) - (((((1. / 6.) * __pyx_v_B) * __pyx_v_cos_2sm) * (-3.0 + (4.0 * pow(__pyx_v_sin_s, 2.0)))) * (-3.0 + (4.0 * __pyx_v_cos2_2sm)))))));
 
-    /* "src/pathprof/geodesics.pyx":209
+    /* "pycraf/pathprof/geodesics.pyx":209
  *             )
  * 
  *         s = dist / WGS_b / A + ds             # <<<<<<<<<<<<<<
  * 
  *         if fabs(s - last_s) < eps or _iter > maxiter:
  */
-    __pyx_v_s = (((__pyx_v_dist / __pyx_v_3src_8pathprof_9geodesics_WGS_b) / __pyx_v_A) + __pyx_v_ds);
+    __pyx_v_s = (((__pyx_v_dist / __pyx_v_6pycraf_8pathprof_9geodesics_WGS_b) / __pyx_v_A) + __pyx_v_ds);
 
-    /* "src/pathprof/geodesics.pyx":211
+    /* "pycraf/pathprof/geodesics.pyx":211
  *         s = dist / WGS_b / A + ds
  * 
  *         if fabs(s - last_s) < eps or _iter > maxiter:             # <<<<<<<<<<<<<<
@@ -3264,7 +3264,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
     __pyx_L6_bool_binop_done:;
     if (__pyx_t_2) {
 
-      /* "src/pathprof/geodesics.pyx":212
+      /* "pycraf/pathprof/geodesics.pyx":212
  * 
  *         if fabs(s - last_s) < eps or _iter > maxiter:
  *             break             # <<<<<<<<<<<<<<
@@ -3273,7 +3273,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
       goto __pyx_L4_break;
 
-      /* "src/pathprof/geodesics.pyx":211
+      /* "pycraf/pathprof/geodesics.pyx":211
  *         s = dist / WGS_b / A + ds
  * 
  *         if fabs(s - last_s) < eps or _iter > maxiter:             # <<<<<<<<<<<<<<
@@ -3282,7 +3282,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
     }
 
-    /* "src/pathprof/geodesics.pyx":214
+    /* "pycraf/pathprof/geodesics.pyx":214
  *             break
  * 
  *         _iter += 1             # <<<<<<<<<<<<<<
@@ -3291,7 +3291,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
     __pyx_v__iter = (__pyx_v__iter + 1);
 
-    /* "src/pathprof/geodesics.pyx":215
+    /* "pycraf/pathprof/geodesics.pyx":215
  * 
  *         _iter += 1
  *         last_s = s             # <<<<<<<<<<<<<<
@@ -3302,16 +3302,16 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
   }
   __pyx_L4_break:;
 
-  /* "src/pathprof/geodesics.pyx":217
+  /* "pycraf/pathprof/geodesics.pyx":217
  *         last_s = s
  * 
  *     lat2_rad[0] = atan2(             # <<<<<<<<<<<<<<
  *         sin_U1 * cos_s + cos_U1 * sin_s * cos_a1,
  *         (1 - WGS_f) * sqrt(
  */
-  (__pyx_v_lat2_rad[0]) = atan2(((__pyx_v_sin_U1 * __pyx_v_cos_s) + ((__pyx_v_cos_U1 * __pyx_v_sin_s) * __pyx_v_cos_a1)), ((1.0 - __pyx_v_3src_8pathprof_9geodesics_WGS_f) * sqrt((__pyx_v_sin2_a + pow(((__pyx_v_sin_U1 * __pyx_v_sin_s) - ((__pyx_v_cos_U1 * __pyx_v_cos_s) * __pyx_v_cos_a1)), 2.0)))));
+  (__pyx_v_lat2_rad[0]) = atan2(((__pyx_v_sin_U1 * __pyx_v_cos_s) + ((__pyx_v_cos_U1 * __pyx_v_sin_s) * __pyx_v_cos_a1)), ((1.0 - __pyx_v_6pycraf_8pathprof_9geodesics_WGS_f) * sqrt((__pyx_v_sin2_a + pow(((__pyx_v_sin_U1 * __pyx_v_sin_s) - ((__pyx_v_cos_U1 * __pyx_v_cos_s) * __pyx_v_cos_a1)), 2.0)))));
 
-  /* "src/pathprof/geodesics.pyx":224
+  /* "pycraf/pathprof/geodesics.pyx":224
  *         )
  * 
  *     lam = atan2(             # <<<<<<<<<<<<<<
@@ -3320,25 +3320,25 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
   __pyx_v_lam = atan2((__pyx_v_sin_s * __pyx_v_sin_a1), ((__pyx_v_cos_U1 * __pyx_v_cos_s) - ((__pyx_v_sin_U1 * __pyx_v_sin_s) * __pyx_v_cos_a1)));
 
-  /* "src/pathprof/geodesics.pyx":229
+  /* "pycraf/pathprof/geodesics.pyx":229
  *         )
  * 
  *     C = WGS_f / 16 * cos2_a * (4 + WGS_f * (4 - 3 * cos2_a))             # <<<<<<<<<<<<<<
  *     L = lam - (1 - C) * WGS_f * sin_a * (
  *         s + C * sin_s * (
  */
-  __pyx_v_C = (((__pyx_v_3src_8pathprof_9geodesics_WGS_f / 16.0) * __pyx_v_cos2_a) * (4.0 + (__pyx_v_3src_8pathprof_9geodesics_WGS_f * (4.0 - (3.0 * __pyx_v_cos2_a)))));
+  __pyx_v_C = (((__pyx_v_6pycraf_8pathprof_9geodesics_WGS_f / 16.0) * __pyx_v_cos2_a) * (4.0 + (__pyx_v_6pycraf_8pathprof_9geodesics_WGS_f * (4.0 - (3.0 * __pyx_v_cos2_a)))));
 
-  /* "src/pathprof/geodesics.pyx":230
+  /* "pycraf/pathprof/geodesics.pyx":230
  * 
  *     C = WGS_f / 16 * cos2_a * (4 + WGS_f * (4 - 3 * cos2_a))
  *     L = lam - (1 - C) * WGS_f * sin_a * (             # <<<<<<<<<<<<<<
  *         s + C * sin_s * (
  *             cos_2sm + C * cos_s * (-1 + 2 * cos2_2sm)
  */
-  __pyx_v_L = (__pyx_v_lam - ((((1.0 - __pyx_v_C) * __pyx_v_3src_8pathprof_9geodesics_WGS_f) * __pyx_v_sin_a) * (__pyx_v_s + ((__pyx_v_C * __pyx_v_sin_s) * (__pyx_v_cos_2sm + ((__pyx_v_C * __pyx_v_cos_s) * (-1.0 + (2.0 * __pyx_v_cos2_2sm))))))));
+  __pyx_v_L = (__pyx_v_lam - ((((1.0 - __pyx_v_C) * __pyx_v_6pycraf_8pathprof_9geodesics_WGS_f) * __pyx_v_sin_a) * (__pyx_v_s + ((__pyx_v_C * __pyx_v_sin_s) * (__pyx_v_cos_2sm + ((__pyx_v_C * __pyx_v_cos_s) * (-1.0 + (2.0 * __pyx_v_cos2_2sm))))))));
 
-  /* "src/pathprof/geodesics.pyx":236
+  /* "pycraf/pathprof/geodesics.pyx":236
  *         )
  * 
  *     lon2_rad[0] = L + lon1_rad             # <<<<<<<<<<<<<<
@@ -3347,7 +3347,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
   (__pyx_v_lon2_rad[0]) = (__pyx_v_L + __pyx_v_lon1_rad);
 
-  /* "src/pathprof/geodesics.pyx":237
+  /* "pycraf/pathprof/geodesics.pyx":237
  * 
  *     lon2_rad[0] = L + lon1_rad
  *     bearing2_rad[0] = atan2(             # <<<<<<<<<<<<<<
@@ -3356,7 +3356,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
   (__pyx_v_bearing2_rad[0]) = atan2(__pyx_v_sin_a, (((-__pyx_v_sin_U1) * __pyx_v_sin_s) + ((__pyx_v_cos_U1 * __pyx_v_cos_s) * __pyx_v_cos_a1)));
 
-  /* "src/pathprof/geodesics.pyx":242
+  /* "pycraf/pathprof/geodesics.pyx":242
  *         )
  * 
  *     return             # <<<<<<<<<<<<<<
@@ -3365,7 +3365,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
   goto __pyx_L0;
 
-  /* "src/pathprof/geodesics.pyx":153
+  /* "pycraf/pathprof/geodesics.pyx":153
  * 
  * 
  * cdef void _direct(             # <<<<<<<<<<<<<<
@@ -3377,7 +3377,7 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
   __pyx_L0:;
 }
 
-/* "src/pathprof/geodesics.pyx":245
+/* "pycraf/pathprof/geodesics.pyx":245
  * 
  * 
  * def direct(             # <<<<<<<<<<<<<<
@@ -3386,10 +3386,10 @@ static void __pyx_f_3src_8pathprof_9geodesics__direct(double __pyx_v_lon1_rad, d
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_8pathprof_9geodesics_3direct(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_3src_8pathprof_9geodesics_2direct[] = "direct(double lon1_deg, double lat1_deg, double bearing1_deg, double dist, double eps=1e-12, int maxiter=50, wrap=True)";
-static PyMethodDef __pyx_mdef_3src_8pathprof_9geodesics_3direct = {"direct", (PyCFunction)__pyx_pw_3src_8pathprof_9geodesics_3direct, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3src_8pathprof_9geodesics_2direct};
-static PyObject *__pyx_pw_3src_8pathprof_9geodesics_3direct(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_6pycraf_8pathprof_9geodesics_3direct(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_6pycraf_8pathprof_9geodesics_2direct[] = "direct(double lon1_deg, double lat1_deg, double bearing1_deg, double dist, double eps=1e-12, int maxiter=50, wrap=True)";
+static PyMethodDef __pyx_mdef_6pycraf_8pathprof_9geodesics_3direct = {"direct", (PyCFunction)__pyx_pw_6pycraf_8pathprof_9geodesics_3direct, METH_VARARGS|METH_KEYWORDS, __pyx_doc_6pycraf_8pathprof_9geodesics_2direct};
+static PyObject *__pyx_pw_6pycraf_8pathprof_9geodesics_3direct(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   double __pyx_v_lon1_deg;
   double __pyx_v_lat1_deg;
   double __pyx_v_bearing1_deg;
@@ -3404,7 +3404,7 @@ static PyObject *__pyx_pw_3src_8pathprof_9geodesics_3direct(PyObject *__pyx_self
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_lon1_deg,&__pyx_n_s_lat1_deg,&__pyx_n_s_bearing1_deg,&__pyx_n_s_dist,&__pyx_n_s_eps,&__pyx_n_s_maxiter,&__pyx_n_s_wrap,0};
     PyObject* values[7] = {0,0,0,0,0,0,0};
 
-    /* "src/pathprof/geodesics.pyx":251
+    /* "pycraf/pathprof/geodesics.pyx":251
  *         double eps=1.e-12,  # corresponds to approximately 0.06mm
  *         int maxiter=50,
  *         wrap=True,             # <<<<<<<<<<<<<<
@@ -3498,13 +3498,13 @@ static PyObject *__pyx_pw_3src_8pathprof_9geodesics_3direct(PyObject *__pyx_self
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("direct", 0, 4, 7, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 245, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("src.pathprof.geodesics.direct", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pycraf.pathprof.geodesics.direct", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3src_8pathprof_9geodesics_2direct(__pyx_self, __pyx_v_lon1_deg, __pyx_v_lat1_deg, __pyx_v_bearing1_deg, __pyx_v_dist, __pyx_v_eps, __pyx_v_maxiter, __pyx_v_wrap);
+  __pyx_r = __pyx_pf_6pycraf_8pathprof_9geodesics_2direct(__pyx_self, __pyx_v_lon1_deg, __pyx_v_lat1_deg, __pyx_v_bearing1_deg, __pyx_v_dist, __pyx_v_eps, __pyx_v_maxiter, __pyx_v_wrap);
 
-  /* "src/pathprof/geodesics.pyx":245
+  /* "pycraf/pathprof/geodesics.pyx":245
  * 
  * 
  * def direct(             # <<<<<<<<<<<<<<
@@ -3517,7 +3517,7 @@ static PyObject *__pyx_pw_3src_8pathprof_9geodesics_3direct(PyObject *__pyx_self
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_8pathprof_9geodesics_2direct(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_lon1_deg, double __pyx_v_lat1_deg, double __pyx_v_bearing1_deg, double __pyx_v_dist, double __pyx_v_eps, int __pyx_v_maxiter, PyObject *__pyx_v_wrap) {
+static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_2direct(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_lon1_deg, double __pyx_v_lat1_deg, double __pyx_v_bearing1_deg, double __pyx_v_dist, double __pyx_v_eps, int __pyx_v_maxiter, PyObject *__pyx_v_wrap) {
   double __pyx_v_lon1_rad;
   double __pyx_v_lat1_rad;
   double __pyx_v_bearing1_rad;
@@ -3536,70 +3536,70 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_2direct(CYTHON_UNUSED PyObje
   PyObject *__pyx_t_5 = NULL;
   __Pyx_RefNannySetupContext("direct", 0);
 
-  /* "src/pathprof/geodesics.pyx":260
+  /* "pycraf/pathprof/geodesics.pyx":260
  *         double lon2_deg, lat2_deg, bearing2_deg
  * 
  *     lon1_rad = DEG2RAD * lon1_deg             # <<<<<<<<<<<<<<
  *     lat1_rad = DEG2RAD * lat1_deg
  *     bearing1_rad = DEG2RAD * bearing1_deg
  */
-  __pyx_v_lon1_rad = (__pyx_v_3src_8pathprof_9geodesics_DEG2RAD * __pyx_v_lon1_deg);
+  __pyx_v_lon1_rad = (__pyx_v_6pycraf_8pathprof_9geodesics_DEG2RAD * __pyx_v_lon1_deg);
 
-  /* "src/pathprof/geodesics.pyx":261
+  /* "pycraf/pathprof/geodesics.pyx":261
  * 
  *     lon1_rad = DEG2RAD * lon1_deg
  *     lat1_rad = DEG2RAD * lat1_deg             # <<<<<<<<<<<<<<
  *     bearing1_rad = DEG2RAD * bearing1_deg
  * 
  */
-  __pyx_v_lat1_rad = (__pyx_v_3src_8pathprof_9geodesics_DEG2RAD * __pyx_v_lat1_deg);
+  __pyx_v_lat1_rad = (__pyx_v_6pycraf_8pathprof_9geodesics_DEG2RAD * __pyx_v_lat1_deg);
 
-  /* "src/pathprof/geodesics.pyx":262
+  /* "pycraf/pathprof/geodesics.pyx":262
  *     lon1_rad = DEG2RAD * lon1_deg
  *     lat1_rad = DEG2RAD * lat1_deg
  *     bearing1_rad = DEG2RAD * bearing1_deg             # <<<<<<<<<<<<<<
  * 
  *     _direct(
  */
-  __pyx_v_bearing1_rad = (__pyx_v_3src_8pathprof_9geodesics_DEG2RAD * __pyx_v_bearing1_deg);
+  __pyx_v_bearing1_rad = (__pyx_v_6pycraf_8pathprof_9geodesics_DEG2RAD * __pyx_v_bearing1_deg);
 
-  /* "src/pathprof/geodesics.pyx":264
+  /* "pycraf/pathprof/geodesics.pyx":264
  *     bearing1_rad = DEG2RAD * bearing1_deg
  * 
  *     _direct(             # <<<<<<<<<<<<<<
  *         lon1_rad, lat1_rad,
  *         bearing1_rad,
  */
-  __pyx_f_3src_8pathprof_9geodesics__direct(__pyx_v_lon1_rad, __pyx_v_lat1_rad, __pyx_v_bearing1_rad, __pyx_v_dist, (&__pyx_v_lon2_rad), (&__pyx_v_lat2_rad), (&__pyx_v_bearing2_rad), __pyx_v_eps, __pyx_v_maxiter);
+  __pyx_f_6pycraf_8pathprof_9geodesics__direct(__pyx_v_lon1_rad, __pyx_v_lat1_rad, __pyx_v_bearing1_rad, __pyx_v_dist, (&__pyx_v_lon2_rad), (&__pyx_v_lat2_rad), (&__pyx_v_bearing2_rad), __pyx_v_eps, __pyx_v_maxiter);
 
-  /* "src/pathprof/geodesics.pyx":274
+  /* "pycraf/pathprof/geodesics.pyx":274
  *         )
  * 
  *     lon2_deg = RAD2DEG * lon2_rad             # <<<<<<<<<<<<<<
  *     lat2_deg = RAD2DEG * lat2_rad
  *     bearing2_deg = RAD2DEG * bearing2_rad
  */
-  __pyx_v_lon2_deg = (__pyx_v_3src_8pathprof_9geodesics_RAD2DEG * __pyx_v_lon2_rad);
+  __pyx_v_lon2_deg = (__pyx_v_6pycraf_8pathprof_9geodesics_RAD2DEG * __pyx_v_lon2_rad);
 
-  /* "src/pathprof/geodesics.pyx":275
+  /* "pycraf/pathprof/geodesics.pyx":275
  * 
  *     lon2_deg = RAD2DEG * lon2_rad
  *     lat2_deg = RAD2DEG * lat2_rad             # <<<<<<<<<<<<<<
  *     bearing2_deg = RAD2DEG * bearing2_rad
  * 
  */
-  __pyx_v_lat2_deg = (__pyx_v_3src_8pathprof_9geodesics_RAD2DEG * __pyx_v_lat2_rad);
+  __pyx_v_lat2_deg = (__pyx_v_6pycraf_8pathprof_9geodesics_RAD2DEG * __pyx_v_lat2_rad);
 
-  /* "src/pathprof/geodesics.pyx":276
+  /* "pycraf/pathprof/geodesics.pyx":276
  *     lon2_deg = RAD2DEG * lon2_rad
  *     lat2_deg = RAD2DEG * lat2_rad
  *     bearing2_deg = RAD2DEG * bearing2_rad             # <<<<<<<<<<<<<<
  * 
  *     if wrap:
  */
-  __pyx_v_bearing2_deg = (__pyx_v_3src_8pathprof_9geodesics_RAD2DEG * __pyx_v_bearing2_rad);
+  __pyx_v_bearing2_deg = (__pyx_v_6pycraf_8pathprof_9geodesics_RAD2DEG * __pyx_v_bearing2_rad);
 
-  /* "src/pathprof/geodesics.pyx":278
+  /* "pycraf/pathprof/geodesics.pyx":278
  *     bearing2_deg = RAD2DEG * bearing2_rad
  * 
  *     if wrap:             # <<<<<<<<<<<<<<
@@ -3609,7 +3609,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_2direct(CYTHON_UNUSED PyObje
   __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_wrap); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 278, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "src/pathprof/geodesics.pyx":279
+    /* "pycraf/pathprof/geodesics.pyx":279
  * 
  *     if wrap:
  *         lon2_deg = (lon2_deg + 180.) % 360. - 180.             # <<<<<<<<<<<<<<
@@ -3618,7 +3618,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_2direct(CYTHON_UNUSED PyObje
  */
     __pyx_v_lon2_deg = (fmod((__pyx_v_lon2_deg + 180.), 360.) - 180.);
 
-    /* "src/pathprof/geodesics.pyx":278
+    /* "pycraf/pathprof/geodesics.pyx":278
  *     bearing2_deg = RAD2DEG * bearing2_rad
  * 
  *     if wrap:             # <<<<<<<<<<<<<<
@@ -3627,7 +3627,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_2direct(CYTHON_UNUSED PyObje
  */
   }
 
-  /* "src/pathprof/geodesics.pyx":281
+  /* "pycraf/pathprof/geodesics.pyx":281
  *         lon2_deg = (lon2_deg + 180.) % 360. - 180.
  * 
  *     return lon2_deg, lat2_deg, bearing2_deg             # <<<<<<<<<<<<<<
@@ -3656,7 +3656,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_2direct(CYTHON_UNUSED PyObje
   __pyx_t_5 = 0;
   goto __pyx_L0;
 
-  /* "src/pathprof/geodesics.pyx":245
+  /* "pycraf/pathprof/geodesics.pyx":245
  * 
  * 
  * def direct(             # <<<<<<<<<<<<<<
@@ -3670,7 +3670,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_2direct(CYTHON_UNUSED PyObje
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_AddTraceback("src.pathprof.geodesics.direct", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pycraf.pathprof.geodesics.direct", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -3678,7 +3678,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_2direct(CYTHON_UNUSED PyObje
   return __pyx_r;
 }
 
-/* "src/pathprof/geodesics.pyx":284
+/* "pycraf/pathprof/geodesics.pyx":284
  * 
  * 
  * cdef inline int find_in_ordered(             # <<<<<<<<<<<<<<
@@ -3686,7 +3686,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_2direct(CYTHON_UNUSED PyObje
  *         cython.floating x0,
  */
 
-static CYTHON_INLINE int __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_ordered(__Pyx_memviewslice __pyx_v_x, float __pyx_v_x0) {
+static CYTHON_INLINE int __pyx_fuse_0__pyx_f_6pycraf_8pathprof_9geodesics_find_in_ordered(__Pyx_memviewslice __pyx_v_x, float __pyx_v_x0) {
   int __pyx_v_l;
   int __pyx_v_h;
   int __pyx_v_i;
@@ -3702,7 +3702,7 @@ static CYTHON_INLINE int __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_o
   Py_ssize_t __pyx_t_8;
   Py_ssize_t __pyx_t_9;
 
-  /* "src/pathprof/geodesics.pyx":296
+  /* "pycraf/pathprof/geodesics.pyx":296
  *     cdef:
  *         int l, h, i
  *         int length = x.shape[0]             # <<<<<<<<<<<<<<
@@ -3711,7 +3711,7 @@ static CYTHON_INLINE int __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_o
  */
   __pyx_v_length = (__pyx_v_x.shape[0]);
 
-  /* "src/pathprof/geodesics.pyx":298
+  /* "pycraf/pathprof/geodesics.pyx":298
  *         int length = x.shape[0]
  * 
  *     l = 0             # <<<<<<<<<<<<<<
@@ -3720,7 +3720,7 @@ static CYTHON_INLINE int __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_o
  */
   __pyx_v_l = 0;
 
-  /* "src/pathprof/geodesics.pyx":299
+  /* "pycraf/pathprof/geodesics.pyx":299
  * 
  *     l = 0
  *     h = length - 1             # <<<<<<<<<<<<<<
@@ -3729,7 +3729,7 @@ static CYTHON_INLINE int __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_o
  */
   __pyx_v_h = (__pyx_v_length - 1);
 
-  /* "src/pathprof/geodesics.pyx":301
+  /* "pycraf/pathprof/geodesics.pyx":301
  *     h = length - 1
  * 
  *     while x[l] <= x0 and x[h] >= x0:             # <<<<<<<<<<<<<<
@@ -3750,7 +3750,7 @@ static CYTHON_INLINE int __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_o
     __pyx_L5_bool_binop_done:;
     if (!__pyx_t_1) break;
 
-    /* "src/pathprof/geodesics.pyx":303
+    /* "pycraf/pathprof/geodesics.pyx":303
  *     while x[l] <= x0 and x[h] >= x0:
  * 
  *         i = l + <int> ((x0 - x[l]) / (x[h] - x[l]) * (h - l))             # <<<<<<<<<<<<<<
@@ -3762,7 +3762,7 @@ static CYTHON_INLINE int __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_o
     __pyx_t_7 = __pyx_v_l;
     __pyx_v_i = (__pyx_v_l + ((int)(((__pyx_v_x0 - (*((float *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_5 * __pyx_v_x.strides[0]) )))) / ((*((float *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_6 * __pyx_v_x.strides[0]) ))) - (*((float *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_7 * __pyx_v_x.strides[0]) ))))) * (__pyx_v_h - __pyx_v_l))));
 
-    /* "src/pathprof/geodesics.pyx":305
+    /* "pycraf/pathprof/geodesics.pyx":305
  *         i = l + <int> ((x0 - x[l]) / (x[h] - x[l]) * (h - l))
  * 
  *         if x[i] < x0:             # <<<<<<<<<<<<<<
@@ -3773,7 +3773,7 @@ static CYTHON_INLINE int __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_o
     __pyx_t_1 = (((*((float *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_8 * __pyx_v_x.strides[0]) ))) < __pyx_v_x0) != 0);
     if (__pyx_t_1) {
 
-      /* "src/pathprof/geodesics.pyx":306
+      /* "pycraf/pathprof/geodesics.pyx":306
  * 
  *         if x[i] < x0:
  *             l = i + 1             # <<<<<<<<<<<<<<
@@ -3782,7 +3782,7 @@ static CYTHON_INLINE int __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_o
  */
       __pyx_v_l = (__pyx_v_i + 1);
 
-      /* "src/pathprof/geodesics.pyx":305
+      /* "pycraf/pathprof/geodesics.pyx":305
  *         i = l + <int> ((x0 - x[l]) / (x[h] - x[l]) * (h - l))
  * 
  *         if x[i] < x0:             # <<<<<<<<<<<<<<
@@ -3792,7 +3792,7 @@ static CYTHON_INLINE int __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_o
       goto __pyx_L7;
     }
 
-    /* "src/pathprof/geodesics.pyx":307
+    /* "pycraf/pathprof/geodesics.pyx":307
  *         if x[i] < x0:
  *             l = i + 1
  *         elif x[i] > x0:             # <<<<<<<<<<<<<<
@@ -3803,7 +3803,7 @@ static CYTHON_INLINE int __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_o
     __pyx_t_1 = (((*((float *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_9 * __pyx_v_x.strides[0]) ))) > __pyx_v_x0) != 0);
     if (__pyx_t_1) {
 
-      /* "src/pathprof/geodesics.pyx":308
+      /* "pycraf/pathprof/geodesics.pyx":308
  *             l = i + 1
  *         elif x[i] > x0:
  *             h = i - 1             # <<<<<<<<<<<<<<
@@ -3812,7 +3812,7 @@ static CYTHON_INLINE int __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_o
  */
       __pyx_v_h = (__pyx_v_i - 1);
 
-      /* "src/pathprof/geodesics.pyx":307
+      /* "pycraf/pathprof/geodesics.pyx":307
  *         if x[i] < x0:
  *             l = i + 1
  *         elif x[i] > x0:             # <<<<<<<<<<<<<<
@@ -3822,7 +3822,7 @@ static CYTHON_INLINE int __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_o
       goto __pyx_L7;
     }
 
-    /* "src/pathprof/geodesics.pyx":310
+    /* "pycraf/pathprof/geodesics.pyx":310
  *             h = i - 1
  *         else:
  *             return i             # <<<<<<<<<<<<<<
@@ -3836,7 +3836,7 @@ static CYTHON_INLINE int __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_o
     __pyx_L7:;
   }
 
-  /* "src/pathprof/geodesics.pyx":312
+  /* "pycraf/pathprof/geodesics.pyx":312
  *             return i
  * 
  *     return l             # <<<<<<<<<<<<<<
@@ -3846,7 +3846,7 @@ static CYTHON_INLINE int __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_o
   __pyx_r = __pyx_v_l;
   goto __pyx_L0;
 
-  /* "src/pathprof/geodesics.pyx":284
+  /* "pycraf/pathprof/geodesics.pyx":284
  * 
  * 
  * cdef inline int find_in_ordered(             # <<<<<<<<<<<<<<
@@ -3859,7 +3859,7 @@ static CYTHON_INLINE int __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_o
   return __pyx_r;
 }
 
-static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_ordered(__Pyx_memviewslice __pyx_v_x, double __pyx_v_x0) {
+static CYTHON_INLINE int __pyx_fuse_1__pyx_f_6pycraf_8pathprof_9geodesics_find_in_ordered(__Pyx_memviewslice __pyx_v_x, double __pyx_v_x0) {
   int __pyx_v_l;
   int __pyx_v_h;
   int __pyx_v_i;
@@ -3875,7 +3875,7 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_o
   Py_ssize_t __pyx_t_8;
   Py_ssize_t __pyx_t_9;
 
-  /* "src/pathprof/geodesics.pyx":296
+  /* "pycraf/pathprof/geodesics.pyx":296
  *     cdef:
  *         int l, h, i
  *         int length = x.shape[0]             # <<<<<<<<<<<<<<
@@ -3884,7 +3884,7 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_o
  */
   __pyx_v_length = (__pyx_v_x.shape[0]);
 
-  /* "src/pathprof/geodesics.pyx":298
+  /* "pycraf/pathprof/geodesics.pyx":298
  *         int length = x.shape[0]
  * 
  *     l = 0             # <<<<<<<<<<<<<<
@@ -3893,7 +3893,7 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_o
  */
   __pyx_v_l = 0;
 
-  /* "src/pathprof/geodesics.pyx":299
+  /* "pycraf/pathprof/geodesics.pyx":299
  * 
  *     l = 0
  *     h = length - 1             # <<<<<<<<<<<<<<
@@ -3902,7 +3902,7 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_o
  */
   __pyx_v_h = (__pyx_v_length - 1);
 
-  /* "src/pathprof/geodesics.pyx":301
+  /* "pycraf/pathprof/geodesics.pyx":301
  *     h = length - 1
  * 
  *     while x[l] <= x0 and x[h] >= x0:             # <<<<<<<<<<<<<<
@@ -3923,7 +3923,7 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_o
     __pyx_L5_bool_binop_done:;
     if (!__pyx_t_1) break;
 
-    /* "src/pathprof/geodesics.pyx":303
+    /* "pycraf/pathprof/geodesics.pyx":303
  *     while x[l] <= x0 and x[h] >= x0:
  * 
  *         i = l + <int> ((x0 - x[l]) / (x[h] - x[l]) * (h - l))             # <<<<<<<<<<<<<<
@@ -3935,7 +3935,7 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_o
     __pyx_t_7 = __pyx_v_l;
     __pyx_v_i = (__pyx_v_l + ((int)(((__pyx_v_x0 - (*((double *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_5 * __pyx_v_x.strides[0]) )))) / ((*((double *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_6 * __pyx_v_x.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_7 * __pyx_v_x.strides[0]) ))))) * (__pyx_v_h - __pyx_v_l))));
 
-    /* "src/pathprof/geodesics.pyx":305
+    /* "pycraf/pathprof/geodesics.pyx":305
  *         i = l + <int> ((x0 - x[l]) / (x[h] - x[l]) * (h - l))
  * 
  *         if x[i] < x0:             # <<<<<<<<<<<<<<
@@ -3946,7 +3946,7 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_o
     __pyx_t_1 = (((*((double *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_8 * __pyx_v_x.strides[0]) ))) < __pyx_v_x0) != 0);
     if (__pyx_t_1) {
 
-      /* "src/pathprof/geodesics.pyx":306
+      /* "pycraf/pathprof/geodesics.pyx":306
  * 
  *         if x[i] < x0:
  *             l = i + 1             # <<<<<<<<<<<<<<
@@ -3955,7 +3955,7 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_o
  */
       __pyx_v_l = (__pyx_v_i + 1);
 
-      /* "src/pathprof/geodesics.pyx":305
+      /* "pycraf/pathprof/geodesics.pyx":305
  *         i = l + <int> ((x0 - x[l]) / (x[h] - x[l]) * (h - l))
  * 
  *         if x[i] < x0:             # <<<<<<<<<<<<<<
@@ -3965,7 +3965,7 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_o
       goto __pyx_L7;
     }
 
-    /* "src/pathprof/geodesics.pyx":307
+    /* "pycraf/pathprof/geodesics.pyx":307
  *         if x[i] < x0:
  *             l = i + 1
  *         elif x[i] > x0:             # <<<<<<<<<<<<<<
@@ -3976,7 +3976,7 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_o
     __pyx_t_1 = (((*((double *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_9 * __pyx_v_x.strides[0]) ))) > __pyx_v_x0) != 0);
     if (__pyx_t_1) {
 
-      /* "src/pathprof/geodesics.pyx":308
+      /* "pycraf/pathprof/geodesics.pyx":308
  *             l = i + 1
  *         elif x[i] > x0:
  *             h = i - 1             # <<<<<<<<<<<<<<
@@ -3985,7 +3985,7 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_o
  */
       __pyx_v_h = (__pyx_v_i - 1);
 
-      /* "src/pathprof/geodesics.pyx":307
+      /* "pycraf/pathprof/geodesics.pyx":307
  *         if x[i] < x0:
  *             l = i + 1
  *         elif x[i] > x0:             # <<<<<<<<<<<<<<
@@ -3995,7 +3995,7 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_o
       goto __pyx_L7;
     }
 
-    /* "src/pathprof/geodesics.pyx":310
+    /* "pycraf/pathprof/geodesics.pyx":310
  *             h = i - 1
  *         else:
  *             return i             # <<<<<<<<<<<<<<
@@ -4009,7 +4009,7 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_o
     __pyx_L7:;
   }
 
-  /* "src/pathprof/geodesics.pyx":312
+  /* "pycraf/pathprof/geodesics.pyx":312
  *             return i
  * 
  *     return l             # <<<<<<<<<<<<<<
@@ -4019,7 +4019,7 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_o
   __pyx_r = __pyx_v_l;
   goto __pyx_L0;
 
-  /* "src/pathprof/geodesics.pyx":284
+  /* "pycraf/pathprof/geodesics.pyx":284
  * 
  * 
  * cdef inline int find_in_ordered(             # <<<<<<<<<<<<<<
@@ -4032,7 +4032,7 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_o
   return __pyx_r;
 }
 
-/* "src/pathprof/geodesics.pyx":315
+/* "pycraf/pathprof/geodesics.pyx":315
  * 
  * 
  * cdef inline double gauss1d(double offset, double s):             # <<<<<<<<<<<<<<
@@ -4040,12 +4040,12 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_o
  *     return exp(-0.5 * offset * offset / s / s)
  */
 
-static CYTHON_INLINE double __pyx_f_3src_8pathprof_9geodesics_gauss1d(double __pyx_v_offset, double __pyx_v_s) {
+static CYTHON_INLINE double __pyx_f_6pycraf_8pathprof_9geodesics_gauss1d(double __pyx_v_offset, double __pyx_v_s) {
   double __pyx_r;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("gauss1d", 0);
 
-  /* "src/pathprof/geodesics.pyx":317
+  /* "pycraf/pathprof/geodesics.pyx":317
  * cdef inline double gauss1d(double offset, double s):
  * 
  *     return exp(-0.5 * offset * offset / s / s)             # <<<<<<<<<<<<<<
@@ -4055,7 +4055,7 @@ static CYTHON_INLINE double __pyx_f_3src_8pathprof_9geodesics_gauss1d(double __p
   __pyx_r = exp(((((-0.5 * __pyx_v_offset) * __pyx_v_offset) / __pyx_v_s) / __pyx_v_s));
   goto __pyx_L0;
 
-  /* "src/pathprof/geodesics.pyx":315
+  /* "pycraf/pathprof/geodesics.pyx":315
  * 
  * 
  * cdef inline double gauss1d(double offset, double s):             # <<<<<<<<<<<<<<
@@ -4069,7 +4069,7 @@ static CYTHON_INLINE double __pyx_f_3src_8pathprof_9geodesics_gauss1d(double __p
   return __pyx_r;
 }
 
-/* "src/pathprof/geodesics.pyx":320
+/* "pycraf/pathprof/geodesics.pyx":320
  * 
  * 
  * def regrid1d_with_x(             # <<<<<<<<<<<<<<
@@ -4078,10 +4078,10 @@ static CYTHON_INLINE double __pyx_f_3src_8pathprof_9geodesics_gauss1d(double __p
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3src_8pathprof_9geodesics_5regrid1d_with_x(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_3src_8pathprof_9geodesics_4regrid1d_with_x[] = "regrid1d_with_x(signatures, args, kwargs, defaults)\n\n    from pycraf.pathprof import regrid1d_with_x\n    import numpy as np\n    import matplotlib.pyplot as plt\n\n    x = np.linspace(1., 0., 100)\n    x_new = np.linspace(0., 1., 128)\n    y_ = np.random.normal(0., 1., 100)\n    y_[50] = 10\n\n    y = np.empty_like(x)\n    y_new = np.empty_like(x_new)\n\n    regrid1d_with_x(x[::-1], y_[::-1], x, y, 0.005)\n    regrid1d_with_x(x[::-1], y_[::-1], x_new, y_new, 0.005)\n\n    plt.close()\n    plt.plot(x, y_, 'k-')\n    plt.plot(x, y, 'r-')\n    plt.plot(x_new, y_new, 'b-')\n    plt.show()\n\n    # Note: there seems to be a bug in find_in_ordered:\n\n    x = np.linspace(0, 1, 100)\n    y = np.sqrt(x)\n    x_new = np.linspace(0, 1, 1000)\n    y_new = np.empty_like(x_new)\n    regrid1d_with_x(x, y, x_new, y_new, 0.1)\n    print(y_new)  # <-- some entries are zero\077\077?\n    ";
-static PyMethodDef __pyx_mdef_3src_8pathprof_9geodesics_5regrid1d_with_x = {"regrid1d_with_x", (PyCFunction)__pyx_pw_3src_8pathprof_9geodesics_5regrid1d_with_x, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3src_8pathprof_9geodesics_4regrid1d_with_x};
-static PyObject *__pyx_pw_3src_8pathprof_9geodesics_5regrid1d_with_x(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_6pycraf_8pathprof_9geodesics_5regrid1d_with_x(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_6pycraf_8pathprof_9geodesics_4regrid1d_with_x[] = "regrid1d_with_x(signatures, args, kwargs, defaults)\n\n    from pycraf.pathprof import regrid1d_with_x\n    import numpy as np\n    import matplotlib.pyplot as plt\n\n    x = np.linspace(1., 0., 100)\n    x_new = np.linspace(0., 1., 128)\n    y_ = np.random.normal(0., 1., 100)\n    y_[50] = 10\n\n    y = np.empty_like(x)\n    y_new = np.empty_like(x_new)\n\n    regrid1d_with_x(x[::-1], y_[::-1], x, y, 0.005)\n    regrid1d_with_x(x[::-1], y_[::-1], x_new, y_new, 0.005)\n\n    plt.close()\n    plt.plot(x, y_, 'k-')\n    plt.plot(x, y, 'r-')\n    plt.plot(x_new, y_new, 'b-')\n    plt.show()\n\n    # Note: there seems to be a bug in find_in_ordered:\n\n    x = np.linspace(0, 1, 100)\n    y = np.sqrt(x)\n    x_new = np.linspace(0, 1, 1000)\n    y_new = np.empty_like(x_new)\n    regrid1d_with_x(x, y, x_new, y_new, 0.1)\n    print(y_new)  # <-- some entries are zero\077\077?\n    ";
+static PyMethodDef __pyx_mdef_6pycraf_8pathprof_9geodesics_5regrid1d_with_x = {"regrid1d_with_x", (PyCFunction)__pyx_pw_6pycraf_8pathprof_9geodesics_5regrid1d_with_x, METH_VARARGS|METH_KEYWORDS, __pyx_doc_6pycraf_8pathprof_9geodesics_4regrid1d_with_x};
+static PyObject *__pyx_pw_6pycraf_8pathprof_9geodesics_5regrid1d_with_x(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_signatures = 0;
   PyObject *__pyx_v_args = 0;
   PyObject *__pyx_v_kwargs = 0;
@@ -4144,18 +4144,18 @@ static PyObject *__pyx_pw_3src_8pathprof_9geodesics_5regrid1d_with_x(PyObject *_
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("__pyx_fused_cpdef", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 320, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("src.pathprof.geodesics.__pyx_fused_cpdef", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pycraf.pathprof.geodesics.__pyx_fused_cpdef", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3src_8pathprof_9geodesics_4regrid1d_with_x(__pyx_self, __pyx_v_signatures, __pyx_v_args, __pyx_v_kwargs, __pyx_v_defaults);
+  __pyx_r = __pyx_pf_6pycraf_8pathprof_9geodesics_4regrid1d_with_x(__pyx_self, __pyx_v_signatures, __pyx_v_args, __pyx_v_kwargs, __pyx_v_defaults);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_8pathprof_9geodesics_4regrid1d_with_x(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_signatures, PyObject *__pyx_v_args, PyObject *__pyx_v_kwargs, CYTHON_UNUSED PyObject *__pyx_v_defaults) {
+static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_4regrid1d_with_x(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_signatures, PyObject *__pyx_v_args, PyObject *__pyx_v_kwargs, CYTHON_UNUSED PyObject *__pyx_v_defaults) {
   PyObject *__pyx_v_dest_sig = NULL;
   PyTypeObject *__pyx_v_ndarray = 0;
   PyObject *__pyx_v_numpy = NULL;
@@ -4238,7 +4238,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_4regrid1d_with_x(CYTHON_UNUS
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_7 = __Pyx_PyErr_ExceptionMatches(__pyx_builtin_ImportError) || __Pyx_PyErr_ExceptionMatches(__pyx_builtin_AttributeError) || __Pyx_PyErr_ExceptionMatches(__pyx_builtin_TypeError);
     if (__pyx_t_7) {
-      __Pyx_AddTraceback("src.pathprof.geodesics.__pyx_fused_cpdef", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("pycraf.pathprof.geodesics.__pyx_fused_cpdef", __pyx_clineno, __pyx_lineno, __pyx_filename);
       if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_8, &__pyx_t_9) < 0) __PYX_ERR(0, 320, __pyx_L6_except_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_GOTREF(__pyx_t_8);
@@ -4679,7 +4679,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_4regrid1d_with_x(CYTHON_UNUS
   __Pyx_XDECREF(__pyx_t_17);
   __Pyx_XDECREF(__pyx_t_18);
   __Pyx_XDECREF(__pyx_t_19);
-  __Pyx_AddTraceback("src.pathprof.geodesics.__pyx_fused_cpdef", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pycraf.pathprof.geodesics.__pyx_fused_cpdef", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_dest_sig);
@@ -4698,7 +4698,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_4regrid1d_with_x(CYTHON_UNUS
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_8pathprof_9geodesics_16__defaults__(CYTHON_UNUSED PyObject *__pyx_self) {
+static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_16__defaults__(CYTHON_UNUSED PyObject *__pyx_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -4735,7 +4735,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_16__defaults__(CYTHON_UNUSED
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_AddTraceback("src.pathprof.geodesics.__defaults__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pycraf.pathprof.geodesics.__defaults__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -4744,9 +4744,9 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_16__defaults__(CYTHON_UNUSED
 }
 
 /* Python wrapper */
-static PyObject *__pyx_fuse_0__pyx_pw_3src_8pathprof_9geodesics_7regrid1d_with_x(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_fuse_0__pyx_mdef_3src_8pathprof_9geodesics_7regrid1d_with_x = {"__pyx_fuse_0regrid1d_with_x", (PyCFunction)__pyx_fuse_0__pyx_pw_3src_8pathprof_9geodesics_7regrid1d_with_x, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3src_8pathprof_9geodesics_4regrid1d_with_x};
-static PyObject *__pyx_fuse_0__pyx_pw_3src_8pathprof_9geodesics_7regrid1d_with_x(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_fuse_0__pyx_pw_6pycraf_8pathprof_9geodesics_7regrid1d_with_x(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_fuse_0__pyx_mdef_6pycraf_8pathprof_9geodesics_7regrid1d_with_x = {"__pyx_fuse_0regrid1d_with_x", (PyCFunction)__pyx_fuse_0__pyx_pw_6pycraf_8pathprof_9geodesics_7regrid1d_with_x, METH_VARARGS|METH_KEYWORDS, __pyx_doc_6pycraf_8pathprof_9geodesics_4regrid1d_with_x};
+static PyObject *__pyx_fuse_0__pyx_pw_6pycraf_8pathprof_9geodesics_7regrid1d_with_x(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __Pyx_memviewslice __pyx_v_x = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_memviewslice __pyx_v_y = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_memviewslice __pyx_v_x_new = { 0, 0, { 0 }, { 0 }, { 0 } };
@@ -4847,7 +4847,7 @@ static PyObject *__pyx_fuse_0__pyx_pw_3src_8pathprof_9geodesics_7regrid1d_with_x
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("regrid1d_with_x", 0, 5, 7, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 320, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("src.pathprof.geodesics.regrid1d_with_x", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pycraf.pathprof.geodesics.regrid1d_with_x", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
@@ -4863,7 +4863,7 @@ static PyObject *__pyx_fuse_0__pyx_pw_3src_8pathprof_9geodesics_7regrid1d_with_x
   if (unlikely(((PyObject *)__pyx_v_y_new.memview) == Py_None)) {
     PyErr_Format(PyExc_TypeError, "Argument '%.200s' must not be None", "y_new"); __PYX_ERR(0, 324, __pyx_L1_error)
   }
-  __pyx_r = __pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(__pyx_self, __pyx_v_x, __pyx_v_y, __pyx_v_x_new, __pyx_v_y_new, __pyx_v_width, __pyx_v_regular, __pyx_v_ordered);
+  __pyx_r = __pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(__pyx_self, __pyx_v_x, __pyx_v_y, __pyx_v_x_new, __pyx_v_y_new, __pyx_v_width, __pyx_v_regular, __pyx_v_ordered);
 
   /* function exit code */
   goto __pyx_L0;
@@ -4874,7 +4874,7 @@ static PyObject *__pyx_fuse_0__pyx_pw_3src_8pathprof_9geodesics_7regrid1d_with_x
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_x, __Pyx_memviewslice __pyx_v_y, __Pyx_memviewslice __pyx_v_x_new, __Pyx_memviewslice __pyx_v_y_new, float __pyx_v_width, int __pyx_v_regular, int __pyx_v_ordered) {
+static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_x, __Pyx_memviewslice __pyx_v_y, __Pyx_memviewslice __pyx_v_x_new, __Pyx_memviewslice __pyx_v_y_new, float __pyx_v_width, int __pyx_v_regular, int __pyx_v_ordered) {
   double __pyx_v_this_x;
   double __pyx_v_kv;
   double __pyx_v_ssum;
@@ -4907,7 +4907,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
   Py_ssize_t __pyx_t_17;
   __Pyx_RefNannySetupContext("__pyx_fuse_0regrid1d_with_x", 0);
 
-  /* "src/pathprof/geodesics.pyx":366
+  /* "pycraf/pathprof/geodesics.pyx":366
  * 
  *         int i, j, s, e
  *         int length = x.size             # <<<<<<<<<<<<<<
@@ -4923,7 +4923,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_length = __pyx_t_3;
 
-  /* "src/pathprof/geodesics.pyx":367
+  /* "pycraf/pathprof/geodesics.pyx":367
  *         int i, j, s, e
  *         int length = x.size
  *         int length_new = x_new.size             # <<<<<<<<<<<<<<
@@ -4939,7 +4939,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_length_new = __pyx_t_3;
 
-  /* "src/pathprof/geodesics.pyx":369
+  /* "pycraf/pathprof/geodesics.pyx":369
  *         int length_new = x_new.size
  * 
  *         double dx = fabs(x[0] - x[length - 1]) / length             # <<<<<<<<<<<<<<
@@ -4950,7 +4950,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
   __pyx_t_5 = (__pyx_v_length - 1);
   __pyx_v_dx = (fabs(((*((float *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_4 * __pyx_v_x.strides[0]) ))) - (*((float *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_5 * __pyx_v_x.strides[0]) ))))) / ((double)__pyx_v_length));
 
-  /* "src/pathprof/geodesics.pyx":371
+  /* "pycraf/pathprof/geodesics.pyx":371
  *         double dx = fabs(x[0] - x[length - 1]) / length
  * 
  *     assert x.size == y.size, 'x and y must have equal size'             # <<<<<<<<<<<<<<
@@ -4981,7 +4981,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
   }
   #endif
 
-  /* "src/pathprof/geodesics.pyx":373
+  /* "pycraf/pathprof/geodesics.pyx":373
  *     assert x.size == y.size, 'x and y must have equal size'
  * 
  *     for i in range(length_new):             # <<<<<<<<<<<<<<
@@ -4992,7 +4992,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
   for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_3; __pyx_t_8+=1) {
     __pyx_v_i = __pyx_t_8;
 
-    /* "src/pathprof/geodesics.pyx":375
+    /* "pycraf/pathprof/geodesics.pyx":375
  *     for i in range(length_new):
  * 
  *         this_x = x_new[i]             # <<<<<<<<<<<<<<
@@ -5002,7 +5002,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
     __pyx_t_9 = __pyx_v_i;
     __pyx_v_this_x = (*((float *) ( /* dim=0 */ (__pyx_v_x_new.data + __pyx_t_9 * __pyx_v_x_new.strides[0]) )));
 
-    /* "src/pathprof/geodesics.pyx":378
+    /* "pycraf/pathprof/geodesics.pyx":378
  * 
  *         # find optimal s, e (if in ordered mode)
  *         if regular:             # <<<<<<<<<<<<<<
@@ -5012,7 +5012,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
     __pyx_t_7 = (__pyx_v_regular != 0);
     if (__pyx_t_7) {
 
-      /* "src/pathprof/geodesics.pyx":380
+      /* "pycraf/pathprof/geodesics.pyx":380
  *         if regular:
  * 
  *             s = int((this_x - 5. * width) / dx - 0.5)             # <<<<<<<<<<<<<<
@@ -5021,7 +5021,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
       __pyx_v_s = ((int)(((__pyx_v_this_x - (5. * __pyx_v_width)) / __pyx_v_dx) - 0.5));
 
-      /* "src/pathprof/geodesics.pyx":381
+      /* "pycraf/pathprof/geodesics.pyx":381
  * 
  *             s = int((this_x - 5. * width) / dx - 0.5)
  *             e = int((this_x + 5. * width) / dx + 1.5)             # <<<<<<<<<<<<<<
@@ -5030,7 +5030,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
       __pyx_v_e = ((int)(((__pyx_v_this_x + (5. * __pyx_v_width)) / __pyx_v_dx) + 1.5));
 
-      /* "src/pathprof/geodesics.pyx":382
+      /* "pycraf/pathprof/geodesics.pyx":382
  *             s = int((this_x - 5. * width) / dx - 0.5)
  *             e = int((this_x + 5. * width) / dx + 1.5)
  *             if s < 0:             # <<<<<<<<<<<<<<
@@ -5040,7 +5040,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
       __pyx_t_7 = ((__pyx_v_s < 0) != 0);
       if (__pyx_t_7) {
 
-        /* "src/pathprof/geodesics.pyx":383
+        /* "pycraf/pathprof/geodesics.pyx":383
  *             e = int((this_x + 5. * width) / dx + 1.5)
  *             if s < 0:
  *                 s = 0             # <<<<<<<<<<<<<<
@@ -5049,7 +5049,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
         __pyx_v_s = 0;
 
-        /* "src/pathprof/geodesics.pyx":382
+        /* "pycraf/pathprof/geodesics.pyx":382
  *             s = int((this_x - 5. * width) / dx - 0.5)
  *             e = int((this_x + 5. * width) / dx + 1.5)
  *             if s < 0:             # <<<<<<<<<<<<<<
@@ -5058,7 +5058,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
       }
 
-      /* "src/pathprof/geodesics.pyx":384
+      /* "pycraf/pathprof/geodesics.pyx":384
  *             if s < 0:
  *                 s = 0
  *             if e >= length:             # <<<<<<<<<<<<<<
@@ -5068,7 +5068,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
       __pyx_t_7 = ((__pyx_v_e >= __pyx_v_length) != 0);
       if (__pyx_t_7) {
 
-        /* "src/pathprof/geodesics.pyx":385
+        /* "pycraf/pathprof/geodesics.pyx":385
  *                 s = 0
  *             if e >= length:
  *                 e = length             # <<<<<<<<<<<<<<
@@ -5077,7 +5077,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
         __pyx_v_e = __pyx_v_length;
 
-        /* "src/pathprof/geodesics.pyx":384
+        /* "pycraf/pathprof/geodesics.pyx":384
  *             if s < 0:
  *                 s = 0
  *             if e >= length:             # <<<<<<<<<<<<<<
@@ -5086,7 +5086,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
       }
 
-      /* "src/pathprof/geodesics.pyx":378
+      /* "pycraf/pathprof/geodesics.pyx":378
  * 
  *         # find optimal s, e (if in ordered mode)
  *         if regular:             # <<<<<<<<<<<<<<
@@ -5096,7 +5096,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
       goto __pyx_L5;
     }
 
-    /* "src/pathprof/geodesics.pyx":387
+    /* "pycraf/pathprof/geodesics.pyx":387
  *                 e = length
  * 
  *         elif ordered:             # <<<<<<<<<<<<<<
@@ -5106,16 +5106,16 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
     __pyx_t_7 = (__pyx_v_ordered != 0);
     if (__pyx_t_7) {
 
-      /* "src/pathprof/geodesics.pyx":388
+      /* "pycraf/pathprof/geodesics.pyx":388
  * 
  *         elif ordered:
  *             s = find_in_ordered(x, this_x)             # <<<<<<<<<<<<<<
  *             e = s + 1
  * 
  */
-      __pyx_v_s = __pyx_fuse_0__pyx_f_3src_8pathprof_9geodesics_find_in_ordered(__pyx_v_x, __pyx_v_this_x);
+      __pyx_v_s = __pyx_fuse_0__pyx_f_6pycraf_8pathprof_9geodesics_find_in_ordered(__pyx_v_x, __pyx_v_this_x);
 
-      /* "src/pathprof/geodesics.pyx":389
+      /* "pycraf/pathprof/geodesics.pyx":389
  *         elif ordered:
  *             s = find_in_ordered(x, this_x)
  *             e = s + 1             # <<<<<<<<<<<<<<
@@ -5124,7 +5124,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
       __pyx_v_e = (__pyx_v_s + 1);
 
-      /* "src/pathprof/geodesics.pyx":391
+      /* "pycraf/pathprof/geodesics.pyx":391
  *             e = s + 1
  * 
  *             while True:             # <<<<<<<<<<<<<<
@@ -5133,7 +5133,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
       while (1) {
 
-        /* "src/pathprof/geodesics.pyx":392
+        /* "pycraf/pathprof/geodesics.pyx":392
  * 
  *             while True:
  *                 s -= 1             # <<<<<<<<<<<<<<
@@ -5142,7 +5142,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
         __pyx_v_s = (__pyx_v_s - 1);
 
-        /* "src/pathprof/geodesics.pyx":393
+        /* "pycraf/pathprof/geodesics.pyx":393
  *             while True:
  *                 s -= 1
  *                 if s < 1:             # <<<<<<<<<<<<<<
@@ -5152,7 +5152,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
         __pyx_t_7 = ((__pyx_v_s < 1) != 0);
         if (__pyx_t_7) {
 
-          /* "src/pathprof/geodesics.pyx":394
+          /* "pycraf/pathprof/geodesics.pyx":394
  *                 s -= 1
  *                 if s < 1:
  *                     s = 0             # <<<<<<<<<<<<<<
@@ -5161,7 +5161,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
           __pyx_v_s = 0;
 
-          /* "src/pathprof/geodesics.pyx":395
+          /* "pycraf/pathprof/geodesics.pyx":395
  *                 if s < 1:
  *                     s = 0
  *                     break             # <<<<<<<<<<<<<<
@@ -5170,7 +5170,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
           goto __pyx_L9_break;
 
-          /* "src/pathprof/geodesics.pyx":393
+          /* "pycraf/pathprof/geodesics.pyx":393
  *             while True:
  *                 s -= 1
  *                 if s < 1:             # <<<<<<<<<<<<<<
@@ -5179,7 +5179,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
         }
 
-        /* "src/pathprof/geodesics.pyx":396
+        /* "pycraf/pathprof/geodesics.pyx":396
  *                     s = 0
  *                     break
  *                 if fabs(x[s] - this_x) > 5. * width:             # <<<<<<<<<<<<<<
@@ -5190,7 +5190,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
         __pyx_t_7 = ((fabs(((*((float *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_10 * __pyx_v_x.strides[0]) ))) - __pyx_v_this_x)) > (5. * __pyx_v_width)) != 0);
         if (__pyx_t_7) {
 
-          /* "src/pathprof/geodesics.pyx":397
+          /* "pycraf/pathprof/geodesics.pyx":397
  *                     break
  *                 if fabs(x[s] - this_x) > 5. * width:
  *                     break             # <<<<<<<<<<<<<<
@@ -5199,7 +5199,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
           goto __pyx_L9_break;
 
-          /* "src/pathprof/geodesics.pyx":396
+          /* "pycraf/pathprof/geodesics.pyx":396
  *                     s = 0
  *                     break
  *                 if fabs(x[s] - this_x) > 5. * width:             # <<<<<<<<<<<<<<
@@ -5210,7 +5210,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
       }
       __pyx_L9_break:;
 
-      /* "src/pathprof/geodesics.pyx":399
+      /* "pycraf/pathprof/geodesics.pyx":399
  *                     break
  * 
  *             while True:             # <<<<<<<<<<<<<<
@@ -5219,7 +5219,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
       while (1) {
 
-        /* "src/pathprof/geodesics.pyx":400
+        /* "pycraf/pathprof/geodesics.pyx":400
  * 
  *             while True:
  *                 e += 1             # <<<<<<<<<<<<<<
@@ -5228,7 +5228,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
         __pyx_v_e = (__pyx_v_e + 1);
 
-        /* "src/pathprof/geodesics.pyx":401
+        /* "pycraf/pathprof/geodesics.pyx":401
  *             while True:
  *                 e += 1
  *                 if e >= length:             # <<<<<<<<<<<<<<
@@ -5238,7 +5238,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
         __pyx_t_7 = ((__pyx_v_e >= __pyx_v_length) != 0);
         if (__pyx_t_7) {
 
-          /* "src/pathprof/geodesics.pyx":402
+          /* "pycraf/pathprof/geodesics.pyx":402
  *                 e += 1
  *                 if e >= length:
  *                     e = length             # <<<<<<<<<<<<<<
@@ -5247,7 +5247,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
           __pyx_v_e = __pyx_v_length;
 
-          /* "src/pathprof/geodesics.pyx":403
+          /* "pycraf/pathprof/geodesics.pyx":403
  *                 if e >= length:
  *                     e = length
  *                     break             # <<<<<<<<<<<<<<
@@ -5256,7 +5256,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
           goto __pyx_L13_break;
 
-          /* "src/pathprof/geodesics.pyx":401
+          /* "pycraf/pathprof/geodesics.pyx":401
  *             while True:
  *                 e += 1
  *                 if e >= length:             # <<<<<<<<<<<<<<
@@ -5265,7 +5265,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
         }
 
-        /* "src/pathprof/geodesics.pyx":404
+        /* "pycraf/pathprof/geodesics.pyx":404
  *                     e = length
  *                     break
  *                 if fabs(x[e - 1] - this_x) > 5. * width:             # <<<<<<<<<<<<<<
@@ -5276,7 +5276,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
         __pyx_t_7 = ((fabs(((*((float *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_11 * __pyx_v_x.strides[0]) ))) - __pyx_v_this_x)) > (5. * __pyx_v_width)) != 0);
         if (__pyx_t_7) {
 
-          /* "src/pathprof/geodesics.pyx":405
+          /* "pycraf/pathprof/geodesics.pyx":405
  *                     break
  *                 if fabs(x[e - 1] - this_x) > 5. * width:
  *                     break             # <<<<<<<<<<<<<<
@@ -5285,7 +5285,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
           goto __pyx_L13_break;
 
-          /* "src/pathprof/geodesics.pyx":404
+          /* "pycraf/pathprof/geodesics.pyx":404
  *                     e = length
  *                     break
  *                 if fabs(x[e - 1] - this_x) > 5. * width:             # <<<<<<<<<<<<<<
@@ -5296,7 +5296,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
       }
       __pyx_L13_break:;
 
-      /* "src/pathprof/geodesics.pyx":387
+      /* "pycraf/pathprof/geodesics.pyx":387
  *                 e = length
  * 
  *         elif ordered:             # <<<<<<<<<<<<<<
@@ -5306,7 +5306,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
       goto __pyx_L5;
     }
 
-    /* "src/pathprof/geodesics.pyx":408
+    /* "pycraf/pathprof/geodesics.pyx":408
  * 
  *         else:
  *             s = 0             # <<<<<<<<<<<<<<
@@ -5316,7 +5316,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
     /*else*/ {
       __pyx_v_s = 0;
 
-      /* "src/pathprof/geodesics.pyx":409
+      /* "pycraf/pathprof/geodesics.pyx":409
  *         else:
  *             s = 0
  *             e = length             # <<<<<<<<<<<<<<
@@ -5327,7 +5327,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
     }
     __pyx_L5:;
 
-    /* "src/pathprof/geodesics.pyx":413
+    /* "pycraf/pathprof/geodesics.pyx":413
  *         # print(i, s, e)
  * 
  *         norm = 0.             # <<<<<<<<<<<<<<
@@ -5336,7 +5336,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
     __pyx_v_norm = 0.;
 
-    /* "src/pathprof/geodesics.pyx":414
+    /* "pycraf/pathprof/geodesics.pyx":414
  * 
  *         norm = 0.
  *         ssum = 0.             # <<<<<<<<<<<<<<
@@ -5345,7 +5345,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  */
     __pyx_v_ssum = 0.;
 
-    /* "src/pathprof/geodesics.pyx":415
+    /* "pycraf/pathprof/geodesics.pyx":415
  *         norm = 0.
  *         ssum = 0.
  *         for j in range(s, e):             # <<<<<<<<<<<<<<
@@ -5356,7 +5356,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
     for (__pyx_t_13 = __pyx_v_s; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
       __pyx_v_j = __pyx_t_13;
 
-      /* "src/pathprof/geodesics.pyx":416
+      /* "pycraf/pathprof/geodesics.pyx":416
  *         ssum = 0.
  *         for j in range(s, e):
  *             kv = gauss1d(x[j] - this_x, width)             # <<<<<<<<<<<<<<
@@ -5364,9 +5364,9 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
  *             norm += kv
  */
       __pyx_t_14 = __pyx_v_j;
-      __pyx_v_kv = __pyx_f_3src_8pathprof_9geodesics_gauss1d(((*((float *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_14 * __pyx_v_x.strides[0]) ))) - __pyx_v_this_x), __pyx_v_width);
+      __pyx_v_kv = __pyx_f_6pycraf_8pathprof_9geodesics_gauss1d(((*((float *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_14 * __pyx_v_x.strides[0]) ))) - __pyx_v_this_x), __pyx_v_width);
 
-      /* "src/pathprof/geodesics.pyx":417
+      /* "pycraf/pathprof/geodesics.pyx":417
  *         for j in range(s, e):
  *             kv = gauss1d(x[j] - this_x, width)
  *             ssum += kv * y[j]             # <<<<<<<<<<<<<<
@@ -5376,7 +5376,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
       __pyx_t_15 = __pyx_v_j;
       __pyx_v_ssum = (__pyx_v_ssum + (__pyx_v_kv * (*((float *) ( /* dim=0 */ (__pyx_v_y.data + __pyx_t_15 * __pyx_v_y.strides[0]) )))));
 
-      /* "src/pathprof/geodesics.pyx":418
+      /* "pycraf/pathprof/geodesics.pyx":418
  *             kv = gauss1d(x[j] - this_x, width)
  *             ssum += kv * y[j]
  *             norm += kv             # <<<<<<<<<<<<<<
@@ -5386,7 +5386,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
       __pyx_v_norm = (__pyx_v_norm + __pyx_v_kv);
     }
 
-    /* "src/pathprof/geodesics.pyx":421
+    /* "pycraf/pathprof/geodesics.pyx":421
  * 
  *         # print(i, s, e, norm, ssum)
  *         if fabs(norm) < 1.e-12:             # <<<<<<<<<<<<<<
@@ -5396,7 +5396,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
     __pyx_t_7 = ((fabs(__pyx_v_norm) < 1.e-12) != 0);
     if (__pyx_t_7) {
 
-      /* "src/pathprof/geodesics.pyx":422
+      /* "pycraf/pathprof/geodesics.pyx":422
  *         # print(i, s, e, norm, ssum)
  *         if fabs(norm) < 1.e-12:
  *             y_new[i] = 0.             # <<<<<<<<<<<<<<
@@ -5406,7 +5406,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
       __pyx_t_16 = __pyx_v_i;
       *((float *) ( /* dim=0 */ (__pyx_v_y_new.data + __pyx_t_16 * __pyx_v_y_new.strides[0]) )) = 0.;
 
-      /* "src/pathprof/geodesics.pyx":421
+      /* "pycraf/pathprof/geodesics.pyx":421
  * 
  *         # print(i, s, e, norm, ssum)
  *         if fabs(norm) < 1.e-12:             # <<<<<<<<<<<<<<
@@ -5416,7 +5416,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
       goto __pyx_L18;
     }
 
-    /* "src/pathprof/geodesics.pyx":424
+    /* "pycraf/pathprof/geodesics.pyx":424
  *             y_new[i] = 0.
  *         else:
  *             y_new[i] = ssum / norm             # <<<<<<<<<<<<<<
@@ -5428,7 +5428,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
     __pyx_L18:;
   }
 
-  /* "src/pathprof/geodesics.pyx":320
+  /* "pycraf/pathprof/geodesics.pyx":320
  * 
  * 
  * def regrid1d_with_x(             # <<<<<<<<<<<<<<
@@ -5443,7 +5443,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("src.pathprof.geodesics.regrid1d_with_x", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pycraf.pathprof.geodesics.regrid1d_with_x", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __PYX_XDEC_MEMVIEW(&__pyx_v_x, 1);
@@ -5455,7 +5455,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_UNUS
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_8pathprof_9geodesics_18__defaults__(CYTHON_UNUSED PyObject *__pyx_self) {
+static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_18__defaults__(CYTHON_UNUSED PyObject *__pyx_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -5492,7 +5492,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_18__defaults__(CYTHON_UNUSED
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_AddTraceback("src.pathprof.geodesics.__defaults__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pycraf.pathprof.geodesics.__defaults__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -5501,9 +5501,9 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_18__defaults__(CYTHON_UNUSED
 }
 
 /* Python wrapper */
-static PyObject *__pyx_fuse_1__pyx_pw_3src_8pathprof_9geodesics_9regrid1d_with_x(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_fuse_1__pyx_mdef_3src_8pathprof_9geodesics_9regrid1d_with_x = {"__pyx_fuse_1regrid1d_with_x", (PyCFunction)__pyx_fuse_1__pyx_pw_3src_8pathprof_9geodesics_9regrid1d_with_x, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3src_8pathprof_9geodesics_4regrid1d_with_x};
-static PyObject *__pyx_fuse_1__pyx_pw_3src_8pathprof_9geodesics_9regrid1d_with_x(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_fuse_1__pyx_pw_6pycraf_8pathprof_9geodesics_9regrid1d_with_x(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_fuse_1__pyx_mdef_6pycraf_8pathprof_9geodesics_9regrid1d_with_x = {"__pyx_fuse_1regrid1d_with_x", (PyCFunction)__pyx_fuse_1__pyx_pw_6pycraf_8pathprof_9geodesics_9regrid1d_with_x, METH_VARARGS|METH_KEYWORDS, __pyx_doc_6pycraf_8pathprof_9geodesics_4regrid1d_with_x};
+static PyObject *__pyx_fuse_1__pyx_pw_6pycraf_8pathprof_9geodesics_9regrid1d_with_x(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __Pyx_memviewslice __pyx_v_x = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_memviewslice __pyx_v_y = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_memviewslice __pyx_v_x_new = { 0, 0, { 0 }, { 0 }, { 0 } };
@@ -5604,7 +5604,7 @@ static PyObject *__pyx_fuse_1__pyx_pw_3src_8pathprof_9geodesics_9regrid1d_with_x
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("regrid1d_with_x", 0, 5, 7, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 320, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("src.pathprof.geodesics.regrid1d_with_x", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pycraf.pathprof.geodesics.regrid1d_with_x", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
@@ -5620,7 +5620,7 @@ static PyObject *__pyx_fuse_1__pyx_pw_3src_8pathprof_9geodesics_9regrid1d_with_x
   if (unlikely(((PyObject *)__pyx_v_y_new.memview) == Py_None)) {
     PyErr_Format(PyExc_TypeError, "Argument '%.200s' must not be None", "y_new"); __PYX_ERR(0, 324, __pyx_L1_error)
   }
-  __pyx_r = __pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(__pyx_self, __pyx_v_x, __pyx_v_y, __pyx_v_x_new, __pyx_v_y_new, __pyx_v_width, __pyx_v_regular, __pyx_v_ordered);
+  __pyx_r = __pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(__pyx_self, __pyx_v_x, __pyx_v_y, __pyx_v_x_new, __pyx_v_y_new, __pyx_v_width, __pyx_v_regular, __pyx_v_ordered);
 
   /* function exit code */
   goto __pyx_L0;
@@ -5631,7 +5631,7 @@ static PyObject *__pyx_fuse_1__pyx_pw_3src_8pathprof_9geodesics_9regrid1d_with_x
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_x, __Pyx_memviewslice __pyx_v_y, __Pyx_memviewslice __pyx_v_x_new, __Pyx_memviewslice __pyx_v_y_new, double __pyx_v_width, int __pyx_v_regular, int __pyx_v_ordered) {
+static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_x, __Pyx_memviewslice __pyx_v_y, __Pyx_memviewslice __pyx_v_x_new, __Pyx_memviewslice __pyx_v_y_new, double __pyx_v_width, int __pyx_v_regular, int __pyx_v_ordered) {
   double __pyx_v_this_x;
   double __pyx_v_kv;
   double __pyx_v_ssum;
@@ -5664,7 +5664,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
   Py_ssize_t __pyx_t_17;
   __Pyx_RefNannySetupContext("__pyx_fuse_1regrid1d_with_x", 0);
 
-  /* "src/pathprof/geodesics.pyx":366
+  /* "pycraf/pathprof/geodesics.pyx":366
  * 
  *         int i, j, s, e
  *         int length = x.size             # <<<<<<<<<<<<<<
@@ -5680,7 +5680,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_length = __pyx_t_3;
 
-  /* "src/pathprof/geodesics.pyx":367
+  /* "pycraf/pathprof/geodesics.pyx":367
  *         int i, j, s, e
  *         int length = x.size
  *         int length_new = x_new.size             # <<<<<<<<<<<<<<
@@ -5696,7 +5696,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_length_new = __pyx_t_3;
 
-  /* "src/pathprof/geodesics.pyx":369
+  /* "pycraf/pathprof/geodesics.pyx":369
  *         int length_new = x_new.size
  * 
  *         double dx = fabs(x[0] - x[length - 1]) / length             # <<<<<<<<<<<<<<
@@ -5707,7 +5707,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
   __pyx_t_5 = (__pyx_v_length - 1);
   __pyx_v_dx = (fabs(((*((double *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_4 * __pyx_v_x.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_5 * __pyx_v_x.strides[0]) ))))) / ((double)__pyx_v_length));
 
-  /* "src/pathprof/geodesics.pyx":371
+  /* "pycraf/pathprof/geodesics.pyx":371
  *         double dx = fabs(x[0] - x[length - 1]) / length
  * 
  *     assert x.size == y.size, 'x and y must have equal size'             # <<<<<<<<<<<<<<
@@ -5738,7 +5738,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
   }
   #endif
 
-  /* "src/pathprof/geodesics.pyx":373
+  /* "pycraf/pathprof/geodesics.pyx":373
  *     assert x.size == y.size, 'x and y must have equal size'
  * 
  *     for i in range(length_new):             # <<<<<<<<<<<<<<
@@ -5749,7 +5749,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
   for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_3; __pyx_t_8+=1) {
     __pyx_v_i = __pyx_t_8;
 
-    /* "src/pathprof/geodesics.pyx":375
+    /* "pycraf/pathprof/geodesics.pyx":375
  *     for i in range(length_new):
  * 
  *         this_x = x_new[i]             # <<<<<<<<<<<<<<
@@ -5759,7 +5759,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
     __pyx_t_9 = __pyx_v_i;
     __pyx_v_this_x = (*((double *) ( /* dim=0 */ (__pyx_v_x_new.data + __pyx_t_9 * __pyx_v_x_new.strides[0]) )));
 
-    /* "src/pathprof/geodesics.pyx":378
+    /* "pycraf/pathprof/geodesics.pyx":378
  * 
  *         # find optimal s, e (if in ordered mode)
  *         if regular:             # <<<<<<<<<<<<<<
@@ -5769,7 +5769,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
     __pyx_t_7 = (__pyx_v_regular != 0);
     if (__pyx_t_7) {
 
-      /* "src/pathprof/geodesics.pyx":380
+      /* "pycraf/pathprof/geodesics.pyx":380
  *         if regular:
  * 
  *             s = int((this_x - 5. * width) / dx - 0.5)             # <<<<<<<<<<<<<<
@@ -5778,7 +5778,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
       __pyx_v_s = ((int)(((__pyx_v_this_x - (5. * __pyx_v_width)) / __pyx_v_dx) - 0.5));
 
-      /* "src/pathprof/geodesics.pyx":381
+      /* "pycraf/pathprof/geodesics.pyx":381
  * 
  *             s = int((this_x - 5. * width) / dx - 0.5)
  *             e = int((this_x + 5. * width) / dx + 1.5)             # <<<<<<<<<<<<<<
@@ -5787,7 +5787,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
       __pyx_v_e = ((int)(((__pyx_v_this_x + (5. * __pyx_v_width)) / __pyx_v_dx) + 1.5));
 
-      /* "src/pathprof/geodesics.pyx":382
+      /* "pycraf/pathprof/geodesics.pyx":382
  *             s = int((this_x - 5. * width) / dx - 0.5)
  *             e = int((this_x + 5. * width) / dx + 1.5)
  *             if s < 0:             # <<<<<<<<<<<<<<
@@ -5797,7 +5797,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
       __pyx_t_7 = ((__pyx_v_s < 0) != 0);
       if (__pyx_t_7) {
 
-        /* "src/pathprof/geodesics.pyx":383
+        /* "pycraf/pathprof/geodesics.pyx":383
  *             e = int((this_x + 5. * width) / dx + 1.5)
  *             if s < 0:
  *                 s = 0             # <<<<<<<<<<<<<<
@@ -5806,7 +5806,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
         __pyx_v_s = 0;
 
-        /* "src/pathprof/geodesics.pyx":382
+        /* "pycraf/pathprof/geodesics.pyx":382
  *             s = int((this_x - 5. * width) / dx - 0.5)
  *             e = int((this_x + 5. * width) / dx + 1.5)
  *             if s < 0:             # <<<<<<<<<<<<<<
@@ -5815,7 +5815,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
       }
 
-      /* "src/pathprof/geodesics.pyx":384
+      /* "pycraf/pathprof/geodesics.pyx":384
  *             if s < 0:
  *                 s = 0
  *             if e >= length:             # <<<<<<<<<<<<<<
@@ -5825,7 +5825,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
       __pyx_t_7 = ((__pyx_v_e >= __pyx_v_length) != 0);
       if (__pyx_t_7) {
 
-        /* "src/pathprof/geodesics.pyx":385
+        /* "pycraf/pathprof/geodesics.pyx":385
  *                 s = 0
  *             if e >= length:
  *                 e = length             # <<<<<<<<<<<<<<
@@ -5834,7 +5834,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
         __pyx_v_e = __pyx_v_length;
 
-        /* "src/pathprof/geodesics.pyx":384
+        /* "pycraf/pathprof/geodesics.pyx":384
  *             if s < 0:
  *                 s = 0
  *             if e >= length:             # <<<<<<<<<<<<<<
@@ -5843,7 +5843,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
       }
 
-      /* "src/pathprof/geodesics.pyx":378
+      /* "pycraf/pathprof/geodesics.pyx":378
  * 
  *         # find optimal s, e (if in ordered mode)
  *         if regular:             # <<<<<<<<<<<<<<
@@ -5853,7 +5853,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
       goto __pyx_L5;
     }
 
-    /* "src/pathprof/geodesics.pyx":387
+    /* "pycraf/pathprof/geodesics.pyx":387
  *                 e = length
  * 
  *         elif ordered:             # <<<<<<<<<<<<<<
@@ -5863,16 +5863,16 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
     __pyx_t_7 = (__pyx_v_ordered != 0);
     if (__pyx_t_7) {
 
-      /* "src/pathprof/geodesics.pyx":388
+      /* "pycraf/pathprof/geodesics.pyx":388
  * 
  *         elif ordered:
  *             s = find_in_ordered(x, this_x)             # <<<<<<<<<<<<<<
  *             e = s + 1
  * 
  */
-      __pyx_v_s = __pyx_fuse_1__pyx_f_3src_8pathprof_9geodesics_find_in_ordered(__pyx_v_x, __pyx_v_this_x);
+      __pyx_v_s = __pyx_fuse_1__pyx_f_6pycraf_8pathprof_9geodesics_find_in_ordered(__pyx_v_x, __pyx_v_this_x);
 
-      /* "src/pathprof/geodesics.pyx":389
+      /* "pycraf/pathprof/geodesics.pyx":389
  *         elif ordered:
  *             s = find_in_ordered(x, this_x)
  *             e = s + 1             # <<<<<<<<<<<<<<
@@ -5881,7 +5881,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
       __pyx_v_e = (__pyx_v_s + 1);
 
-      /* "src/pathprof/geodesics.pyx":391
+      /* "pycraf/pathprof/geodesics.pyx":391
  *             e = s + 1
  * 
  *             while True:             # <<<<<<<<<<<<<<
@@ -5890,7 +5890,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
       while (1) {
 
-        /* "src/pathprof/geodesics.pyx":392
+        /* "pycraf/pathprof/geodesics.pyx":392
  * 
  *             while True:
  *                 s -= 1             # <<<<<<<<<<<<<<
@@ -5899,7 +5899,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
         __pyx_v_s = (__pyx_v_s - 1);
 
-        /* "src/pathprof/geodesics.pyx":393
+        /* "pycraf/pathprof/geodesics.pyx":393
  *             while True:
  *                 s -= 1
  *                 if s < 1:             # <<<<<<<<<<<<<<
@@ -5909,7 +5909,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
         __pyx_t_7 = ((__pyx_v_s < 1) != 0);
         if (__pyx_t_7) {
 
-          /* "src/pathprof/geodesics.pyx":394
+          /* "pycraf/pathprof/geodesics.pyx":394
  *                 s -= 1
  *                 if s < 1:
  *                     s = 0             # <<<<<<<<<<<<<<
@@ -5918,7 +5918,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
           __pyx_v_s = 0;
 
-          /* "src/pathprof/geodesics.pyx":395
+          /* "pycraf/pathprof/geodesics.pyx":395
  *                 if s < 1:
  *                     s = 0
  *                     break             # <<<<<<<<<<<<<<
@@ -5927,7 +5927,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
           goto __pyx_L9_break;
 
-          /* "src/pathprof/geodesics.pyx":393
+          /* "pycraf/pathprof/geodesics.pyx":393
  *             while True:
  *                 s -= 1
  *                 if s < 1:             # <<<<<<<<<<<<<<
@@ -5936,7 +5936,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
         }
 
-        /* "src/pathprof/geodesics.pyx":396
+        /* "pycraf/pathprof/geodesics.pyx":396
  *                     s = 0
  *                     break
  *                 if fabs(x[s] - this_x) > 5. * width:             # <<<<<<<<<<<<<<
@@ -5947,7 +5947,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
         __pyx_t_7 = ((fabs(((*((double *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_10 * __pyx_v_x.strides[0]) ))) - __pyx_v_this_x)) > (5. * __pyx_v_width)) != 0);
         if (__pyx_t_7) {
 
-          /* "src/pathprof/geodesics.pyx":397
+          /* "pycraf/pathprof/geodesics.pyx":397
  *                     break
  *                 if fabs(x[s] - this_x) > 5. * width:
  *                     break             # <<<<<<<<<<<<<<
@@ -5956,7 +5956,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
           goto __pyx_L9_break;
 
-          /* "src/pathprof/geodesics.pyx":396
+          /* "pycraf/pathprof/geodesics.pyx":396
  *                     s = 0
  *                     break
  *                 if fabs(x[s] - this_x) > 5. * width:             # <<<<<<<<<<<<<<
@@ -5967,7 +5967,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
       }
       __pyx_L9_break:;
 
-      /* "src/pathprof/geodesics.pyx":399
+      /* "pycraf/pathprof/geodesics.pyx":399
  *                     break
  * 
  *             while True:             # <<<<<<<<<<<<<<
@@ -5976,7 +5976,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
       while (1) {
 
-        /* "src/pathprof/geodesics.pyx":400
+        /* "pycraf/pathprof/geodesics.pyx":400
  * 
  *             while True:
  *                 e += 1             # <<<<<<<<<<<<<<
@@ -5985,7 +5985,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
         __pyx_v_e = (__pyx_v_e + 1);
 
-        /* "src/pathprof/geodesics.pyx":401
+        /* "pycraf/pathprof/geodesics.pyx":401
  *             while True:
  *                 e += 1
  *                 if e >= length:             # <<<<<<<<<<<<<<
@@ -5995,7 +5995,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
         __pyx_t_7 = ((__pyx_v_e >= __pyx_v_length) != 0);
         if (__pyx_t_7) {
 
-          /* "src/pathprof/geodesics.pyx":402
+          /* "pycraf/pathprof/geodesics.pyx":402
  *                 e += 1
  *                 if e >= length:
  *                     e = length             # <<<<<<<<<<<<<<
@@ -6004,7 +6004,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
           __pyx_v_e = __pyx_v_length;
 
-          /* "src/pathprof/geodesics.pyx":403
+          /* "pycraf/pathprof/geodesics.pyx":403
  *                 if e >= length:
  *                     e = length
  *                     break             # <<<<<<<<<<<<<<
@@ -6013,7 +6013,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
           goto __pyx_L13_break;
 
-          /* "src/pathprof/geodesics.pyx":401
+          /* "pycraf/pathprof/geodesics.pyx":401
  *             while True:
  *                 e += 1
  *                 if e >= length:             # <<<<<<<<<<<<<<
@@ -6022,7 +6022,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
         }
 
-        /* "src/pathprof/geodesics.pyx":404
+        /* "pycraf/pathprof/geodesics.pyx":404
  *                     e = length
  *                     break
  *                 if fabs(x[e - 1] - this_x) > 5. * width:             # <<<<<<<<<<<<<<
@@ -6033,7 +6033,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
         __pyx_t_7 = ((fabs(((*((double *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_11 * __pyx_v_x.strides[0]) ))) - __pyx_v_this_x)) > (5. * __pyx_v_width)) != 0);
         if (__pyx_t_7) {
 
-          /* "src/pathprof/geodesics.pyx":405
+          /* "pycraf/pathprof/geodesics.pyx":405
  *                     break
  *                 if fabs(x[e - 1] - this_x) > 5. * width:
  *                     break             # <<<<<<<<<<<<<<
@@ -6042,7 +6042,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
           goto __pyx_L13_break;
 
-          /* "src/pathprof/geodesics.pyx":404
+          /* "pycraf/pathprof/geodesics.pyx":404
  *                     e = length
  *                     break
  *                 if fabs(x[e - 1] - this_x) > 5. * width:             # <<<<<<<<<<<<<<
@@ -6053,7 +6053,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
       }
       __pyx_L13_break:;
 
-      /* "src/pathprof/geodesics.pyx":387
+      /* "pycraf/pathprof/geodesics.pyx":387
  *                 e = length
  * 
  *         elif ordered:             # <<<<<<<<<<<<<<
@@ -6063,7 +6063,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
       goto __pyx_L5;
     }
 
-    /* "src/pathprof/geodesics.pyx":408
+    /* "pycraf/pathprof/geodesics.pyx":408
  * 
  *         else:
  *             s = 0             # <<<<<<<<<<<<<<
@@ -6073,7 +6073,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
     /*else*/ {
       __pyx_v_s = 0;
 
-      /* "src/pathprof/geodesics.pyx":409
+      /* "pycraf/pathprof/geodesics.pyx":409
  *         else:
  *             s = 0
  *             e = length             # <<<<<<<<<<<<<<
@@ -6084,7 +6084,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
     }
     __pyx_L5:;
 
-    /* "src/pathprof/geodesics.pyx":413
+    /* "pycraf/pathprof/geodesics.pyx":413
  *         # print(i, s, e)
  * 
  *         norm = 0.             # <<<<<<<<<<<<<<
@@ -6093,7 +6093,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
     __pyx_v_norm = 0.;
 
-    /* "src/pathprof/geodesics.pyx":414
+    /* "pycraf/pathprof/geodesics.pyx":414
  * 
  *         norm = 0.
  *         ssum = 0.             # <<<<<<<<<<<<<<
@@ -6102,7 +6102,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  */
     __pyx_v_ssum = 0.;
 
-    /* "src/pathprof/geodesics.pyx":415
+    /* "pycraf/pathprof/geodesics.pyx":415
  *         norm = 0.
  *         ssum = 0.
  *         for j in range(s, e):             # <<<<<<<<<<<<<<
@@ -6113,7 +6113,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
     for (__pyx_t_13 = __pyx_v_s; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
       __pyx_v_j = __pyx_t_13;
 
-      /* "src/pathprof/geodesics.pyx":416
+      /* "pycraf/pathprof/geodesics.pyx":416
  *         ssum = 0.
  *         for j in range(s, e):
  *             kv = gauss1d(x[j] - this_x, width)             # <<<<<<<<<<<<<<
@@ -6121,9 +6121,9 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
  *             norm += kv
  */
       __pyx_t_14 = __pyx_v_j;
-      __pyx_v_kv = __pyx_f_3src_8pathprof_9geodesics_gauss1d(((*((double *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_14 * __pyx_v_x.strides[0]) ))) - __pyx_v_this_x), __pyx_v_width);
+      __pyx_v_kv = __pyx_f_6pycraf_8pathprof_9geodesics_gauss1d(((*((double *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_14 * __pyx_v_x.strides[0]) ))) - __pyx_v_this_x), __pyx_v_width);
 
-      /* "src/pathprof/geodesics.pyx":417
+      /* "pycraf/pathprof/geodesics.pyx":417
  *         for j in range(s, e):
  *             kv = gauss1d(x[j] - this_x, width)
  *             ssum += kv * y[j]             # <<<<<<<<<<<<<<
@@ -6133,7 +6133,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
       __pyx_t_15 = __pyx_v_j;
       __pyx_v_ssum = (__pyx_v_ssum + (__pyx_v_kv * (*((double *) ( /* dim=0 */ (__pyx_v_y.data + __pyx_t_15 * __pyx_v_y.strides[0]) )))));
 
-      /* "src/pathprof/geodesics.pyx":418
+      /* "pycraf/pathprof/geodesics.pyx":418
  *             kv = gauss1d(x[j] - this_x, width)
  *             ssum += kv * y[j]
  *             norm += kv             # <<<<<<<<<<<<<<
@@ -6143,7 +6143,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
       __pyx_v_norm = (__pyx_v_norm + __pyx_v_kv);
     }
 
-    /* "src/pathprof/geodesics.pyx":421
+    /* "pycraf/pathprof/geodesics.pyx":421
  * 
  *         # print(i, s, e, norm, ssum)
  *         if fabs(norm) < 1.e-12:             # <<<<<<<<<<<<<<
@@ -6153,7 +6153,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
     __pyx_t_7 = ((fabs(__pyx_v_norm) < 1.e-12) != 0);
     if (__pyx_t_7) {
 
-      /* "src/pathprof/geodesics.pyx":422
+      /* "pycraf/pathprof/geodesics.pyx":422
  *         # print(i, s, e, norm, ssum)
  *         if fabs(norm) < 1.e-12:
  *             y_new[i] = 0.             # <<<<<<<<<<<<<<
@@ -6163,7 +6163,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
       __pyx_t_16 = __pyx_v_i;
       *((double *) ( /* dim=0 */ (__pyx_v_y_new.data + __pyx_t_16 * __pyx_v_y_new.strides[0]) )) = 0.;
 
-      /* "src/pathprof/geodesics.pyx":421
+      /* "pycraf/pathprof/geodesics.pyx":421
  * 
  *         # print(i, s, e, norm, ssum)
  *         if fabs(norm) < 1.e-12:             # <<<<<<<<<<<<<<
@@ -6173,7 +6173,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
       goto __pyx_L18;
     }
 
-    /* "src/pathprof/geodesics.pyx":424
+    /* "pycraf/pathprof/geodesics.pyx":424
  *             y_new[i] = 0.
  *         else:
  *             y_new[i] = ssum / norm             # <<<<<<<<<<<<<<
@@ -6185,7 +6185,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
     __pyx_L18:;
   }
 
-  /* "src/pathprof/geodesics.pyx":320
+  /* "pycraf/pathprof/geodesics.pyx":320
  * 
  * 
  * def regrid1d_with_x(             # <<<<<<<<<<<<<<
@@ -6200,7 +6200,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("src.pathprof.geodesics.regrid1d_with_x", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pycraf.pathprof.geodesics.regrid1d_with_x", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __PYX_XDEC_MEMVIEW(&__pyx_v_x, 1);
@@ -6212,7 +6212,7 @@ static PyObject *__pyx_pf_3src_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_UNUS
   return __pyx_r;
 }
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":197
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":197
  *         # experimental exception made for __getbuffer__ and __releasebuffer__
  *         # -- the details of this may change.
  *         def __getbuffer__(ndarray self, Py_buffer* info, int flags):             # <<<<<<<<<<<<<<
@@ -6259,7 +6259,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     __Pyx_GIVEREF(__pyx_v_info->obj);
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":203
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":203
  *             # of flags
  * 
  *             if info == NULL: return             # <<<<<<<<<<<<<<
@@ -6272,7 +6272,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     goto __pyx_L0;
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":206
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":206
  * 
  *             cdef int copy_shape, i, ndim
  *             cdef int endian_detector = 1             # <<<<<<<<<<<<<<
@@ -6281,7 +6281,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_endian_detector = 1;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":207
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":207
  *             cdef int copy_shape, i, ndim
  *             cdef int endian_detector = 1
  *             cdef bint little_endian = ((<char*>&endian_detector)[0] != 0)             # <<<<<<<<<<<<<<
@@ -6290,7 +6290,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_little_endian = ((((char *)(&__pyx_v_endian_detector))[0]) != 0);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":209
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":209
  *             cdef bint little_endian = ((<char*>&endian_detector)[0] != 0)
  * 
  *             ndim = PyArray_NDIM(self)             # <<<<<<<<<<<<<<
@@ -6299,7 +6299,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_ndim = PyArray_NDIM(__pyx_v_self);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":211
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":211
  *             ndim = PyArray_NDIM(self)
  * 
  *             if sizeof(npy_intp) != sizeof(Py_ssize_t):             # <<<<<<<<<<<<<<
@@ -6309,7 +6309,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_t_1 = (((sizeof(npy_intp)) != (sizeof(Py_ssize_t))) != 0);
   if (__pyx_t_1) {
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":212
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":212
  * 
  *             if sizeof(npy_intp) != sizeof(Py_ssize_t):
  *                 copy_shape = 1             # <<<<<<<<<<<<<<
@@ -6318,7 +6318,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     __pyx_v_copy_shape = 1;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":211
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":211
  *             ndim = PyArray_NDIM(self)
  * 
  *             if sizeof(npy_intp) != sizeof(Py_ssize_t):             # <<<<<<<<<<<<<<
@@ -6328,7 +6328,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     goto __pyx_L4;
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":214
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":214
  *                 copy_shape = 1
  *             else:
  *                 copy_shape = 0             # <<<<<<<<<<<<<<
@@ -6340,7 +6340,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   }
   __pyx_L4:;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":216
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":216
  *                 copy_shape = 0
  * 
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)             # <<<<<<<<<<<<<<
@@ -6354,7 +6354,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     goto __pyx_L6_bool_binop_done;
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":217
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":217
  * 
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_C_CONTIGUOUS)):             # <<<<<<<<<<<<<<
@@ -6365,7 +6365,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_t_1 = __pyx_t_2;
   __pyx_L6_bool_binop_done:;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":216
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":216
  *                 copy_shape = 0
  * 
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)             # <<<<<<<<<<<<<<
@@ -6374,7 +6374,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   if (__pyx_t_1) {
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":218
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":218
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_C_CONTIGUOUS)):
  *                 raise ValueError(u"ndarray is not C contiguous")             # <<<<<<<<<<<<<<
@@ -6387,7 +6387,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __PYX_ERR(1, 218, __pyx_L1_error)
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":216
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":216
  *                 copy_shape = 0
  * 
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)             # <<<<<<<<<<<<<<
@@ -6396,7 +6396,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":220
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":220
  *                 raise ValueError(u"ndarray is not C contiguous")
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)             # <<<<<<<<<<<<<<
@@ -6410,7 +6410,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     goto __pyx_L9_bool_binop_done;
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":221
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":221
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_F_CONTIGUOUS)):             # <<<<<<<<<<<<<<
@@ -6421,7 +6421,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_t_1 = __pyx_t_2;
   __pyx_L9_bool_binop_done:;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":220
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":220
  *                 raise ValueError(u"ndarray is not C contiguous")
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)             # <<<<<<<<<<<<<<
@@ -6430,7 +6430,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   if (__pyx_t_1) {
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":222
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":222
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_F_CONTIGUOUS)):
  *                 raise ValueError(u"ndarray is not Fortran contiguous")             # <<<<<<<<<<<<<<
@@ -6443,7 +6443,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __PYX_ERR(1, 222, __pyx_L1_error)
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":220
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":220
  *                 raise ValueError(u"ndarray is not C contiguous")
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)             # <<<<<<<<<<<<<<
@@ -6452,7 +6452,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":224
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":224
  *                 raise ValueError(u"ndarray is not Fortran contiguous")
  * 
  *             info.buf = PyArray_DATA(self)             # <<<<<<<<<<<<<<
@@ -6461,7 +6461,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_info->buf = PyArray_DATA(__pyx_v_self);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":225
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":225
  * 
  *             info.buf = PyArray_DATA(self)
  *             info.ndim = ndim             # <<<<<<<<<<<<<<
@@ -6470,7 +6470,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_info->ndim = __pyx_v_ndim;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":226
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":226
  *             info.buf = PyArray_DATA(self)
  *             info.ndim = ndim
  *             if copy_shape:             # <<<<<<<<<<<<<<
@@ -6480,7 +6480,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_t_1 = (__pyx_v_copy_shape != 0);
   if (__pyx_t_1) {
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":229
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":229
  *                 # Allocate new buffer for strides and shape info.
  *                 # This is allocated as one block, strides first.
  *                 info.strides = <Py_ssize_t*>stdlib.malloc(sizeof(Py_ssize_t) * <size_t>ndim * 2)             # <<<<<<<<<<<<<<
@@ -6489,7 +6489,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     __pyx_v_info->strides = ((Py_ssize_t *)malloc((((sizeof(Py_ssize_t)) * ((size_t)__pyx_v_ndim)) * 2)));
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":230
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":230
  *                 # This is allocated as one block, strides first.
  *                 info.strides = <Py_ssize_t*>stdlib.malloc(sizeof(Py_ssize_t) * <size_t>ndim * 2)
  *                 info.shape = info.strides + ndim             # <<<<<<<<<<<<<<
@@ -6498,7 +6498,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     __pyx_v_info->shape = (__pyx_v_info->strides + __pyx_v_ndim);
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":231
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":231
  *                 info.strides = <Py_ssize_t*>stdlib.malloc(sizeof(Py_ssize_t) * <size_t>ndim * 2)
  *                 info.shape = info.strides + ndim
  *                 for i in range(ndim):             # <<<<<<<<<<<<<<
@@ -6509,7 +6509,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
       __pyx_v_i = __pyx_t_5;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":232
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":232
  *                 info.shape = info.strides + ndim
  *                 for i in range(ndim):
  *                     info.strides[i] = PyArray_STRIDES(self)[i]             # <<<<<<<<<<<<<<
@@ -6518,7 +6518,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
       (__pyx_v_info->strides[__pyx_v_i]) = (PyArray_STRIDES(__pyx_v_self)[__pyx_v_i]);
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":233
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":233
  *                 for i in range(ndim):
  *                     info.strides[i] = PyArray_STRIDES(self)[i]
  *                     info.shape[i] = PyArray_DIMS(self)[i]             # <<<<<<<<<<<<<<
@@ -6528,7 +6528,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       (__pyx_v_info->shape[__pyx_v_i]) = (PyArray_DIMS(__pyx_v_self)[__pyx_v_i]);
     }
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":226
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":226
  *             info.buf = PyArray_DATA(self)
  *             info.ndim = ndim
  *             if copy_shape:             # <<<<<<<<<<<<<<
@@ -6538,7 +6538,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     goto __pyx_L11;
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":235
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":235
  *                     info.shape[i] = PyArray_DIMS(self)[i]
  *             else:
  *                 info.strides = <Py_ssize_t*>PyArray_STRIDES(self)             # <<<<<<<<<<<<<<
@@ -6548,7 +6548,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   /*else*/ {
     __pyx_v_info->strides = ((Py_ssize_t *)PyArray_STRIDES(__pyx_v_self));
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":236
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":236
  *             else:
  *                 info.strides = <Py_ssize_t*>PyArray_STRIDES(self)
  *                 info.shape = <Py_ssize_t*>PyArray_DIMS(self)             # <<<<<<<<<<<<<<
@@ -6559,7 +6559,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   }
   __pyx_L11:;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":237
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":237
  *                 info.strides = <Py_ssize_t*>PyArray_STRIDES(self)
  *                 info.shape = <Py_ssize_t*>PyArray_DIMS(self)
  *             info.suboffsets = NULL             # <<<<<<<<<<<<<<
@@ -6568,7 +6568,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_info->suboffsets = NULL;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":238
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":238
  *                 info.shape = <Py_ssize_t*>PyArray_DIMS(self)
  *             info.suboffsets = NULL
  *             info.itemsize = PyArray_ITEMSIZE(self)             # <<<<<<<<<<<<<<
@@ -6577,7 +6577,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_info->itemsize = PyArray_ITEMSIZE(__pyx_v_self);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":239
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":239
  *             info.suboffsets = NULL
  *             info.itemsize = PyArray_ITEMSIZE(self)
  *             info.readonly = not PyArray_ISWRITEABLE(self)             # <<<<<<<<<<<<<<
@@ -6586,7 +6586,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_info->readonly = (!(PyArray_ISWRITEABLE(__pyx_v_self) != 0));
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":242
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":242
  * 
  *             cdef int t
  *             cdef char* f = NULL             # <<<<<<<<<<<<<<
@@ -6595,7 +6595,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_f = NULL;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":243
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":243
  *             cdef int t
  *             cdef char* f = NULL
  *             cdef dtype descr = self.descr             # <<<<<<<<<<<<<<
@@ -6607,7 +6607,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_v_descr = ((PyArray_Descr *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":246
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":246
  *             cdef int offset
  * 
  *             cdef bint hasfields = PyDataType_HASFIELDS(descr)             # <<<<<<<<<<<<<<
@@ -6616,7 +6616,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_hasfields = PyDataType_HASFIELDS(__pyx_v_descr);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":248
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":248
  *             cdef bint hasfields = PyDataType_HASFIELDS(descr)
  * 
  *             if not hasfields and not copy_shape:             # <<<<<<<<<<<<<<
@@ -6634,7 +6634,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_L15_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":250
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":250
  *             if not hasfields and not copy_shape:
  *                 # do not call releasebuffer
  *                 info.obj = None             # <<<<<<<<<<<<<<
@@ -6647,7 +6647,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     __Pyx_DECREF(__pyx_v_info->obj);
     __pyx_v_info->obj = Py_None;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":248
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":248
  *             cdef bint hasfields = PyDataType_HASFIELDS(descr)
  * 
  *             if not hasfields and not copy_shape:             # <<<<<<<<<<<<<<
@@ -6657,7 +6657,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     goto __pyx_L14;
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":253
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":253
  *             else:
  *                 # need to call releasebuffer
  *                 info.obj = self             # <<<<<<<<<<<<<<
@@ -6673,7 +6673,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   }
   __pyx_L14:;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":255
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":255
  *                 info.obj = self
  * 
  *             if not hasfields:             # <<<<<<<<<<<<<<
@@ -6683,7 +6683,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_t_1 = ((!(__pyx_v_hasfields != 0)) != 0);
   if (__pyx_t_1) {
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":256
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":256
  * 
  *             if not hasfields:
  *                 t = descr.type_num             # <<<<<<<<<<<<<<
@@ -6693,7 +6693,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     __pyx_t_4 = __pyx_v_descr->type_num;
     __pyx_v_t = __pyx_t_4;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":257
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":257
  *             if not hasfields:
  *                 t = descr.type_num
  *                 if ((descr.byteorder == c'>' and little_endian) or             # <<<<<<<<<<<<<<
@@ -6713,7 +6713,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     }
     __pyx_L20_next_or:;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":258
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":258
  *                 t = descr.type_num
  *                 if ((descr.byteorder == c'>' and little_endian) or
  *                     (descr.byteorder == c'<' and not little_endian)):             # <<<<<<<<<<<<<<
@@ -6730,7 +6730,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     __pyx_t_1 = __pyx_t_2;
     __pyx_L19_bool_binop_done:;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":257
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":257
  *             if not hasfields:
  *                 t = descr.type_num
  *                 if ((descr.byteorder == c'>' and little_endian) or             # <<<<<<<<<<<<<<
@@ -6739,7 +6739,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     if (__pyx_t_1) {
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":259
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":259
  *                 if ((descr.byteorder == c'>' and little_endian) or
  *                     (descr.byteorder == c'<' and not little_endian)):
  *                     raise ValueError(u"Non-native byte order not supported")             # <<<<<<<<<<<<<<
@@ -6752,7 +6752,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __PYX_ERR(1, 259, __pyx_L1_error)
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":257
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":257
  *             if not hasfields:
  *                 t = descr.type_num
  *                 if ((descr.byteorder == c'>' and little_endian) or             # <<<<<<<<<<<<<<
@@ -6761,7 +6761,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     }
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":260
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":260
  *                     (descr.byteorder == c'<' and not little_endian)):
  *                     raise ValueError(u"Non-native byte order not supported")
  *                 if   t == NPY_BYTE:        f = "b"             # <<<<<<<<<<<<<<
@@ -6773,7 +6773,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = ((char *)"b");
       break;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":261
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":261
  *                     raise ValueError(u"Non-native byte order not supported")
  *                 if   t == NPY_BYTE:        f = "b"
  *                 elif t == NPY_UBYTE:       f = "B"             # <<<<<<<<<<<<<<
@@ -6784,7 +6784,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = ((char *)"B");
       break;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":262
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":262
  *                 if   t == NPY_BYTE:        f = "b"
  *                 elif t == NPY_UBYTE:       f = "B"
  *                 elif t == NPY_SHORT:       f = "h"             # <<<<<<<<<<<<<<
@@ -6795,7 +6795,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = ((char *)"h");
       break;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":263
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":263
  *                 elif t == NPY_UBYTE:       f = "B"
  *                 elif t == NPY_SHORT:       f = "h"
  *                 elif t == NPY_USHORT:      f = "H"             # <<<<<<<<<<<<<<
@@ -6806,7 +6806,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = ((char *)"H");
       break;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":264
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":264
  *                 elif t == NPY_SHORT:       f = "h"
  *                 elif t == NPY_USHORT:      f = "H"
  *                 elif t == NPY_INT:         f = "i"             # <<<<<<<<<<<<<<
@@ -6817,7 +6817,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = ((char *)"i");
       break;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":265
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":265
  *                 elif t == NPY_USHORT:      f = "H"
  *                 elif t == NPY_INT:         f = "i"
  *                 elif t == NPY_UINT:        f = "I"             # <<<<<<<<<<<<<<
@@ -6828,7 +6828,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = ((char *)"I");
       break;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":266
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":266
  *                 elif t == NPY_INT:         f = "i"
  *                 elif t == NPY_UINT:        f = "I"
  *                 elif t == NPY_LONG:        f = "l"             # <<<<<<<<<<<<<<
@@ -6839,7 +6839,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = ((char *)"l");
       break;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":267
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":267
  *                 elif t == NPY_UINT:        f = "I"
  *                 elif t == NPY_LONG:        f = "l"
  *                 elif t == NPY_ULONG:       f = "L"             # <<<<<<<<<<<<<<
@@ -6850,7 +6850,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = ((char *)"L");
       break;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":268
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":268
  *                 elif t == NPY_LONG:        f = "l"
  *                 elif t == NPY_ULONG:       f = "L"
  *                 elif t == NPY_LONGLONG:    f = "q"             # <<<<<<<<<<<<<<
@@ -6861,7 +6861,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = ((char *)"q");
       break;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":269
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":269
  *                 elif t == NPY_ULONG:       f = "L"
  *                 elif t == NPY_LONGLONG:    f = "q"
  *                 elif t == NPY_ULONGLONG:   f = "Q"             # <<<<<<<<<<<<<<
@@ -6872,7 +6872,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = ((char *)"Q");
       break;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":270
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":270
  *                 elif t == NPY_LONGLONG:    f = "q"
  *                 elif t == NPY_ULONGLONG:   f = "Q"
  *                 elif t == NPY_FLOAT:       f = "f"             # <<<<<<<<<<<<<<
@@ -6883,7 +6883,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = ((char *)"f");
       break;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":271
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":271
  *                 elif t == NPY_ULONGLONG:   f = "Q"
  *                 elif t == NPY_FLOAT:       f = "f"
  *                 elif t == NPY_DOUBLE:      f = "d"             # <<<<<<<<<<<<<<
@@ -6894,7 +6894,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = ((char *)"d");
       break;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":272
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":272
  *                 elif t == NPY_FLOAT:       f = "f"
  *                 elif t == NPY_DOUBLE:      f = "d"
  *                 elif t == NPY_LONGDOUBLE:  f = "g"             # <<<<<<<<<<<<<<
@@ -6905,7 +6905,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = ((char *)"g");
       break;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":273
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":273
  *                 elif t == NPY_DOUBLE:      f = "d"
  *                 elif t == NPY_LONGDOUBLE:  f = "g"
  *                 elif t == NPY_CFLOAT:      f = "Zf"             # <<<<<<<<<<<<<<
@@ -6916,7 +6916,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = ((char *)"Zf");
       break;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":274
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":274
  *                 elif t == NPY_LONGDOUBLE:  f = "g"
  *                 elif t == NPY_CFLOAT:      f = "Zf"
  *                 elif t == NPY_CDOUBLE:     f = "Zd"             # <<<<<<<<<<<<<<
@@ -6927,7 +6927,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = ((char *)"Zd");
       break;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":275
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":275
  *                 elif t == NPY_CFLOAT:      f = "Zf"
  *                 elif t == NPY_CDOUBLE:     f = "Zd"
  *                 elif t == NPY_CLONGDOUBLE: f = "Zg"             # <<<<<<<<<<<<<<
@@ -6938,7 +6938,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = ((char *)"Zg");
       break;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":276
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":276
  *                 elif t == NPY_CDOUBLE:     f = "Zd"
  *                 elif t == NPY_CLONGDOUBLE: f = "Zg"
  *                 elif t == NPY_OBJECT:      f = "O"             # <<<<<<<<<<<<<<
@@ -6950,7 +6950,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       default:
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":278
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":278
  *                 elif t == NPY_OBJECT:      f = "O"
  *                 else:
  *                     raise ValueError(u"unknown dtype code in numpy.pxd (%d)" % t)             # <<<<<<<<<<<<<<
@@ -6976,7 +6976,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
     }
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":279
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":279
  *                 else:
  *                     raise ValueError(u"unknown dtype code in numpy.pxd (%d)" % t)
  *                 info.format = f             # <<<<<<<<<<<<<<
@@ -6985,7 +6985,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     __pyx_v_info->format = __pyx_v_f;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":280
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":280
  *                     raise ValueError(u"unknown dtype code in numpy.pxd (%d)" % t)
  *                 info.format = f
  *                 return             # <<<<<<<<<<<<<<
@@ -6995,7 +6995,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":255
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":255
  *                 info.obj = self
  * 
  *             if not hasfields:             # <<<<<<<<<<<<<<
@@ -7004,7 +7004,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":282
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":282
  *                 return
  *             else:
  *                 info.format = <char*>stdlib.malloc(_buffer_format_string_len)             # <<<<<<<<<<<<<<
@@ -7014,7 +7014,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   /*else*/ {
     __pyx_v_info->format = ((char *)malloc(0xFF));
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":283
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":283
  *             else:
  *                 info.format = <char*>stdlib.malloc(_buffer_format_string_len)
  *                 info.format[0] = c'^' # Native data types, manual alignment             # <<<<<<<<<<<<<<
@@ -7023,7 +7023,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     (__pyx_v_info->format[0]) = '^';
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":284
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":284
  *                 info.format = <char*>stdlib.malloc(_buffer_format_string_len)
  *                 info.format[0] = c'^' # Native data types, manual alignment
  *                 offset = 0             # <<<<<<<<<<<<<<
@@ -7032,7 +7032,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     __pyx_v_offset = 0;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":285
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":285
  *                 info.format[0] = c'^' # Native data types, manual alignment
  *                 offset = 0
  *                 f = _util_dtypestring(descr, info.format + 1,             # <<<<<<<<<<<<<<
@@ -7042,7 +7042,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     __pyx_t_7 = __pyx_f_5numpy__util_dtypestring(__pyx_v_descr, (__pyx_v_info->format + 1), (__pyx_v_info->format + 0xFF), (&__pyx_v_offset)); if (unlikely(__pyx_t_7 == NULL)) __PYX_ERR(1, 285, __pyx_L1_error)
     __pyx_v_f = __pyx_t_7;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":288
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":288
  *                                       info.format + _buffer_format_string_len,
  *                                       &offset)
  *                 f[0] = c'\0' # Terminate format string             # <<<<<<<<<<<<<<
@@ -7052,7 +7052,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     (__pyx_v_f[0]) = '\x00';
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":197
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":197
  *         # experimental exception made for __getbuffer__ and __releasebuffer__
  *         # -- the details of this may change.
  *         def __getbuffer__(ndarray self, Py_buffer* info, int flags):             # <<<<<<<<<<<<<<
@@ -7084,7 +7084,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   return __pyx_r;
 }
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":290
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":290
  *                 f[0] = c'\0' # Terminate format string
  * 
  *         def __releasebuffer__(ndarray self, Py_buffer* info):             # <<<<<<<<<<<<<<
@@ -7108,7 +7108,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("__releasebuffer__", 0);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":291
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":291
  * 
  *         def __releasebuffer__(ndarray self, Py_buffer* info):
  *             if PyArray_HASFIELDS(self):             # <<<<<<<<<<<<<<
@@ -7118,7 +7118,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
   __pyx_t_1 = (PyArray_HASFIELDS(__pyx_v_self) != 0);
   if (__pyx_t_1) {
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":292
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":292
  *         def __releasebuffer__(ndarray self, Py_buffer* info):
  *             if PyArray_HASFIELDS(self):
  *                 stdlib.free(info.format)             # <<<<<<<<<<<<<<
@@ -7127,7 +7127,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
  */
     free(__pyx_v_info->format);
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":291
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":291
  * 
  *         def __releasebuffer__(ndarray self, Py_buffer* info):
  *             if PyArray_HASFIELDS(self):             # <<<<<<<<<<<<<<
@@ -7136,7 +7136,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
  */
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":293
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":293
  *             if PyArray_HASFIELDS(self):
  *                 stdlib.free(info.format)
  *             if sizeof(npy_intp) != sizeof(Py_ssize_t):             # <<<<<<<<<<<<<<
@@ -7146,7 +7146,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
   __pyx_t_1 = (((sizeof(npy_intp)) != (sizeof(Py_ssize_t))) != 0);
   if (__pyx_t_1) {
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":294
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":294
  *                 stdlib.free(info.format)
  *             if sizeof(npy_intp) != sizeof(Py_ssize_t):
  *                 stdlib.free(info.strides)             # <<<<<<<<<<<<<<
@@ -7155,7 +7155,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
  */
     free(__pyx_v_info->strides);
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":293
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":293
  *             if PyArray_HASFIELDS(self):
  *                 stdlib.free(info.format)
  *             if sizeof(npy_intp) != sizeof(Py_ssize_t):             # <<<<<<<<<<<<<<
@@ -7164,7 +7164,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
  */
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":290
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":290
  *                 f[0] = c'\0' # Terminate format string
  * 
  *         def __releasebuffer__(ndarray self, Py_buffer* info):             # <<<<<<<<<<<<<<
@@ -7176,7 +7176,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
   __Pyx_RefNannyFinishContext();
 }
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":770
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":770
  * ctypedef npy_cdouble     complex_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -7190,7 +7190,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew1", 0);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":771
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":771
  * 
  * cdef inline object PyArray_MultiIterNew1(a):
  *     return PyArray_MultiIterNew(1, <void*>a)             # <<<<<<<<<<<<<<
@@ -7204,7 +7204,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":770
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":770
  * ctypedef npy_cdouble     complex_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -7223,7 +7223,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":773
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":773
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -7237,7 +7237,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew2", 0);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":774
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":774
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)             # <<<<<<<<<<<<<<
@@ -7251,7 +7251,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":773
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":773
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -7270,7 +7270,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":776
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":776
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -7284,7 +7284,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew3", 0);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":777
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":777
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)             # <<<<<<<<<<<<<<
@@ -7298,7 +7298,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":776
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":776
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -7317,7 +7317,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":779
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":779
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -7331,7 +7331,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew4", 0);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":780
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":780
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)             # <<<<<<<<<<<<<<
@@ -7345,7 +7345,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":779
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":779
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -7364,7 +7364,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":782
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":782
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -7378,7 +7378,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew5", 0);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":783
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":783
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)             # <<<<<<<<<<<<<<
@@ -7392,7 +7392,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":782
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":782
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -7411,7 +7411,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":785
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":785
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline char* _util_dtypestring(dtype descr, char* f, char* end, int* offset) except NULL:             # <<<<<<<<<<<<<<
@@ -7440,7 +7440,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
   char *__pyx_t_9;
   __Pyx_RefNannySetupContext("_util_dtypestring", 0);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":790
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":790
  * 
  *     cdef dtype child
  *     cdef int endian_detector = 1             # <<<<<<<<<<<<<<
@@ -7449,7 +7449,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
   __pyx_v_endian_detector = 1;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":791
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":791
  *     cdef dtype child
  *     cdef int endian_detector = 1
  *     cdef bint little_endian = ((<char*>&endian_detector)[0] != 0)             # <<<<<<<<<<<<<<
@@ -7458,7 +7458,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
   __pyx_v_little_endian = ((((char *)(&__pyx_v_endian_detector))[0]) != 0);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":794
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":794
  *     cdef tuple fields
  * 
  *     for childname in descr.names:             # <<<<<<<<<<<<<<
@@ -7481,7 +7481,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __Pyx_XDECREF_SET(__pyx_v_childname, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":795
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":795
  * 
  *     for childname in descr.names:
  *         fields = descr.fields[childname]             # <<<<<<<<<<<<<<
@@ -7498,7 +7498,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __Pyx_XDECREF_SET(__pyx_v_fields, ((PyObject*)__pyx_t_3));
     __pyx_t_3 = 0;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":796
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":796
  *     for childname in descr.names:
  *         fields = descr.fields[childname]
  *         child, new_offset = fields             # <<<<<<<<<<<<<<
@@ -7537,7 +7537,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __Pyx_XDECREF_SET(__pyx_v_new_offset, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":798
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":798
  *         child, new_offset = fields
  * 
  *         if (end - f) - <int>(new_offset - offset[0]) < 15:             # <<<<<<<<<<<<<<
@@ -7554,7 +7554,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __pyx_t_6 = ((((__pyx_v_end - __pyx_v_f) - ((int)__pyx_t_5)) < 15) != 0);
     if (__pyx_t_6) {
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":799
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":799
  * 
  *         if (end - f) - <int>(new_offset - offset[0]) < 15:
  *             raise RuntimeError(u"Format string allocated too short, see comment in numpy.pxd")             # <<<<<<<<<<<<<<
@@ -7567,7 +7567,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __PYX_ERR(1, 799, __pyx_L1_error)
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":798
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":798
  *         child, new_offset = fields
  * 
  *         if (end - f) - <int>(new_offset - offset[0]) < 15:             # <<<<<<<<<<<<<<
@@ -7576,7 +7576,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
     }
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":801
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":801
  *             raise RuntimeError(u"Format string allocated too short, see comment in numpy.pxd")
  * 
  *         if ((child.byteorder == c'>' and little_endian) or             # <<<<<<<<<<<<<<
@@ -7596,7 +7596,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     }
     __pyx_L8_next_or:;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":802
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":802
  * 
  *         if ((child.byteorder == c'>' and little_endian) or
  *             (child.byteorder == c'<' and not little_endian)):             # <<<<<<<<<<<<<<
@@ -7613,7 +7613,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __pyx_t_6 = __pyx_t_7;
     __pyx_L7_bool_binop_done:;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":801
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":801
  *             raise RuntimeError(u"Format string allocated too short, see comment in numpy.pxd")
  * 
  *         if ((child.byteorder == c'>' and little_endian) or             # <<<<<<<<<<<<<<
@@ -7622,7 +7622,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
     if (__pyx_t_6) {
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":803
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":803
  *         if ((child.byteorder == c'>' and little_endian) or
  *             (child.byteorder == c'<' and not little_endian)):
  *             raise ValueError(u"Non-native byte order not supported")             # <<<<<<<<<<<<<<
@@ -7635,7 +7635,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __PYX_ERR(1, 803, __pyx_L1_error)
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":801
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":801
  *             raise RuntimeError(u"Format string allocated too short, see comment in numpy.pxd")
  * 
  *         if ((child.byteorder == c'>' and little_endian) or             # <<<<<<<<<<<<<<
@@ -7644,7 +7644,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
     }
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":813
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":813
  * 
  *         # Output padding bytes
  *         while offset[0] < new_offset:             # <<<<<<<<<<<<<<
@@ -7660,7 +7660,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       if (!__pyx_t_6) break;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":814
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":814
  *         # Output padding bytes
  *         while offset[0] < new_offset:
  *             f[0] = 120 # "x"; pad byte             # <<<<<<<<<<<<<<
@@ -7669,7 +7669,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
       (__pyx_v_f[0]) = 0x78;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":815
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":815
  *         while offset[0] < new_offset:
  *             f[0] = 120 # "x"; pad byte
  *             f += 1             # <<<<<<<<<<<<<<
@@ -7678,7 +7678,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
       __pyx_v_f = (__pyx_v_f + 1);
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":816
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":816
  *             f[0] = 120 # "x"; pad byte
  *             f += 1
  *             offset[0] += 1             # <<<<<<<<<<<<<<
@@ -7689,7 +7689,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       (__pyx_v_offset[__pyx_t_8]) = ((__pyx_v_offset[__pyx_t_8]) + 1);
     }
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":818
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":818
  *             offset[0] += 1
  * 
  *         offset[0] += child.itemsize             # <<<<<<<<<<<<<<
@@ -7699,7 +7699,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __pyx_t_8 = 0;
     (__pyx_v_offset[__pyx_t_8]) = ((__pyx_v_offset[__pyx_t_8]) + __pyx_v_child->elsize);
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":820
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":820
  *         offset[0] += child.itemsize
  * 
  *         if not PyDataType_HASFIELDS(child):             # <<<<<<<<<<<<<<
@@ -7709,7 +7709,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __pyx_t_6 = ((!(PyDataType_HASFIELDS(__pyx_v_child) != 0)) != 0);
     if (__pyx_t_6) {
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":821
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":821
  * 
  *         if not PyDataType_HASFIELDS(child):
  *             t = child.type_num             # <<<<<<<<<<<<<<
@@ -7721,7 +7721,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       __Pyx_XDECREF_SET(__pyx_v_t, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":822
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":822
  *         if not PyDataType_HASFIELDS(child):
  *             t = child.type_num
  *             if end - f < 5:             # <<<<<<<<<<<<<<
@@ -7731,7 +7731,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       __pyx_t_6 = (((__pyx_v_end - __pyx_v_f) < 5) != 0);
       if (__pyx_t_6) {
 
-        /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":823
+        /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":823
  *             t = child.type_num
  *             if end - f < 5:
  *                 raise RuntimeError(u"Format string allocated too short.")             # <<<<<<<<<<<<<<
@@ -7744,7 +7744,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         __PYX_ERR(1, 823, __pyx_L1_error)
 
-        /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":822
+        /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":822
  *         if not PyDataType_HASFIELDS(child):
  *             t = child.type_num
  *             if end - f < 5:             # <<<<<<<<<<<<<<
@@ -7753,7 +7753,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":826
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":826
  * 
  *             # Until ticket #99 is fixed, use integers to avoid warnings
  *             if   t == NPY_BYTE:        f[0] =  98 #"b"             # <<<<<<<<<<<<<<
@@ -7771,7 +7771,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":827
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":827
  *             # Until ticket #99 is fixed, use integers to avoid warnings
  *             if   t == NPY_BYTE:        f[0] =  98 #"b"
  *             elif t == NPY_UBYTE:       f[0] =  66 #"B"             # <<<<<<<<<<<<<<
@@ -7789,7 +7789,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":828
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":828
  *             if   t == NPY_BYTE:        f[0] =  98 #"b"
  *             elif t == NPY_UBYTE:       f[0] =  66 #"B"
  *             elif t == NPY_SHORT:       f[0] = 104 #"h"             # <<<<<<<<<<<<<<
@@ -7807,7 +7807,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":829
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":829
  *             elif t == NPY_UBYTE:       f[0] =  66 #"B"
  *             elif t == NPY_SHORT:       f[0] = 104 #"h"
  *             elif t == NPY_USHORT:      f[0] =  72 #"H"             # <<<<<<<<<<<<<<
@@ -7825,7 +7825,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":830
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":830
  *             elif t == NPY_SHORT:       f[0] = 104 #"h"
  *             elif t == NPY_USHORT:      f[0] =  72 #"H"
  *             elif t == NPY_INT:         f[0] = 105 #"i"             # <<<<<<<<<<<<<<
@@ -7843,7 +7843,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":831
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":831
  *             elif t == NPY_USHORT:      f[0] =  72 #"H"
  *             elif t == NPY_INT:         f[0] = 105 #"i"
  *             elif t == NPY_UINT:        f[0] =  73 #"I"             # <<<<<<<<<<<<<<
@@ -7861,7 +7861,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":832
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":832
  *             elif t == NPY_INT:         f[0] = 105 #"i"
  *             elif t == NPY_UINT:        f[0] =  73 #"I"
  *             elif t == NPY_LONG:        f[0] = 108 #"l"             # <<<<<<<<<<<<<<
@@ -7879,7 +7879,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":833
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":833
  *             elif t == NPY_UINT:        f[0] =  73 #"I"
  *             elif t == NPY_LONG:        f[0] = 108 #"l"
  *             elif t == NPY_ULONG:       f[0] = 76  #"L"             # <<<<<<<<<<<<<<
@@ -7897,7 +7897,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":834
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":834
  *             elif t == NPY_LONG:        f[0] = 108 #"l"
  *             elif t == NPY_ULONG:       f[0] = 76  #"L"
  *             elif t == NPY_LONGLONG:    f[0] = 113 #"q"             # <<<<<<<<<<<<<<
@@ -7915,7 +7915,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":835
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":835
  *             elif t == NPY_ULONG:       f[0] = 76  #"L"
  *             elif t == NPY_LONGLONG:    f[0] = 113 #"q"
  *             elif t == NPY_ULONGLONG:   f[0] = 81  #"Q"             # <<<<<<<<<<<<<<
@@ -7933,7 +7933,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":836
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":836
  *             elif t == NPY_LONGLONG:    f[0] = 113 #"q"
  *             elif t == NPY_ULONGLONG:   f[0] = 81  #"Q"
  *             elif t == NPY_FLOAT:       f[0] = 102 #"f"             # <<<<<<<<<<<<<<
@@ -7951,7 +7951,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":837
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":837
  *             elif t == NPY_ULONGLONG:   f[0] = 81  #"Q"
  *             elif t == NPY_FLOAT:       f[0] = 102 #"f"
  *             elif t == NPY_DOUBLE:      f[0] = 100 #"d"             # <<<<<<<<<<<<<<
@@ -7969,7 +7969,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":838
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":838
  *             elif t == NPY_FLOAT:       f[0] = 102 #"f"
  *             elif t == NPY_DOUBLE:      f[0] = 100 #"d"
  *             elif t == NPY_LONGDOUBLE:  f[0] = 103 #"g"             # <<<<<<<<<<<<<<
@@ -7987,7 +7987,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":839
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":839
  *             elif t == NPY_DOUBLE:      f[0] = 100 #"d"
  *             elif t == NPY_LONGDOUBLE:  f[0] = 103 #"g"
  *             elif t == NPY_CFLOAT:      f[0] = 90; f[1] = 102; f += 1 # Zf             # <<<<<<<<<<<<<<
@@ -8007,7 +8007,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":840
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":840
  *             elif t == NPY_LONGDOUBLE:  f[0] = 103 #"g"
  *             elif t == NPY_CFLOAT:      f[0] = 90; f[1] = 102; f += 1 # Zf
  *             elif t == NPY_CDOUBLE:     f[0] = 90; f[1] = 100; f += 1 # Zd             # <<<<<<<<<<<<<<
@@ -8027,7 +8027,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":841
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":841
  *             elif t == NPY_CFLOAT:      f[0] = 90; f[1] = 102; f += 1 # Zf
  *             elif t == NPY_CDOUBLE:     f[0] = 90; f[1] = 100; f += 1 # Zd
  *             elif t == NPY_CLONGDOUBLE: f[0] = 90; f[1] = 103; f += 1 # Zg             # <<<<<<<<<<<<<<
@@ -8047,7 +8047,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":842
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":842
  *             elif t == NPY_CDOUBLE:     f[0] = 90; f[1] = 100; f += 1 # Zd
  *             elif t == NPY_CLONGDOUBLE: f[0] = 90; f[1] = 103; f += 1 # Zg
  *             elif t == NPY_OBJECT:      f[0] = 79 #"O"             # <<<<<<<<<<<<<<
@@ -8065,7 +8065,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":844
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":844
  *             elif t == NPY_OBJECT:      f[0] = 79 #"O"
  *             else:
  *                 raise ValueError(u"unknown dtype code in numpy.pxd (%d)" % t)             # <<<<<<<<<<<<<<
@@ -8089,7 +8089,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       }
       __pyx_L15:;
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":845
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":845
  *             else:
  *                 raise ValueError(u"unknown dtype code in numpy.pxd (%d)" % t)
  *             f += 1             # <<<<<<<<<<<<<<
@@ -8098,7 +8098,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
       __pyx_v_f = (__pyx_v_f + 1);
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":820
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":820
  *         offset[0] += child.itemsize
  * 
  *         if not PyDataType_HASFIELDS(child):             # <<<<<<<<<<<<<<
@@ -8108,7 +8108,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       goto __pyx_L13;
     }
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":849
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":849
  *             # Cython ignores struct boundary information ("T{...}"),
  *             # so don't output it
  *             f = _util_dtypestring(child, f, end, offset)             # <<<<<<<<<<<<<<
@@ -8121,7 +8121,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     }
     __pyx_L13:;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":794
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":794
  *     cdef tuple fields
  * 
  *     for childname in descr.names:             # <<<<<<<<<<<<<<
@@ -8131,7 +8131,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":850
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":850
  *             # so don't output it
  *             f = _util_dtypestring(child, f, end, offset)
  *     return f             # <<<<<<<<<<<<<<
@@ -8141,7 +8141,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
   __pyx_r = __pyx_v_f;
   goto __pyx_L0;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":785
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":785
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline char* _util_dtypestring(dtype descr, char* f, char* end, int* offset) except NULL:             # <<<<<<<<<<<<<<
@@ -8166,7 +8166,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
   return __pyx_r;
 }
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":966
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":966
  * 
  * 
  * cdef inline void set_array_base(ndarray arr, object base):             # <<<<<<<<<<<<<<
@@ -8181,7 +8181,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   int __pyx_t_2;
   __Pyx_RefNannySetupContext("set_array_base", 0);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":968
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":968
  * cdef inline void set_array_base(ndarray arr, object base):
  *      cdef PyObject* baseptr
  *      if base is None:             # <<<<<<<<<<<<<<
@@ -8192,7 +8192,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":969
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":969
  *      cdef PyObject* baseptr
  *      if base is None:
  *          baseptr = NULL             # <<<<<<<<<<<<<<
@@ -8201,7 +8201,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
     __pyx_v_baseptr = NULL;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":968
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":968
  * cdef inline void set_array_base(ndarray arr, object base):
  *      cdef PyObject* baseptr
  *      if base is None:             # <<<<<<<<<<<<<<
@@ -8211,7 +8211,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
     goto __pyx_L3;
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":971
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":971
  *          baseptr = NULL
  *      else:
  *          Py_INCREF(base) # important to do this before decref below!             # <<<<<<<<<<<<<<
@@ -8221,7 +8221,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   /*else*/ {
     Py_INCREF(__pyx_v_base);
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":972
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":972
  *      else:
  *          Py_INCREF(base) # important to do this before decref below!
  *          baseptr = <PyObject*>base             # <<<<<<<<<<<<<<
@@ -8232,7 +8232,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   }
   __pyx_L3:;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":973
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":973
  *          Py_INCREF(base) # important to do this before decref below!
  *          baseptr = <PyObject*>base
  *      Py_XDECREF(arr.base)             # <<<<<<<<<<<<<<
@@ -8241,7 +8241,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
   Py_XDECREF(__pyx_v_arr->base);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":974
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":974
  *          baseptr = <PyObject*>base
  *      Py_XDECREF(arr.base)
  *      arr.base = baseptr             # <<<<<<<<<<<<<<
@@ -8250,7 +8250,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
   __pyx_v_arr->base = __pyx_v_baseptr;
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":966
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":966
  * 
  * 
  * cdef inline void set_array_base(ndarray arr, object base):             # <<<<<<<<<<<<<<
@@ -8262,7 +8262,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   __Pyx_RefNannyFinishContext();
 }
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":976
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":976
  *      arr.base = baseptr
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -8276,7 +8276,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("get_array_base", 0);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":977
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":977
  * 
  * cdef inline object get_array_base(ndarray arr):
  *     if arr.base is NULL:             # <<<<<<<<<<<<<<
@@ -8286,7 +8286,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   __pyx_t_1 = ((__pyx_v_arr->base == NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":978
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":978
  * cdef inline object get_array_base(ndarray arr):
  *     if arr.base is NULL:
  *         return None             # <<<<<<<<<<<<<<
@@ -8298,7 +8298,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
     __pyx_r = Py_None;
     goto __pyx_L0;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":977
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":977
  * 
  * cdef inline object get_array_base(ndarray arr):
  *     if arr.base is NULL:             # <<<<<<<<<<<<<<
@@ -8307,7 +8307,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
  */
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":980
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":980
  *         return None
  *     else:
  *         return <object>arr.base             # <<<<<<<<<<<<<<
@@ -8321,7 +8321,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
     goto __pyx_L0;
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":976
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":976
  *      arr.base = baseptr
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -8336,7 +8336,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   return __pyx_r;
 }
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":985
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":985
  * # Versions of the import_* functions which are more suitable for
  * # Cython code.
  * cdef inline int import_array() except -1:             # <<<<<<<<<<<<<<
@@ -8357,7 +8357,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
   PyObject *__pyx_t_8 = NULL;
   __Pyx_RefNannySetupContext("import_array", 0);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":986
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":986
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8373,7 +8373,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":987
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":987
  * cdef inline int import_array() except -1:
  *     try:
  *         _import_array()             # <<<<<<<<<<<<<<
@@ -8382,7 +8382,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
  */
       __pyx_t_4 = _import_array(); if (unlikely(__pyx_t_4 == -1)) __PYX_ERR(1, 987, __pyx_L3_error)
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":986
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":986
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8397,7 +8397,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __pyx_L3_error:;
     __Pyx_PyThreadState_assign
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":988
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":988
  *     try:
  *         _import_array()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -8412,7 +8412,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":989
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":989
  *         _import_array()
  *     except Exception:
  *         raise ImportError("numpy.core.multiarray failed to import")             # <<<<<<<<<<<<<<
@@ -8428,7 +8428,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":986
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":986
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8444,7 +8444,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __pyx_L10_try_end:;
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":985
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":985
  * # Versions of the import_* functions which are more suitable for
  * # Cython code.
  * cdef inline int import_array() except -1:             # <<<<<<<<<<<<<<
@@ -8467,7 +8467,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
   return __pyx_r;
 }
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":991
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":991
  *         raise ImportError("numpy.core.multiarray failed to import")
  * 
  * cdef inline int import_umath() except -1:             # <<<<<<<<<<<<<<
@@ -8488,7 +8488,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
   PyObject *__pyx_t_8 = NULL;
   __Pyx_RefNannySetupContext("import_umath", 0);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":992
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":992
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8504,7 +8504,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":993
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":993
  * cdef inline int import_umath() except -1:
  *     try:
  *         _import_umath()             # <<<<<<<<<<<<<<
@@ -8513,7 +8513,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
  */
       __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == -1)) __PYX_ERR(1, 993, __pyx_L3_error)
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":992
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":992
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8528,7 +8528,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __pyx_L3_error:;
     __Pyx_PyThreadState_assign
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":994
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":994
  *     try:
  *         _import_umath()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -8543,7 +8543,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":995
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":995
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
@@ -8559,7 +8559,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":992
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":992
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8575,7 +8575,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __pyx_L10_try_end:;
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":991
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":991
  *         raise ImportError("numpy.core.multiarray failed to import")
  * 
  * cdef inline int import_umath() except -1:             # <<<<<<<<<<<<<<
@@ -8598,7 +8598,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
   return __pyx_r;
 }
 
-/* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":997
+/* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":997
  *         raise ImportError("numpy.core.umath failed to import")
  * 
  * cdef inline int import_ufunc() except -1:             # <<<<<<<<<<<<<<
@@ -8619,7 +8619,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
   PyObject *__pyx_t_8 = NULL;
   __Pyx_RefNannySetupContext("import_ufunc", 0);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":998
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":998
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8635,7 +8635,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":999
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":999
  * cdef inline int import_ufunc() except -1:
  *     try:
  *         _import_umath()             # <<<<<<<<<<<<<<
@@ -8644,7 +8644,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
  */
       __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == -1)) __PYX_ERR(1, 999, __pyx_L3_error)
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":998
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":998
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8659,7 +8659,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __pyx_L3_error:;
     __Pyx_PyThreadState_assign
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":1000
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":1000
  *     try:
  *         _import_umath()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -8673,7 +8673,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":1001
+      /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":1001
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
@@ -8687,7 +8687,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":998
+    /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":998
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8703,7 +8703,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __pyx_L10_try_end:;
   }
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":997
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":997
  *         raise ImportError("numpy.core.umath failed to import")
  * 
  * cdef inline int import_ufunc() except -1:             # <<<<<<<<<<<<<<
@@ -20502,7 +20502,7 @@ static PyBufferProcs __pyx_tp_as_buffer_array = {
 
 static PyTypeObject __pyx_type___pyx_array = {
   PyVarObject_HEAD_INIT(0, 0)
-  "src.pathprof.geodesics.array", /*tp_name*/
+  "pycraf.pathprof.geodesics.array", /*tp_name*/
   sizeof(struct __pyx_array_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_array, /*tp_dealloc*/
@@ -20608,7 +20608,7 @@ static PyMethodDef __pyx_methods_Enum[] = {
 
 static PyTypeObject __pyx_type___pyx_MemviewEnum = {
   PyVarObject_HEAD_INIT(0, 0)
-  "src.pathprof.geodesics.Enum", /*tp_name*/
+  "pycraf.pathprof.geodesics.Enum", /*tp_name*/
   sizeof(struct __pyx_MemviewEnum_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_Enum, /*tp_dealloc*/
@@ -20856,7 +20856,7 @@ static PyBufferProcs __pyx_tp_as_buffer_memoryview = {
 
 static PyTypeObject __pyx_type___pyx_memoryview = {
   PyVarObject_HEAD_INIT(0, 0)
-  "src.pathprof.geodesics.memoryview", /*tp_name*/
+  "pycraf.pathprof.geodesics.memoryview", /*tp_name*/
   sizeof(struct __pyx_memoryview_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_memoryview, /*tp_dealloc*/
@@ -20981,7 +20981,7 @@ static struct PyGetSetDef __pyx_getsets__memoryviewslice[] = {
 
 static PyTypeObject __pyx_type___pyx_memoryviewslice = {
   PyVarObject_HEAD_INIT(0, 0)
-  "src.pathprof.geodesics._memoryviewslice", /*tp_name*/
+  "pycraf.pathprof.geodesics._memoryviewslice", /*tp_name*/
   sizeof(struct __pyx_memoryviewslice_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc__memoryviewslice, /*tp_dealloc*/
@@ -21169,6 +21169,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_obj, __pyx_k_obj, sizeof(__pyx_k_obj), 0, 0, 1, 1},
   {&__pyx_n_s_ordered, __pyx_k_ordered, sizeof(__pyx_k_ordered), 0, 0, 1, 1},
   {&__pyx_n_s_pack, __pyx_k_pack, sizeof(__pyx_k_pack), 0, 0, 1, 1},
+  {&__pyx_n_s_pycraf_pathprof_geodesics, __pyx_k_pycraf_pathprof_geodesics, sizeof(__pyx_k_pycraf_pathprof_geodesics), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_getbuffer, __pyx_k_pyx_getbuffer, sizeof(__pyx_k_pyx_getbuffer), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
@@ -21180,7 +21181,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_signatures, __pyx_k_signatures, sizeof(__pyx_k_signatures), 0, 0, 1, 1},
   {&__pyx_n_s_size, __pyx_k_size, sizeof(__pyx_k_size), 0, 0, 1, 1},
   {&__pyx_n_s_split, __pyx_k_split, sizeof(__pyx_k_split), 0, 0, 1, 1},
-  {&__pyx_n_s_src_pathprof_geodesics, __pyx_k_src_pathprof_geodesics, sizeof(__pyx_k_src_pathprof_geodesics), 0, 0, 1, 1},
   {&__pyx_n_s_ssum, __pyx_k_ssum, sizeof(__pyx_k_ssum), 0, 0, 1, 1},
   {&__pyx_n_s_start, __pyx_k_start, sizeof(__pyx_k_start), 0, 0, 1, 1},
   {&__pyx_n_s_step, __pyx_k_step, sizeof(__pyx_k_step), 0, 0, 1, 1},
@@ -21228,7 +21228,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "src/pathprof/geodesics.pyx":320
+  /* "pycraf/pathprof/geodesics.pyx":320
  * 
  * 
  * def regrid1d_with_x(             # <<<<<<<<<<<<<<
@@ -21248,7 +21248,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":218
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":218
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_C_CONTIGUOUS)):
  *                 raise ValueError(u"ndarray is not C contiguous")             # <<<<<<<<<<<<<<
@@ -21259,7 +21259,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":222
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":222
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_F_CONTIGUOUS)):
  *                 raise ValueError(u"ndarray is not Fortran contiguous")             # <<<<<<<<<<<<<<
@@ -21270,7 +21270,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":259
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":259
  *                 if ((descr.byteorder == c'>' and little_endian) or
  *                     (descr.byteorder == c'<' and not little_endian)):
  *                     raise ValueError(u"Non-native byte order not supported")             # <<<<<<<<<<<<<<
@@ -21281,7 +21281,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":799
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":799
  * 
  *         if (end - f) - <int>(new_offset - offset[0]) < 15:
  *             raise RuntimeError(u"Format string allocated too short, see comment in numpy.pxd")             # <<<<<<<<<<<<<<
@@ -21292,7 +21292,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__10);
   __Pyx_GIVEREF(__pyx_tuple__10);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":803
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":803
  *         if ((child.byteorder == c'>' and little_endian) or
  *             (child.byteorder == c'<' and not little_endian)):
  *             raise ValueError(u"Non-native byte order not supported")             # <<<<<<<<<<<<<<
@@ -21303,7 +21303,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__11);
   __Pyx_GIVEREF(__pyx_tuple__11);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":823
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":823
  *             t = child.type_num
  *             if end - f < 5:
  *                 raise RuntimeError(u"Format string allocated too short.")             # <<<<<<<<<<<<<<
@@ -21314,7 +21314,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__12);
   __Pyx_GIVEREF(__pyx_tuple__12);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":989
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":989
  *         _import_array()
  *     except Exception:
  *         raise ImportError("numpy.core.multiarray failed to import")             # <<<<<<<<<<<<<<
@@ -21325,7 +21325,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__13);
   __Pyx_GIVEREF(__pyx_tuple__13);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":995
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":995
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
@@ -21336,7 +21336,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__14);
   __Pyx_GIVEREF(__pyx_tuple__14);
 
-  /* "../../../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":1001
+  /* "../../../local/anaconda3/lib/python3.5/site-packages/Cython/Includes/numpy/__init__.pxd":1001
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
@@ -21491,7 +21491,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__28);
   __Pyx_GIVEREF(__pyx_tuple__28);
 
-  /* "src/pathprof/geodesics.pyx":117
+  /* "pycraf/pathprof/geodesics.pyx":117
  * 
  * 
  * def inverse(             # <<<<<<<<<<<<<<
@@ -21503,7 +21503,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__29);
   __pyx_codeobj__30 = (PyObject*)__Pyx_PyCode_New(6, 0, 15, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__29, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_bwinkel_projects_pymodules, __pyx_n_s_inverse, 117, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__30)) __PYX_ERR(0, 117, __pyx_L1_error)
 
-  /* "src/pathprof/geodesics.pyx":245
+  /* "pycraf/pathprof/geodesics.pyx":245
  * 
  * 
  * def direct(             # <<<<<<<<<<<<<<
@@ -21515,7 +21515,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__31);
   __pyx_codeobj__32 = (PyObject*)__Pyx_PyCode_New(7, 0, 16, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__31, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_bwinkel_projects_pymodules, __pyx_n_s_direct, 245, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__32)) __PYX_ERR(0, 245, __pyx_L1_error)
 
-  /* "src/pathprof/geodesics.pyx":320
+  /* "pycraf/pathprof/geodesics.pyx":320
  * 
  * 
  * def regrid1d_with_x(             # <<<<<<<<<<<<<<
@@ -21668,14 +21668,14 @@ PyMODINIT_FUNC PyInit_geodesics(void)
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
-  if (__pyx_module_is_main_src__pathprof__geodesics) {
+  if (__pyx_module_is_main_pycraf__pathprof__geodesics) {
     if (PyObject_SetAttrString(__pyx_m, "__name__", __pyx_n_s_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 1, __pyx_L1_error)
-    if (!PyDict_GetItemString(modules, "src.pathprof.geodesics")) {
-      if (unlikely(PyDict_SetItemString(modules, "src.pathprof.geodesics", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
+    if (!PyDict_GetItemString(modules, "pycraf.pathprof.geodesics")) {
+      if (unlikely(PyDict_SetItemString(modules, "pycraf.pathprof.geodesics", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
     }
   }
   #endif
@@ -21742,7 +21742,7 @@ PyMODINIT_FUNC PyInit_geodesics(void)
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "src/pathprof/geodesics.pyx":17
+  /* "pycraf/pathprof/geodesics.pyx":17
  *     exp, sqrt, fabs, M_PI, sin, cos, tan, asin, acos, atan2
  *     )
  * import numpy as np             # <<<<<<<<<<<<<<
@@ -21754,7 +21754,7 @@ PyMODINIT_FUNC PyInit_geodesics(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/pathprof/geodesics.pyx":19
+  /* "pycraf/pathprof/geodesics.pyx":19
  * import numpy as np
  * 
  * np.import_array()             # <<<<<<<<<<<<<<
@@ -21763,7 +21763,7 @@ PyMODINIT_FUNC PyInit_geodesics(void)
  */
   __pyx_t_2 = __pyx_f_5numpy_import_array(); if (unlikely(__pyx_t_2 == -1)) __PYX_ERR(0, 19, __pyx_L1_error)
 
-  /* "src/pathprof/geodesics.pyx":21
+  /* "pycraf/pathprof/geodesics.pyx":21
  * np.import_array()
  * 
  * __all__ = ['inverse', 'direct', 'regrid1d_with_x']             # <<<<<<<<<<<<<<
@@ -21784,76 +21784,76 @@ PyMODINIT_FUNC PyInit_geodesics(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_all, __pyx_t_1) < 0) __PYX_ERR(0, 21, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/pathprof/geodesics.pyx":24
+  /* "pycraf/pathprof/geodesics.pyx":24
  * 
  * 
  * cdef double WGS_a = 6378137.0             # <<<<<<<<<<<<<<
  * cdef double WGS_b = 6356752.314245
  * cdef double WGS_f = 1 / 298.257223563
  */
-  __pyx_v_3src_8pathprof_9geodesics_WGS_a = 6378137.0;
+  __pyx_v_6pycraf_8pathprof_9geodesics_WGS_a = 6378137.0;
 
-  /* "src/pathprof/geodesics.pyx":25
+  /* "pycraf/pathprof/geodesics.pyx":25
  * 
  * cdef double WGS_a = 6378137.0
  * cdef double WGS_b = 6356752.314245             # <<<<<<<<<<<<<<
  * cdef double WGS_f = 1 / 298.257223563
  * cdef double DEG2RAD = M_PI / 180.
  */
-  __pyx_v_3src_8pathprof_9geodesics_WGS_b = 6356752.314245;
+  __pyx_v_6pycraf_8pathprof_9geodesics_WGS_b = 6356752.314245;
 
-  /* "src/pathprof/geodesics.pyx":26
+  /* "pycraf/pathprof/geodesics.pyx":26
  * cdef double WGS_a = 6378137.0
  * cdef double WGS_b = 6356752.314245
  * cdef double WGS_f = 1 / 298.257223563             # <<<<<<<<<<<<<<
  * cdef double DEG2RAD = M_PI / 180.
  * cdef double RAD2DEG = 180. / M_PI
  */
-  __pyx_v_3src_8pathprof_9geodesics_WGS_f = (1.0 / 298.257223563);
+  __pyx_v_6pycraf_8pathprof_9geodesics_WGS_f = (1.0 / 298.257223563);
 
-  /* "src/pathprof/geodesics.pyx":27
+  /* "pycraf/pathprof/geodesics.pyx":27
  * cdef double WGS_b = 6356752.314245
  * cdef double WGS_f = 1 / 298.257223563
  * cdef double DEG2RAD = M_PI / 180.             # <<<<<<<<<<<<<<
  * cdef double RAD2DEG = 180. / M_PI
  * 
  */
-  __pyx_v_3src_8pathprof_9geodesics_DEG2RAD = (M_PI / 180.);
+  __pyx_v_6pycraf_8pathprof_9geodesics_DEG2RAD = (M_PI / 180.);
 
-  /* "src/pathprof/geodesics.pyx":28
+  /* "pycraf/pathprof/geodesics.pyx":28
  * cdef double WGS_f = 1 / 298.257223563
  * cdef double DEG2RAD = M_PI / 180.
  * cdef double RAD2DEG = 180. / M_PI             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_v_3src_8pathprof_9geodesics_RAD2DEG = (180. / M_PI);
+  __pyx_v_6pycraf_8pathprof_9geodesics_RAD2DEG = (180. / M_PI);
 
-  /* "src/pathprof/geodesics.pyx":117
+  /* "pycraf/pathprof/geodesics.pyx":117
  * 
  * 
  * def inverse(             # <<<<<<<<<<<<<<
  *         double lon1_deg, double lat1_deg,
  *         double lon2_deg, double lat2_deg,
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_3src_8pathprof_9geodesics_1inverse, NULL, __pyx_n_s_src_pathprof_geodesics); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 117, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_6pycraf_8pathprof_9geodesics_1inverse, NULL, __pyx_n_s_pycraf_pathprof_geodesics); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 117, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_inverse, __pyx_t_1) < 0) __PYX_ERR(0, 117, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/pathprof/geodesics.pyx":245
+  /* "pycraf/pathprof/geodesics.pyx":245
  * 
  * 
  * def direct(             # <<<<<<<<<<<<<<
  *         double lon1_deg, double lat1_deg,
  *         double bearing1_deg,
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_3src_8pathprof_9geodesics_3direct, NULL, __pyx_n_s_src_pathprof_geodesics); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 245, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_6pycraf_8pathprof_9geodesics_3direct, NULL, __pyx_n_s_pycraf_pathprof_geodesics); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 245, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_direct, __pyx_t_1) < 0) __PYX_ERR(0, 245, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "src/pathprof/geodesics.pyx":326
+  /* "pycraf/pathprof/geodesics.pyx":326
  *         cython.floating[:] y_new not None,  # output
  *         cython.floating width,
  *         bint regular=False,             # <<<<<<<<<<<<<<
@@ -21863,7 +21863,7 @@ PyMODINIT_FUNC PyInit_geodesics(void)
   __pyx_t_1 = __Pyx_PyBool_FromLong(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 326, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "src/pathprof/geodesics.pyx":327
+  /* "pycraf/pathprof/geodesics.pyx":327
  *         cython.floating width,
  *         bint regular=False,
  *         bint ordered=True,             # <<<<<<<<<<<<<<
@@ -21873,7 +21873,7 @@ PyMODINIT_FUNC PyInit_geodesics(void)
   __pyx_t_3 = __Pyx_PyBool_FromLong(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 327, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
 
-  /* "src/pathprof/geodesics.pyx":320
+  /* "pycraf/pathprof/geodesics.pyx":320
  * 
  * 
  * def regrid1d_with_x(             # <<<<<<<<<<<<<<
@@ -21890,35 +21890,35 @@ PyMODINIT_FUNC PyInit_geodesics(void)
   __pyx_t_3 = 0;
   __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 320, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __pyx_FusedFunction_NewEx(&__pyx_fuse_0__pyx_mdef_3src_8pathprof_9geodesics_7regrid1d_with_x, 0, __pyx_n_s_regrid1d_with_x, NULL, __pyx_n_s_src_pathprof_geodesics, __pyx_d, ((PyObject *)__pyx_codeobj__34)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 320, __pyx_L1_error)
+  __pyx_t_1 = __pyx_FusedFunction_NewEx(&__pyx_fuse_0__pyx_mdef_6pycraf_8pathprof_9geodesics_7regrid1d_with_x, 0, __pyx_n_s_regrid1d_with_x, NULL, __pyx_n_s_pycraf_pathprof_geodesics, __pyx_d, ((PyObject *)__pyx_codeobj__34)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 320, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (!__Pyx_CyFunction_InitDefaults(__pyx_t_1, sizeof(__pyx_defaults2), 0)) __PYX_ERR(0, 320, __pyx_L1_error)
   __Pyx_CyFunction_Defaults(__pyx_defaults2, __pyx_t_1)->__pyx_arg_regular = 0;
   __Pyx_CyFunction_Defaults(__pyx_defaults2, __pyx_t_1)->__pyx_arg_ordered = 1;
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_t_4);
-  __Pyx_CyFunction_SetDefaultsGetter(__pyx_t_1, __pyx_pf_3src_8pathprof_9geodesics_16__defaults__);
+  __Pyx_CyFunction_SetDefaultsGetter(__pyx_t_1, __pyx_pf_6pycraf_8pathprof_9geodesics_16__defaults__);
   if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_float, __pyx_t_1) < 0) __PYX_ERR(0, 320, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __pyx_FusedFunction_NewEx(&__pyx_fuse_1__pyx_mdef_3src_8pathprof_9geodesics_9regrid1d_with_x, 0, __pyx_n_s_regrid1d_with_x, NULL, __pyx_n_s_src_pathprof_geodesics, __pyx_d, ((PyObject *)__pyx_codeobj__34)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 320, __pyx_L1_error)
+  __pyx_t_1 = __pyx_FusedFunction_NewEx(&__pyx_fuse_1__pyx_mdef_6pycraf_8pathprof_9geodesics_9regrid1d_with_x, 0, __pyx_n_s_regrid1d_with_x, NULL, __pyx_n_s_pycraf_pathprof_geodesics, __pyx_d, ((PyObject *)__pyx_codeobj__34)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 320, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (!__Pyx_CyFunction_InitDefaults(__pyx_t_1, sizeof(__pyx_defaults3), 0)) __PYX_ERR(0, 320, __pyx_L1_error)
   __Pyx_CyFunction_Defaults(__pyx_defaults3, __pyx_t_1)->__pyx_arg_regular = 0;
   __Pyx_CyFunction_Defaults(__pyx_defaults3, __pyx_t_1)->__pyx_arg_ordered = 1;
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_t_4);
-  __Pyx_CyFunction_SetDefaultsGetter(__pyx_t_1, __pyx_pf_3src_8pathprof_9geodesics_18__defaults__);
+  __Pyx_CyFunction_SetDefaultsGetter(__pyx_t_1, __pyx_pf_6pycraf_8pathprof_9geodesics_18__defaults__);
   if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_double, __pyx_t_1) < 0) __PYX_ERR(0, 320, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __pyx_FusedFunction_NewEx(&__pyx_mdef_3src_8pathprof_9geodesics_5regrid1d_with_x, 0, __pyx_n_s_regrid1d_with_x, NULL, __pyx_n_s_src_pathprof_geodesics, __pyx_d, ((PyObject *)__pyx_codeobj__34)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 320, __pyx_L1_error)
+  __pyx_t_1 = __pyx_FusedFunction_NewEx(&__pyx_mdef_6pycraf_8pathprof_9geodesics_5regrid1d_with_x, 0, __pyx_n_s_regrid1d_with_x, NULL, __pyx_n_s_pycraf_pathprof_geodesics, __pyx_d, ((PyObject *)__pyx_codeobj__34)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 320, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_t_4);
-  __Pyx_CyFunction_SetDefaultsGetter(__pyx_t_1, __pyx_pf_3src_8pathprof_9geodesics_16__defaults__);
+  __Pyx_CyFunction_SetDefaultsGetter(__pyx_t_1, __pyx_pf_6pycraf_8pathprof_9geodesics_16__defaults__);
   ((__pyx_FusedFunctionObject *) __pyx_t_1)->__signatures__ = __pyx_t_3;
   __Pyx_GIVEREF(__pyx_t_3);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_regrid1d_with_x, __pyx_t_1) < 0) __PYX_ERR(0, 320, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "src/pathprof/geodesics.pyx":1
+  /* "pycraf/pathprof/geodesics.pyx":1
  * #!python             # <<<<<<<<<<<<<<
  * # -*- coding: utf-8 -*-
  * # cython: language_level=3
@@ -22081,11 +22081,11 @@ PyMODINIT_FUNC PyInit_geodesics(void)
   __Pyx_XDECREF(__pyx_t_5);
   if (__pyx_m) {
     if (__pyx_d) {
-      __Pyx_AddTraceback("init src.pathprof.geodesics", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init pycraf.pathprof.geodesics", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     Py_DECREF(__pyx_m); __pyx_m = 0;
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init src.pathprof.geodesics");
+    PyErr_SetString(PyExc_ImportError, "init pycraf.pathprof.geodesics");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
