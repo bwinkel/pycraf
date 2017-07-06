@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 from __future__ import (
     absolute_import, unicode_literals, division, print_function
     )
@@ -54,7 +55,6 @@ dBm = dB_mW = apu.dB(apu.mW)
 dBm_MHz = dB_mW_MHz = apu.dB(apu.mW / apu.MHz)
 dB_uV_m = apu.dB(apu.uV ** 2 / apu.m ** 2)
 dB_1_m = apu.dB(1. / apu.m)  # for antenna factor
-
 
 # Astropy.unit equivalency between linear and logscale field strength
 # this is necessary, because the dB_uV_m is from E ** 2 (dB scale is power)
