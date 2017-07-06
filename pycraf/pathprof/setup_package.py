@@ -31,11 +31,13 @@ def get_extensions():
             'include_dirs': ['numpy'],
             }
     elif 'darwin' in platform.system().lower():
+        os.environ['CC'] = 'gcc-6'
+        os.environ['LD'] = 'gcc-6'
         comp_args = {
             'extra_compile_args': [
-                '-fopenmp=libomp', '-O3', '-mmacosx-version-min=10.7'
+                '-fopenmp', '-O3', '-mmacosx-version-min=10.7'
                 ],
-            'extra_link_args': ['-fopenmp=libomp'],
+            'extra_link_args': ['-fopenmp'],
             'libraries': ['m'],
             'include_dirs': ['numpy'],
             }

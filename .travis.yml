@@ -6,6 +6,10 @@ language: c
 os:
     - linux
 
+# compiler:
+#     - gcc
+#     - clang
+
 # Setting sudo to false opts in to Travis-CI container-based builds.
 sudo: false
 
@@ -35,7 +39,7 @@ env:
         - PIP_DEPENDENCIES=''
         - EVENT_TYPE='pull_request push'
 
-        - SRTMDATA=${TRAVIS_BUILD_DIR}/pathprof/tests/srtm
+        - SRTMDATA=${TRAVIS_BUILD_DIR}/pycraf/pathprof/tests/srtm
         - OMP_NUM_THREADS=2
         - TWINE_USERNAME=bwinkel
 
@@ -59,10 +63,10 @@ env:
         # line to use the X virtual framebuffer.
         # - SETUP_XVFB=True
 
-    matrix:
-        # Make sure that egg_info works without dependencies
-        - PYTHON_VERSION=3.5 SETUP_CMD='egg_info'
-        - PYTHON_VERSION=3.6 SETUP_CMD='egg_info'
+    # matrix:
+    #     # Make sure that egg_info works without dependencies
+    #     - PYTHON_VERSION=3.5 SETUP_CMD='egg_info'
+    #     - PYTHON_VERSION=3.6 SETUP_CMD='egg_info'
 
 matrix:
 
@@ -72,39 +76,49 @@ matrix:
     include:
         # Try MacOS X
         - os: osx
-          env: SETUP_CMD='test'
+          osx_image: xcode8.3
+          env:
+            - SETUP_CMD='test'
+            - CC='gcc-6'
+            - CXX='g++-6'
+            - CPP='g++-6'
+            - LD='gcc-6'
 
-        # Do a coverage test.
-        - os: linux
-          env: SETUP_CMD='test --coverage'
+    #     # Do a coverage test.
+    #     - os: linux
+    #       env: SETUP_CMD='test --coverage'
 
-        # Check for sphinx doc build warnings - we do this first because it
-        # may run for a long time
-        - os: linux
-          env: SETUP_CMD='build_docs -w'
+    #     # Check for sphinx doc build warnings - we do this first because it
+    #     # may run for a long time
+    #     - os: linux
+    #       env: SETUP_CMD='build_docs -w'
 
-        # Now try Astropy dev with the latest 3.x.
-        - os: linux
-          env: ASTROPY_VERSION=development
-               EVENT_TYPE='pull_request push cron'
+    #     # Now try Astropy dev with the latest 3.x.
+    #     - os: linux
+    #       env: ASTROPY_VERSION=development
+    #            EVENT_TYPE='pull_request push cron'
 
-        # Try all python versions and Numpy versions. Since we can assume that
-        # the Numpy developers have taken care of testing Numpy with different
-        # versions of Python, we can vary Python and Numpy versions at the same
-        # time.
+    #     # Try all python versions and Numpy versions. Since we can assume that
+    #     # the Numpy developers have taken care of testing Numpy with different
+    #     # versions of Python, we can vary Python and Numpy versions at the same
+    #     # time.
 
-        - os: linux
-          env: PYTHON_VERSION=3.5 NUMPY_VERSION=1.11
+    #     - os: linux
+    #       env: PYTHON_VERSION=3.5 NUMPY_VERSION=1.11
 
-        # Do a PEP8 test with pycodestyle
-        - os: linux
-          env: MAIN_CMD='pycodestyle packagename --count' SETUP_CMD=''
+    #     # Do a PEP8 test with pycodestyle
+    #     - os: linux
+    #       env: MAIN_CMD='pycodestyle packagename --count' SETUP_CMD=''
 
-    allow_failures:
-        # Do a PEP8 test with pycodestyle
-        # (allow to fail unless your code completely compliant)
-        - os: linux
-          env: MAIN_CMD='pycodestyle packagename --count' SETUP_CMD=''
+    # allow_failures:
+    #     # Do a PEP8 test with pycodestyle
+    #     # (allow to fail unless your code completely compliant)
+    #     - os: linux
+    #       env: MAIN_CMD='pycodestyle packagename --count' SETUP_CMD=''
+
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gcc6; brew link --overwrite gcc@6; fi
 
 install:
 
