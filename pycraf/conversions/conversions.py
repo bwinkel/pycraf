@@ -29,16 +29,17 @@ UNITS = [
     ]
 
 __all__ = [
-    'Aeff_from_Ageom', 'Ageom_from_Aeff',
-    'Gain_from_Aeff', 'Aeff_from_Gain',
-    'Ant_factor_from_Gain', 'Gain_from_Ant_factor',
-    'S_from_E', 'E_from_S',
-    'Ptx_from_Erx', 'Erx_from_Ptx',
-    'S_from_Ptx', 'Ptx_from_S',
-    'Prx_from_S', 'S_from_Prx',
-    'Prx_from_Ptx', 'Ptx_from_Prx',
+    'eff_from_geom_area', 'geom_from_eff_area',
+    'eta_a_from_areas',
+    'gain_from_eff_area', 'eff_area_from_gain',
+    'antfactor_from_gain', 'gain_from_antfactor',
+    'powerflux_from_efield', 'efield_from_powerflux',
+    'ptx_from_efield', 'efield_from_ptx',
+    'powerflux_from_ptx', 'ptx_from_powerflux',
+    'prx_from_powerflux', 'powerflux_from_prx',
+    'prx_from_ptx', 'ptx_from_prx',
     'free_space_loss',
-    'Erx_unit', 'R0', 'E_field_equivalency',
+    'Erx_unit', 'R0', 'efield_equivalency',
     ] + UNITS
 
 
@@ -59,16 +60,28 @@ dB_1_m = apu.dB(1. / apu.m)  # for antenna factor
 # Astropy.unit equivalency between linear and logscale field strength
 # this is necessary, because the dB_uV_m is from E ** 2 (dB scale is power)
 # one can make use of the equivalency in the .to() function, e.g.:
-#     Erx_unit.to(cnv.dB_uV_m, equivalencies=E_field_equivalency)
+#     Erx_unit.to(cnv.dB_uV_m, equivalencies=efield_equivalency)
 # this conflicts with apu.logarithmic():
-# def E_field_equivalency():
+# def efield_equivalency():
 #     return [(
 #         apu.uV / apu.m,
 #         dB_uV_m,
 #         lambda x: 10. * np.log10(x ** 2),
 #         lambda x: np.sqrt(10 ** (x / 10.))
 #         )]
-def E_field_equivalency():
+def efield_equivalency():
+    '''
+    `~astropy.units` equivalency to handle log-scale E-field units.
+
+    For electric fields, the Decibel scale is define via the amplitude
+    of the field squared, :math:`\vert\vec E\vert^2`, which is proportional
+    to the power.
+
+    Returns
+    -------
+    equivalency : list
+        The returned list contains one tuple with the equivalency.
+    '''
     return [(
         apu.uV / apu.m,
         (apu.uV / apu.m) ** 2,
@@ -78,7 +91,7 @@ def E_field_equivalency():
 
 
 # apu.add_enabled_equivalencies(apu.logarithmic())
-apu.add_enabled_equivalencies(E_field_equivalency())
+apu.add_enabled_equivalencies(efield_equivalency())
 
 # define some useful constants
 R0 = (
@@ -93,381 +106,502 @@ ERX_VALUE = Erx_unit.to(apu.V / apu.m).value
 
 
 @utils.ranged_quantity_input(
-    Ageom=(0, None, apu.m ** 2),
+    geom_area=(0, None, apu.m ** 2),
     eta_a=(0, 100, apu.percent),
     strip_input_units=True, output_unit=apu.m ** 2
     )
-def Aeff_from_Ageom(Ageom, eta_a):
+def eff_from_geom_area(geom_area, eta_a):
     '''
-    Calculate effective ant. area from geometric area, given ant. efficiency.
+    Effective antenna area from geometric area, given antenna efficiency.
 
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    The effective and geometric antenna areas are linked via the antenna
+    efficiency:
+
+        A_eff = eta_a * A_geom.
 
     Parameters
     ----------
-    Ageom - Geometric antenna area [m**2]
-    eta_a - Antenna efficiency [% or dimless]
+    geom_area : `~astropy.units.Quantity`
+        Geometric antenna area, A_geom [m**2]
+    eta_a : `~astropy.units.Quantity`
+        Antenna efficiency [%, dimless]
 
     Returns
     -------
-    Effective antenna area, Aeff [m**2]
+    eff_area : `~astropy.units.Quantity`
+        Effective antenna area, A_eff [m**2]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
     '''
 
-    return Ageom * eta_a / 100.
+    return geom_area * eta_a / 100.
 
 
 @utils.ranged_quantity_input(
-    Aeff=(0, None, apu.m ** 2),
+    eff_area=(0, None, apu.m ** 2),
     eta_a=(0, 100, apu.percent),
     strip_input_units=True, output_unit=apu.m ** 2
     )
-def Ageom_from_Aeff(Aeff, eta_a):
+def geom_from_eff_area(eff_area, eta_a):
     '''
-    Calculate geometric ant. area from effective area, given ant. efficiency.
+    Geometric antenna area from effective area, given antenna efficiency.
 
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    The effective and geometric antenna areas are linked via the antenna
+    efficiency:
+
+        A_eff = eta_a * A_geom.
 
     Parameters
     ----------
-    Aeff - Effective antenna area [m**2]
-    eta_a - Antenna efficiency [% or dimless]
+    eff_area : `~astropy.units.Quantity`
+        Effective antenna area, A_eff [m**2]
+    eta_a : `~astropy.units.Quantity`
+        Antenna efficiency [%, dimless]
 
     Returns
     -------
-    Geometric antenna area, Ageom [m**2]
+    geom_area : `~astropy.units.Quantity`
+        Geometric antenna area, A_geom [m**2]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
     '''
 
-    return Aeff / eta_a * 100.
+    return eff_area / eta_a * 100.
 
 
 @utils.ranged_quantity_input(
-    Aeff=(0, None, apu.m ** 2),
-    f=(0, None, apu.Hz),
+    geom_area=(0, None, apu.m ** 2),
+    eff_area=(0, None, apu.m ** 2),
+    strip_input_units=True, output_unit=apu.percent
+    )
+def eta_a_from_areas(geom_area, eff_area):
+    '''
+    Antenna efficiency from geometric and effective antenna areas.
+
+    The effective and geometric antenna areas are linked via the antenna
+    efficiency:
+
+        A_eff = eta_a * A_geom.
+
+    Parameters
+    ----------
+    eff_area : `~astropy.units.Quantity`
+        Effective antenna area, A_eff [m**2]
+    geom_area : `~astropy.units.Quantity`
+        Geometric antenna area, A_geom [m**2]
+
+    Returns
+    -------
+    eta_a : `~astropy.units.Quantity`
+        Antenna efficiency [%, dimless]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
+    '''
+
+    return eff_area / geom_area * 100.
+
+
+@utils.ranged_quantity_input(
+    eff_area=(0, None, apu.m ** 2),
+    freq=(0, None, apu.Hz),
     strip_input_units=True, output_unit=dBi
     )
-def Gain_from_Aeff(Aeff, f):
+def gain_from_eff_area(eff_area, freq):
     '''
-    Calculate antenna gain from effective antenna area, given frequency.
-
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    Antenna gain from effective antenna area, given frequency.
 
     Parameters
     ----------
-    Aeff - Effective antenna area [m**2]
-    f - Frequency [Hz]
+    eff_area : `~astropy.units.Quantity`
+        Effective antenna area, A_eff [m**2]
+    freq : `~astropy.units.Quantity`
+        Frequency [Hz]
 
     Returns
     -------
-    Antenna gain, G [dBi]
+    gain : `~astropy.units.Quantity`
+        Antenna gain [dBi]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
     '''
 
     return 10 * np.log10(
-        4. * np.pi * Aeff * (f / C_VALUE) ** 2
+        4. * np.pi * eff_area * (freq / C_VALUE) ** 2
         )
 
 
 @utils.ranged_quantity_input(
-    G=(1.e-30, None, dimless),
-    f=(0, None, apu.Hz),
+    gain=(1.e-30, None, dimless),
+    freq=(0, None, apu.Hz),
     strip_input_units=True, output_unit=apu.m ** 2
     )
-def Aeff_from_Gain(G, f):
+def eff_area_from_gain(gain, freq):
     '''
-    Calculate effective antenna area from antenna gain, given frequency.
-
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    Effective antenna area from antenna gain, given frequency.
 
     Parameters
     ----------
-    G - Antenna gain [dBi, or dimless]
-    f - Frequency [Hz]
+    gain : `~astropy.units.Quantity`
+        Antenna gain [dBi, dimless]
+    freq : `~astropy.units.Quantity`
+        Frequency [Hz]
 
     Returns
     -------
-    Effective antenna area, Aeff [m**2]
+    eff_area : `~astropy.units.Quantity`
+        Effective antenna area, A_eff [m**2]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
     '''
 
-    return G * (C_VALUE / f) ** 2 / 4. / np.pi
+    return gain * (C_VALUE / freq) ** 2 / 4. / np.pi
 
 
 @utils.ranged_quantity_input(
-    G=(1.e-30, None, dimless),
-    f=(0, None, apu.Hz),
-    Zi=(0, None, apu.Ohm),
+    gain=(1.e-30, None, dimless),
+    freq=(0, None, apu.Hz),
+    zi=(0, None, apu.Ohm),
     strip_input_units=True, output_unit=dB_1_m
     )
-def Ant_factor_from_Gain(G, f, Zi):
+def antfactor_from_gain(gain, freq, zi):
     '''
-    Calculate antenna factor from antenna gain, given frequency and impedance.
-
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    Antenna factor from antenna gain, given frequency and impedance.
 
     Parameters
     ----------
-    G - Antenna gain [dBi, or dimless]
-    f - Frequency [Hz]
-    Zi - Receiver impedance [Ohm]
+    gain : `~astropy.units.Quantity`
+        Antenna gain [dBi, or dimless]
+    freq : `~astropy.units.Quantity`
+        Frequency [Hz]
+    zi : `~astropy.units.Quantity`
+        Receiver impedance, Zi [Ohm]
 
     Returns
     -------
-    Antenna factor, Ka [dB(1/m)]
+    antfactor : `~astropy.units.Quantity`
+        Antenna factor, Ka [dB(1/m)]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
     '''
 
     return 10 * np.log10(np.sqrt(
-        4. * np.pi / G * (f / C_VALUE) ** 2 * R0_VALUE / Zi
+        4. * np.pi / gain * (freq / C_VALUE) ** 2 * R0_VALUE / zi
         ))
 
 
 @utils.ranged_quantity_input(
-    Ka=(1.e-30, None, 1. / apu.m),
-    f=(0, None, apu.Hz),
-    Zi=(0, None, apu.Ohm),
+    antfactor=(1.e-30, None, 1. / apu.m),
+    freq=(0, None, apu.Hz),
+    zi=(0, None, apu.Ohm),
     strip_input_units=True, output_unit=dBi
     )
-def Gain_from_Ant_factor(Ka, f, Zi):
+def gain_from_antfactor(antfactor, freq, zi):
     '''
-    Calculate antenna gain from antenna factor, given frequency and impedance.
-
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    Antenna gain from antenna factor, given frequency and impedance.
 
     Parameters
     ----------
-    Ka - Antenna factor, Ka [1/m]
-    f - Frequency [Hz]
-    Zi - Receiver impedance [Ohm]
+    antfactor : `~astropy.units.Quantity`
+        Antenna factor, Ka [1/m]
+    freq : `~astropy.units.Quantity`
+        Frequency [Hz]
+    zi : `~astropy.units.Quantity`
+        Receiver impedance, Zi [Ohm]
 
     Returns
     -------
-    Antenna gain [dBi]
+    gain : `~astropy.units.Quantity`
+        Antenna gain [dBi, or dimless]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
     '''
 
     return 10 * np.log10(
-        4. * np.pi / Ka ** 2 * (f / C_VALUE) ** 2 * R0_VALUE / Zi
+        4. * np.pi / antfactor ** 2 * (freq / C_VALUE) ** 2 * R0_VALUE / zi
         )
 
 
-# @apu.quantity_input(E=dB_uV_m, equivalencies=E_field_equivalency())
+# @apu.quantity_input(E=dB_uV_m, equivalencies=efield_equivalency())
 @utils.ranged_quantity_input(
-    E=(1.e-30, None, apu.V / apu.meter),
+    efield=(1.e-30, None, apu.V / apu.meter),
     strip_input_units=True, output_unit=apu.W / apu.m ** 2
     )
-def S_from_E(E):
+def powerflux_from_efield(efield):
     '''
-    Calculate power flux density, S, from field strength.
-
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    Power flux density from E-field strength.
 
     Parameters
     ----------
-    E - Received E-field strength [uV/m]
+    efield : `~astropy.units.Quantity`
+        E-field strength, E [uV/m]
 
     Returns
     -------
-    Power flux density, S [dB_W_m2 or W/m**2]
+    powerflux : `~astropy.units.Quantity`
+        Power flux density, S [dB_W_m2, W/m**2]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
     '''
 
-    return E ** 2 / R0_VALUE
+    return efield ** 2 / R0_VALUE
 
 
 @utils.ranged_quantity_input(
-    S=(None, None, apu.W / apu.m ** 2),
+    powerflux=(None, None, apu.W / apu.m ** 2),
     strip_input_units=True, output_unit=apu.uV / apu.meter
     )
-def E_from_S(S):
+def efield_from_powerflux(powerflux):
     '''
-    Calculate field strength, E, from power flux density.
-
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    E-field strength from power flux density.
 
     Parameters
     ----------
-    S - Power flux density [dB_W_m2 or W/m**2]
+    powerflux : `~astropy.units.Quantity`
+        Power flux density, S [dB_W_m2 or W/m**2]
 
     Returns
     -------
-    Received E-field strength, E [uV/m]
+    efield : `~astropy.units.Quantity`
+        E-field strength, E [uV/m]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
     '''
 
-    # return np.sqrt(np.power(10., 0.1 * S) * R0_VALUE) * 1.e6
-    return np.sqrt(S * R0_VALUE) * 1.e6
+    return np.sqrt(powerflux * R0_VALUE) * 1.e6
 
 
 @utils.ranged_quantity_input(
-    Erx=(1.e-30, None, apu.V / apu.meter),
-    d=(1.e-30, None, apu.m),
-    Gtx=(1.e-30, None, dimless),
+    efield=(1.e-30, None, apu.V / apu.meter),
+    dist=(1.e-30, None, apu.m),
+    gtx=(1.e-30, None, dimless),
     strip_input_units=True, output_unit=apu.W
     )
-def Ptx_from_Erx(Erx, d, Gtx):
+def ptx_from_efield(efield, dist, gtx):
     '''
-    Calculate transmitter power, Ptx, from received field strength.
-
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    Transmitter power from E-field strength measured at distance.
 
     Parameters
     ----------
-    Erx - Received E-field strength [dB_uV_m, uV/m, or (uV/m)**2]
-    d - Distance to transmitter [m]
-    Gtx - Gain of transmitter [dBi, or dimless]
+    efield : `~astropy.units.Quantity`
+        E-field strength, E [dB_uV_m, uV/m, (uV/m)**2]
+    dist : `~astropy.units.Quantity`
+        Distance to transmitter [m]
+    gtx : `~astropy.units.Quantity`
+        Gain of transmitter, Gtx [dBi, or dimless]
 
     Returns
     -------
-    Transmitter power, Ptx [W]
+    ptx : `~astropy.units.Quantity`
+        Transmitter power, Ptx [W]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
     '''
 
-    return 4. * np.pi * d ** 2 / Gtx * Erx ** 2 / R0_VALUE
+    return 4. * np.pi * dist ** 2 / gtx * efield ** 2 / R0_VALUE
 
 
 @utils.ranged_quantity_input(
-    Ptx=(1.e-30, None, apu.W),
-    d=(1.e-30, None, apu.m),
-    Gtx=(1.e-30, None, dimless),
+    ptx=(1.e-30, None, apu.W),
+    dist=(1.e-30, None, apu.m),
+    gtx=(1.e-30, None, dimless),
     strip_input_units=True, output_unit=apu.uV / apu.meter
     )
-def Erx_from_Ptx(Ptx, d, Gtx):
+def efield_from_ptx(ptx, dist, gtx):
     '''
-    Calculate received field strength, Erx, from transmitter power.
-
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    E-field strength measured at distance from transmitter power.
 
     Parameters
     ----------
-    Ptx - Transmitter power [dB_W, W]
-    d - Distance to transmitter [m]
-    Gtx - Gain of transmitter [dBi, or dimless]
+    ptx : `~astropy.units.Quantity`
+        Transmitter power, Ptx [dB_W, W]
+    dist : `~astropy.units.Quantity`
+        Distance to transmitter [m]
+    gtx : `~astropy.units.Quantity`
+        Gain of transmitter, Gtx [dBi, dimless]
 
     Returns
     -------
-    Received E-field strength, Erx [uV/m]
+    efield : `~astropy.units.Quantity`
+        E-field strength, E [uV/m]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
     '''
 
-    return (Ptx * Gtx / 4. / np.pi * R0_VALUE) ** 0.5 / d * 1.e6
+    return (ptx * gtx / 4. / np.pi * R0_VALUE) ** 0.5 / dist * 1.e6
 
 
 @utils.ranged_quantity_input(
-    Ptx=(1.e-30, None, apu.W),
-    d=(1.e-30, None, apu.m),
-    Gtx=(1.e-30, None, dimless),
+    ptx=(1.e-30, None, apu.W),
+    dist=(1.e-30, None, apu.m),
+    gtx=(1.e-30, None, dimless),
     strip_input_units=True, output_unit=apu.W / apu.m ** 2
     )
-def S_from_Ptx(Ptx, d, Gtx):
+def powerflux_from_ptx(ptx, dist, gtx):
     '''
-    Calculate power flux density, S, from transmitter power.
-
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    Power flux density from transmitter power.
 
     Parameters
     ----------
-    Ptx - Transmitter power [dB_W, W]
-    d - Distance to transmitter [m]
-    Gtx - Gain of transmitter [dBi, or dimless]
+    ptx : `~astropy.units.Quantity`
+        Transmitter power, Ptx [dB_W, W]
+    dist : `~astropy.units.Quantity`
+        Distance to transmitter [m]
+    gtx : `~astropy.units.Quantity`
+        Gain of transmitter, Gtx [dBi, dimless]
 
     Returns
     -------
-    Power flux density, S (at receiver location) [W/m**2]
+    powerflux : `~astropy.units.Quantity`
+        Power flux density, S (at distance) [W/m**2]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
     '''
 
-    # log-units seem not yet flexible enough to make the simpler
-    # statement work:
-    # return Gtx * Ptx / 4. / np.pi / d ** 2
-    # (would be doable with apu.logarithmic() environment)
-
-    return Gtx * Ptx / 4. / np.pi / d ** 2
+    return gtx * ptx / 4. / np.pi / dist ** 2
 
 
 @utils.ranged_quantity_input(
-    S=(1.e-30, None, apu.W / apu.m ** 2),
-    d=(1.e-30, None, apu.m),
-    Gtx=(1.e-30, None, dimless),
+    powerflux=(1.e-30, None, apu.W / apu.m ** 2),
+    dist=(1.e-30, None, apu.m),
+    gtx=(1.e-30, None, dimless),
     strip_input_units=True, output_unit=apu.W
     )
-def Ptx_from_S(S, d, Gtx):
+def ptx_from_powerflux(powerflux, dist, gtx):
     '''
-    Calculate transmitter power, Ptx, from power flux density.
-
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    Transmitter power from power flux density.
 
     Parameters
     ----------
-    S - Power flux density (at receiver location) [W/m**2, dB_W_m2]
-    d - Distance to transmitter [m]
-    Gtx - Gain of transmitter [dBi, or dimless]
+    powerflux : `~astropy.units.Quantity`
+        Power flux density, S (at distance) [W/m**2, dB_W_m2]
+    dist : `~astropy.units.Quantity`
+        Distance to transmitter [m]
+    gtx : `~astropy.units.Quantity`
+        Gain of transmitter, Gtx [dBi, dimless]
 
     Returns
     -------
-    Transmitter power, Ptx [W]
+    ptx : `~astropy.units.Quantity`
+        Transmitter power, Ptx [W]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
     '''
 
-    return S * 4. * np.pi * d ** 2 / Gtx
+    return powerflux * 4. * np.pi * dist ** 2 / gtx
 
 
 @utils.ranged_quantity_input(
-    Prx=(1.e-30, None, apu.W),
-    f=(1.e-30, None, apu.Hz),
-    Grx=(1.e-30, None, dimless),
+    prx=(1.e-30, None, apu.W),
+    freq=(1.e-30, None, apu.Hz),
+    grx=(1.e-30, None, dimless),
     strip_input_units=True, output_unit=apu.W / apu.m ** 2
     )
-def S_from_Prx(Prx, f, Grx):
+def powerflux_from_prx(prx, freq, grx):
     '''
-    Calculate power flux density, S, from received power.
+    Power flux density from received power.
 
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    Power flux density and received power are linked via effective antenna
+    area (which is propotional to receiving antenna gain).
 
     Parameters
     ----------
-    Prx - Received power [dB_W, W]
-    f - Frequency of radiation [Hz]
-    Grx - Gain of receiver [dBi, or dimless]
+    prx : `~astropy.units.Quantity`
+        Received power [dB_W, W]
+    freq : `~astropy.units.Quantity`
+        Frequency of radiation [Hz]
+    grx : `~astropy.units.Quantity`
+        Gain of receiver, Grx [dBi, dimless]
 
     Returns
     -------
-    Power flux density, S (at receiver location) [W]
+    powerflux : `~astropy.units.Quantity`
+        Power flux density [W/m**2]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
     '''
 
-    return Prx / Grx * (
-        4. * np.pi * f ** 2 / C_VALUE ** 2
+    return prx / grx * (
+        4. * np.pi * freq ** 2 / C_VALUE ** 2
         )
 
 
 @utils.ranged_quantity_input(
-    S=(1.e-30, None, apu.W / apu.m ** 2),
-    f=(1.e-30, None, apu.Hz),
-    Grx=(1.e-30, None, dimless),
+    powerflux=(1.e-30, None, apu.W / apu.m ** 2),
+    freq=(1.e-30, None, apu.Hz),
+    grx=(1.e-30, None, dimless),
     strip_input_units=True, output_unit=apu.W
     )
-def Prx_from_S(S, f, Grx):
+def prx_from_powerflux(powerflux, freq, grx):
     '''
-    Calculate received power, Prx, from power flux density.
+    Received power from power flux density.
 
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    Power flux density and received power are linked via effective antenna
+    area (which is propotional to receiving antenna gain).
 
     Parameters
     ----------
-    S - Power flux density (at receiver location) [W/m**2, dB_W_m2]
-    f - Frequency of radiation [Hz]
-    Grx - Gain of receiver [dBi, or dimless]
+    powerflux : `~astropy.units.Quantity`
+        Power flux density [W/m**2, dB_W_m2]
+    freq : `~astropy.units.Quantity`
+        Frequency of radiation [Hz]
+    grx : `~astropy.units.Quantity`
+        Gain of receiver, Grx [dBi, dimless]
 
     Returns
     -------
-    Received power, Prx [W]
+    prx : `~astropy.units.Quantity`
+        Received power [W]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
     '''
 
-    return S * Grx * (
-        C_VALUE ** 2 / 4. / np.pi / f ** 2
+    return powerflux * grx * (
+        C_VALUE ** 2 / 4. / np.pi / freq ** 2
         )
 
 
@@ -477,90 +611,111 @@ def _free_space_loss(d, f):
 
 
 @utils.ranged_quantity_input(
-    d=(1.e-30, None, apu.m),
-    f=(1.e-30, None, apu.Hz),
+    dist=(1.e-30, None, apu.m),
+    freq=(1.e-30, None, apu.Hz),
     strip_input_units=True, output_unit=dB
     )
-def free_space_loss(d, f):
+def free_space_loss(dist, freq):
     '''
-    Calculate the free space loss of a propagating radio wave.
-
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    Free-space loss of a propagating radio wave.
 
     Parameters
     ----------
-    d - Distance between transmitter and receiver [m]
-    f - Frequency of radiation [Hz]
+    dist : `~astropy.units.Quantity`
+        Distance between transmitter and receiver [m]
+    freq : `~astropy.units.Quantity`
+        Frequency of radiation [Hz]
 
     Returns
     -------
-    Free-space loss, FSPL [dB]
+    FSPL : `~astropy.units.Quantity`
+        Free-space loss [dB]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
     '''
 
-    return 10. * np.log10(_free_space_loss(f, d))
+    return 10. * np.log10(_free_space_loss(freq, dist))
 
 
 @utils.ranged_quantity_input(
-    Ptx=(1.e-30, None, apu.W),
-    Gtx=(1.e-30, None, dimless),
-    Grx=(1.e-30, None, dimless),
-    d=(1.e-30, None, apu.m),
-    f=(1.e-30, None, apu.Hz),
+    ptx=(1.e-30, None, apu.W),
+    gtx=(1.e-30, None, dimless),
+    grx=(1.e-30, None, dimless),
+    dist=(1.e-30, None, apu.m),
+    freq=(1.e-30, None, apu.Hz),
     strip_input_units=True, output_unit=apu.W
     )
-def Prx_from_Ptx(Ptx, Gtx, Grx, d, f):
+def prx_from_ptx(ptx, gtx, grx, dist, freq):
     '''
-    Calculate received power, Prx, from transmitted power.
-
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    Received power from transmitted power.
 
     Parameters
     ----------
-    Ptx - Transmitter power [dB_W, W]
-    Gtx - Gain of transmitter [dBi, or dimless]
-    Grx - Gain of receiver [dBi, or dimless]
-    d - Distance between transmitter and receiver [m]
-    f - Frequency of radiation [Hz]
+    ptx : `~astropy.units.Quantity`
+        Transmitter power, Ptx [dB_W, W]
+    gtx : `~astropy.units.Quantity`
+        Gain of transmitter, Gtx [dBi, dimless]
+    grx : `~astropy.units.Quantity`
+        Gain of receiver, Grx [dBi, dimless]
+    dist : `~astropy.units.Quantity`
+        Distance between transmitter and receiver [m]
+    freq : `~astropy.units.Quantity`
+        Frequency of radiation [Hz]
 
     Returns
     -------
-    Received power, Prx [W]
+    prx : `~astropy.units.Quantity`
+        Received power [W]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
     '''
 
-    return Ptx * Gtx * Grx * _free_space_loss(d, f)
+    return ptx * gtx * grx * _free_space_loss(dist, freq)
 
 
 @utils.ranged_quantity_input(
-    Prx=(1.e-30, None, apu.W),
-    Gtx=(1.e-30, None, dimless),
-    Grx=(1.e-30, None, dimless),
-    d=(1.e-30, None, apu.m),
-    f=(1.e-30, None, apu.Hz),
+    prx=(1.e-30, None, apu.W),
+    gtx=(1.e-30, None, dimless),
+    grx=(1.e-30, None, dimless),
+    dist=(1.e-30, None, apu.m),
+    freq=(1.e-30, None, apu.Hz),
     strip_input_units=True, output_unit=apu.W
     )
-def Ptx_from_Prx(Prx, Gtx, Grx, d, f):
+def ptx_from_prx(prx, gtx, grx, dist, freq):
     '''
-    Calculate transmitted power, Prx, from received power.
-
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    Transmitted power from received power.
 
     Parameters
     ----------
-    Prx - Received power [dB_W, W]
-    Gtx - Gain of transmitter [dBi, or dimless]
-    Grx - Gain of receiver [dBi, or dimless]
-    d - Distance between transmitter and receiver [m]
-    f - Frequency of radiation [Hz]
+    prx : `~astropy.units.Quantity`
+        Received power, Prx [dB_W, W]
+    gtx : `~astropy.units.Quantity`
+        Gain of transmitter, Gtx [dBi, dimless]
+    grx : `~astropy.units.Quantity`
+        Gain of receiver, Grx [dBi, dimless]
+    dist : `~astropy.units.Quantity`
+        Distance between transmitter and receiver [m]
+    freq : `~astropy.units.Quantity`
+        Frequency of radiation [Hz]
 
     Returns
     -------
-    Transmitter power, Ptx [W]
+    ptx : `~astropy.units.Quantity`
+        Transmitter power, Ptx [W]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
     '''
 
-    return Prx / Gtx / Grx / _free_space_loss(d, f)
+    return prx / gtx / grx / _free_space_loss(dist, freq)
 
 
 if __name__ == '__main__':
