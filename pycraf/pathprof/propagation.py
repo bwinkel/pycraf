@@ -33,7 +33,7 @@ __all__ = [
 def freespace_loss(pathprop):
     '''
     Calculate the free space loss, L_bfsg, of a propagating radio wave
-    according to ITU-R P.452-16 Eq. (8-12).
+    according to ITU-R P.452-16 Eq (8-12).
 
     Parameters
     ----------
@@ -72,7 +72,7 @@ def troposcatter_loss(
         ):
     '''
     Calculate the tropospheric scatter loss, L_bs, of a propagating radio wave
-    according to ITU-R P.452-16 Eq. (45).
+    according to ITU-R P.452-16 Eq (45).
 
     Note: All quantities must be astropy Quantities
           (astropy.units.quantity.Quantity).
@@ -100,7 +100,7 @@ def troposcatter_loss(
 def ducting_loss(pathprop):
     '''
     Calculate the ducting/layer reflection loss, L_ba, of a propagating radio
-    wave according to ITU-R P.452-16 Eq. (46-56).
+    wave according to ITU-R P.452-16 Eq (46-56).
 
     Note: All quantities must be astropy Quantities
           (astropy.units.quantity.Quantity).
@@ -128,7 +128,7 @@ def ducting_loss(pathprop):
 def diffraction_loss(pathprop):
     '''
     Calculate the Diffraction loss of a propagating radio
-    wave according to ITU-R P.452-16 Eq. (14-44).
+    wave according to ITU-R P.452-16 Eq (14-44).
 
     Parameters
     ----------
@@ -169,7 +169,7 @@ def complete_loss(
         ):
     '''
     Calculate the total loss of a propagating radio
-    wave according to ITU-R P.452-16 Eq. (58-64).
+    wave according to ITU-R P.452-16 Eq (58-64).
 
     Parameters
     ----------
@@ -209,7 +209,7 @@ def clutter_correction(
         ):
     '''
     Calculate the Clutter loss of a propagating radio
-    wave according to ITU-R P.452-16 Eq. (57).
+    wave according to ITU-R P.452-16 Eq (57).
 
     Parameters
     ----------

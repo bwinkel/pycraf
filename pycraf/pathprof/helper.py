@@ -17,11 +17,11 @@ from .. import utils
 
 __all__ = [
     'R_E', 'K_BETA', 'A_BETA_VALUE',
-    'anual_time_percentage_from_worst_month',
+    'annual_timepercent_from_worst_month',
     'deltaN_N0_from_map', 'radiomet_data_for_pathcenter',
-    'median_effective_earth_radius_factor',
-    'effective_earth_radius_factor_beta',
-    'median_effective_earth_radius', 'effective_earth_radius_beta',
+    'median_eff_earth_radius_factor',
+    'eff_earth_radius_factor_beta',
+    'median_eff_earth_radius', 'eff_earth_radius_beta',
     'make_kmz', 'terrain_cmap_factory',
     ]
 
@@ -79,12 +79,12 @@ _N0_interpolator = RegularGridInterpolator(
     omega=(0, 100, apu.percent),
     strip_input_units=True, output_unit=apu.percent,
     )
-def anual_time_percentage_from_worst_month(
+def annual_timepercent_from_worst_month(
         p_w, phi, omega
         ):
     '''
     Calculate annual equivalent time percentage, p, from worst-month time
-    percentage, p_w, according to ITU-R P.452-16 Eq. (1).
+    percentage, p_w, according to ITU-R P.452-16 Eq (1).
 
     Parameters
     ----------
@@ -152,7 +152,7 @@ def _N_from_map(lon, lat):
 def deltaN_N0_from_map(lon, lat):
     '''
     Calculate radiometeorological data, ΔN and N_0, from path center
-    coordinates, according to ITU-R P.452-16 Eq. (2-4).
+    coordinates, according to ITU-R P.452-16 Eq (2-4).
 
     Parameters
     ----------
@@ -214,7 +214,7 @@ def _radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm):
 def radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm):
     '''
     Calculate radiometeorological data, ΔN, β_0 and N_0, from path center
-    coordinates, according to ITU-R P.452-16 Eq. (2-4).
+    coordinates, according to ITU-R P.452-16 Eq (2-4).
 
     Parameters
     ----------
@@ -252,10 +252,10 @@ def radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm):
     strip_input_units=True,
     output_unit=cnv.dimless,
     )
-def median_effective_earth_radius_factor(lon, lat):
+def median_eff_earth_radius_factor(lon, lat):
     '''
     Calculate median effective Earth radius factor, k_50, according to
-    ITU-R P.452-16 Eq. (5).
+    ITU-R P.452-16 Eq (5).
 
     Parameters
     ----------
@@ -278,7 +278,7 @@ def median_effective_earth_radius_factor(lon, lat):
     strip_input_units=True,
     output_unit=cnv.dimless,
     )
-def effective_earth_radius_factor_beta():
+def eff_earth_radius_factor_beta():
     '''
     Calculate effective Earth radius factor exceeded for beta_0 percent
     of time, k_beta, according to ITU-R P.452-16.
@@ -296,7 +296,7 @@ def effective_earth_radius_factor_beta():
     return K_BETA_VALUE
 
 
-def _median_effective_earth_radius(lon, lat):
+def _median_eff_earth_radius(lon, lat):
 
     return R_E_VALUE * 157. / (157. - _DN_interpolator((lon % 360, lat)))
 
@@ -307,10 +307,10 @@ def _median_effective_earth_radius(lon, lat):
     strip_input_units=True,
     output_unit=apu.km,
     )
-def median_effective_earth_radius(lon, lat):
+def median_eff_earth_radius(lon, lat):
     '''
     Calculate median effective Earth radius, a_e, according to
-    ITU-R P.452-16 Eq. (6a).
+    ITU-R P.452-16 Eq (6a).
 
     Parameters
     ----------
@@ -326,17 +326,17 @@ def median_effective_earth_radius(lon, lat):
       bilinear interpolation.
     '''
 
-    return _median_effective_earth_radius(lon, lat)
+    return _median_eff_earth_radius(lon, lat)
 
 
 @utils.ranged_quantity_input(
     strip_input_units=True,
     output_unit=apu.km,
     )
-def effective_earth_radius_beta(lon, lat):
+def eff_earth_radius_beta(lon, lat):
     '''
     Calculate effective Earth radius exceeded for beta_0 percent of time,
-    a_beta, according to ITU-R P.452-16 Eq. (6b).
+    a_beta, according to ITU-R P.452-16 Eq (6b).
 
     Returns
     -------

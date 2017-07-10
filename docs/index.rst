@@ -29,13 +29,19 @@ Getting Started
 User Documentation
 ******************
 
-Available module
-----------------
+Available modules
+-----------------
 
 .. toctree::
    :maxdepth: 1
 
    conversions/index
+   pathprof/index
+
+.. automodapi:: pycraf
+    :no-heading:
+    :no-main-docstr:
+
 
 
 ***************
@@ -55,3 +61,4 @@ This code is makes use of the excellent work provided by the
 `Astropy <http://www.astropy.org/>`_ community. pycraf uses the Astropy package and also the
 `Astropy Package Template <https://github.com/astropy/package-template>`_
 for the packaging.
+

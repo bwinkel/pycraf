@@ -33,9 +33,9 @@ class TestHelper:
 
         pass
 
-    def test_anual_time_percentage_from_worst_month(self):
+    def test_annual_timepercent_from_worst_month(self):
 
-        pfunc = pathprof.anual_time_percentage_from_worst_month
+        pfunc = pathprof.annual_timepercent_from_worst_month
         args_list = [
             (0, 100, apu.percent),
             (-90, 90, apu.deg),
@@ -102,9 +102,9 @@ class TestHelper:
                 326.14456177, 329.69577705], cnv.dimless),
             )
 
-    def test_median_effective_earth_radius(self):
+    def test_median_eff_earth_radius(self):
 
-        pfunc = pathprof.median_effective_earth_radius
+        pfunc = pathprof.median_eff_earth_radius
         args_list = [
             (0, 360, apu.deg),
             (-90, 90, apu.deg),

@@ -2129,6 +2129,7 @@ static const char __pyx_k_MemoryView_of_r_object[] = "<MemoryView of %r object>"
 static const char __pyx_k_MemoryView_of_r_at_0x_x[] = "<MemoryView of %r at 0x%x>";
 static const char __pyx_k_contiguous_and_indirect[] = "<contiguous and indirect>";
 static const char __pyx_k_Cannot_index_with_type_s[] = "Cannot index with type '%s'";
+static const char __pyx_k_regrid1d_with_x_line_320[] = "regrid1d_with_x (line 320)";
 static const char __pyx_k_Invalid_shape_in_axis_d_d[] = "Invalid shape in axis %d: %d.";
 static const char __pyx_k_pycraf_pathprof_geodesics[] = "pycraf.pathprof.geodesics";
 static const char __pyx_k_No_matching_signature_found[] = "No matching signature found";
@@ -2138,6 +2139,7 @@ static const char __pyx_k_x_and_y_must_have_equal_size[] = "x and y must have eq
 static const char __pyx_k_Expected_at_least_d_arguments[] = "Expected at least %d arguments";
 static const char __pyx_k_unable_to_allocate_array_data[] = "unable to allocate array data.";
 static const char __pyx_k_strided_and_direct_or_indirect[] = "<strided and direct or indirect>";
+static const char __pyx_k_Regrid_an_array_of_values_measu[] = "\n    Regrid an array of values, measured at support x to a new support x_new.\n\n    Example code::\n\n        >>> from pycraf.pathprof import regrid1d_with_x\n        >>> import numpy as np\n        >>> import matplotlib.pyplot as plt\n\n        >>> x = np.linspace(1., 0., 100)\n        >>> x_new = np.linspace(0., 1., 1000)\n        >>> y_ = np.random.normal(0., 1., 100)\n        >>> y_[50] = 10\n\n        >>> y = np.empty_like(x)\n        >>> y_new = np.empty_like(x_new)\n\n        >>> regrid1d_with_x(x[::-1], y_[::-1], x, y, 0.005)\n        >>> regrid1d_with_x(x[::-1], y_[::-1], x_new, y_new, 0.005)\n\n        >>> plt.close()\n        >>> plt.plot(x, y_, 'k-')\n        >>> plt.plot(x, y, 'r-')\n        >>> plt.plot(x_new, y_new, 'b-')\n        >>> plt.show()\n    ";
 static const char __pyx_k_home_bwinkel_projects_pymodules[] = "/home/bwinkel/projects/pymodules/pycraf/pycraf/pathprof/geodesics.pyx";
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
 static const char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
@@ -2180,6 +2182,7 @@ static PyObject *__pyx_kp_s_No_matching_signature_found;
 static PyObject *__pyx_kp_u_Non_native_byte_order_not_suppor;
 static PyObject *__pyx_n_b_O;
 static PyObject *__pyx_kp_s_Out_of_bounds_on_buffer_access_a;
+static PyObject *__pyx_kp_u_Regrid_an_array_of_values_measu;
 static PyObject *__pyx_n_s_RuntimeError;
 static PyObject *__pyx_n_s_TypeError;
 static PyObject *__pyx_kp_s_Unable_to_convert_item_to_object;
@@ -2263,6 +2266,7 @@ static PyObject *__pyx_n_s_pyx_vtable;
 static PyObject *__pyx_n_s_range;
 static PyObject *__pyx_n_s_regrid1d_with_x;
 static PyObject *__pyx_n_u_regrid1d_with_x;
+static PyObject *__pyx_kp_u_regrid1d_with_x_line_320;
 static PyObject *__pyx_n_s_regular;
 static PyObject *__pyx_n_s_s;
 static PyObject *__pyx_n_s_shape;
@@ -3827,7 +3831,7 @@ static CYTHON_INLINE int __pyx_fuse_0__pyx_f_6pycraf_8pathprof_9geodesics_find_i
  *         else:
  *             return i             # <<<<<<<<<<<<<<
  * 
- *     return l
+ *     return i
  */
     /*else*/ {
       __pyx_r = __pyx_v_i;
@@ -3839,11 +3843,11 @@ static CYTHON_INLINE int __pyx_fuse_0__pyx_f_6pycraf_8pathprof_9geodesics_find_i
   /* "pycraf/pathprof/geodesics.pyx":312
  *             return i
  * 
- *     return l             # <<<<<<<<<<<<<<
+ *     return i             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_r = __pyx_v_l;
+  __pyx_r = __pyx_v_i;
   goto __pyx_L0;
 
   /* "pycraf/pathprof/geodesics.pyx":284
@@ -4000,7 +4004,7 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_6pycraf_8pathprof_9geodesics_find_i
  *         else:
  *             return i             # <<<<<<<<<<<<<<
  * 
- *     return l
+ *     return i
  */
     /*else*/ {
       __pyx_r = __pyx_v_i;
@@ -4012,11 +4016,11 @@ static CYTHON_INLINE int __pyx_fuse_1__pyx_f_6pycraf_8pathprof_9geodesics_find_i
   /* "pycraf/pathprof/geodesics.pyx":312
  *             return i
  * 
- *     return l             # <<<<<<<<<<<<<<
+ *     return i             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_r = __pyx_v_l;
+  __pyx_r = __pyx_v_i;
   goto __pyx_L0;
 
   /* "pycraf/pathprof/geodesics.pyx":284
@@ -4079,7 +4083,7 @@ static CYTHON_INLINE double __pyx_f_6pycraf_8pathprof_9geodesics_gauss1d(double 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_6pycraf_8pathprof_9geodesics_5regrid1d_with_x(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_6pycraf_8pathprof_9geodesics_4regrid1d_with_x[] = "regrid1d_with_x(signatures, args, kwargs, defaults)\n\n    from pycraf.pathprof import regrid1d_with_x\n    import numpy as np\n    import matplotlib.pyplot as plt\n\n    x = np.linspace(1., 0., 100)\n    x_new = np.linspace(0., 1., 128)\n    y_ = np.random.normal(0., 1., 100)\n    y_[50] = 10\n\n    y = np.empty_like(x)\n    y_new = np.empty_like(x_new)\n\n    regrid1d_with_x(x[::-1], y_[::-1], x, y, 0.005)\n    regrid1d_with_x(x[::-1], y_[::-1], x_new, y_new, 0.005)\n\n    plt.close()\n    plt.plot(x, y_, 'k-')\n    plt.plot(x, y, 'r-')\n    plt.plot(x_new, y_new, 'b-')\n    plt.show()\n\n    # Note: there seems to be a bug in find_in_ordered:\n\n    x = np.linspace(0, 1, 100)\n    y = np.sqrt(x)\n    x_new = np.linspace(0, 1, 1000)\n    y_new = np.empty_like(x_new)\n    regrid1d_with_x(x, y, x_new, y_new, 0.1)\n    print(y_new)  # <-- some entries are zero\077\077?\n    ";
+static char __pyx_doc_6pycraf_8pathprof_9geodesics_4regrid1d_with_x[] = "regrid1d_with_x(signatures, args, kwargs, defaults)\n\n    Regrid an array of values, measured at support x to a new support x_new.\n\n    Example code::\n\n        >>> from pycraf.pathprof import regrid1d_with_x\n        >>> import numpy as np\n        >>> import matplotlib.pyplot as plt\n\n        >>> x = np.linspace(1., 0., 100)\n        >>> x_new = np.linspace(0., 1., 1000)\n        >>> y_ = np.random.normal(0., 1., 100)\n        >>> y_[50] = 10\n\n        >>> y = np.empty_like(x)\n        >>> y_new = np.empty_like(x_new)\n\n        >>> regrid1d_with_x(x[::-1], y_[::-1], x, y, 0.005)\n        >>> regrid1d_with_x(x[::-1], y_[::-1], x_new, y_new, 0.005)\n\n        >>> plt.close()\n        >>> plt.plot(x, y_, 'k-')\n        >>> plt.plot(x, y, 'r-')\n        >>> plt.plot(x_new, y_new, 'b-')\n        >>> plt.show()\n    ";
 static PyMethodDef __pyx_mdef_6pycraf_8pathprof_9geodesics_5regrid1d_with_x = {"regrid1d_with_x", (PyCFunction)__pyx_pw_6pycraf_8pathprof_9geodesics_5regrid1d_with_x, METH_VARARGS|METH_KEYWORDS, __pyx_doc_6pycraf_8pathprof_9geodesics_4regrid1d_with_x};
 static PyObject *__pyx_pw_6pycraf_8pathprof_9geodesics_5regrid1d_with_x(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_signatures = 0;
@@ -4907,39 +4911,39 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
   Py_ssize_t __pyx_t_17;
   __Pyx_RefNannySetupContext("__pyx_fuse_0regrid1d_with_x", 0);
 
-  /* "pycraf/pathprof/geodesics.pyx":366
+  /* "pycraf/pathprof/geodesics.pyx":361
  * 
  *         int i, j, s, e
  *         int length = x.size             # <<<<<<<<<<<<<<
  *         int length_new = x_new.size
  * 
  */
-  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_x, 1, (PyObject *(*)(char *)) __pyx_memview_get_float, (int (*)(char *, PyObject *)) __pyx_memview_set_float, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 366, __pyx_L1_error)
+  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_x, 1, (PyObject *(*)(char *)) __pyx_memview_get_float, (int (*)(char *, PyObject *)) __pyx_memview_set_float, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 361, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_size); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 366, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_size); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 361, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 366, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 361, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_length = __pyx_t_3;
 
-  /* "pycraf/pathprof/geodesics.pyx":367
+  /* "pycraf/pathprof/geodesics.pyx":362
  *         int i, j, s, e
  *         int length = x.size
  *         int length_new = x_new.size             # <<<<<<<<<<<<<<
  * 
  *         double dx = fabs(x[0] - x[length - 1]) / length
  */
-  __pyx_t_2 = __pyx_memoryview_fromslice(__pyx_v_x_new, 1, (PyObject *(*)(char *)) __pyx_memview_get_float, (int (*)(char *, PyObject *)) __pyx_memview_set_float, 0);; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 367, __pyx_L1_error)
+  __pyx_t_2 = __pyx_memoryview_fromslice(__pyx_v_x_new, 1, (PyObject *(*)(char *)) __pyx_memview_get_float, (int (*)(char *, PyObject *)) __pyx_memview_set_float, 0);; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 362, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_size); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 367, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_size); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 362, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 367, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 362, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_length_new = __pyx_t_3;
 
-  /* "pycraf/pathprof/geodesics.pyx":369
+  /* "pycraf/pathprof/geodesics.pyx":364
  *         int length_new = x_new.size
  * 
  *         double dx = fabs(x[0] - x[length - 1]) / length             # <<<<<<<<<<<<<<
@@ -4950,7 +4954,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
   __pyx_t_5 = (__pyx_v_length - 1);
   __pyx_v_dx = (fabs(((*((float *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_4 * __pyx_v_x.strides[0]) ))) - (*((float *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_5 * __pyx_v_x.strides[0]) ))))) / ((double)__pyx_v_length));
 
-  /* "pycraf/pathprof/geodesics.pyx":371
+  /* "pycraf/pathprof/geodesics.pyx":366
  *         double dx = fabs(x[0] - x[length - 1]) / length
  * 
  *     assert x.size == y.size, 'x and y must have equal size'             # <<<<<<<<<<<<<<
@@ -4959,29 +4963,29 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
   #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_x, 1, (PyObject *(*)(char *)) __pyx_memview_get_float, (int (*)(char *, PyObject *)) __pyx_memview_set_float, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 371, __pyx_L1_error)
+    __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_x, 1, (PyObject *(*)(char *)) __pyx_memview_get_float, (int (*)(char *, PyObject *)) __pyx_memview_set_float, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 366, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_size); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 371, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_size); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 366, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_y, 1, (PyObject *(*)(char *)) __pyx_memview_get_float, (int (*)(char *, PyObject *)) __pyx_memview_set_float, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 371, __pyx_L1_error)
+    __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_y, 1, (PyObject *(*)(char *)) __pyx_memview_get_float, (int (*)(char *, PyObject *)) __pyx_memview_set_float, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 366, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_size); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 371, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_size); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 366, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = PyObject_RichCompare(__pyx_t_2, __pyx_t_6, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 371, __pyx_L1_error)
+    __pyx_t_1 = PyObject_RichCompare(__pyx_t_2, __pyx_t_6, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 366, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_7 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 371, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 366, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (unlikely(!__pyx_t_7)) {
       PyErr_SetObject(PyExc_AssertionError, __pyx_kp_u_x_and_y_must_have_equal_size);
-      __PYX_ERR(0, 371, __pyx_L1_error)
+      __PYX_ERR(0, 366, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "pycraf/pathprof/geodesics.pyx":373
+  /* "pycraf/pathprof/geodesics.pyx":368
  *     assert x.size == y.size, 'x and y must have equal size'
  * 
  *     for i in range(length_new):             # <<<<<<<<<<<<<<
@@ -4992,7 +4996,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
   for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_3; __pyx_t_8+=1) {
     __pyx_v_i = __pyx_t_8;
 
-    /* "pycraf/pathprof/geodesics.pyx":375
+    /* "pycraf/pathprof/geodesics.pyx":370
  *     for i in range(length_new):
  * 
  *         this_x = x_new[i]             # <<<<<<<<<<<<<<
@@ -5002,7 +5006,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
     __pyx_t_9 = __pyx_v_i;
     __pyx_v_this_x = (*((float *) ( /* dim=0 */ (__pyx_v_x_new.data + __pyx_t_9 * __pyx_v_x_new.strides[0]) )));
 
-    /* "pycraf/pathprof/geodesics.pyx":378
+    /* "pycraf/pathprof/geodesics.pyx":373
  * 
  *         # find optimal s, e (if in ordered mode)
  *         if regular:             # <<<<<<<<<<<<<<
@@ -5012,7 +5016,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
     __pyx_t_7 = (__pyx_v_regular != 0);
     if (__pyx_t_7) {
 
-      /* "pycraf/pathprof/geodesics.pyx":380
+      /* "pycraf/pathprof/geodesics.pyx":375
  *         if regular:
  * 
  *             s = int((this_x - 5. * width) / dx - 0.5)             # <<<<<<<<<<<<<<
@@ -5021,7 +5025,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
       __pyx_v_s = ((int)(((__pyx_v_this_x - (5. * __pyx_v_width)) / __pyx_v_dx) - 0.5));
 
-      /* "pycraf/pathprof/geodesics.pyx":381
+      /* "pycraf/pathprof/geodesics.pyx":376
  * 
  *             s = int((this_x - 5. * width) / dx - 0.5)
  *             e = int((this_x + 5. * width) / dx + 1.5)             # <<<<<<<<<<<<<<
@@ -5030,7 +5034,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
       __pyx_v_e = ((int)(((__pyx_v_this_x + (5. * __pyx_v_width)) / __pyx_v_dx) + 1.5));
 
-      /* "pycraf/pathprof/geodesics.pyx":382
+      /* "pycraf/pathprof/geodesics.pyx":377
  *             s = int((this_x - 5. * width) / dx - 0.5)
  *             e = int((this_x + 5. * width) / dx + 1.5)
  *             if s < 0:             # <<<<<<<<<<<<<<
@@ -5040,7 +5044,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
       __pyx_t_7 = ((__pyx_v_s < 0) != 0);
       if (__pyx_t_7) {
 
-        /* "pycraf/pathprof/geodesics.pyx":383
+        /* "pycraf/pathprof/geodesics.pyx":378
  *             e = int((this_x + 5. * width) / dx + 1.5)
  *             if s < 0:
  *                 s = 0             # <<<<<<<<<<<<<<
@@ -5049,7 +5053,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
         __pyx_v_s = 0;
 
-        /* "pycraf/pathprof/geodesics.pyx":382
+        /* "pycraf/pathprof/geodesics.pyx":377
  *             s = int((this_x - 5. * width) / dx - 0.5)
  *             e = int((this_x + 5. * width) / dx + 1.5)
  *             if s < 0:             # <<<<<<<<<<<<<<
@@ -5058,7 +5062,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
       }
 
-      /* "pycraf/pathprof/geodesics.pyx":384
+      /* "pycraf/pathprof/geodesics.pyx":379
  *             if s < 0:
  *                 s = 0
  *             if e >= length:             # <<<<<<<<<<<<<<
@@ -5068,7 +5072,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
       __pyx_t_7 = ((__pyx_v_e >= __pyx_v_length) != 0);
       if (__pyx_t_7) {
 
-        /* "pycraf/pathprof/geodesics.pyx":385
+        /* "pycraf/pathprof/geodesics.pyx":380
  *                 s = 0
  *             if e >= length:
  *                 e = length             # <<<<<<<<<<<<<<
@@ -5077,7 +5081,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
         __pyx_v_e = __pyx_v_length;
 
-        /* "pycraf/pathprof/geodesics.pyx":384
+        /* "pycraf/pathprof/geodesics.pyx":379
  *             if s < 0:
  *                 s = 0
  *             if e >= length:             # <<<<<<<<<<<<<<
@@ -5086,7 +5090,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
       }
 
-      /* "pycraf/pathprof/geodesics.pyx":378
+      /* "pycraf/pathprof/geodesics.pyx":373
  * 
  *         # find optimal s, e (if in ordered mode)
  *         if regular:             # <<<<<<<<<<<<<<
@@ -5096,7 +5100,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
       goto __pyx_L5;
     }
 
-    /* "pycraf/pathprof/geodesics.pyx":387
+    /* "pycraf/pathprof/geodesics.pyx":382
  *                 e = length
  * 
  *         elif ordered:             # <<<<<<<<<<<<<<
@@ -5106,7 +5110,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
     __pyx_t_7 = (__pyx_v_ordered != 0);
     if (__pyx_t_7) {
 
-      /* "pycraf/pathprof/geodesics.pyx":388
+      /* "pycraf/pathprof/geodesics.pyx":383
  * 
  *         elif ordered:
  *             s = find_in_ordered(x, this_x)             # <<<<<<<<<<<<<<
@@ -5115,7 +5119,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
       __pyx_v_s = __pyx_fuse_0__pyx_f_6pycraf_8pathprof_9geodesics_find_in_ordered(__pyx_v_x, __pyx_v_this_x);
 
-      /* "pycraf/pathprof/geodesics.pyx":389
+      /* "pycraf/pathprof/geodesics.pyx":384
  *         elif ordered:
  *             s = find_in_ordered(x, this_x)
  *             e = s + 1             # <<<<<<<<<<<<<<
@@ -5124,7 +5128,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
       __pyx_v_e = (__pyx_v_s + 1);
 
-      /* "pycraf/pathprof/geodesics.pyx":391
+      /* "pycraf/pathprof/geodesics.pyx":386
  *             e = s + 1
  * 
  *             while True:             # <<<<<<<<<<<<<<
@@ -5133,7 +5137,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
       while (1) {
 
-        /* "pycraf/pathprof/geodesics.pyx":392
+        /* "pycraf/pathprof/geodesics.pyx":387
  * 
  *             while True:
  *                 s -= 1             # <<<<<<<<<<<<<<
@@ -5142,7 +5146,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
         __pyx_v_s = (__pyx_v_s - 1);
 
-        /* "pycraf/pathprof/geodesics.pyx":393
+        /* "pycraf/pathprof/geodesics.pyx":388
  *             while True:
  *                 s -= 1
  *                 if s < 1:             # <<<<<<<<<<<<<<
@@ -5152,7 +5156,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
         __pyx_t_7 = ((__pyx_v_s < 1) != 0);
         if (__pyx_t_7) {
 
-          /* "pycraf/pathprof/geodesics.pyx":394
+          /* "pycraf/pathprof/geodesics.pyx":389
  *                 s -= 1
  *                 if s < 1:
  *                     s = 0             # <<<<<<<<<<<<<<
@@ -5161,7 +5165,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
           __pyx_v_s = 0;
 
-          /* "pycraf/pathprof/geodesics.pyx":395
+          /* "pycraf/pathprof/geodesics.pyx":390
  *                 if s < 1:
  *                     s = 0
  *                     break             # <<<<<<<<<<<<<<
@@ -5170,7 +5174,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
           goto __pyx_L9_break;
 
-          /* "pycraf/pathprof/geodesics.pyx":393
+          /* "pycraf/pathprof/geodesics.pyx":388
  *             while True:
  *                 s -= 1
  *                 if s < 1:             # <<<<<<<<<<<<<<
@@ -5179,7 +5183,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
         }
 
-        /* "pycraf/pathprof/geodesics.pyx":396
+        /* "pycraf/pathprof/geodesics.pyx":391
  *                     s = 0
  *                     break
  *                 if fabs(x[s] - this_x) > 5. * width:             # <<<<<<<<<<<<<<
@@ -5190,7 +5194,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
         __pyx_t_7 = ((fabs(((*((float *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_10 * __pyx_v_x.strides[0]) ))) - __pyx_v_this_x)) > (5. * __pyx_v_width)) != 0);
         if (__pyx_t_7) {
 
-          /* "pycraf/pathprof/geodesics.pyx":397
+          /* "pycraf/pathprof/geodesics.pyx":392
  *                     break
  *                 if fabs(x[s] - this_x) > 5. * width:
  *                     break             # <<<<<<<<<<<<<<
@@ -5199,7 +5203,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
           goto __pyx_L9_break;
 
-          /* "pycraf/pathprof/geodesics.pyx":396
+          /* "pycraf/pathprof/geodesics.pyx":391
  *                     s = 0
  *                     break
  *                 if fabs(x[s] - this_x) > 5. * width:             # <<<<<<<<<<<<<<
@@ -5210,7 +5214,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
       }
       __pyx_L9_break:;
 
-      /* "pycraf/pathprof/geodesics.pyx":399
+      /* "pycraf/pathprof/geodesics.pyx":394
  *                     break
  * 
  *             while True:             # <<<<<<<<<<<<<<
@@ -5219,7 +5223,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
       while (1) {
 
-        /* "pycraf/pathprof/geodesics.pyx":400
+        /* "pycraf/pathprof/geodesics.pyx":395
  * 
  *             while True:
  *                 e += 1             # <<<<<<<<<<<<<<
@@ -5228,7 +5232,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
         __pyx_v_e = (__pyx_v_e + 1);
 
-        /* "pycraf/pathprof/geodesics.pyx":401
+        /* "pycraf/pathprof/geodesics.pyx":396
  *             while True:
  *                 e += 1
  *                 if e >= length:             # <<<<<<<<<<<<<<
@@ -5238,7 +5242,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
         __pyx_t_7 = ((__pyx_v_e >= __pyx_v_length) != 0);
         if (__pyx_t_7) {
 
-          /* "pycraf/pathprof/geodesics.pyx":402
+          /* "pycraf/pathprof/geodesics.pyx":397
  *                 e += 1
  *                 if e >= length:
  *                     e = length             # <<<<<<<<<<<<<<
@@ -5247,7 +5251,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
           __pyx_v_e = __pyx_v_length;
 
-          /* "pycraf/pathprof/geodesics.pyx":403
+          /* "pycraf/pathprof/geodesics.pyx":398
  *                 if e >= length:
  *                     e = length
  *                     break             # <<<<<<<<<<<<<<
@@ -5256,7 +5260,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
           goto __pyx_L13_break;
 
-          /* "pycraf/pathprof/geodesics.pyx":401
+          /* "pycraf/pathprof/geodesics.pyx":396
  *             while True:
  *                 e += 1
  *                 if e >= length:             # <<<<<<<<<<<<<<
@@ -5265,7 +5269,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
         }
 
-        /* "pycraf/pathprof/geodesics.pyx":404
+        /* "pycraf/pathprof/geodesics.pyx":399
  *                     e = length
  *                     break
  *                 if fabs(x[e - 1] - this_x) > 5. * width:             # <<<<<<<<<<<<<<
@@ -5276,7 +5280,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
         __pyx_t_7 = ((fabs(((*((float *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_11 * __pyx_v_x.strides[0]) ))) - __pyx_v_this_x)) > (5. * __pyx_v_width)) != 0);
         if (__pyx_t_7) {
 
-          /* "pycraf/pathprof/geodesics.pyx":405
+          /* "pycraf/pathprof/geodesics.pyx":400
  *                     break
  *                 if fabs(x[e - 1] - this_x) > 5. * width:
  *                     break             # <<<<<<<<<<<<<<
@@ -5285,7 +5289,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
           goto __pyx_L13_break;
 
-          /* "pycraf/pathprof/geodesics.pyx":404
+          /* "pycraf/pathprof/geodesics.pyx":399
  *                     e = length
  *                     break
  *                 if fabs(x[e - 1] - this_x) > 5. * width:             # <<<<<<<<<<<<<<
@@ -5296,7 +5300,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
       }
       __pyx_L13_break:;
 
-      /* "pycraf/pathprof/geodesics.pyx":387
+      /* "pycraf/pathprof/geodesics.pyx":382
  *                 e = length
  * 
  *         elif ordered:             # <<<<<<<<<<<<<<
@@ -5306,7 +5310,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
       goto __pyx_L5;
     }
 
-    /* "pycraf/pathprof/geodesics.pyx":408
+    /* "pycraf/pathprof/geodesics.pyx":403
  * 
  *         else:
  *             s = 0             # <<<<<<<<<<<<<<
@@ -5316,7 +5320,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
     /*else*/ {
       __pyx_v_s = 0;
 
-      /* "pycraf/pathprof/geodesics.pyx":409
+      /* "pycraf/pathprof/geodesics.pyx":404
  *         else:
  *             s = 0
  *             e = length             # <<<<<<<<<<<<<<
@@ -5327,7 +5331,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
     }
     __pyx_L5:;
 
-    /* "pycraf/pathprof/geodesics.pyx":413
+    /* "pycraf/pathprof/geodesics.pyx":408
  *         # print(i, s, e)
  * 
  *         norm = 0.             # <<<<<<<<<<<<<<
@@ -5336,7 +5340,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
     __pyx_v_norm = 0.;
 
-    /* "pycraf/pathprof/geodesics.pyx":414
+    /* "pycraf/pathprof/geodesics.pyx":409
  * 
  *         norm = 0.
  *         ssum = 0.             # <<<<<<<<<<<<<<
@@ -5345,7 +5349,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
  */
     __pyx_v_ssum = 0.;
 
-    /* "pycraf/pathprof/geodesics.pyx":415
+    /* "pycraf/pathprof/geodesics.pyx":410
  *         norm = 0.
  *         ssum = 0.
  *         for j in range(s, e):             # <<<<<<<<<<<<<<
@@ -5356,7 +5360,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
     for (__pyx_t_13 = __pyx_v_s; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
       __pyx_v_j = __pyx_t_13;
 
-      /* "pycraf/pathprof/geodesics.pyx":416
+      /* "pycraf/pathprof/geodesics.pyx":411
  *         ssum = 0.
  *         for j in range(s, e):
  *             kv = gauss1d(x[j] - this_x, width)             # <<<<<<<<<<<<<<
@@ -5366,7 +5370,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
       __pyx_t_14 = __pyx_v_j;
       __pyx_v_kv = __pyx_f_6pycraf_8pathprof_9geodesics_gauss1d(((*((float *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_14 * __pyx_v_x.strides[0]) ))) - __pyx_v_this_x), __pyx_v_width);
 
-      /* "pycraf/pathprof/geodesics.pyx":417
+      /* "pycraf/pathprof/geodesics.pyx":412
  *         for j in range(s, e):
  *             kv = gauss1d(x[j] - this_x, width)
  *             ssum += kv * y[j]             # <<<<<<<<<<<<<<
@@ -5376,7 +5380,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
       __pyx_t_15 = __pyx_v_j;
       __pyx_v_ssum = (__pyx_v_ssum + (__pyx_v_kv * (*((float *) ( /* dim=0 */ (__pyx_v_y.data + __pyx_t_15 * __pyx_v_y.strides[0]) )))));
 
-      /* "pycraf/pathprof/geodesics.pyx":418
+      /* "pycraf/pathprof/geodesics.pyx":413
  *             kv = gauss1d(x[j] - this_x, width)
  *             ssum += kv * y[j]
  *             norm += kv             # <<<<<<<<<<<<<<
@@ -5386,7 +5390,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
       __pyx_v_norm = (__pyx_v_norm + __pyx_v_kv);
     }
 
-    /* "pycraf/pathprof/geodesics.pyx":421
+    /* "pycraf/pathprof/geodesics.pyx":416
  * 
  *         # print(i, s, e, norm, ssum)
  *         if fabs(norm) < 1.e-12:             # <<<<<<<<<<<<<<
@@ -5396,7 +5400,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
     __pyx_t_7 = ((fabs(__pyx_v_norm) < 1.e-12) != 0);
     if (__pyx_t_7) {
 
-      /* "pycraf/pathprof/geodesics.pyx":422
+      /* "pycraf/pathprof/geodesics.pyx":417
  *         # print(i, s, e, norm, ssum)
  *         if fabs(norm) < 1.e-12:
  *             y_new[i] = 0.             # <<<<<<<<<<<<<<
@@ -5406,7 +5410,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
       __pyx_t_16 = __pyx_v_i;
       *((float *) ( /* dim=0 */ (__pyx_v_y_new.data + __pyx_t_16 * __pyx_v_y_new.strides[0]) )) = 0.;
 
-      /* "pycraf/pathprof/geodesics.pyx":421
+      /* "pycraf/pathprof/geodesics.pyx":416
  * 
  *         # print(i, s, e, norm, ssum)
  *         if fabs(norm) < 1.e-12:             # <<<<<<<<<<<<<<
@@ -5416,7 +5420,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_6regrid1d_with_x(CYTHON_U
       goto __pyx_L18;
     }
 
-    /* "pycraf/pathprof/geodesics.pyx":424
+    /* "pycraf/pathprof/geodesics.pyx":419
  *             y_new[i] = 0.
  *         else:
  *             y_new[i] = ssum / norm             # <<<<<<<<<<<<<<
@@ -5664,39 +5668,39 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
   Py_ssize_t __pyx_t_17;
   __Pyx_RefNannySetupContext("__pyx_fuse_1regrid1d_with_x", 0);
 
-  /* "pycraf/pathprof/geodesics.pyx":366
+  /* "pycraf/pathprof/geodesics.pyx":361
  * 
  *         int i, j, s, e
  *         int length = x.size             # <<<<<<<<<<<<<<
  *         int length_new = x_new.size
  * 
  */
-  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_x, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 366, __pyx_L1_error)
+  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_x, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 361, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_size); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 366, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_size); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 361, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 366, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 361, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_length = __pyx_t_3;
 
-  /* "pycraf/pathprof/geodesics.pyx":367
+  /* "pycraf/pathprof/geodesics.pyx":362
  *         int i, j, s, e
  *         int length = x.size
  *         int length_new = x_new.size             # <<<<<<<<<<<<<<
  * 
  *         double dx = fabs(x[0] - x[length - 1]) / length
  */
-  __pyx_t_2 = __pyx_memoryview_fromslice(__pyx_v_x_new, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 367, __pyx_L1_error)
+  __pyx_t_2 = __pyx_memoryview_fromslice(__pyx_v_x_new, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 362, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_size); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 367, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_size); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 362, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 367, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 362, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_length_new = __pyx_t_3;
 
-  /* "pycraf/pathprof/geodesics.pyx":369
+  /* "pycraf/pathprof/geodesics.pyx":364
  *         int length_new = x_new.size
  * 
  *         double dx = fabs(x[0] - x[length - 1]) / length             # <<<<<<<<<<<<<<
@@ -5707,7 +5711,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
   __pyx_t_5 = (__pyx_v_length - 1);
   __pyx_v_dx = (fabs(((*((double *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_4 * __pyx_v_x.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_5 * __pyx_v_x.strides[0]) ))))) / ((double)__pyx_v_length));
 
-  /* "pycraf/pathprof/geodesics.pyx":371
+  /* "pycraf/pathprof/geodesics.pyx":366
  *         double dx = fabs(x[0] - x[length - 1]) / length
  * 
  *     assert x.size == y.size, 'x and y must have equal size'             # <<<<<<<<<<<<<<
@@ -5716,29 +5720,29 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
   #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_x, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 371, __pyx_L1_error)
+    __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_x, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 366, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_size); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 371, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_size); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 366, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_y, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 371, __pyx_L1_error)
+    __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_y, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 366, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_size); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 371, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_size); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 366, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = PyObject_RichCompare(__pyx_t_2, __pyx_t_6, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 371, __pyx_L1_error)
+    __pyx_t_1 = PyObject_RichCompare(__pyx_t_2, __pyx_t_6, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 366, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_7 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 371, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 366, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (unlikely(!__pyx_t_7)) {
       PyErr_SetObject(PyExc_AssertionError, __pyx_kp_u_x_and_y_must_have_equal_size);
-      __PYX_ERR(0, 371, __pyx_L1_error)
+      __PYX_ERR(0, 366, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "pycraf/pathprof/geodesics.pyx":373
+  /* "pycraf/pathprof/geodesics.pyx":368
  *     assert x.size == y.size, 'x and y must have equal size'
  * 
  *     for i in range(length_new):             # <<<<<<<<<<<<<<
@@ -5749,7 +5753,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
   for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_3; __pyx_t_8+=1) {
     __pyx_v_i = __pyx_t_8;
 
-    /* "pycraf/pathprof/geodesics.pyx":375
+    /* "pycraf/pathprof/geodesics.pyx":370
  *     for i in range(length_new):
  * 
  *         this_x = x_new[i]             # <<<<<<<<<<<<<<
@@ -5759,7 +5763,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
     __pyx_t_9 = __pyx_v_i;
     __pyx_v_this_x = (*((double *) ( /* dim=0 */ (__pyx_v_x_new.data + __pyx_t_9 * __pyx_v_x_new.strides[0]) )));
 
-    /* "pycraf/pathprof/geodesics.pyx":378
+    /* "pycraf/pathprof/geodesics.pyx":373
  * 
  *         # find optimal s, e (if in ordered mode)
  *         if regular:             # <<<<<<<<<<<<<<
@@ -5769,7 +5773,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
     __pyx_t_7 = (__pyx_v_regular != 0);
     if (__pyx_t_7) {
 
-      /* "pycraf/pathprof/geodesics.pyx":380
+      /* "pycraf/pathprof/geodesics.pyx":375
  *         if regular:
  * 
  *             s = int((this_x - 5. * width) / dx - 0.5)             # <<<<<<<<<<<<<<
@@ -5778,7 +5782,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
       __pyx_v_s = ((int)(((__pyx_v_this_x - (5. * __pyx_v_width)) / __pyx_v_dx) - 0.5));
 
-      /* "pycraf/pathprof/geodesics.pyx":381
+      /* "pycraf/pathprof/geodesics.pyx":376
  * 
  *             s = int((this_x - 5. * width) / dx - 0.5)
  *             e = int((this_x + 5. * width) / dx + 1.5)             # <<<<<<<<<<<<<<
@@ -5787,7 +5791,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
       __pyx_v_e = ((int)(((__pyx_v_this_x + (5. * __pyx_v_width)) / __pyx_v_dx) + 1.5));
 
-      /* "pycraf/pathprof/geodesics.pyx":382
+      /* "pycraf/pathprof/geodesics.pyx":377
  *             s = int((this_x - 5. * width) / dx - 0.5)
  *             e = int((this_x + 5. * width) / dx + 1.5)
  *             if s < 0:             # <<<<<<<<<<<<<<
@@ -5797,7 +5801,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
       __pyx_t_7 = ((__pyx_v_s < 0) != 0);
       if (__pyx_t_7) {
 
-        /* "pycraf/pathprof/geodesics.pyx":383
+        /* "pycraf/pathprof/geodesics.pyx":378
  *             e = int((this_x + 5. * width) / dx + 1.5)
  *             if s < 0:
  *                 s = 0             # <<<<<<<<<<<<<<
@@ -5806,7 +5810,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
         __pyx_v_s = 0;
 
-        /* "pycraf/pathprof/geodesics.pyx":382
+        /* "pycraf/pathprof/geodesics.pyx":377
  *             s = int((this_x - 5. * width) / dx - 0.5)
  *             e = int((this_x + 5. * width) / dx + 1.5)
  *             if s < 0:             # <<<<<<<<<<<<<<
@@ -5815,7 +5819,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
       }
 
-      /* "pycraf/pathprof/geodesics.pyx":384
+      /* "pycraf/pathprof/geodesics.pyx":379
  *             if s < 0:
  *                 s = 0
  *             if e >= length:             # <<<<<<<<<<<<<<
@@ -5825,7 +5829,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
       __pyx_t_7 = ((__pyx_v_e >= __pyx_v_length) != 0);
       if (__pyx_t_7) {
 
-        /* "pycraf/pathprof/geodesics.pyx":385
+        /* "pycraf/pathprof/geodesics.pyx":380
  *                 s = 0
  *             if e >= length:
  *                 e = length             # <<<<<<<<<<<<<<
@@ -5834,7 +5838,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
         __pyx_v_e = __pyx_v_length;
 
-        /* "pycraf/pathprof/geodesics.pyx":384
+        /* "pycraf/pathprof/geodesics.pyx":379
  *             if s < 0:
  *                 s = 0
  *             if e >= length:             # <<<<<<<<<<<<<<
@@ -5843,7 +5847,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
       }
 
-      /* "pycraf/pathprof/geodesics.pyx":378
+      /* "pycraf/pathprof/geodesics.pyx":373
  * 
  *         # find optimal s, e (if in ordered mode)
  *         if regular:             # <<<<<<<<<<<<<<
@@ -5853,7 +5857,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
       goto __pyx_L5;
     }
 
-    /* "pycraf/pathprof/geodesics.pyx":387
+    /* "pycraf/pathprof/geodesics.pyx":382
  *                 e = length
  * 
  *         elif ordered:             # <<<<<<<<<<<<<<
@@ -5863,7 +5867,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
     __pyx_t_7 = (__pyx_v_ordered != 0);
     if (__pyx_t_7) {
 
-      /* "pycraf/pathprof/geodesics.pyx":388
+      /* "pycraf/pathprof/geodesics.pyx":383
  * 
  *         elif ordered:
  *             s = find_in_ordered(x, this_x)             # <<<<<<<<<<<<<<
@@ -5872,7 +5876,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
       __pyx_v_s = __pyx_fuse_1__pyx_f_6pycraf_8pathprof_9geodesics_find_in_ordered(__pyx_v_x, __pyx_v_this_x);
 
-      /* "pycraf/pathprof/geodesics.pyx":389
+      /* "pycraf/pathprof/geodesics.pyx":384
  *         elif ordered:
  *             s = find_in_ordered(x, this_x)
  *             e = s + 1             # <<<<<<<<<<<<<<
@@ -5881,7 +5885,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
       __pyx_v_e = (__pyx_v_s + 1);
 
-      /* "pycraf/pathprof/geodesics.pyx":391
+      /* "pycraf/pathprof/geodesics.pyx":386
  *             e = s + 1
  * 
  *             while True:             # <<<<<<<<<<<<<<
@@ -5890,7 +5894,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
       while (1) {
 
-        /* "pycraf/pathprof/geodesics.pyx":392
+        /* "pycraf/pathprof/geodesics.pyx":387
  * 
  *             while True:
  *                 s -= 1             # <<<<<<<<<<<<<<
@@ -5899,7 +5903,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
         __pyx_v_s = (__pyx_v_s - 1);
 
-        /* "pycraf/pathprof/geodesics.pyx":393
+        /* "pycraf/pathprof/geodesics.pyx":388
  *             while True:
  *                 s -= 1
  *                 if s < 1:             # <<<<<<<<<<<<<<
@@ -5909,7 +5913,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
         __pyx_t_7 = ((__pyx_v_s < 1) != 0);
         if (__pyx_t_7) {
 
-          /* "pycraf/pathprof/geodesics.pyx":394
+          /* "pycraf/pathprof/geodesics.pyx":389
  *                 s -= 1
  *                 if s < 1:
  *                     s = 0             # <<<<<<<<<<<<<<
@@ -5918,7 +5922,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
           __pyx_v_s = 0;
 
-          /* "pycraf/pathprof/geodesics.pyx":395
+          /* "pycraf/pathprof/geodesics.pyx":390
  *                 if s < 1:
  *                     s = 0
  *                     break             # <<<<<<<<<<<<<<
@@ -5927,7 +5931,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
           goto __pyx_L9_break;
 
-          /* "pycraf/pathprof/geodesics.pyx":393
+          /* "pycraf/pathprof/geodesics.pyx":388
  *             while True:
  *                 s -= 1
  *                 if s < 1:             # <<<<<<<<<<<<<<
@@ -5936,7 +5940,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
         }
 
-        /* "pycraf/pathprof/geodesics.pyx":396
+        /* "pycraf/pathprof/geodesics.pyx":391
  *                     s = 0
  *                     break
  *                 if fabs(x[s] - this_x) > 5. * width:             # <<<<<<<<<<<<<<
@@ -5947,7 +5951,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
         __pyx_t_7 = ((fabs(((*((double *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_10 * __pyx_v_x.strides[0]) ))) - __pyx_v_this_x)) > (5. * __pyx_v_width)) != 0);
         if (__pyx_t_7) {
 
-          /* "pycraf/pathprof/geodesics.pyx":397
+          /* "pycraf/pathprof/geodesics.pyx":392
  *                     break
  *                 if fabs(x[s] - this_x) > 5. * width:
  *                     break             # <<<<<<<<<<<<<<
@@ -5956,7 +5960,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
           goto __pyx_L9_break;
 
-          /* "pycraf/pathprof/geodesics.pyx":396
+          /* "pycraf/pathprof/geodesics.pyx":391
  *                     s = 0
  *                     break
  *                 if fabs(x[s] - this_x) > 5. * width:             # <<<<<<<<<<<<<<
@@ -5967,7 +5971,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
       }
       __pyx_L9_break:;
 
-      /* "pycraf/pathprof/geodesics.pyx":399
+      /* "pycraf/pathprof/geodesics.pyx":394
  *                     break
  * 
  *             while True:             # <<<<<<<<<<<<<<
@@ -5976,7 +5980,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
       while (1) {
 
-        /* "pycraf/pathprof/geodesics.pyx":400
+        /* "pycraf/pathprof/geodesics.pyx":395
  * 
  *             while True:
  *                 e += 1             # <<<<<<<<<<<<<<
@@ -5985,7 +5989,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
         __pyx_v_e = (__pyx_v_e + 1);
 
-        /* "pycraf/pathprof/geodesics.pyx":401
+        /* "pycraf/pathprof/geodesics.pyx":396
  *             while True:
  *                 e += 1
  *                 if e >= length:             # <<<<<<<<<<<<<<
@@ -5995,7 +5999,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
         __pyx_t_7 = ((__pyx_v_e >= __pyx_v_length) != 0);
         if (__pyx_t_7) {
 
-          /* "pycraf/pathprof/geodesics.pyx":402
+          /* "pycraf/pathprof/geodesics.pyx":397
  *                 e += 1
  *                 if e >= length:
  *                     e = length             # <<<<<<<<<<<<<<
@@ -6004,7 +6008,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
           __pyx_v_e = __pyx_v_length;
 
-          /* "pycraf/pathprof/geodesics.pyx":403
+          /* "pycraf/pathprof/geodesics.pyx":398
  *                 if e >= length:
  *                     e = length
  *                     break             # <<<<<<<<<<<<<<
@@ -6013,7 +6017,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
           goto __pyx_L13_break;
 
-          /* "pycraf/pathprof/geodesics.pyx":401
+          /* "pycraf/pathprof/geodesics.pyx":396
  *             while True:
  *                 e += 1
  *                 if e >= length:             # <<<<<<<<<<<<<<
@@ -6022,7 +6026,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
         }
 
-        /* "pycraf/pathprof/geodesics.pyx":404
+        /* "pycraf/pathprof/geodesics.pyx":399
  *                     e = length
  *                     break
  *                 if fabs(x[e - 1] - this_x) > 5. * width:             # <<<<<<<<<<<<<<
@@ -6033,7 +6037,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
         __pyx_t_7 = ((fabs(((*((double *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_11 * __pyx_v_x.strides[0]) ))) - __pyx_v_this_x)) > (5. * __pyx_v_width)) != 0);
         if (__pyx_t_7) {
 
-          /* "pycraf/pathprof/geodesics.pyx":405
+          /* "pycraf/pathprof/geodesics.pyx":400
  *                     break
  *                 if fabs(x[e - 1] - this_x) > 5. * width:
  *                     break             # <<<<<<<<<<<<<<
@@ -6042,7 +6046,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
           goto __pyx_L13_break;
 
-          /* "pycraf/pathprof/geodesics.pyx":404
+          /* "pycraf/pathprof/geodesics.pyx":399
  *                     e = length
  *                     break
  *                 if fabs(x[e - 1] - this_x) > 5. * width:             # <<<<<<<<<<<<<<
@@ -6053,7 +6057,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
       }
       __pyx_L13_break:;
 
-      /* "pycraf/pathprof/geodesics.pyx":387
+      /* "pycraf/pathprof/geodesics.pyx":382
  *                 e = length
  * 
  *         elif ordered:             # <<<<<<<<<<<<<<
@@ -6063,7 +6067,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
       goto __pyx_L5;
     }
 
-    /* "pycraf/pathprof/geodesics.pyx":408
+    /* "pycraf/pathprof/geodesics.pyx":403
  * 
  *         else:
  *             s = 0             # <<<<<<<<<<<<<<
@@ -6073,7 +6077,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
     /*else*/ {
       __pyx_v_s = 0;
 
-      /* "pycraf/pathprof/geodesics.pyx":409
+      /* "pycraf/pathprof/geodesics.pyx":404
  *         else:
  *             s = 0
  *             e = length             # <<<<<<<<<<<<<<
@@ -6084,7 +6088,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
     }
     __pyx_L5:;
 
-    /* "pycraf/pathprof/geodesics.pyx":413
+    /* "pycraf/pathprof/geodesics.pyx":408
  *         # print(i, s, e)
  * 
  *         norm = 0.             # <<<<<<<<<<<<<<
@@ -6093,7 +6097,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
     __pyx_v_norm = 0.;
 
-    /* "pycraf/pathprof/geodesics.pyx":414
+    /* "pycraf/pathprof/geodesics.pyx":409
  * 
  *         norm = 0.
  *         ssum = 0.             # <<<<<<<<<<<<<<
@@ -6102,7 +6106,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
  */
     __pyx_v_ssum = 0.;
 
-    /* "pycraf/pathprof/geodesics.pyx":415
+    /* "pycraf/pathprof/geodesics.pyx":410
  *         norm = 0.
  *         ssum = 0.
  *         for j in range(s, e):             # <<<<<<<<<<<<<<
@@ -6113,7 +6117,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
     for (__pyx_t_13 = __pyx_v_s; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
       __pyx_v_j = __pyx_t_13;
 
-      /* "pycraf/pathprof/geodesics.pyx":416
+      /* "pycraf/pathprof/geodesics.pyx":411
  *         ssum = 0.
  *         for j in range(s, e):
  *             kv = gauss1d(x[j] - this_x, width)             # <<<<<<<<<<<<<<
@@ -6123,7 +6127,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
       __pyx_t_14 = __pyx_v_j;
       __pyx_v_kv = __pyx_f_6pycraf_8pathprof_9geodesics_gauss1d(((*((double *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_14 * __pyx_v_x.strides[0]) ))) - __pyx_v_this_x), __pyx_v_width);
 
-      /* "pycraf/pathprof/geodesics.pyx":417
+      /* "pycraf/pathprof/geodesics.pyx":412
  *         for j in range(s, e):
  *             kv = gauss1d(x[j] - this_x, width)
  *             ssum += kv * y[j]             # <<<<<<<<<<<<<<
@@ -6133,7 +6137,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
       __pyx_t_15 = __pyx_v_j;
       __pyx_v_ssum = (__pyx_v_ssum + (__pyx_v_kv * (*((double *) ( /* dim=0 */ (__pyx_v_y.data + __pyx_t_15 * __pyx_v_y.strides[0]) )))));
 
-      /* "pycraf/pathprof/geodesics.pyx":418
+      /* "pycraf/pathprof/geodesics.pyx":413
  *             kv = gauss1d(x[j] - this_x, width)
  *             ssum += kv * y[j]
  *             norm += kv             # <<<<<<<<<<<<<<
@@ -6143,7 +6147,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
       __pyx_v_norm = (__pyx_v_norm + __pyx_v_kv);
     }
 
-    /* "pycraf/pathprof/geodesics.pyx":421
+    /* "pycraf/pathprof/geodesics.pyx":416
  * 
  *         # print(i, s, e, norm, ssum)
  *         if fabs(norm) < 1.e-12:             # <<<<<<<<<<<<<<
@@ -6153,7 +6157,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
     __pyx_t_7 = ((fabs(__pyx_v_norm) < 1.e-12) != 0);
     if (__pyx_t_7) {
 
-      /* "pycraf/pathprof/geodesics.pyx":422
+      /* "pycraf/pathprof/geodesics.pyx":417
  *         # print(i, s, e, norm, ssum)
  *         if fabs(norm) < 1.e-12:
  *             y_new[i] = 0.             # <<<<<<<<<<<<<<
@@ -6163,7 +6167,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
       __pyx_t_16 = __pyx_v_i;
       *((double *) ( /* dim=0 */ (__pyx_v_y_new.data + __pyx_t_16 * __pyx_v_y_new.strides[0]) )) = 0.;
 
-      /* "pycraf/pathprof/geodesics.pyx":421
+      /* "pycraf/pathprof/geodesics.pyx":416
  * 
  *         # print(i, s, e, norm, ssum)
  *         if fabs(norm) < 1.e-12:             # <<<<<<<<<<<<<<
@@ -6173,7 +6177,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_9geodesics_8regrid1d_with_x(CYTHON_U
       goto __pyx_L18;
     }
 
-    /* "pycraf/pathprof/geodesics.pyx":424
+    /* "pycraf/pathprof/geodesics.pyx":419
  *             y_new[i] = 0.
  *         else:
  *             y_new[i] = ssum / norm             # <<<<<<<<<<<<<<
@@ -21092,6 +21096,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_u_Non_native_byte_order_not_suppor, __pyx_k_Non_native_byte_order_not_suppor, sizeof(__pyx_k_Non_native_byte_order_not_suppor), 0, 1, 0, 0},
   {&__pyx_n_b_O, __pyx_k_O, sizeof(__pyx_k_O), 0, 0, 0, 1},
   {&__pyx_kp_s_Out_of_bounds_on_buffer_access_a, __pyx_k_Out_of_bounds_on_buffer_access_a, sizeof(__pyx_k_Out_of_bounds_on_buffer_access_a), 0, 0, 1, 0},
+  {&__pyx_kp_u_Regrid_an_array_of_values_measu, __pyx_k_Regrid_an_array_of_values_measu, sizeof(__pyx_k_Regrid_an_array_of_values_measu), 0, 1, 0, 0},
   {&__pyx_n_s_RuntimeError, __pyx_k_RuntimeError, sizeof(__pyx_k_RuntimeError), 0, 0, 1, 1},
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
   {&__pyx_kp_s_Unable_to_convert_item_to_object, __pyx_k_Unable_to_convert_item_to_object, sizeof(__pyx_k_Unable_to_convert_item_to_object), 0, 0, 1, 0},
@@ -21175,6 +21180,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
   {&__pyx_n_s_regrid1d_with_x, __pyx_k_regrid1d_with_x, sizeof(__pyx_k_regrid1d_with_x), 0, 0, 1, 1},
   {&__pyx_n_u_regrid1d_with_x, __pyx_k_regrid1d_with_x, sizeof(__pyx_k_regrid1d_with_x), 0, 1, 0, 1},
+  {&__pyx_kp_u_regrid1d_with_x_line_320, __pyx_k_regrid1d_with_x_line_320, sizeof(__pyx_k_regrid1d_with_x_line_320), 0, 1, 0, 0},
   {&__pyx_n_s_regular, __pyx_k_regular, sizeof(__pyx_k_regular), 0, 0, 1, 1},
   {&__pyx_n_s_s, __pyx_k_s, sizeof(__pyx_k_s), 0, 0, 1, 1},
   {&__pyx_n_s_shape, __pyx_k_shape, sizeof(__pyx_k_shape), 0, 0, 1, 1},
@@ -21211,7 +21217,7 @@ static int __Pyx_InitCachedBuiltins(void) {
   __pyx_builtin_AttributeError = __Pyx_GetBuiltinName(__pyx_n_s_AttributeError); if (!__pyx_builtin_AttributeError) __PYX_ERR(0, 320, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(0, 320, __pyx_L1_error)
   __pyx_builtin_zip = __Pyx_GetBuiltinName(__pyx_n_s_zip); if (!__pyx_builtin_zip) __PYX_ERR(0, 320, __pyx_L1_error)
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 373, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 368, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(1, 218, __pyx_L1_error)
   __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(1, 799, __pyx_L1_error)
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(2, 146, __pyx_L1_error)
@@ -21925,6 +21931,7 @@ PyMODINIT_FUNC PyInit_geodesics(void)
  */
   __pyx_t_5 = PyDict_New(); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
+  if (PyDict_SetItem(__pyx_t_5, __pyx_kp_u_regrid1d_with_x_line_320, __pyx_kp_u_Regrid_an_array_of_values_measu) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_5) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 

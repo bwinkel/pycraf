@@ -7,18 +7,18 @@ Requirements
 
 pycraf has the following strict requirements:
 
-- `Python <http://www.python.org/>`_ 3.5 or 3.6
+- `Python <http://www.python.org/>`_ 3.5 or later
 
-- `Numpy`_ |minimum_numpy_version| or later
+- `Numpy <http://www.numpy.org/>`_ 1.8 or later
 
-- `pytest`_ 2.8 or later
+- `pytest <https://pypi.python.org/pypi/pytest>`_ 2.8 or later
 
 - `h5py <http://h5py.org/>`_: To read/write path geometry data created by
-  :function:`~pycraf.pathprof.height_profile_data` from/to HDF5 files.
+  `~pycraf.pathprof.height_profile_data`_ from/to HDF5 files.
 
-- `scipy`_: Used in various routines.
+- `scipy <https://scipy.org/>`_: Used in various routines.
 
-- `matplotlib <http://matplotlib.org/>`_ 1.5 or later: To provide plotting functionality that `pycraf.pathprof.helper` enhances.
+- `matplotlib <http://matplotlib.org/>`_ 1.5 or later: To provide plotting functionality that `pycraf.pathprof.helper`_ enhances.
 
 - `setuptools <https://pythonhosted.org/setuptools/>`_: Used for the package installation.
 
@@ -30,14 +30,14 @@ Using pip
 
 To install pycraf with `pip <http://www.pip-installer.org/en/latest/>`_, simply run
 
-.. code:: bash
+.. code-block:: bash
 
     pip install pycraf
 
 .. note::
 
-    You will need a C compiler (e.g. ``gcc`` or ``clang``) to be installed (see
-    `Building from source`_ below) for the installation to succeed.
+    You will need a C compiler (``gcc``) to be installed for the installation to succeed. Since `pycraf` needs OpenMP, ``clang`` is currently not
+    supported.
 
 .. note::
 
@@ -76,14 +76,14 @@ dependency and unfortunately, the official
 only the sources. You can download a
 suitable wheel from `Christoph Gohlke's package site <http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyproj>`_. Then use
 
-.. code:: bash
+.. code-block:: bash
 
-    pip install [path-to-wheel]\pyproj‑*.whl
+    pip install [path-to-wheel]/pyproj‑*.whl
 
 If you're using `Anaconda <https://www.continuum.io/downloads>`_
 (recommended), it gets much simpler
 
-.. code:: bash
+.. code-block:: bash
 
     conda install -c conda-forge pyproj
 
@@ -93,7 +93,7 @@ Testing an installed pycraf
 ----------------------------
 
 The easiest way to test your installed version of pycraf is running
-correctly is to use the :ref:`~pycraf.test()` function::
+correctly is to use the `~pycraf.test()` function::
 
     >>> import pycraf  # doctest: +SKIP
     >>> pycraf.test()  # doctest: +SKIP

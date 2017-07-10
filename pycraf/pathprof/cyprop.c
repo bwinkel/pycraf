@@ -1010,16 +1010,16 @@ struct __pyx_ctuple_double__and_double;
 typedef struct __pyx_ctuple_double__and_double __pyx_ctuple_double__and_double;
 struct __pyx_ctuple_int__and_double__and_int__and_double__and_double__and_double;
 typedef struct __pyx_ctuple_int__and_double__and_int__and_double__and_double__and_double __pyx_ctuple_int__and_double__and_int__and_double__and_double__and_double;
-struct __pyx_ctuple_7de9c__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc;
-typedef struct __pyx_ctuple_7de9c__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc __pyx_ctuple_7de9c__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc;
-struct __pyx_ctuple_8127b__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc;
-typedef struct __pyx_ctuple_8127b__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_ctuple_8127b__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc;
+struct __pyx_ctuple_170d0__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc;
+typedef struct __pyx_ctuple_170d0__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc __pyx_ctuple_170d0__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc;
+struct __pyx_ctuple_9d39c__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc;
+typedef struct __pyx_ctuple_9d39c__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_ctuple_9d39c__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc;
 struct __pyx_ctuple_double__and_double__and_double;
 typedef struct __pyx_ctuple_double__and_double__and_double __pyx_ctuple_double__and_double__and_double;
 struct __pyx_ctuple_double__and_double__and_double__and_double__and_double;
 typedef struct __pyx_ctuple_double__and_double__and_double__and_double__and_double __pyx_ctuple_double__and_double__and_double__and_double__and_double;
-struct __pyx_ctuple_bcb9b__double__and_double__and_double__and_double__and_double__and_double__and_double__etc;
-typedef struct __pyx_ctuple_bcb9b__double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_ctuple_bcb9b__double__and_double__and_double__and_double__and_double__and_double__and_double__etc;
+struct __pyx_ctuple_3a1a__double__and_double__and_double__and_double__and_double__and_double__and_double__etc;
+typedef struct __pyx_ctuple_3a1a__double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_ctuple_3a1a__double__and_double__and_double__and_double__and_double__and_double__and_double__etc;
 struct __pyx_defaults;
 typedef struct __pyx_defaults __pyx_defaults;
 
@@ -1181,7 +1181,7 @@ struct __pyx_ctuple_int__and_double__and_int__and_double__and_double__and_double
  *         double, int, double, double,
  *         double, int, double, double,
  */
-struct __pyx_ctuple_7de9c__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc {
+struct __pyx_ctuple_170d0__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc {
   double f0;
   int f1;
   double f2;
@@ -1203,7 +1203,7 @@ struct __pyx_ctuple_7de9c__double__and_int__and_double__and_double__and_double__
  *         double a_e,
  *         double distance,
  */
-struct __pyx_ctuple_8127b__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc {
+struct __pyx_ctuple_9d39c__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc {
   int f0;
   double f1;
   double f2;
@@ -1250,7 +1250,7 @@ struct __pyx_ctuple_double__and_double__and_double__and_double__and_double {
  *         ppstruct pp,
  *         double G_t, double G_r,
  */
-struct __pyx_ctuple_bcb9b__double__and_double__and_double__and_double__and_double__and_double__and_double__etc {
+struct __pyx_ctuple_3a1a__double__and_double__and_double__and_double__and_double__and_double__and_double__etc {
   double f0;
   double f1;
   double f2;
@@ -2111,7 +2111,7 @@ static PyObject* __pyx_convert__to_py___pyx_ctuple_double__and_double__and_doubl
 static PyObject* __pyx_convert__to_py___pyx_ctuple_double__and_double__and_double__and_double__and_double(__pyx_ctuple_double__and_double__and_double__and_double__and_double);
 
 /* ToPyCTupleUtility.proto */
-static PyObject* __pyx_convert__to_py___pyx_ctuple_bcb9b__double__and_double__and_double__and_double__and_double__and_double__and_double__etc(__pyx_ctuple_bcb9b__double__and_double__and_double__and_double__and_double__and_double__and_double__etc);
+static PyObject* __pyx_convert__to_py___pyx_ctuple_3a1a__double__and_double__and_double__and_double__and_double__and_double__and_double__etc(__pyx_ctuple_3a1a__double__and_double__and_double__and_double__and_double__and_double__and_double__etc);
 
 /* ToPyCTupleUtility.proto */
 static PyObject* __pyx_convert__to_py___pyx_ctuple_double__and_double(__pyx_ctuple_double__and_double);
@@ -2408,8 +2408,8 @@ static void __pyx_f_6pycraf_8pathprof_6cyprop__process_path(struct __pyx_t_6pycr
 static __pyx_ctuple_double__and_double __pyx_f_6pycraf_8pathprof_6cyprop__smooth_earth_heights(double, __Pyx_memviewslice, __Pyx_memviewslice); /*proto*/
 static __pyx_ctuple_double__and_double __pyx_f_6pycraf_8pathprof_6cyprop__effective_antenna_heights(double, __Pyx_memviewslice, __Pyx_memviewslice, double, double, double, double); /*proto*/
 static __pyx_ctuple_int__and_double__and_int__and_double__and_double__and_double __pyx_f_6pycraf_8pathprof_6cyprop__diffraction_helper_v16(double, double, __Pyx_memviewslice, __Pyx_memviewslice, double, double, double); /*proto*/
-static __pyx_ctuple_7de9c__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc __pyx_f_6pycraf_8pathprof_6cyprop__diffraction_helper_v14(double, double, double, __Pyx_memviewslice, __Pyx_memviewslice, double, double, double); /*proto*/
-static __pyx_ctuple_8127b__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_f_6pycraf_8pathprof_6cyprop__path_geometry_helper(double, double, __Pyx_memviewslice, __Pyx_memviewslice, double, double, double, int, double); /*proto*/
+static __pyx_ctuple_170d0__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc __pyx_f_6pycraf_8pathprof_6cyprop__diffraction_helper_v14(double, double, double, __Pyx_memviewslice, __Pyx_memviewslice, double, double, double); /*proto*/
+static __pyx_ctuple_9d39c__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_f_6pycraf_8pathprof_6cyprop__path_geometry_helper(double, double, __Pyx_memviewslice, __Pyx_memviewslice, double, double, double, int, double); /*proto*/
 static __pyx_ctuple_double__and_double__and_double __pyx_f_6pycraf_8pathprof_6cyprop__free_space_loss_bfsg(struct __pyx_t_6pycraf_8pathprof_6cyprop_ppstruct); /*proto*/
 static double __pyx_f_6pycraf_8pathprof_6cyprop__tropospheric_scatter_loss_bs(struct __pyx_t_6pycraf_8pathprof_6cyprop_ppstruct, double, double); /*proto*/
 static double __pyx_f_6pycraf_8pathprof_6cyprop__ducting_loss_ba(struct __pyx_t_6pycraf_8pathprof_6cyprop_ppstruct); /*proto*/
@@ -2423,7 +2423,7 @@ static double __pyx_f_6pycraf_8pathprof_6cyprop__diffraction_spherical_earth_los
 static double __pyx_f_6pycraf_8pathprof_6cyprop__delta_bullington_loss(struct __pyx_t_6pycraf_8pathprof_6cyprop_ppstruct, int); /*proto*/
 static CYTHON_INLINE double __pyx_f_6pycraf_8pathprof_6cyprop__I_helper(double); /*proto*/
 static __pyx_ctuple_double__and_double__and_double__and_double__and_double __pyx_f_6pycraf_8pathprof_6cyprop__diffraction_loss_complete(struct __pyx_t_6pycraf_8pathprof_6cyprop_ppstruct); /*proto*/
-static __pyx_ctuple_bcb9b__double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_f_6pycraf_8pathprof_6cyprop__path_attenuation_complete(struct __pyx_t_6pycraf_8pathprof_6cyprop_ppstruct, double, double); /*proto*/
+static __pyx_ctuple_3a1a__double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_f_6pycraf_8pathprof_6cyprop__path_attenuation_complete(struct __pyx_t_6pycraf_8pathprof_6cyprop_ppstruct, double, double); /*proto*/
 static double __pyx_f_6pycraf_8pathprof_6cyprop__clutter_correction(double, int, double); /*proto*/
 static CYTHON_INLINE double __pyx_f_6pycraf_8pathprof_6cyprop__phi_helper(double, double, double, double, double, double, double); /*proto*/
 static CYTHON_INLINE double __pyx_f_6pycraf_8pathprof_6cyprop__g_helper(double, double); /*proto*/
@@ -7241,14 +7241,14 @@ static void __pyx_f_6pycraf_8pathprof_6cyprop__process_path(struct __pyx_t_6pycr
   int __pyx_t_9;
   int __pyx_t_10;
   double __pyx_t_11;
-  __pyx_ctuple_7de9c__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc __pyx_t_12;
+  __pyx_ctuple_170d0__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc __pyx_t_12;
   double __pyx_t_13;
   double __pyx_t_14;
   double __pyx_t_15;
   int __pyx_t_16;
   double __pyx_t_17;
   double __pyx_t_18;
-  __pyx_ctuple_8127b__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_t_19;
+  __pyx_ctuple_9d39c__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_t_19;
 
   /* "pycraf/pathprof/cyprop.pyx":707
  * 
@@ -8857,7 +8857,7 @@ static __pyx_ctuple_int__and_double__and_int__and_double__and_double__and_double
  *         double, int, double, double,
  */
 
-static __pyx_ctuple_7de9c__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc __pyx_f_6pycraf_8pathprof_6cyprop__diffraction_helper_v14(double __pyx_v_a_e_50, double __pyx_v_a_e_beta, double __pyx_v_distance, __Pyx_memviewslice __pyx_v_d_v, __Pyx_memviewslice __pyx_v_h_v, double __pyx_v_h_ts, double __pyx_v_h_rs, double __pyx_v_wavelen) {
+static __pyx_ctuple_170d0__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc __pyx_f_6pycraf_8pathprof_6cyprop__diffraction_helper_v14(double __pyx_v_a_e_50, double __pyx_v_a_e_beta, double __pyx_v_distance, __Pyx_memviewslice __pyx_v_d_v, __Pyx_memviewslice __pyx_v_h_v, double __pyx_v_h_ts, double __pyx_v_h_rs, double __pyx_v_wavelen) {
   int __pyx_v_i;
   int __pyx_v_dsize;
   double __pyx_v_d;
@@ -8884,7 +8884,7 @@ static __pyx_ctuple_7de9c__double__and_int__and_double__and_double__and_double__
   double __pyx_v_dt50;
   double __pyx_v_hr50;
   double __pyx_v_dr50;
-  __pyx_ctuple_7de9c__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc __pyx_r;
+  __pyx_ctuple_170d0__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc __pyx_r;
   long __pyx_t_1;
   int __pyx_t_2;
   Py_ssize_t __pyx_t_3;
@@ -8895,7 +8895,7 @@ static __pyx_ctuple_7de9c__double__and_int__and_double__and_double__and_double__
   Py_ssize_t __pyx_t_8;
   Py_ssize_t __pyx_t_9;
   int __pyx_t_10;
-  __pyx_ctuple_7de9c__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc __pyx_t_11;
+  __pyx_ctuple_170d0__double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__and_double__and_int__and_double__and_double__etc __pyx_t_11;
   Py_ssize_t __pyx_t_12;
   Py_ssize_t __pyx_t_13;
   int __pyx_t_14;
@@ -9671,7 +9671,7 @@ static __pyx_ctuple_7de9c__double__and_int__and_double__and_double__and_double__
  *         double distance,
  */
 
-static __pyx_ctuple_8127b__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_f_6pycraf_8pathprof_6cyprop__path_geometry_helper(double __pyx_v_a_e, double __pyx_v_distance, __Pyx_memviewslice __pyx_v_d_v, __Pyx_memviewslice __pyx_v_h_v, double __pyx_v_h_ts, double __pyx_v_h_rs, double __pyx_v_h_st, int __pyx_v_nu_bull_idx, double __pyx_v_duct_slope) {
+static __pyx_ctuple_9d39c__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_f_6pycraf_8pathprof_6cyprop__path_geometry_helper(double __pyx_v_a_e, double __pyx_v_distance, __Pyx_memviewslice __pyx_v_d_v, __Pyx_memviewslice __pyx_v_h_v, double __pyx_v_h_ts, double __pyx_v_h_rs, double __pyx_v_h_st, int __pyx_v_nu_bull_idx, double __pyx_v_duct_slope) {
   int __pyx_v_i;
   int __pyx_v_dsize;
   double __pyx_v_d;
@@ -9693,7 +9693,7 @@ static __pyx_ctuple_8127b__int__and_double__and_double__and_double__and_double__
   double __pyx_v_d_lr;
   double __pyx_v_h_m_i;
   double __pyx_v_h_m;
-  __pyx_ctuple_8127b__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_r;
+  __pyx_ctuple_9d39c__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_r;
   long __pyx_t_1;
   int __pyx_t_2;
   Py_ssize_t __pyx_t_3;
@@ -9711,7 +9711,7 @@ static __pyx_ctuple_8127b__int__and_double__and_double__and_double__and_double__
   Py_ssize_t __pyx_t_15;
   Py_ssize_t __pyx_t_16;
   Py_ssize_t __pyx_t_17;
-  __pyx_ctuple_8127b__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_t_18;
+  __pyx_ctuple_9d39c__int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_t_18;
 
   /* "pycraf/pathprof/cyprop.pyx":1177
  *     cdef:
@@ -12855,7 +12855,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_6cyprop_10diffraction_loss_complete_
  *         double G_t, double G_r,
  */
 
-static __pyx_ctuple_bcb9b__double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_f_6pycraf_8pathprof_6cyprop__path_attenuation_complete(struct __pyx_t_6pycraf_8pathprof_6cyprop_ppstruct __pyx_v_pp, double __pyx_v_G_t, double __pyx_v_G_r) {
+static __pyx_ctuple_3a1a__double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_f_6pycraf_8pathprof_6cyprop__path_attenuation_complete(struct __pyx_t_6pycraf_8pathprof_6cyprop_ppstruct __pyx_v_pp, double __pyx_v_G_t, double __pyx_v_G_r) {
   double __pyx_v__THETA;
   double __pyx_v__XI;
   double __pyx_v__D_SW;
@@ -12882,7 +12882,7 @@ static __pyx_ctuple_bcb9b__double__and_double__and_double__and_double__and_doubl
   double __pyx_v_A_hr;
   double __pyx_v_L_bda;
   double __pyx_v_L;
-  __pyx_ctuple_bcb9b__double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_r;
+  __pyx_ctuple_3a1a__double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_r;
   int __pyx_t_1;
   __pyx_ctuple_double__and_double__and_double __pyx_t_2;
   double __pyx_t_3;
@@ -12891,7 +12891,7 @@ static __pyx_ctuple_bcb9b__double__and_double__and_double__and_double__and_doubl
   __pyx_ctuple_double__and_double__and_double__and_double__and_double __pyx_t_6;
   double __pyx_t_7;
   double __pyx_t_8;
-  __pyx_ctuple_bcb9b__double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_t_9;
+  __pyx_ctuple_3a1a__double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_t_9;
 
   /* "pycraf/pathprof/cyprop.pyx":1901
  *     cdef:
@@ -13353,7 +13353,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_6cyprop_12path_attenuation_complete_
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert__to_py___pyx_ctuple_bcb9b__double__and_double__and_double__and_double__and_double__and_double__and_double__etc(__pyx_f_6pycraf_8pathprof_6cyprop__path_attenuation_complete(__pyx_v_pathprop->_pp, __pyx_v_G_t, __pyx_v_G_r)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2000, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert__to_py___pyx_ctuple_3a1a__double__and_double__and_double__and_double__and_double__and_double__and_double__etc(__pyx_f_6pycraf_8pathprof_6cyprop__path_attenuation_complete(__pyx_v_pathprop->_pp, __pyx_v_G_t, __pyx_v_G_r)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2000, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -18028,7 +18028,7 @@ static PyObject *__pyx_pf_6pycraf_8pathprof_6cyprop_18atten_map_fast_cython(CYTH
   int __pyx_t_58;
   __Pyx_memviewslice __pyx_t_59 = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_memviewslice __pyx_t_60 = { 0, 0, { 0 }, { 0 }, { 0 } };
-  __pyx_ctuple_bcb9b__double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_t_61;
+  __pyx_ctuple_3a1a__double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_t_61;
   double __pyx_t_62;
   double __pyx_t_63;
   double __pyx_t_64;
@@ -49681,7 +49681,7 @@ bad:
 }
 
 /* ToPyCTupleUtility */
-                    static PyObject* __pyx_convert__to_py___pyx_ctuple_bcb9b__double__and_double__and_double__and_double__and_double__and_double__and_double__etc(__pyx_ctuple_bcb9b__double__and_double__and_double__and_double__and_double__and_double__and_double__etc value) {
+                    static PyObject* __pyx_convert__to_py___pyx_ctuple_3a1a__double__and_double__and_double__and_double__and_double__and_double__and_double__etc(__pyx_ctuple_3a1a__double__and_double__and_double__and_double__and_double__and_double__and_double__etc value) {
     PyObject* item = NULL;
     PyObject* result = PyTuple_New(7);
     if (!result) goto bad;

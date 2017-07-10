@@ -309,7 +309,7 @@ cdef inline int find_in_ordered(
         else:
             return i
 
-    return l
+    return i
 
 
 cdef inline double gauss1d(double offset, double s):
@@ -327,35 +327,30 @@ def regrid1d_with_x(
         bint ordered=True,
         ):
     '''
-    from pycraf.pathprof import regrid1d_with_x
-    import numpy as np
-    import matplotlib.pyplot as plt
+    Regrid an array of values, measured at support x to a new support x_new.
 
-    x = np.linspace(1., 0., 100)
-    x_new = np.linspace(0., 1., 128)
-    y_ = np.random.normal(0., 1., 100)
-    y_[50] = 10
+    Example code::
 
-    y = np.empty_like(x)
-    y_new = np.empty_like(x_new)
+        >>> from pycraf.pathprof import regrid1d_with_x
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
 
-    regrid1d_with_x(x[::-1], y_[::-1], x, y, 0.005)
-    regrid1d_with_x(x[::-1], y_[::-1], x_new, y_new, 0.005)
+        >>> x = np.linspace(1., 0., 100)
+        >>> x_new = np.linspace(0., 1., 1000)
+        >>> y_ = np.random.normal(0., 1., 100)
+        >>> y_[50] = 10
 
-    plt.close()
-    plt.plot(x, y_, 'k-')
-    plt.plot(x, y, 'r-')
-    plt.plot(x_new, y_new, 'b-')
-    plt.show()
+        >>> y = np.empty_like(x)
+        >>> y_new = np.empty_like(x_new)
 
-    # Note: there seems to be a bug in find_in_ordered:
+        >>> regrid1d_with_x(x[::-1], y_[::-1], x, y, 0.005)
+        >>> regrid1d_with_x(x[::-1], y_[::-1], x_new, y_new, 0.005)
 
-    x = np.linspace(0, 1, 100)
-    y = np.sqrt(x)
-    x_new = np.linspace(0, 1, 1000)
-    y_new = np.empty_like(x_new)
-    regrid1d_with_x(x, y, x_new, y_new, 0.1)
-    print(y_new)  # <-- some entries are zero???
+        >>> plt.close()
+        >>> plt.plot(x, y_, 'k-')
+        >>> plt.plot(x, y, 'r-')
+        >>> plt.plot(x_new, y_new, 'b-')
+        >>> plt.show()
     '''
 
     cdef:

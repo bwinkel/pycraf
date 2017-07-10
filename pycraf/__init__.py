@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-This is the pycraf package for compatibility studies at radio frequencies.
+Top-level functionality:
 '''
 
 # Affiliated packages may add whatever they like to this file, but
