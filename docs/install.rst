@@ -28,7 +28,9 @@ Installing pycraf
 Using pip
 -------------
 
-To install pycraf with `pip <http://www.pip-installer.org/en/latest/>`_, simply run::
+To install pycraf with `pip <http://www.pip-installer.org/en/latest/>`_, simply run
+
+.. code:: bash
 
     pip install pycraf
 
@@ -72,12 +74,16 @@ However, the `pyproj <https://pypi.python.org/pypi/pyproj?>`_ package is a
 dependency and unfortunately, the official
 `pyproj <https://pypi.python.org/pypi/pyproj?>`_ repository on PyPI contains
 only the sources. You can download a
-suitable wheel from `Christoph Gohlke's package site <http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyproj>`_. Then use::
+suitable wheel from `Christoph Gohlke's package site <http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyproj>`_. Then use
+
+.. code:: bash
 
     pip install [path-to-wheel]\pyproj‑*.whl
 
 If you're using `Anaconda <https://www.continuum.io/downloads>`_
-(recommended), it gets much simpler::
+(recommended), it gets much simpler
+
+.. code:: bash
 
     conda install -c conda-forge pyproj
 
@@ -89,8 +95,8 @@ Testing an installed pycraf
 The easiest way to test your installed version of pycraf is running
 correctly is to use the :ref:`~pycraf.test()` function::
 
-    import pycraf
-    pycraf.test()
+    >>> import pycraf  # doctest: +SKIP
+    >>> pycraf.test()  # doctest: +SKIP
 
 The tests should run and print out any failures, which you can report at
 the `pycraf issue tracker <http://github.com/bwinkel/pycraf/issues>`_.

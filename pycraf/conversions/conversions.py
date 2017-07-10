@@ -69,13 +69,15 @@ dB_1_m = apu.dB(1. / apu.m)  # for antenna factor
 #         lambda x: 10. * np.log10(x ** 2),
 #         lambda x: np.sqrt(10 ** (x / 10.))
 #         )]
+
+
 def efield_equivalency():
     '''
     `~astropy.units` equivalency to handle log-scale E-field units.
 
     For electric fields, the Decibel scale is define via the amplitude
-    of the field squared, :math:`\vert\vec E\vert^2`, which is proportional
-    to the power.
+    of the field squared, :math:`{\\vert\\vec E\\vert}^2` which is
+    proportional to the power.
 
     Returns
     -------
