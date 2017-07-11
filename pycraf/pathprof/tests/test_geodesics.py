@@ -33,7 +33,7 @@ class TestGeodesics:
 
         pass
 
-    def test_inverse(self):
+    def test_inverse_cython(self):
 
         # testing against geographic-lib
 
@@ -44,33 +44,27 @@ class TestGeodesics:
             lat1 = np.random.uniform(-90, 90, 50)
             lat2 = np.random.uniform(-90, 90, 50)
 
-        distance = np.empty_like(lon1)
-        bearing1 = np.empty_like(lon1)
-        bearing2 = np.empty_like(lon1)
+        distance, bearing1, bearing2 = pathprof.geodesics.inverse_cython(
+            np.radians(lon1), np.radians(lat1),
+            np.radians(lon2), np.radians(lat2),
+            )
+        (
+            distance_lowprec, bearing1_lowprec, bearing2_lowprec
+            ) = pathprof.geodesics.inverse_cython(
+            np.radians(lon1), np.radians(lat1),
+            np.radians(lon2), np.radians(lat2),
+            eps=1.e-8
+            )
+
         distance_gglib = np.empty_like(lon1)
         bearing1_gglib = np.empty_like(lon1)
         bearing2_gglib = np.empty_like(lon1)
-        distance_lowprec = np.empty_like(lon1)
-        bearing1_lowprec = np.empty_like(lon1)
-        bearing2_lowprec = np.empty_like(lon1)
 
-        for idx, (_lon1, _lon2, _lat1, _lat2) in enumerate(zip(
+        for idx, (_lon1, _lat1, _lon2, _lat2) in enumerate(zip(
                 lon1, lat1, lon2, lat2
                 )):
 
-            (
-                distance[idx], bearing1[idx], bearing2[idx]
-                ) = pathprof.geodesics.inverse(
-                _lon1, _lon2, _lat1, _lat2
-                )
-            (
-                distance_lowprec[idx], bearing1_lowprec[idx],
-                bearing2_lowprec[idx]
-                ) = pathprof.geodesics.inverse(
-                _lon1, _lon2, _lat1, _lat2, eps=1.e-8
-                )
-
-            aux = Geodesic.WGS84.Inverse(_lon2, _lon1, _lat2, _lat1)
+            aux = Geodesic.WGS84.Inverse(_lat1, _lon1, _lat2, _lon2)
             distance_gglib[idx] = aux['s12']
             bearing1_gglib[idx] = aux['azi1']
             bearing2_gglib[idx] = aux['azi2']
@@ -88,30 +82,30 @@ class TestGeodesics:
             )
 
         assert_quantity_allclose(
-            bearing1,
+            np.degrees(bearing1),
             bearing1_gglib,
             # atol=1.e-10, rtol=1.e-4
             )
 
         assert_quantity_allclose(
-            bearing1_lowprec,
+            np.degrees(bearing1_lowprec),
             bearing1_gglib,
             atol=1.e-6,
             )
 
         assert_quantity_allclose(
-            bearing2,
+            np.degrees(bearing2),
             bearing2_gglib,
             # atol=1.e-10, rtol=1.e-4
             )
 
         assert_quantity_allclose(
-            bearing2_lowprec,
+            np.degrees(bearing2_lowprec),
             bearing2_gglib,
             atol=1.e-6,
             )
 
-    def test_direct(self):
+    def test_direct_cython(self):
 
         # testing against geographic-lib
 
@@ -122,30 +116,24 @@ class TestGeodesics:
             bearing1 = np.random.uniform(-90, 90, 50)
             dist = np.random.uniform(1, 10.e6, 50)  # 10000 km max
 
-        lon2 = np.empty_like(lon1)
-        lat2 = np.empty_like(lon1)
-        bearing2 = np.empty_like(lon1)
+        lon2, lat2, bearing2 = pathprof.cygeodesics.direct_cython(
+            np.radians(lon1), np.radians(lat1),
+            np.radians(bearing1), dist
+            )
+        (
+            lon2_lowprec, lat2_lowprec, bearing2_lowprec
+            ) = pathprof.cygeodesics.direct_cython(
+            np.radians(lon1), np.radians(lat1),
+            np.radians(bearing1), dist, eps=1.e-8
+            )
+
         lon2_gglib = np.empty_like(lon1)
         lat2_gglib = np.empty_like(lon1)
         bearing2_gglib = np.empty_like(lon1)
-        lon2_lowprec = np.empty_like(lon1)
-        lat2_lowprec = np.empty_like(lon1)
-        bearing2_lowprec = np.empty_like(lon1)
 
         for idx, (_lon1, _lat1, _bearing1, _dist) in enumerate(zip(
                 lon1, lat1, bearing1, dist
                 )):
-
-            (
-                lon2[idx], lat2[idx], bearing2[idx]
-                ) = pathprof.geodesics.direct(
-                _lon1, _lat1, _bearing1, _dist
-                )
-            (
-                lon2_lowprec[idx], lat2_lowprec[idx], bearing2_lowprec[idx]
-                ) = pathprof.geodesics.direct(
-                _lon1, _lat1, _bearing1, _dist, eps=1.e-8
-                )
 
             line = Geodesic.WGS84.Line(_lat1, _lon1, _bearing1)
             pos = line.Position(_dist)
@@ -154,37 +142,37 @@ class TestGeodesics:
             bearing2_gglib[idx] = pos['azi2']
 
         assert_quantity_allclose(
-            lon2,
+            np.degrees(lon2),
             lon2_gglib,
             # atol=1.e-10, rtol=1.e-4
             )
 
         assert_quantity_allclose(
-            lon2_lowprec,
+            np.degrees(lon2_lowprec),
             lon2_gglib,
             atol=1.e-6,
             )
 
         assert_quantity_allclose(
-            lat2,
+            np.degrees(lat2),
             lat2_gglib,
             # atol=1.e-10, rtol=1.e-4
             )
 
         assert_quantity_allclose(
-            lat2_lowprec,
+            np.degrees(lat2_lowprec),
             lat2_gglib,
             atol=1.e-6,
             )
 
         assert_quantity_allclose(
-            bearing2,
+            np.degrees(bearing2),
             bearing2_gglib,
             # atol=1.e-10, rtol=1.e-4
             )
 
         assert_quantity_allclose(
-            bearing2_lowprec,
+            np.degrees(bearing2_lowprec),
             bearing2_gglib,
             atol=1.e-6,
             )

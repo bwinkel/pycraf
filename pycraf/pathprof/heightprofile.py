@@ -14,7 +14,7 @@ from astropy import units as apu
 import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 # from geographiclib.geodesic import Geodesic
-from . import geodesics
+from . import cygeodesics
 from .. import conversions as cnv
 from .. import utils
 
@@ -146,29 +146,32 @@ def _get_interpolated_data(lons, lats):
 
 
 def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
-    # angles in deg; step and heights in m
+    # angles in rad; lengths in m
 
     # first find start bearing (and backward bearing for the curious people)
     # and distance
 
     # import time
     # t = time.time()
-    distance, bearing_1, bearing_2 = geodesics.inverse(
-        lon_t, lat_t, lon_r, lat_r
+    lon_t_rad, lat_t_rad = np.radians(lon_t), np.radians(lat_t)
+    lon_r_rad, lat_r_rad = np.radians(lon_r), np.radians(lat_r),
+    distance, bearing_1_rad, bearing_2_rad = cygeodesics.inverse_cython(
+        lon_t_rad, lat_t_rad, lon_r_rad, lat_r_rad,
         )
-    back_bearing = bearing_2 % 360. - 180.
+    bearing_1 = np.degrees(bearing_1_rad)
+    bearing_2 = np.degrees(bearing_2_rad)
+    back_bearing = bearing_2 % 360 - 180
 
     distances = np.arange(0., distance + step, step)  # [m]
-    lons = np.empty_like(distances)
-    lats = np.empty_like(distances)
-    bearing_2s = np.empty_like(distances)
 
-    for idx, d in enumerate(distances):
-        # TODO: build a numpy interface in Geodesics
-        lons[idx], lats[idx], bearing_2s[idx] = geodesics.direct(
-            lon_t, lat_t, bearing_1, d
-            )
-    back_bearings = bearing_2s % 360. - 180.
+    lons_rad, lats_rad, bearing_2s_rad = cygeodesics.direct_cython(
+        lon_t_rad, lat_t_rad, bearing_1_rad, distances
+        )
+    lons = np.degrees(lons_rad)
+    lats = np.degrees(lats_rad)
+    bearing_2s = np.degrees(bearing_2s_rad)
+
+    back_bearings = bearing_2s % 360 - 180
 
     # important: unless the requested resolution is super-fine, we always
     # have to query the raw height profile data using sufficient resolution,
@@ -181,17 +184,16 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
 
     if step > _HGT_RES / 1.5:
         hdistances = np.arange(0., distance + _HGT_RES / 3., _HGT_RES / 3.)
-        hlons = np.empty_like(hdistances)
-        hlats = np.empty_like(hdistances)
-        for idx, d in enumerate(hdistances):
-            hlons[idx], hlats[idx], _ = geodesics.direct(
-                lon_t, lat_t, bearing_1, d
-                )
+        hlons, hlats, _ = cygeodesics.direct_cython(
+            lon_t_rad, lat_t_rad, bearing_1_rad, hdistances
+            )
+        hlons = np.degrees(hlons)
+        hlats = np.degrees(hlats)
 
         hheights = _get_interpolated_data(hlons, hlats).astype(np.float64)
         heights = np.empty_like(distances)
         # now smooth/interpolate this to the desired step width
-        geodesics.regrid1d_with_x(
+        cygeodesics.regrid1d_with_x(
             hdistances, hheights, distances, heights,
             step / 2.35, regular=True
             )
@@ -203,14 +205,9 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
     # print(time.time() - t)
 
     return (
-        lons,
-        lats,
-        distances * 1.e-3,
-        heights,
-        bearing_1,
-        back_bearing,
-        back_bearings,
-        distance * 1.e-3,
+        lons, lats, distances * 1.e-3, heights,
+        bearing_1, back_bearing, back_bearings,
+        distance * 1.e-3
         )
 
 

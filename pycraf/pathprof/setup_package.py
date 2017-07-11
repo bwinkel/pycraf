@@ -50,9 +50,9 @@ def get_extensions():
         )
 
     ext_module_pathprof_geodesics = Extension(
-        name='pycraf.pathprof.geodesics',
+        name='pycraf.pathprof.cygeodesics',
         # ['pycraf/pathprof/geodesics.pyx'],
-        sources=[os.path.join(PYXDIR, 'geodesics.pyx')],
+        sources=[os.path.join(PYXDIR, 'cygeodesics.pyx')],
         **comp_args
         )
 

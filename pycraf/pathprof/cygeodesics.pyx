@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 
 cimport cython
 cimport numpy as np
+from numpy cimport PyArray_MultiIter_DATA as Py_Iter_DATA
 from libc.math cimport (
     exp, sqrt, fabs, M_PI, sin, cos, tan, asin, acos, atan2
     )
@@ -18,7 +19,7 @@ import numpy as np
 
 np.import_array()
 
-__all__ = ['inverse', 'direct', 'regrid1d_with_x']
+# __all__ = ['inverse', 'direct']
 
 
 cdef double WGS_a = 6378137.0
@@ -26,15 +27,13 @@ cdef double WGS_b = 6356752.314245
 cdef double WGS_f = 1 / 298.257223563
 cdef double DEG2RAD = M_PI / 180.
 cdef double RAD2DEG = 180. / M_PI
-
+cdef double M_2PI = 2 * M_PI
 
 # see https://en.wikipedia.org/wiki/Vincenty's_formulae
 
-cdef void _inverse(
+cdef (double, double, double) _inverse(
         double lon1_rad, double lat1_rad,
         double lon2_rad, double lat2_rad,
-        double *dist,
-        double *bearing1_rad, double *bearing2_rad,
         double eps,
         int maxiter,
         ) nogil:
@@ -46,6 +45,8 @@ cdef void _inverse(
         double sin_lam, cos_lam
         double sin_s, cos_s, sin_a, cos2_a, cos_2sm, cos2_2sm
         double C, u2, A, B, ds
+
+        double dist, bearing1_rad, bearing2_rad
 
         int _iter
 
@@ -101,63 +102,76 @@ cdef void _inverse(
             )
         )
 
-    dist[0] = WGS_b * A * (s - ds)
-    bearing1_rad[0] = atan2(
+    dist = WGS_b * A * (s - ds)
+    bearing1_rad = atan2(
         cos_U2 * sin_lam,
         cos_U1 * sin_U2 - sin_U1 * cos_U2 * cos_lam
         )
-    bearing2_rad[0] = atan2(
+    bearing2_rad = atan2(
         cos_U1 * sin_lam,
         -sin_U1 * cos_U2 + cos_U1 * sin_U2 * cos_lam
         )
 
-    return
+    return (dist, bearing1_rad, bearing2_rad)
 
 
-def inverse(
-        double lon1_deg, double lat1_deg,
-        double lon2_deg, double lat2_deg,
+def inverse_cython(
+        lon1_rad, lat1_rad,
+        lon2_rad, lat2_rad,
         double eps=1.e-12,  # corresponds to approximately 0.06mm
         int maxiter=50,
         ):
 
     cdef:
 
-        double lon1_rad, lat1_rad,
-        double lon2_rad, lat2_rad,
+        np.broadcast broadcast, it
+        np.ndarray dist_arr, bearing1_arr, bearing2_arr
 
-        double dist = 0.,
-        double bearing1_rad = 0., bearing1_deg = 0.
-        double bearing2_rad = 0., bearing2_deg = 0.
+    # Turn all inputs into arrays
+    kwargs = dict(dtype=np.double, order='C', copy=False, subok=True)
+    lon1_rad = np.array(lon1_rad, **kwargs)
+    lat1_rad = np.array(lat1_rad, **kwargs)
+    lon2_rad = np.array(lon2_rad, **kwargs)
+    lat2_rad = np.array(lat2_rad, **kwargs)
 
-    lon1_rad = DEG2RAD * lon1_deg
-    lon2_rad = DEG2RAD * lon2_deg
-    lat1_rad = DEG2RAD * lat1_deg
-    lat2_rad = DEG2RAD * lat2_deg
+    broadcast = np.broadcast(lon1_rad, lat1_rad, lon2_rad, lat2_rad)
+    dist_arr = np.empty(broadcast.shape + (), dtype=np.double)
+    bearing1_arr = np.empty(broadcast.shape + (), dtype=np.double)
+    bearing2_arr = np.empty(broadcast.shape + (), dtype=np.double)
 
-    _inverse(
-        lon1_rad, lat1_rad,
-        lon2_rad, lat2_rad,
-        &dist,
-        &bearing1_rad, &bearing2_rad,
-        eps,
-        maxiter,
+    it = np.broadcast(
+        lon1_rad, lat1_rad, lon2_rad, lat2_rad,
+        dist_arr, bearing1_arr, bearing2_arr,
         )
 
-    bearing1_deg = RAD2DEG * bearing1_rad
-    bearing2_deg = RAD2DEG * bearing2_rad
+    with nogil:
+        while np.PyArray_MultiIter_NOTDONE(it):
 
-    return dist, bearing1_deg, bearing2_deg
+            (
+                (<double*> Py_Iter_DATA(it, 4))[0],
+                (<double*> Py_Iter_DATA(it, 5))[0],
+                (<double*> Py_Iter_DATA(it, 6))[0],
+                ) = _inverse(
+                    (<double*> Py_Iter_DATA(it, 0))[0],
+                    (<double*> Py_Iter_DATA(it, 1))[0],
+                    (<double*> Py_Iter_DATA(it, 2))[0],
+                    (<double*> Py_Iter_DATA(it, 3))[0],
+                    eps,
+                    maxiter,
+                    )
+
+            np.PyArray_MultiIter_NEXT(it)
+
+    return dist_arr, bearing1_arr, bearing2_arr
 
 
-cdef void _direct(
+cdef (double, double, double) _direct(
         double lon1_rad, double lat1_rad,
         double bearing1_rad,
         double dist,
-        double *lon2_rad, double *lat2_rad,
-        double *bearing2_rad,
         double eps,
         int maxiter,
+        int cwrap
         ) nogil:
 
     cdef:
@@ -167,6 +181,8 @@ cdef void _direct(
         double sin_lam, cos_lam
         double sin_s, cos_s, sin_a, cos2_a, cos_2sm, cos2_2sm
         double C, u2, A, B, ds
+
+        double lon2_rad, lat2_rad, bearing2_rad
 
         int _iter
 
@@ -214,7 +230,7 @@ cdef void _direct(
         _iter += 1
         last_s = s
 
-    lat2_rad[0] = atan2(
+    lat2_rad = atan2(
         sin_U1 * cos_s + cos_U1 * sin_s * cos_a1,
         (1 - WGS_f) * sqrt(
             sin2_a + (sin_U1 * sin_s - cos_U1 * cos_s * cos_a1) ** 2
@@ -233,19 +249,21 @@ cdef void _direct(
             )
         )
 
-    lon2_rad[0] = L + lon1_rad
-    bearing2_rad[0] = atan2(
+    lon2_rad = L + lon1_rad
+    bearing2_rad = atan2(
         sin_a,
         -sin_U1 * sin_s + cos_U1 * cos_s * cos_a1
         )
 
-    return
+    if cwrap:
+        lon2_rad = (lon2_rad + M_PI) % M_2PI - M_PI
+
+    return lon2_rad, lat2_rad, bearing2_rad
 
 
-def direct(
-        double lon1_deg, double lat1_deg,
-        double bearing1_deg,
-        double dist,
+def direct_cython(
+        lon1_rad, lat1_rad,
+        bearing1_rad, dist_m,
         double eps=1.e-12,  # corresponds to approximately 0.06mm
         int maxiter=50,
         wrap=True,
@@ -253,32 +271,47 @@ def direct(
 
     cdef:
 
-        double lon1_rad, lat1_rad, bearing1_rad
-        double lon2_rad, lat2_rad, bearing2_rad
-        double lon2_deg, lat2_deg, bearing2_deg
+        np.broadcast broadcast, it
+        np.ndarray lon2_arr, lat2_arr, bearing2_arr
+        int cwrap = 1 if wrap else 0
 
-    lon1_rad = DEG2RAD * lon1_deg
-    lat1_rad = DEG2RAD * lat1_deg
-    bearing1_rad = DEG2RAD * bearing1_deg
+    # Turn all inputs into arrays
+    kwargs = dict(dtype=np.double, order='C', copy=False, subok=True)
+    lon1_rad = np.array(lon1_rad, **kwargs)
+    lat1_rad = np.array(lat1_rad, **kwargs)
+    bearing1_rad = np.array(bearing1_rad, **kwargs)
+    dist_m = np.array(dist_m, **kwargs)
 
-    _direct(
-        lon1_rad, lat1_rad,
-        bearing1_rad,
-        dist,
-        &lon2_rad, &lat2_rad,
-        &bearing2_rad,
-        eps,
-        maxiter,
+    broadcast = np.broadcast(lon1_rad, lat1_rad, bearing1_rad, dist_m)
+    lon2_arr = np.empty(broadcast.shape + (), dtype=np.double)
+    lat2_arr = np.empty(broadcast.shape + (), dtype=np.double)
+    bearing2_arr = np.empty(broadcast.shape + (), dtype=np.double)
+
+    it = np.broadcast(
+        lon1_rad, lat1_rad, bearing1_rad, dist_m,
+        lon2_arr, lat2_arr, bearing2_arr,
         )
 
-    lon2_deg = RAD2DEG * lon2_rad
-    lat2_deg = RAD2DEG * lat2_rad
-    bearing2_deg = RAD2DEG * bearing2_rad
+    with nogil:
+        while np.PyArray_MultiIter_NOTDONE(it):
 
-    if wrap:
-        lon2_deg = (lon2_deg + 180.) % 360. - 180.
+            (
+                (<double*> Py_Iter_DATA(it, 4))[0],
+                (<double*> Py_Iter_DATA(it, 5))[0],
+                (<double*> Py_Iter_DATA(it, 6))[0],
+                ) = _direct(
+                    (<double*> Py_Iter_DATA(it, 0))[0],
+                    (<double*> Py_Iter_DATA(it, 1))[0],
+                    (<double*> Py_Iter_DATA(it, 2))[0],
+                    (<double*> Py_Iter_DATA(it, 3))[0],
+                    eps,
+                    maxiter,
+                    cwrap
+                    )
 
-    return lon2_deg, lat2_deg, bearing2_deg
+            np.PyArray_MultiIter_NEXT(it)
+
+    return lon2_arr, lat2_arr, bearing2_arr
 
 
 cdef inline int find_in_ordered(
