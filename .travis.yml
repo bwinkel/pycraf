@@ -74,6 +74,12 @@ matrix:
     fast_finish: true
 
     include:
+
+        # Standard linux; also used for sdist'ing
+        - os: linux
+          env: SETUP_CMD='test'
+               DO_DIST=YES
+
         # Try MacOS X
         - os: osx
           osx_image: xcode8.3
@@ -152,3 +158,12 @@ after_success:
     # If coveralls.io is set up for this package, uncomment the line below.
     # The coveragerc file may be customized as needed for your package.
     - if [[ $SETUP_CMD == *coverage* ]]; then coveralls --rcfile='pycraf/tests/coveragerc'; fi
+
+    - echo "TRAVIS_TAG" $TRAVIS_TAG
+    - echo "DO_DIST" $DO_DIST
+    - |
+        if [[ $TRAVIS_TAG && $DO_DIST]]; then
+              conda install twine
+              python setup.py sdist
+              python -m twine upload dist/*.tar.gz
+        fi

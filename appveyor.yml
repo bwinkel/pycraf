@@ -50,3 +50,16 @@ build: false
 
 test_script:
     - "%CMD_IN_ENV% python setup.py test"
+
+after_test:
+  # This step builds your wheels.
+  - "%CMD_IN_ENV% python setup.py bdist_wheel"
+  - "%CMD_IN_ENV% python setup.py bdist_wininst"
+  - "%CMD_IN_ENV% python setup.py bdist_msi"
+
+on_success:
+#  You can use this step to upload your artifacts to a public website.
+#  See Appveyor's documentation for more details. Or you can simply
+#  access your wheels from the Appveyor "artifacts" tab for your build.
+#  APPVEYOR_REPO_TAG is true only if commit is a tag
+- ps: "If ($env:APPVEYOR_REPO_TAG -eq \"true\") {\n  conda install twine\n   python -m twine upload (resolve-path dist\\*.whl)\n  }"
