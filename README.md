@@ -1,6 +1,6 @@
 # Introduction #
 
-- *Version*: 0.23
+- *Version*: 0.24
 - *Authors*: Benjamin Winkel
 
 [![PyPI version](https://img.shields.io/pypi/v/pycraf.svg)](https://pypi.python.org/pypi/pycraf)

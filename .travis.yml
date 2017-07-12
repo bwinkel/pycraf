@@ -161,9 +161,4 @@ after_success:
 
     - echo "TRAVIS_TAG" $TRAVIS_TAG
     - echo "DO_DIST" $DO_DIST
-    - |
-        if [[ $TRAVIS_TAG && $DO_DIST]]; then
-              conda install twine
-              python setup.py sdist
-              python -m twine upload dist/*.tar.gz
-        fi
+    - if [[ $TRAVIS_TAG && $DO_DIST ]]; then conda install twine; python setup.py sdist; python -m twine upload dist/*.tar.gz; fi
