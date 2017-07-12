@@ -102,9 +102,9 @@ class TestHelper:
                 326.14456177, 329.69577705], cnv.dimless),
             )
 
-    def test_median_eff_earth_radius(self):
+    def test_eff_earth_radius_median(self):
 
-        pfunc = pathprof.median_eff_earth_radius
+        pfunc = pathprof.eff_earth_radius_median
         args_list = [
             (0, 360, apu.deg),
             (-90, 90, apu.deg),

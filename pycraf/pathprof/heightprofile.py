@@ -202,12 +202,11 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
 
         heights = _get_interpolated_data(lons, lats).astype(np.float64)
 
-    # print(time.time() - t)
-
     return (
-        lons, lats, distances * 1.e-3, heights,
-        bearing_1, back_bearing, back_bearings,
-        distance * 1.e-3
+        lons, lats,
+        distance * 1.e-3,
+        distances * 1.e-3, heights,
+        bearing_1, back_bearing, back_bearings
         )
 
 
@@ -219,7 +218,7 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
     step=(1., 1.e5, apu.m),
     strip_input_units=True,
     output_unit=(
-        apu.deg, apu.deg, apu.km, apu.m, apu.deg, apu.deg, apu.deg, apu.km
+        apu.deg, apu.deg, apu.km, apu.km, apu.m, apu.deg, apu.deg, apu.deg
         )
     )
 def srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
@@ -228,24 +227,47 @@ def srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
 
     Parameters
     ----------
-    lon_t, lat_t - Transmitter coordinates [deg]
-    lon_r, lat_r - Receiver coordinates [deg]
+    lon_t, lat_t : `~astropy.units.Quantity`
+        Geographic longitude/latitude of start point (transmitter) [deg]
+    lon_r, lat_r : `~astropy.units.Quantity`
+        Geographic longitude/latitude of end point (receiver) [deg]
+    step : `~astropy.units.Quantity`
+        Distance resolution of height profile along path [m]
 
     Returns
     -------
-    d_vec, h_vec - Path dist/height profile vectors [m]
+    lons : `~astropy.units.Quantity` 1D array
+        Geographic longitudes of path.
+    lats : `~astropy.units.Quantity` 1D array
+        Geographic latitudes of path.
+    distance : `~astropy.units.Quantity` scalar
+        Distance between start and end point of path.
+    distances : `~astropy.units.Quantity` 1D array
+        Distances along the path (with respect to start point).
+    heights : `~astropy.units.Quantity` 1D array
+        Terrain height along the path (aka Height profile).
+    bearing : `~astropy.units.Quantity` scalar
+        Start bearing of path.
+    backbearing : `~astropy.units.Quantity` scalar
+        Back-bearing at end point of path.
+    backbearings : `~astropy.units.Quantity` 1D array
+        Back-bearings for each point on the path.
 
     Notes
     -----
-    - d_vec contains distances from Transmitter.
+    - `distances` contains distances from Transmitter.
+    - `SRTM data <https://www2.jpl.nasa.gov/srtm/>`_ need to be downloaded
+      manually by the user. An environment variable `SRTMDATA` has to be
+      set to point to the directory containing the .hgt files; see
+      :ref:`srtm_data`.
     '''
 
     return _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step)
 
 
 @utils.ranged_quantity_input(
-    lon_t=(-180, 180, apu.deg),
-    lat_t=(-90, 90, apu.deg),
+    lon_c=(-180, 180, apu.deg),
+    lat_c=(-90, 90, apu.deg),
     map_size_lon=(0.002, 90, apu.deg),
     map_size_lat=(0.002, 90, apu.deg),
     map_resolution=(0.0001, 0.1, apu.deg),
@@ -254,7 +276,7 @@ def srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
     output_unit=(apu.deg, apu.deg, apu.m)
     )
 def srtm_height_map(
-        lon_t, lat_t,
+        lon_c, lat_c,
         map_size_lon, map_size_lat,
         map_resolution=3. * apu.arcsec,
         hprof_step=None,
@@ -262,47 +284,56 @@ def srtm_height_map(
         do_coords_2d=False,
         ):
     '''
-    Calculate height profiles and auxillary maps needed for atten_map_fast.
-
-    This can be used to cache height-profile data. Since it is independent
-    of frequency, time_percent, Tx and Rx heights, etc., one can re-use
-    it to save computing time when doing batch jobs.
-
-    Note: Path attenuation is completely symmetric, i.e., it doesn't matter if
-    the transmitter or the receiver is situated in the map center.
+    Extract terrain map from SRTM data.
 
     Parameters
     ----------
-    lon_t, lat_t - Transmitter coordinates [deg]
-    map_size_lon, map_size_lat - Map size [deg]
-    map_resolution - Pixel resolution of map [deg]
-    hprof_step - Pixel resolution of map [m]
-        overrides map_resolution if given!
-    do_cos_delta - If True, divide map_size_lon by cos(lat_t) for square map
-    do_coords_2d - If True, return 2D lon and lat coordinate arrays
+    lon_t, lat_t : `~astropy.units.Quantity`
+        Geographic longitude/latitude of map center [deg]
+    map_size_lon, map_size_lat : `~astropy.units.Quantity`
+        Map size in longitude/latitude[deg]
+    map_resolution : `~astropy.units.Quantity`, optional
+        Pixel resolution of map [deg] (default: 3 arcsec)
+    hprof_step : `~astropy.units.Quantity`, optional
+        Pixel resolution of map [m] (default: None)
+        Overrides `map_resolution` if given!
+    do_cos_delta : bool, optional
+        If True, divide `map_size_lon` by `cos(lat_c)` to produce a more
+        square-like map. (default: True)
+    do_coords_2d : bool, optional
+        If True, return 2D coordinate arrays (default: False)
 
     Returns
     -------
-    (lons, lats, heights) - tuple
-        lons - Geographic longitudes [deg]
-        lats - Geographic latitudes [deg]
-        heights - Height map [deg]
+    lons : `~astropy.units.Quantity`, 1D or 2D
+        Geographic longitudes [deg]
+    lats : `~astropy.units.Quantity`, 1D or 2D
+        Geographic latitudes [deg]
+    heights : `~astropy.units.Quantity`, 1D or 2D
+        Height map [m]
+
+    Notes
+    -----
+    - `SRTM data <https://www2.jpl.nasa.gov/srtm/>`_ need to be downloaded
+      manually by the user. An environment variable `SRTMDATA` has to be
+      set to point to the directory containing the .hgt files; see
+      :ref:`srtm_data`.
     '''
 
     if hprof_step is None:
         hprof_step = map_resolution * 3600. / 1. * 30.
 
-    cosdelta = 1. / np.cos(np.radians(lat_t)) if do_cos_delta else 1.
+    cosdelta = 1. / np.cos(np.radians(lat_c)) if do_cos_delta else 1.
 
     # construction map arrays
     xcoords = np.arange(
-        lon_t - cosdelta * map_size_lon / 2,
-        lon_t + cosdelta * map_size_lon / 2 + 1.e-6,
+        lon_c - cosdelta * map_size_lon / 2,
+        lon_c + cosdelta * map_size_lon / 2 + 1.e-6,
         cosdelta * map_resolution,
         )
     ycoords = np.arange(
-        lat_t - map_size_lat / 2,
-        lat_t + map_size_lat / 2 + 1.e-6,
+        lat_c - map_size_lat / 2,
+        lat_c + map_size_lat / 2 + 1.e-6,
         map_resolution,
         )
     xcoords2d, ycoords2d = np.meshgrid(xcoords, ycoords)

@@ -6,10 +6,15 @@ Contains functions to construct height profiles and terrain maps from `SRTM
 <https://www2.jpl.nasa.gov/srtm/>`_ data, calculate shortest path on the
 Geoid - so-called geodesics -, and perform path propagation/attenuation
 estimation.
+'''
 
-Clutter types are defined according to `ITU-R Recommendation P.452-16
-<https://www.itu.int/rec/R-REC-P.452-16-201507-I/en>`_.
+from .cyprop import *
+from .geodesics import *
+from .heightprofile import *
+from .helper import *
+from .propagation import *
 
+_clutter_table = '''
 +-------+-------------------+------+------+
 | Value | Alias             | |ha| | |dk| |
 +=======+===================+======+======+
@@ -38,14 +43,15 @@ Clutter types are defined according to `ITU-R Recommendation P.452-16
 | 10    | INDUSTRIAL_ZONE   | 20   | 50   |
 +-------+-------------------+------+------+
 
-
 .. |ha| replace:: :math:`h_\mathrm{a}~[\mathrm{m}]`
 .. |dk| replace:: :math:`d_\mathrm{k}~[\mathrm{m}]`
-
 '''
 
-from .cyprop import *
-from .geodesics import *
-from .heightprofile import *
-from .helper import *
-from .propagation import *
+# enum docstring can't be set within pyx-file. Need to monkey-patch it here.
+CLUTTER.__doc__ = '''
+Clutter types are defined according to `ITU-R Recommendation P.452-16
+<https://www.itu.int/rec/R-REC-P.452-16-201507-I/en>`_.
+
+''' + _clutter_table
+
+# __doc__ += _clutter_table

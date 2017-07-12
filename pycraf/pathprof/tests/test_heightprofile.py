@@ -28,7 +28,7 @@ def test_srtm_height_profile():
 
     # Geodesics are already tested, so only check heights
     (
-        _, _, _, heights, _, _, _, _,
+        _, _, _, _, heights, _, _, _,
         ) = pathprof.srtm_height_profile(
         lon_t, lat_t, lon_r, lat_r, 100 * apu.m
         )
@@ -50,7 +50,7 @@ def test_srtm_height_profile():
     lon_r, lat_r = 6.502 * apu.deg, 50.502 * apu.deg
 
     (
-        _, _, _, heights, _, _, _, _,
+        _, _, _, _, heights, _, _, _,
         ) = pathprof.srtm_height_profile(
         lon_t, lat_t, lon_r, lat_r, 10 * apu.m
         )

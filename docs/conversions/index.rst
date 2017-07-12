@@ -4,8 +4,6 @@
 Conversions (`pycraf.conversions`)
 **************************************
 
-.. |apu| replace:: `astropy.units <http://docs.astropy.org/en/stable/units/index.html>`_
-
 .. currentmodule:: pycraf.conversions
 
 Introduction
@@ -120,7 +118,7 @@ usual::
 
 Astropy `~astropy.units` provide even some additional formatting options::
 
-    >>> print('{0.value:.1f} {0.unit}.format(power.to(u.W)))
+    >>> print('{0.value:.1f} {0.unit}'.format(power.to(u.W)))
     1.3 W
     >>> print('{0.value:.1f} {0.unit:FITS}'.format(1 * u.m / u.s))
     1.0 m s-1
@@ -164,7 +162,7 @@ The following quantities are of interest in compatibility studies:
 - Spectral power flux density, :math:`S_\nu`, with: :math:`S=\int \mathrm{d}\nu\,S_\nu`
 - Transmitted power, :math:`P_\mathrm{tx}`, with :math:`S = G_\mathrm{tx}\frac{P_\mathrm{tx}}{4\pi d^2}`
 - Received power, :math:`P_\mathrm{rx} = S\cdot A_\mathrm{eff}^\mathrm{rx} = S\cdot G_\mathrm{rx}\frac{\lambda^2}{4\pi} = G_\mathrm{tx}\frac{P_\mathrm{tx}}{4\pi d^2} \cdot G_\mathrm{rx}\frac{\lambda^2}{4\pi} = G_\mathrm{tx} G_\mathrm{rx} P_\mathrm{tx} L_\mathrm{fs}`
-- Free-space loss: :math:`L_\mathrm{fs} = \frac{c^2}{16\pi^2}\frac{1}{f^2} = \frac{\lambda^2}{16\pi^2 d^2}`
+- Free-space loss: :math:`L_\mathrm{fs} = \frac{c^2}{16\pi^2}\frac{1}{d^2f^2} = \frac{\lambda^2}{16\pi^2 d^2}`
 
 A few examples::
 

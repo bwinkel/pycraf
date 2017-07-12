@@ -85,14 +85,14 @@ class TestPropagation:
             #     )
             # json.dump(pprop._pp, open(pprop_name, 'w'))
 
-            los_loss = pathprof.freespace_loss(pprop)
-            trop_loss = pathprof.troposcatter_loss(
+            los_loss = pathprof.loss_freespace(pprop)
+            trop_loss = pathprof.loss_troposcatter(
                 pprop, G_t * cnv.dB, G_r * cnv.dB,
                 )
-            duct_loss = pathprof.ducting_loss(pprop)
-            diff_loss = pathprof.diffraction_loss(pprop)
+            duct_loss = pathprof.loss_ducting(pprop)
+            diff_loss = pathprof.loss_diffraction(pprop)
 
-            tot_loss = pathprof.complete_loss(
+            tot_loss = pathprof.loss_complete(
                 pprop, G_t * cnv.dB, G_r * cnv.dB,
                 )
 
@@ -159,7 +159,7 @@ class TestPropagation:
         for case, pprop in zip(self.cases, self.pprops):
 
             freq, (h_tg, h_rg), time_percent, version, (G_t, G_r) = case
-            los_loss = pathprof.freespace_loss(pprop)
+            los_loss = pathprof.loss_freespace(pprop)
             losses = {}
             losses['L_bfsg'] = los_loss[0].to(cnv.dB).value
             losses['E_sp'] = los_loss[1].to(cnv.dB).value
@@ -179,7 +179,7 @@ class TestPropagation:
         for case, pprop in zip(self.cases, self.pprops):
 
             freq, (h_tg, h_rg), time_percent, version, (G_t, G_r) = case
-            tropo_loss = pathprof.troposcatter_loss(
+            tropo_loss = pathprof.loss_troposcatter(
                 pprop, G_t * cnv.dB, G_r * cnv.dB
                 )
             losses = {}
@@ -199,7 +199,7 @@ class TestPropagation:
         for case, pprop in zip(self.cases, self.pprops):
 
             freq, (h_tg, h_rg), time_percent, version, (G_t, G_r) = case
-            duct_loss = pathprof.ducting_loss(pprop)
+            duct_loss = pathprof.loss_ducting(pprop)
             losses = {}
             losses['L_ba'] = duct_loss.to(cnv.dB).value
 
@@ -217,7 +217,7 @@ class TestPropagation:
         for case, pprop in zip(self.cases, self.pprops):
 
             freq, (h_tg, h_rg), time_percent, version, (G_t, G_r) = case
-            diff_loss = pathprof.diffraction_loss(pprop)
+            diff_loss = pathprof.loss_diffraction(pprop)
             losses = {}
             losses['L_d_50'] = diff_loss[0].to(cnv.dB).value
             losses['L_dp'] = diff_loss[1].to(cnv.dB).value
@@ -239,7 +239,7 @@ class TestPropagation:
         for case, pprop in zip(self.cases, self.pprops):
 
             freq, (h_tg, h_rg), time_percent, version, (G_t, G_r) = case
-            tot_loss = pathprof.complete_loss(
+            tot_loss = pathprof.loss_complete(
                 pprop, G_t * cnv.dB, G_r * cnv.dB
                 )
             losses = {}

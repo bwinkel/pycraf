@@ -1,0 +1,20 @@
+# Note: it's important that none of the packages below depend on pycraf,
+# because if they do, the conda version of pycraf will get installed. If that
+# happens, then that version will take precendence over the latest developer
+# version of pycraf that gets installed just before the documentation build,
+# and Sphinx will pick up only the older stable conda package.
+
+name: pycraf
+
+dependencies:
+  - python>=3
+  - numpy
+  - cython
+  - matplotlib
+  - scipy
+  - h5py
+  - pytest
+  - astropy
+  - pip:
+    - pyproj
+    - geographiclib

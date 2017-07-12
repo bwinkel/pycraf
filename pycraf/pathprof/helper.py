@@ -16,12 +16,12 @@ from .. import utils
 
 
 __all__ = [
-    'R_E', 'K_BETA', 'A_BETA_VALUE',
+    'R_E', 'K_BETA', 'A_BETA',
     'annual_timepercent_from_worst_month',
     'deltaN_N0_from_map', 'radiomet_data_for_pathcenter',
-    'median_eff_earth_radius_factor',
+    'eff_earth_radius_factor_median',
     'eff_earth_radius_factor_beta',
-    'median_eff_earth_radius', 'eff_earth_radius_beta',
+    'eff_earth_radius_median', 'eff_earth_radius_beta',
     'make_kmz', 'terrain_cmap_factory',
     ]
 
@@ -29,10 +29,15 @@ __all__ = [
 # useful constants
 R_E_VALUE = 6371.
 R_E = R_E_VALUE * apu.km  # Earth radius
+R_E.__doc__ = '''Earth Radius'''
+
 K_BETA_VALUE = 3.
 K_BETA = K_BETA_VALUE * cnv.dimless  # eff. Earth radius factor for beta_0
+K_BETA.__doc__ = '''Effective Earth radius factor for beta_0 percent'''
+
 A_BETA_VALUE = 3. * R_E_VALUE
 A_BETA = K_BETA_VALUE * apu.km  # eff. Earth radius for beta_0
+A_BETA.__doc__ = '''Effective Earth radius for beta_0 percent'''
 
 KML_TEMPLATE = '''<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
@@ -88,20 +93,24 @@ def annual_timepercent_from_worst_month(
 
     Parameters
     ----------
-    p_w - worst-month time percentage in %
-    phi - path center latitude in degrees
-    omega - fraction of the path over water in % (see Table 3)
+    p_w : `~astropy.units.Quantity`
+        worst-month time percentage [%]
+    phi : `~astropy.units.Quantity`
+        Geographic latitude of path center [deg]
+    omega : `~astropy.units.Quantity`
+        Fraction of the path over water (see Table 3) [%]
 
     Returns
     -------
-    p - annual equivalent time percentage in %
+    p : `~astropy.units.Quantity`
+        Annual equivalent time percentage [%]
 
     Notes
     -----
-    Use this function, if you want to do path propagation calculations
-    for the worst month case. The resulting time percentage, p, can then
-    be plugged into other functions. If you want just annual averages,
-    just use your time percentage value as is.
+    - Use this function, if you want to do path propagation calculations
+      for the worst month case. The resulting time percentage, p, can then
+      be plugged into other functions. If you want just annual averages,
+      simply use your time percentage value as is.
     '''
 
     omega /= 100.  # convert from percent to fraction
@@ -116,26 +125,11 @@ def annual_timepercent_from_worst_month(
     p = 10 ** (a / b)
 
     p = np.max([p, p_w / 12.], axis=0)
+
     return p
 
 
-def _N_from_map(lon, lat):
-    '''
-    Query ΔN and N_0 values from digitized maps by means of bilinear interpol.
-
-
-    Parameters
-    ----------
-    lon, lat - path center coordinates [deg]
-
-
-    Returns
-    -------
-    delta_N, N_0 - radiometeorological data
-        delta_N - average radio-refractive index lapse-rate through the
-                  lowest 1 km of the atmosphere in N-units/km
-        N_0 - sea-level surface refractivity in N-units
-    '''
+def _DN_N0_from_map(lon, lat):
 
     _DN = _DN_interpolator((lon % 360, lat))
     _N0 = _N0_interpolator((lon % 360, lat))
@@ -151,27 +145,30 @@ def _N_from_map(lon, lat):
     )
 def deltaN_N0_from_map(lon, lat):
     '''
-    Calculate radiometeorological data, ΔN and N_0, from path center
-    coordinates, according to ITU-R P.452-16 Eq (2-4).
+    Query delta_N and N_0 values from digitized maps by means of bilinear
+    interpolation.
 
     Parameters
     ----------
-    lon, lat - path center coordinates [deg]
+    lon, lat : `~astropy.units.Quantity`
+        Geographic longitude and latitude of path center [deg]
 
     Returns
     -------
-    delta_N, N_0 - radiometeorological data
-        delta_N - average radio-refractive index lapse-rate through the
-            lowest 1 km of the atmosphere [N-units/km]
-        N_0 - sea-level surface refractivity [N-units]
+    delta_N : `~astropy.units.Quantity`
+        Average radio-refractive index lapse-rate through the lowest 1 km of
+        the atmosphere [N-units/km == 1/km]
+    N_0 : `~astropy.units.Quantity`
+        Sea-level surface refractivity [N-units == dimless]
 
     Notes
     -----
-    - ΔN and N_0 are derived from digitized maps (shipped with P.452) by
-      bilinear interpolation.
+    - The values for `delta_N` and `N_0` are queried from
+      a radiometeorological map provided with `ITU-R Rec. P.452
+      <https://www.itu.int/rec/R-REC-P.452-16-201507-I/en>`_.
     '''
 
-    return _N_from_map(lon, lat)
+    return _DN_N0_from_map(lon, lat)
 
 
 def _radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm):
@@ -213,31 +210,38 @@ def _radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm):
     )
 def radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm):
     '''
-    Calculate radiometeorological data, ΔN, β_0 and N_0, from path center
-    coordinates, according to ITU-R P.452-16 Eq (2-4).
+    Calculate delta_N, beta_0, and N_0 values from digitized maps, according
+    to ITU-R P.452-16 Eq (2-4).
 
     Parameters
     ----------
-    lon, lat - path center coordinates [deg]
-    d_tm - longest continuous land (inland + coastal) section of the
+    lon, lat : `~astropy.units.Quantity`
+        Geographic longitude and latitude of path center [deg]
+    d_tm : `~astropy.units.Quantity`, optional
+        longest continuous land (inland + coastal) section of the
         great-circle path [km]
-    d_lm - longest continuous inland section of the great-circle path [km]
+    d_lm : `~astropy.units.Quantity`, optional
+        longest continuous inland section of the great-circle path [km]
 
     Returns
     -------
-    delta_N, beta_0, N_0 - radiometeorological data
-        delta_N - average radio-refractive index lapse-rate through the
-            lowest 1 km of the atmosphere [N-units/km]
-        beta_0 - the time percentage for which refractive index lapse-rates
-            exceeding 100 N-units/km can be expected in the first 100 m
-            of the lower atmosphere [%]
-        N_0 - sea-level surface refractivity [N-units]
+    delta_N : `~astropy.units.Quantity`
+        Average radio-refractive index lapse-rate through the lowest 1 km of
+        the atmosphere [N-units/km == 1/km]
+    beta_0 : `~astropy.units.Quantity`
+        the time percentage for which refractive index lapse-rates
+        exceeding 100 N-units/km can be expected in the first 100 m
+        of the lower atmosphere [%]
+    N_0 : `~astropy.units.Quantity`
+        Sea-level surface refractivity [N-units == dimless]
 
     Notes
     -----
-    - ΔN and N_0 are derived from digitized maps (shipped with P.452) by
-      bilinear interpolation.
-    - Radio-climaticzones can be queried from ITU Digitized World Map (IDWM).
+    - The values for `delta_N` and `N_0` are queried from
+      a radiometeorological map provided with `ITU-R Rec. P.452
+      <https://www.itu.int/rec/R-REC-P.452-16-201507-I/en>`_.
+    - Radio-climaticzones can be obtained from
+      `ITU Digitized World Map (IDWM) <http://www.itu.int/pub/R-SOFT-IDWM>`_.
       For many applications, it is probably the case, that only inland
       zones are present along the path of length d.
       In this case, d_tm = d_lm = d.
@@ -252,23 +256,26 @@ def radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm):
     strip_input_units=True,
     output_unit=cnv.dimless,
     )
-def median_eff_earth_radius_factor(lon, lat):
+def eff_earth_radius_factor_median(lon, lat):
     '''
     Calculate median effective Earth radius factor, k_50, according to
     ITU-R P.452-16 Eq (5).
 
     Parameters
     ----------
-    lon, lat - path center coordinates [deg]
+    lon, lat : `~astropy.units.Quantity`
+        Geographic longitude and latitude of path center [deg]
 
     Returns
     -------
-    k50 - median effective Earth radius factor [dimless]
+    k50 : `~astropy.units.Quantity`
+        Median effective Earth radius factor [dimless]
 
     Notes
     -----
-    - Uses ΔN, which is derived from digitized maps (shipped with P.452) by
-      bilinear interpolation.
+    - Uses delta_N, which is derived from digitized maps (shipped with P.452)
+      by bilinear interpolation; see also
+      `~pycraf.pathprof.deltaN_N0_from_map`.
     '''
 
     return 157. / (157. - _DN_interpolator((lon % 360, lat)))
@@ -285,18 +292,19 @@ def eff_earth_radius_factor_beta():
 
     Returns
     -------
-    k_beta - effective Earth radius factor exceeded for beta_0 percent
+    k_beta : `~astropy.units.Quantity`
+        Effective Earth radius factor exceeded for beta_0 percent
         of time [dimless]
 
     Notes
     -----
-    - This is just a constant. Better use K_BETA to avoid overhead.
+    - This is just a constant. You could also use K_BETA to avoid overhead.
     '''
 
     return K_BETA_VALUE
 
 
-def _median_eff_earth_radius(lon, lat):
+def _eff_earth_radius_median(lon, lat):
 
     return R_E_VALUE * 157. / (157. - _DN_interpolator((lon % 360, lat)))
 
@@ -307,26 +315,29 @@ def _median_eff_earth_radius(lon, lat):
     strip_input_units=True,
     output_unit=apu.km,
     )
-def median_eff_earth_radius(lon, lat):
+def eff_earth_radius_median(lon, lat):
     '''
     Calculate median effective Earth radius, a_e, according to
     ITU-R P.452-16 Eq (6a).
 
     Parameters
     ----------
-    lon, lat - path center coordinates [deg]
+    lon, lat : `~astropy.units.Quantity`
+        Geographic longitude and latitude of path center [deg]
 
     Returns
     -------
-    a_e - median effective Earth radius [km]
+    a_e : `~astropy.units.Quantity`
+        Median effective Earth radius [km]
 
     Notes
     -----
-    - Uses ΔN, which is derived from digitized maps (shipped with P.452) by
-      bilinear interpolation.
+    - Uses delta_N, which is derived from digitized maps (shipped with P.452)
+      by bilinear interpolation; see also
+      `~pycraf.pathprof.deltaN_N0_from_map`.
     '''
 
-    return _median_eff_earth_radius(lon, lat)
+    return _eff_earth_radius_median(lon, lat)
 
 
 @utils.ranged_quantity_input(
@@ -340,11 +351,12 @@ def eff_earth_radius_beta(lon, lat):
 
     Returns
     -------
-    a_beta - effective Earth radius exceeded for beta_0 percent of time [km]
+    a_beta : `~astropy.units.Quantity`
+        Effective Earth radius exceeded for beta_0 percent of time [km]
 
     Notes
     -----
-    - This is just a constant. Better use A_BETA to avoid overhead.
+    - This is just a constant. You could also use A_BETA to avoid overhead.
     '''
 
     return A_BETA_VALUE
@@ -358,12 +370,18 @@ def make_kmz(
 
     Parameters
     ----------
-    kmz_filename - output file name
-    atten_map - 2D array with path attenuation
-    bbox - tuple (east, south, west, north) edges of map [deg]
-    vmin, vmax - lower and upper colorbar bounds
-        if None, 2.5% and 97.5% percentiles of atten_map are used
-    cmap - matplotlib colormap
+    kmz_filename : str
+        Output file name for .kmz-file
+    atten_map : 2D `~numpy.ndarray` of floats
+        2D array with path attenuation values
+    bbox : tuple of 4 floats
+        (east, south, west, north) edges of map [deg]
+    vmin, vmax : float
+        Lower and upper colorbar bounds.
+        If None, 2.5% and 97.5% percentiles of atten_map are used
+        (default: None)
+    cmap : matplotlib.colormap
+        (default: 'inferno_r')
     '''
 
     # descriptive xml
@@ -448,23 +466,27 @@ def terrain_cmap_factory(sealevel=0.5, vmax=1200):
     With this, one can adjust the colors in the cmap such that the sea level
     is properly defined (blue).
 
-    Usage
-    -----
-    vmin, vmax = -20, 1200
-    terrain_cmap, terrain_norm = terrain_cmap_factory(vmax=vmax)
-    plt.imshow(
-        heights, cmap=terrain_cmap, norm=terrain_norm, vmin=vmin, vmax=vmax
-        )
+    A simple use case would look like the following::
+
+        >>> vmin, vmax = -20, 1200  # doctest: +SKIP
+        >>> terrain_cmap, terrain_norm = terrain_cmap_factory(vmax=vmax)  # doctest: +SKIP
+        >>> plt.imshow(  # doctest: +SKIP
+        ...     heights, cmap=terrain_cmap, norm=terrain_norm,
+        ...     vmin=vmin, vmax=vmax
+        ...     )
 
     Parameters
     ----------
-    sealevel - the sealevel value
-    vmax - maximum height to cover in the colormap
-        (one should call plt.imshow the same vmax option!)
+    sealevel : float
+        The sealevel value.
+    vmax : float
+        Maximum height to cover in the colormap
+        (one should call plt.imshow with the same vmax option!)
 
     Returns
     -------
-    terrain_cmap, terrain_norm
+    terrain_cmap : matplotlib.colors.LinearSegmentedColormap
+    terrain_norm : matplotlib.colors.Normalize instance
     '''
 
     # Combine the lower and upper range of the terrain colormap with a gap in

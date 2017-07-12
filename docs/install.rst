@@ -14,11 +14,11 @@ pycraf has the following strict requirements:
 - `pytest <https://pypi.python.org/pypi/pytest>`_ 2.8 or later
 
 - `h5py <http://h5py.org/>`_: To read/write path geometry data created by
-  `~pycraf.pathprof.height_profile_data`_ from/to HDF5 files.
+  `~pycraf.pathprof.height_profile_data` from/to HDF5 files.
 
 - `scipy <https://scipy.org/>`_: Used in various routines.
 
-- `matplotlib <http://matplotlib.org/>`_ 1.5 or later: To provide plotting functionality that `pycraf.pathprof.helper`_ enhances.
+- `matplotlib <http://matplotlib.org/>`_ 1.5 or later: To provide plotting functionality that `~pycraf.pathprof.helper` enhances.
 
 - `setuptools <https://pythonhosted.org/setuptools/>`_: Used for the package installation.
 
@@ -108,3 +108,21 @@ the `pycraf issue tracker <http://github.com/bwinkel/pycraf/issues>`_.
     run the tests from the source code directory, or :ref:`running-tests`
     for more details.
 
+.. _srtm_data:
+
+Using SRTM data
+---------------
+
+To make full use of the path attenuation calculations provided by pycraf,
+we recommend to use NASA's Shuttle Radar Topography Mission
+`(SRTM) data <https://www2.jpl.nasa.gov/srtm/>`_ for height-profile
+generation. pycraf can work with so-called `.hgt` files, a very simple binary
+format. Each .hgt file, a so-called tile, just contains 1201x1201 16-bit
+integers. From the file naming scheme, one can infer the associated
+coordinates. Most tiles contain one square-degree.
+
+Unfortunately, we cannot provide SRTM data as part of the package, due to the
+large file sizes and legal reasons. But once you downloaded the necessary
+tiles (all or only a subset appropriate for your region), simply define the
+environment variable `SRTMDATA`, let it point to the folder containing the
+tiles, and pycraf will find the files when it is imported from Python.

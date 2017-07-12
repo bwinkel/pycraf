@@ -31,13 +31,7 @@ np.import_array()
 __all__ = [
     'CLUTTER', 'CLUTTER_DATA',
     'PARAMETERS_BASIC', 'PARAMETERS_V14', 'PARAMETERS_V16',
-    'PathProp', 'set_num_threads',
-    # 'specific_attenuation_annex2',
-    # 'free_space_loss_bfsg_cython', 'tropospheric_scatter_loss_bs_cython',
-    # 'ducting_loss_ba_cython', 'diffraction_loss_complete_cython',
-    # 'path_attenuation_complete_cython', 'clutter_correction_cython',
-    # 'atten_map_fast_cython', 'beta_from_DN_N0',
-    # 'height_profile_data_cython',
+    'set_num_threads',
     ]
 
 
@@ -290,8 +284,15 @@ def set_num_threads(int nthreads):
     '''
     Change maximum number of threads to use.
 
-    This is a convenience function, to call omp_set_num_threads(),
-    which is not possible during runtime from python.
+    Parameters
+    ----------
+    nthreads - int
+        Number of threads to use.
+
+    Notes
+    -----
+    - This can also be controlled by setting the environment variable
+      `OMP_NUM_THREADS`.
     '''
 
     openmp.omp_set_num_threads(nthreads)
@@ -307,33 +308,6 @@ cdef inline double f_min(double a, double b) nogil:
 
 
 cdef class _PathProp(object):
-    '''
-    Calculate path profile properties.
-
-    Parameters
-    ----------
-    freq - Frequency of radiation [GHz]
-    temperature - Temperature (K)
-    pressure - Pressure (hPa)
-    lon_t, lat_t - Transmitter coordinates [deg]
-    lon_r, lat_r - Receiver coordinates [deg]
-    h_tg, h_rg - Transmitter/receiver heights over ground [m]
-    hprof_step - Distance resolution of height profile along path [m]
-    time_percent - Time percentage [%] (maximal 50%)
-    omega - Fraction of the path over water [%] (see Table 3)
-    d_tm - longest continuous land (inland + coastal) section of the
-        great-circle path [km]
-    d_lm - longest continuous inland section of the great-circle path [km]
-    d_ct, d_cr - Distance over land from transmit/receive antenna to the coast
-        along great circle interference path [km]
-        (set to zero for terminal on ship/sea platform; only relevant if less
-        than 5 km)
-    polarization - Polarization (0 - horizontal, 1 - vertical; default: 0)
-
-    Returns
-    -------
-    Path Properties object
-    '''
 
     cdef:
         readonly ppstruct _pp
@@ -358,7 +332,7 @@ cdef class _PathProp(object):
             delta_N, N0,
             # override if you don't want builtin method:
             hprof_dists, hprof_heights,
-            bearing, back_bearing,
+            hprof_bearing, hprof_backbearing,
             ):
 
         assert time_percent <= 50.
@@ -373,7 +347,7 @@ cdef class _PathProp(object):
 
         assert (
             (hprof_dists is None) == (hprof_heights is None) ==
-            (bearing is None) == (back_bearing is None)
+            (hprof_bearing is None) == (hprof_backbearing is None)
             ), (
                 'hprof_dists, hprof_heights, bearing, and back_bearing '
                 'must all be None or all be provided'
@@ -409,12 +383,12 @@ cdef class _PathProp(object):
             (
                 lons,
                 lats,
+                distance,
                 distances,
                 heights,
                 bearing,
                 back_bearing,
                 back_bearings,
-                distance,
                 ) = heightprofile._srtm_height_profile(
                     lon_t, lat_t,
                     lon_r, lat_r,
@@ -425,6 +399,11 @@ cdef class _PathProp(object):
             heights = hprof_heights.astype(np.float64, order='C', copy=False)
             hsize = distances.size
             distance = distances[hsize - 1]
+            bearing = hprof_bearing
+            back_bearing = hprof_backbearing
+
+        if len(distances) < 5:
+            raise ValueError('Height profile must have at least 5 steps.')
 
         zheights = np.zeros_like(heights)
 
@@ -463,7 +442,7 @@ cdef class _PathProp(object):
 
         # TODO: cythonize _radiomet_data_for_pathcenter
         if delta_N is None:
-            delta_N, N0 = helper._N_from_map(
+            delta_N, N0 = helper._DN_N0_from_map(
                 self._pp.lon_mid, self._pp.lat_mid
                 )
 
@@ -485,139 +464,6 @@ cdef class _PathProp(object):
             distances,
             heights,
             zheights,
-            )
-
-
-# This is a wrapper class to expose the ppstruct members as attributes
-# (unfortunately, one cannot do dynamical attributes on cdef-classes)
-class PathProp(_PathProp):
-    '''
-    Calculate path profile properties.
-
-    Parameters
-    ----------
-    freq - Frequency of radiation [GHz]
-    temperature - Temperature (K)
-    pressure - Pressure (hPa)
-    lon_t, lat_t - Transmitter coordinates [deg]
-    lon_r, lat_r - Receiver coordinates [deg]
-    h_tg, h_rg - Transmitter/receiver heights over ground [m]
-    hprof_step - Distance resolution of height profile along path [m]
-    time_percent - Time percentage [%] (maximal 50%)
-    omega - Fraction of the path over water [%] (see Table 3)
-    d_tm - longest continuous land (inland + coastal) section of the
-        great-circle path [km]
-    d_lm - longest continuous inland section of the great-circle path [km]
-    d_ct, d_cr - Distance over land from transmit/receive antenna to the coast
-        along great circle interference path [km]
-        (set to zero for terminal on ship/sea platform; only relevant if less
-        than 5 km)
-    polarization - Polarization (0 - horizontal, 1 - vertical; default: 0)
-
-    Returns
-    -------
-    Path Properties object
-    '''
-
-    @utils.ranged_quantity_input(
-        freq=(0.1, 100, apu.GHz),
-        temperature=(None, None, apu.K),
-        pressure=(None, None, apu.hPa),
-        lon_t=(-180, 180, apu.deg),
-        lat_t=(-90, 90, apu.deg),
-        lon_r=(-180, 180, apu.deg),
-        lat_r=(-90, 90, apu.deg),
-        h_tg=(None, None, apu.m),
-        h_rg=(None, None, apu.m),
-        hprof_step=(None, None, apu.m),
-        time_percent=(0, 50, apu.percent),
-        omega_percent=(0, 100, apu.percent),
-        d_tm=(None, None, apu.m),
-        d_lm=(None, None, apu.m),
-        d_ct=(None, None, apu.m),
-        d_cr=(None, None, apu.m),
-        delta_N=(None, None, cnv.dimless / apu.km),
-        N0=(None, None, cnv.dimless),
-        hprof_dists=(None, None, apu.km),
-        hprof_heights=(None, None, apu.m),
-        bearing=(None, None, apu.deg),
-        back_bearing=(None, None, apu.deg),
-        strip_input_units=True, allow_none=True, output_unit=None
-        )
-    def __init__(
-            self,
-            freq,
-            temperature,
-            pressure,
-            lon_t, lat_t,
-            lon_r, lat_r,
-            h_tg, h_rg,
-            hprof_step,
-            time_percent,
-            omega_percent=0 * apu.percent,
-            d_tm=None, d_lm=None,
-            d_ct=None, d_cr=None,
-            zone_t=CLUTTER.UNKNOWN, zone_r=CLUTTER.UNKNOWN,
-            polarization=0,
-            version=16,
-            # override if you don't want builtin method:
-            delta_N=None, N0=None,
-            # override if you don't want builtin method:
-            hprof_dists=None, hprof_heights=None,
-            bearing=None, back_bearing=None,
-            ):
-
-        super().__init__(
-            freq,
-            temperature,
-            pressure,
-            lon_t, lat_t,
-            lon_r, lat_r,
-            h_tg, h_rg,
-            hprof_step,
-            time_percent,
-            omega=omega_percent,
-            d_tm=d_tm, d_lm=d_lm,
-            d_ct=d_ct, d_cr=d_cr,
-            zone_t=zone_t, zone_r=zone_r,
-            polarization=polarization,
-            version=version,
-            delta_N=delta_N, N0=N0,
-            hprof_dists=hprof_dists, hprof_heights=hprof_heights,
-            bearing=bearing, back_bearing=back_bearing,
-            )
-
-        self.__params = list(PARAMETERS_BASIC)  # make a copy
-        if self._pp['version'] == 14:
-            self.__params += PARAMETERS_V14
-        elif self._pp['version'] == 16:
-            self.__params += PARAMETERS_V16
-
-        # no need to set property, as readonly and immutable
-        # can just copy to __dict__
-        # for p in self.__params:
-        #     setattr(
-        #         PathProp,
-        #         p[0],
-        #         property(lambda self: getattr(self._pp, p[0]))
-        #         )
-
-        for p in self.__params:
-            self.__dict__[p[0]] = self._pp[p[0]] * p[3]
-
-    def __repr__(self):
-
-        return 'PathProp<Freq: {:.3f}>'.format(self.freq)
-
-    def __str__(self):
-
-        return '\n'.join(
-            '{}: {{:{}}} {}'.format(
-                '{:15s}', p[1], '{:10s}'
-                ).format(
-                p[0], self._pp[p[0]], p[2]
-                )
-            for p in self.__params
             )
 
 
@@ -2075,30 +1921,127 @@ def height_profile_data_cython(
     Calculate height profiles and auxillary maps needed for atten_map_fast.
 
     This can be used to cache height-profile data. Since it is independent
-    of frequency, time_percent, Tx and Rx heights, etc., one can re-use
+    of frequency, timepercent, Tx and Rx heights, etc., one can re-use
     it to save computing time when doing batch jobs.
-
-    Note: Path attenuation is completely symmetric, i.e., it doesn't matter if
-    the transmitter or the receiver is situated in the map center.
 
     Parameters
     ----------
-    lon_t, lat_t - Transmitter coordinates [deg]
-    map_size_lon, map_size_lat - Map size [deg]
-    map_resolution - Pixel resolution of map [deg]
-    do_cos_delta - If True, divide map_size_lon by cos(latitude) for square map
-    zone_t, zone_r - Transmitter/receiver clutter zone codes.
-    d_tm - longest continuous land (inland + coastal) section of the
+    lon_t, lat_t : double
+        Geographic longitude/latitude of transmitter [deg]
+    map_size_lon, map_size_lat : double
+        Map size in longitude/latitude[deg]
+    map_resolution : double, optional
+        Pixel resolution of map [deg] (default: 3 arcsec)
+    do_cos_delta : int, optional
+        If True, divide `map_size_lon` by `cos(lat_t)` to produce a more
+        square-like map. (default: True)
+    zone_t, zone_r : CLUTTER enum, optional
+        Clutter type for transmitter/receiver terminal.
+        (default: CLUTTER.UNKNOWN)
+    d_tm : double, optional
+        longest continuous land (inland + coastal) section of the
         great-circle path [km]
-    d_lm - longest continuous inland section of the great-circle path [km]
-    d_ct, d_cr - Distance over land from transmit/receive antenna to the coast
+        (default: distance between Tx and Rx)
+    d_lm : double, optional
+        longest continuous inland section of the great-circle path [km]
+        (default: distance between Tx and Rx)
+    d_ct, d_cr : double, optional
+        Distance over land from transmitter/receiver antenna to the coast
         along great circle interference path [km]
-        (set to zero for terminal on ship/sea platform; only relevant if less
-        than 5 km)
+        (default: 50000 km)
 
     Returns
     -------
-    Dictionary with height profiles and auxillary maps
+    hprof_data : dict
+        Dictionary with height profiles and auxillary data as
+        calculated with `~pycraf.pathprof.height_profile_data`.
+
+        The dictionary contains the following entities (the map dimension
+        is mx * my):
+
+        - "lon_t", "lat_t" : float
+
+          Map center coordinates.
+
+        - "map_size_lon", "map_size_lat" : float
+
+          Map size.
+
+        - "hprof_step" : float
+
+          Distance resolution of height profile.
+
+        - "do_cos_delta" : int
+
+          Whether cos-delta correction was applied for map size creation.
+
+        - "xcoords", "ycoords" : `~numpy.ndarray` 1D (float; (mx, ); (my, ))
+
+          Longitude and latitude coordinates of first row and first column
+          in the map
+
+        - "lon_mid_map", "lat_mid_map" : `~numpy.ndarray` 2D (float; (mx, my))
+
+          Longitude and latitude path center coordinates for each pixel
+          w.r.t. map center.
+
+        - "dist_map" : `~numpy.ndarray` 2D (float; (mx, my))
+
+          Distances to map center for each pixel.
+
+        - "d_ct_map", "d_cr_map" : `~numpy.ndarray` 2D (float; (mx, my))
+
+          The `d_ct` and `d_cr` values for each pixel in the map.
+
+        - "d_lm_map", "d_tm_map" : `~numpy.ndarray` 2D (float; (mx, my))
+
+          The `d_lm` and `d_tm` values for each pixel in the map.
+
+        - "zone_t_map", "zone_r_map" : `~numpy.ndarray` 2D (CLUTTER enum; (mx, my))
+
+          The clutter zone types `zone_t` and `zone_r` for each pixel in the
+          map.
+
+        - "bearing_map", "back_bearing_map" : `~numpy.ndarray` 2D (float; (mx, my))
+
+          The `bearing` and `backbearing` values for each pixel in the map.
+
+        - "N0_map", "delta_N_map", "beta0_map" : `~numpy.ndarray` 2D (float; (mx, my))
+
+          The `N0`, `delta_N`, and `beta0` values for each pixel in the map.
+
+        - "path_idx_map" : `~numpy.ndarray` 2D (int; (mx, my))
+
+          Map of path IDs for each pixel. With this index, one can query
+          the associated height profile from `height_profs`.
+
+        - "pix_dist_map" : `~numpy.ndarray` 2D (float; (mx, my))
+
+          Angular distance of the closest path to each of the map pixels.
+
+        - "dist_end_idx_map" : `~numpy.ndarray` 2D (int; (mx, my))
+
+          Index of the last element in the dist/height profiles to be used
+          when querying the profiles from `dist_prof` and
+          `height_profs`.
+
+        - "dist_prof" : `~numpy.ndarray` 1D (float, (mh, ))
+
+          Distance values for each of the paths stored in `height_profs`.
+
+        - "height_profs" : `~numpy.ndarray` 2D (float, (me, mh))
+
+          Height profiles to each of the pixels on the map edge, zero padded.
+
+        - "zheight_prof" : `~numpy.ndarray` 1D (float, (mh, ))
+
+          Zero-valued array of the same length as `height_profs` for
+          convenience.
+
+    Notes
+    -----
+    - Path attenuation is completely symmetric, i.e., it doesn't matter if
+      the transmitter or the receiver is situated in the map center.
     '''
 
     cdef:
@@ -2194,8 +2137,8 @@ def height_profile_data_cython(
             hprof_step
             )
         (
-            lons, lats, dists, heights,
-            bearing, back_bearing, back_bearings, _
+            lons, lats, _, dists, heights,
+            bearing, back_bearing, back_bearings
             ) = res
         dist_dict[eidx] = dists
         height_dict[eidx] = heights
@@ -2337,37 +2280,57 @@ def atten_map_fast_cython(
         int version=16,
         ):
     '''
-    Calculate attenuation map using a fast method.
+    Calculate attenuation maps using a fast method.
 
     Parameters
     ----------
-    freq - Frequency of radiation [GHz]
-    temperature - Temperature (K)
-    pressure - Pressure (hPa)
-    h_tg, h_rg - Transmitter/receiver heights over ground [m]
-    time_percent - Time percentage [%] (maximal 50%)
-    hprof_data - Dictionary with height profiles and auxillary maps as
-        calculated with height_profile_data_cython.
-    omega - Fraction of the path over water [%] (see Table 3)
-    polarization - Polarization (0 - horizontal, 1 - vertical; default: 0)
-    version - P.452 version to use (14 or 16)
+    freq : double
+        Frequency of radiation [GHz]
+    temperature : double
+        Temperature (K)
+    pressure : double
+        Pressure (hPa)
+    h_tg, h_rg : double
+        Transmitter/receiver heights over ground [m]
+    timepercent : double
+        Time percentage [%] (maximal 50%)
+    hprof_data : dict, dict-like
+        Dictionary with height profiles and auxillary maps as
+        calculated with `~pycraf.pathprof.height_profile_data`.
+    omega : double, optional
+        Fraction of the path over water [%] (see Table 3)
+        (default: 0%)
+    polarization : int, optional
+        Polarization (default: 0)
+        Allowed values are: 0 - horizontal, 1 - vertical
+    version : int, optional
+        ITU-R Rec. P.452 version. Allowed values are: 14, 16
 
     Returns
     -------
-    (atten_map, eps_pt_map, eps_pr_map) - tuple
-        atten_map - 3D array with attenuation maps
-            first dimension has length 6 and refers to:
-                0: L_bfsg - Free-space loss [dB]
-                1: L_bd - Basic transmission loss associated with diffraction
-                          not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
-                2: L_bs - Tropospheric scatter loss [dB]
-                3: L_ba - Ducting/layer reflection loss [dB]
-                4: L_b - Complete path propagation loss [dB]
-                5: L_b_corr - As L_b but with clutter correction [dB]
-            (i.e., the output of path_attenuation_complete_cython without
-            gain-corrected values)
-        eps_pt_map - 2D array with elevation angle of paths w.r.t. Tx [deg]
-        eps_pr_map - 2D array with elevation angle of paths w.r.t. Rx [deg]
+    atten_map : 3D `~numpy.ndarray`
+        Attenuation maps. First dimension has length 6, which refers to:
+
+        0) L_bfsg - Free-space loss [dB]
+        1) L_bd - Basic transmission loss associated with diffraction
+           not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
+        2) L_bs - Tropospheric scatter loss [dB]
+        3) L_ba - Ducting/layer reflection loss [dB]
+        4) L_b - Complete path propagation loss [dB]
+        5) L_b_corr - As L_b but with clutter correction [dB]
+
+        (i.e., the output of path_attenuation_complete without
+        gain-corrected values)
+    eps_pt_map : 2D `~numpy.ndarray`
+        Elevation angle of paths w.r.t. Tx [deg]
+    eps_pr_map : 2D `~numpy.ndarray`
+        Elevation angle of paths w.r.t. Rx [deg]
+
+    Notes
+    -----
+    - The diffraction-loss algorithm was changed between ITU-R P.452
+      version 14 and 15. The former used a Deygout method, the new one
+      is based on a Bullington calculation with correction terms.
     '''
 
     # TODO: implement map-based clutter handling; currently, only a single
