@@ -149,7 +149,8 @@ class TestPropagation:
                 self.pprop_template.format(
                     freq, h_tg, h_rg, time_percent, version
                     ))
-            pprop_true = json.load(open(pprop_name, 'r'))
+            with open(pprop_name, 'r') as f:
+                pprop_true = json.load(f)
 
             for k in pprop._pp:
                 assert_quantity_allclose(pprop._pp[k], pprop_true[k])
@@ -169,7 +170,8 @@ class TestPropagation:
                 self.loss_template.format(
                     freq, h_tg, h_rg, time_percent, version, G_t, G_r
                     ))
-            loss_true = json.load(open(loss_name, 'r'))
+            with open(loss_name, 'r') as f:
+                loss_true = json.load(f)
 
             for k in losses:
                 assert_quantity_allclose(losses[k], loss_true[k])
@@ -189,7 +191,8 @@ class TestPropagation:
                 self.loss_template.format(
                     freq, h_tg, h_rg, time_percent, version, G_t, G_r
                 ))
-            loss_true = json.load(open(loss_name, 'r'))
+            with open(loss_name, 'r') as f:
+                loss_true = json.load(f)
 
             for k in losses:
                 assert_quantity_allclose(losses[k], loss_true[k])
@@ -207,7 +210,8 @@ class TestPropagation:
                 self.loss_template.format(
                     freq, h_tg, h_rg, time_percent, version, G_t, G_r
                 ))
-            loss_true = json.load(open(loss_name, 'r'))
+            with open(loss_name, 'r') as f:
+                loss_true = json.load(f)
 
             for k in losses:
                 assert_quantity_allclose(losses[k], loss_true[k])
@@ -229,7 +233,8 @@ class TestPropagation:
                 self.loss_template.format(
                     freq, h_tg, h_rg, time_percent, version, G_t, G_r
                 ))
-            loss_true = json.load(open(loss_name, 'r'))
+            with open(loss_name, 'r') as f:
+                loss_true = json.load(f)
 
             for k in losses:
                 assert_quantity_allclose(losses[k], loss_true[k])
@@ -255,7 +260,8 @@ class TestPropagation:
                 self.loss_template.format(
                     freq, h_tg, h_rg, time_percent, version, G_t, G_r
                 ))
-            loss_true = json.load(open(loss_name, 'r'))
+            with open(loss_name, 'r') as f:
+                loss_true = json.load(f)
 
             for k in losses:
                 assert_quantity_allclose(losses[k], loss_true[k])
