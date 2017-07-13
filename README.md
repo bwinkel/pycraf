@@ -2,29 +2,29 @@
 
 - *Version*: 0.24
 - *Authors*: Benjamin Winkel
+- *User manual*: Hosted on [GitHub Pages](https://bwinkel.github.io/pycraf/)
 
 [![PyPI version](https://img.shields.io/pypi/v/pycraf.svg)](https://pypi.python.org/pypi/pycraf)
 [![Build Status](https://travis-ci.org/bwinkel/pycraf.svg?branch=master)](https://travis-ci.org/bwinkel/pycraf)
 [![Build status](https://ci.appveyor.com/api/projects/status/tj7swn14t6bek3jr?svg=true)](https://ci.appveyor.com/project/bwinkel/pycraf)
 [![License](https://img.shields.io/badge/license-GPL-blue.svg)](https://www.github.com/bwinkel/pycraf/blob/master/COPYING)
 [![Coverage Status](https://coveralls.io/repos/github/bwinkel/pycraf/badge.svg?branch=master)](https://coveralls.io/github/bwinkel/pycraf?branch=master)
-[![Manual](https://readthedocs.org/projects/pycraf/badge/?version=latest)](http://pycraf.readthedocs.io/en/latest/)
 
-# Disclaimer #
+## Disclaimer ##
 `pycraf` is still in the early-development stage. While much of the
 functionality is already working as intended, the API is not yet stable.
 Nevertheless, we kindly invite you to use and test the library and we are
 grateful for feedback. Note, that the documentation is still missing (but at
 least docstrings are provided).
 
-# Purpose #
+## Purpose ##
 
 `pycraf` is a Python package that provides functions and procedures for
 various tasks in spectrum-management compatibility studies. A typical example
 would be to calculate the interference levels at a radio telescope produced
 from a ratio broadcasting tower.
 
-# Features #
+## Features ##
 
 * Full implementation of [ITU-R Rec. P.452-16](https://www.itu.int/rec/R-REC-P.452-16-201507-I/en) that allows to calculate path
   attenuation for the distance between interferer and victim service. Supports
@@ -35,6 +35,23 @@ from a ratio broadcasting tower.
   RAS, IMT, fixed-service links).
 * Functions to convert power flux densities, field strengths, transmitted and
   received powers at certain distances and frequencies into each other.
+
+# Usage #
+
+## Examples and Documentation ##
+
+We provide [an online documentation and API reference](https://bwinkel.github.io/pycraf/). Furthermore, you can find tutorials and HowTos in
+the [`notebooks`](http://nbviewer.jupyter.org/github/bwinkel/pycraf/blob/master/notebooks/)
+directory on the pycraf repository.
+
+## Testing ##
+
+After installation (see below) you can test, if everything works as intended:
+
+```python
+import pycraf
+pycraf.tests()
+```
 
 # License #
 
@@ -121,13 +138,6 @@ large file sizes and legal reasons. But once you downloaded the necessary tiles
 (all or only a subset appropriate for your region), simply define the
 environment variable `$SRTMDATA`, let it point to the folder containing the
 tiles, and `pycraf` will find the files when it is imported from Python.
-
-# Usage #
-
-## Examples and Documentation ##
-
-Will follow asap. Sorry for the inconvenience! You can find tutorials in the
-[`notebooks`](http://nbviewer.jupyter.org/github/bwinkel/pycraf/blob/master/notebooks/) directory on the pycraf repository.
 
 # Who do I talk to? #
 
