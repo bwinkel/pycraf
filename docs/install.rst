@@ -86,6 +86,30 @@ If you're using `Anaconda <https://www.continuum.io/downloads>`_
 .. code-block:: bash
 
     conda install -c conda-forge pyproj
+    pip install pycraf
+
+.. _macos_install:
+
+Installation on MacOS
+~~~~~~~~~~~~~~~~~~~~~
+
+For installation on MacOS you'll have to install gcc-6. The clang compiler
+seems not to support OpenMP in a way that is needed by pycraf:
+
+.. code-block:: bash
+
+    brew install gcc6
+    brew link --overwrite gcc@6
+
+Then proceed as usual with
+
+.. code-block:: bash
+
+    # if on Anaconda, install pyproj the easy way:
+    conda install -c conda-forge pyproj
+
+    # then
+    pip install pycraf
 
 .. _testing_installed_pycraf:
 

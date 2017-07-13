@@ -95,6 +95,17 @@ If you're using [Anaconda](https://www.continuum.io/downloads) (recommended), it
 conda install -c conda-forge pyproj
 ```
 
+## MacOS machines ##
+
+For installation on MacOS you'll have to install gcc-6. The clang compiler
+seems not to support OpenMP in a way that is needed by pycraf:
+
+```
+brew install gcc6
+brew link --overwrite gcc@6
+```
+
+
 ## SRTM data ##
 
 To make full use of the path attenuation calculations provided by `pycraf`
