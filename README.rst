@@ -108,7 +108,7 @@ The easiest way to install pycraf is via pip::
 The installation is also possible from source. Download the tar.gz-file,
 extract (or clone from GitHub) and simply execute::
 
-python setup.py install
+    python setup.py install
 
 Dependencies
 ------------
