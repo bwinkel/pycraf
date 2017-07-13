@@ -5,7 +5,8 @@ environment:
   # In the Appveyor UI, add your PyPI password as TWINE_PASSWORD (click
   # Settings > Environment > Add Variable...). Make sure to mark it as private!
   TWINE_USERNAME: bwinkel
-  SRTMDATA: "%APPVEYOR_BUILD_FOLDER%\\pycraf\\pathprof\\tests\\srtm"
+  # SRTMDATA: "%APPVEYOR_BUILD_FOLDER%\\pycraf\\pathprof\\tests\\srtm"
+  SRTMDATA: "%APPVEYOR_BUILD_FOLDER%\\srtm"
 
   global:
       PYTHON: "C:\\conda"
@@ -40,10 +41,16 @@ platform:
     -x64
 
 install:
+    # downloading srtm data
+    - "mkdir %SRTMDATA%"
+    - "powershell -command \"& { Invoke-WebRequest -Uri 'http://viewfinderpanoramas.org/dem3/M32.zip' -OutFile '%SRTMDATA%\\M32.zip' }\""
+    - "powershell -command \"& { Expand-Archive '%SRTMDATA%\\M32.zip' -DestinationPath '%SRTMDATA%\\' }\""
+    - "powershell -command \"& { Move-Item '%SRTMDATA%\\*\\*.hgt' '%SRTMDATA%\\' }\""
     - "git clone git://github.com/astropy/ci-helpers.git"
     - "powershell ci-helpers/appveyor/install-miniconda.ps1"
     - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
     - "activate test"
+    # - "powershell -command \"& { (New-Object Net.WebClient).DownloadFile('http://viewfinderpanoramas.org/dem3/M32.zip', '%SRTMDATA%/') }\""
 
 # Not a .NET project, we build the package in the install step instead
 build: false
@@ -56,6 +63,10 @@ after_test:
   - "%CMD_IN_ENV% python setup.py bdist_wheel"
   - "%CMD_IN_ENV% python setup.py bdist_wininst"
   - "%CMD_IN_ENV% python setup.py bdist_msi"
+
+artifacts:
+  # bdist_wheel puts your built wheel in the dist directory
+  - path: dist\*
 
 on_success:
 #  You can use this step to upload your artifacts to a public website.

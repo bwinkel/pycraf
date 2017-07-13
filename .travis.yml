@@ -39,7 +39,8 @@ env:
         - PIP_DEPENDENCIES=''
         - EVENT_TYPE='pull_request push'
 
-        - SRTMDATA=${TRAVIS_BUILD_DIR}/pycraf/pathprof/tests/srtm
+        # - SRTMDATA=${TRAVIS_BUILD_DIR}/pycraf/pathprof/tests/srtm
+        - SRTMDATA=${TRAVIS_BUILD_DIR}/srtm
         - OMP_NUM_THREADS=2
         - TWINE_USERNAME=bwinkel
 
@@ -128,6 +129,13 @@ before_install:
 
 install:
 
+    # download SRTM data for tests
+    - wget -P ${TRAVIS_BUILD_DIR}/srtm/ http://viewfinderpanoramas.org/dem3/M32.zip
+    - wget -P ${TRAVIS_BUILD_DIR}/srtm/ http://viewfinderpanoramas.org/dem3/N32.zip
+    - unzip ${TRAVIS_BUILD_DIR}/srtm/M32.zip -d ${TRAVIS_BUILD_DIR}/srtm/
+    - unzip ${TRAVIS_BUILD_DIR}/srtm/N32.zip -d ${TRAVIS_BUILD_DIR}/srtm/
+    - mv ${TRAVIS_BUILD_DIR}/srtm/{M,N}*/*.hgt ${TRAVIS_BUILD_DIR}/srtm/
+
     # We now use the ci-helpers package to set up our testing environment.
     # This is done by using Miniconda and then using conda and pip to install
     # dependencies. Which dependencies are installed using conda and pip is
@@ -141,6 +149,7 @@ install:
 
     - git clone git://github.com/astropy/ci-helpers.git
     - source ci-helpers/travis/setup_conda.sh
+
 
     # As described above, using ci-helpers, you should be able to set up an
     # environment with dependencies installed using conda and pip, but in some
