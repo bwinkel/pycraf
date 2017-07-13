@@ -101,8 +101,10 @@ matrix:
         # Check for sphinx doc build warnings - we do this first because it
         # may run for a long time
         - os: linux
-          env: SETUP_CMD='build_docs -w'
-               DO_DOCS=YES
+          env:
+            # - SETUP_CMD='build_docs -w'
+            - SETUP_CMD='build_docs'
+            - DO_DOCS=YES
 
         # Now try Astropy dev with the latest 3.x.
         - os: linux
@@ -166,7 +168,8 @@ install:
 
 script:
    - $MAIN_CMD $SETUP_CMD
-   - if [[ $DO_DOCS ]]; then set -e; conda install doctr; doctr deploy docs;fi
+   - echo "DO_DOCS" $DO_DOCS
+   - if [[ $DO_DOCS ]]; then set -e; conda install doctr; doctr deploy .;fi
 
 after_success:
     # If coveralls.io is set up for this package, uncomment the line below.
