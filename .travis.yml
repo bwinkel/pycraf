@@ -169,13 +169,25 @@ install:
 script:
    - $MAIN_CMD $SETUP_CMD
    - echo "DO_DOCS" $DO_DOCS
-   - if [[ $DO_DOCS ]]; then set -e; conda install doctr; doctr deploy .;fi
+   # also have to remove the c-files, generated during build
+   - 'if [[ $DO_DOCS ]]; then
+       set -e;
+       conda install doctr;
+       git reset --hard HEAD;
+       doctr deploy . --built-docs docs/;
+     fi'
 
 after_success:
     # If coveralls.io is set up for this package, uncomment the line below.
     # The coveragerc file may be customized as needed for your package.
-    - if [[ $SETUP_CMD == *coverage* ]]; then coveralls --rcfile='pycraf/tests/coveragerc'; fi
+    - 'if [[ $SETUP_CMD == *coverage* ]]; then
+        coveralls --rcfile="pycraf/tests/coveragerc";
+      fi'
 
     - echo "TRAVIS_TAG" $TRAVIS_TAG
     - echo "DO_DIST" $DO_DIST
-    - if [[ $TRAVIS_TAG && $DO_DIST ]]; then conda install twine; python setup.py sdist; python -m twine upload dist/*.tar.gz; fi
+    - 'if [[ $TRAVIS_TAG && $DO_DIST ]]; then
+        conda install twine;
+        python setup.py sdist;
+        python -m twine upload dist/*.tar.gz;
+      fi'
