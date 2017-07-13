@@ -64,6 +64,9 @@ env:
         # line to use the X virtual framebuffer.
         # - SETUP_XVFB=True
 
+        # github pages secure key
+        - secure: "c9cNFhnlRkx/J5kLiP8uEwTvPDq9hPuSQXG3qiR5+JfB0CeERwr59Vuyux3g6IXmWMwqHPhIMkohV7PtnmaxRWmO0RiGhEDIZOZ5NVI5XGCIrJYuNPJ2tJnGJ3GMDqCw+Mw49MS4xx04fS0ye0StGYbP3gmMIHwIk3LCV5DPjrmlS9t/3mOry1MKlQIqXb6JocJBHtlHtK094i91arW1UG+KEVM1Xv/sjOupHKRbQ4/2OZYGx9Kzl9aeVDCxbNUyXxLd12vJKjIn5toDbzLlFuqb2VgLg2LDMdFGcL2VnUS6MUWb4nPPn20cLKv9B/5auUWC08COMg+QJTzsGUuU8fMGlgaDgB0/geXNkwnY1vF8S19sQCUW4oAU1RjOuOYMhUlxBodz/ql+RGJ6f/mBoD+FJ9aSJ9fOb1hXosFmM9KSRNaa6PiPouWQ+Xx1foaeD5DelCO9d5ZiKR63PBJby7dq1sh0DyCbi5vcqZFwwwrut27Pb6yJmyYacvbyLpbXh3BuA5V20hoOlGdzxg+aObJLx4eArwj8BoMlYvQ1up3dk558KqSCa/KZgjgg32cdGoikRn60Yywd1fZ9dtJ+ctL20U3dA3Csg4vIW+a3r0S/evrpPSTzjXxVxaqi669Svw1Hj0OtiR4rR7y+Ph6U11BT+xSsK7N0J3DrUBKiq5I="
+
     # matrix:
     #     # Make sure that egg_info works without dependencies
     #     - PYTHON_VERSION=3.5 SETUP_CMD='egg_info'
@@ -99,6 +102,7 @@ matrix:
         # may run for a long time
         - os: linux
           env: SETUP_CMD='build_docs -w'
+               DO_DOCS=YES
 
         # Now try Astropy dev with the latest 3.x.
         - os: linux
@@ -162,6 +166,7 @@ install:
 
 script:
    - $MAIN_CMD $SETUP_CMD
+   - if [[ $DO_DOCS ]]; then set -e; conda install doctr; doctr deploy docs;fi
 
 after_success:
     # If coveralls.io is set up for this package, uncomment the line below.
