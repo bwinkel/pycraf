@@ -19,16 +19,16 @@ __all__ = [
     'refractive_index', 'saturation_water_pressure',
     'pressure_water_from_humidity', 'humidity_from_pressure_water',
     'pressure_water_from_rho_water', 'rho_water_from_pressure_water',
-    'standard_profile', 'low_latitude_profile',
-    'mid_latitude_summer_profile', 'mid_latitude_winter_profile',
-    'high_latitude_summer_profile', 'high_latitude_winter_profile',
+    'profile_standard', 'profile_lowlat',
+    'profile_midlat_summer', 'profile_midlat_winter',
+    'profile_highlat_summer', 'profile_highlat_winter',
     'resonances_oxygen', 'resonances_water',
     # 'atten_linear_from_atten_log', 'atten_log_from_atten_linear',
     'opacity_from_atten', 'atten_from_opacity',
-    'specific_attenuation_annex1',
-    'terrestrial_attenuation', 'slant_attenuation_annex1',
-    'specific_attenuation_annex2',
-    'slant_attenuation_annex2',
+    'atten_specific_annex1',
+    'atten_terrestrial', 'atten_slant_annex1',
+    'atten_specific_annex2',
+    'atten_slant_annex2',
     'equivalent_height_dry', 'equivalent_height_wet',
     # '_prepare_path'
     ]
@@ -305,7 +305,7 @@ def rho_water_from_pressure_water(temperature, pressure_water):
     height=(0, 84.99999999, apu.km),
     strip_input_units=True, output_unit=None
     )
-def standard_profile(height):
+def profile_standard(height):
     '''
     Compute temperature and pressure according to ITU-R P.835-5, Annex 1.
 
@@ -528,7 +528,7 @@ def _profile_helper(
         )
 
 
-def low_latitude_profile(height):
+def profile_lowlat(height):
     '''
     Compute "low latitude" height profiles according to ITU-R P.835-5.
 
@@ -584,7 +584,7 @@ def low_latitude_profile(height):
         )
 
 
-def mid_latitude_summer_profile(height):
+def profile_midlat_summer(height):
     '''
     Compute "mid latitude summer" height profiles according to ITU-R P.835-5.
 
@@ -638,7 +638,7 @@ def mid_latitude_summer_profile(height):
         )
 
 
-def mid_latitude_winter_profile(height):
+def profile_midlat_winter(height):
     '''
     Compute "mid latitude winter" height profiles according to ITU-R P.835-5.
 
@@ -692,7 +692,7 @@ def mid_latitude_winter_profile(height):
         )
 
 
-def high_latitude_summer_profile(height):
+def profile_highlat_summer(height):
     '''
     Compute "high latitude summer" height profiles according to ITU-R P.835-5.
 
@@ -746,7 +746,7 @@ def high_latitude_summer_profile(height):
         )
 
 
-def high_latitude_winter_profile(height):
+def profile_highlat_winter(height):
     '''
     Compute "high latitude winter" height profiles according to ITU-R P.835-5.
 
@@ -1006,7 +1006,7 @@ def _N_D_prime2(freq_grid, pressure_dry, pressure_water, temperature):
     return freq_grid * pressure_dry * theta ** 2 * (sum_1 + sum_2)
 
 
-def _specific_attenuation_annex1(
+def _atten_specific_annex1(
         freq_grid, pressure_dry, pressure_water, temperature
         ):
     '''
@@ -1067,7 +1067,7 @@ def _specific_attenuation_annex1(
     temperature=(1.e-30, None, apu.K),
     strip_input_units=True, output_unit=(cnv.dB / apu.km, cnv.dB / apu.km)
     )
-def specific_attenuation_annex1(
+def atten_specific_annex1(
         freq_grid, pressure_dry, pressure_water, temperature
         ):
     '''
@@ -1086,7 +1086,7 @@ def specific_attenuation_annex1(
     dry_attenuation, wet_attenuation (dB / km)
     '''
 
-    return _specific_attenuation_annex1(
+    return _atten_specific_annex1(
         freq_grid, pressure_dry, pressure_water, temperature
         )
 
@@ -1096,7 +1096,7 @@ def specific_attenuation_annex1(
     path_length=(1.e-30, None, apu.km),
     strip_input_units=True, output_unit=cnv.dB
     )
-def terrestrial_attenuation(specific_atten, path_length):
+def atten_terrestrial(specific_atten, path_length):
     '''
     Calculate total path attenuation for a path close to the ground
     (i.e., one layer), according to ITU-R P.676-10, annex 1 + 2.
@@ -1283,7 +1283,7 @@ def _prepare_path(elevation, obs_alt, profile_func, max_path_length=1000.):
     max_path_length=(1.e-30, None, apu.km),
     strip_input_units=True, output_unit=(cnv.dB, apu.deg, apu.K)
     )
-def slant_attenuation_annex1(
+def atten_slant_annex1(
         freq_grid, elevation, obs_alt, profile_func,
         t_bg=2.73 * apu.K, max_path_length=1000. * apu.km
         ):
@@ -1359,7 +1359,7 @@ def slant_attenuation_annex1(
 
     for press_n, press_w_n, temp_n, a_n, _, _, _, _, _ in path_params[::-1]:
 
-        atten_dry, atten_wet = _specific_attenuation_annex1(
+        atten_dry, atten_wet = _atten_specific_annex1(
             _freq, press_n, press_w_n, temp_n
         )
         gamma_n = atten_dry + atten_wet
@@ -1408,7 +1408,7 @@ _helper_funcs = dict(
     )
 
 
-def _specific_attenuation_annex2(freq_grid, pressure, rho_water, temperature):
+def _atten_specific_annex2(freq_grid, pressure, rho_water, temperature):
     '''
     Calculate specific attenuation using a simplified algorithm
     (ITU-R P.676-10 Annex 2.1).
@@ -1546,7 +1546,7 @@ def _specific_attenuation_annex2(freq_grid, pressure, rho_water, temperature):
     temperature=(1.e-30, None, apu.K),
     strip_input_units=True, output_unit=(cnv.dB / apu.km, cnv.dB / apu.km)
     )
-def specific_attenuation_annex2(freq_grid, pressure, rho_water, temperature):
+def atten_specific_annex2(freq_grid, pressure, rho_water, temperature):
     '''
     Calculate specific attenuation using a simplified algorithm
     (ITU-R P.676-10 Annex 2.1).
@@ -1563,7 +1563,7 @@ def specific_attenuation_annex2(freq_grid, pressure, rho_water, temperature):
     dry_attenuation, wet_attenuation (dB / km)
     '''
 
-    return _specific_attenuation_annex2(
+    return _atten_specific_annex2(
         freq_grid, pressure, rho_water, temperature
         )
 
@@ -1657,7 +1657,7 @@ def equivalent_height_wet(freq_grid, pressure):
     elevation=(-90, 90, apu.deg),
     strip_input_units=True, output_unit=cnv.dB
     )
-def slant_attenuation_annex2(atten_dry, atten_wet, h_dry, h_wet, elevation):
+def atten_slant_annex2(atten_dry, atten_wet, h_dry, h_wet, elevation):
     '''
     Calculate simple path attenuation for slant path through full atmosphere.
     (P.676-10: 28])

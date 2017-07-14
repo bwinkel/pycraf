@@ -20,7 +20,7 @@ from ...utils import check_astro_quantities
 
 HEIGHTS_PROFILE = [1, 10, 30, 50]
 
-LOW_LATITUDE_PROFILE = (
+PROFILE_LOWLAT = (
     [294.074786, 237.4778, 226.929, 270.],
     [9.0662840000e+02, 2.8485260000e+02, 1.5058940282e+01, 7.9610185204e-01],
     [1.4121645413e+01, 5.1420983832e-02, 2.8760293829e-05, 1.2778908988e-06],
@@ -29,7 +29,7 @@ LOW_LATITUDE_PROFILE = (
     [7.71111916e+01, 1.91041823e+01, 3.08083540e-02, 3.28223224e-05],
     [6.31614766e+01, 2.70773340e+01, 4.83024177e-02, 3.38613965e-05]
     )
-MID_LATITUDE_SUMMER_PROFILE = (
+PROFILE_MIDLAT_SUMMER = (
     [289.69681, 235.7158, 239.1281161835, 275.],
     [9.0512630000e+02, 2.8370960000e+02, 1.4998514754e+01, 7.9290741247e-01],
     [9.2511658582e+00, 6.1239834071e-02, 2.7183571711e-05, 1.2496220820e-06],
@@ -39,7 +39,7 @@ MID_LATITUDE_SUMMER_PROFILE = (
     [5.58605089e+01, 3.88463586e+01, 1.20693332e-02, 2.23005192e-05]
     )
 
-MID_LATITUDE_WINTER_PROFILE = (
+PROFILE_MIDLAT_WINTER = (
     [268.8965, 218., 218., 265.],
     [8.9939800000e+02, 2.5897870000e+02, 1.3691097703e+01, 7.2378985731e-01],
     [2.5601686537e+00, 5.1486866321e-04, 2.7218907085e-05, 1.1837378270e-06],
@@ -49,7 +49,7 @@ MID_LATITUDE_WINTER_PROFILE = (
     [7.39206835e+01, 2.51660327e+00, 1.33230193e-01, 4.72982065e-05]
     )
 
-HIGH_LATITUDE_SUMMER_PROFILE = (
+PROFILE_HIGHLAT_SUMMER = (
     [281.9167, 225., 238.4880972095, 277.],
     [8.9871920000e+02, 2.6961380000e+02, 1.4253330015e+01, 7.5351267819e-01],
     [6.2160419038e+00, 1.9974283742e-02, 2.5902312529e-05, 1.1789617138e-06],
@@ -59,7 +59,7 @@ HIGH_LATITUDE_SUMMER_PROFILE = (
     [6.55326136e+01, 4.19043072e+01, 1.22895220e-02, 1.80369481e-05]
     )
 
-HIGH_LATITUDE_WINTER_PROFILE = (
+PROFILE_HIGHLAT_WINTER = (
     [258.31873, 217.5, 217.5, 260.],
     [8.9319570000e+02, 2.4387180000e+02, 1.2892460426e+01, 6.8156931564e-01],
     [1.2069272815e+00, 4.8594960055e-04, 2.5690079763e-05, 1.1361236208e-06],
@@ -263,12 +263,12 @@ class TestConversions:
             rho_w
             )
 
-    def test_standard_profile(self):
+    def test_profile_standard(self):
 
         args_list = [
             (0, 84.99999999, apu.km),
             ]
-        check_astro_quantities(atm.standard_profile, args_list)
+        check_astro_quantities(atm.profile_standard, args_list)
 
         # also testing multi-dim arrays:
         heights = Quantity([[1, 10], [3, 20], [30, 50]], apu.km)
@@ -280,7 +280,7 @@ class TestConversions:
             ref_indices,
             humidities_water,
             humidities_ice,
-            ) = atm.standard_profile(heights)
+            ) = atm.profile_standard(heights)
 
         assert_quantity_allclose(
             temperatures,
@@ -342,9 +342,9 @@ class TestConversions:
     def test_special_profiles(self):
 
         for _profile_name in [
-                'low_latitude_profile',
-                'mid_latitude_summer_profile', 'mid_latitude_winter_profile',
-                'high_latitude_summer_profile', 'high_latitude_winter_profile'
+                'profile_lowlat',
+                'profile_midlat_summer', 'profile_midlat_winter',
+                'profile_highlat_summer', 'profile_highlat_winter'
                 ]:
 
             _prof_func = getattr(atm, _profile_name)
@@ -413,7 +413,7 @@ class TestConversions:
                 Quantity(c_humidities_ice, apu.percent)
                 )
 
-    def test_specific_attenuation_annex1(self):
+    def test_atten_specific_annex1(self):
 
         args_list = [
             (1.e-30, None, apu.GHz),
@@ -421,29 +421,29 @@ class TestConversions:
             (1.e-30, None, apu.hPa),
             (1.e-30, None, apu.K),
             ]
-        check_astro_quantities(atm.specific_attenuation_annex1, args_list)
+        check_astro_quantities(atm.atten_specific_annex1, args_list)
 
         # test for scalar quantities
         with pytest.raises(TypeError):
-            atm.specific_attenuation_annex1(
+            atm.atten_specific_annex1(
                 1 * apu.GHz,
                 Quantity([1000, 1000], apu.hPa),
                 10 * apu.hPa, 300 * apu.K
                 )
 
         with pytest.raises(TypeError):
-            atm.specific_attenuation_annex1(
+            atm.atten_specific_annex1(
                 1 * apu.GHz, 1000 * apu.hPa,
                 Quantity([10, 10], apu.hPa),
                 300 * apu.K
                 )
 
         with pytest.raises(TypeError):
-            atm.specific_attenuation_annex1(
+            atm.atten_specific_annex1(
                 1 * apu.GHz, 1000 * apu.hPa, 10 * apu.hPa,
                 Quantity([300, 300], apu.K)
                 )
-        atten_dry, atten_wet = atm.specific_attenuation_annex1(
+        atten_dry, atten_wet = atm.atten_specific_annex1(
             np.logspace(1, 2, 5) * apu.GHz,
             980 * apu.hPa,
             10 * apu.hPa,
@@ -466,16 +466,16 @@ class TestConversions:
                 ], cnv.dB / apu.km)
             )
 
-    def test_terrestrial_attenuation(self):
+    def test_atten_terrestrial(self):
 
         args_list = [
             (1.e-30, None, cnv.dB / apu.km),
             (1.e-30, None, apu.km),
             ]
-        check_astro_quantities(atm.terrestrial_attenuation, args_list)
+        check_astro_quantities(atm.atten_terrestrial, args_list)
 
         assert_quantity_allclose(
-            atm.terrestrial_attenuation(
+            atm.atten_terrestrial(
                 Quantity([
                     0.0057314491, 0.0425094528, 0.0665904646, 0.1297056177
                     ], cnv.dB / apu.km),
@@ -486,12 +486,12 @@ class TestConversions:
                 ]) * cnv.dB
             )
 
-    def test_slant_attenuation_annex1(self):
+    def test_atten_slant_annex1(self):
 
         # from functools import partial
         # _func = partial(
-        #     atm.slant_attenuation_annex1,
-        #     profile_func=atm.standard_profile
+        #     atm.atten_slant_annex1,
+        #     profile_func=atm.profile_standard
         #     )
 
         # args_list = [
@@ -503,9 +503,9 @@ class TestConversions:
         #     ]
         # check_astro_quantities(_func, args_list)
 
-        atten, refract, tebb = atm.slant_attenuation_annex1(
+        atten, refract, tebb = atm.atten_slant_annex1(
             np.logspace(1, 2, 5) * apu.GHz, 30 * apu.deg, 400 * apu.m,
-            atm.standard_profile,
+            atm.profile_standard,
             )
 
         assert_quantity_allclose(
@@ -528,7 +528,7 @@ class TestConversions:
                 ], apu.K)
             )
 
-    def test_specific_attenuation_annex2(self):
+    def test_atten_specific_annex2(self):
 
         args_list = [
             (1.e-30, None, apu.GHz),
@@ -536,29 +536,29 @@ class TestConversions:
             (1.e-30, None, apu.g / apu.m ** 3),
             (1.e-30, None, apu.K),
             ]
-        check_astro_quantities(atm.specific_attenuation_annex2, args_list)
+        check_astro_quantities(atm.atten_specific_annex2, args_list)
 
         # test for scalar quantities
         with pytest.raises(TypeError):
-            atm.specific_attenuation_annex2(
+            atm.atten_specific_annex2(
                 1 * apu.GHz,
                 Quantity([1000, 1000], apu.hPa),
                 10 * apu.g / apu.m ** 3, 300 * apu.K
                 )
 
         with pytest.raises(TypeError):
-            atm.specific_attenuation_annex2(
+            atm.atten_specific_annex2(
                 1 * apu.GHz, 1000 * apu.hPa,
                 Quantity([10, 10], apu.g / apu.m ** 3),
                 300 * apu.K
                 )
 
         with pytest.raises(TypeError):
-            atm.specific_attenuation_annex2(
+            atm.atten_specific_annex2(
                 1 * apu.GHz, 1000 * apu.hPa, 10 * apu.g / apu.m ** 3,
                 Quantity([300, 300], apu.K)
                 )
-        atten_dry, atten_wet = atm.specific_attenuation_annex2(
+        atten_dry, atten_wet = atm.atten_specific_annex2(
             np.logspace(1, 2, 5) * apu.GHz,
             980 * apu.hPa,
             10 * apu.g / apu.m ** 3,
@@ -623,7 +623,7 @@ class TestConversions:
                 ], apu.km)
             )
 
-    def test_slant_attenuation_annex2(self):
+    def test_atten_slant_annex2(self):
 
         args_list = [
             (1.e-30, None, cnv.dB / apu.km),
@@ -632,7 +632,7 @@ class TestConversions:
             (1.e-30, None, apu.km),
             (-90, 90, apu.deg),
             ]
-        check_astro_quantities(atm.slant_attenuation_annex2, args_list)
+        check_astro_quantities(atm.atten_slant_annex2, args_list)
 
         atten_dry = Quantity([
             0.006643591, 0.008556794, 0.0200009175, 6.5824558517,
@@ -644,7 +644,7 @@ class TestConversions:
             0.5888230557
             ], cnv.dB / apu.km)
 
-        atten_tot = atm.slant_attenuation_annex2(
+        atten_tot = atm.atten_slant_annex2(
             atten_dry, atten_wet,
             10 * apu.km, 1 * apu.km, 30 * apu.deg
             )
