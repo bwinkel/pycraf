@@ -117,7 +117,7 @@ def atten_from_opacity(opacity, elevation):
     )
 def refractive_index(temperature, pressure, pressure_water):
     '''
-    Calculate refractive index according to ITU-R P.453-10.
+    Calculate refractive index according to ITU-R P.453-12.
 
     Parameters
     ----------
@@ -131,8 +131,9 @@ def refractive_index(temperature, pressure, pressure_water):
     '''
 
     return (
-        1 + 77.6e-6 / temperature * (
-            pressure + 4810. * pressure_water / temperature
+        1 + 1e-6 / temperature * (
+            77.6 * pressure - 5.6 * pressure_water +
+            3.75e5 * pressure_water / temperature
             )
         )
 
@@ -144,7 +145,7 @@ def refractive_index(temperature, pressure, pressure_water):
     )
 def saturation_water_pressure(temperature, pressure, wet_type='water'):
     '''
-    Calculate saturation water pressure according to ITU-R P.453-10.
+    Calculate saturation water pressure according to ITU-R P.453-12.
 
     Parameters
     ----------
@@ -169,9 +170,9 @@ def _saturation_water_pressure(temperature, pressure, wet_type):
     assert wet_type in ['water', 'ice']
 
     EF = (
-        1. + 1.e-4 * (7.2 + pressure * (0.00320 + 5.9e-7 * temp_C ** 2))
+        1. + 1.e-4 * (7.2 + pressure * (0.0320 + 5.9e-6 * temp_C ** 2))
         if wet_type == 'water' else
-        1. + 1.e-4 * (2.2 + pressure * (0.00382 + 6.4e-7 * temp_C ** 2))
+        1. + 1.e-4 * (2.2 + pressure * (0.0382 + 6.4e-6 * temp_C ** 2))
         )
 
     a, b, c, d = (
@@ -194,7 +195,7 @@ def pressure_water_from_humidity(
         temperature, pressure, humidity, wet_type='water'
         ):
     '''
-    Calculate p_water according to ITU-R P.453-10.
+    Calculate p_water according to ITU-R P.453-12.
 
     Parameters
     ----------
@@ -227,7 +228,7 @@ def humidity_from_pressure_water(
         temperature, pressure, pressure_water, wet_type='water'
         ):
     '''
-    Calculate relative humidity according to ITU-R P.453-10.
+    Calculate relative humidity according to ITU-R P.453-12.
 
     wet_type - 'water' or 'ice'
 
@@ -259,7 +260,7 @@ def humidity_from_pressure_water(
     )
 def pressure_water_from_rho_water(temperature, rho_water):
     '''
-    Calculate water pressure according to ITU-R P.453-10.
+    Calculate water pressure according to ITU-R P.453-12.
 
     Parameters
     ----------
@@ -283,7 +284,7 @@ def pressure_water_from_rho_water(temperature, rho_water):
     )
 def rho_water_from_pressure_water(temperature, pressure_water):
     '''
-    Calculate water density according to ITU-R P.453-10.
+    Calculate water density according to ITU-R P.453-12.
 
     Parameters
     ----------
@@ -306,7 +307,7 @@ def rho_water_from_pressure_water(temperature, pressure_water):
     )
 def standard_profile(height):
     '''
-    Compute temperature and pressure according to ITU R-P.835-5, Annex 1.
+    Compute temperature and pressure according to ITU-R P.835-5, Annex 1.
 
     Note, for convenience, derived quantities like water density/pressure
     and refraction indices are also returned.
@@ -529,7 +530,7 @@ def _profile_helper(
 
 def low_latitude_profile(height):
     '''
-    Compute "low latitude" height profiles according to ITU R-P.835-5.
+    Compute "low latitude" height profiles according to ITU-R P.835-5.
 
     Valid for geographic latitudes |phi| < 22 deg.
 
@@ -585,7 +586,7 @@ def low_latitude_profile(height):
 
 def mid_latitude_summer_profile(height):
     '''
-    Compute "mid latitude summer" height profiles according to ITU R-P.835-5.
+    Compute "mid latitude summer" height profiles according to ITU-R P.835-5.
 
     Valid for geographic latitudes 22 deg < |phi| < 45 deg.
 
@@ -639,7 +640,7 @@ def mid_latitude_summer_profile(height):
 
 def mid_latitude_winter_profile(height):
     '''
-    Compute "mid latitude winter" height profiles according to ITU R-P.835-5.
+    Compute "mid latitude winter" height profiles according to ITU-R P.835-5.
 
     Valid for geographic latitudes 22 deg < |phi| < 45 deg.
 
@@ -693,7 +694,7 @@ def mid_latitude_winter_profile(height):
 
 def high_latitude_summer_profile(height):
     '''
-    Compute "high latitude summer" height profiles according to ITU R-P.835-5.
+    Compute "high latitude summer" height profiles according to ITU-R P.835-5.
 
     Valid for geographic latitudes |phi| > 45 deg.
 
@@ -747,7 +748,7 @@ def high_latitude_summer_profile(height):
 
 def high_latitude_winter_profile(height):
     '''
-    Compute "high latitude winter" height profiles according to ITU R-P.835-5.
+    Compute "high latitude winter" height profiles according to ITU-R P.835-5.
 
     Valid for geographic latitudes |phi| > 45 deg.
 
