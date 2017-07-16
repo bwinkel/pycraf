@@ -170,7 +170,7 @@ script:
    - $MAIN_CMD $SETUP_CMD
    - echo "DO_DOCS" $DO_DOCS
    # also have to remove the c-files, generated during build
-   - 'if [[ $DO_DOCS ]]; then
+   - 'if [[ $TRAVIS_TAG && $DO_DOCS ]]; then
        set -e;
        conda install doctr;
        git reset --hard HEAD;

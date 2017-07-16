@@ -17,7 +17,7 @@ pycraf
 The pycraf Python package provides functions and procedures for
 various tasks in spectrum-management compatibility studies. A typical example
 would be to calculate the interference levels at a radio telescope produced
-from a ratio broadcasting tower.
+from a radio broadcasting tower.
 
 Releases are `registered on PyPI <http://pypi.python.org/pypi/pycraf>`_,
 and development is occurring at the

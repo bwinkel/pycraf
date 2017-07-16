@@ -36,6 +36,7 @@ Available modules
    :maxdepth: 1
 
    conversions/index
+   atm/index
    pathprof/index
 
 .. automodapi:: pycraf

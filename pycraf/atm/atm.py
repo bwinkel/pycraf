@@ -57,122 +57,134 @@ resonances_water = np.genfromtxt(
 
 
 @utils.ranged_quantity_input(
-    atten=(1.000000000001, None, cnv.dimless), elevation=(-90, 90, apu.deg),
+    atten=(1.000000000001, None, cnv.dimless), elev=(-90, 90, apu.deg),
     strip_input_units=True, output_unit=cnv.dimless
     )
-def opacity_from_atten(atten, elevation):
+def opacity_from_atten(atten, elev):
     '''
-    Calculate atmospheric opacity from attenuation.
-
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    Atmospheric opacity derived from attenuation.
 
     Parameters
     ----------
-    Atmospheric attenuation [dB or dimless]
-        BEWARE: if given in dB, value should be greater than zero
-    Elevation [deg]
+    atten : `~astropy.units.Quantity`
+        Atmospheric attenuation [dB or dimless]
+    elev : `~astropy.units.Quantity`
+        Elevation [deg]
+        This is used to calculate the so-called Airmass, AM = 1 / sin(elev)
 
     Returns
     -------
-    Atmospheric opacity [dimless aka neper]
+    tau : `~astropy.units.Quantity`
+        Atmospheric opacity [dimless aka neper]
     '''
 
-    AM_inv = np.sin(np.radians(elevation))
+    AM_inv = np.sin(np.radians(elev))
 
     return AM_inv * np.log(atten)
 
 
 @utils.ranged_quantity_input(
-    opacity=(0.000000000001, None, cnv.dimless), elevation=(-90, 90, apu.deg),
+    tau=(0.000000000001, None, cnv.dimless), elev=(-90, 90, apu.deg),
     strip_input_units=True, output_unit=cnv.dB
     )
-def atten_from_opacity(opacity, elevation):
+def atten_from_opacity(tau, elev):
     '''
-    Calculate atmospheric attenuation from opacity.
-
-    Note: All quantities must be astropy Quantities
-          (astropy.units.quantity.Quantity).
+    Atmospheric attenuation derived from opacity.
 
     Parameters
     ----------
-    Atmospheric opacity [dimless aka neper]
-    Elevation [deg]
+    tau : `~astropy.units.Quantity`
+        Atmospheric opacity [dimless aka neper]
+    elev : `~astropy.units.Quantity`
+        Elevation [deg]
+
+        This is used to calculate the so-called Airmass, AM = 1 / sin(elev)
 
     Returns
     -------
-    Atmospheric attenuation [dB]
+    atten : `~astropy.units.Quantity`
+        Atmospheric attenuation [dB or dimless]
     '''
 
-    AM = 1. / np.sin(np.radians(elevation))
+    AM = 1. / np.sin(np.radians(elev))
 
-    return 10 * np.log10(np.exp(opacity * AM))
+    return 10 * np.log10(np.exp(tau * AM))
 
 
 @utils.ranged_quantity_input(
-    temperature=(1.e-30, None, apu.K),
-    pressure=(1.e-30, None, apu.hPa),
-    pressure_water=(1.e-30, None, apu.hPa),
+    temp=(1.e-30, None, apu.K),
+    press=(1.e-30, None, apu.hPa),
+    press_w=(1.e-30, None, apu.hPa),
     strip_input_units=True, output_unit=cnv.dimless
     )
-def refractive_index(temperature, pressure, pressure_water):
+def refractive_index(temp, press, press_w):
     '''
-    Calculate refractive index according to ITU-R P.453-12.
+    Refractive index according to `ITU-R P.453-12
+    <https://www.itu.int/rec/R-REC-P.453-12-201609-I/en>`_.
 
     Parameters
     ----------
-    temperature - air temperature (K)
-    pressure - total air pressure (hPa)
-    pressure_water - water vapor partial pressure (hPa)
+    temp : `~astropy.units.Quantity`
+        Air temperature [K]
+    press : `~astropy.units.Quantity`
+        Total air pressure [hPa]
+    press_w : `~astropy.units.Quantity`
+        Water vapor partial pressure [hPa]
 
     Returns
     -------
-    Refractive index (dimless)
+    n_index : `~astropy.units.Quantity`
+        Refractive index [dimless]
     '''
 
     return (
-        1 + 1e-6 / temperature * (
-            77.6 * pressure - 5.6 * pressure_water +
-            3.75e5 * pressure_water / temperature
+        1 + 1e-6 / temp * (
+            77.6 * press - 5.6 * press_w +
+            3.75e5 * press_w / temp
             )
         )
 
 
 @utils.ranged_quantity_input(
-    temperature=(1.e-30, None, apu.K),
-    pressure=(1.e-30, None, apu.hPa),
+    temp=(1.e-30, None, apu.K),
+    press=(1.e-30, None, apu.hPa),
     strip_input_units=True, output_unit=apu.hPa
     )
-def saturation_water_pressure(temperature, pressure, wet_type='water'):
+def saturation_water_pressure(temp, press, wet_type='water'):
     '''
-    Calculate saturation water pressure according to ITU-R P.453-12.
+    Saturation water pressure according to `ITU-R P.453-12
+    <https://www.itu.int/rec/R-REC-P.453-12-201609-I/en>`_.
 
     Parameters
     ----------
-    temperature - air temperature (K)
-    pressure - total air pressure (hPa)
-    wet_type - 'water' or 'ice'
+    temp : `~astropy.units.Quantity`
+        Air temperature [K]
+    press : `~astropy.units.Quantity`
+        Total air pressure [hPa]
+    wet_type : str, optional
+        Type of wet material: 'water', 'ice'
 
     Returns
     -------
-    Saturation water vapor pressure, e_s (hPa)
+    press_sat : `~astropy.units.Quantity`
+        Saturation water vapor pressure, e_s [hPa]
     '''
 
     return _saturation_water_pressure(
-        temperature, pressure, wet_type=wet_type
+        temp, press, wet_type=wet_type
         )
 
 
-def _saturation_water_pressure(temperature, pressure, wet_type):
+def _saturation_water_pressure(temp, press, wet_type):
     # temp_C is temperature in Celcius
-    temp_C = temperature - 273.15
+    temp_C = temp - 273.15
 
     assert wet_type in ['water', 'ice']
 
     EF = (
-        1. + 1.e-4 * (7.2 + pressure * (0.0320 + 5.9e-6 * temp_C ** 2))
+        1. + 1.e-4 * (7.2 + press * (0.0320 + 5.9e-6 * temp_C ** 2))
         if wet_type == 'water' else
-        1. + 1.e-4 * (2.2 + pressure * (0.0382 + 6.4e-6 * temp_C ** 2))
+        1. + 1.e-4 * (2.2 + press * (0.0382 + 6.4e-6 * temp_C ** 2))
         )
 
     a, b, c, d = (
@@ -186,119 +198,139 @@ def _saturation_water_pressure(temperature, pressure, wet_type):
 
 
 @utils.ranged_quantity_input(
-    temperature=(1.e-30, None, apu.K),
-    pressure=(1.e-30, None, apu.hPa),
+    temp=(1.e-30, None, apu.K),
+    press=(1.e-30, None, apu.hPa),
     humidity=(0, 100, apu.percent),
     strip_input_units=True, output_unit=apu.hPa
     )
 def pressure_water_from_humidity(
-        temperature, pressure, humidity, wet_type='water'
+        temp, press, humidity, wet_type='water'
         ):
     '''
-    Calculate p_water according to ITU-R P.453-12.
+    Water pressure according to `ITU-R P.453-12
+    <https://www.itu.int/rec/R-REC-P.453-12-201609-I/en>`_.
 
     Parameters
     ----------
-    temperature - air temperature (K)
-    pressure - total air pressure (hPa)
-    humidity - relative humidity (%)
-    wet_type - 'water' or 'ice'
+    temp : `~astropy.units.Quantity`
+        Air temperature [K]
+    press : `~astropy.units.Quantity`
+        Total air pressure [hPa]
+    humidity : `~astropy.units.Quantity`
+        Relative humidity [%]
+    wet_type : str, optional
+        Type of wet material: 'water', 'ice'
 
     Returns
     -------
-    Water vapor partial pressure (hPa)
+    press_w : `~astropy.units.Quantity`
+        Water vapor partial pressure [hPa]
     '''
 
     e_s = _saturation_water_pressure(
-        temperature, pressure, wet_type=wet_type
+        temp, press, wet_type=wet_type
         )
 
-    pressure_water = humidity / 100. * e_s
+    press_w = humidity / 100. * e_s
 
-    return pressure_water
+    return press_w
 
 
 @utils.ranged_quantity_input(
-    temperature=(1.e-30, None, apu.K),
-    pressure=(1.e-30, None, apu.hPa),
-    pressure_water=(1.e-30, None, apu.hPa),
+    temp=(1.e-30, None, apu.K),
+    press=(1.e-30, None, apu.hPa),
+    press_w=(1.e-30, None, apu.hPa),
     strip_input_units=True, output_unit=apu.percent
     )
 def humidity_from_pressure_water(
-        temperature, pressure, pressure_water, wet_type='water'
+        temp, press, press_w, wet_type='water'
         ):
     '''
-    Calculate relative humidity according to ITU-R P.453-12.
+    Relative humidity according to `ITU-R P.453-12
+    <https://www.itu.int/rec/R-REC-P.453-12-201609-I/en>`_.
 
     wet_type - 'water' or 'ice'
 
     Parameters
     ----------
-    temperature - air temperature (K)
-    pressure - total air pressure (hPa)
-    pressure_water - water vapor partial pressure (hPa)
-    wet_type - 'water' or 'ice'
+    temp : `~astropy.units.Quantity`
+        Air temperature [K]
+    press : `~astropy.units.Quantity`
+        Total air pressure [hPa]
+    press_w : `~astropy.units.Quantity`
+        Water vapor partial pressure [hPa]
+    wet_type : str, optional
+        Type of wet material: 'water', 'ice'
 
     Returns
     -------
-    Relative humidity (%)
+    humidity : `~astropy.units.Quantity`
+        Relative humidity [%]
     '''
 
     e_s = _saturation_water_pressure(
-        temperature, pressure, wet_type=wet_type
+        temp, press, wet_type=wet_type
         )
 
-    humidity = 100. * pressure_water / e_s
+    humidity = 100. * press_w / e_s
 
     return humidity
 
 
 @utils.ranged_quantity_input(
-    temperature=(1.e-30, None, apu.K),
-    rho_water=(1.e-30, None, apu.g / apu.m ** 3),
+    temp=(1.e-30, None, apu.K),
+    rho_w=(1.e-30, None, apu.g / apu.m ** 3),
     strip_input_units=True, output_unit=apu.hPa
     )
-def pressure_water_from_rho_water(temperature, rho_water):
+def pressure_water_from_rho_water(temp, rho_w):
     '''
-    Calculate water pressure according to ITU-R P.453-12.
+    Water pressure according to `ITU-R P.453-12
+    <https://www.itu.int/rec/R-REC-P.453-12-201609-I/en>`_.
 
     Parameters
     ----------
-    temperature - air temperature (K)
-    rho_water - water vapor density (g / m**3)
+    temp : `~astropy.units.Quantity`
+        Air temperature [K]
+    rho_w : `~astropy.units.Quantity`
+        Water vapor density [g / m**3]
 
     Returns
     -------
-    Water vapor partial pressure (hPa)
+    press_w : `~astropy.units.Quantity`
+        Water vapor partial pressure [hPa]
     '''
 
-    pressure_water = rho_water * temperature / 216.7
+    press_w = rho_w * temp / 216.7
 
-    return pressure_water
+    return press_w
 
 
 @utils.ranged_quantity_input(
-    temperature=(1.e-30, None, apu.K),
-    pressure_water=(1.e-30, None, apu.hPa),
+    temp=(1.e-30, None, apu.K),
+    press_w=(1.e-30, None, apu.hPa),
     strip_input_units=True, output_unit=apu.g / apu.m ** 3
     )
-def rho_water_from_pressure_water(temperature, pressure_water):
+def rho_water_from_pressure_water(temp, press_w):
     '''
-    Calculate water density according to ITU-R P.453-12.
+    Water density according to `ITU-R P.453-12
+    <https://www.itu.int/rec/R-REC-P.453-12-201609-I/en>`_.
 
     Parameters
     ----------
-    temperature - air temperature (K)
-    pressure_water - water vapor partial pressure (hPa)
+    temp : `~astropy.units.Quantity`
+        Air temperature [K]
+    press_w : `~astropy.units.Quantity`
+        Water vapor partial pressure [hPa]
 
     Returns
     -------
-    Water vapor density (g / m**3)
+    rho_w : `~astropy.units.Quantity`
+        Water vapor density [g / m**3]
     '''
 
-    rho_water = pressure_water * 216.7 / temperature
+    rho_w = press_w * 216.7 / temp
 
-    return rho_water
+    return rho_w
 
 
 @utils.ranged_quantity_input(
@@ -307,24 +339,35 @@ def rho_water_from_pressure_water(temperature, pressure_water):
     )
 def profile_standard(height):
     '''
-    Compute temperature and pressure according to ITU-R P.835-5, Annex 1.
-
-    Note, for convenience, derived quantities like water density/pressure
-    and refraction indices are also returned.
+    Standard height profiles according to `ITU-R P.835-5
+    <https://www.itu.int/rec/R-REC-P.835-5-201202-I/en>`_, Annex 1.
 
     Parameters
     ----------
-    height - height above ground (km, array or scalar)
+    height : `~astropy.units.Quantity`
+        Height above ground [km]
 
     Returns
     -------
-    Temperature (K)
-    Total pressure (hPa)
-    Water vapor density (g / m**3)
-    Water vapor partial pressure (hPa)
-    Refractive index (dimensionless)
-    Relative humidity (%) if water vapour was in form of liquid water
-    Relative humidity (%) if water vapour was in form of ice
+    temp : `~astropy.units.Quantity`
+        Temperature [K]
+    press : `~astropy.units.Quantity`
+        Total pressure [hPa]
+    rho_w : `~astropy.units.Quantity`
+        Water vapor density [g / m**3]
+    press_w : `~astropy.units.Quantity`
+        Water vapor partial pressure [hPa]
+    n_index : `~astropy.units.Quantity`
+        Refractive index [dimless]
+    humidity_water : `~astropy.units.Quantity`
+        Relative humidity if water vapor was in form of liquid water [%]
+    humidity_ice : `~astropy.units.Quantity`
+        Relative humidity if water vapor was in form of ice [%]
+
+    Notes
+    -----
+    For convenience, derived quantities like water density/pressure
+    and refraction indices are also returned.
     '''
 
     # height = np.asarray(height)  # this is not sufficient for masking :-(
@@ -440,21 +483,29 @@ def _profile_helper(
 
     Parameters
     ----------
-    height - height above ground (km, array or scalar)
-    [temp,press,rho]_heights - list of height steps for which piece-wise
-        functions are defined
-    [temp,press,rho]_funcs - list of functions valid for the according height
-        interval
+    height : `~astropy.units.Quantity`
+        Height above ground [km]
+    {temp,press,rho}_heights : list of floats
+        Height steps for which piece-wise functions are defined
+    {temp,press,rho}_funcs - list of functions
+        Functions that return the desired quantity for a given height interval
 
     Returns
     -------
-    Temperature (K)
-    Total pressure (hPa)
-    Water vapor density (g / m**3)
-    Water vapor partial pressure (hPa)
-    Refractive index (dimensionless)
-    Relative humidity (%) if water vapour was in form of liquid water
-    Relative humidity (%) if water vapour was in form of ice
+    temp : `~astropy.units.Quantity`
+        Temperature [K]
+    press : `~astropy.units.Quantity`
+        Total pressure [hPa]
+    rho_w : `~astropy.units.Quantity`
+        Water vapor density [g / m**3]
+    press_w : `~astropy.units.Quantity`
+        Water vapor partial pressure [hPa]
+    n_index : `~astropy.units.Quantity`
+        Refractive index [dimless]
+    humidity_water : `~astropy.units.Quantity`
+        Relative humidity if water vapor was in form of liquid water [%]
+    humidity_ice : `~astropy.units.Quantity`
+        Relative humidity if water vapor was in form of ice [%]
     '''
 
     height = np.atleast_1d(height)
@@ -530,23 +581,32 @@ def _profile_helper(
 
 def profile_lowlat(height):
     '''
-    Compute "low latitude" height profiles according to ITU-R P.835-5.
+    Low latitude height profiles according to `ITU-R P.835-5
+    <https://www.itu.int/rec/R-REC-P.835-5-201202-I/en>`_.
 
-    Valid for geographic latitudes |phi| < 22 deg.
+    Valid for geographic latitudes :math:`\\vert \\phi\\vert < 22^\\circ`.
 
     Parameters
     ----------
-    height - height above ground (km, array or scalar)
+    height : `~astropy.units.Quantity`
+        Height above ground [km]
 
     Returns
     -------
-    Temperature (K)
-    Total pressure (hPa)
-    Water vapor density (g / m**3)
-    Water vapor partial pressure (hPa)
-    Refractive index (dimensionless)
-    Relative humidity (%) if water vapour was in form of liquid water
-    Relative humidity (%) if water vapour was in form of ice
+    temp : `~astropy.units.Quantity`
+        Temperature [K]
+    press : `~astropy.units.Quantity`
+        Total pressure [hPa]
+    rho_w : `~astropy.units.Quantity`
+        Water vapor density [g / m**3]
+    press_w : `~astropy.units.Quantity`
+        Water vapor partial pressure [hPa]
+    n_index : `~astropy.units.Quantity`
+        Refractive index [dimless]
+    humidity_water : `~astropy.units.Quantity`
+        Relative humidity if water vapor was in form of liquid water [%]
+    humidity_ice : `~astropy.units.Quantity`
+        Relative humidity if water vapor was in form of ice [%]
     '''
 
     temp_heights = [0., 17., 47., 52., 80., 100.]
@@ -586,23 +646,32 @@ def profile_lowlat(height):
 
 def profile_midlat_summer(height):
     '''
-    Compute "mid latitude summer" height profiles according to ITU-R P.835-5.
+    Mid latitude summer height profiles according to `ITU-R P.835-5
+    <https://www.itu.int/rec/R-REC-P.835-5-201202-I/en>`_.
 
-    Valid for geographic latitudes 22 deg < |phi| < 45 deg.
+    Valid for geographic latitudes :math:`22^\\circ < \\vert \\phi\\vert < 45^\\circ`.
 
     Parameters
     ----------
-    height - height above ground (km, array or scalar)
+    height : `~astropy.units.Quantity`
+        Height above ground [km]
 
     Returns
     -------
-    Temperature (K)
-    Total pressure (hPa)
-    Water vapor density (g / m**3)
-    Water vapor partial pressure (hPa)
-    Refractive index (dimensionless)
-    Relative humidity (%) if water vapour was in form of liquid water
-    Relative humidity (%) if water vapour was in form of ice
+    temp : `~astropy.units.Quantity`
+        Temperature [K]
+    press : `~astropy.units.Quantity`
+        Total pressure [hPa]
+    rho_w : `~astropy.units.Quantity`
+        Water vapor density [g / m**3]
+    press_w : `~astropy.units.Quantity`
+        Water vapor partial pressure [hPa]
+    n_index : `~astropy.units.Quantity`
+        Refractive index [dimless]
+    humidity_water : `~astropy.units.Quantity`
+        Relative humidity if water vapor was in form of liquid water [%]
+    humidity_ice : `~astropy.units.Quantity`
+        Relative humidity if water vapor was in form of ice [%]
     '''
 
     temp_heights = [0., 13., 17., 47., 53., 80., 100.]
@@ -640,23 +709,32 @@ def profile_midlat_summer(height):
 
 def profile_midlat_winter(height):
     '''
-    Compute "mid latitude winter" height profiles according to ITU-R P.835-5.
+    Mid latitude winter height profiles according to `ITU-R P.835-5
+    <https://www.itu.int/rec/R-REC-P.835-5-201202-I/en>`_.
 
-    Valid for geographic latitudes 22 deg < |phi| < 45 deg.
+    Valid for geographic latitudes :math:`22^\\circ < \\vert \\phi\\vert < 45^\\circ`.
 
     Parameters
     ----------
-    height - height above ground (km, array or scalar)
+    height : `~astropy.units.Quantity`
+        Height above ground [km]
 
     Returns
     -------
-    Temperature (K)
-    Total pressure (hPa)
-    Water vapor density (g / m**3)
-    Water vapor partial pressure (hPa)
-    Refractive index (dimensionless)
-    Relative humidity (%) if water vapour was in form of liquid water
-    Relative humidity (%) if water vapour was in form of ice
+    temp : `~astropy.units.Quantity`
+        Temperature [K]
+    press : `~astropy.units.Quantity`
+        Total pressure [hPa]
+    rho_w : `~astropy.units.Quantity`
+        Water vapor density [g / m**3]
+    press_w : `~astropy.units.Quantity`
+        Water vapor partial pressure [hPa]
+    n_index : `~astropy.units.Quantity`
+        Refractive index [dimless]
+    humidity_water : `~astropy.units.Quantity`
+        Relative humidity if water vapor was in form of liquid water [%]
+    humidity_ice : `~astropy.units.Quantity`
+        Relative humidity if water vapor was in form of ice [%]
     '''
 
     temp_heights = [0., 10., 33., 47., 53., 80., 100.]
@@ -694,23 +772,32 @@ def profile_midlat_winter(height):
 
 def profile_highlat_summer(height):
     '''
-    Compute "high latitude summer" height profiles according to ITU-R P.835-5.
+    High latitude summer height profiles according to `ITU-R P.835-5
+    <https://www.itu.int/rec/R-REC-P.835-5-201202-I/en>`_.
 
-    Valid for geographic latitudes |phi| > 45 deg.
+    Valid for geographic latitudes :math:`\\vert \\phi\\vert > 45^\\circ`.
 
     Parameters
     ----------
-    height - height above ground (km, array or scalar)
+    height : `~astropy.units.Quantity`
+        Height above ground [km]
 
     Returns
     -------
-    Temperature (K)
-    Total pressure (hPa)
-    Water vapor density (g / m**3)
-    Water vapor partial pressure (hPa)
-    Refractive index (dimensionless)
-    Relative humidity (%) if water vapour was in form of liquid water
-    Relative humidity (%) if water vapour was in form of ice
+    temp : `~astropy.units.Quantity`
+        Temperature [K]
+    press : `~astropy.units.Quantity`
+        Total pressure [hPa]
+    rho_w : `~astropy.units.Quantity`
+        Water vapor density [g / m**3]
+    press_w : `~astropy.units.Quantity`
+        Water vapor partial pressure [hPa]
+    n_index : `~astropy.units.Quantity`
+        Refractive index [dimless]
+    humidity_water : `~astropy.units.Quantity`
+        Relative humidity if water vapor was in form of liquid water [%]
+    humidity_ice : `~astropy.units.Quantity`
+        Relative humidity if water vapor was in form of ice [%]
     '''
 
     temp_heights = [0., 10., 23., 48., 53., 79., 100.]
@@ -748,23 +835,32 @@ def profile_highlat_summer(height):
 
 def profile_highlat_winter(height):
     '''
-    Compute "high latitude winter" height profiles according to ITU-R P.835-5.
+    High latitude winter height profiles according to `ITU-R P.835-5
+    <https://www.itu.int/rec/R-REC-P.835-5-201202-I/en>`_.
 
-    Valid for geographic latitudes |phi| > 45 deg.
+    Valid for geographic latitudes :math:`\\vert \\phi\\vert > 45^\\circ`.
 
     Parameters
     ----------
-    height - height above ground (km, array or scalar)
+    height : `~astropy.units.Quantity`
+        Height above ground [km]
 
     Returns
     -------
-    Temperature (K)
-    Total pressure (hPa)
-    Water vapor density (g / m**3)
-    Water vapor partial pressure (hPa)
-    Refractive index (dimensionless)
-    Relative humidity (%) if water vapour was in form of liquid water
-    Relative humidity (%) if water vapour was in form of ice
+    temp : `~astropy.units.Quantity`
+        Temperature [K]
+    press : `~astropy.units.Quantity`
+        Total pressure [hPa]
+    rho_w : `~astropy.units.Quantity`
+        Water vapor density [g / m**3]
+    press_w : `~astropy.units.Quantity`
+        Water vapor partial pressure [hPa]
+    n_index : `~astropy.units.Quantity`
+        Refractive index [dimless]
+    humidity_water : `~astropy.units.Quantity`
+        Relative humidity if water vapor was in form of liquid water [%]
+    humidity_ice : `~astropy.units.Quantity`
+        Relative humidity if water vapor was in form of ice [%]
     '''
 
     temp_heights = [0., 8.5, 30., 50., 54., 100.]
@@ -799,25 +895,30 @@ def profile_highlat_winter(height):
         )
 
 
-def _S_oxygen(pressure_dry, temperature):
+def _S_oxygen(press_dry, temp):
     '''
-    Compute line strength of all oxygen resonances (Equation [P.676-10: 3]).
+    Line strengths of all oxygen resonances according to `ITU-R P.676-10
+    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Eq (3).
 
     Parameters
     ----------
-    pressure_dry - dry air pressure (~oxygen) (hPa)
-    temperature - temperature (K)
+    press_dry : `numpy.ndarray`, float
+        Dry air (=Oxygen) pressure [hPa]
+    temp : `numpy.ndarray`, float
+        Temperature [K]
 
     Returns
     -------
-    Line strength
+    I : `numpy.ndarray`, float
+        Line strength
 
-    Note:
-    pressure_total = pressure_dry + pressure_water
+    Notes
+    -----
+    Total pressure: `press = press_dry + press_w`
     '''
 
-    theta = 300. / temperature
-    factor = 1.e-7 * pressure_dry * theta ** 3
+    theta = 300. / temp
+    factor = 1.e-7 * press_dry * theta ** 3
 
     return (
         resonances_oxygen['a1'] *
@@ -826,25 +927,30 @@ def _S_oxygen(pressure_dry, temperature):
         )
 
 
-def _S_water(pressure_water, temperature):
+def _S_water(press_w, temp):
     '''
-    Compute line strength of all water resonances (Equation [P.676-10: 3]).
+    Line strengths of all water resonances according to `ITU-R P.676-10
+    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Eq (3).
 
     Parameters
     ----------
-    pressure_water - water vapor partial pressure (hPa)
-    temperature - temperature (K)
+    press_w : `numpy.ndarray`, float
+        Water vapor partial pressure [hPa]
+    temp : `numpy.ndarray`, float
+        Temperature [K]
 
     Returns
     -------
-    Line strength
+    I : `numpy.ndarray`, float
+        Line strength
 
-    Note:
-    pressure_total = pressure_dry + pressure_water
+    Notes
+    -----
+    Total pressure: `press = press_dry + press_w`
     '''
 
-    theta = 300. / temperature
-    factor = 1.e-1 * pressure_water * theta ** 3.5
+    theta = 300. / temp
+    factor = 1.e-1 * press_w * theta ** 3.5
 
     return (
         resonances_water['b1'] *
@@ -853,90 +959,123 @@ def _S_water(pressure_water, temperature):
         )
 
 
-def _Delta_f_oxygen(pressure_dry, pressure_water, temperature):
+def _Delta_f_oxygen(press_dry, press_w, temp):
     '''
-    Calculate line width for all oxygen resonances (Eq. [P.676-10: 6a/b]).
+    Line widths for all oxygen resonances according to `ITU-R P.676-10
+    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Eq (6a/b).
 
     Parameters
     ----------
-    pressure_dry - dry air pressure (~oxygen) (hPa)
-    pressure_water - water vapor partial pressure (hPa)
-    temperature - temperature (K)
+    press_dry : `numpy.ndarray`, float
+        Dry air (=Oxygen) pressure [hPa]
+    press_w : `numpy.ndarray`, float
+        Water vapor partial pressure [hPa]
+    temp : `numpy.ndarray`, float
+        Temperature [K]
 
     Returns
     -------
-    Line widths for all oxygen resonances.
+    W : `numpy.ndarray`, float
+        Line widths for all oxygen resonances
 
-    Note: oxygen resonance line widths also depend on wet-air pressure.
+    Notes
+    -----
+    Oxygen resonance line widths also depend on wet-air pressure.
     '''
 
-    theta = 300. / temperature
+    theta = 300. / temp
     df = resonances_oxygen['a3'] * 1.e-4 * (
-        pressure_dry * theta ** (0.8 - resonances_oxygen['a4']) +
-        1.1 * pressure_water * theta
+        press_dry * theta ** (0.8 - resonances_oxygen['a4']) +
+        1.1 * press_w * theta
         )
     return np.sqrt(df ** 2 + 2.25e-6)
 
 
-def _Delta_f_water(pressure_dry, pressure_water, temperature):
+def _Delta_f_water(press_dry, press_w, temp):
     '''
-    Calculate line width for all water resonances (Eq. [P.676-10: 6a/b]).
+    Line widths for all water resonances according to
+    `ITU-R P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_,
+    Eq (6a/b).
 
     Parameters
     ----------
-    pressure_dry - dry air pressure (~oxygen) (hPa)
-    pressure_water - water vapor partial pressure (hPa)
-    temperature - temperature (K)
+    press_dry : `numpy.ndarray`, float
+        Dry air (=Oxygen) pressure [hPa]
+    press_w : `numpy.ndarray`, float
+        Water vapor partial pressure [hPa]
+    temp : `numpy.ndarray`, float
+        Temperature [K]
 
     Returns
     -------
-    Line widths for all oxygen resonances.
+    W : `numpy.ndarray`, float
+        Line widths for all water resonances [GHz]
 
-    Note: water resonance line widths also depend on dry-air pressure.
+    Notes
+    -----
+    Water resonance line widths also depend on dry-air pressure.
     '''
 
-    theta = 300. / temperature
+    theta = 300. / temp
     f0, b3, b4, b5, b6 = (
         resonances_water[b]
         for b in ['f0', 'b3', 'b4', 'b5', 'b6']
         )
 
     df = b3 * 1.e-4 * (
-        pressure_dry * theta ** b4 +
-        b5 * pressure_water * theta ** b6
+        press_dry * theta ** b4 +
+        b5 * press_w * theta ** b6
         )
     return 0.535 * df + np.sqrt(
         0.217 * df ** 2 + 2.1316e-12 * f0 ** 2 / theta
         )
 
 
-def _delta_oxygen(pressure_dry, pressure_water, temperature):
+def _delta_oxygen(press_dry, press_w, temp):
     '''
-    Calculate shape correction for all oxygen resonances (Eq. [P.676-10: 7]).
+    Shape correction for all oxygen resonances according to
+    `ITU-R P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_,
+    Eq (7).
 
     Parameters
     ----------
-    pressure_dry - dry air pressure (~oxygen) (hPa)
-    pressure_water - water vapor partial pressure (hPa)
-    temperature - temperature (K)
+    press_dry : `numpy.ndarray`, float
+        Dry air (=Oxygen) pressure [hPa]
+    press_w : `numpy.ndarray`, float
+        Water vapor partial pressure [hPa]
+    temp : `numpy.ndarray`, float
+        Temperature [K]
 
     Returns
     -------
-    Profile shape correction factors for all oxygen resonances.
+    delta : `numpy.ndarray`, float
+        Profile shape correction factors for all oxygen resonances
 
-    Note, this function accounts for interference effects in oxygen lines.
+    Notes
+    -----
+    This function accounts for interference effects in oxygen lines.
     '''
 
-    theta = 300. / temperature
+    theta = 300. / temp
     return (
         (resonances_oxygen['a5'] + resonances_oxygen['a6'] * theta) * 1.e-4 *
-        (pressure_dry + pressure_water) * theta ** 0.8
+        (press_dry + press_w) * theta ** 0.8
         )
 
 
 def _delta_water():
     '''
-    Return shape correction factor for all water vapor resonances (all-zero).
+    Shape correction factor for all water vapor resonances (all-zero).
+
+    Returns
+    -------
+    delta : `numpy.ndarray`, float
+        Profile shape correction factors for all water resonances.
+
+    Notes
+    -----
+    This is only introduced to be able to use the same machinery that is
+    working with oxygen, in the `_delta_oxygen` function.
     '''
 
     return np.zeros(len(resonances_water['f0']), dtype=np.float64)
@@ -944,24 +1083,31 @@ def _delta_water():
 
 def _F(freq_grid, f_i, Delta_f, delta):
     '''
-    Calculate line-profiles for all resonances at the freq_grid positions.
-    (Equation [P.676-10: 5])
+    Line-profiles for all resonances at the freq_grid positions according to
+    `ITU-R P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_,
+    Eq (5).
 
     Parameters
     ----------
-    freq_grid - Frequencies (GHz) at which to calculate line-width shapes
-    f_i - Resonance line frequencies (GHz)
-    Delta_f - line widths of all resonances
-    delta - correction factors to account for interference effects in oxygen
+    freq_grid : `numpy.ndarray` of float
+        Frequencies at which to calculate line-width shapes [GHz]
+    f_i : `numpy.ndarray` of float
+        Resonance line frequencies [GHz]
+    Delta_f : `numpy.ndarray` of float
+        Line widths of all resonances [GHz]
+    delta : `numpy.ndarray` of float
+        Correction factors to account for interference effects in oxygen
         lines
 
     Returns
     -------
-    m x n Array with the line-shape values
-        (n = len(freq_grid), m = len(Delta_f))
+    S : `numpy.ndarray` of float (m, n)
+        Line-shape values, (`n = len(freq_grid)`, `m = len(Delta_f)`)
 
-    Note: no integration is done between freq_grid positions, so if you're
-    interested in high accuracy near resonance lines, make your freq_grid
+    Notes
+    -----
+    No integration is done between `freq_grid` positions, so if you're
+    interested in high accuracy near resonance lines, make your `freq_grid`
     sufficiently fine.
     '''
 
@@ -978,80 +1124,69 @@ def _F(freq_grid, f_i, Delta_f, delta):
     return _freq_grid / _f_i * (sum_1 + sum_2)
 
 
-def _N_D_prime2(freq_grid, pressure_dry, pressure_water, temperature):
+def _N_D_prime2(freq_grid, press_dry, press_w, temp):
     '''
-    Compute dry air continuum absorption, aka Debye spectrum
-    (Equation [P.676-10: 8/9])
+    Dry air continuum absorption (Debye spectrum) according to
+    `ITU-R P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_,
+    Eq (8/9).
 
     Parameters
     ----------
-    freq_grid - Frequencies (GHz) at which to calculate line-width shapes
-    pressure_dry - dry air pressure (~oxygen) (hPa)
-    pressure_water - water vapor partial pressure (hPa)
-    temperature - temperature (K)
+    freq_grid : `numpy.ndarray`, float
+        Frequencies at which to calculate line-width shapes [GHz]
+    press_dry : `numpy.ndarray`, float
+        Dry air (=Oxygen) pressure [hPa]
+    press_w : `numpy.ndarray`, float
+        Water vapor partial pressure [hPa]
+    temp : `numpy.ndarray`, float
+        Temperature [K]
 
     Returns
     -------
-    Debye absorption spectrum
+    deb_spec : `numpy.ndarray`, float
+       Debye absorption spectrum [dB / km]
     '''
 
-    theta = 300. / temperature
-    d = 5.6e-4 * (pressure_dry + pressure_water) * theta ** 0.8
+    theta = 300. / temp
+    d = 5.6e-4 * (press_dry + press_w) * theta ** 0.8
 
     sum_1 = 6.14e-5 / d / (1 + (freq_grid / d) ** 2)
-    sum_2 = 1.4e-12 * pressure_dry * theta ** 1.5 / (
+    sum_2 = 1.4e-12 * press_dry * theta ** 1.5 / (
         1 + 1.9e-5 * freq_grid ** 1.5
         )
 
-    return freq_grid * pressure_dry * theta ** 2 * (sum_1 + sum_2)
+    return freq_grid * press_dry * theta ** 2 * (sum_1 + sum_2)
 
 
 def _atten_specific_annex1(
-        freq_grid, pressure_dry, pressure_water, temperature
+        freq_grid, press_dry, press_w, temp
         ):
-    '''
-    Compute specific (one layer) atmospheric attenuation according to
-    ITU-R P.676-10, annex 1.
-
-    Parameters
-    ----------
-    freq_grid - Frequencies (GHz) at which to calculate specific attenuation
-    pressure_dry - dry air pressure (~oxygen) (hPa)
-    pressure_water - water vapor partial pressure (hPa)
-    temperature - temperature (K)
-
-    Returns
-    -------
-    dry_attenuation, wet_attenuation (dB / km)
-    '''
 
     freq_grid = np.atleast_1d(freq_grid)
-    # assert pressure_dry.size == 1, 'pressure_dry must be scalar'
-    # assert pressure_water.size == 1, 'pressure_water must be scalar'
-    # assert temperature.size == 1, 'temperature must be scalar'
-    if not isinstance(pressure_dry, numbers.Real):
-        raise TypeError('pressure_dry must be a scalar float')
-    if not isinstance(pressure_water, numbers.Real):
-        raise TypeError('pressure_water must be a scalar float')
-    if not isinstance(temperature, numbers.Real):
-        raise TypeError('temperature must be a scalar float')
+
+    if not isinstance(press_dry, numbers.Real):
+        raise TypeError('press_dry must be a scalar float')
+    if not isinstance(press_w, numbers.Real):
+        raise TypeError('press_w must be a scalar float')
+    if not isinstance(temp, numbers.Real):
+        raise TypeError('temp must be a scalar float')
 
     # first calculate dry attenuation (oxygen lines + N_D_prime2)
-    S_o2 = _S_oxygen(pressure_dry, temperature)
+    S_o2 = _S_oxygen(press_dry, temp)
     f_i = resonances_oxygen['f0']
-    Delta_f = _Delta_f_oxygen(pressure_dry, pressure_water, temperature)
-    delta = _delta_oxygen(pressure_dry, pressure_water, temperature)
+    Delta_f = _Delta_f_oxygen(press_dry, press_w, temp)
+    delta = _delta_oxygen(press_dry, press_w, temp)
     F_o2 = _F(freq_grid, f_i, Delta_f, delta)
 
     atten_o2 = np.sum(S_o2[:, np.newaxis] * F_o2, axis=0)
     atten_o2 += _N_D_prime2(
-        freq_grid, pressure_dry, pressure_water, temperature
+        freq_grid, press_dry, press_w, temp
         )
 
     # now, wet contribution
-    S_h2o = _S_water(pressure_water, temperature)
+    S_h2o = _S_water(press_w, temp)
     f_i = resonances_water['f0']
-    Delta_f = _Delta_f_water(pressure_dry, pressure_water, temperature)
+    Delta_f = _Delta_f_water(press_dry, press_w, temp)
     delta = _delta_water()
     F_h2o = _F(freq_grid, f_i, Delta_f, delta)
 
@@ -1062,32 +1197,45 @@ def _atten_specific_annex1(
 
 @utils.ranged_quantity_input(
     freq_grid=(1.e-30, 1000, apu.GHz),
-    pressure_dry=(1.e-30, None, apu.hPa),
-    pressure_water=(1.e-30, None, apu.hPa),
-    temperature=(1.e-30, None, apu.K),
+    press_dry=(1.e-30, None, apu.hPa),
+    press_w=(1.e-30, None, apu.hPa),
+    temp=(1.e-30, None, apu.K),
     strip_input_units=True, output_unit=(cnv.dB / apu.km, cnv.dB / apu.km)
     )
 def atten_specific_annex1(
-        freq_grid, pressure_dry, pressure_water, temperature
+        freq_grid, press_dry, press_w, temp
         ):
     '''
-    Compute specific (one layer) atmospheric attenuation according to
-    ITU-R P.676-10, annex 1.
+    Specific (one layer) atmospheric attenuation according to `ITU-R P.676-10
+    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Annex 1.
 
     Parameters
     ----------
-    freq_grid - Frequencies (GHz) at which to calculate specific attenuation
-    pressure_dry - dry air pressure (~oxygen) (hPa)
-    pressure_water - water vapor partial pressure (hPa)
-    temperature - temperature (K)
+    freq_grid : `~astropy.units.Quantity`
+        Frequencies at which to calculate line-width shapes [GHz]
+    press_dry : `~astropy.units.Quantity`
+        Dry air (=Oxygen) pressure [hPa]
+    press_w : `~astropy.units.Quantity`
+        Water vapor partial pressure [hPa]
+    temp : `~astropy.units.Quantity`
+        Temperature [K]
 
     Returns
     -------
-    dry_attenuation, wet_attenuation (dB / km)
+    atten_dry : `~astropy.units.Quantity`
+        Dry-air specific attenuation [dB / km]
+    atten_wet : `~astropy.units.Quantity`
+        Wet-air specific attenuation [dB / km]
+
+    Notes
+    -----
+    No integration is done between `freq_grid` positions, so if you're
+    interested in high accuracy near resonance lines, make your `freq_grid`
+    sufficiently fine.
     '''
 
     return _atten_specific_annex1(
-        freq_grid, pressure_dry, pressure_water, temperature
+        freq_grid, press_dry, press_w, temp
         )
 
 
@@ -1098,94 +1246,72 @@ def atten_specific_annex1(
     )
 def atten_terrestrial(specific_atten, path_length):
     '''
-    Calculate total path attenuation for a path close to the ground
-    (i.e., one layer), according to ITU-R P.676-10, annex 1 + 2.
+    Total path attenuation for a path close to the ground (i.e., one layer),
+    according to `ITU-R P.676-10
+    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Annex 1 + 2.
 
     Parameters
     ----------
-    specific_atten - Specific attenuation (dry + wet, dB / km)
-    path_length - Length of path (km)
+    specific_atten : `~astropy.units.Quantity`
+        Specific attenuation (dry + wet) [dB / km]
+    path_length : `~astropy.units.Quantity`
+        Length of path [km]
 
     Returns
     -------
-    Total attenuation along path (dB)
+    total_atten : `~astropy.units.Quantity`
+        Total attenuation along path [dB]
     '''
 
     return specific_atten * path_length
 
 
-def _prepare_path(elevation, obs_alt, profile_func, max_path_length=1000.):
+def _prepare_path(elev, obs_alt, profile_func, max_path_length=1000.):
     '''
-    Helper function to construct the path parameters.
-    See ITU-R P.676-10, annex 1.
+    Helper function to construct the path parameters; see `ITU-R P.676-10
+    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Annex 1.
 
     Parameters
     ----------
-    elevation - (Apparent) elevation of source as seen from observer (degrees)
-    obs_alt - Height of observer above sea-level (m)
-    profile_func - function having height (above sea-level in km) as
-        parameter, and that returns
-            - Temperature (K)
-            - Total pressure (hPa)
-            - Water vapor density (g / m**3)
-            - Water vapor partial pressure (hPa)
-            - Refractive index (dimensionless)
-            - Relative humidity (%) if water vapour was in form of liquid
-              water
-            - Relative humidity (%) if water vapour was in form of ice
-        for that height. Note, this function must have the same signature as
-        the standardized atmospheric height profiles, but since only
-        temperature, total pressure and water vapor pressure are needed here,
-        you can return dummy values for the rest.
-    max_path_length - Maximal length of path (km) before stopping iteration
+    elev : float
+        (Apparent) elevation of source as seen from observer [deg]
+    obs_alt : float
+        Height of observer above sea-level [m]
+    profile_func : func
+        A height profile function having the same signature as
+        `~pycraf.atm.profile_standard`
+    max_path_length : float, optional
+        Maximal length of path before stopping iteration [km]
         (default: 1000 km; useful for terrestrial paths)
 
     Returns
     -------
-    List of tuples with the following quantities for each height layer:
-        press_n - Total pressure (hPa)
-        press_w_n - Water vapor partial pressure (hPa)
-        temp_n - Temperature (K)
-        a_n - Path length (km)
-        r_n - Radius (i.e., distance to Earth center, km)
-        alpha_n - exit angle
-        delta_n - angle between current normal vector and first normal vector
-            (aka projected angular distance to starting point)
-        beta_n - entry angle
-        h_n - height above sea-level (km)
-    Refraction - Offset w.r.t. to a hypothetical straight path, i.e., the
-        correction between real and apparent source elevation (degrees)
+    layer_params : list
+        List of tuples with the following quantities for each height layer `n`:
+
+        0) press_n - Total pressure [hPa]
+        1) press_w_n - Water vapor partial pressure [hPa]
+        2) temp_n - Temperature [K]
+        3) a_n - Path length [km]
+        4) r_n - Radius (i.e., distance to Earth center) [km]
+        5) alpha_n - exit angle [rad]
+        6) delta_n - angle between current normal vector and first normal
+           vector (aka projected angular distance to starting point) [rad]
+        7) beta_n - entry angle [rad]
+        8) h_n - height above sea-level [km]
+
+    Refraction : float
+        Offset with respect to a hypothetical straight path, i.e., the
+        correction between real and apparent source elevation [deg]
+
+    Notes
+    -----
+    Although the `profile_func` must have the same signature as
+    `~pycraf.atm.profile_standard`, which is one of the standardized
+    atmospheric height profiles, only temperature, total pressure and
+    water vapor pressure are needed here, i.e., `profile_func` may return
+    dummy values for the rest.
     '''
-
-    # checking signatures is more complicated, than this... will
-    # need to look into this later
-    # # first check if profile_func has correct signature (input *and* output)
-    # @apu.quantity_input(
-    #     temperature=apu.K, pressure=apu.hPa,
-    #     rho_water=apu.g / apu.m ** 3, pressure_water=apu.hPa,
-    #     ref_index=cnv.dimless,
-    #     humidity_water=apu.percent, humidity_ice=apu.percent
-    #     )
-    # def atmospheric_profile_func_check(
-    #         temperature, pressure, rho_water, pressure_water,
-    #         ref_index, humidity_water, humidity_ice
-    #         ):
-
-    #     return None
-
-    # _ret = profile_func(10 * apu.km)  # checks input
-    # # check, if _ret is an iterable, otherwise (*_ret) won't work
-    # # assert isinstance(_ret, collections.Iterable), (
-    # #     'profile_func must return an iterable'
-    # #     )
-    # # unfortunately, if _ret is a (scalar) apu.Quantity, the __iter__()
-    # # method is defined, but will raise a TypeError
-    # # better check for tuple, although it is unnecessarily strict
-    # assert isinstance(_ret, tuple), (
-    #     'profile_func must return a tuple'
-    #     )
-
-    # atmospheric_profile_func_check(*_ret)  # checks output
 
     # construct height layers
     # deltas = 0.0001 * np.exp(np.arange(922) / 100.)
@@ -1231,7 +1357,7 @@ def _prepare_path(elevation, obs_alt, profile_func, max_path_length=1000.):
 
     # calculate layer path lengths (Equation 17 to 19)
     # all angles in rad
-    beta_n = beta_0 = np.radians(90. - elevation)  # initial value
+    beta_n = beta_0 = np.radians(90. - elev)  # initial value
 
     # we will store a_n, gamma_n, and temperature for each layer, to allow
     # Tebb calculation
@@ -1288,50 +1414,52 @@ def atten_slant_annex1(
         t_bg=2.73 * apu.K, max_path_length=1000. * apu.km
         ):
     '''
-    Calculate path attenuation for a slant path through full atmosphere.
-    (Equation [P.676-10: 17-20])
+    Path attenuation for a slant path through full atmosphere according to
+    `ITU-R P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_
+    Eq (17-20).
 
     Parameters
     ----------
-    freq_grid - Frequencies (GHz) at which to calculate line-width shapes
-    elevation - (Apparent) elevation of source as seen from observer (degrees)
-    obs_alt - Height of observer above sea-level (m)
-    profile_func - function having height (above sea-level in km) as
-        parameter, and that returns
-            - Temperature (K)
-            - Total pressure (hPa)
-            - Water vapor density (g / m**3)
-            - Water vapor partial pressure (hPa)
-            - Refractive index (dimensionless)
-            - Relative humidity (%) if water vapour was in form of liquid
-              water
-            - Relative humidity (%) if water vapour was in form of ice
-        for that height. Note, this function must have the same signature as
-        the standardized atmospheric height profiles, but since only
-        temperature, total pressure and water vapor pressure are needed here,
-        you can return dummy values for the rest (as long as they have
-        proper units).
-    t_bg - background temperature (or temperature just after the last layer,
-        default: 2.73 K)
-        This is needed for accurate Tebb calculation, usually this is the
+    freq_grid : `~astropy.units.Quantity`
+        Frequencies at which to calculate line-width shapes [GHz]
+    elev : `~astropy.units.Quantity`, scalar
+        (Apparent) elevation of source as seen from observer [deg]
+    obs_alt : `~astropy.units.Quantity`, scalar
+        Height of observer above sea-level [m]
+    profile_func : func
+        A height profile function having the same signature as
+        `~pycraf.atm.profile_standard`
+    t_bg : `~astropy.units.Quantity`, scalar, optional
+        Background temperature, i.e. temperature just after the outermost
+        layer (default: 2.73 K)
+
+        This is needed for accurate `t_ebb` calculation, usually this is the
         temperature of the CMB (if Earth-Space path), but at lower
         frequencies, Galactic foreground contribution might play a role.
-    max_path_length - Maximal length of path (km) before stopping iteration
+    max_path_length : `~astropy.units.Quantity`, scalar
+        Maximal length of path before stopping iteration [km]
         (default: 1000 km; useful for terrestrial paths)
 
     Returns
     -------
-    Total attenuation along path (dB)
-    Refraction - Offset w.r.t. to a hypothetical straight path, i.e., the
-        correction between real and apparent source elevation (degrees)
-    Tebb (K) - Equivalent black body temperature of the atmosphere (accounting
-        for any outside contribution, e.g., from CMB)
+    total_atten : `~astropy.units.Quantity`
+        Total attenuation along path [dB]
+    Refraction : `~astropy.units.Quantity`
+        Offset with respect to a hypothetical straight path, i.e., the
+        correction between real and apparent source elevation [deg]
+    t_ebb (K) : `~astropy.units.Quantity`
+        Equivalent black body temperature of the atmosphere (accounting
+        for any outside contribution, e.g., from CMB) [K]
+
+    Notes
+    -----
+    Although the `profile_func` must have the same signature as
+    `~pycraf.atm.profile_standard`, which is one of the standardized
+    atmospheric height profiles, only temperature, total pressure and
+    water vapor pressure are needed here, i.e., `profile_func` may return
+    dummy values for the rest.
     '''
 
-    # assert elevation.size == 1, 'elevation must be scalar'
-    # assert obs_alt.size == 1, 'obs_alt must be scalar'
-    # assert t_bg.size == 1, 't_bg must be scalar'
-    # assert max_path_length.size == 1, 'max_path_length must be scalar'
     if not isinstance(elevation, numbers.Real):
         raise TypeError('elevation must be a scalar float')
     if not isinstance(obs_alt, numbers.Real):
@@ -1375,7 +1503,8 @@ def atten_slant_annex1(
 
 def _phi_helper(r_p, r_t, args):
     '''
-    Helper function (Equation [P.676-10: 22u])
+    Helper function according to `ITU-R P.676-10
+    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_ Eq (22u).
     '''
 
     phi0, a, b, c, d = args
@@ -1408,36 +1537,21 @@ _helper_funcs = dict(
     )
 
 
-def _atten_specific_annex2(freq_grid, pressure, rho_water, temperature):
-    '''
-    Calculate specific attenuation using a simplified algorithm
-    (ITU-R P.676-10 Annex 2.1).
-
-    Parameters
-    ----------
-    freq_grid - Frequencies (GHz)
-    pressure - total air pressure (dry + wet) (hPa)
-    rho_water - water vapor density (g / m^3)
-    temperature - temperature (K)
-
-    Returns
-    -------
-    dry_attenuation, wet_attenuation (dB / km)
-    '''
+def _atten_specific_annex2(freq_grid, press, rho_w, temp):
 
     freq_grid = np.atleast_1d(freq_grid)
 
-    if not isinstance(pressure, numbers.Real):
-        raise TypeError('pressure must be a scalar float')
-    if not isinstance(rho_water, numbers.Real):
-        raise TypeError('rho_water must be a scalar float')
-    if not isinstance(temperature, numbers.Real):
-        raise TypeError('temperature must be a scalar float')
+    if not isinstance(press, numbers.Real):
+        raise TypeError('press must be a scalar float')
+    if not isinstance(rho_w, numbers.Real):
+        raise TypeError('rho_w must be a scalar float')
+    if not isinstance(temp, numbers.Real):
+        raise TypeError('temp must be a scalar float')
 
     _freq = freq_grid
-    _press = pressure
-    _rho_w = rho_water
-    _temp = temperature
+    _press = press
+    _rho_w = rho_w
+    _temp = temp
 
     r_p = _press / 1013.
     r_t = 288. / (_temp - 0.15)
@@ -1541,53 +1655,69 @@ def _atten_specific_annex2(freq_grid, pressure, rho_water, temperature):
 
 @utils.ranged_quantity_input(
     freq_grid=(1.e-30, 350., apu.GHz),
-    pressure=(1.e-30, None, apu.hPa),
-    rho_water=(1.e-30, None, apu.g / apu.m ** 3),
-    temperature=(1.e-30, None, apu.K),
+    press=(1.e-30, None, apu.hPa),
+    rho_w=(1.e-30, None, apu.g / apu.m ** 3),
+    temp=(1.e-30, None, apu.K),
     strip_input_units=True, output_unit=(cnv.dB / apu.km, cnv.dB / apu.km)
     )
-def atten_specific_annex2(freq_grid, pressure, rho_water, temperature):
+def atten_specific_annex2(freq_grid, press, rho_w, temp):
     '''
-    Calculate specific attenuation using a simplified algorithm
-    (ITU-R P.676-10 Annex 2.1).
+    Specific (one layer) atmospheric attenuation based on a simplified
+    algorithm according to `ITU-R P.676-10
+    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Annex 2.1.
 
     Parameters
     ----------
-    freq_grid - Frequencies (GHz)
-    pressure - total air pressure (dry + wet) (hPa)
-    rho_water - water vapor density (g / m^3)
-    temperature - temperature (K)
+    freq_grid : `~astropy.units.Quantity`
+        Frequencies at which to calculate line-width shapes [GHz]
+    press : `~astropy.units.Quantity`
+        Total air pressure (dry + wet) [hPa]
+    rho_w : `~astropy.units.Quantity`
+        Water vapor density [g / m^3]
+    temp : `~astropy.units.Quantity`
+        Temperature [K]
 
     Returns
     -------
-    dry_attenuation, wet_attenuation (dB / km)
+    atten_dry : `~astropy.units.Quantity`
+        Dry-air specific attenuation [dB / km]
+    atten_wet : `~astropy.units.Quantity`
+        Wet-air specific attenuation [dB / km]
+
+    Notes
+    -----
+    In contrast to Annex 1, the method in Annex 2 is only valid below 350 GHz.
     '''
 
     return _atten_specific_annex2(
-        freq_grid, pressure, rho_water, temperature
+        freq_grid, press, rho_w, temp
         )
 
 
 @utils.ranged_quantity_input(
     freq_grid=(1.e-30, 350., apu.GHz),
-    pressure=(1.e-30, None, apu.hPa),
+    press=(1.e-30, None, apu.hPa),
     strip_input_units=True, output_unit=apu.km
     )
-def equivalent_height_dry(freq_grid, pressure):
+def equivalent_height_dry(freq_grid, press):
     '''
-    Calculate equivalent height for dry air (ITU-R P.676-10 Annex 2.2).
+    Equivalent height for dry air according to `ITU-R P.676-10
+    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Annex 2.2.
 
     Parameters
     ----------
-    freq_grid - Frequencies (GHz)
-    pressure - total air pressure (dry + wet) (hPa)
+    freq_grid : `~astropy.units.Quantity`
+        Frequenciesat which to calculate line-width shapes [GHz]
+    press : `~astropy.units.Quantity`
+        Total air pressure (dry + wet) [hPa]
 
     Returns
     -------
-    Equivalent height for dry air (km)
+    h_dry : `~astropy.units.Quantity`
+        Equivalent height for dry air [km]
     '''
 
-    r_p = pressure / 1013.
+    r_p = press / 1013.
 
     f = np.atleast_1d(freq_grid).astype(dtype=np.float64, copy=False)
 
@@ -1613,24 +1743,28 @@ def equivalent_height_dry(freq_grid, pressure):
 
 @utils.ranged_quantity_input(
     freq_grid=(1.e-30, 350., apu.GHz),
-    pressure=(1.e-30, None, apu.hPa),
+    press=(1.e-30, None, apu.hPa),
     strip_input_units=True, output_unit=apu.km
     )
-def equivalent_height_wet(freq_grid, pressure):
+def equivalent_height_wet(freq_grid, press):
     '''
-    Calculate equivalent height for wet air (ITU-R P.676-10 Annex 2.2).
+    Equivalent height for wet air according to `ITU-R P.676-10
+    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Annex 2.2.
 
     Parameters
     ----------
-    freq_grid - Frequencies (GHz)
-    pressure - total air pressure (dry + wet) (hPa)
+    freq_grid : `~astropy.units.Quantity`
+        Frequenciesat which to calculate line-width shapes [GHz]
+    press : `~astropy.units.Quantity`
+        Total air pressure (dry + wet) [hPa]
 
     Returns
     -------
-    Equivalent height for wet air (km)
+    h_wet : `~astropy.units.Quantity`
+        Equivalent height for wet air [km]
     '''
 
-    r_p = pressure / 1013.
+    r_p = press / 1013.
 
     f = np.atleast_1d(freq_grid).astype(dtype=np.float64, copy=False)
 
@@ -1654,32 +1788,40 @@ def equivalent_height_wet(freq_grid, pressure):
     atten_wet=(1.e-30, None, cnv.dB / apu.km),
     h_dry=(1.e-30, None, apu.km),
     h_wet=(1.e-30, None, apu.km),
-    elevation=(-90, 90, apu.deg),
+    elev=(-90, 90, apu.deg),
     strip_input_units=True, output_unit=cnv.dB
     )
-def atten_slant_annex2(atten_dry, atten_wet, h_dry, h_wet, elevation):
+def atten_slant_annex2(atten_dry, atten_wet, h_dry, h_wet, elev):
     '''
-    Calculate simple path attenuation for slant path through full atmosphere.
-    (P.676-10: 28])
+    Simple path attenuation for slant path through full atmosphere according to
+    `ITU-R P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_,
+    Eq (28).
 
     Parameters
     ----------
-    atten_dry - Specific attenuation for dry air (dB / km)
-    atten_wet - Specific attenuation for wet air (dB / km)
-    h_dry - Equivalent height for dry air (km)
-    h_wet - Equivalent height for wet air (km)
-    elevation - Elevation of source as seen from observer (degrees)
+    atten_dry : `~astropy.units.Quantity`
+        Specific attenuation for dry air [dB / km]
+    atten_wet : `~astropy.units.Quantity`
+        Specific attenuation for wet air [dB / km]
+    h_dry : `~astropy.units.Quantity`
+        Equivalent height for dry air [km]
+    h_wet : `~astropy.units.Quantity`
+        Equivalent height for wet air [km]
+    elev : `~astropy.units.Quantity`
+        (Apparent) elevation of source as seen from observer [deg]
 
     Returns
     -------
-    Total attenuation along path (dB)
+    total_atten : `~astropy.units.Quantity`
+        Total attenuation along path [dB]
 
     Notes
     -----
-    You can use the helper functions equivalent_height_[dry,wet] to infer
-    the equivalent heights from the total (wet+dry) air pressure.
+    You can use the helper functions `~pycraf.atm.equivalent_height_dry` and
+    `~pycraf.atm.equivalent_height_wet` to infer the equivalent heights from
+    the total (wet+dry) air pressure.
     '''
 
-    AM = 1. / np.sin(np.radians(elevation))
+    AM = 1. / np.sin(np.radians(elev))
 
     return AM * (atten_dry * h_dry + atten_wet * h_wet)

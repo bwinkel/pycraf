@@ -54,10 +54,6 @@ To install pycraf with `pip <http://www.pip-installer.org/en/latest/>`_, simply 
     about how to do this in the `pip documentation
     <http://www.pip-installer.org/en/1.2.1/other-tools.html#using-pip-with-the-user-scheme>`_.
 
-    Alternatively, if you intend to do development on other software that uses
-    pycraf, such as an affiliated package, consider installing pycraf into a
-    :ref:`virtualenv<using-virtualenv>`.
-
     We recommend to use a Python distribution, such as `Anaconda <https://www.continuum.io/downloads>`_, especially, if you are on :ref:`windows_install`.
 
     Do **not** install pycraf or other third-party packages using ``sudo``
@@ -128,9 +124,7 @@ the `pycraf issue tracker <http://github.com/bwinkel/pycraf/issues>`_.
 .. note::
 
     This way of running the tests may not work if you do it in the
-    pycraf source distribution.  See :ref:`sourcebuildtest` for how to
-    run the tests from the source code directory, or :ref:`running-tests`
-    for more details.
+    pycraf source distribution directory.
 
 .. _srtm_data:
 
