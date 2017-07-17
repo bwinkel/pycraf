@@ -52,9 +52,9 @@ The two functions `~pycraf.protection.cispr11_limits` and
 `~pycraf.protection.cispr22_limits` have a different call signature (see
 API reference), but are similarly easy to use::
 
-    >>> from pycraf import protection
-    >>> import astropy.units as u
-    >>> protection.cispr11_limits(
+    >>> from pycraf import protection  # doctest: +SKIP
+    >>> import astropy.units as u  # doctest: +SKIP
+    >>> protection.cispr11_limits(  # doctest: +SKIP
     ...     500 * u.MHz, detector_type='QP', detector_dist=100 * u.m
     ...     )
     (<Decibel [ 26.54242509] dB(uV2 / m2)>, <Quantity 120.0 kHz>)
