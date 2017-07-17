@@ -209,7 +209,8 @@ def fl_pattern(
     Notes
     -----
     - If `G_max` is unknown, there is a helper function
-     `pycraf.antenna.G_max_from_HPBW` that can be used to estimate its value.
+      `pycraf.antenna.G_max_from_HPBW` that can be used to estimate its
+      value.
     - See `ITU-R Rec F.699
       <https://www.itu.int/rec/R-REC-F.699-7-200604-I/en>`_ for further
       explanation and applicability of this model.

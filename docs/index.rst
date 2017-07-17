@@ -40,6 +40,7 @@ Available modules
    pathprof/index
    antenna/index
    protection/index
+   geospatial/index
 
 .. automodapi:: pycraf
     :no-heading:

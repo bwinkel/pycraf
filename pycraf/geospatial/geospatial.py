@@ -8,7 +8,9 @@ from __future__ import (
 from functools import partial, lru_cache
 # import numpy as np
 import numbers
+from astropy import units as apu
 import pyproj
+from .. import utils
 
 
 # Note: UTM zones extend over 6d in longitude and a full hemisphere in
@@ -22,10 +24,10 @@ import pyproj
 
 
 __all__ = [
-    'utm_to_wgs84', 'wgs84_to_utm', 'utm_to_wgs84_32N',
+    'utm_to_wgs84', 'wgs84_to_utm',  # 'utm_to_wgs84_32N',
     'etrs89_to_wgs84', 'wgs84_to_etrs89',
     # 'itrf2005_to_wgs84',
-    'wgs84_to_itrf2005',
+    # 'wgs84_to_itrf2005',
     ]
 
 
@@ -67,25 +69,43 @@ def _create_proj(sys1, sys2, zone=None, south=False):
     return pyproj.Proj(_proj_str)
 
 
+@utils.ranged_quantity_input(
+    ulon=(None, None, apu.m),
+    ulat=(None, None, apu.m),
+    strip_input_units=True, output_unit=(apu.deg, apu.deg)
+    )
 def utm_to_wgs84(ulon, ulat, zone, south=False):
     '''
     Convert UTM coordinates to GPS/WGS84.
 
     Parameters
     ----------
-    ulon, ulat - UTM longitude and latitude [deg]
-    zone - UTM zone (e.g., 32 for Effelsberg, with south == False)
-    south - set to True if on southern hemisphere
+    ulon, ulat : `~astropy.units.Quantity`
+        UTM longitude and latitude [m]
+    zone : int
+        UTM zone (e.g., 32 for longitudes 6 E to 12 E); see `Wikipedia
+        <https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system>`_
+        for more information on the zones
+    south : bool
+        Hemisphere; set to True for southern hemisphere (default: False)
 
     Returns
     -------
-    glon, glat - GPS/WGS84 longitude and latitude [deg]
+    glon, glat : `~astropy.units.Quantity`
+        GPS/WGS84 longitude and latitude [deg]
 
     Notes
     -----
-    Uses
-        +proj=utm +zone=xx +ellps=WGS84 +datum=WGS84 +units=m +no_defs [+south]
-    for pyproj setup. Only one zone per function call is allowed.
+    - Uses
+
+      .. code-block:: bash
+
+          +proj=utm +zone=xx +ellps=WGS84 +datum=WGS84 +units=m +no_defs [+south]
+
+      for `pyproj` setup (inverse transformation). Only one zone per function
+      call is allowed.
+    - This function uses only the longitudal zone scheme. There is also
+      the NATO system, which introduces latitude bands.
     '''
 
     _proj = _create_proj('UTM', 'WGS84', zone, south)
@@ -93,24 +113,43 @@ def utm_to_wgs84(ulon, ulat, zone, south=False):
     return _proj(ulon, ulat, inverse=True)
 
 
+@utils.ranged_quantity_input(
+    glon=(None, None, apu.deg),
+    glat=(None, None, apu.deg),
+    strip_input_units=True, output_unit=(apu.m, apu.m)
+    )
 def wgs84_to_utm(glon, glat, zone, south=False):
     '''
     Convert GPS/WGS84 coordinates to UTM.
 
     Parameters
     ----------
-    glon, glat - GPS/WGS84 longitude and latitude [deg]
-    zone - UTM zone (e.g., 32 for Effelsberg)
+    glon, glat : `~astropy.units.Quantity`
+        GPS/WGS84 longitude and latitude [deg]
+    zone : int
+        UTM zone (e.g., 32 for longitudes 6 E to 12 E); see `Wikipedia
+        <https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system>`_
+        for more information on the zones
+    south : bool
+        Hemisphere; set to True for southern hemisphere (default: False)
 
     Returns
     -------
-    ulon, ulat - UTM longitude and latitude [deg]
+    ulon, ulat : `~astropy.units.Quantity`
+        UTM longitude and latitude [m]
 
     Notes
     -----
-    Uses
-        +proj=utm +zone=xx +ellps=WGS84 +datum=WGS84 +units=m +no_defs [+south]
-    for pyproj setup.
+    - Uses
+
+      .. code-block:: bash
+
+          +proj=utm +zone=xx +ellps=WGS84 +datum=WGS84 +units=m +no_defs [+south]
+
+      for `pyproj` setup (forward transformation). Only one zone per function
+      call is allowed.
+    - This function uses only the longitudal zone scheme. There is also
+      the NATO system, which introduces latitude bands.
     '''
 
     _proj = _create_proj('UTM', 'WGS84', zone, south)
@@ -123,6 +162,11 @@ utm_to_wgs84_32N = partial(utm_to_wgs84, zone=32, south=False)
 wgs84_to_utm_32N = partial(wgs84_to_utm, zone=32, south=False)
 
 
+@utils.ranged_quantity_input(
+    elon=(None, None, apu.m),
+    elat=(None, None, apu.m),
+    strip_input_units=True, output_unit=(apu.deg, apu.deg)
+    )
 def etrs89_to_wgs84(elon, elat):
     '''
     Convert ETSR89 coordinates to GPS/WGS84.
@@ -132,18 +176,24 @@ def etrs89_to_wgs84(elon, elat):
 
     Parameters
     ----------
-    elon, elat - ETRS89 longitude and latitude [deg]
+    elon, elat : `~astropy.units.Quantity`
+        ETRS89 longitude and latitude [m]
 
     Returns
     -------
-    glon, glat - GPS/WGS84 longitude and latitude [deg]
+    glon, glat : `~astropy.units.Quantity`
+        GPS/WGS84 longitude and latitude [deg]
 
     Notes
     -----
     Uses
+
+    .. code-block:: bash
+
         +proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000
         +ellps=GRS80 +units=m +no_defs
-    for pyproj setup.
+
+    for pyproj setup (inverse transformation).
     '''
 
     _proj = _create_proj('ETRS89', 'WGS84')
@@ -151,6 +201,11 @@ def etrs89_to_wgs84(elon, elat):
     return _proj(elon, elat, inverse=True)
 
 
+@utils.ranged_quantity_input(
+    glon=(None, None, apu.deg),
+    glat=(None, None, apu.deg),
+    strip_input_units=True, output_unit=(apu.m, apu.m)
+    )
 def wgs84_to_etrs89(glon, glat):
     '''
     Convert GPS/WGS84 coordinates to ETSR89.
@@ -160,18 +215,24 @@ def wgs84_to_etrs89(glon, glat):
 
     Parameters
     ----------
-    glon, glat - GPS/WGS84 longitude and latitude [deg]
+    glon, glat : `~astropy.units.Quantity`
+        GPS/WGS84 longitude and latitude [deg]
 
     Returns
     -------
-    elon, elat - ETRS89 longitude and latitude [deg]
+    elon, elat : `~astropy.units.Quantity`
+        ETRS89 longitude and latitude [m]
 
     Notes
     -----
     Uses
+
+    .. code-block:: bash
+
         +proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000
         +ellps=GRS80 +units=m +no_defs
-    for pyproj setup.
+
+    for pyproj setup (forward transformation).
     '''
 
     _proj = _create_proj('ETRS89', 'WGS84')
@@ -179,8 +240,10 @@ def wgs84_to_etrs89(glon, glat):
     return _proj(glon, glat, inverse=False)
 
 
-def wgs84_to_itrf2005(glon, glat):
+def _wgs84_to_itrf2005(glon, glat):
     '''
+    BROKEN!
+
     Convert GPS/WGS84 coordinates to ITRF.
 
     Parameters
