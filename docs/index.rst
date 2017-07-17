@@ -38,6 +38,7 @@ Available modules
    conversions/index
    atm/index
    pathprof/index
+   protection/index
 
 .. automodapi:: pycraf
     :no-heading:

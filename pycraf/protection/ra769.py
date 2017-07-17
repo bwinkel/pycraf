@@ -14,10 +14,47 @@ from astropy.table import QTable, Table
 from .. import conversions as cnv
 
 
-__all__ = ['protection_limits']
+__all__ = ['ra769_limits']
 
 
-def protection_limits(mode='continuum', scale='dB'):
+def ra769_limits(mode='continuum', scale='dB'):
+    '''
+    Limits for spectral line and continuum observations according to
+    `ITU-R Rec RA.769 <https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en>`_.
+
+
+    Parameters
+    ----------
+    mode : str, optional
+        Observing mode: 'continuum', 'spectroscopy' (default: 'continuum')
+    scale : str, optional
+        Default scale to use: 'linear', 'dB' (default: 'linear')
+
+    Returns
+    -------
+    ra769_limits : `~astropy.table.Table`
+        A table with the following columns:
+
+        - "frequency" [MHz]
+        - "bandwidth" [MHz]
+        - "T_A" [K]
+        - "T_rx" [K]
+        - "T_rms" [K]
+        - "P_rms_nu" [W/Hz, dB(W/Hz)]
+        - "Plim" [W, dB(W)]
+        - "Plim_nu" [W/Hz, dB(W/Hz)]
+        - "Slim" [W/m^2, dB(W/m^2)]
+        - "Slim_nu" [Jy, dB(W/m^2/Hz)]
+        - "Efield" [uV/m, db(uV^2/m^2)]
+        - "Efield_norm", normalized to 1 MHz bandwidth [uV/m, db(uV^2/m^2)]
+
+    Notes
+    -----
+    Because all columns are Astropy Quantities (see
+    `~astropy.units.Quantity`), one can easily convert between linear and
+    log-scale at a later stage. the `scale` parameter just defines the
+    scale to use initially.
+    '''
 
     modes = ['continuum', 'spectroscopy']
     scales = ['linear', 'dB']
