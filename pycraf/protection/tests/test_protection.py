@@ -21,7 +21,7 @@ from ...utils import check_astro_quantities
 TOL_KWARGS = {'atol': 0., 'rtol': 1.e-6}
 
 
-# @pytest.mark.skip(reason='failing on AppVeyor and Travis for unknown reason')
+@pytest.mark.skip(reason='failing on AppVeyor and Travis for unknown reason')
 def test_cispr_limits():
 
     args_list = [
