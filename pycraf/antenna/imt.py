@@ -12,23 +12,28 @@ from .. import utils
 
 
 __all__ = [
-    'single_element_pattern', 'composite_pattern',
+    'imt2020_single_element_pattern', 'imt2020_composite_pattern',
     ]
 
 
 def _A_EH(phi, A_m, phi_3db):
     '''
-    Antenna element's horizontal pattern according to IMT.MODEL document.
+    Antenna element's horizontal pattern according to `IMT.MODEL
+    <https://www.itu.int/md/R15-TG5.1-C-0036>`_ document.
 
     Parameters
     ----------
-    phi - azimuth [deg]
-    A_m - front-to-back ratio (horizontal)
-    phi_3db - horizontal 3dB bandwidth of single element [deg]
+    phi : np.ndarray, float
+        Azimuth [deg]
+    A_m : np.ndarray, float
+        Front-to-back ratio (horizontal) [dimless]
+    phi_3db : np.ndarray, float
+        Horizontal 3-dB beam width of single element [deg]
 
     Returns
     -------
-    A_EH - Antenna element's horizontal radiation pattern [dB]
+    A_EH : np.ndarray, float
+        Antenna element's horizontal radiation pattern [dB]
     '''
 
     return -np.minimum(12 * (phi / phi_3db) ** 2, A_m)
@@ -36,23 +41,28 @@ def _A_EH(phi, A_m, phi_3db):
 
 def _A_EV(theta, SLA_nu, theta_3db):
     '''
-    Antenna element's vertical pattern according to IMT.MODEL document.
+    Antenna element's vertical pattern according to `IMT.MODEL
+    <https://www.itu.int/md/R15-TG5.1-C-0036>`_ document.
 
     Parameters
     ----------
-    theta - elevation [deg]
-    SLA_nu - front-to-back ratio (vertical)
-    theta_3db - vertical 3dB bandwidth of single element [deg]
+    theta : np.ndarray, float
+        Elevation [deg]
+    SLA_nu : np.ndarray, float
+        Front-to-back ratio (vertical) [dimless]
+    theta_3db : np.ndarray, float
+        Vertical 3-dB beam width of single element [deg]
 
     Returns
     -------
-    A_EV - Antenna element's vertical radiation pattern [dB]
+    A_EV : np.ndarray, float
+        Antenna element's vertical radiation pattern [dB]
     '''
 
     return -np.minimum(12 * ((theta - 90.) / theta_3db) ** 2, SLA_nu)
 
 
-def _single_element_pattern(
+def _imt2020_single_element_pattern(
         azim, elev,
         G_Emax,
         A_m, SLA_nu,
@@ -77,38 +87,48 @@ def _single_element_pattern(
     theta_3db=(0, None, apu.deg),
     strip_input_units=True, output_unit=cnv.dB
     )
-def single_element_pattern(
+def imt2020_single_element_pattern(
         azim, elev,
         G_Emax,
         A_m, SLA_nu,
         phi_3db, theta_3db
         ):
     '''
-    Single antenna element's pattern according to IMT.MODEL document.
+    Single antenna element's pattern according to `IMT.MODEL
+    <https://www.itu.int/md/R15-TG5.1-C-0036>`_ document.
 
     Parameters
     ----------
-    azim - azimuth [deg]
-    elev - elevation [deg]
-    G_Emax - Single element maximum gain [dBi]
-    A_m - front-to-back ratio (horizontal)
-    SLA_nu - front-to-back ratio (vertical)
-    phi_3db - horizontal 3dB bandwidth of single element [deg]
-    theta_3db - vertical 3dB bandwidth of single element [deg]
+    azim : `~astropy.units.Quantity`
+        Azimuth [deg]
+    elev : `~astropy.units.Quantity`
+        Elevation [deg]
+    G_Emax : `~astropy.units.Quantity`
+        Single element maximum gain [dBi]
+    A_m : `~astropy.units.Quantity`
+        Front-to-back ratio (horizontal) [dimless]
+    SLA_nu : `~astropy.units.Quantity`
+        Front-to-back ratio (vertical) [dimless]
+    phi_3db : `~astropy.units.Quantity`
+        Horizontal 3dB beam width of single element [deg]
+    theta_3db : `~astropy.units.Quantity`
+        Vertical 3dB beam width of single element [deg]
 
     Returns
     -------
-    A_E - Single antenna element's pattern [dB]
+    A_E : `~astropy.units.Quantity`
+        Single antenna element's pattern [dB]
     '''
 
-    return _single_element_pattern(
+    return _imt2020_single_element_pattern(
         azim, elev,
         G_Emax,
         A_m, SLA_nu,
         phi_3db, theta_3db
         )
 
-def _composite_pattern(
+
+def _imt2020_composite_pattern(
         azim, elev,
         azim_i, elev_i,
         G_Emax,
@@ -123,7 +143,7 @@ def _composite_pattern(
     phi_i = azim_i
     theta_i = elev_i  # sic! (tilt angle in imt.model is elevation)
 
-    A_E = _single_element_pattern(
+    A_E = _imt2020_single_element_pattern(
         azim, elev,
         G_Emax,
         A_m, SLA_nu,
@@ -173,7 +193,7 @@ def _composite_pattern(
     d_V=(0, None, cnv.dimless),
     strip_input_units=True, output_unit=cnv.dB
     )
-def composite_pattern(
+def imt2020_composite_pattern(
         azim, elev,
         azim_i, elev_i,
         G_Emax,
@@ -183,24 +203,34 @@ def composite_pattern(
         N_H, N_V,
         ):
     '''
-    Composite (array) antenna pattern according to IMT.MODEL document.
+    Composite (array) antenna pattern according to `IMT.MODEL
+    <https://www.itu.int/md/R15-TG5.1-C-0036>`_ document.
 
     Parameters
     ----------
-    azim, elev - azimuth/elevation [deg]
-    azim_i, elev_i - azimuthal/elevation pointing of beam i [deg]
-    G_Emax - Single element maximum gain [dBi]
-    A_m, SLA_nu - front-to-back ratio (horizontal/vertical)
-    phi_3db, theta_3db - horiz/vert 3dB bandwidth of single element [deg]
-    d_H, d_V - horiz/vert separation of beams in units of wavelength [dimless]
-    N_H, N_V - horiz/vert number of single antenna elements
+    azim, elev : `~astropy.units.Quantity`
+        Azimuth/Elevation [deg]
+    azim_i, elev_i : `~astropy.units.Quantity`
+        Azimuthal/Elevational pointing of beam `i` [deg]
+    G_Emax : `~astropy.units.Quantity`
+        Single element maximum gain [dBi]
+    A_m, SLA_nu : `~astropy.units.Quantity`
+        Front-to-back ratio (horizontal/vertical) [dimless]
+    phi_3db, theta_3db : `~astropy.units.Quantity`
+        Horizontal/Vertical 3dB beam width of single element [deg]
+    d_H, d_V : `~astropy.units.Quantity`
+        Horizontal/Vertical separation of beams in units of wavelength
+        [dimless]
+    N_H, N_V : int
+        Horizontal/Vertical number of single antenna elements
 
     Returns
     -------
-    A_A - Composite/array antenna pattern of beam i [dB]
+    A_A : `~astropy.units.Quantity`
+        Composite (array) antenna pattern of beam `i` [dB]
     '''
 
-    return _composite_pattern(
+    return _imt2020_composite_pattern(
         azim, elev,
         azim_i, elev_i,
         G_Emax,

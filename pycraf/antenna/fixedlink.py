@@ -20,7 +20,8 @@ __all__ = [
 
 def _fl_pattern_2_1(phi, diameter_over_wavelength, G_max):
     '''
-    Antenna gain as a function of angular distance after ITU-R F.699-7 2.1.
+    Antenna gain as a function of angular distance after `ITU-R Rec F.699
+    <https://www.itu.int/rec/R-REC-F.699-7-200604-I/en>`_ 2.1.
 
     Valid for 1 to 70 GHz and cases where D / wavelength > 100
     '''
@@ -63,7 +64,8 @@ def _fl_pattern_2_1(phi, diameter_over_wavelength, G_max):
 
 def _fl_pattern_2_2(phi, diameter_over_wavelength, G_max):
     '''
-    Antenna gain as a function of angular distance after ITU-R F.699-7 2.2.
+    Antenna gain as a function of angular distance after `ITU-R Rec F.699
+    <https://www.itu.int/rec/R-REC-F.699-7-200604-I/en>`_ 2.2.
 
     Valid for 1 to 70 GHz and cases where D / wavelength <= 100
     '''
@@ -106,7 +108,8 @@ def _fl_pattern_2_2(phi, diameter_over_wavelength, G_max):
 
 def _fl_pattern_2_3(phi, diameter_over_wavelength, G_max):
     '''
-    Antenna gain as a function of angular distance after ITU-R F.699-7 2.3.
+    Antenna gain as a function of angular distance after `ITU-R Rec F.699
+    <https://www.itu.int/rec/R-REC-F.699-7-200604-I/en>`_ 2.3.
 
     Valid for 0.1 to 1 GHz and cases where D / wavelength > 0.63
     '''
@@ -184,43 +187,32 @@ def fl_pattern(
         phi, diameter, wavelength, G_max
         ):
     '''
-    Antenna gain as a function of angular distance after ITU-R F.699-7.
+    Antenna gain as a function of angular distance after `ITU-R Rec F.699
+    <https://www.itu.int/rec/R-REC-F.699-7-200604-I/en>`_.
 
     Parameters
     ----------
-    phi - angular distance in degrees
-    diameter - antenna diameter
-    wavelength - observing wavelength
-    G_max - antenna maximum gain
-        Note: if this is unknown, there is a helper function G_max_from_HPBW
-        that can be used to estimate a value.
+    phi : `~astropy.units.Quantity`
+        Angular distance[deg]
+    diameter : `~astropy.units.Quantity`
+        Antenna diameter [m]
+    wavelength : `~astropy.units.Quantity`
+        Observing wavelength [m]
+    G_max : `~astropy.units.Quantity`
+        Antenna maximum gain [dBi]
 
     Returns
     -------
-    antenna gain in dBi
+    gain : `~astropy.units.Quantity`
+        Antenna gain [dBi]
 
     Notes
     -----
-    See ITU-R F.699-7 for explanation and applicability of this model.
-
-
-    Example
-    -------
-
-    from pycraf.antenna import *
-    from pycraf.conversions import *
-    import numpy as np
-    import matplotlib.pyplot as plt
-    from astropy import units as apu
-
-    phi = np.linspace(-20, 20, 1000) * apu.deg
-    diam = np.array([1, 2, 10])[:, np.newaxis] * apu.m
-    wavlen = 0.03 * apu.m  # about 10 GHz
-    G_max = fl_G_max_from_size(diam, wavlen)
-    gain = fl_pattern(phi, diam, wavlen, G_max)
-    plt.plot(phi, gain.T, '-')
-    plt.show()
-
+    - If `G_max` is unknown, there is a helper function
+     `pycraf.antenna.G_max_from_HPBW` that can be used to estimate its value.
+    - See `ITU-R Rec F.699
+      <https://www.itu.int/rec/R-REC-F.699-7-200604-I/en>`_ for further
+      explanation and applicability of this model.
     '''
 
     return _fl_pattern(phi, diameter, wavelength, G_max)
@@ -238,20 +230,26 @@ def _fl_hpbw_from_size(diameter, wavelength):
     )
 def fl_hpbw_from_size(diameter, wavelength):
     '''
-    Estimate HPBW from antenna diameter after ITU-R F.699-7.
+    Estimate HPBW from antenna diameter after `ITU-R Rec F.699
+    <https://www.itu.int/rec/R-REC-F.699-7-200604-I/en>`_.
 
     Parameters
     ----------
-    diameter - antenna diameter
-    wavelength - observing wavelength
+    diameter : `~astropy.units.Quantity`
+        Antenna diameter [m]
+    wavelength : `~astropy.units.Quantity`
+        Observing wavelength [m]
 
     Returns
     -------
-    hpbw - antenna HPBW (3 dB point) in deg
+    hpbw : `~astropy.units.Quantity`
+        Antenna HPBW (3-dB point) [deg]
 
     Notes
     -----
-    See ITU-R F.699-7 for explanation and applicability of this model.
+    See `ITU-R Rec F.699
+    <https://www.itu.int/rec/R-REC-F.699-7-200604-I/en>`_ for further
+    explanation and applicability of this model.
     '''
 
     return _fl_hpbw_from_size(diameter, wavelength)
@@ -269,20 +267,26 @@ def _fl_G_max_from_size(diameter, wavelength):
     )
 def fl_G_max_from_size(diameter, wavelength):
     '''
-    Estimate G_max from antenna diameter after ITU-R F.699-7.
+    Estimate maximum gain from antenna diameter after `ITU-R Rec F.699
+    <https://www.itu.int/rec/R-REC-F.699-7-200604-I/en>`_.
 
     Parameters
     ----------
-    diameter - antenna diameter
-    wavelength - observing wavelength
+    diameter : `~astropy.units.Quantity`
+        Antenna diameter [m]
+    wavelength : `~astropy.units.Quantity`
+        Observing wavelength [m]
 
     Returns
     -------
-    G_max - antenna maximum gain
+    G_max : `~astropy.units.Quantity`
+        Antenna maximum gain [dBi]
 
     Notes
     -----
-    See ITU-R F.699-7 for explanation and applicability of this model.
+    See `ITU-R Rec F.699
+    <https://www.itu.int/rec/R-REC-F.699-7-200604-I/en>`_ for further
+    explanation and applicability of this model.
     '''
 
     return _fl_G_max_from_size(diameter, wavelength)
@@ -299,19 +303,24 @@ def _fl_G_max_from_hpbw(hpbw):
     )
 def fl_G_max_from_hpbw(hpbw):
     '''
-    Estimate G_max from antenna hpbw after ITU-R F.699-7.
+    Estimate maximum gain from antenna hpbw after `ITU-R Rec F.699
+    <https://www.itu.int/rec/R-REC-F.699-7-200604-I/en>`_.
 
     Parameters
     ----------
-    hpbw - antenna HPBW (3 dB point) in deg
+    hpbw : `~astropy.units.Quantity`
+        Antenna HPBW (3-dB point) [deg]
 
     Returns
     -------
-    G_max - antenna maximum gain
+    G_max : `~astropy.units.Quantity`
+        Antenna maximum gain [dBi]
 
     Notes
     -----
-    See ITU-R F.699-7 for explanation and applicability of this model.
+    See `ITU-R Rec F.699
+    <https://www.itu.int/rec/R-REC-F.699-7-200604-I/en>`_ for further
+    explanation and applicability of this model.
     '''
 
     return _fl_G_max_from_hpbw(hpbw)

@@ -38,6 +38,7 @@ Available modules
    conversions/index
    atm/index
    pathprof/index
+   antenna/index
    protection/index
 
 .. automodapi:: pycraf

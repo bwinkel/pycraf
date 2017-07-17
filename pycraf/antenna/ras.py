@@ -28,43 +28,33 @@ def ras_pattern(
         phi, diameter, wavelength, eta_a=100. * apu.percent, do_bessel=False
         ):
     '''
-    Antenna gain as a function of angular distance after ITU-R RA.1631.
+    Antenna gain as a function of angular distance after `ITU-R Rec RA.1631
+    <https://www.itu.int/rec/R-REC-RA.1631-0-200305-I/en>`_.
 
     Parameters
     ----------
-    phi - angular distance in degrees
-    diameter - antenna diameter
-    wavelength - observing wavelength
-    do_bessel - if set to True, use Bessel function approx. for inner 1 deg
-    eta_a - antenna efficiency (default: 100%)
+    phi : `~astropy.units.Quantity`
+        Angular distance from looking direction [deg]
+    diameter : `~astropy.units.Quantity`
+        Antenna diameter [m]
+    wavelength : `~astropy.units.Quantity`
+        Observing wavelength [m]
+    eta_a : `~astropy.units.Quantity`
+        Antenna efficiency (default: 100%)
+    do_bessel : bool, optional
+        If set to True, use Bessel function approximation for inner 1 deg
+        of the pattern (see RA.1631 for details). (default: False)
 
     Returns
     -------
-    antenna gain in dBi
+    gain : `~astropy.units.Quantity`
+        Antenna gain [dBi]
 
     Notes
     -----
-    See ITU-R RA.1631 for explanation and applicability of this model.
-
-
-    Example
-    -------
-
-    from pycraf.antenna import *
-    import numpy as np
-    import matplotlib.pyplot as plt
-    from astropy import units as apu
-
-    phi = np.linspace(0, 20, 1000) * apu.deg
-    diam = np.array([10, 50, 100])[:, np.newaxis] * apu.m
-    gain = ras_pattern(phi, diam, 0.21 * apu.m)
-    plt.plot(phi, gain.T, '-')
-    plt.show()
-
-    phi = np.linspace(0, 2, 10000) * apu.deg
-    gain = ras_pattern(phi, 100 * apu.m, 0.21 * apu.m, do_bessel=True)
-    plt.plot(phi, gain, '-')
-    plt.show()
+    - See `ITU-R Rec. RA.1631-0
+      <https://www.itu.int/rec/R-REC-RA.1631-0-200305-I/en>`_ for further
+      explanations and applicability of this model.
     '''
 
     phi = np.abs(phi)
