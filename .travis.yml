@@ -170,11 +170,12 @@ script:
    - $MAIN_CMD $SETUP_CMD
    - echo "DO_DOCS" $DO_DOCS
    # also have to remove the c-files, generated during build
+   #  --built-docs docs/_build/html/
    - 'if [[ $TRAVIS_TAG && $DO_DOCS ]]; then
        set -e;
        conda install doctr;
        git reset --hard HEAD;
-       doctr deploy . --built-docs docs/;
+       doctr deploy . --no-require-master;
      fi'
 
 after_success:
