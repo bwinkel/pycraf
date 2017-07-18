@@ -1,0 +1,6 @@
+eff_earth_radius_factor_median
+==============================
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: eff_earth_radius_factor_median

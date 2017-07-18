@@ -1,0 +1,467 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Conversions (pycraf.conversions) &#8212; pycraf v0.24.5</title>
+    
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.24.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="antfactor_from_gain" href="../api/pycraf.conversions.antfactor_from_gain.html" />
+    <link rel="prev" title="Importing pycraf and subpackages" href="../importing_pycraf.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="../api/pycraf.conversions.antfactor_from_gain.html" title="antfactor_from_gain">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="../importing_pycraf.html" title="Importing pycraf and subpackages">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v0.24.5</a>
+	 &#187;
+      </li>
+      
+      <li>Conversions (<code class="docutils literal"><span class="pre">pycraf.conversions</span></code>)</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="conversions-pycraf-conversions">
+<h1>Conversions (<a class="reference internal" href="#module-pycraf.conversions" title="pycraf.conversions"><code class="xref py py-obj docutils literal"><span class="pre">pycraf.conversions</span></code></a>)<a class="headerlink" href="#conversions-pycraf-conversions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-pycraf.conversions" title="pycraf.conversions"><code class="xref py py-obj docutils literal"><span class="pre">conversions</span></code></a> sub-package contains various functions to convert
+and calculate power flux densities, electrical field strengths, transmitted
+and received powers from each other. Routines that link antenna areas and
+gains are also present. With the <a class="reference internal" href="../api/pycraf.conversions.free_space_loss.html#pycraf.conversions.free_space_loss" title="pycraf.conversions.free_space_loss"><code class="xref py py-obj docutils literal"><span class="pre">free_space_loss</span></code></a> function
+one can determine the free-space loss for a given frequency and distance
+between transmitter (Tx) and receiver (Rx). Furthermore, several useful
+Decibel units are defined (see <a class="reference internal" href="#reference-api">Reference/API</a>).</p>
+</div>
+<div class="section" id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>Using the <a class="reference internal" href="#module-pycraf.conversions" title="pycraf.conversions"><code class="xref py py-obj docutils literal"><span class="pre">conversions</span></code></a> package is really simple:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A_eff</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span>  <span class="c1"># effective area</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A_geom</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span>  <span class="c1"># geometric area</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eta_a</span> <span class="o">=</span> <span class="mi">50</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span>  <span class="c1"># antenna efficiency</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;A_eff = </span><span class="si">{0.value:.1f}</span><span class="s1"> </span><span class="si">{0.unit}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="n">A_geom</span><span class="p">,</span> <span class="n">eta_a</span><span class="p">))</span>
+<span class="gp">... </span>   <span class="p">)</span>
+<span class="go">A_eff = 10.0 m2</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;A_geom = </span><span class="si">{0.value:.1f}</span><span class="s1"> </span><span class="si">{0.unit}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">cnv</span><span class="o">.</span><span class="n">geom_from_eff_area</span><span class="p">(</span><span class="n">A_eff</span><span class="p">,</span> <span class="n">eta_a</span><span class="p">))</span>
+<span class="gp">... </span>   <span class="p">)</span>
+<span class="go">A_geom = 20.0 m2</span>
+</pre></div>
+</div>
+<p>Because all function parameters and return values are Astropy Quantities
+(see <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>), unit conversion is automatically performed:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">50</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">Quantity</span> <span class="mf">5.0</span> <span class="n">m2</span><span class="o">&gt;</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">Quantity</span> <span class="mf">5.0</span> <span class="n">m2</span><span class="o">&gt;</span>
+
+<span class="o">&gt;&gt;</span> <span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">Quantity</span> <span class="mf">100000.0</span> <span class="n">m2</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">It is not possible to omit the unit, even if a quantity is dimensionless</p>
+</div>
+<p>pycraf would raise an exception if one tried:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="ne">TypeError</span><span class="p">:</span> <span class="n">Argument</span> <span class="s1">&#39;eta_a&#39;</span> <span class="n">to</span> <span class="n">function</span> <span class="s1">&#39;eff_from_geom_area&#39;</span> <span class="n">has</span> <span class="n">no</span>
+<span class="s1">&#39;unit&#39;</span> <span class="n">attribute</span><span class="o">.</span> <span class="n">You</span> <span class="n">may</span> <span class="n">want</span> <span class="n">to</span> <span class="k">pass</span> <span class="ow">in</span> <span class="n">an</span> <span class="n">astropy</span> <span class="n">Quantity</span> <span class="n">instead</span><span class="o">.</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A Jupyter tutorial notebook about the <a class="reference internal" href="#module-pycraf.conversions" title="pycraf.conversions"><code class="xref py py-obj docutils literal"><span class="pre">conversions</span></code></a> package is
+provided in the <a class="reference external" href="https://github.com/bwinkel/pycraf/blob/master/notebooks/01_conversions.ipynb">pycraf repository</a> on GitHub.</p>
+</div>
+</div>
+<div class="section" id="using-pycraf-conversions">
+<h2>Using <a class="reference internal" href="#module-pycraf.conversions" title="pycraf.conversions"><code class="xref py py-obj docutils literal"><span class="pre">pycraf.conversions</span></code></a><a class="headerlink" href="#using-pycraf-conversions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="decibel-units">
+<h3>Decibel units<a class="headerlink" href="#decibel-units" title="Permalink to this headline">¶</a></h3>
+<p>In the <a class="reference internal" href="#module-pycraf.conversions" title="pycraf.conversions"><code class="xref py py-obj docutils literal"><span class="pre">conversions</span></code></a> module, several Decibel units are defined
+that often occur in spectrum-management tasks. Examples are the
+<img class="math" src="../_images/math/1e532af1fe5eb7e74069b9da8bb8e46eab21dbca.png" alt="\mathrm{dB}"/> unit or <img class="math" src="../_images/math/87542047c083844bd28c877c34bed1edf82437fa.png" alt="\mathrm{dBm}\equiv\mathrm{dB[mW]}"/>. In
+Python these are defined with the help of the <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">units</span></code></a> package, e.g.:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dB_W</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">dB</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dB_W_m2_Hz</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">dB</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">Hz</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dB_uV_m</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">dB</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">uV</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The <img class="math" src="../_images/math/538d7edf9010c9c351e76620cd3401abd8a382ea.png" alt="\mathrm{dB}[\mu\mathrm{V}^2 / \mathrm{m}^2]"/> unit is a bit
+special. Engineers will usually call this symbol
+<img class="math" src="../_images/math/86517b90a706850ef24a6a5be6468fa618a95ef8.png" alt="\mathrm{dB}[\mu\mathrm{V} / \mathrm{m}]"/>, but strictly speaking
+the power of the electrical field is referred to, which means that
+the amplitude of the E-field has to be squared.</p>
+<p class="last">In fact, if one would omit the squaring from the definition, the unit
+would not work in the equations, because the <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">units</span></code></a> framework
+would notice an inconsistency of the units.</p>
+</div>
+<p>Working with the Decibel units is easy:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">power</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">power</span>
+<span class="go">&lt;Decibel 1.0 dB(W)&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">power</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
+<span class="go">&lt;Quantity 1.2589254117941673 W&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">power</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span><span class="p">))</span>
+<span class="go">1.2589254117941673 W</span>
+</pre></div>
+</div>
+<p>Often, one wants to do some formatting in the print function, which works as
+usual:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">power</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span><span class="p">)))</span>
+<span class="go">1.3 W</span>
+</pre></div>
+</div>
+<p>Astropy <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">units</span></code></a> provide even some additional formatting options:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0.value:.1f}</span><span class="s1"> </span><span class="si">{0.unit}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">power</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span><span class="p">)))</span>
+<span class="go">1.3 W</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0.value:.1f}</span><span class="s1"> {0.unit:FITS}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">s</span><span class="p">))</span>
+<span class="go">1.0 m s-1</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Under some circumstances, the automatic conversion from the Decibel
+to the associated linear unit <a class="reference external" href="https://github.com/astropy/astropy/issues/6319">can fail</a>. This may get fixed in a future
+version of Astropy. It helps to construct the Quantities via
+multiplication, avoiding the <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a> constructor, i.e.,
+<code class="code docutils literal"><span class="pre">1</span> <span class="pre">*</span> <span class="pre">cnv.dB</span></code> instead of <code class="code docutils literal"><span class="pre">u.Quantity(1,</span> <span class="pre">cnv.dB)</span></code>.</p>
+</div>
+</div>
+<div class="section" id="conversion-formulae">
+<h3>Conversion formulae<a class="headerlink" href="#conversion-formulae" title="Permalink to this headline">¶</a></h3>
+<p>For a complete list of the functions provided in the <a class="reference internal" href="#module-pycraf.conversions" title="pycraf.conversions"><code class="xref py py-obj docutils literal"><span class="pre">conversions</span></code></a>
+package, see the <a class="reference internal" href="#reference-api">Reference/API</a> section below. All functions expect
+the parameters to have appropriate units, and will return a
+<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, i.e. a value with a unit. This makes it sometimes
+a bit verbose to write code, but has the invaluable advantage that one
+avoids mistakes in the calculations that come from using the wrong units.</p>
+<p>For example, in the various ITU-R Recommendations, the described algorithms
+often assume the quantities to be in a certain unit. In pycraf all functions
+are defined in a way, that input parameters are first converted to the
+correct unit before feeding the values into the ITU-R algorithms.</p>
+<p>The following quantities are of interest in compatibility studies:</p>
+<ul class="simple">
+<li>Distance between transmitter and receiver: <img class="math" src="../_images/math/b9d10b54744d07746b97f53c55eb98046fd76c8c.png" alt="d"/></li>
+<li>Frequency of radiation: <img class="math" src="../_images/math/875eb40014526135383caa89fd500ae40a835f56.png" alt="f"/></li>
+<li>Wavelength of radiation: <img class="math" src="../_images/math/d4edbfe1dcef00ab44cf5683acbb9663b61d59cf.png" alt="\lambda = \frac{c}{f}"/></li>
+<li>Geometric antenna area: <img class="math" src="../_images/math/6590314e59dc2fb5d42825ed853d547c7049d08e.png" alt="A_\mathrm{geom}"/></li>
+<li>Effective antenna area: <img class="math" src="../_images/math/2573b4d2dca9545cfc65821d246c1e60d42c2268.png" alt="A_\mathrm{eff} = \eta_\mathrm{A} A_\mathrm{geom}"/></li>
+<li>Antenna efficiency: <img class="math" src="../_images/math/1446dc60907e08a960a45985a586f7a20a3b009e.png" alt="\eta_\mathrm{A}"/></li>
+<li>Transmitter/receiver gain, <img class="math" src="../_images/math/939f0afaca5f3eba9845963d7dfab4cec626fb9f.png" alt="G_\mathrm{tx}"/>, <img class="math" src="../_images/math/53b5ce572811d4db41617539e84a13566d18280b.png" alt="G_\mathrm{rx}"/>: <img class="math" src="../_images/math/0eb8f7749c63c5b60aaf01f26578dcd8de0f8ef6.png" alt="A_\mathrm{eff} = G\frac{\lambda^2}{4\pi}"/></li>
+<li>Pointing flux: <img class="math" src="../_images/math/84bf1627b83ca623cf68f493c572b8e4fc001d01.png" alt="\vec S = \vec E \times \vec H"/></li>
+<li>Power flux density: <img class="math" src="../_images/math/cf2e0196c271cf290e82737e637e007efe1dfe45.png" alt="S\equiv\vert \vec S \vert = \sqrt{\frac{\varepsilon_0}{\mu_0}} \vert \vec E \vert^2 = \frac{E^2}{R_0}"/>
+with <img class="math" src="../_images/math/feddf9d43c5dcb125c4cdd2abf3f43a4143a8106.png" alt="R_0 \equiv \sqrt{\frac{\varepsilon_0}{\mu_0}} = 376.73~\Omega"/></li>
+<li>Spectral power flux density, <img class="math" src="../_images/math/8b0b0912ff2ae2f2f3cb22063bc8e339085c6737.png" alt="S_\nu"/>, with: <img class="math" src="../_images/math/af1b596b1d7376ed6d2dffe23d1d9533c4e2d115.png" alt="S=\int \mathrm{d}\nu\,S_\nu"/></li>
+<li>Transmitted power, <img class="math" src="../_images/math/556adf8c89ab87934e5d74d742d8d9ccac395c1e.png" alt="P_\mathrm{tx}"/>, with <img class="math" src="../_images/math/d6e44fd6cddeb77153fff3ad1e1a2788a3e82638.png" alt="S = G_\mathrm{tx}\frac{P_\mathrm{tx}}{4\pi d^2}"/></li>
+<li>Received power, <img class="math" src="../_images/math/307554d63096c15ee9ea43b050149aef37a7ab6c.png" alt="P_\mathrm{rx} = S\cdot A_\mathrm{eff}^\mathrm{rx} = S\cdot G_\mathrm{rx}\frac{\lambda^2}{4\pi} = G_\mathrm{tx}\frac{P_\mathrm{tx}}{4\pi d^2} \cdot G_\mathrm{rx}\frac{\lambda^2}{4\pi} = G_\mathrm{tx} G_\mathrm{rx} P_\mathrm{tx} L_\mathrm{fs}"/></li>
+<li>Free-space loss: <img class="math" src="../_images/math/80d693b60e7794057b33bb412908e862019b35f3.png" alt="L_\mathrm{fs} = \frac{c^2}{16\pi^2}\frac{1}{d^2f^2} = \frac{\lambda^2}{16\pi^2 d^2}"/></li>
+</ul>
+<p>A few examples:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frequency</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">GHz</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">Jy</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">MHz</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">E_rx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">30</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_uV_m</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">distance</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G_tx</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G_rx</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_rx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_tx</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBm</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">efield_from_powerflux</span><span class="p">(</span><span class="n">S</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_uV_m</span><span class="p">)</span>
+<span class="go">&lt;Decibel -44.23969433034762 dB(uV2 / m2)&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">powerflux_from_efield</span><span class="p">(</span><span class="n">E_rx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2</span><span class="p">)</span>
+<span class="go">&lt;Decibel -175.7603056696524 dB(W / m2)&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">ptx_from_powerflux</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>
+<span class="go">&lt;Decibel -119.00790135977903 dB(W)&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">powerflux_from_ptx</span><span class="p">(</span><span class="n">P_tx</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2</span><span class="p">)</span>
+<span class="go">&lt;Decibel -80.99209864022097 dB(W / m2)&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">prx_from_powerflux</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>
+<span class="go">&lt;Decibel -221.4556845816624 dB(W)&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">powerflux_from_prx</span><span class="p">(</span><span class="n">P_rx</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2</span><span class="p">)</span>
+<span class="go">&lt;Decibel -8.544315418337588 dB(W / m2)&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">free_space_loss</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>
+<span class="go">&lt;Decibel -132.44778322188336 dB&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">prx_from_ptx</span><span class="p">(</span><span class="n">P_tx</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>
+<span class="go">&lt;Decibel -112.44778322188337 dB(W)&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">ptx_from_prx</span><span class="p">(</span><span class="n">P_rx</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>
+<span class="go">&lt;Decibel 62.44778322188338 dB(W)&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">Astropy Units and Quantities package</a>, which is used extensively in pycraf.</li>
+</ul>
+</div>
+<div class="section" id="reference-api">
+<h2>Reference/API<a class="headerlink" href="#reference-api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-pycraf.conversions">
+<span id="pycraf-conversions-package"></span><h3>pycraf.conversions Package<a class="headerlink" href="#module-pycraf.conversions" title="Permalink to this headline">¶</a></h3>
+<p>Contains functions to convert power flux densities, field strengths,
+transmitted and received powers at certain distances and frequencies into each
+other. Furthermore, some convenience decibel-Scales are defined.</p>
+<p>The following Decibel units are available:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="21%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Unit</th>
+<th class="head">Alias</th>
+<th class="head">Definition</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><img class="math" src="../_images/math/d839e144267ecbb8a87acbc8a7dfda7824a1693e.png" alt="1"/></td>
+<td>dimless</td>
+<td>u.dimensionless_unscaled</td>
+</tr>
+<tr class="row-odd"><td><img class="math" src="../_images/math/1e532af1fe5eb7e74069b9da8bb8e46eab21dbca.png" alt="\mathrm{dB}"/> = <img class="math" src="../_images/math/d30902b065765cb5c9b36c20b477117481c7fb86.png" alt="\mathrm{dBi}"/></td>
+<td>dB = dBi</td>
+<td>u.dB(dimless)</td>
+</tr>
+<tr class="row-even"><td><img class="math" src="../_images/math/338afcf4d7b13e5674e50d313aceaeb6fec351b0.png" alt="\mathrm{dB}[\mathrm{W}]"/></td>
+<td>dB_W</td>
+<td>u.dB(u.W)</td>
+</tr>
+<tr class="row-odd"><td><img class="math" src="../_images/math/7f6b5f028404a8af072cda2823f4ba5feea77a8e.png" alt="\mathrm{dB}[\mathrm{W} / \mathrm{Hz}]"/></td>
+<td>dB_W_Hz</td>
+<td>u.dB(u.W / u.Hz)</td>
+</tr>
+<tr class="row-even"><td><img class="math" src="../_images/math/4a3b81717121062b286d4a32246f94aab3cee59b.png" alt="\mathrm{dB}[\mathrm{W} / \mathrm{m}^2]"/></td>
+<td>dB_W_m2</td>
+<td>u.dB(u.W / u.m ** 2)</td>
+</tr>
+<tr class="row-odd"><td><img class="math" src="../_images/math/692e75bb1eba2fdbb36ced89df8d5f8a4e865912.png" alt="\mathrm{dB}[\mathrm{W} / \mathrm{m}^2 / \mathrm{Hz}]"/></td>
+<td>dB_W_m2_Hz</td>
+<td>u.dB(u.W / u.m ** 2 / u.Hz)</td>
+</tr>
+<tr class="row-even"><td><img class="math" src="../_images/math/b617235be2a6024db94d7d98b000731b2c17bdc0.png" alt="\mathrm{dB}[\mathrm{Jy} \cdot \mathrm{Hz}]"/></td>
+<td>dB_Jy_Hz</td>
+<td>u.dB(u.Jy * u.Hz)</td>
+</tr>
+<tr class="row-odd"><td><img class="math" src="../_images/math/918980d1568b3656d104d23930627c0d0d60af1c.png" alt="\mathrm{dB}[\mathrm{mW}]"/></td>
+<td>dBm = dB_mW</td>
+<td>u.dB(u.mW)</td>
+</tr>
+<tr class="row-even"><td><img class="math" src="../_images/math/0da7637d11c4489326a7ad6de547972dbe1927b9.png" alt="\mathrm{dB}[\mathrm{mW} / \mathrm{MHz}]"/></td>
+<td>dBm_MHz</td>
+<td>u.dB(u.mW / u.MHz)</td>
+</tr>
+<tr class="row-odd"><td><img class="math" src="../_images/math/538d7edf9010c9c351e76620cd3401abd8a382ea.png" alt="\mathrm{dB}[\mu\mathrm{V}^2 / \mathrm{m}^2]"/></td>
+<td>dB_uV_m</td>
+<td>u.dB(u.uV ** 2 / u.m ** 2)</td>
+</tr>
+<tr class="row-even"><td><img class="math" src="../_images/math/bb59df14d0bf20376ceca7c03e5fdf5206354e22.png" alt="\mathrm{dB}[1 / \mathrm{m}]"/></td>
+<td>dB_1_m</td>
+<td>u.dB(1 / u.m)</td>
+</tr>
+</tbody>
+</table>
+<p>u = <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">astropy.units</a></p>
+<div class="section" id="functions">
+<h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.conversions.antfactor_from_gain.html#pycraf.conversions.antfactor_from_gain" title="pycraf.conversions.antfactor_from_gain"><code class="xref py py-obj docutils literal"><span class="pre">antfactor_from_gain</span></code></a>(gain,&nbsp;freq,&nbsp;zi)</td>
+<td>Antenna factor from antenna gain, given frequency and impedance.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.conversions.eff_area_from_gain.html#pycraf.conversions.eff_area_from_gain" title="pycraf.conversions.eff_area_from_gain"><code class="xref py py-obj docutils literal"><span class="pre">eff_area_from_gain</span></code></a>(gain,&nbsp;freq)</td>
+<td>Effective antenna area from antenna gain, given frequency.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.conversions.eff_from_geom_area.html#pycraf.conversions.eff_from_geom_area" title="pycraf.conversions.eff_from_geom_area"><code class="xref py py-obj docutils literal"><span class="pre">eff_from_geom_area</span></code></a>(geom_area,&nbsp;eta_a)</td>
+<td>Effective antenna area from geometric area, given antenna efficiency.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.conversions.efield_equivalency.html#pycraf.conversions.efield_equivalency" title="pycraf.conversions.efield_equivalency"><code class="xref py py-obj docutils literal"><span class="pre">efield_equivalency</span></code></a>()</td>
+<td><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">units</span></code></a> equivalency to handle log-scale E-field units.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.conversions.efield_from_powerflux.html#pycraf.conversions.efield_from_powerflux" title="pycraf.conversions.efield_from_powerflux"><code class="xref py py-obj docutils literal"><span class="pre">efield_from_powerflux</span></code></a>(powerflux)</td>
+<td>E-field strength from power flux density.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.conversions.efield_from_ptx.html#pycraf.conversions.efield_from_ptx" title="pycraf.conversions.efield_from_ptx"><code class="xref py py-obj docutils literal"><span class="pre">efield_from_ptx</span></code></a>(ptx,&nbsp;dist,&nbsp;gtx)</td>
+<td>E-field strength measured at distance from transmitter power.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.conversions.eta_a_from_areas.html#pycraf.conversions.eta_a_from_areas" title="pycraf.conversions.eta_a_from_areas"><code class="xref py py-obj docutils literal"><span class="pre">eta_a_from_areas</span></code></a>(geom_area,&nbsp;eff_area)</td>
+<td>Antenna efficiency from geometric and effective antenna areas.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.conversions.free_space_loss.html#pycraf.conversions.free_space_loss" title="pycraf.conversions.free_space_loss"><code class="xref py py-obj docutils literal"><span class="pre">free_space_loss</span></code></a>(dist,&nbsp;freq)</td>
+<td>Free-space loss of a propagating radio wave.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.conversions.gain_from_antfactor.html#pycraf.conversions.gain_from_antfactor" title="pycraf.conversions.gain_from_antfactor"><code class="xref py py-obj docutils literal"><span class="pre">gain_from_antfactor</span></code></a>(antfactor,&nbsp;freq,&nbsp;zi)</td>
+<td>Antenna gain from antenna factor, given frequency and impedance.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.conversions.gain_from_eff_area.html#pycraf.conversions.gain_from_eff_area" title="pycraf.conversions.gain_from_eff_area"><code class="xref py py-obj docutils literal"><span class="pre">gain_from_eff_area</span></code></a>(eff_area,&nbsp;freq)</td>
+<td>Antenna gain from effective antenna area, given frequency.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.conversions.geom_from_eff_area.html#pycraf.conversions.geom_from_eff_area" title="pycraf.conversions.geom_from_eff_area"><code class="xref py py-obj docutils literal"><span class="pre">geom_from_eff_area</span></code></a>(eff_area,&nbsp;eta_a)</td>
+<td>Geometric antenna area from effective area, given antenna efficiency.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.conversions.powerflux_from_efield.html#pycraf.conversions.powerflux_from_efield" title="pycraf.conversions.powerflux_from_efield"><code class="xref py py-obj docutils literal"><span class="pre">powerflux_from_efield</span></code></a>(efield)</td>
+<td>Power flux density from E-field strength.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.conversions.powerflux_from_prx.html#pycraf.conversions.powerflux_from_prx" title="pycraf.conversions.powerflux_from_prx"><code class="xref py py-obj docutils literal"><span class="pre">powerflux_from_prx</span></code></a>(prx,&nbsp;freq,&nbsp;grx)</td>
+<td>Power flux density from received power.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.conversions.powerflux_from_ptx.html#pycraf.conversions.powerflux_from_ptx" title="pycraf.conversions.powerflux_from_ptx"><code class="xref py py-obj docutils literal"><span class="pre">powerflux_from_ptx</span></code></a>(ptx,&nbsp;dist,&nbsp;gtx)</td>
+<td>Power flux density from transmitter power.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.conversions.prx_from_powerflux.html#pycraf.conversions.prx_from_powerflux" title="pycraf.conversions.prx_from_powerflux"><code class="xref py py-obj docutils literal"><span class="pre">prx_from_powerflux</span></code></a>(powerflux,&nbsp;freq,&nbsp;grx)</td>
+<td>Received power from power flux density.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.conversions.prx_from_ptx.html#pycraf.conversions.prx_from_ptx" title="pycraf.conversions.prx_from_ptx"><code class="xref py py-obj docutils literal"><span class="pre">prx_from_ptx</span></code></a>(ptx,&nbsp;gtx,&nbsp;grx,&nbsp;dist,&nbsp;freq)</td>
+<td>Received power from transmitted power.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.conversions.ptx_from_efield.html#pycraf.conversions.ptx_from_efield" title="pycraf.conversions.ptx_from_efield"><code class="xref py py-obj docutils literal"><span class="pre">ptx_from_efield</span></code></a>(efield,&nbsp;dist,&nbsp;gtx)</td>
+<td>Transmitter power from E-field strength measured at distance.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.conversions.ptx_from_powerflux.html#pycraf.conversions.ptx_from_powerflux" title="pycraf.conversions.ptx_from_powerflux"><code class="xref py py-obj docutils literal"><span class="pre">ptx_from_powerflux</span></code></a>(powerflux,&nbsp;dist,&nbsp;gtx)</td>
+<td>Transmitter power from power flux density.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.conversions.ptx_from_prx.html#pycraf.conversions.ptx_from_prx" title="pycraf.conversions.ptx_from_prx"><code class="xref py py-obj docutils literal"><span class="pre">ptx_from_prx</span></code></a>(prx,&nbsp;gtx,&nbsp;grx,&nbsp;dist,&nbsp;freq)</td>
+<td>Transmitted power from received power.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">Conversions (<code class="docutils literal"><span class="pre">pycraf.conversions</span></code>)</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#using-pycraf-conversions">Using <code class="docutils literal"><span class="pre">pycraf.conversions</span></code></a><ul>
+<li><a class="reference internal" href="#decibel-units">Decibel units</a></li>
+<li><a class="reference internal" href="#conversion-formulae">Conversion formulae</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+<li><a class="reference internal" href="#reference-api">Reference/API</a><ul>
+<li><a class="reference internal" href="#module-pycraf.conversions">pycraf.conversions Package</a><ul>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="../_sources/conversions/index.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 18 Jul 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

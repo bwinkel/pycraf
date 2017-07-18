@@ -1,0 +1,6 @@
+loss_freespace
+==============
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: loss_freespace

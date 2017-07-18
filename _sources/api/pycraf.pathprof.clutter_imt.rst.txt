@@ -1,0 +1,6 @@
+clutter_imt
+===========
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: clutter_imt

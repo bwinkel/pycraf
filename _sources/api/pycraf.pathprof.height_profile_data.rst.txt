@@ -1,0 +1,6 @@
+height_profile_data
+===================
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: height_profile_data

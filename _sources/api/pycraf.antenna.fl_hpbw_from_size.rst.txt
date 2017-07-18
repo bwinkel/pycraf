@@ -1,0 +1,6 @@
+fl_hpbw_from_size
+=================
+
+.. currentmodule:: pycraf.antenna
+
+.. autofunction:: fl_hpbw_from_size

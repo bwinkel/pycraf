@@ -1,0 +1,6 @@
+profile_highlat_winter
+======================
+
+.. currentmodule:: pycraf.atm
+
+.. autofunction:: profile_highlat_winter

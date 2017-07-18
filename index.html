@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pycraf Documentation &#8212; pycraf v0.24.5</title>
+    
+    <link rel="stylesheet" href="_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.24.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="install.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="#"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="genindex.html">Index</a></li>
+    <li><a title="Module Index" href="py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="install.html" title="Installation">
+	  next &raquo;
+	</a>
+      </li>
+      <li>
+	<a href="#">pycraf v0.24.5</a>
+	 &#187;
+      </li>
+      
+       
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pycraf-documentation">
+<h1>pycraf Documentation<a class="headerlink" href="#pycraf-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Welcome to the pycraf documentation. The pycraf Python package provides
+functions and procedures for various tasks related to spectrum-management
+compatibility studies. This includes an implementation of <a class="reference external" href="https://www.itu.int/rec/R-REC-P.452-16-201507-I/en">ITU-R
+Recommendation P.452-16</a>
+that allows to calculate path attenuation for the distance between an
+interferer and the victim service.</p>
+<div class="section" id="getting-started">
+<span id="id1"></span><h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="importing_pycraf.html">Importing pycraf and subpackages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="importing_pycraf.html#getting-started-with-subpackages">Getting started with subpackages</a></li>
+<li class="toctree-l1"><a class="reference external" href="http://nbviewer.jupyter.org/github/bwinkel/pycraf/blob/master/notebooks/">Tutorials</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="user-documentation">
+<h2>User Documentation<a class="headerlink" href="#user-documentation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="available-modules">
+<h3>Available modules<a class="headerlink" href="#available-modules" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="conversions/index.html">Conversions (<code class="docutils literal"><span class="pre">pycraf.conversions</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atm/index.html">Atmospheric models (<code class="docutils literal"><span class="pre">pycraf.atm</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pathprof/index.html">Path attenuation, terrain data, and geodesics (<code class="docutils literal"><span class="pre">pycraf.pathprof</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="antenna/index.html">Antenna patterns (<code class="docutils literal"><span class="pre">pycraf.antenna</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protection/index.html">Protection levels (<code class="docutils literal"><span class="pre">pycraf.protection</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geospatial/index.html">Geographical frames (<code class="docutils literal"><span class="pre">pycraf.geospatial</span></code>)</a></li>
+</ul>
+</div>
+<div class="section" id="functions">
+<h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="api/pycraf.test.html#pycraf.test" title="pycraf.test"><code class="xref py py-obj docutils literal"><span class="pre">test</span></code></a>([package,&nbsp;test_path,&nbsp;args,&nbsp;plugins,&nbsp;...])</td>
+<td>Run the tests using <a class="reference external" href="http://pytest.org/latest">py.test</a>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="section" id="project-details">
+<h2>Project details<a class="headerlink" href="#project-details" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="license.html">Licenses</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="acknowledgments">
+<h2>Acknowledgments<a class="headerlink" href="#acknowledgments" title="Permalink to this headline">¶</a></h2>
+<p>This code is makes use of the excellent work provided by the
+<a class="reference external" href="http://www.astropy.org/">Astropy</a> community. pycraf uses the Astropy package and also the
+<a class="reference external" href="https://github.com/astropy/package-template">Astropy Package Template</a>
+for the packaging.
+<a class="reference external" href="https://www.itu.int/rec/R-REC-P.452-16-201507-I/en">ITU-R Recommendation P.452-16</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">pycraf Documentation</a><ul>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#user-documentation">User Documentation</a><ul>
+<li><a class="reference internal" href="#available-modules">Available modules</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#project-details">Project details</a></li>
+<li><a class="reference internal" href="#acknowledgments">Acknowledgments</a></li>
+</ul>
+</li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="_sources/index.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 18 Jul 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

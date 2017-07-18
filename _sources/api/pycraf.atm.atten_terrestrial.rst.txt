@@ -1,0 +1,6 @@
+atten_terrestrial
+=================
+
+.. currentmodule:: pycraf.atm
+
+.. autofunction:: atten_terrestrial

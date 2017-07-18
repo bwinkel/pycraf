@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ra769_limits &#8212; pycraf v0.24.5</title>
+    
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.24.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Geographical frames (pycraf.geospatial)" href="../geospatial/index.html" />
+    <link rel="prev" title="cispr22_limits" href="pycraf.protection.cispr22_limits.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="../geospatial/index.html" title="Geographical frames (pycraf.geospatial)">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="pycraf.protection.cispr22_limits.html" title="cispr22_limits">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v0.24.5</a>
+	 &#187;
+      </li>
+      <li><a href="../protection/index.html" accesskey="U">Protection levels (<code class="docutils literal"><span class="pre">pycraf.protection</span></code>)</a> &#187;</li>
+      
+      <li>ra769_limits</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ra769-limits">
+<h1>ra769_limits<a class="headerlink" href="#ra769-limits" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pycraf.protection.ra769_limits">
+<code class="descclassname">pycraf.protection.</code><code class="descname">ra769_limits</code><span class="sig-paren">(</span><em>mode='continuum'</em>, <em>scale='dB'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/protection/ra769.html#ra769_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.protection.ra769_limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Limits for spectral line and continuum observations according to
+<a class="reference external" href="https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en">ITU-R Rec RA.769</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : str, optional</p>
+<blockquote>
+<div><p>Observing mode: &#8216;continuum&#8217;, &#8216;spectroscopy&#8217; (default: &#8216;continuum&#8217;)</p>
+</div></blockquote>
+<p><strong>scale</strong> : str, optional</p>
+<blockquote>
+<div><p>Default scale to use: &#8216;linear&#8217;, &#8216;dB&#8217; (default: &#8216;linear&#8217;)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ra769_limits</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.table.Table.html#astropy.table.Table" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Table</span></code></a></p>
+<blockquote class="last">
+<div><p>A table with the following columns:</p>
+<ul class="simple">
+<li>&#8220;frequency&#8221; [MHz]</li>
+<li>&#8220;bandwidth&#8221; [MHz]</li>
+<li>&#8220;T_A&#8221; [K]</li>
+<li>&#8220;T_rx&#8221; [K]</li>
+<li>&#8220;T_rms&#8221; [K]</li>
+<li>&#8220;P_rms_nu&#8221; [W/Hz, dB(W/Hz)]</li>
+<li>&#8220;Plim&#8221; [W, dB(W)]</li>
+<li>&#8220;Plim_nu&#8221; [W/Hz, dB(W/Hz)]</li>
+<li>&#8220;Slim&#8221; [W/m^2, dB(W/m^2)]</li>
+<li>&#8220;Slim_nu&#8221; [Jy, dB(W/m^2/Hz)]</li>
+<li>&#8220;Efield&#8221; [uV/m, db(uV^2/m^2)]</li>
+<li>&#8220;Efield_norm&#8221;, normalized to 1 MHz bandwidth [uV/m, db(uV^2/m^2)]</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Because all columns are Astropy Quantities (see
+<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>), one can easily convert between linear and
+log-scale at a later stage. the <code class="xref py py-obj docutils literal"><span class="pre">scale</span></code> parameter just defines the
+scale to use initially.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">ra769_limits</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="../_sources/api/pycraf.protection.ra769_limits.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 18 Jul 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

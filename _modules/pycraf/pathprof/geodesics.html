@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pycraf.pathprof.geodesics &#8212; pycraf v0.24.5</title>
+    
+    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.24.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../../../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../../../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../../../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../../../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li>
+	<a href="../../../index.html">pycraf v0.24.5</a>
+	 &#187;
+      </li>
+      <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+      
+       
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pycraf.pathprof.geodesics</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">absolute_import</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+    <span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">.cygeodesics</span> <span class="k">import</span> <span class="n">inverse_cython</span><span class="p">,</span> <span class="n">direct_cython</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;geoid_inverse&#39;</span><span class="p">,</span> <span class="s1">&#39;geoid_direct&#39;</span><span class="p">]</span>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">lon1</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">),</span>
+    <span class="n">lat1</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">),</span>
+    <span class="n">lon2</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">),</span>
+    <span class="n">lat2</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">)</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="geoid_inverse"><a class="viewcode-back" href="../../../api/pycraf.pathprof.geoid_inverse.html#pycraf.pathprof.geoid_inverse">[docs]</a><span class="k">def</span> <span class="nf">geoid_inverse</span><span class="p">(</span>
+        <span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span><span class="p">,</span>
+        <span class="n">lon2</span><span class="p">,</span> <span class="n">lat2</span><span class="p">,</span>
+        <span class="n">eps</span><span class="o">=</span><span class="mf">1.e-12</span><span class="p">,</span>  <span class="c1"># corresponds to approximately 0.06mm</span>
+        <span class="n">maxiter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+        <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Solve inverse Geodesics problem using Vincenty&#39;s formulae.</span>
+
+<span class="sd">    Using an iterative approach, the distance and relative bearings between</span>
+<span class="sd">    two points (P1, and P2) on the Geoid (Earth ellipsoid) are determined;</span>
+<span class="sd">    see also `Wikipedia &lt;https://en.wikipedia.org/wiki/Vincenty&#39;s_formulae&gt;`_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lon1 : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic longitude of P1 [rad]</span>
+<span class="sd">    lat1 : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic latitude of P1 [rad]</span>
+<span class="sd">    lon2 : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic longitude of P2 [rad]</span>
+<span class="sd">    lat2 : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic latitude of P2 [rad]</span>
+<span class="sd">    eps : float, optional</span>
+<span class="sd">        Accuracy of calculation (default: 1.e-12)</span>
+<span class="sd">    maxiter : int, optional</span>
+<span class="sd">        Maximum number of iterations to perform (default: 50)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    distance : `~astropy.units.Quantity`</span>
+<span class="sd">        Distance between P1 and P2 [m]</span>
+<span class="sd">    bearing1 : `~astropy.units.Quantity`</span>
+<span class="sd">        Start bearing [rad]</span>
+<span class="sd">    bearing2 : `~astropy.units.Quantity`</span>
+<span class="sd">        Back-bearing [rad]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The iteration will stop if either the desired accuracy (`eps`) is reached</span>
+<span class="sd">    or the number of iterations exceeds `maxiter`.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">inverse_cython</span><span class="p">(</span><span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span><span class="p">,</span> <span class="n">lon2</span><span class="p">,</span> <span class="n">lat2</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="n">maxiter</span><span class="p">)</span></div>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">lon1</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">),</span>
+    <span class="n">lat1</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">),</span>
+    <span class="n">bearing1</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">),</span>
+    <span class="n">dist</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">)</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="geoid_direct"><a class="viewcode-back" href="../../../api/pycraf.pathprof.geoid_direct.html#pycraf.pathprof.geoid_direct">[docs]</a><span class="k">def</span> <span class="nf">geoid_direct</span><span class="p">(</span>
+        <span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span><span class="p">,</span>
+        <span class="n">bearing1</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span>
+        <span class="n">eps</span><span class="o">=</span><span class="mf">1.e-12</span><span class="p">,</span>  <span class="c1"># corresponds to approximately 0.06mm</span>
+        <span class="n">maxiter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+        <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Solve direct Geodesics problem using Vincenty&#39;s formulae.</span>
+
+<span class="sd">    From starting point P1, given a start bearing, find</span>
+<span class="sd">    point P2 located at a certain distance from P1 on the Geoid (Earth</span>
+<span class="sd">    ellipsoid). As for the inverse problem, an iterative approach is used;</span>
+<span class="sd">    see also `Wikipedia &lt;https://en.wikipedia.org/wiki/Vincenty&#39;s_formulae&gt;`_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lon1 : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic longitude of P1 [rad]</span>
+<span class="sd">    lat1 : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic latitude of P1 [rad]</span>
+<span class="sd">    bearing1 : `~astropy.units.Quantity`</span>
+<span class="sd">        Start bearing [rad]</span>
+<span class="sd">    distance : `~astropy.units.Quantity`</span>
+<span class="sd">        Distance between P1 and P2 [m]</span>
+<span class="sd">    eps : float, optional</span>
+<span class="sd">        Accuracy of calculation (default: 1.e-12)</span>
+<span class="sd">    maxiter : int, optional</span>
+<span class="sd">        Maximum number of iterations to perform (default: 50)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    lon2 : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic longitude of P2 [rad]</span>
+<span class="sd">    lat2 : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic latitude of P2 [rad]</span>
+<span class="sd">    bearing2 : `~astropy.units.Quantity`</span>
+<span class="sd">        Back-bearing [rad]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The iteration will stop if either the desired accuracy (`eps`) is reached</span>
+<span class="sd">    or the number of iterations exceeds `maxiter`.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">direct_cython</span><span class="p">(</span>
+        <span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span><span class="p">,</span> <span class="n">bearing1</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="n">maxiter</span><span class="p">,</span> <span class="n">wrap</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This not a standalone python program! Use as module.&#39;</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right"> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 18 Jul 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

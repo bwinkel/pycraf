@@ -1,0 +1,6 @@
+ras_pattern
+===========
+
+.. currentmodule:: pycraf.antenna
+
+.. autofunction:: ras_pattern

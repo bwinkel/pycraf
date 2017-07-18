@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Importing pycraf and subpackages &#8212; pycraf v0.24.5</title>
+    
+    <link rel="stylesheet" href="_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.24.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Conversions (pycraf.conversions)" href="conversions/index.html" />
+    <link rel="prev" title="Installation" href="install.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="genindex.html">Index</a></li>
+    <li><a title="Module Index" href="py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="conversions/index.html" title="Conversions (pycraf.conversions)">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="install.html" title="Installation">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="index.html">pycraf v0.24.5</a>
+	 &#187;
+      </li>
+      
+      <li>Importing pycraf and subpackages</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="importing-pycraf-and-subpackages">
+<h1>Importing pycraf and subpackages<a class="headerlink" href="#importing-pycraf-and-subpackages" title="Permalink to this headline">¶</a></h1>
+<p>Using pycraf in Python is as simple as:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycraf</span>
+</pre></div>
+</div>
+<p>Then one can access the subpackages via:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pycraf</span><span class="o">.&lt;</span><span class="n">subpackage</span><span class="o">&gt;</span>  
+</pre></div>
+</div>
+<p>and call associated functions, e.g.:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pycraf</span><span class="o">.</span><span class="n">conversions</span><span class="o">.</span><span class="n">free_space_loss</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>  
+</pre></div>
+</div>
+<p>It is also possible to do:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="o">&lt;</span><span class="n">subpackage</span><span class="o">&gt;</span>  
+</pre></div>
+</div>
+<p>Or:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf.</span><span class="o">&lt;</span><span class="n">subpackage</span><span class="o">&gt;</span> <span class="k">as</span> <span class="o">&lt;</span><span class="n">abbrev</span><span class="o">&gt;</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf.</span><span class="o">&lt;</span><span class="n">subpackage</span><span class="o">&gt;</span> <span class="kn">import</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span>  
+</pre></div>
+</div>
+<p>For example:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf.conversions</span> <span class="k">import</span> <span class="n">free_space_loss</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-started-with-subpackages">
+<h1>Getting started with subpackages<a class="headerlink" href="#getting-started-with-subpackages" title="Permalink to this headline">¶</a></h1>
+<p>Because different subpackages have very different functionality, each subpackage has its own
+getting started guide. These can be found by browsing the sections listed in the <a class="reference external" href="http://docs.astropy.org/en/stable/index.html#user-docs" title="(in Astropy v2.0)"><span>User Documentation</span></a>.</p>
+<p>You can also look at docstrings for a
+particular package or object, or access their documentation using the
+<code class="xref py py-obj docutils literal"><span class="pre">find_api_page</span></code> function. For example,</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">find_api_page</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf.pathprof</span> <span class="k">import</span> <span class="n">PathProp</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">find_api_page</span><span class="p">(</span><span class="n">PathProp</span><span class="p">)</span>  
+</pre></div>
+</div>
+<p>will bring up the documentation for the <a class="reference internal" href="api/pycraf.pathprof.PathProp.html#pycraf.pathprof.PathProp" title="pycraf.pathprof.PathProp"><code class="xref py py-obj docutils literal"><span class="pre">PathProp</span></code></a> class
+in your browser.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">Importing pycraf and subpackages</a></li>
+<li><a class="reference internal" href="#getting-started-with-subpackages">Getting started with subpackages</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="_sources/importing_pycraf.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 18 Jul 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

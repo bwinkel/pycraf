@@ -1,0 +1,6 @@
+set_num_threads
+===============
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: set_num_threads

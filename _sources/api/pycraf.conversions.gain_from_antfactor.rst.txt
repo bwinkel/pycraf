@@ -1,0 +1,6 @@
+gain_from_antfactor
+===================
+
+.. currentmodule:: pycraf.conversions
+
+.. autofunction:: gain_from_antfactor

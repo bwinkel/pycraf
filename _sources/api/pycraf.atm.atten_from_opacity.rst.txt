@@ -1,0 +1,6 @@
+atten_from_opacity
+==================
+
+.. currentmodule:: pycraf.atm
+
+.. autofunction:: atten_from_opacity

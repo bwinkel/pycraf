@@ -1,0 +1,6 @@
+equivalent_height_dry
+=====================
+
+.. currentmodule:: pycraf.atm
+
+.. autofunction:: equivalent_height_dry

@@ -1,0 +1,6 @@
+eta_a_from_areas
+================
+
+.. currentmodule:: pycraf.conversions
+
+.. autofunction:: eta_a_from_areas

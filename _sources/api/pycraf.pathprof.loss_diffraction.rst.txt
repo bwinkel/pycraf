@@ -1,0 +1,6 @@
+loss_diffraction
+================
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: loss_diffraction

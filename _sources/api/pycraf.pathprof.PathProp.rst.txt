@@ -1,0 +1,7 @@
+PathProp
+========
+
+.. currentmodule:: pycraf.pathprof
+
+.. autoclass:: PathProp
+   :show-inheritance:

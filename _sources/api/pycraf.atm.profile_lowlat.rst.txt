@@ -1,0 +1,6 @@
+profile_lowlat
+==============
+
+.. currentmodule:: pycraf.atm
+
+.. autofunction:: profile_lowlat

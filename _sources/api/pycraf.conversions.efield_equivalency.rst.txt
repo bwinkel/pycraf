@@ -1,0 +1,6 @@
+efield_equivalency
+==================
+
+.. currentmodule:: pycraf.conversions
+
+.. autofunction:: efield_equivalency

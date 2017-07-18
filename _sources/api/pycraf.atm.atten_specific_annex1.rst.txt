@@ -1,0 +1,6 @@
+atten_specific_annex1
+=====================
+
+.. currentmodule:: pycraf.atm
+
+.. autofunction:: atten_specific_annex1

@@ -1,0 +1,6 @@
+fl_G_max_from_hpbw
+==================
+
+.. currentmodule:: pycraf.antenna
+
+.. autofunction:: fl_G_max_from_hpbw

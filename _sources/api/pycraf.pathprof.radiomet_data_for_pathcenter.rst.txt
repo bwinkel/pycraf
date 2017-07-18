@@ -1,0 +1,6 @@
+radiomet_data_for_pathcenter
+============================
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: radiomet_data_for_pathcenter
