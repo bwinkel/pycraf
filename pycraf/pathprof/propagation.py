@@ -156,8 +156,8 @@ class PathProp(cyprop._PathProp):
         N0=(None, None, cnv.dimless),
         hprof_dists=(None, None, apu.km),
         hprof_heights=(None, None, apu.m),
-        bearing=(None, None, apu.deg),
-        back_bearing=(None, None, apu.deg),
+        hprof_bearing=(None, None, apu.deg),
+        hprof_backbearing=(None, None, apu.deg),
         strip_input_units=True, allow_none=True, output_unit=None
         )
     def __init__(
