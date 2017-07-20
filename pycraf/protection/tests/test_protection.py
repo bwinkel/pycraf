@@ -21,7 +21,7 @@ from ...utils import check_astro_quantities
 TOL_KWARGS = {'atol': 0., 'rtol': 1.e-6}
 
 
-@pytest.mark.skip(reason='failing on AppVeyor and Travis for unknown reason')
+# @pytest.mark.skip(reason='failing on AppVeyor and Travis for unknown reason')
 def test_cispr_limits():
 
     args_list = [
@@ -165,6 +165,34 @@ COL_UNITS_DB = [
     cnv.dB_uV_m,
     cnv.dB_uV_m,
     ]
+
+
+def test_cispr_limits_qtable_column():
+
+    # this tests for a "bug" encountered in the wind-turbine notebook
+    # if one uses the frequency column of the ra769 table,
+    # an early version of the cispr function refused to work
+
+    cont_lims = prot.ra769_limits(mode='continuum')[4:9]
+
+    freqs = cont_lims['frequency']
+
+    detector_dist = 30 * apu.m
+    # we query the QP values and assume that they equal 'RMS';
+    # as discussed above
+    detector_type = 'QP'
+
+    # case 1
+    cispr11_lim, cispr11_bw = prot.cispr11_limits(
+        freqs, detector_type=detector_type, detector_dist=detector_dist
+        )
+
+    assert_quantity_allclose(
+        cispr11_lim,
+        np.array([
+            37., 37., 37., 37., 37.
+            ]) * cnv.dB_uV_m,
+        )
 
 
 def test_ra769_limits():

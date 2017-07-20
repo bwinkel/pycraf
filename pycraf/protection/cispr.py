@@ -16,9 +16,8 @@ from .. import utils
 __all__ = ['cispr11_limits', 'cispr22_limits']
 
 
-@apu.quantity_input(freq=apu.Hz, detector_dist=apu.m)
 def _cispr_limits(
-        params, freq, detector_type='RMS', detector_dist=30. * apu.m
+        params, freq, detector_type='RMS', detector_dist=30.
         ):
     '''
     The params dictionary must have the following content:
@@ -31,34 +30,30 @@ def _cispr_limits(
     assert detector_type in ['QP', 'RMS']
 
     freq = np.atleast_1d(freq)
-    Elim = np.ones(freq.shape, dtype=np.float64) * cnv.dB_uV_m
+    Elim = np.ones(freq.shape, dtype=np.float64)
 
     for lof, hif, lim in params['lims']:
 
         mask = (freq >= lof) & (freq < hif)
-        Elim[mask] = lim.to(cnv.dB_uV_m)
+        Elim[mask] = lim
 
-    Elim.value[...] += 20 * np.log10(
-        (params['dist'] / detector_dist).to(cnv.dimless)
-        )  # 20, because area of sphere is proportional to radius ** 2
+    # 20, because area of sphere is proportional to radius ** 2
+    Elim += 20 * np.log10(params['dist'] / detector_dist)
 
     # According to Hasenpusch (BNetzA, priv. comm.) the CISPR standard
     # detector is a quasi-peak detector with a bandwidth of 120 kHz. To
     # convert to an RMS detector (which is more suitable to the RA.769) one
     # has to subtract 5.5 dB.
     if detector_type == 'RMS':
-        Elim.value[...] -= 5.5
+        Elim -= 5.5
 
-    return (
-        Elim.to(cnv.dB_uV_m),
-        params['meas_bw']
-        )
+    return Elim, params['meas_bw']
 
 
 @utils.ranged_quantity_input(
-    freq=(0, None, apu.Hz),
+    freq=(0, None, apu.MHz),
     detector_dist=(0.001, None, apu.m),
-    strip_input_units=False, output_unit=None
+    strip_input_units=True, output_unit=(cnv.dB_uV_m, apu.kHz)
     )
 def cispr11_limits(freq, detector_type='RMS', detector_dist=30. * apu.m):
     '''
@@ -86,11 +81,11 @@ def cispr11_limits(freq, detector_type='RMS', detector_dist=30. * apu.m):
 
     cispr11_params = {
         'lims': [
-            (0 * apu.MHz, 230 * apu.MHz, 30 * cnv.dB_uV_m),
-            (230 * apu.MHz, 1e20 * apu.MHz, 37 * cnv.dB_uV_m)
+            (0, 230, 30),
+            (230, 1e20, 37)
             ],
-        'dist': 30 * apu.meter,
-        'meas_bw': 120 * apu.kHz
+        'dist': 30,
+        'meas_bw': 120,
         }
 
     return _cispr_limits(
@@ -100,9 +95,9 @@ def cispr11_limits(freq, detector_type='RMS', detector_dist=30. * apu.m):
 
 
 @utils.ranged_quantity_input(
-    freq=(0, None, apu.Hz),
+    freq=(0, None, apu.MHz),
     detector_dist=(0.001, None, apu.m),
-    strip_input_units=False, output_unit=None
+    strip_input_units=True, output_unit=(cnv.dB_uV_m, apu.kHz)
     )
 def cispr22_limits(freq, detector_type='RMS', detector_dist=30. * apu.m):
     '''
@@ -113,7 +108,7 @@ def cispr22_limits(freq, detector_type='RMS', detector_dist=30. * apu.m):
     Parameters
     ----------
     freq : `~astropy.units.Quantity`
-        Frequency or frequency vector [Hz]
+        Frequency or frequency vector [MHz]
     detector_type : str, optional
         Detector type: 'QP' (quasi-peak), 'RMS' (default: 'RMS)
     detector_dist : `~astropy.units.Quantity`, optional
@@ -130,13 +125,13 @@ def cispr22_limits(freq, detector_type='RMS', detector_dist=30. * apu.m):
 
     cispr22_params = {
         'lims': [
-            (0 * apu.MHz, 230 * apu.MHz, 40 * cnv.dB_uV_m),
-            (230 * apu.MHz, 1000 * apu.MHz, 47 * cnv.dB_uV_m),
-            (1000 * apu.MHz, 3000 * apu.MHz, 56 * cnv.dB_uV_m),
-            (3000 * apu.MHz, 1e20 * apu.MHz, 60 * cnv.dB_uV_m)
+            (0, 230, 40),
+            (230, 1000, 47),
+            (1000, 3000, 56),
+            (3000, 1e20, 60)
             ],
-        'dist': 30 * apu.meter,
-        'meas_bw': 120 * apu.kHz  # is this correct?
+        'dist': 30,
+        'meas_bw': 120,  # is this correct?
         }
 
     return _cispr_limits(
