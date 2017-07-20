@@ -15,8 +15,7 @@ from .. import utils
 
 UNITS = [
     'dimless',
-    'dB',
-    'dBi',
+    'dB', 'dBi', 'dBc',
     'dB_W',
     'dB_W_Hz',
     'dB_W_m2',
@@ -46,7 +45,7 @@ __all__ = [
 # define some useful dB-Scales
 # dimless = apu.Unit(1)
 dimless = apu.dimensionless_unscaled
-dB = dBi = apu.dB(dimless)
+dB = dBi = dBc = apu.dB(dimless)
 dB_W = apu.dB(apu.W)
 dB_W_Hz = apu.dB(apu.W / apu.Hz)
 dB_W_m2 = apu.dB(apu.W / apu.m ** 2)
