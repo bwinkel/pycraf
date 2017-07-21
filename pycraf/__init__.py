@@ -23,3 +23,4 @@ if not _ASTROPY_SETUP_:
     from . import utils
     from . import pathprof
     from . import protection
+    from . import satellite
