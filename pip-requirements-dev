@@ -7,4 +7,5 @@ pytest
 pyproj >= 1.9
 geographiclib >= 1.46
 matplotlib >= 1.2
+sgp4>=1.4
 h5py
