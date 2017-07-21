@@ -41,6 +41,7 @@ Available modules
    antenna/index
    protection/index
    geospatial/index
+   satellite/index
 
 .. automodapi:: pycraf
     :no-heading:

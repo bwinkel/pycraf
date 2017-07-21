@@ -45,7 +45,6 @@
 ./_images/math/bb59df14d0bf20376ceca7c03e5fdf5206354e22.png
 ./_images/math/bb8e1602300cfc187bbfedb628ed176c084face6.png
 ./_images/math/cf2e0196c271cf290e82737e637e007efe1dfe45.png
-./_images/math/d30902b065765cb5c9b36c20b477117481c7fb86.png
 ./_images/math/d4edbfe1dcef00ab44cf5683acbb9663b61d59cf.png
 ./_images/math/d6e44fd6cddeb77153fff3ad1e1a2788a3e82638.png
 ./_images/math/d839e144267ecbb8a87acbc8a7dfda7824a1693e.png
@@ -65,6 +64,7 @@
 ./_modules/pycraf/pathprof/propagation.html
 ./_modules/pycraf/protection/cispr.html
 ./_modules/pycraf/protection/ra769.html
+./_modules/pycraf/satellite/satellite.html
 ./_sources/antenna/index.rst.txt
 ./_sources/api/pycraf.antenna.fl_G_max_from_hpbw.rst.txt
 ./_sources/api/pycraf.antenna.fl_G_max_from_size.rst.txt
@@ -132,6 +132,7 @@
 ./_sources/api/pycraf.pathprof.eff_earth_radius_median.rst.txt
 ./_sources/api/pycraf.pathprof.geoid_direct.rst.txt
 ./_sources/api/pycraf.pathprof.geoid_inverse.rst.txt
+./_sources/api/pycraf.pathprof.great_circle_bearing.rst.txt
 ./_sources/api/pycraf.pathprof.height_profile_data.rst.txt
 ./_sources/api/pycraf.pathprof.loss_complete.rst.txt
 ./_sources/api/pycraf.pathprof.loss_diffraction.rst.txt
@@ -144,9 +145,12 @@
 ./_sources/api/pycraf.pathprof.srtm_height_map.rst.txt
 ./_sources/api/pycraf.pathprof.srtm_height_profile.rst.txt
 ./_sources/api/pycraf.pathprof.terrain_cmap_factory.rst.txt
+./_sources/api/pycraf.pathprof.true_angular_distance.rst.txt
 ./_sources/api/pycraf.protection.cispr11_limits.rst.txt
 ./_sources/api/pycraf.protection.cispr22_limits.rst.txt
 ./_sources/api/pycraf.protection.ra769_limits.rst.txt
+./_sources/api/pycraf.satellite.SatelliteObserver.rst.txt
+./_sources/api/pycraf.satellite.get_sat.rst.txt
 ./_sources/api/pycraf.test.rst.txt
 ./_sources/atm/index.rst.txt
 ./_sources/conversions/index.rst.txt
@@ -157,6 +161,7 @@
 ./_sources/license.rst.txt
 ./_sources/pathprof/index.rst.txt
 ./_sources/protection/index.rst.txt
+./_sources/satellite/index.rst.txt
 ./_static/ajax-loader.gif
 ./_static/astropy_linkout.svg
 ./_static/astropy_linkout_20.png
@@ -271,6 +276,7 @@
 ./api/pycraf.pathprof.eff_earth_radius_median.html
 ./api/pycraf.pathprof.geoid_direct.html
 ./api/pycraf.pathprof.geoid_inverse.html
+./api/pycraf.pathprof.great_circle_bearing.html
 ./api/pycraf.pathprof.height_profile_data.html
 ./api/pycraf.pathprof.loss_complete.html
 ./api/pycraf.pathprof.loss_diffraction.html
@@ -283,9 +289,12 @@
 ./api/pycraf.pathprof.srtm_height_map.html
 ./api/pycraf.pathprof.srtm_height_profile.html
 ./api/pycraf.pathprof.terrain_cmap_factory.html
+./api/pycraf.pathprof.true_angular_distance.html
 ./api/pycraf.protection.cispr11_limits.html
 ./api/pycraf.protection.cispr22_limits.html
 ./api/pycraf.protection.ra769_limits.html
+./api/pycraf.satellite.SatelliteObserver.html
+./api/pycraf.satellite.get_sat.html
 ./api/pycraf.test.html
 ./atm/index-1.pdf
 ./atm/index-1.png
@@ -319,5 +328,6 @@
 ./pathprof/index.html
 ./protection/index.html
 ./py-modindex.html
+./satellite/index.html
 ./search.html
 ./searchindex.js
