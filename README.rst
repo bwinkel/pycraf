@@ -93,7 +93,7 @@ ITU kindly gave us permission to include data files into pycraf that are
 distributed with the Recommendations on the ITU servers. This makes it possible
 to just use pycraf without the need to manually download necessary data files.
 However, these data files are not free for commercial use. For details, please
-see the `LICENSE.ITU <https://www.github.com/bwinkel/pycraf/blob/master/LICENSE.ITU>`_ file.
+see the `LICENSE.ITU <https://www.github.com/bwinkel/pycraf/blob/master/licenses/LICENSE.ITU>`_ file.
 
 Since pycraf uses the `Astropy Package Template <https://github.com/astropy/package-template>`_ for packaging, we also refer to the associated  `license <https://github.com/bwinkel/pycraf/blob/master/licenses/LICENSE_ASTROPY_PACKAGE_TEMPLATE.rst>`_.
 

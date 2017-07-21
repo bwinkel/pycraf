@@ -13,7 +13,7 @@ ITU kindly gave us permission to include data files into pycraf that are
 distributed with the Recommendations on the ITU servers. This makes it possible
 to just use pycraf without the need to manually download necessary data files.
 However, these data files are not free for commercial use. For details, please
-see the `LICENSE.ITU <https://www.github.com/bwinkel/pycraf/blob/master/LICENSE.ITU>`_ file.
+see the `LICENSE.ITU <https://www.github.com/bwinkel/pycraf/blob/master/licenses/LICENSE.ITU>`_ file.
 
 We are very grateful for the kind support from ITU study groups and ITU's
 legal department.
