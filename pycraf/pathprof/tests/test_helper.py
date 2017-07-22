@@ -33,59 +33,6 @@ class TestHelper:
 
         pass
 
-    def test_true_angular_distance(self):
-
-        pfunc = pathprof.true_angular_distance
-        args_list = [
-            (-180, 360, apu.deg),
-            (-90, 90, apu.deg),
-            (-180, 360, apu.deg),
-            (-90, 90, apu.deg),
-            ]
-        check_astro_quantities(pfunc, args_list)
-
-        l1 = Quantity([10., 20., 30., 140., 350.], apu.deg)
-        b1 = Quantity([0., 20., 60., 40., 80.], apu.deg)
-        l2 = Quantity([-40., 200., 30.1, 130., 320.], apu.deg)
-        b2 = Quantity([0., -30., 60.05, 30., 10.], apu.deg)
-
-        adist = Quantity(
-            [
-                5.00000000e+01, 1.70000000e+02, 7.06839454e-02,
-                1.29082587e+01, 7.13909421e+01
-                ], apu.deg
-            )
-        assert_quantity_allclose(
-            pfunc(l1, b1, l2, b2),
-            adist,
-            )
-
-    def test_great_circle_bearing(self):
-
-        pfunc = pathprof.great_circle_bearing
-        args_list = [
-            (-180, 360, apu.deg),
-            (-90, 90, apu.deg),
-            (-180, 360, apu.deg),
-            (-90, 90, apu.deg),
-            ]
-        check_astro_quantities(pfunc, args_list)
-
-        l1 = Quantity([10., 20., 30., 140., 350.], apu.deg)
-        b1 = Quantity([0., 20., 60., 40., 80.], apu.deg)
-        l2 = Quantity([-40., 200., 30.1, 130., 320.], apu.deg)
-        b2 = Quantity([0., -30., 60.05, 30., 10.], apu.deg)
-
-        adist = Quantity(
-            [
-                -90., 180., 44.935034, -137.686456, -148.696726
-                ], apu.deg
-            )
-        assert_quantity_allclose(
-            pfunc(l1, b1, l2, b2),
-            adist,
-            )
-
     def test_annual_timepercent_from_worst_month(self):
 
         pfunc = pathprof.annual_timepercent_from_worst_month

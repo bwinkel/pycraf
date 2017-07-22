@@ -19,6 +19,7 @@ if not _ASTROPY_SETUP_:
     from . import antenna
     from . import atm
     from . import conversions
+    from . import geometry
     from . import geospatial
     from . import utils
     from . import pathprof

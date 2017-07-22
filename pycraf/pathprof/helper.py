@@ -17,7 +17,6 @@ from .. import utils
 
 __all__ = [
     'R_E', 'K_BETA', 'A_BETA',
-    'true_angular_distance', 'great_circle_bearing',
     'annual_timepercent_from_worst_month',
     'deltaN_N0_from_map', 'radiomet_data_for_pathcenter',
     'eff_earth_radius_factor_median',
@@ -77,87 +76,6 @@ _N0_interpolator = RegularGridInterpolator(
     (_refract_data['lons'][0], _refract_data['lats'][::-1, 0]),
     _refract_data['n050'][::-1].T
     )
-
-
-@utils.ranged_quantity_input(
-    l1=(-180, 360, apu.deg),
-    b1=(-90, 90, apu.deg),
-    l2=(-180, 360, apu.deg),
-    b2=(-90, 90, apu.deg),
-    strip_input_units=True, output_unit=apu.deg,
-    )
-def true_angular_distance(l1, b1, l2, b2):
-    '''
-    True angular distance between points (l1, b1) and (l2, b2).
-
-    Based on Vincenty formula
-    (http://en.wikipedia.org/wiki/Great-circle_distance).
-    This was spotted in astropy source code.
-
-    Parameters
-    ----------
-    l1, b1 : `~astropy.units.Quantity`
-        Longitude/Latitude of point 1 [deg]
-    l2, b2 : `~astropy.units.Quantity`
-        Longitude/Latitude of point 2 [deg]
-
-    Returns
-    -------
-    adist : `~astropy.units.Quantity`
-        True angular distance [deg]
-    '''
-
-    sin_diff_lon = np.sin(np.radians(l2 - l1))
-    cos_diff_lon = np.cos(np.radians(l2 - l1))
-    sin_lat1 = np.sin(np.radians(b1))
-    sin_lat2 = np.sin(np.radians(b2))
-    cos_lat1 = np.cos(np.radians(b1))
-    cos_lat2 = np.cos(np.radians(b2))
-
-    num1 = cos_lat2 * sin_diff_lon
-    num2 = cos_lat1 * sin_lat2 - sin_lat1 * cos_lat2 * cos_diff_lon
-    denominator = sin_lat1 * sin_lat2 + cos_lat1 * cos_lat2 * cos_diff_lon
-
-    return np.degrees(np.arctan2(
-        np.sqrt(num1 ** 2 + num2 ** 2), denominator
-        ))
-
-
-@utils.ranged_quantity_input(
-    l1=(-180, 360, apu.deg),
-    b1=(-90, 90, apu.deg),
-    l2=(-180, 360, apu.deg),
-    b2=(-90, 90, apu.deg),
-    strip_input_units=True, output_unit=apu.deg,
-    )
-def great_circle_bearing(l1, b1, l2, b2):
-    '''
-    Great circle bearing between points (l1, b1) and (l2, b2).
-
-    Parameters
-    ----------
-    l1, b1 : `~astropy.units.Quantity`
-        Longitude/Latitude of point 1 [deg]
-    l2, b2 : `~astropy.units.Quantity`
-        Longitude/Latitude of point 2 [deg]
-
-    Returns
-    -------
-    bearing : `~astropy.units.Quantity`
-        Great circle bearing [deg]
-    '''
-
-    sin_diff_lon = np.sin(np.radians(l2 - l1))
-    cos_diff_lon = np.cos(np.radians(l2 - l1))
-    sin_lat1 = np.sin(np.radians(b1))
-    sin_lat2 = np.sin(np.radians(b2))
-    cos_lat1 = np.cos(np.radians(b1))
-    cos_lat2 = np.cos(np.radians(b2))
-
-    a = cos_lat2 * sin_diff_lon
-    b = cos_lat1 * sin_lat2 - sin_lat1 * cos_lat2 * cos_diff_lon
-
-    return np.degrees(np.arctan2(a, b))
 
 
 @utils.ranged_quantity_input(
