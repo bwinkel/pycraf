@@ -58,12 +58,12 @@ coordinates of the ISS at a given time, download the current TLE and do::
     >>> # create a SatelliteObserver instance
     >>> sat_obs = satellite.SatelliteObserver(location)
 
-    >>> dt = datetime.datetime(2017, 7, 22, 8, 38, 57)
+    >>> dt = datetime.datetime(2016, 7, 22, 8, 38, 57)
     >>> obstime = time.Time(dt)
 
     >>> az, el, dist = sat_obs.azel_from_sat(tle_string, obstime)
     >>> print('az, el, dist: {:.1f}, {:.1f}, {:.0f}'.format(az, el, dist))
-    az, el, dist: -146.2 deg, -50.7 deg, 10296 km
+    az, el, dist: -95.3 deg, -27.6 deg, 6654 km
 
     >>> # can also use arrays of obstime
     >>> mjd = 55123. + np.array([0.123, 0.99, 50.3])
