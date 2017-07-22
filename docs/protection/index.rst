@@ -27,8 +27,8 @@ The function `~pycraf.protection.ra769_limits` returns a
 `~astropy.table.Table` object that resembles (Table 1 and 2) from
 `ITU-R Rec. RA.769 <https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en>`_::
 
-    >>> from pycraf import protection
-    >>> protection.ra769_limits()
+    >>> from pycraf import protection  # doctest: +SKIP
+    >>> protection.ra769_limits()  # doctest: +SKIP
     <Table length=21>
     frequency bandwidth   T_A   ...     Slim_nu        Efield    Efield_norm
        MHz       MHz       K    ... dB(W / (Hz m2)) dB(uV2 / m2) dB(uV2 / m2)
