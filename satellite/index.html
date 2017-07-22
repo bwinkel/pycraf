@@ -102,7 +102,7 @@ local) horizontal coordinates (azimuth, elevation, distance) of an observer.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The TLEs are usually published once a day, because the contained
-parameters rapidly change; drag forces cause rapid changes in the orbits
+parameters quickly change; drag forces cause rapid changes in the orbits
 of almost all satellites.</p>
 </div>
 <p>On most websites that offer TLEs (e.g., <a class="reference external" href="http://celestrak.com/">Celestrak</a>)
@@ -112,9 +112,8 @@ in fact three-line strings are used, where the first line just contains the name
 2 25544  51.6478 121.2152 0011003  68.5125 263.9959 15.50783143834295
 </pre></div>
 </div>
-<p>For convenience, <a class="reference internal" href="#module-pycraf.satellite" title="pycraf.satellite"><code class="xref py py-obj docutils literal"><span class="pre">satellite</span></code></a> follows this format. To calculate the
-horizontal coordinates of the ISS at current time, download the current TLE
-and do:</p>
+<p>The pycraf package follows this format. To calculate the horizontal
+coordinates of the ISS at a given time, download the current TLE and do:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datetime</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy.coordinates</span> <span class="k">import</span> <span class="n">EarthLocation</span>
@@ -131,25 +130,24 @@ and do:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># create a SatelliteObserver instance</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sat_obs</span> <span class="o">=</span> <span class="n">satellite</span><span class="o">.</span><span class="n">SatelliteObserver</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># query current time</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">obstime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">Time</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">57</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obstime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">Time</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sat_obs</span><span class="o">.</span><span class="n">azel_from_sat</span><span class="p">(</span><span class="n">tle_string</span><span class="p">,</span> <span class="n">obstime</span><span class="p">)</span>
-<span class="go">(&lt;Quantity 108.10045415963617 deg&gt;,</span>
-<span class="go"> &lt;Quantity -45.48590640535226 deg&gt;,</span>
-<span class="go"> &lt;Quantity 9560.504553253912 km&gt;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">sat_obs</span><span class="o">.</span><span class="n">azel_from_sat</span><span class="p">(</span><span class="n">tle_string</span><span class="p">,</span> <span class="n">obstime</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;az, el, dist: </span><span class="si">{:.1f}</span><span class="s1">, </span><span class="si">{:.1f}</span><span class="s1">, </span><span class="si">{:.0f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">dist</span><span class="p">))</span>
+<span class="go">az, el, dist: -146.2 deg, -50.7 deg, 10296 km</span>
 
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># can also use arrays of obstime</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mjd</span> <span class="o">=</span> <span class="mf">55123.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.123</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">,</span> <span class="mf">50.3</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obstime2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">Time</span><span class="p">(</span><span class="n">mjd</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;mjd&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sat_obs</span><span class="o">.</span><span class="n">azel_from_sat</span><span class="p">(</span><span class="n">tle_string</span><span class="p">,</span> <span class="n">obstime2</span><span class="p">)</span>
-<span class="go">(&lt;Quantity [  28.39693587,-143.17010479,  -6.97428002] deg&gt;,</span>
-<span class="go"> &lt;Quantity [-43.16852656,-21.46811918,-36.77340433] deg&gt;,</span>
-<span class="go"> &lt;Quantity [ 9388.29246437, 5675.03921204, 8361.28408463] km&gt;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">sat_obs</span><span class="o">.</span><span class="n">azel_from_sat</span><span class="p">(</span><span class="n">tle_string</span><span class="p">,</span> <span class="n">obstime2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">az</span>
+<span class="go">&lt;Quantity [  28.39693587,-143.17010479,  -6.97428002] deg&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">el</span>
+<span class="go">&lt;Quantity [-43.16852656,-21.46811918,-36.77340433] deg&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span>
+<span class="go">&lt;Quantity [ 9388.29246437, 5675.03921204, 8361.28408463] km&gt;</span>
 </pre></div>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Of course, your results will differ, because the actual time has changed.</p>
 </div>
 <p>The <a class="reference internal" href="../api/pycraf.satellite.SatelliteObserver.html#pycraf.satellite.SatelliteObserver.azel_from_sat" title="pycraf.satellite.SatelliteObserver.azel_from_sat"><code class="xref py py-obj docutils literal"><span class="pre">azel_from_sat</span></code></a> method also accepts
 a <code class="xref py py-obj docutils literal"><span class="pre">sgp4.io.Satellite</span></code> object. This could be created by using the
@@ -266,7 +264,7 @@ string (TLE).</p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 21 Jul 2017. <br/>
+    Last built 22 Jul 2017. <br/>
   </p>
 </footer>
   </body>
