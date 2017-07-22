@@ -1,4 +1,4 @@
-.. pycraf-atm:
+.. pycraf-satellite:
 
 **************************************
 Satellites (`pycraf.satellite`)

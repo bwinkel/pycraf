@@ -1,6 +1,6 @@
 great_circle_bearing
 ====================
 
-.. currentmodule:: pycraf.pathprof
+.. currentmodule:: pycraf.geometry
 
 .. autofunction:: great_circle_bearing

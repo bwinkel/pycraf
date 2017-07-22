@@ -1,6 +1,6 @@
 true_angular_distance
 =====================
 
-.. currentmodule:: pycraf.pathprof
+.. currentmodule:: pycraf.geometry
 
 .. autofunction:: true_angular_distance

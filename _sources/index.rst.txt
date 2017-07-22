@@ -42,6 +42,7 @@ Available modules
    protection/index
    geospatial/index
    satellite/index
+   geometry/index
 
 .. automodapi:: pycraf
     :no-heading:

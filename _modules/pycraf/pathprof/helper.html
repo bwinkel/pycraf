@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pycraf.pathprof.helper &#8212; pycraf v0.24.6</title>
+    <title>pycraf.pathprof.helper &#8212; pycraf v0.24.7</title>
     
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.24.6',
+        VERSION:     '0.24.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -57,7 +57,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v0.24.6</a>
+	<a href="../../../index.html">pycraf v0.24.7</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
@@ -92,7 +92,6 @@
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;R_E&#39;</span><span class="p">,</span> <span class="s1">&#39;K_BETA&#39;</span><span class="p">,</span> <span class="s1">&#39;A_BETA&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;true_angular_distance&#39;</span><span class="p">,</span> <span class="s1">&#39;great_circle_bearing&#39;</span><span class="p">,</span>
     <span class="s1">&#39;annual_timepercent_from_worst_month&#39;</span><span class="p">,</span>
     <span class="s1">&#39;deltaN_N0_from_map&#39;</span><span class="p">,</span> <span class="s1">&#39;radiomet_data_for_pathcenter&#39;</span><span class="p">,</span>
     <span class="s1">&#39;eff_earth_radius_factor_median&#39;</span><span class="p">,</span>
@@ -152,87 +151,6 @@
     <span class="p">(</span><span class="n">_refract_data</span><span class="p">[</span><span class="s1">&#39;lons&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">_refract_data</span><span class="p">[</span><span class="s1">&#39;lats&#39;</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
     <span class="n">_refract_data</span><span class="p">[</span><span class="s1">&#39;n050&#39;</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
     <span class="p">)</span>
-
-
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">l1</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
-    <span class="n">b1</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
-    <span class="n">l2</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
-    <span class="n">b2</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
-    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span>
-    <span class="p">)</span>
-<div class="viewcode-block" id="true_angular_distance"><a class="viewcode-back" href="../../../api/pycraf.pathprof.true_angular_distance.html#pycraf.pathprof.true_angular_distance">[docs]</a><span class="k">def</span> <span class="nf">true_angular_distance</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">l2</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    True angular distance between points (l1, b1) and (l2, b2).</span>
-
-<span class="sd">    Based on Vincenty formula</span>
-<span class="sd">    (http://en.wikipedia.org/wiki/Great-circle_distance).</span>
-<span class="sd">    This was spotted in astropy source code.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    l1, b1 : `~astropy.units.Quantity`</span>
-<span class="sd">        Longitude/Latitude of point 1 [deg]</span>
-<span class="sd">    l2, b2 : `~astropy.units.Quantity`</span>
-<span class="sd">        Longitude/Latitude of point 2 [deg]</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    adist : `~astropy.units.Quantity`</span>
-<span class="sd">        True angular distance [deg]</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-
-    <span class="n">sin_diff_lon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">l2</span> <span class="o">-</span> <span class="n">l1</span><span class="p">))</span>
-    <span class="n">cos_diff_lon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">l2</span> <span class="o">-</span> <span class="n">l1</span><span class="p">))</span>
-    <span class="n">sin_lat1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">b1</span><span class="p">))</span>
-    <span class="n">sin_lat2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">b2</span><span class="p">))</span>
-    <span class="n">cos_lat1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">b1</span><span class="p">))</span>
-    <span class="n">cos_lat2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">b2</span><span class="p">))</span>
-
-    <span class="n">num1</span> <span class="o">=</span> <span class="n">cos_lat2</span> <span class="o">*</span> <span class="n">sin_diff_lon</span>
-    <span class="n">num2</span> <span class="o">=</span> <span class="n">cos_lat1</span> <span class="o">*</span> <span class="n">sin_lat2</span> <span class="o">-</span> <span class="n">sin_lat1</span> <span class="o">*</span> <span class="n">cos_lat2</span> <span class="o">*</span> <span class="n">cos_diff_lon</span>
-    <span class="n">denominator</span> <span class="o">=</span> <span class="n">sin_lat1</span> <span class="o">*</span> <span class="n">sin_lat2</span> <span class="o">+</span> <span class="n">cos_lat1</span> <span class="o">*</span> <span class="n">cos_lat2</span> <span class="o">*</span> <span class="n">cos_diff_lon</span>
-
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">num1</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">num2</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span> <span class="n">denominator</span>
-        <span class="p">))</span></div>
-
-
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">l1</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
-    <span class="n">b1</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
-    <span class="n">l2</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
-    <span class="n">b2</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
-    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span>
-    <span class="p">)</span>
-<div class="viewcode-block" id="great_circle_bearing"><a class="viewcode-back" href="../../../api/pycraf.pathprof.great_circle_bearing.html#pycraf.pathprof.great_circle_bearing">[docs]</a><span class="k">def</span> <span class="nf">great_circle_bearing</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">l2</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Great circle bearing between points (l1, b1) and (l2, b2).</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    l1, b1 : `~astropy.units.Quantity`</span>
-<span class="sd">        Longitude/Latitude of point 1 [deg]</span>
-<span class="sd">    l2, b2 : `~astropy.units.Quantity`</span>
-<span class="sd">        Longitude/Latitude of point 2 [deg]</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    bearing : `~astropy.units.Quantity`</span>
-<span class="sd">        Great circle bearing [deg]</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-
-    <span class="n">sin_diff_lon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">l2</span> <span class="o">-</span> <span class="n">l1</span><span class="p">))</span>
-    <span class="n">cos_diff_lon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">l2</span> <span class="o">-</span> <span class="n">l1</span><span class="p">))</span>
-    <span class="n">sin_lat1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">b1</span><span class="p">))</span>
-    <span class="n">sin_lat2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">b2</span><span class="p">))</span>
-    <span class="n">cos_lat1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">b1</span><span class="p">))</span>
-    <span class="n">cos_lat2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">b2</span><span class="p">))</span>
-
-    <span class="n">a</span> <span class="o">=</span> <span class="n">cos_lat2</span> <span class="o">*</span> <span class="n">sin_diff_lon</span>
-    <span class="n">b</span> <span class="o">=</span> <span class="n">cos_lat1</span> <span class="o">*</span> <span class="n">sin_lat2</span> <span class="o">-</span> <span class="n">sin_lat1</span> <span class="o">*</span> <span class="n">cos_lat2</span> <span class="o">*</span> <span class="n">cos_diff_lon</span>
-
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span></div>
 
 
 <span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>

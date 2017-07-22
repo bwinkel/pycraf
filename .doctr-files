@@ -57,6 +57,7 @@
 ./_modules/pycraf/antenna/ras.html
 ./_modules/pycraf/atm/atm.html
 ./_modules/pycraf/conversions/conversions.html
+./_modules/pycraf/geometry/geometry.html
 ./_modules/pycraf/geospatial/geospatial.html
 ./_modules/pycraf/pathprof/geodesics.html
 ./_modules/pycraf/pathprof/heightprofile.html
@@ -113,6 +114,10 @@
 ./_sources/api/pycraf.conversions.ptx_from_efield.rst.txt
 ./_sources/api/pycraf.conversions.ptx_from_powerflux.rst.txt
 ./_sources/api/pycraf.conversions.ptx_from_prx.rst.txt
+./_sources/api/pycraf.geometry.cart_to_sphere.rst.txt
+./_sources/api/pycraf.geometry.great_circle_bearing.rst.txt
+./_sources/api/pycraf.geometry.sphere_to_cart.rst.txt
+./_sources/api/pycraf.geometry.true_angular_distance.rst.txt
 ./_sources/api/pycraf.geospatial.etrs89_to_wgs84.rst.txt
 ./_sources/api/pycraf.geospatial.utm_to_wgs84.rst.txt
 ./_sources/api/pycraf.geospatial.wgs84_to_etrs89.rst.txt
@@ -132,7 +137,6 @@
 ./_sources/api/pycraf.pathprof.eff_earth_radius_median.rst.txt
 ./_sources/api/pycraf.pathprof.geoid_direct.rst.txt
 ./_sources/api/pycraf.pathprof.geoid_inverse.rst.txt
-./_sources/api/pycraf.pathprof.great_circle_bearing.rst.txt
 ./_sources/api/pycraf.pathprof.height_profile_data.rst.txt
 ./_sources/api/pycraf.pathprof.loss_complete.rst.txt
 ./_sources/api/pycraf.pathprof.loss_diffraction.rst.txt
@@ -145,7 +149,6 @@
 ./_sources/api/pycraf.pathprof.srtm_height_map.rst.txt
 ./_sources/api/pycraf.pathprof.srtm_height_profile.rst.txt
 ./_sources/api/pycraf.pathprof.terrain_cmap_factory.rst.txt
-./_sources/api/pycraf.pathprof.true_angular_distance.rst.txt
 ./_sources/api/pycraf.protection.cispr11_limits.rst.txt
 ./_sources/api/pycraf.protection.cispr22_limits.rst.txt
 ./_sources/api/pycraf.protection.ra769_limits.rst.txt
@@ -154,6 +157,7 @@
 ./_sources/api/pycraf.test.rst.txt
 ./_sources/atm/index.rst.txt
 ./_sources/conversions/index.rst.txt
+./_sources/geometry/index.rst.txt
 ./_sources/geospatial/index.rst.txt
 ./_sources/importing_pycraf.rst.txt
 ./_sources/index.rst.txt
@@ -257,6 +261,10 @@
 ./api/pycraf.conversions.ptx_from_efield.html
 ./api/pycraf.conversions.ptx_from_powerflux.html
 ./api/pycraf.conversions.ptx_from_prx.html
+./api/pycraf.geometry.cart_to_sphere.html
+./api/pycraf.geometry.great_circle_bearing.html
+./api/pycraf.geometry.sphere_to_cart.html
+./api/pycraf.geometry.true_angular_distance.html
 ./api/pycraf.geospatial.etrs89_to_wgs84.html
 ./api/pycraf.geospatial.utm_to_wgs84.html
 ./api/pycraf.geospatial.wgs84_to_etrs89.html
@@ -276,7 +284,6 @@
 ./api/pycraf.pathprof.eff_earth_radius_median.html
 ./api/pycraf.pathprof.geoid_direct.html
 ./api/pycraf.pathprof.geoid_inverse.html
-./api/pycraf.pathprof.great_circle_bearing.html
 ./api/pycraf.pathprof.height_profile_data.html
 ./api/pycraf.pathprof.loss_complete.html
 ./api/pycraf.pathprof.loss_diffraction.html
@@ -289,7 +296,6 @@
 ./api/pycraf.pathprof.srtm_height_map.html
 ./api/pycraf.pathprof.srtm_height_profile.html
 ./api/pycraf.pathprof.terrain_cmap_factory.html
-./api/pycraf.pathprof.true_angular_distance.html
 ./api/pycraf.protection.cispr11_limits.html
 ./api/pycraf.protection.cispr22_limits.html
 ./api/pycraf.protection.ra769_limits.html
@@ -311,6 +317,7 @@
 ./atm/index.html
 ./conversions/index.html
 ./genindex.html
+./geometry/index.html
 ./geospatial/index.html
 ./importing_pycraf.html
 ./index.html
