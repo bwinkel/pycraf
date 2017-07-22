@@ -54,6 +54,21 @@ def get_sat(tle_string):
 
 
 def _propagate(sat, dt):
+    '''
+    True equator mean equinox (TEME) position from `sgp4` at given time.
+
+    Parameters
+    ----------
+    sat : `sgp4.io.Satellite` instance
+        Satellite object filled from TLE
+    dt : `~datetime.datetime`
+        Time
+
+    Returns
+    -------
+    xs, ys, zs : float
+        TEME (=True equator mean equinox) position of satellite [km]
+    '''
 
     # pos [km], vel [km/s]
     position, velocity = sat.propagate(
