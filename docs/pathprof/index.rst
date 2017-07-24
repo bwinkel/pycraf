@@ -306,6 +306,48 @@ using `~pycraf.pathprof.terrain_cmap_factory`. It returns a `cmap` and a
     distance are given -, it finds P2. The geodesics are the equivalent of
     great-circle paths on a sphere, but on the Geoid.
 
+Another useful feature of the Geodesics functionality is that one can query
+the Geographical coordinates of points at a certain distance from a central
+point. On the sphere, they would all be located on a circle, but on Earth
+it's different:
+
+.. plot::
+   :include-source:
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from astropy import units as u
+    from pycraf import pathprof, geometry
+
+    lon, lat = 0 * u.deg, 70 * u.deg
+    bearings = np.linspace(-180, 180, 721) * u.deg
+    distance = 1000 * u.km
+
+    lons, lats, _ = pathprof.geoid_direct(lon, lat, bearings, distance)
+    ang_dist = geometry.true_angular_distance(lon, lat, lons, lats)
+
+    fig = plt.figure(figsize=(7, 6))
+    ax = fig.add_axes((0.1, 0.1, 0.8, 0.8))
+    cax = fig.add_axes((0.9, 0.1, 0.02, 0.8))
+    sc = ax.scatter(
+        lons.to(u.deg), lats.to(u.deg),
+        c=ang_dist.to(u.deg), cmap='viridis'
+        )
+    cbar = plt.colorbar(sc, cax=cax)
+    cbar.set_label('Angular distance [deg]')
+    ax.set_xlabel('Longitude [deg]')
+    ax.set_ylabel('Latitude [deg]')
+    ax.set_aspect(1. / np.cos(np.radians(70)))
+    ax.grid()
+
+.. note::
+
+    Make no mistake, the apparent distortion mostly comes from projecting the
+    "sphere" to a flat projection. However, if one calculates the angular
+    distances with the formula for the sphere, there is some deviation
+    (from North to South). For many cases where only rough estimates are
+    needed it will be sufficient to treat the Geoid as a normal sphere.
+
 .. _pathprof-using-attenmaps:
 
 Producing maps of path propagation loss
