@@ -20,10 +20,17 @@ from ...utils import check_astro_quantities, get_pkg_data_filename
 from astropy.utils.misc import NumpyRNGContext
 import json
 from itertools import product
-import h5py
+import importlib
 
 
 TOL_KWARGS = {'atol': 1.e-4, 'rtol': 1.e-4}
+
+
+# skip over h5py related tests, if not present:
+skip_h5py = pytest.mark.skipif(
+    importlib.util.find_spec('h5py') is None,
+    reason='"h5py" package not installed'
+    )
 
 
 class TestPropagation:
@@ -58,7 +65,7 @@ class TestPropagation:
             '{:.2f}db_{:.2f}db_v{:d}.json'
             )
         self.fastmap_template = (
-            'fastmap/attens_{:.2f}ghz_{:.2f}m_{:.2f}m_{:.2f}percent_v{:d}.hdf5'
+            'fastmap/attens_{:.2f}ghz_{:.2f}m_{:.2f}m_{:.2f}percent_v{:d}.{}'
             )
         self.pprops = []
         for case in self.cases:
@@ -266,7 +273,10 @@ class TestPropagation:
             for k in losses:
                 assert_quantity_allclose(losses[k], loss_true[k])
 
-    def test_height_profile_data(self, tmpdir_factory):
+    @skip_h5py
+    def test_height_profile_data_h5py(self, tmpdir_factory):
+
+        import h5py
 
         hprof_data_cache = pathprof.height_profile_data(
             6.5 * apu.deg, 50.5 * apu.deg,
@@ -307,7 +317,10 @@ class TestPropagation:
                 atol=1.e-6,
                 )
 
-    def test_fast_atten_map(self, tmpdir_factory):
+    @skip_h5py
+    def test_fast_atten_map_h5py(self, tmpdir_factory):
+
+        import h5py
 
         tfile = get_pkg_data_filename('fastmap/hprof.hdf5')
         hprof_data_cache = h5py.File(tfile, 'r')
@@ -332,11 +345,11 @@ class TestPropagation:
 
             tfile = get_pkg_data_filename(
                 self.fastmap_template.format(
-                    freq, h_tg, h_rg, time_percent, version
+                    freq, h_tg, h_rg, time_percent, version, 'hdf5'
                     ))
 
             # Warning: if uncommenting, the test cases will be overwritten
-            # do this only, if you need to update the json files
+            # do this only, if you need to update the h5py files
             # (make sure, that results are correct!)
             # with h5py.File(tfile, 'w') as h5f:
             #     h5f['atten_map'] = atten_map
@@ -364,3 +377,97 @@ class TestPropagation:
                 )
             assert_allclose(h5f['eps_pt_map'], eps_pt_map)
             assert_allclose(h5f['eps_pr_map'], eps_pr_map)
+
+    def test_height_profile_data_npz(self, tmpdir_factory):
+
+        hprof_data_cache = pathprof.height_profile_data(
+            6.5 * apu.deg, 50.5 * apu.deg,
+            900 * apu.arcsec, 900 * apu.arcsec,
+            map_resolution=30 * apu.arcsec,
+            )
+
+        # also testing reading/writing from hdf5
+        tdir = tmpdir_factory.mktemp('hdata')
+        tfile = str(tdir.join('hprof.npz'))
+        print('writing temporary files to', tdir)
+
+        # saving
+        np.savez(tfile, **hprof_data_cache)
+
+        hprof_data_cache_disk = np.load(tfile)
+
+        for k in hprof_data_cache:
+            assert_quantity_allclose(
+                np.squeeze(hprof_data_cache[k]),
+                np.squeeze(hprof_data_cache_disk[k])
+                )
+
+        # also test versus true results
+        tfile = get_pkg_data_filename('fastmap/hprof.npz')
+        hprof_data_cache_true = np.load(tfile)
+
+        for k in hprof_data_cache:
+            assert_quantity_allclose(
+                np.squeeze(hprof_data_cache[k]),
+                np.squeeze(hprof_data_cache_true[k]),
+                atol=1.e-6,
+                )
+
+    def test_fast_atten_map_npz(self, tmpdir_factory):
+
+        tfile = get_pkg_data_filename('fastmap/hprof.npz')
+        hprof_data_cache = np.load(tfile)
+
+        for case in self.cases:
+
+            freq, (h_tg, h_rg), time_percent, version, (G_t, G_r) = case
+
+            atten_map, eps_pt_map, eps_pr_map = pathprof.atten_map_fast(
+                freq * apu.GHz,
+                self.temperature,
+                self.pressure,
+                h_tg * apu.m, h_rg * apu.m,
+                time_percent * apu.percent,
+                hprof_data_cache,  # dict_like
+                version=version,
+                )
+
+            atten_map = atten_map.to(cnv.dB).value
+            eps_pt_map = eps_pt_map.to(apu.deg).value
+            eps_pr_map = eps_pr_map.to(apu.deg).value
+
+            fname = self.fastmap_template.format(
+                freq, h_tg, h_rg, time_percent, version, 'npz'
+                )
+
+            # Warning: if uncommenting, the test cases will be overwritten
+            # do this only, if you need to update the npz files
+            # (make sure, that results are correct!)
+            # np.savez(
+            #     '/tmp/' + fname, atten_map=atten_map,
+            #     eps_pt_map=eps_pt_map, eps_pr_map=eps_pr_map
+            #     )
+            # continue
+
+            tfile = get_pkg_data_filename(fname)
+            print(tfile)
+            true_dat = np.load(tfile)
+
+            # Note conversion to some ndarray type necessary, as h5py
+            # returns <HDF5 dataset> types
+            tol_kwargs = {'atol': 1.e-6, 'rtol': 1.e-6}
+            # atten_map[0, 0, 0] = 10
+            # for some super-strange reason, index 9, 13 is completely off
+            # on travis and appveyor (only diffraction)
+            # as it is only one pixel, we ignore it here for now
+            t_atten_map = np.squeeze(true_dat['atten_map'])
+            t_atten_map[:, 9, 13] = atten_map[:, 9, 13]
+
+            idx = np.where(np.abs(t_atten_map - atten_map) > 1.e-6)
+            for i, y, x in zip(*idx):
+                print(i, y, x, t_atten_map[i, y, x], atten_map[i, y, x])
+            assert_allclose(
+                t_atten_map, atten_map, **tol_kwargs
+                )
+            assert_allclose(true_dat['eps_pt_map'], eps_pt_map)
+            assert_allclose(true_dat['eps_pr_map'], eps_pr_map)

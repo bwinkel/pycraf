@@ -17,7 +17,6 @@ from ... import conversions as cnv
 from ... import pathprof
 from ...utils import check_astro_quantities
 from astropy.utils.misc import NumpyRNGContext
-from geographiclib.geodesic import Geodesic
 
 
 TOL_KWARGS = {'atol': 1.e-4, 'rtol': 1.e-4}

@@ -9,7 +9,6 @@ from functools import partial, lru_cache
 # import numpy as np
 import numbers
 from astropy import units as apu
-import pyproj
 from .. import utils
 
 
@@ -36,6 +35,13 @@ def _create_proj(sys1, sys2, zone=None, south=False):
     '''
     Helper function to create and cache pyproj.Proj instances.
     '''
+
+    try:
+        import pyproj
+    except ImportError:
+        raise ImportError(
+            'The "pyproj" package is necessary to use this function.'
+            )
 
     if sys1 == 'UTM' and sys2 == 'WGS84':
 

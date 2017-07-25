@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from functools import lru_cache
-from sgp4.earth_gravity import wgs72
-from sgp4.io import twoline2rv, Satellite
 import numpy as np
 from astropy.coordinates import EarthLocation
 from astropy import time, units as apu
@@ -43,6 +41,15 @@ def get_sat(tle_string):
         1 25544U 98067A   13165.59097222  .00004759  00000-0  88814-4 0    47
         2 25544  51.6478 121.2152 0011003  68.5125 263.9959 15.50783143834295
     '''
+
+    try:
+        import sgp4
+        from sgp4.earth_gravity import wgs72
+        from sgp4.io import twoline2rv, Satellite
+    except ImportError:
+        raise ImportError(
+            'The "sgp4" package is necessary to use this function.'
+            )
 
     tle_string_list = tle_string.split('\n')
     satname = tle_string_list[0]
@@ -260,6 +267,14 @@ class SatelliteObserver(object):
         assert isinstance(obstime, time.Time), (
             'obstime must be an astropy.time.Time object!'
             )
+
+        try:
+            import sgp4
+            from sgp4.io import Satellite
+        except ImportError:
+            raise ImportError(
+                'The "sgp4" package is necessary to use this Class.'
+                )
 
         if not isinstance(satellite_or_tle, Satellite):
             _, satellite = get_sat(satellite_or_tle)

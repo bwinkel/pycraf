@@ -9,10 +9,25 @@ from __future__ import (
 import os
 from astropy import units as apu
 import numpy as np
-import matplotlib
 from scipy.interpolate import RegularGridInterpolator
 from .. import conversions as cnv
 from .. import utils
+
+
+try:
+    import matplotlib  # pylint: disable=W0611
+    from matplotlib.colors import Normalize
+
+    # On older versions of matplotlib Normalize is an old-style class
+    if not isinstance(Normalize, type):
+        class Normalize(Normalize, object):
+            pass
+except ImportError:
+    class Normalize(object):
+        def __init__(self, *args, **kwargs):
+            raise ImportError(
+                'The "matplotlib" package is necessary to use this.'
+                )
 
 
 __all__ = [
@@ -427,7 +442,7 @@ def make_kmz(
         myzip.writestr('doc.kml', kml)
 
 
-class FixPointNormalize(matplotlib.colors.Normalize):
+class FixPointNormalize(Normalize):
     '''
     From http://stackoverflow.com/questions/40895021/python-equivalent-for-matlabs-demcmap-elevation-appropriate-colormap
     by ImportanceOfBeingErnest
@@ -451,7 +466,7 @@ class FixPointNormalize(matplotlib.colors.Normalize):
         # col_val is the color value in the range [0, 1]
         # that should represent the sealevel.
         self.col_val = col_val
-        matplotlib.colors.Normalize.__init__(self, vmin, vmax, clip)
+        super().__init__(vmin, vmax, clip)
 
     def __call__(self, value, clip=None):
 
@@ -492,6 +507,13 @@ def terrain_cmap_factory(sealevel=0.5, vmax=1200):
     # Combine the lower and upper range of the terrain colormap with a gap in
     # the middle to let the coastline appear more prominently. Inspired by
     # stackoverflow.com/questions/31051488/combining-two-matplotlib-colormaps
+
+    try:
+        import matplotlib
+    except ImportError:
+        raise ImportError(
+            'The "matplotlib" package is necessary to use this function.'
+            )
 
     colors_undersea = matplotlib.pyplot.cm.terrain(np.linspace(0, 0.17, 56))
     colors_land = matplotlib.pyplot.cm.terrain(np.linspace(0.25, 1, 200))

@@ -116,11 +116,19 @@ Dependencies
 We kept the dependencies as minimal as possible. The following packages are
 required:
 
+* setuptools
+* cython 0.23 or later
 * numpy 1.8 or later
 * astropy 1.1 or later
-* matplotlib 1.2 or later
-* cython 0.23 or later
-* pyproj 1.9 or later
+* scipy 0.15 or later
+* pytest 2.6 or later
+
+The following packages are optional, and you will need them for certain
+features and to build the docs:
+
+* matplotlib 1.2 or later; for some plot helpers
+* pyproj 1.9 or later; for the `geospatial` subpackage
+* sgp4 1.4 or later; for the `satellite` subpackage
 
 Windows machines
 ----------------
@@ -135,6 +143,11 @@ suitable wheel from `Christoph Gohlke's package site <http://www.lfd.uci.edu/~go
 If you're using `Anaconda <https://www.continuum.io/downloads>`_ (recommended), it is much simpler::
 
     conda install -c conda-forge pyproj
+
+In case you want or need to install from the sources, the MS Visual C compiler
+is necessary. You can download and use the `Visual C++ 2015 Build Tools
+<http://landinghub.visualstudio.com/visual-cpp-build-tools>`_ which is "only"
+4 GBytes...
 
 MacOS machines
 --------------

@@ -15,7 +15,14 @@ from astropy.units import Quantity
 from astropy.utils.misc import NumpyRNGContext
 from ... import conversions as cnv
 from ... import geospatial as gsp
-import pyproj
+import importlib
+
+
+# skip over pyproj related tests (currently all), if package not present:
+skip_pyproj = pytest.mark.skipif(
+    importlib.util.find_spec('pyproj') is None,
+    reason='"pyproj" package not installed'
+    )
 
 
 class TestTransformations:
@@ -82,7 +89,10 @@ class TestTransformations:
 
         pass
 
+    @skip_pyproj
     def test_create_proj(self):
+
+        import pyproj
 
         _create_proj = gsp.geospatial._create_proj
 
@@ -105,6 +115,7 @@ class TestTransformations:
             proj = _create_proj(*args, **kwargs)
             assert isinstance(proj, pyproj.Proj)
 
+    @skip_pyproj
     def test_wgs84_to_utm(self):
 
         zones = [1, 32, 60]
@@ -117,6 +128,7 @@ class TestTransformations:
             assert_allclose(ulon, self.ulon)
             assert_allclose(ulat, self.ulat)
 
+    @skip_pyproj
     def test_utm_to_wgs84(self):
 
         zones = [1, 32, 60]
@@ -129,6 +141,7 @@ class TestTransformations:
             assert_allclose(glon, self.glon)
             assert_allclose(glat, self.glat)
 
+    @skip_pyproj
     def test_wgs84_to_etrs89(self):
 
         elon, elat = gsp.wgs84_to_etrs89(self.glon2, self.glat2)
@@ -136,6 +149,7 @@ class TestTransformations:
         assert_allclose(elon, self.elon)
         assert_allclose(elat, self.elat)
 
+    @skip_pyproj
     def test_etrs89_to_wgs84(self):
 
         glon, glat = gsp.etrs89_to_wgs84(self.elon, self.elat)
