@@ -16,7 +16,8 @@ from astropy import units as apu
 from astropy.units import Quantity
 from ... import conversions as cnv
 from ... import pathprof
-from ...utils import check_astro_quantities, get_pkg_data_filename
+from ...utils import check_astro_quantities
+from astropy.utils.data import get_pkg_data_filename
 from astropy.utils.misc import NumpyRNGContext
 import json
 from itertools import product
@@ -26,7 +27,7 @@ import importlib
 TOL_KWARGS = {'atol': 1.e-4, 'rtol': 1.e-4}
 
 
-# skip over h5py related tests, if not present:
+# skip over h5py related tests, if not package present:
 skip_h5py = pytest.mark.skipif(
     importlib.util.find_spec('h5py') is None,
     reason='"h5py" package not installed'

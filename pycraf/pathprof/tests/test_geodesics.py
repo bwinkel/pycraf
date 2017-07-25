@@ -15,7 +15,8 @@ from astropy import units as apu
 from astropy.units import Quantity
 from ... import conversions as cnv
 from ... import pathprof
-from ...utils import check_astro_quantities, get_pkg_data_filename
+from ...utils import check_astro_quantities
+from astropy.utils.data import get_pkg_data_filename
 from astropy.utils.misc import NumpyRNGContext
 
 
