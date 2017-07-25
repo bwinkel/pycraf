@@ -42,13 +42,13 @@ Using the `~pycraf.conversions` package is really simple::
 Because all function parameters and return values are Astropy Quantities
 (see `~astropy.units.Quantity`), unit conversion is automatically performed::
 
-    >> cnv.eff_from_geom_area(10 * u.m ** 2, 50 * u.percent)
+    >> cnv.eff_from_geom_area(10 * u.m ** 2, 50 * u.percent)  # doctest: +FLOAT_CMP
     <Quantity 5.0 m2>
 
-    >> cnv.eff_from_geom_area(10 * u.m ** 2, 0.5 * cnv.dimless)
+    >> cnv.eff_from_geom_area(10 * u.m ** 2, 0.5 * cnv.dimless)  # doctest: +FLOAT_CMP
     <Quantity 5.0 m2>
 
-    >> cnv.eff_from_geom_area(1 * u.km ** 2, 10 * u.percent)
+    >> cnv.eff_from_geom_area(1 * u.km ** 2, 10 * u.percent)  # doctest: +FLOAT_CMP
     <Quantity 100000.0 m2>
 
 
@@ -102,12 +102,12 @@ Working with the Decibel units is easy::
     >>> from pycraf import conversions as cnv
 
     >>> power = 1 * cnv.dB_W
-    >>> power
+    >>> power  # doctest: +FLOAT_CMP
     <Decibel 1.0 dB(W)>
 
-    >>> power.to(u.W)
+    >>> power.to(u.W)  # doctest: +FLOAT_CMP
     <Quantity 1.2589254117941673 W>
-    >>> print(power.to(u.W))
+    >>> print(power.to(u.W))  # doctest: +FLOAT_CMP
     1.2589254117941673 W
 
 Often, one wants to do some formatting in the print function, which works as
@@ -178,27 +178,27 @@ A few examples::
     >>> P_rx = -10 * cnv.dBm
     >>> P_tx = 20 * cnv.dBm
 
-    >>> cnv.efield_from_powerflux(S).to(cnv.dB_uV_m)
+    >>> cnv.efield_from_powerflux(S).to(cnv.dB_uV_m)  # doctest: +FLOAT_CMP
     <Decibel -44.23969433034762 dB(uV2 / m2)>
-    >>> cnv.powerflux_from_efield(E_rx).to(cnv.dB_W_m2)
+    >>> cnv.powerflux_from_efield(E_rx).to(cnv.dB_W_m2)  # doctest: +FLOAT_CMP
     <Decibel -175.7603056696524 dB(W / m2)>
 
-    >>> cnv.ptx_from_powerflux(S, distance, G_tx).to(cnv.dB_W)
+    >>> cnv.ptx_from_powerflux(S, distance, G_tx).to(cnv.dB_W)  # doctest: +FLOAT_CMP
     <Decibel -119.00790135977903 dB(W)>
-    >>> cnv.powerflux_from_ptx(P_tx, distance, G_tx).to(cnv.dB_W_m2)
+    >>> cnv.powerflux_from_ptx(P_tx, distance, G_tx).to(cnv.dB_W_m2)  # doctest: +FLOAT_CMP
     <Decibel -80.99209864022097 dB(W / m2)>
 
-    >>> cnv.prx_from_powerflux(S, frequency, G_rx).to(cnv.dB_W)
+    >>> cnv.prx_from_powerflux(S, frequency, G_rx).to(cnv.dB_W)  # doctest: +FLOAT_CMP
     <Decibel -221.4556845816624 dB(W)>
-    >>> cnv.powerflux_from_prx(P_rx, frequency, G_rx).to(cnv.dB_W_m2)
+    >>> cnv.powerflux_from_prx(P_rx, frequency, G_rx).to(cnv.dB_W_m2)  # doctest: +FLOAT_CMP
     <Decibel -8.544315418337588 dB(W / m2)>
 
-    >>> cnv.free_space_loss(distance, frequency)
+    >>> cnv.free_space_loss(distance, frequency)  # doctest: +FLOAT_CMP
     <Decibel -132.44778322188336 dB>
 
-    >>> cnv.prx_from_ptx(P_tx, G_tx, G_rx, distance, frequency).to(cnv.dB_W)
+    >>> cnv.prx_from_ptx(P_tx, G_tx, G_rx, distance, frequency).to(cnv.dB_W)  # doctest: +FLOAT_CMP
     <Decibel -112.44778322188337 dB(W)>
-    >>> cnv.ptx_from_prx(P_rx, G_tx, G_rx, distance, frequency).to(cnv.dB_W)
+    >>> cnv.ptx_from_prx(P_rx, G_tx, G_rx, distance, frequency).to(cnv.dB_W)  # doctest: +FLOAT_CMP
     <Decibel 62.44778322188338 dB(W)>
 
 See Also

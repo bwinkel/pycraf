@@ -34,6 +34,15 @@ skip_h5py = pytest.mark.skipif(
     )
 
 
+MAP_KEYS = [
+    'lon_mid_map', 'lat_mid_map',
+    'dist_map', 'd_ct_map', 'd_cr_map', 'd_lm_map', 'd_tm_map',
+    'zone_t_map', 'zone_r_map', 'bearing_map', 'back_bearing_map',
+    'N0_map', 'delta_N_map', 'beta0_map', 'path_idx_map',
+    'pix_dist_map', 'dist_end_idx_map'
+    ]
+
+
 class TestPropagation:
 
     def setup(self):
@@ -310,13 +319,20 @@ class TestPropagation:
         hprof_data_cache_true = h5py.File(tfile, 'r')
 
         for k in hprof_data_cache:
-            assert_quantity_allclose(
-                # Note conversion to some ndarray type necessary, as h5py
-                # returns <HDF5 dataset> types
-                np.squeeze(hprof_data_cache[k]),
-                np.squeeze(hprof_data_cache_true[k]),
-                atol=1.e-6,
-                )
+            # Note conversion to some ndarray type necessary, as h5py
+            # returns <HDF5 dataset> types
+            q1 = np.squeeze(hprof_data_cache[k])
+            q2 = np.squeeze(hprof_data_cache_true[k])
+
+            # we'll skip over the map center, as the path_idx is quasi-random
+            # (all paths have a point in the center...)
+            if k in MAP_KEYS:
+                q1[15, 15] = q2[15, 15]
+
+            if issubclass(q1.dtype.type, np.integer):
+                assert_equal(q1, q2)
+            else:
+                assert_quantity_allclose(q1, q2, atol=1.e-6)
 
     @skip_h5py
     def test_fast_atten_map_h5py(self, tmpdir_factory):
@@ -408,11 +424,24 @@ class TestPropagation:
         hprof_data_cache_true = np.load(tfile)
 
         for k in hprof_data_cache:
-            assert_quantity_allclose(
-                np.squeeze(hprof_data_cache[k]),
-                np.squeeze(hprof_data_cache_true[k]),
-                atol=1.e-6,
-                )
+            q1 = np.squeeze(hprof_data_cache[k])
+            q2 = np.squeeze(hprof_data_cache_true[k])
+
+            # print(k)
+            # if k == 'path_idx_map':
+            #     idx = np.where(np.abs(q1 - q2) > 1.e-6)
+            #     for y, x in zip(*idx):
+            #         print(y, x, q1[y, x], q2[y, x])
+
+            # we'll skip over the map center, as the path_idx is quasi-random
+            # (all paths have a point in the center...)
+            if k in MAP_KEYS:
+                q1[15, 15] = q2[15, 15]
+
+            if issubclass(q1.dtype.type, np.integer):
+                assert_equal(q1, q2)
+            else:
+                assert_quantity_allclose(q1, q2, atol=1.e-6)
 
     def test_fast_atten_map_npz(self, tmpdir_factory):
 

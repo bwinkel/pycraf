@@ -69,11 +69,11 @@ coordinates of the ISS at a given time, download the current TLE and do::
     >>> mjd = 55123. + np.array([0.123, 0.99, 50.3])
     >>> obstime2 = time.Time(mjd, format='mjd')
     >>> az, el, dist = sat_obs.azel_from_sat(tle_string, obstime2)
-    >>> az
+    >>> az  # doctest: +FLOAT_CMP
     <Quantity [  28.39693587,-143.17010479,  -6.97428002] deg>
-    >>> el
+    >>> el  # doctest: +FLOAT_CMP
     <Quantity [-43.16852656,-21.46811918,-36.77340433] deg>
-    >>> dist
+    >>> dist  # doctest: +FLOAT_CMP
     <Quantity [ 9388.29246437, 5675.03921204, 8361.28408463] km>
 
 The `~pycraf.satellite.SatelliteObserver.azel_from_sat` method also accepts
@@ -99,9 +99,9 @@ be processed::
 
     # using sgp4 directly, to get position and velocity in ECI coordinates
     >>> position, velocity = sat.propagate(2017, 6, 29, 12, 50, 19)
-    >>> position  # km
+    >>> position  # km  # doctest: +FLOAT_CMP
     (3289.302521216188, 3816.880925531413, 4443.175627001508)
-    >>> velocity  # km/s
+    >>> velocity  # km/s  # doctest: +FLOAT_CMP
     (-2.958995807371371, 6.335950621185331, -3.241778555003016)
 
 

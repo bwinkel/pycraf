@@ -93,6 +93,7 @@ matrix:
             - CXX='g++-6'
             - CPP='g++-6'
             - LD='gcc-6'
+            - DO_MAC_DIST=YES
 
         # Do a coverage test.
         - os: linux
@@ -191,4 +192,10 @@ after_success:
         conda install twine;
         python setup.py sdist;
         python -m twine upload dist/*.tar.gz;
+      fi'
+    - echo "DO_MAC_DIST" $DO_MAC_DIST
+    - 'if [[ $TRAVIS_TAG && $DO_MAC_DIST ]]; then
+        conda install twine;
+        python setup.py bdist_wheel;
+        python -m twine upload dist/*.whl;
       fi'
