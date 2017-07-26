@@ -41,3 +41,4 @@ prune astropy_helpers/astropy_helpers/tests
 # global-exclude *.pyc *.o
 # recursive-include pycraf *.py
 recursive-include pycraf/itudata *
+recursive-include pycraf/pathprof/data *

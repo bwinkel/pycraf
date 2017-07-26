@@ -13,6 +13,7 @@ from .geodesics import *
 from .heightprofile import *
 from .helper import *
 from .propagation import *
+from .srtm import *
 
 _clutter_table = '''
 +-------+-------------------+------+------+

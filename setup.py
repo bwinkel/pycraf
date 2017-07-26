@@ -110,6 +110,7 @@ package_info = get_package_info()
 # Add the project-global data
 package_info['package_data'].setdefault(PACKAGENAME, [])
 package_info['package_data'][PACKAGENAME].append('data/*')
+package_info['package_data'][PACKAGENAME].append('pathprof/data/*')
 package_info['package_data'][PACKAGENAME].append('itudata/*.*')
 package_info['package_data'][PACKAGENAME].append('itudata/p.452-16/*')
 package_info['package_data'][PACKAGENAME].append('itudata/p.452-16/R-REC-P.452-16-201507/*')
