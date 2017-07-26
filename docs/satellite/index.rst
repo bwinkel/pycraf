@@ -61,14 +61,14 @@ coordinates of the ISS at a given time, download the current TLE and do::
     >>> dt = datetime.datetime(2010, 7, 22, 8, 38, 57)
     >>> obstime = time.Time(dt)
 
-    >>> az, el, dist = sat_obs.azel_from_sat(tle_string, obstime)
+    >>> az, el, dist = sat_obs.azel_from_sat(tle_string, obstime)  # doctest: +REMOTE_DATA
     >>> print('az, el, dist: {:.1f}, {:.1f}, {:.0f}'.format(az, el, dist))
     az, el, dist: -165.5 deg, 7.4 deg, 1713 km
 
     >>> # can also use arrays of obstime
     >>> mjd = 55123. + np.array([0.123, 0.99, 50.3])
     >>> obstime2 = time.Time(mjd, format='mjd')
-    >>> az, el, dist = sat_obs.azel_from_sat(tle_string, obstime2)
+    >>> az, el, dist = sat_obs.azel_from_sat(tle_string, obstime2)  # doctest: +REMOTE_DATA
     >>> az  # doctest: +FLOAT_CMP
     <Quantity [  28.39693587,-143.17010479,  -6.97428002] deg>
     >>> el  # doctest: +FLOAT_CMP

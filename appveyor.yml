@@ -60,7 +60,7 @@ install:
 build: false
 
 test_script:
-    - "%CMD_IN_ENV% python setup.py test"
+    - "%CMD_IN_ENV% python setup.py test --remote-data=any"
 
 after_test:
   # This step builds your wheels.

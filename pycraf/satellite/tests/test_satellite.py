@@ -9,7 +9,7 @@
 import pytest
 import numpy as np
 from numpy.testing import assert_equal, assert_allclose
-from astropy.tests.helper import assert_quantity_allclose
+from astropy.tests.helper import assert_quantity_allclose, remote_data
 from astropy import units as apu
 from astropy.units import Quantity
 from astropy.coordinates import EarthLocation
@@ -36,6 +36,7 @@ class TestSatelliteObserver:
 
         pass
 
+    @remote_data(source='any')
     def test_azel_from_sat(self):
 
         mjd = 55123. + np.array([0., 0.123, 0.99, 50.3])

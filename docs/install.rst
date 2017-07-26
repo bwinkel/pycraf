@@ -147,6 +147,11 @@ correctly is to use the `~pycraf.test()` function::
     >>> import pycraf  # doctest: +SKIP
     >>> pycraf.test()  # doctest: +SKIP
 
+To run the tests for one sub-package, e.g., `conversions`, only::
+
+    >>> import pycraf  # doctest: +SKIP
+    >>> pycraf.test('conversions')  # doctest: +SKIP
+
 The tests should run and print out any failures, which you can report at
 the `pycraf issue tracker <http://github.com/bwinkel/pycraf/issues>`__.
 
@@ -154,6 +159,27 @@ the `pycraf issue tracker <http://github.com/bwinkel/pycraf/issues>`__.
 
     This way of running the tests may not work if you do it in the
     pycraf source distribution directory.
+
+.. note::
+
+    By default, the `test` function will skip over tests that require
+    data from the internet. One can include them by::
+
+        >>> import pycraf  # doctest: +SKIP
+        >>> pycraf.test(remote_data='any')  # doctest: +SKIP
+
+If you prefer testing on the command line and usually work with the source
+code, you can also do
+
+.. code-block:: bash
+
+    python setup.py test
+
+    # to run tests from a sub-package
+    python setup.py test -P conversions
+
+    # include tests, which need to download data (will slow down tests)
+    python setup.py test --remote-data=any
 
 .. _srtm_data:
 

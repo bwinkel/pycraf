@@ -35,7 +35,7 @@ env:
         - NUMPY_VERSION=stable
         - ASTROPY_VERSION=stable
         - MAIN_CMD='python setup.py'
-        - SETUP_CMD='test'
+        - SETUP_CMD='test --remote-data=any'
         - PIP_DEPENDENCIES=''
         - EVENT_TYPE='pull_request push'
 
@@ -81,14 +81,12 @@ matrix:
 
         # Standard linux; also used for sdist'ing
         - os: linux
-          env: SETUP_CMD='test'
-               DO_DIST=YES
+          env: DO_DIST=YES
 
         # Try MacOS X
         - os: osx
           osx_image: xcode8.3
           env:
-            - SETUP_CMD='test'
             - CC='gcc-6'
             - CXX='g++-6'
             - CPP='g++-6'

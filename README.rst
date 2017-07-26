@@ -72,7 +72,12 @@ Testing
 After installation (see below) you can test, if everything works as intended::
 
     import pycraf
-    pycraf.tests()
+
+    pycraf.test()
+    # this will skip over some tests that need to download
+    # data from the internet; to include them:
+    pycraf.test(source='any')
+
 
 
 License
