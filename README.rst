@@ -169,14 +169,14 @@ SRTM data
 To make full use of the path attenuation calculations provided by pycraf
 (implements `ITU-R Rec. P.452 <https://www.itu.int/rec/R-REC-P.452-16-201507-I/en>`_), we recommend to use NASA's
 `Shuttle Radar Topography Mission (SRTM) <https://www2.jpl.nasa.gov/srtm/>`_
-data for height- profile generation. pycraf can work with so-called *.hgt*
+data for height-profile generation. pycraf can work with so-called *.hgt*
 files, a very simple binary format. Each *.hgt* file, a so-called tile, just
 contains 1201x1201 16-bit integers. From the file naming scheme, one can infer
 the associated coordinates. Most tiles contain one square-degree.
 
 Unfortunately, we cannot provide SRTM data as part of the package, due to the
-large file sizes and legal reasons. But once you downloaded the necessary tiles
-(all or only a subset appropriate for your region), simply define the
+large file sizes and legal reasons. But once you downloaded the necessary
+tiles (all or only a subset appropriate for your region), simply define the
 environment variable *SRTMDATA*, let it point to the folder containing the
 tiles, and pycraf will find the files when it is imported from Python.
 
@@ -184,10 +184,12 @@ On windows::
 
     set SRTMDATA=C:\[path-to-srtm]\
 
-On linux/MacOS (sh-like)::
+On Linux/MacOS (sh-like)::
 
     export SRTMDATA=[path-to-srtm]/
 
+There is also the possibility to change the path to the SRTM directory during
+run-time (see documentation).
 
 Acknowledgments
 ===============

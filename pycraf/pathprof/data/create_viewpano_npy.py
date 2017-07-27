@@ -6,9 +6,10 @@
 # /bin/rm *.zip newpano.txt; for i in `cat pano.txt`; do echo "$i" >> newpano.txt; wget http://viewfinderpanoramas.org/dem3/${i}; unzip -l $i | grep '.hg' >> newpano.txt; done
 
 import numpy as np
+from astropy.utils.data import get_pkg_data_filename
 
 
-with open('newpano.txt', 'r') as f:
+with open(get_pkg_data_filename('newpano.txt'), 'r') as f:
     lines = f.readlines()
 
 

@@ -28,7 +28,6 @@ from __future__ import (
 # from functools import partial, lru_cache
 import os
 import shutil
-import collections
 from zipfile import ZipFile
 import re
 import json
@@ -36,13 +35,12 @@ import glob
 from functools import lru_cache
 import numpy as np
 from scipy.interpolate import RegularGridInterpolator
-from astropy.utils.state import ScienceState
 from astropy.utils.data import get_pkg_data_filename, download_file
 from astropy import units as apu
 from .. import utils
 
 
-__all__ = ['SrtmDir', 'srtm_height_data']
+__all__ = ['SrtmConf', 'srtm_height_data']
 
 
 HGT_RES = 90.  # m; equivalent to 3 arcsec resolution
@@ -61,33 +59,71 @@ class TileNotAvailable(Exception):
     pass
 
 
-class SrtmDir(ScienceState):
+class SrtmConf(utils.MultiState):
+    '''
+    Provide a global state to adjust SRTM configuration.
+
+    By default, `~pycraf` will look for SRTM '.hgt' files (the terrain data)
+    in the SRTMDATA environment variable. If this is not defined, the
+    local directory ('./') is used for look-up. It is possible during
+    run-time to change the directory where to look for '.hgt' files
+    with the `SrtmConf` manager::
+
+        from pycraf.pathprof import SrtmConf
+        SrtmConf.set(srtm_dir='/path/to/srtmdir')
+
+    Alternatively, if only a temporary change of the config is desired,
+    one can use `SrtmConf` as a context manager::
+
+        with SrtmConf.set(srtm_dir='/path/to/srtmdir'):
+            # do stuff
+
+    Afterwards, the old settings will be re-established.
+
+    It is also possible to allow downloading of missing '.hgt' files::
+
+        SrtmConf.set(download='missing')
+
+    The default behavior is to not download anything (`download='never'`).
+    There is even an option, to always force download (`download='always'`).
+
+    The default download server will be `server='nasa_v2.1'`. One could
+    also use the (very old) data (`server='nasa_v1.0'`) or inofficial
+    tiles from viewfinderpanorama (`server='viewpano'`).
+
+    URLS:
+
+    - `nasa_v2.1 <https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/>`__
+    - `nasa_v1.0 <https://dds.cr.usgs.gov/srtm/version1/>`__
+    - `viewpano <http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm>`__
     '''
 
-
-    Possible values for 'download': 'never', 'missing', 'always'
-    Possible values for 'server': 'nasa_v2.1', 'nasa_v1.0', 'panoramic'
-    '''
+    _attributes = ('srtm_dir', 'download', 'server')
 
     # default values
-    _value = {
-        'srtm_dir': os.environ.get('SRTMDATA', '.'),
-        'download': 'never',
-        'server': 'nasa_v2.1',
-        }
+    srtm_dir = os.environ.get('SRTMDATA', '.')
+    download = 'never'
+    server = 'nasa_v2.1'
 
     @classmethod
-    def validate(cls, options_dict):
+    def validate(cls, **kwargs):
+        '''
+        This checks, if the provided inputs for `download` and `server` are
+        allowed. Possible values are:
 
-        if not isinstance(options_dict, collections.Mapping):
-            raise TypeError('Argument "options_dict" must be a dictionary.')
+        - `download`:  'never', 'missing', 'always'
+        - `server`:  'nasa_v2.1', 'nasa_v1.0', 'viewpano'
 
-        for k, v in options_dict.items():
-            if k not in ['srtm_dir', 'download', 'server']:
-                raise ValueError(
-                    'Only the options "srtm_dir", "download" and "server" '
-                    'are supported.'
-                    )
+        '''
+
+        for k, v in kwargs.items():
+
+            if k == 'srtm_dir':
+                if not isinstance(v, str):
+                    raise ValueError(
+                        '"srtm_dir" option must be a string.'
+                        )
+
             if k == 'download':
                 if v not in ['never', 'missing', 'always']:
                     raise ValueError(
@@ -101,11 +137,7 @@ class SrtmDir(ScienceState):
                         '"viewpano" are supported for "server" option.'
                         )
 
-        # it is super important to make a copy of the dictionary
-        # otherwise, the context manager won't work correctly
-        new_options_dict = dict(cls._value)
-        new_options_dict.update(options_dict)
-        return new_options_dict
+        return kwargs
 
 
 def _hgt_filename(ilon, ilat):
@@ -121,9 +153,9 @@ def _hgt_filename(ilon, ilat):
 
 def _check_availability(ilon, ilat):
     # check availability of a tile on download servers
-    # returns continent name (for NASA server) or tile name (Pano)
+    # returns continent name (for NASA server) or zip file name (Pano)
 
-    server = SrtmDir.get()['server']
+    server = SrtmConf.server
     tile_name = _hgt_filename(ilon, ilat)
 
     if server.startswith('nasa_v'):
@@ -152,7 +184,7 @@ def _check_availability(ilon, ilat):
                     ilon, ilat
                     ))
 
-        return VIEWPANO_TILES['supertile'][idx][0]
+        return VIEWPANO_TILES['zipfile'][idx][0]
 
     return None  # should not happen
 
@@ -160,8 +192,8 @@ def _check_availability(ilon, ilat):
 def _download(ilon, ilat):
     # download the tile to path
 
-    srtm_dir = SrtmDir.get()['srtm_dir']
-    server = SrtmDir.get()['server']
+    srtm_dir = SrtmConf.srtm_dir
+    server = SrtmConf.server
 
     tile_name = _hgt_filename(ilon, ilat)
     tile_path = os.path.join(srtm_dir, tile_name)
@@ -239,7 +271,7 @@ def _extract_hgt_coords(hgt_name):
 def _get_hgt_diskpath(tile_name):
     # check, if a tile already exists in srtm directory (recursive)
 
-    srtm_dir = SrtmDir.get()['srtm_dir']
+    srtm_dir = SrtmConf.srtm_dir
     _files = glob.glob(os.path.join(srtm_dir, '**', tile_name), recursive=True)
 
     if len(_files) > 1:
@@ -256,11 +288,11 @@ def get_hgt_file(ilon, ilat):
 
     _check_availability(ilon, ilat)
 
-    srtm_dir = SrtmDir.get()['srtm_dir']
+    srtm_dir = SrtmConf.srtm_dir
     tile_name = _hgt_filename(ilon, ilat)
     hgt_file = _get_hgt_diskpath(tile_name)
 
-    download = SrtmDir.get()['download']
+    download = SrtmConf.download
     if download == 'always' or (hgt_file is None and download == 'missing'):
 
         _download(ilon, ilat)

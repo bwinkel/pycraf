@@ -24,6 +24,7 @@ Getting Started
    install
    importing_pycraf
    Tutorials <http://nbviewer.jupyter.org/github/bwinkel/pycraf/blob/master/notebooks/>
+   pathprof/download_srtm
 
 ******************
 User Documentation

@@ -54,10 +54,13 @@ the P.452 calculations, that fall in the following categories:
     - Finding radiometerological data for the path's midpoint, which is also
       necessary to determine the effective Earth radii.
 
+.. note::
+
+    For most of the functionality in this module, you will need to :ref:`download_srtm`.
+
 
 Getting Started
 ===============
-
 
 .. _pathprof-getting-started-height-profile:
 
@@ -96,7 +99,7 @@ Let's start with querying `SRTM data` and plot a height profile.
 
 .. note::
 
-    If the profile resolution, `hprof_step` is made large (TODO: how large),
+    If the profile resolution, `hprof_step` is made large,
     Gaussian smoothing is applied to avoid aliasing effects.
 
 
