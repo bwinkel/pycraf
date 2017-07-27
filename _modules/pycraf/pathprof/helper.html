@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pycraf.pathprof.helper &#8212; pycraf v0.24.7</title>
+    <title>pycraf.pathprof.helper &#8212; pycraf v0.25.0</title>
     
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.24.7',
+        VERSION:     '0.25.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -57,7 +57,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v0.24.7</a>
+	<a href="../../../index.html">pycraf v0.25.0</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
@@ -84,10 +84,25 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">RegularGridInterpolator</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">utils</span>
+
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">matplotlib</span>  <span class="c1"># pylint: disable=W0611</span>
+    <span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="k">import</span> <span class="n">Normalize</span>
+
+    <span class="c1"># On older versions of matplotlib Normalize is an old-style class</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Normalize</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">Normalize</span><span class="p">(</span><span class="n">Normalize</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">class</span> <span class="nc">Normalize</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s1">&#39;The &quot;matplotlib&quot; package is necessary to use this.&#39;</span>
+                <span class="p">)</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -502,7 +517,7 @@
         <span class="n">myzip</span><span class="o">.</span><span class="n">writestr</span><span class="p">(</span><span class="s1">&#39;doc.kml&#39;</span><span class="p">,</span> <span class="n">kml</span><span class="p">)</span></div>
 
 
-<span class="k">class</span> <span class="nc">FixPointNormalize</span><span class="p">(</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">FixPointNormalize</span><span class="p">(</span><span class="n">Normalize</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    From http://stackoverflow.com/questions/40895021/python-equivalent-for-matlabs-demcmap-elevation-appropriate-colormap</span>
 <span class="sd">    by ImportanceOfBeingErnest</span>
@@ -526,7 +541,7 @@
         <span class="c1"># col_val is the color value in the range [0, 1]</span>
         <span class="c1"># that should represent the sealevel.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">col_val</span> <span class="o">=</span> <span class="n">col_val</span>
-        <span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">clip</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">clip</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
@@ -568,6 +583,13 @@
     <span class="c1"># the middle to let the coastline appear more prominently. Inspired by</span>
     <span class="c1"># stackoverflow.com/questions/31051488/combining-two-matplotlib-colormaps</span>
 
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">matplotlib</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s1">&#39;The &quot;matplotlib&quot; package is necessary to use this function.&#39;</span>
+            <span class="p">)</span>
+
     <span class="n">colors_undersea</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">terrain</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.17</span><span class="p">,</span> <span class="mi">56</span><span class="p">))</span>
     <span class="n">colors_land</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">terrain</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">200</span><span class="p">))</span>
 
@@ -602,7 +624,7 @@
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 22 Jul 2017. <br/>
+    Last built 27 Jul 2017. <br/>
   </p>
 </footer>
   </body>

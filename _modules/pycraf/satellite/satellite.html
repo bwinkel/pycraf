@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pycraf.satellite.satellite &#8212; pycraf v0.24.7</title>
+    <title>pycraf.satellite.satellite &#8212; pycraf v0.25.0</title>
     
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.24.7',
+        VERSION:     '0.25.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -57,7 +57,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v0.24.7</a>
+	<a href="../../../index.html">pycraf v0.25.0</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
@@ -77,8 +77,6 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">lru_cache</span>
-<span class="kn">from</span> <span class="nn">sgp4.earth_gravity</span> <span class="k">import</span> <span class="n">wgs72</span>
-<span class="kn">from</span> <span class="nn">sgp4.io</span> <span class="k">import</span> <span class="n">twoline2rv</span><span class="p">,</span> <span class="n">Satellite</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">astropy.coordinates</span> <span class="k">import</span> <span class="n">EarthLocation</span>
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">time</span><span class="p">,</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
@@ -118,6 +116,15 @@
 <span class="sd">        1 25544U 98067A   13165.59097222  .00004759  00000-0  88814-4 0    47</span>
 <span class="sd">        2 25544  51.6478 121.2152 0011003  68.5125 263.9959 15.50783143834295</span>
 <span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">sgp4</span>
+        <span class="kn">from</span> <span class="nn">sgp4.earth_gravity</span> <span class="k">import</span> <span class="n">wgs72</span>
+        <span class="kn">from</span> <span class="nn">sgp4.io</span> <span class="k">import</span> <span class="n">twoline2rv</span><span class="p">,</span> <span class="n">Satellite</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s1">&#39;The &quot;sgp4&quot; package is necessary to use this function.&#39;</span>
+            <span class="p">)</span>
 
     <span class="n">tle_string_list</span> <span class="o">=</span> <span class="n">tle_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="n">satname</span> <span class="o">=</span> <span class="n">tle_string_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -336,6 +343,14 @@
             <span class="s1">&#39;obstime must be an astropy.time.Time object!&#39;</span>
             <span class="p">)</span>
 
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">sgp4</span>
+            <span class="kn">from</span> <span class="nn">sgp4.io</span> <span class="k">import</span> <span class="n">Satellite</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s1">&#39;The &quot;sgp4&quot; package is necessary to use this Class.&#39;</span>
+                <span class="p">)</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">satellite_or_tle</span><span class="p">,</span> <span class="n">Satellite</span><span class="p">):</span>
             <span class="n">_</span><span class="p">,</span> <span class="n">satellite</span> <span class="o">=</span> <span class="n">get_sat</span><span class="p">(</span><span class="n">satellite_or_tle</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -372,7 +387,7 @@
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 22 Jul 2017. <br/>
+    Last built 27 Jul 2017. <br/>
   </p>
 </footer>
   </body>

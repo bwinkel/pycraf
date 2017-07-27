@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Conversions (pycraf.conversions) &#8212; pycraf v0.24.7</title>
+    <title>Conversions (pycraf.conversions) &#8212; pycraf v0.25.0</title>
     
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.24.7',
+        VERSION:     '0.25.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -29,7 +29,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="antfactor_from_gain" href="../api/pycraf.conversions.antfactor_from_gain.html" />
-    <link rel="prev" title="Importing pycraf and subpackages" href="../importing_pycraf.html" />
+    <link rel="prev" title="Download SRTM data" href="../pathprof/download_srtm.html" />
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 <script type="text/javascript" src="../_static/copybutton.js"></script>
 
@@ -64,13 +64,13 @@
 	</a>
       </li>
       <li class="right">
-	<a href="../importing_pycraf.html" title="Importing pycraf and subpackages">
+	<a href="../pathprof/download_srtm.html" title="Download SRTM data">
 	  &laquo; previous
 	</a>
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.24.7</a>
+	<a href="../index.html">pycraf v0.25.0</a>
 	 &#187;
       </li>
       
@@ -119,13 +119,13 @@ Decibel units are defined (see <a class="reference internal" href="#reference-ap
 </div>
 <p>Because all function parameters and return values are Astropy Quantities
 (see <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>), unit conversion is automatically performed:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">50</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span><span class="p">)</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">50</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span><span class="p">)</span>  <span class="c1"># doctest: +FLOAT_CMP</span>
 <span class="o">&lt;</span><span class="n">Quantity</span> <span class="mf">5.0</span> <span class="n">m2</span><span class="o">&gt;</span>
 
-<span class="o">&gt;&gt;</span> <span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span> <span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">)</span>  <span class="c1"># doctest: +FLOAT_CMP</span>
 <span class="o">&lt;</span><span class="n">Quantity</span> <span class="mf">5.0</span> <span class="n">m2</span><span class="o">&gt;</span>
 
-<span class="o">&gt;&gt;</span> <span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span> <span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span><span class="p">)</span>  <span class="c1"># doctest: +FLOAT_CMP</span>
 <span class="o">&lt;</span><span class="n">Quantity</span> <span class="mf">100000.0</span> <span class="n">m2</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -175,12 +175,12 @@ would notice an inconsistency of the units.</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">power</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">power</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">power</span>  
 <span class="go">&lt;Decibel 1.0 dB(W)&gt;</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">power</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">power</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>  
 <span class="go">&lt;Quantity 1.2589254117941673 W&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">power</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">power</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span><span class="p">))</span>  
 <span class="go">1.2589254117941673 W</span>
 </pre></div>
 </div>
@@ -248,27 +248,27 @@ with <img class="math" src="../_images/math/feddf9d43c5dcb125c4cdd2abf3f43a4143a
 <span class="gp">&gt;&gt;&gt; </span><span class="n">P_rx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBm</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">P_tx</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBm</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">efield_from_powerflux</span><span class="p">(</span><span class="n">S</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_uV_m</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">efield_from_powerflux</span><span class="p">(</span><span class="n">S</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_uV_m</span><span class="p">)</span>  
 <span class="go">&lt;Decibel -44.23969433034762 dB(uV2 / m2)&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">powerflux_from_efield</span><span class="p">(</span><span class="n">E_rx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">powerflux_from_efield</span><span class="p">(</span><span class="n">E_rx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2</span><span class="p">)</span>  
 <span class="go">&lt;Decibel -175.7603056696524 dB(W / m2)&gt;</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">ptx_from_powerflux</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">ptx_from_powerflux</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>  
 <span class="go">&lt;Decibel -119.00790135977903 dB(W)&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">powerflux_from_ptx</span><span class="p">(</span><span class="n">P_tx</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">powerflux_from_ptx</span><span class="p">(</span><span class="n">P_tx</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2</span><span class="p">)</span>  
 <span class="go">&lt;Decibel -80.99209864022097 dB(W / m2)&gt;</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">prx_from_powerflux</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">prx_from_powerflux</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>  
 <span class="go">&lt;Decibel -221.4556845816624 dB(W)&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">powerflux_from_prx</span><span class="p">(</span><span class="n">P_rx</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">powerflux_from_prx</span><span class="p">(</span><span class="n">P_rx</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2</span><span class="p">)</span>  
 <span class="go">&lt;Decibel -8.544315418337588 dB(W / m2)&gt;</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">free_space_loss</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">free_space_loss</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>  
 <span class="go">&lt;Decibel -132.44778322188336 dB&gt;</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">prx_from_ptx</span><span class="p">(</span><span class="n">P_tx</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">prx_from_ptx</span><span class="p">(</span><span class="n">P_tx</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>  
 <span class="go">&lt;Decibel -112.44778322188337 dB(W)&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">ptx_from_prx</span><span class="p">(</span><span class="n">P_rx</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">ptx_from_prx</span><span class="p">(</span><span class="n">P_rx</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>  
 <span class="go">&lt;Decibel 62.44778322188338 dB(W)&gt;</span>
 </pre></div>
 </div>
@@ -460,7 +460,7 @@ other. Furthermore, some convenience decibel-Scales are defined.</p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 22 Jul 2017. <br/>
+    Last built 27 Jul 2017. <br/>
   </p>
 </footer>
   </body>

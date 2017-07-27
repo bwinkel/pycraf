@@ -31,11 +31,11 @@ The provided functions are just a thin wrapper around `pyproj`::
     >>> rt_lon, rt_lat = 6.88361 * u.deg, 50.52483 * u.deg
 
     >>> utm_lon, utm_lat = wgs84_to_utm(rt_lon, rt_lat, 32)
-    >>> print(utm_lon, utm_lat)
+    >>> print(utm_lon, utm_lat)  # doctest: +FLOAT_CMP
     349988.58854241937 m 5599125.388981281 m
 
     >>> etrs_lon, etrs_lat = wgs84_to_etrs89(rt_lon, rt_lat)
-    >>> print(etrs_lon, etrs_lat)
+    >>> print(etrs_lon, etrs_lat)  # doctest: +FLOAT_CMP
     4100074.484338885 m 3050584.470522307 m
 
 

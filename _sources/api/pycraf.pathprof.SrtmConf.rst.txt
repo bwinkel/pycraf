@@ -1,0 +1,31 @@
+SrtmConf
+========
+
+.. currentmodule:: pycraf.pathprof
+
+.. autoclass:: SrtmConf
+   :show-inheritance:
+
+   .. rubric:: Attributes Summary
+
+   .. autosummary::
+
+      ~SrtmConf.download
+      ~SrtmConf.server
+      ~SrtmConf.srtm_dir
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~SrtmConf.validate
+
+   .. rubric:: Attributes Documentation
+
+   .. autoattribute:: download
+   .. autoattribute:: server
+   .. autoattribute:: srtm_dir
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: validate

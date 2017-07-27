@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pycraf.geospatial.geospatial &#8212; pycraf v0.24.7</title>
+    <title>pycraf.geospatial.geospatial &#8212; pycraf v0.25.0</title>
     
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.24.7',
+        VERSION:     '0.25.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -57,7 +57,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v0.24.7</a>
+	<a href="../../../index.html">pycraf v0.25.0</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
@@ -84,7 +84,6 @@
 <span class="c1"># import numpy as np</span>
 <span class="kn">import</span> <span class="nn">numbers</span>
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
-<span class="kn">import</span> <span class="nn">pyproj</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">utils</span>
 
 
@@ -111,6 +110,13 @@
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Helper function to create and cache pyproj.Proj instances.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">pyproj</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s1">&#39;The &quot;pyproj&quot; package is necessary to use this function.&#39;</span>
+            <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">sys1</span> <span class="o">==</span> <span class="s1">&#39;UTM&#39;</span> <span class="ow">and</span> <span class="n">sys2</span> <span class="o">==</span> <span class="s1">&#39;WGS84&#39;</span><span class="p">:</span>
 
@@ -362,7 +368,7 @@
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 22 Jul 2017. <br/>
+    Last built 27 Jul 2017. <br/>
   </p>
 </footer>
   </body>

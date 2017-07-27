@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Satellites (pycraf.satellite) &#8212; pycraf v0.24.7</title>
+    <title>Satellites (pycraf.satellite) &#8212; pycraf v0.25.0</title>
     
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.24.7',
+        VERSION:     '0.25.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -70,7 +70,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.24.7</a>
+	<a href="../index.html">pycraf v0.25.0</a>
 	 &#187;
       </li>
       
@@ -133,19 +133,19 @@ coordinates of the ISS at a given time, download the current TLE and do:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2010</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">57</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obstime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">Time</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">sat_obs</span><span class="o">.</span><span class="n">azel_from_sat</span><span class="p">(</span><span class="n">tle_string</span><span class="p">,</span> <span class="n">obstime</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;az, el, dist: </span><span class="si">{:.1f}</span><span class="s1">, </span><span class="si">{:.1f}</span><span class="s1">, </span><span class="si">{:.0f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">dist</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">sat_obs</span><span class="o">.</span><span class="n">azel_from_sat</span><span class="p">(</span><span class="n">tle_string</span><span class="p">,</span> <span class="n">obstime</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;az, el, dist: </span><span class="si">{:.1f}</span><span class="s1">, </span><span class="si">{:.1f}</span><span class="s1">, </span><span class="si">{:.0f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">dist</span><span class="p">))</span>  
 <span class="go">az, el, dist: -165.5 deg, 7.4 deg, 1713 km</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># can also use arrays of obstime</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mjd</span> <span class="o">=</span> <span class="mf">55123.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.123</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">,</span> <span class="mf">50.3</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obstime2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">Time</span><span class="p">(</span><span class="n">mjd</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;mjd&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">sat_obs</span><span class="o">.</span><span class="n">azel_from_sat</span><span class="p">(</span><span class="n">tle_string</span><span class="p">,</span> <span class="n">obstime2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">az</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">sat_obs</span><span class="o">.</span><span class="n">azel_from_sat</span><span class="p">(</span><span class="n">tle_string</span><span class="p">,</span> <span class="n">obstime2</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">az</span>  
 <span class="go">&lt;Quantity [  28.39693587,-143.17010479,  -6.97428002] deg&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">el</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">el</span>  
 <span class="go">&lt;Quantity [-43.16852656,-21.46811918,-36.77340433] deg&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span>  
 <span class="go">&lt;Quantity [ 9388.29246437, 5675.03921204, 8361.28408463] km&gt;</span>
 </pre></div>
 </div>
@@ -171,9 +171,9 @@ be processed:</p>
 
 <span class="go"># using sgp4 directly, to get position and velocity in ECI coordinates</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">position</span><span class="p">,</span> <span class="n">velocity</span> <span class="o">=</span> <span class="n">sat</span><span class="o">.</span><span class="n">propagate</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">19</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">position</span>  <span class="c1"># km</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">position</span>  <span class="c1"># km  </span>
 <span class="go">(3289.302521216188, 3816.880925531413, 4443.175627001508)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">velocity</span>  <span class="c1"># km/s</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">velocity</span>  <span class="c1"># km/s  </span>
 <span class="go">(-2.958995807371371, 6.335950621185331, -3.241778555003016)</span>
 </pre></div>
 </div>
@@ -264,7 +264,7 @@ string (TLE).</p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 22 Jul 2017. <br/>
+    Last built 27 Jul 2017. <br/>
   </p>
 </footer>
   </body>

@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SrtmConf &#8212; pycraf v0.25.0</title>
+    
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.25.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="A_BETA" href="pycraf.pathprof.A_BETA.html" />
+    <link rel="prev" title="PathProp" href="pycraf.pathprof.PathProp.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="pycraf.pathprof.A_BETA.html" title="A_BETA">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="pycraf.pathprof.PathProp.html" title="PathProp">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v0.25.0</a>
+	 &#187;
+      </li>
+      <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="docutils literal"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
+      
+      <li>SrtmConf</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="srtmconf">
+<h1>SrtmConf<a class="headerlink" href="#srtmconf" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pycraf.pathprof.SrtmConf">
+<em class="property">class </em><code class="descclassname">pycraf.pathprof.</code><code class="descname">SrtmConf</code><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#SrtmConf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.pathprof.SrtmConf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pycraf.utils.multistate.MultiState</span></code></p>
+<p>Provide a global state to adjust SRTM configuration.</p>
+<p>By default, <code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code> will look for SRTM &#8216;.hgt&#8217; files (the terrain data)
+in the SRTMDATA environment variable. If this is not defined, the
+local directory (&#8216;./&#8217;) is used for look-up. It is possible during
+run-time to change the directory where to look for &#8216;.hgt&#8217; files
+with the <a class="reference internal" href="#pycraf.pathprof.SrtmConf" title="pycraf.pathprof.SrtmConf"><code class="xref py py-obj docutils literal"><span class="pre">SrtmConf</span></code></a> manager:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pycraf.pathprof</span> <span class="k">import</span> <span class="n">SrtmConf</span>
+<span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">srtm_dir</span><span class="o">=</span><span class="s1">&#39;/path/to/srtmdir&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Alternatively, if only a temporary change of the config is desired,
+one can use <a class="reference internal" href="#pycraf.pathprof.SrtmConf" title="pycraf.pathprof.SrtmConf"><code class="xref py py-obj docutils literal"><span class="pre">SrtmConf</span></code></a> as a context manager:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">srtm_dir</span><span class="o">=</span><span class="s1">&#39;/path/to/srtmdir&#39;</span><span class="p">):</span>
+    <span class="c1"># do stuff</span>
+</pre></div>
+</div>
+<p>Afterwards, the old settings will be re-established.</p>
+<p>It is also possible to allow downloading of missing &#8216;.hgt&#8217; files:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The default behavior is to not download anything (<code class="xref py py-obj docutils literal"><span class="pre">download='never'</span></code>).
+There is even an option, to always force download (<code class="xref py py-obj docutils literal"><span class="pre">download='always'</span></code>).</p>
+<p>The default download server will be <code class="xref py py-obj docutils literal"><span class="pre">server='nasa_v2.1'</span></code>. One could
+also use the (very old) data (<code class="xref py py-obj docutils literal"><span class="pre">server='nasa_v1.0'</span></code>) or inofficial
+tiles from viewfinderpanorama (<code class="xref py py-obj docutils literal"><span class="pre">server='viewpano'</span></code>).</p>
+<p>URLS:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/">nasa_v2.1</a></li>
+<li><a class="reference external" href="https://dds.cr.usgs.gov/srtm/version1/">nasa_v1.0</a></li>
+<li><a class="reference external" href="http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm">viewpano</a></li>
+</ul>
+<p class="rubric">Attributes Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pycraf.pathprof.SrtmConf.download" title="pycraf.pathprof.SrtmConf.download"><code class="xref py py-obj docutils literal"><span class="pre">download</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pycraf.pathprof.SrtmConf.server" title="pycraf.pathprof.SrtmConf.server"><code class="xref py py-obj docutils literal"><span class="pre">server</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pycraf.pathprof.SrtmConf.srtm_dir" title="pycraf.pathprof.SrtmConf.srtm_dir"><code class="xref py py-obj docutils literal"><span class="pre">srtm_dir</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pycraf.pathprof.SrtmConf.validate" title="pycraf.pathprof.SrtmConf.validate"><code class="xref py py-obj docutils literal"><span class="pre">validate</span></code></a>(**kwargs)</td>
+<td>This checks, if the provided inputs for <a class="reference internal" href="#pycraf.pathprof.SrtmConf.download" title="pycraf.pathprof.SrtmConf.download"><code class="xref py py-obj docutils literal"><span class="pre">download</span></code></a> and <a class="reference internal" href="#pycraf.pathprof.SrtmConf.server" title="pycraf.pathprof.SrtmConf.server"><code class="xref py py-obj docutils literal"><span class="pre">server</span></code></a> are allowed.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes Documentation</p>
+<dl class="attribute">
+<dt id="pycraf.pathprof.SrtmConf.download">
+<code class="descname">download</code><em class="property"> = 'never'</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.download" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pycraf.pathprof.SrtmConf.server">
+<code class="descname">server</code><em class="property"> = 'nasa_v2.1'</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.server" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pycraf.pathprof.SrtmConf.srtm_dir">
+<code class="descname">srtm_dir</code><em class="property"> = '/home/travis/build/bwinkel/pycraf/srtm'</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.srtm_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods Documentation</p>
+<dl class="classmethod">
+<dt id="pycraf.pathprof.SrtmConf.validate">
+<em class="property">classmethod </em><code class="descname">validate</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#SrtmConf.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.pathprof.SrtmConf.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>This checks, if the provided inputs for <a class="reference internal" href="#pycraf.pathprof.SrtmConf.download" title="pycraf.pathprof.SrtmConf.download"><code class="xref py py-obj docutils literal"><span class="pre">download</span></code></a> and <a class="reference internal" href="#pycraf.pathprof.SrtmConf.server" title="pycraf.pathprof.SrtmConf.server"><code class="xref py py-obj docutils literal"><span class="pre">server</span></code></a> are
+allowed. Possible values are:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#pycraf.pathprof.SrtmConf.download" title="pycraf.pathprof.SrtmConf.download"><code class="xref py py-obj docutils literal"><span class="pre">download</span></code></a>:  &#8216;never&#8217;, &#8216;missing&#8217;, &#8216;always&#8217;</li>
+<li><a class="reference internal" href="#pycraf.pathprof.SrtmConf.server" title="pycraf.pathprof.SrtmConf.server"><code class="xref py py-obj docutils literal"><span class="pre">server</span></code></a>:  &#8216;nasa_v2.1&#8217;, &#8216;nasa_v1.0&#8217;, &#8216;viewpano&#8217;</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">SrtmConf</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="../_sources/api/pycraf.pathprof.SrtmConf.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 27 Jul 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>
