@@ -219,27 +219,27 @@ def test_check_availability_nasa():
 
 def test_check_availability_pano():
 
-    assert srtm.VIEWPANO_TILES.size == 19196
+    assert srtm.VIEWPANO_TILES.size == 19297
 
     pano_cases = [
-        (19, 18, 'E34'),
+        (19, 18, 'E34.zip'),
         (28, 35, None),
         (-24, -1, None),
         (-111, -40, None),
-        (119, 12, 'D50'),
+        (119, 12, 'D50.zip'),
         (86, -46, None),
         (147, -54, None),
         (-20, -71, None),
         (-46, -79, None),
-        (-46, -22, 'F23'),
-        (6, 25, 'G32'),
+        (-46, -22, 'SF23.zip'),
+        (6, 25, 'G32.zip'),
         (67, -22, None),
         (63, -38, None),
-        (-97, 51, 'M14'),
-        (148, -38, 'J55'),
-        (53, 39, 'J39'),
+        (-97, 51, 'M14.zip'),
+        (148, -38, 'SJ55.zip'),
+        (53, 39, 'J39.zip'),
         (27, -67, None),
-        (57, 20, 'F40'),
+        (57, 20, 'F40.zip'),
         (109, -31, None),
         (-143, 74, None),
         ]

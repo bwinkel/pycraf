@@ -48,17 +48,12 @@ __all__ = ['SrtmDir', 'srtm_height_data']
 HGT_RES = 90.  # m; equivalent to 3 arcsec resolution
 
 _NASA_JSON_NAME = get_pkg_data_filename('data/nasa.json')
-_VIEWPANO_NAME = get_pkg_data_filename('data/viewpano.dat')
+_VIEWPANO_NAME = get_pkg_data_filename('data/viewpano.npy')
 
 with open(_NASA_JSON_NAME, 'r') as f:
     NASA_TILES = json.load(f)
 
-VIEWPANO_TILES = np.genfromtxt(
-    _VIEWPANO_NAME, delimiter=',', dtype=np.dtype([
-        ('supertile', np.str, 16),
-        ('tile', np.str, 16)
-        ])
-    )
+VIEWPANO_TILES = np.load(_VIEWPANO_NAME)
 
 
 class TileNotAvailable(Exception):
@@ -208,11 +203,11 @@ def _download(ilon, ilat):
 
         base_url = 'http://viewfinderpanoramas.org/dem3/'
 
-        super_tile_name = _check_availability(ilon, ilat)
-        super_tile_path = os.path.join(srtm_dir, super_tile_name + '.zip')
+        zipfile_name = _check_availability(ilon, ilat)
+        super_tile_path = os.path.join(srtm_dir, zipfile_name)
 
         # downloading
-        full_url = base_url + super_tile_name + '.zip'
+        full_url = base_url + zipfile_name
         tmp_path = download_file(full_url)
 
         # move to srtm_dir
