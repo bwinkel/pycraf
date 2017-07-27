@@ -28,6 +28,7 @@ from __future__ import (
 # from functools import partial, lru_cache
 import os
 import shutil
+import collections
 from zipfile import ZipFile
 import re
 import json
@@ -37,23 +38,25 @@ import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 from astropy.utils.state import ScienceState
 from astropy.utils.data import get_pkg_data_filename, download_file
+from astropy import units as apu
+from .. import utils
 
 
-__all__ = ['SrtmDir']
+__all__ = ['SrtmDir', 'srtm_height_data']
 
 
 HGT_RES = 90.  # m; equivalent to 3 arcsec resolution
 
 _NASA_JSON_NAME = get_pkg_data_filename('data/nasa.json')
-_VIEWPANO_NAME = get_pkg_data_filename('data/viewfinderpanorama.dat')
+_VIEWPANO_NAME = get_pkg_data_filename('data/viewpano.dat')
 
 with open(_NASA_JSON_NAME, 'r') as f:
     NASA_TILES = json.load(f)
 
 VIEWPANO_TILES = np.genfromtxt(
     _VIEWPANO_NAME, delimiter=',', dtype=np.dtype([
-        ('l1', np.int), ('b1', np.int), ('l2', np.int), ('b2', np.int),
-        ('name', np.str, 16)
+        ('supertile', np.str, 16),
+        ('tile', np.str, 16)
         ])
     )
 
@@ -81,6 +84,9 @@ class SrtmDir(ScienceState):
     @classmethod
     def validate(cls, options_dict):
 
+        if not isinstance(options_dict, collections.Mapping):
+            raise TypeError('Argument "options_dict" must be a dictionary.')
+
         for k, v in options_dict.items():
             if k not in ['srtm_dir', 'download', 'server']:
                 raise ValueError(
@@ -100,7 +106,9 @@ class SrtmDir(ScienceState):
                         '"viewpano" are supported for "server" option.'
                         )
 
-        new_options_dict = cls._value
+        # it is super important to make a copy of the dictionary
+        # otherwise, the context manager won't work correctly
+        new_options_dict = dict(cls._value)
         new_options_dict.update(options_dict)
         return new_options_dict
 
@@ -139,20 +147,17 @@ def _check_availability(ilon, ilat):
 
     elif server == 'viewpano':
 
-        for l1, b1, l2, b2, name in VIEWPANO_TILES:
+        tiles = VIEWPANO_TILES['tile']
+        idx = np.where(tiles == tile_name)
 
-            if (
-                    (l1 <= (ilon + 180) * 5 < l2) and
-                    (b1 <= (90 - ilat) * 5 < b2)
-                    ):
-
-                return name
-        else:
+        if len(tiles[idx]) == 0:
             raise TileNotAvailable(
                 'No tile found for ({}d, {}d) in list of available '
                 'tiles.'.format(
                     ilon, ilat
                     ))
+
+        return VIEWPANO_TILES['supertile'][idx][0]
 
     return None  # should not happen
 
@@ -199,30 +204,25 @@ def _download(ilon, ilat):
 
         os.remove(tile_path + '.zip')
 
-        # return tile_path
-
     elif server == 'viewpano':
 
         base_url = 'http://viewfinderpanoramas.org/dem3/'
 
         super_tile_name = _check_availability(ilon, ilat)
-        super_tile_path = os.path.join(srtm_dir, super_tile_name)
+        super_tile_path = os.path.join(srtm_dir, super_tile_name + '.zip')
 
         # downloading
-        full_url = base_url + super_tile_name
+        full_url = base_url + super_tile_name + '.zip'
         tmp_path = download_file(full_url)
 
         # move to srtm_dir
         shutil.move(tmp_path, super_tile_path)
-
 
         # unpacking
         with ZipFile(super_tile_path, 'r') as zf:
             zf.extractall(srtm_dir)
 
         os.remove(super_tile_path)
-
-        # return tile_path
 
 
 def _extract_hgt_coords(hgt_name):
@@ -245,7 +245,7 @@ def _get_hgt_diskpath(tile_name):
     # check, if a tile already exists in srtm directory (recursive)
 
     srtm_dir = SrtmDir.get()['srtm_dir']
-    _files = glob.glob(os.path.join(srtm_dir, tile_name), recursive=True)
+    _files = glob.glob(os.path.join(srtm_dir, '**', tile_name), recursive=True)
 
     if len(_files) > 1:
         raise IOError('{} exists {} times in {}'.format(
@@ -258,6 +258,8 @@ def _get_hgt_diskpath(tile_name):
 
 
 def get_hgt_file(ilon, ilat):
+
+    _check_availability(ilon, ilat)
 
     srtm_dir = SrtmDir.get()['srtm_dir']
     tile_name = _hgt_filename(ilon, ilat)
@@ -317,27 +319,8 @@ def get_tile_interpolator(ilon, ilat):
     return _tile_interpolator
 
 
-def get_interpolated_data(lons, lats):
-    '''
-    Extract terrain data (interpolated) from SRTM .hgt files.
-
-    Parameters
-    ----------
-    lons, lats : `~numpy.ndarray` or float
-        Geographic longitudes/latitudes for which to return height data [deg]
-
-    Returns
-    -------
-    heights : `~numpy.ndarray` or float
-        SRTM heights [m]
-
-    Notes
-    -----
-    - `SRTM data <https://www2.jpl.nasa.gov/srtm/>`_ need to be downloaded
-      manually by the user. An environment variable `SRTMDATA` has to be
-      set to point to the directory containing the .hgt files; see
-      :ref:`srtm_data`.
-    '''
+def _srtm_height_data(lons, lats):
+    # angles in deg
 
     # coordinates could span different tiles, so first get the unique list
     lons = np.atleast_1d(lons)
@@ -360,6 +343,38 @@ def get_interpolated_data(lons, lats):
             )
 
     return heights
+
+
+@utils.ranged_quantity_input(
+    lons=(-180, 180, apu.deg),
+    lats=(-90, 90, apu.deg),
+    strip_input_units=True,
+    output_unit=apu.m
+    )
+def srtm_height_data(lons, lats):
+    '''
+    SRTM terrain data (bi-linearly interpolated) extracted from ".hgt" files.
+
+    Parameters
+    ----------
+    lons, lats : `~astropy.units.Quantity`
+        Geographic longitudes/latitudes for which to return height data [deg]
+
+    Returns
+    -------
+    heights : `~astropy.units.Quantity`
+        SRTM heights [m]
+
+    Notes
+    -----
+    - `distances` contains distances from Transmitter.
+    - `SRTM data <https://www2.jpl.nasa.gov/srtm/>`_ need to be downloaded
+      manually by the user. An environment variable `SRTMDATA` has to be
+      set to point to the directory containing the .hgt files; see
+      :ref:`srtm_data`.
+    '''
+
+    return _srtm_height_data(lons, lats)
 
 
 if __name__ == '__main__':

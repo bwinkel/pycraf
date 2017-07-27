@@ -64,7 +64,7 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
         hlons = np.degrees(hlons)
         hlats = np.degrees(hlats)
 
-        hheights = srtm.get_interpolated_data(hlons, hlats).astype(np.float64)
+        hheights = srtm._srtm_height_data(hlons, hlats).astype(np.float64)
         heights = np.empty_like(distances)
         # now smooth/interpolate this to the desired step width
         cygeodesics.regrid1d_with_x(
@@ -74,7 +74,7 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
 
     else:
 
-        heights = srtm.get_interpolated_data(lons, lats).astype(np.float64)
+        heights = srtm._srtm_height_data(lons, lats).astype(np.float64)
 
     return (
         lons, lats,
@@ -212,7 +212,7 @@ def srtm_height_map(
         )
     xcoords2d, ycoords2d = np.meshgrid(xcoords, ycoords)
 
-    heightmap = srtm.get_interpolated_data(
+    heightmap = srtm._srtm_height_data(
         xcoords2d.flatten(), ycoords2d.flatten()
         ).reshape(xcoords2d.shape)
 
