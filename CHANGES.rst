@@ -1,3 +1,15 @@
+0.25.1 (2017-07-28)
+====================
+
+Bugfixes
+--------
+
+- Tests now don't run any SRTM-data related function, only if the option
+  `remote-data=any` is given (on CLI, within Python it is invoked with
+  `pycraf.test(remote_data='any')`). Therefore, one doesn't need to
+  manually download SRTM tiles beforehand anymore.
+
+
 0.25.0 (2017-07-27)
 ====================
 

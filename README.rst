@@ -2,7 +2,7 @@
 pycraf
 ******
 
-- *Version:* 0.24
+- *Version:* 0.25
 - *Author:* Benjamin Winkel
 - *User manual:* Hosted on `GitHub Pages <https://bwinkel.github.io/pycraf/>`_
 
@@ -74,9 +74,6 @@ After installation (see below) you can test, if everything works as intended::
     import pycraf
 
     pycraf.test()
-    # this will skip over some tests that need to download
-    # data from the internet; to include them:
-    pycraf.test(remote_data='any')
 
 By default, the `test` function will skip over tests that require
 data from the internet. One can include them by::
@@ -143,33 +140,9 @@ features and to build the docs:
 * pyproj 1.9 or later; for the `geospatial` subpackage
 * sgp4 1.4 or later; for the `satellite` subpackage
 
-Windows machines
-----------------
-
-Note, for Windows machines we provide a binary wheel (Python 3.5+ only).
-However, the pyproj package is a dependency and unfortunately, the official
-pyproj repository on PyPI contains only the sources. You can download a
-suitable wheel from `Christoph Gohlke's package site <http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyproj>`_. Then use::
-
-    pip install [path-to-wheel]\pyproj‑*.whl
-
-If you're using `Anaconda <https://www.continuum.io/downloads>`_ (recommended), it is much simpler::
-
-    conda install -c conda-forge pyproj
-
-In case you want or need to install from the sources, the MS Visual C compiler
-is necessary. You can download and use the `Visual C++ 2015 Build Tools
-<http://landinghub.visualstudio.com/visual-cpp-build-tools>`_ which is "only"
-4 GBytes...
-
-MacOS machines
---------------
-
-For installation on MacOS you'll have to install gcc-6. The clang compiler
-seems not to support OpenMP in a way that is needed by pycraf::
-
-    brew install gcc6
-    brew link --overwrite gcc@6
+For further details, we refer to the online documention `installation
+instructions <https://bwinkel.github.io/pycraf/install.html>`_. It also
+includes some hints for running pycraf on Windows or MacOS.
 
 SRTM data
 ---------
