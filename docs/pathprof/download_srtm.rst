@@ -84,8 +84,34 @@ to download missing tiles during run-time::
     from pycraf.pathprof import SrtmConf
     SrtmConf.set(srtm_dir='/path/to/srtmdir')
 
-Please see the `~pycraf.pathprof.SrtmConf` class reference for further
-details.
+Alternatively, if only a temporary change of the config is desired,
+one can use `~pycraf.pathprof.SrtmConf` as a context manager::
+
+    with SrtmConf.set(srtm_dir='/path/to/srtmdir'):
+        # do stuff
+
+Afterwards, the old settings will be re-established.
+
+It is also possible to allow downloading of missing *.hgt* files::
+
+    SrtmConf.set(download='missing')
+
+The default download server will be `server='nasa_v2.1'`. One could
+also use the (very old) data (`server='nasa_v1.0'`) or inofficial
+tiles from `viewfinderpanoramas.org
+<http://viewfinderpanoramas.org/>`_ (`server='viewpano'`)::
+
+    SrtmConf.set(server='viewpano')
+
+Of course, one can set all of these options simultaneously::
+
+    with SrtmConf.set(
+            srtm_dir='/path/to/srtmdir',
+            download='missing',
+            server='viewpano'
+            ):
+
+        # do stuff
 
 Download links
 ==============

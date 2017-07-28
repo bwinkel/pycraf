@@ -78,9 +78,8 @@ class SrtmConf(utils.MultiState):
         with SrtmConf.set(srtm_dir='/path/to/srtmdir'):
             # do stuff
 
-    Afterwards, the old settings will be re-established.
-
-    It is also possible to allow downloading of missing '.hgt' files::
+    Afterwards, the old settings will be re-established. It is also possible
+    to allow downloading of missing '.hgt' files::
 
         SrtmConf.set(download='missing')
 
@@ -90,6 +89,16 @@ class SrtmConf(utils.MultiState):
     The default download server will be `server='nasa_v2.1'`. One could
     also use the (very old) data (`server='nasa_v1.0'`) or inofficial
     tiles from viewfinderpanorama (`server='viewpano'`).
+
+    Of course, one can set all of these options simultaneously::
+
+        with SrtmConf.set(
+                srtm_dir='/path/to/srtmdir',
+                download='missing',
+                server='viewpano'
+                ):
+
+            # do stuff
 
     URLS:
 
