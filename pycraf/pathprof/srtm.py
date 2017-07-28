@@ -34,7 +34,7 @@ import json
 import glob
 from functools import lru_cache
 import numpy as np
-from scipy.interpolate import RegularGridInterpolator
+from scipy.interpolate import RegularGridInterpolator, RectBivariateSpline
 from astropy.utils.data import get_pkg_data_filename, download_file
 from astropy import units as apu
 from .. import utils
@@ -90,7 +90,7 @@ class SrtmConf(utils.MultiState):
     also use the (very old) data (`server='nasa_v1.0'`) or inofficial
     tiles from viewfinderpanorama (`server='viewpano'`).
 
-    Of course, one can set all of these options simultaneously::
+    Of course, one can set several of these options simultaneously::
 
         with SrtmConf.set(
                 srtm_dir='/path/to/srtmdir',
@@ -100,6 +100,20 @@ class SrtmConf(utils.MultiState):
 
             # do stuff
 
+    Last, but not least, it is possible to use different interpolation methods.
+    The default method uses bi-linear interpolation (`interp='linear'`). One
+    can also have nearest-neighbor (`interp='nearest'`) or spline
+    (`interp='spline'`) interpolation. The two former internally use
+    `~scipy.interpolate.RegularGridInterpolator`, the latter employs
+    `~scipy.interpolate.RectBivariateSpline` that also allows custom
+    spline degrees (`kx` and `ky`, default: 3) and smoothing factor (`s`,
+    default: 0.). To change these use::
+
+        SrtmConf.set(interp='spline', spline_opts=(k, s))
+
+    We refer to `~scipy.interpolate.RectBivariateSpline` description for
+    further information.
+
     URLS:
 
     - `nasa_v2.1 <https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/>`__
@@ -107,12 +121,14 @@ class SrtmConf(utils.MultiState):
     - `viewpano <http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm>`__
     '''
 
-    _attributes = ('srtm_dir', 'download', 'server')
+    _attributes = ('srtm_dir', 'download', 'server', 'interp', 'spline_opts')
 
     # default values
     srtm_dir = os.environ.get('SRTMDATA', '.')
     download = 'never'
     server = 'nasa_v2.1'
+    interp = 'linear'
+    spline_opts = (3, 0)
 
     @classmethod
     def validate(cls, **kwargs):
@@ -122,6 +138,8 @@ class SrtmConf(utils.MultiState):
 
         - `download`:  'never', 'missing', 'always'
         - `server`:  'nasa_v2.1', 'nasa_v1.0', 'viewpano'
+        - `interp`:  'nearest', 'linear', 'spline'
+        - `spline_opts`:  tuple(k, s) (k = degree, s = smoothing factor)
 
         '''
 
@@ -144,6 +162,34 @@ class SrtmConf(utils.MultiState):
                     raise ValueError(
                         'Only the values "nasa_v2.1", "nasa_v1.0", and '
                         '"viewpano" are supported for "server" option.'
+                        )
+
+            if k == 'interp':
+                if v not in ['nearest', 'linear', 'spline']:
+                    raise ValueError(
+                        'Only the values "nearest", "linear", and '
+                        '"spline" are supported for "interp" option.'
+                        )
+
+            if k == 'spline_opts':
+                if not isinstance(v, tuple):
+                    raise ValueError(
+                        '"spline_opts" option must be a tuple (k, s).'
+                        )
+
+                if not len(v) == 2:
+                    raise ValueError(
+                        '"spline_opts" option must be a tuple (k, s).'
+                        )
+
+                if not isinstance(v[0], int):
+                    raise ValueError(
+                        '"spline_opts" k-value must be an int.'
+                        )
+
+                if not isinstance(v[1], float):
+                    raise ValueError(
+                        '"spline_opts" s-value must be a float.'
                         )
 
         return kwargs
@@ -340,17 +386,26 @@ def get_tile_data(ilon, ilat):
     return lons, lats, tile
 
 
+# cannot use SrtmConf inside to query interp and spline_opts, because
+# caching might cause problems
 @lru_cache(maxsize=36, typed=False)
-def get_tile_interpolator(ilon, ilat):
+def get_tile_interpolator(ilon, ilat, interp, spline_opts):
     # angles in deg
 
     lons, lats, tile = get_tile_data(ilon, ilat)
     # have to treat NaNs in some way; set to zero for now
     tile = np.nan_to_num(tile)
 
-    _tile_interpolator = RegularGridInterpolator(
-        (lons[:, 0], lats[0]), tile.T
-        )
+    if interp in ['nearest', 'linear']:
+        _tile_interpolator = RegularGridInterpolator(
+            (lons[:, 0], lats[0]), tile.T, method=interp,
+            )
+    elif interp == 'spline':
+        kx = ky = spline_opts[0]
+        s = spline_opts[1]
+        _tile_interpolator = RectBivariateSpline(
+            lons[:, 0], lats[0], tile.T, kx=kx, ky=ky, s=s,
+            )
 
     return _tile_interpolator
 
@@ -362,6 +417,7 @@ def _srtm_height_data(lons, lats):
     lons = np.atleast_1d(lons)
     lats = np.atleast_1d(lats)
 
+    # TODO user npy iterator to allow broadcasting
     assert lons.ndim == 1 and lats.ndim == 1
 
     heights = np.empty(lons.shape, dtype=np.float32)
@@ -371,12 +427,19 @@ def _srtm_height_data(lons, lats):
 
     uilonlats = set((a, b) for a, b in zip(ilons, ilats))
 
+    interp = SrtmConf.interp
+    spline_opts = SrtmConf.spline_opts
+
     for uilon, uilat in uilonlats:
 
         mask = (ilons == uilon) & (ilats == uilat)
-        heights[mask] = get_tile_interpolator(uilon, uilat)(
-            (lons[mask], lats[mask])
-            )
+
+        if interp in ['nearest', 'linear']:
+            ifunc = get_tile_interpolator(uilon, uilat, interp, None)
+            heights[mask] = ifunc((lons[mask], lats[mask]))
+        elif interp == 'spline':
+            ifunc = get_tile_interpolator(uilon, uilat, interp, spline_opts)
+            heights[mask] = ifunc(lons[mask], lats[mask], grid=False)
 
     return heights
 

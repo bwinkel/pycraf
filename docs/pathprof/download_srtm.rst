@@ -103,7 +103,7 @@ tiles from `viewfinderpanoramas.org
 
     SrtmConf.set(server='viewpano')
 
-Of course, one can set all of these options simultaneously::
+Of course, one can set several of these options simultaneously::
 
     with SrtmConf.set(
             srtm_dir='/path/to/srtmdir',
@@ -112,6 +112,21 @@ Of course, one can set all of these options simultaneously::
             ):
 
         # do stuff
+
+Last, but not least, it is possible to use different interpolation methods.
+The default method uses bi-linear interpolation (`interp='linear'`). One
+can also have nearest-neighbor (`interp='nearest'`) or spline
+(`interp='spline'`) interpolation. The two former internally use
+`~scipy.interpolate.RegularGridInterpolator`, the latter employs
+`~scipy.interpolate.RectBivariateSpline` that also allows custom
+spline degrees (`kx` and `ky`) and smoothing factor (`s`).
+To change these use::
+
+    SrtmConf.set(interp='spline', spline_opts=(k, s))
+
+We refer to `~scipy.interpolate.RectBivariateSpline` description for
+further information.
+
 
 Download links
 ==============

@@ -1,3 +1,16 @@
+0.25.2 (unreleased)
+====================
+
+New Features
+------------
+
+pycraf.pathprof
+^^^^^^^^^^^^^^^
+- Add option `interp` to `SrtmConf` to allow different interpolation schemes
+  for SRTM data. Currently, 'nearest', 'linear' (default), and 'spline' are
+  supported.
+
+
 0.25.1 (2017-07-28)
 ====================
 

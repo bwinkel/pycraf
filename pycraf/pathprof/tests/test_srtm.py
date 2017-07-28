@@ -388,7 +388,7 @@ def test_get_tile_zero(srtm_temp_dir):
 
 
 @remote_data(source='any')
-def test_srtm_height_data(srtm_temp_dir):
+def test_srtm_height_data_linear(srtm_temp_dir):
 
     args_list = [
         (-180, 180, apu.deg),
@@ -396,14 +396,79 @@ def test_srtm_height_data(srtm_temp_dir):
         ]
     check_astro_quantities(srtm.srtm_height_data, args_list)
 
-    with srtm.SrtmConf.set(srtm_dir=srtm_temp_dir):
+    with srtm.SrtmConf.set(srtm_dir=srtm_temp_dir, interp='linear'):
 
-        lons = np.arange(12.1, 12.91, 0.2) * apu.deg
-        lats = np.arange(50.1, 50.91, 0.2) * apu.deg
-        heights = srtm.srtm_height_data(lons, lats)
+        # lons = np.arange(12.1, 12.91, 0.2) * apu.deg
+        # lats = np.arange(50.1, 50.91, 0.2)[:, np.newaxis] * apu.deg
+
+        lons, lats = np.meshgrid(
+            np.arange(12.1005, 12.9, 0.2),
+            np.arange(50.1005, 50.9, 0.2)
+            )
+        # heights = srtm.srtm_height_data(lons * apu.deg, lats * apu.deg)
+        heights = srtm.srtm_height_data(
+            lons.flatten() * apu.deg, lats.flatten() * apu.deg
+            ).reshape(lons.shape)
 
         assert_quantity_allclose(heights, np.array([
-            581., 559., 708., 467., 294.
+            [581.71997070, 484.48001099, 463.79998779, 736.44000244],
+            [613.00000000, 549.88000488, 636.52001953, 678.91998291],
+            [433.44000244, 416.20001221, 704.52001953, 826.08001709],
+            [358.72000122, 395.55999756, 263.83999634, 469.39999390]
+            ]) * apu.m)
+
+
+@remote_data(source='any')
+def test_srtm_height_data_nearest(srtm_temp_dir):
+
+    args_list = [
+        (-180, 180, apu.deg),
+        (-90, 90, apu.deg),
+        ]
+    check_astro_quantities(srtm.srtm_height_data, args_list)
+
+    with srtm.SrtmConf.set(srtm_dir=srtm_temp_dir, interp='nearest'):
+
+        lons, lats = np.meshgrid(
+            np.arange(12.1005, 12.9, 0.2),
+            np.arange(50.1005, 50.9, 0.2)
+            )
+        heights = srtm.srtm_height_data(
+            lons.flatten() * apu.deg, lats.flatten() * apu.deg
+            ).reshape(lons.shape)
+
+        assert_quantity_allclose(heights, np.array([
+            [583., 484., 463., 739.],
+            [613., 543., 641., 685.],
+            [432., 415., 699., 828.],
+            [358., 397., 262., 471.]
+            ]) * apu.m)
+
+
+@remote_data(source='any')
+def test_srtm_height_data_spline(srtm_temp_dir):
+
+    args_list = [
+        (-180, 180, apu.deg),
+        (-90, 90, apu.deg),
+        ]
+    check_astro_quantities(srtm.srtm_height_data, args_list)
+
+    with srtm.SrtmConf.set(srtm_dir=srtm_temp_dir, interp='spline'):
+
+        lons, lats = np.meshgrid(
+            np.arange(12.1005, 12.9, 0.2),
+            np.arange(50.1005, 50.9, 0.2)
+            )
+        heights = srtm.srtm_height_data(
+            lons.flatten() * apu.deg, lats.flatten() * apu.deg
+            ).reshape(lons.shape)
+
+        assert_quantity_allclose(heights, np.array([
+            [581.39044189, 484.20700073, 463.94418335, 734.95751953],
+            [613.10083008, 550.10040283, 637.01745605, 678.44708252],
+            [432.46701050, 416.11437988, 704.96179199, 826.47576904],
+            [358.81408691, 395.84069824, 262.50534058, 471.27304077]
             ]) * apu.m)
 
 
