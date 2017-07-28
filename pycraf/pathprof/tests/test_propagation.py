@@ -501,3 +501,75 @@ class TestPropagation:
                 )
             assert_allclose(true_dat['eps_pt_map'], eps_pt_map)
             assert_allclose(true_dat['eps_pr_map'], eps_pr_map)
+
+
+def test_clutter_correction():
+
+    # args_list = [
+    #     (None, None, apu.m),
+    #     (None, None, apu.GHz),
+    #     ]
+
+    # check_astro_quantities(pathprof.clutter_correction, args_list)
+
+    CL = pathprof.CLUTTER
+
+    cases = [
+        (CL.UNKNOWN, 5 * apu.m, 1 * apu.GHz, -0.33 * cnv.dB),
+        (CL.SPARSE, 2 * apu.m, 0.5 * apu.GHz, 9.148328469292968 * cnv.dB),
+        (CL.VILLAGE, 5 * apu.m, 1 * apu.GHz, -0.12008183792955418 * cnv.dB),
+        (CL.SUBURBAN, 5 * apu.m, 10 * apu.GHz, 13.606900992918096 * cnv.dB),
+        (CL.DENSE_URBAN, 10 * apu.m, 10 * apu.GHz, 18.4986816015433 * cnv.dB),
+        (CL.INDUSTRIAL_ZONE, 50 * apu.m, 2 * apu.GHz, -0.32999999670 * cnv.dB),
+        ]
+
+    for zone, h_g, freq, loss in cases:
+
+        assert_quantity_allclose(
+            pathprof.clutter_correction(h_g, zone, freq),
+            loss,
+            )
+
+
+def test_clutter_imt():
+
+    args_list = [
+        (2, 67, apu.GHz),
+        (0.25, None, apu.km),
+        (0, 100, apu.percent),
+        ]
+
+    check_astro_quantities(pathprof.clutter_imt, args_list)
+
+    freq = [2.5, 10, 20] * apu.GHz
+    dist = np.logspace(2.5, 4, 4)[:, np.newaxis] * apu.m
+
+    assert_quantity_allclose(
+        pathprof.clutter_imt(freq, dist, 2 * apu.percent, num_end_points=1),
+        [
+            [9.70031407, 11.67179752, 12.59465169],
+            [14.90452998, 20.26362512, 22.56060172],
+            [14.99471557, 20.77252115, 23.65890113],
+            [14.99509074, 20.77485862, 23.66473226]
+            ] * cnv.dB,
+        )
+
+    assert_quantity_allclose(
+        pathprof.clutter_imt(freq, dist, 50 * apu.percent, num_end_points=2),
+        [
+            [44.05089174, 47.99385864, 49.83956699],
+            [54.45932356, 65.17751385, 69.77146704],
+            [54.63969475, 66.19530591, 71.96806586],
+            [54.64044508, 66.19998085, 71.97972813]
+            ] * cnv.dB,
+        )
+
+    assert_quantity_allclose(
+        pathprof.clutter_imt(freq, dist, 90 * apu.percent, num_end_points=1),
+        [
+            [29.71581878, 31.68730223, 32.61015641],
+            [34.92003469, 40.27912984, 42.57610643],
+            [35.01022029, 40.78802587, 43.67440584],
+            [35.01059545, 40.79036334, 43.68023698]
+            ] * cnv.dB,
+        )

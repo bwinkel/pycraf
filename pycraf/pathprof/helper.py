@@ -153,10 +153,10 @@ def _DN_N0_from_map(lon, lat):
 
 
 @utils.ranged_quantity_input(
-    lon=(0, 360, apu.deg),
+    lon=(-180, 360, apu.deg),
     lat=(-90, 90, apu.deg),
     strip_input_units=True,
-    output_unit=(cnv.dimless / apu.km, apu.percent, cnv.dimless),
+    output_unit=(cnv.dimless / apu.km, cnv.dimless),
     )
 def deltaN_N0_from_map(lon, lat):
     '''
@@ -216,7 +216,7 @@ def _radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm):
 
 
 @utils.ranged_quantity_input(
-    lon=(0, 360, apu.deg),
+    lon=(-180, 360, apu.deg),
     lat=(-90, 90, apu.deg),
     d_tm=(0, None, apu.km),
     d_lm=(0, None, apu.km),
@@ -266,7 +266,7 @@ def radiomet_data_for_pathcenter(lon, lat, d_tm, d_lm):
 
 
 @utils.ranged_quantity_input(
-    lon=(0, 360, apu.deg),
+    lon=(-180, 360, apu.deg),
     lat=(-90, 90, apu.deg),
     strip_input_units=True,
     output_unit=cnv.dimless,
@@ -325,7 +325,7 @@ def _eff_earth_radius_median(lon, lat):
 
 
 @utils.ranged_quantity_input(
-    lon=(0, 360, apu.deg),
+    lon=(-180, 360, apu.deg),
     lat=(-90, 90, apu.deg),
     strip_input_units=True,
     output_unit=apu.km,
@@ -359,7 +359,7 @@ def eff_earth_radius_median(lon, lat):
     strip_input_units=True,
     output_unit=apu.km,
     )
-def eff_earth_radius_beta(lon, lat):
+def eff_earth_radius_beta():
     '''
     Calculate effective Earth radius exceeded for beta_0 percent of time,
     a_beta, according to ITU-R P.452-16 Eq (6b).

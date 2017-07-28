@@ -132,19 +132,19 @@ class TestConversions:
             Ageom
             )
 
-    def eta_a_from_areas(self):
+    def test_eta_a_from_areas(self):
 
         args_list = [
             (0, None, apu.m ** 2),
             (0, None, apu.m ** 2),
             ]
-        check_astro_quantities(cnv.geom_from_eff_area, args_list)
+        check_astro_quantities(cnv.eta_a_from_areas, args_list)
 
         Aeff = 50. * apu.m ** 2
         Ageom = 100. * apu.m ** 2
 
         assert_quantity_allclose(
-            cnv.geom_from_eff_area(Ageom, Aeff),
+            cnv.eta_a_from_areas(Ageom, Aeff),
             50 * apu.percent
             )
 
@@ -181,6 +181,46 @@ class TestConversions:
         assert_quantity_allclose(
             cnv.eff_area_from_gain(58.4453846250226 * cnv.dB, 10 * apu.GHz),
             50. * apu.m ** 2
+            )
+
+    def test_antfactor_from_gain(self):
+
+        args_list = [
+            (1.e-30, None, cnv.dimless),
+            (0, None, apu.Hz),
+            (0, None, apu.Ohm),
+            ]
+        check_astro_quantities(cnv.antfactor_from_gain, args_list)
+
+        assert_quantity_allclose(
+            cnv.antfactor_from_gain(38 * cnv.dB, 1 * apu.GHz, 10 * apu.Ohm),
+            -0.39200487434260217 * cnv.dB_1_m
+            )
+        assert_quantity_allclose(
+            cnv.antfactor_from_gain(58 * cnv.dB, 10 * apu.GHz, 20 * apu.Ohm),
+            -1.8971548526625104 * cnv.dB_1_m
+            )
+
+    def test_gain_from_antfactor(self):
+
+        # args_list = [
+        #     (1.e-30, None, 1. / apu.m),
+        #     (0, None, apu.Hz),
+        #     (0, None, apu.Ohm),
+        #     ]
+        # check_astro_quantities(cnv.gain_from_antfactor, args_list)
+
+        assert_quantity_allclose(
+            cnv.gain_from_antfactor(
+                -0.39200487434260217 * cnv.dB_1_m, 1 * apu.GHz, 10 * apu.Ohm
+                ),
+            38 * cnv.dB
+            )
+        assert_quantity_allclose(
+            cnv.gain_from_antfactor(
+                -1.8971548526625104 * cnv.dB_1_m, 10 * apu.GHz, 20 * apu.Ohm
+                ),
+            58 * cnv.dB
             )
 
     def test_powerflux_from_efield(self):

@@ -13,7 +13,7 @@ cimport cython
 cimport numpy as np
 from numpy cimport PyArray_MultiIter_DATA as Py_Iter_DATA
 from libc.math cimport (
-    exp, sqrt, fabs, M_PI, sin, cos, tan, asin, acos, atan2
+    exp, sqrt, fabs, M_PI, sin, cos, tan, asin, acos, atan2, fmod
     )
 import numpy as np
 
@@ -256,7 +256,10 @@ cdef (double, double, double) _direct(
         )
 
     if cwrap:
-        lon2_rad = (lon2_rad + M_PI) % M_2PI - M_PI
+        while lon2_rad < 0:
+            lon2_rad += M_2PI
+
+        lon2_rad = fmod(lon2_rad + M_PI, M_2PI) - M_PI
 
     return lon2_rad, lat2_rad, bearing2_rad
 

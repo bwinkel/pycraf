@@ -33,9 +33,17 @@ class TestGeodesics:
 
         pass
 
-    def test_inverse_cython(self):
+    def test_inverse(self):
 
         # testing against geographic-lib
+        args_list = [
+            (-np.pi, np.pi, apu.rad),
+            (-np.pi / 2, np.pi / 2, apu.rad),
+            (-np.pi, np.pi, apu.rad),
+            (-np.pi / 2, np.pi / 2, apu.rad),
+            ]
+
+        check_astro_quantities(pathprof.geoid_inverse, args_list)
 
         with NumpyRNGContext(1):
 
@@ -44,15 +52,18 @@ class TestGeodesics:
             lat1 = np.random.uniform(-90, 90, 50)
             lat2 = np.random.uniform(-90, 90, 50)
 
-        distance, bearing1, bearing2 = pathprof.geodesics.inverse_cython(
-            np.radians(lon1), np.radians(lat1),
-            np.radians(lon2), np.radians(lat2),
+        lon1 = (lon1 + 180) % 360 - 180
+        lon2 = (lon2 + 180) % 360 - 180
+
+        distance, bearing1, bearing2 = pathprof.geoid_inverse(
+            lon1 * apu.deg, lat1 * apu.deg,
+            lon2 * apu.deg, lat2 * apu.deg,
             )
         (
             distance_lowprec, bearing1_lowprec, bearing2_lowprec
-            ) = pathprof.geodesics.inverse_cython(
-            np.radians(lon1), np.radians(lat1),
-            np.radians(lon2), np.radians(lat2),
+            ) = pathprof.geoid_inverse(
+            lon1 * apu.deg, lat1 * apu.deg,
+            lon2 * apu.deg, lat2 * apu.deg,
             eps=1.e-8
             )
 
@@ -85,44 +96,52 @@ class TestGeodesics:
         gglib = np.load(gglib_inverse_name)
 
         assert_quantity_allclose(
-            distance,
+            distance.to_value(apu.m),
             gglib['distance'],
             # atol=1.e-10, rtol=1.e-4
             )
 
         assert_quantity_allclose(
-            distance_lowprec,
+            distance_lowprec.to_value(apu.m),
             gglib['distance'],
             atol=1.,
             )
 
         assert_quantity_allclose(
-            np.degrees(bearing1),
+            bearing1.to_value(apu.deg),
             gglib['bearing1'],
             # atol=1.e-10, rtol=1.e-4
             )
 
         assert_quantity_allclose(
-            np.degrees(bearing1_lowprec),
+            bearing1_lowprec.to_value(apu.deg),
             gglib['bearing1'],
             atol=1.e-6,
             )
 
         assert_quantity_allclose(
-            np.degrees(bearing2),
+            bearing2.to_value(apu.deg),
             gglib['bearing2'],
             # atol=1.e-10, rtol=1.e-4
             )
 
         assert_quantity_allclose(
-            np.degrees(bearing2_lowprec),
+            bearing2_lowprec.to_value(apu.deg),
             gglib['bearing2'],
             atol=1.e-6,
             )
 
-    def test_direct_cython(self):
+    def test_direct(self):
 
         # testing against geographic-lib
+        args_list = [
+            (-np.pi, np.pi, apu.rad),
+            (-np.pi / 2, np.pi / 2, apu.rad),
+            (-np.pi, np.pi, apu.rad),
+            (0.1, None, apu.m),
+            ]
+
+        check_astro_quantities(pathprof.geoid_direct, args_list)
 
         with NumpyRNGContext(1):
 
@@ -131,15 +150,18 @@ class TestGeodesics:
             bearing1 = np.random.uniform(-90, 90, 50)
             dist = np.random.uniform(1, 10.e6, 50)  # 10000 km max
 
-        lon2, lat2, bearing2 = pathprof.cygeodesics.direct_cython(
-            np.radians(lon1), np.radians(lat1),
-            np.radians(bearing1), dist
+        lon1 = (lon1 + 180) % 360 - 180
+
+        lon2, lat2, bearing2 = pathprof.geoid_direct(
+            lon1 * apu.deg, lat1 * apu.deg,
+            bearing1 * apu.deg, dist * apu.m
             )
         (
             lon2_lowprec, lat2_lowprec, bearing2_lowprec
-            ) = pathprof.cygeodesics.direct_cython(
-            np.radians(lon1), np.radians(lat1),
-            np.radians(bearing1), dist, eps=1.e-8
+            ) = pathprof.geoid_direct(
+            lon1 * apu.deg, lat1 * apu.deg,
+            bearing1 * apu.deg, dist * apu.m,
+            eps=1.e-8
             )
 
         def produce_geographicslib_results():
@@ -172,37 +194,37 @@ class TestGeodesics:
         gglib = np.load(gglib_direct_name)
 
         assert_quantity_allclose(
-            np.degrees(lon2),
+            lon2.to_value(apu.deg),
             gglib['lon2'],
             # atol=1.e-10, rtol=1.e-4
             )
 
         assert_quantity_allclose(
-            np.degrees(lon2_lowprec),
+            lon2_lowprec.to_value(apu.deg),
             gglib['lon2'],
             atol=1.e-6,
             )
 
         assert_quantity_allclose(
-            np.degrees(lat2),
+            lat2.to_value(apu.deg),
             gglib['lat2'],
             # atol=1.e-10, rtol=1.e-4
             )
 
         assert_quantity_allclose(
-            np.degrees(lat2_lowprec),
+            lat2_lowprec.to_value(apu.deg),
             gglib['lat2'],
             atol=1.e-6,
             )
 
         assert_quantity_allclose(
-            np.degrees(bearing2),
+            bearing2.to_value(apu.deg),
             gglib['bearing2'],
             # atol=1.e-10, rtol=1.e-4
             )
 
         assert_quantity_allclose(
-            np.degrees(bearing2_lowprec),
+            bearing2_lowprec.to_value(apu.deg),
             gglib['bearing2'],
             atol=1.e-6,
             )
