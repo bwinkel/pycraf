@@ -49,7 +49,7 @@ To install pycraf with `pip <http://www.pip-installer.org/en/latest/>`__, simply
 
 .. note::
 
-    You will need a C compiler (``gcc``) to be installed for the installation
+    You may need a C compiler (``gcc``) to be installed for the installation
     to succeed. Since `pycraf` needs OpenMP, ``clang`` is currently not
     supported.
 
@@ -75,13 +75,38 @@ To install pycraf with `pip <http://www.pip-installer.org/en/latest/>`__, simply
     Do **not** install pycraf or other third-party packages using ``sudo``
     unless you are fully aware of the risks.
 
+.. _source_install:
+
+Installation from source
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+There are two options, if you want to build pycraf from sources. Either, you
+install the tar-ball (*.tar.gz file) from `PyPI
+<https://pypi.python.org/pypi/pycraf>`_ and extract it to the directory of
+your choice, or, if you always want to stay up-to-date, clone the git
+repository:
+
+.. code-block:: bash
+
+    git clone https://github.com/bwinkel/pycraf
+
+Then go into the pycraf source directory and run:
+
+.. code-block:: bash
+
+    python setup.py install
+
+Again, consider the ``--user`` option or even better use a python distribution
+such as `Anaconda <https://www.continuum.io/downloads>`_ to avoid messing up
+the system-wide Python installation.
+
 
 .. _windows_install:
 
 Installation on Windows
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Note, for Windows machines we provide a binary wheel (Python 3.5+ only).
+Note that for Windows machines we provide a binary wheel (Python 3.5+ only).
 However, the `pyproj <https://pypi.python.org/pypi/pyproj>`_ package is a
 dependency and unfortunately, the official
 `pyproj <https://pypi.python.org/pypi/pyproj>`__ repository on PyPI contains
@@ -118,7 +143,8 @@ If you're using `Anaconda <https://www.continuum.io/downloads>`__
 Installation on MacOS
 ~~~~~~~~~~~~~~~~~~~~~
 
-For installation on MacOS you'll have to install gcc-6. The clang compiler
+Even though we also provide a binary wheel for MacOS, it seems you'll still
+have to install a C-compiler, in particular *gcc-6*. The clang compiler
 seems not to support OpenMP in a way that is needed by pycraf:
 
 .. code-block:: bash
@@ -135,6 +161,15 @@ Then proceed as usual with
 
     # then
     pip install pycraf
+
+.. warning::
+
+    Currently, we only provide MacOS wheels for *gcc-6* (version 6.4).
+    It seems that if you have a different version of *gcc-6* on your machine
+    importing pycraf will fail with some ``libgomp`` error, which is probably
+    due to binary inconsistencies between the various *gcc* versions.
+    Please, consider updating to the 6.4-version of *gcc*, or install from
+    source with your own *gcc* compiler.
 
 .. _testing_installed_pycraf:
 
@@ -167,6 +202,10 @@ the `pycraf issue tracker <http://github.com/bwinkel/pycraf/issues>`__.
 
         >>> import pycraf  # doctest: +SKIP
         >>> pycraf.test(remote_data='any')  # doctest: +SKIP
+
+    This will *always* download SRTM data (few tiles only) to test the
+    auto-download functionality! Do this only, if you can afford the
+    network traffic.
 
 If you prefer testing on the command line and usually work with the source
 code, you can also do

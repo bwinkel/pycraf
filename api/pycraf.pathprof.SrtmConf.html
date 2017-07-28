@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>SrtmConf &#8212; pycraf v0.25.0</title>
+    <title>SrtmConf &#8212; pycraf v0.25.1</title>
     
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.25.0',
+        VERSION:     '0.25.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -70,7 +70,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.0</a>
+	<a href="../index.html">pycraf v0.25.1</a>
 	 &#187;
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="docutils literal"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
@@ -107,8 +107,8 @@ one can use <a class="reference internal" href="#pycraf.pathprof.SrtmConf" title
     <span class="c1"># do stuff</span>
 </pre></div>
 </div>
-<p>Afterwards, the old settings will be re-established.</p>
-<p>It is also possible to allow downloading of missing &#8216;.hgt&#8217; files:</p>
+<p>Afterwards, the old settings will be re-established. It is also possible
+to allow downloading of missing &#8216;.hgt&#8217; files:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -117,6 +117,16 @@ There is even an option, to always force download (<code class="xref py py-obj d
 <p>The default download server will be <code class="xref py py-obj docutils literal"><span class="pre">server='nasa_v2.1'</span></code>. One could
 also use the (very old) data (<code class="xref py py-obj docutils literal"><span class="pre">server='nasa_v1.0'</span></code>) or inofficial
 tiles from viewfinderpanorama (<code class="xref py py-obj docutils literal"><span class="pre">server='viewpano'</span></code>).</p>
+<p>Of course, one can set all of these options simultaneously:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+        <span class="n">srtm_dir</span><span class="o">=</span><span class="s1">&#39;/path/to/srtmdir&#39;</span><span class="p">,</span>
+        <span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">,</span>
+        <span class="n">server</span><span class="o">=</span><span class="s1">&#39;viewpano&#39;</span>
+        <span class="p">):</span>
+
+    <span class="c1"># do stuff</span>
+</pre></div>
+</div>
 <p>URLS:</p>
 <ul class="simple">
 <li><a class="reference external" href="https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/">nasa_v2.1</a></li>
@@ -208,7 +218,7 @@ allowed. Possible values are:</p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 27 Jul 2017. <br/>
+    Last built 28 Jul 2017. <br/>
   </p>
 </footer>
   </body>

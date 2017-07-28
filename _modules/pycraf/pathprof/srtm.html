@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pycraf.pathprof.srtm &#8212; pycraf v0.25.0</title>
+    <title>pycraf.pathprof.srtm &#8212; pycraf v0.25.1</title>
     
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.25.0',
+        VERSION:     '0.25.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -57,7 +57,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v0.25.0</a>
+	<a href="../../../index.html">pycraf v0.25.1</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
@@ -153,9 +153,8 @@
 <span class="sd">        with SrtmConf.set(srtm_dir=&#39;/path/to/srtmdir&#39;):</span>
 <span class="sd">            # do stuff</span>
 
-<span class="sd">    Afterwards, the old settings will be re-established.</span>
-
-<span class="sd">    It is also possible to allow downloading of missing &#39;.hgt&#39; files::</span>
+<span class="sd">    Afterwards, the old settings will be re-established. It is also possible</span>
+<span class="sd">    to allow downloading of missing &#39;.hgt&#39; files::</span>
 
 <span class="sd">        SrtmConf.set(download=&#39;missing&#39;)</span>
 
@@ -165,6 +164,16 @@
 <span class="sd">    The default download server will be `server=&#39;nasa_v2.1&#39;`. One could</span>
 <span class="sd">    also use the (very old) data (`server=&#39;nasa_v1.0&#39;`) or inofficial</span>
 <span class="sd">    tiles from viewfinderpanorama (`server=&#39;viewpano&#39;`).</span>
+
+<span class="sd">    Of course, one can set all of these options simultaneously::</span>
+
+<span class="sd">        with SrtmConf.set(</span>
+<span class="sd">                srtm_dir=&#39;/path/to/srtmdir&#39;,</span>
+<span class="sd">                download=&#39;missing&#39;,</span>
+<span class="sd">                server=&#39;viewpano&#39;</span>
+<span class="sd">                ):</span>
+
+<span class="sd">            # do stuff</span>
 
 <span class="sd">    URLS:</span>
 
@@ -500,7 +509,7 @@
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 27 Jul 2017. <br/>
+    Last built 28 Jul 2017. <br/>
   </p>
 </footer>
   </body>

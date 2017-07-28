@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v0.25.0</title>
+    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v0.25.1</title>
     
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.25.0',
+        VERSION:     '0.25.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -70,7 +70,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.0</a>
+	<a href="../index.html">pycraf v0.25.1</a>
 	 &#187;
       </li>
       
@@ -168,10 +168,6 @@ necessary to determine the effective Earth radii.</li>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Height [m]&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
 </pre></div>
-</div>
-<p>(<a class="reference external" href="../pathprof/index-1.png">png</a>, <a class="reference external" href="../pathprof/index-1.svg">svg</a>, <a class="reference external" href="../pathprof/index-1.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/index-11.png" src="../_images/index-11.png" />
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -360,10 +356,6 @@ to produce terrain maps of a region:</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../pathprof/index-2.png">png</a>, <a class="reference external" href="../pathprof/index-2.svg">svg</a>, <a class="reference external" href="../pathprof/index-2.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/index-21.png" src="../_images/index-21.png" />
-</div>
 <p>Here, we made use of a special <code class="xref py py-obj docutils literal"><span class="pre">matplotlib</span></code> colormap, which can be produced
 using <a class="reference internal" href="../api/pycraf.pathprof.terrain_cmap_factory.html#pycraf.pathprof.terrain_cmap_factory" title="pycraf.pathprof.terrain_cmap_factory"><code class="xref py py-obj docutils literal"><span class="pre">terrain_cmap_factory</span></code></a>. It returns a <code class="xref py py-obj docutils literal"><span class="pre">cmap</span></code> and a
 <code class="xref py py-obj docutils literal"><span class="pre">norm</span></code>, which make it so that blue colors always start below a height of 0 m
@@ -506,7 +498,7 @@ estimation.</p>
 <tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.deltaN_N0_from_map.html#pycraf.pathprof.deltaN_N0_from_map" title="pycraf.pathprof.deltaN_N0_from_map"><code class="xref py py-obj docutils literal"><span class="pre">deltaN_N0_from_map</span></code></a>(lon,&nbsp;lat)</td>
 <td>Query delta_N and N_0 values from digitized maps by means of bilinear interpolation.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.eff_earth_radius_beta.html#pycraf.pathprof.eff_earth_radius_beta" title="pycraf.pathprof.eff_earth_radius_beta"><code class="xref py py-obj docutils literal"><span class="pre">eff_earth_radius_beta</span></code></a>(lon,&nbsp;lat)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.eff_earth_radius_beta.html#pycraf.pathprof.eff_earth_radius_beta" title="pycraf.pathprof.eff_earth_radius_beta"><code class="xref py py-obj docutils literal"><span class="pre">eff_earth_radius_beta</span></code></a>()</td>
 <td>Calculate effective Earth radius exceeded for beta_0 percent of time, a_beta, according to ITU-R P.452-16 Eq (6b).</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.eff_earth_radius_factor_beta.html#pycraf.pathprof.eff_earth_radius_factor_beta" title="pycraf.pathprof.eff_earth_radius_factor_beta"><code class="xref py py-obj docutils literal"><span class="pre">eff_earth_radius_factor_beta</span></code></a>()</td>
@@ -737,7 +729,7 @@ estimation.</p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 27 Jul 2017. <br/>
+    Last built 28 Jul 2017. <br/>
   </p>
 </footer>
   </body>

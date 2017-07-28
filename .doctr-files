@@ -1,9 +1,7 @@
 ./_images/index-1.png
-./_images/index-11.png
 ./_images/index-1_00_00.png
 ./_images/index-1_01_00.png
 ./_images/index-2.png
-./_images/index-21.png
 ./_images/index-2_00_00.png
 ./_images/index-2_01_00.png
 ./_images/index-3.png
@@ -332,14 +330,8 @@
 ./license.html
 ./objects.inv
 ./pathprof/download_srtm.html
-./pathprof/index-1.pdf
-./pathprof/index-1.png
 ./pathprof/index-1.py
-./pathprof/index-1.svg
-./pathprof/index-2.pdf
-./pathprof/index-2.png
 ./pathprof/index-2.py
-./pathprof/index-2.svg
 ./pathprof/index-3.pdf
 ./pathprof/index-3.png
 ./pathprof/index-3.py
