@@ -76,8 +76,16 @@ After installation (see below) you can test, if everything works as intended::
     pycraf.test()
     # this will skip over some tests that need to download
     # data from the internet; to include them:
-    pycraf.test(source='any')
+    pycraf.test(remote_data='any')
 
+By default, the `test` function will skip over tests that require
+data from the internet. One can include them by::
+
+    pycraf.test(remote_data='any')
+
+This will *always* download SRTM data (few tiles only) to test the
+auto-download functionality! Do this only, if you can afford the network
+traffic.
 
 
 License

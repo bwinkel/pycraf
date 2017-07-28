@@ -11,7 +11,7 @@ import pytest
 from functools import partial
 import numpy as np
 from numpy.testing import assert_equal, assert_allclose
-from astropy.tests.helper import assert_quantity_allclose
+from astropy.tests.helper import assert_quantity_allclose, remote_data
 from astropy import units as apu
 from astropy.units import Quantity
 from ... import conversions as cnv
@@ -43,6 +43,8 @@ MAP_KEYS = [
     ]
 
 
+@remote_data(source='any')
+@pytest.mark.usefixtures('srtm_handler')
 class TestPropagation:
 
     def setup(self):
@@ -81,7 +83,6 @@ class TestPropagation:
         for case in self.cases:
 
             freq, (h_tg, h_rg), time_percent, version, (G_t, G_r) = case
-
             pprop = pathprof.PathProp(
                 freq * apu.GHz,
                 self.temperature, self.pressure,
@@ -92,6 +93,7 @@ class TestPropagation:
                 time_percent * apu.percent,
                 version=version,
                 )
+
             self.pprops.append(pprop)
 
             # Warning: if uncommenting, the test cases will be overwritten

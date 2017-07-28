@@ -168,6 +168,10 @@ the `pycraf issue tracker <http://github.com/bwinkel/pycraf/issues>`__.
         >>> import pycraf  # doctest: +SKIP
         >>> pycraf.test(remote_data='any')  # doctest: +SKIP
 
+    This will *always* download SRTM data (few tiles only) to test the
+    auto-download functionality! Do this only, if you can afford the
+    network traffic.
+
 If you prefer testing on the command line and usually work with the source
 code, you can also do
 

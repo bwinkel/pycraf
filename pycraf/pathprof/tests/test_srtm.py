@@ -14,13 +14,6 @@ from ...utils import check_astro_quantities
 TOL_KWARGS = {'atol': 1.e-4, 'rtol': 1.e-4}
 
 
-@pytest.fixture(scope='session')
-def srtm_temp_dir(tmpdir_factory):
-
-    tdir = tmpdir_factory.mktemp('srtmdata')
-    return str(tdir)
-
-
 class TestSrtmConf:
 
     def test_context_manager(self):
