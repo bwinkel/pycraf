@@ -1,8 +1,8 @@
-.. _download_srtm:
+.. _working_with_srtm:
 
-******************
-Download SRTM data
-******************
+**********************
+Working with SRTM data
+**********************
 
 Introduction
 ============
@@ -51,6 +51,12 @@ When you use the functionality from the  `~pycraf.pathprof` sub-package,
 (or a sub-directory). If you have many different projects and want to
 store the tiles in a custom (system-wide) directory, there are two options,
 explained in the following.
+
+.. warning::
+    Placing the *.hgt* files in the current work directory (where Python
+    is started) and having `pycraf` look for them there seems handy, but it
+    can be slow if many other sub-directories are present as `pycraf` will
+    recursively search for *.hgt* files.
 
 Using `SRTMDATA` environment variable
 -------------------------------------

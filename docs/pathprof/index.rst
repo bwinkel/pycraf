@@ -56,7 +56,8 @@ the P.452 calculations, that fall in the following categories:
 
 .. note::
 
-    For most of the functionality in this module, you will need to :ref:`download_srtm`.
+    For most of the functionality in this module, you will need to download
+    SRTM tile data; see :ref:`working_with_srtm`.
 
 
 Getting Started

@@ -130,10 +130,16 @@ def srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
     Notes
     -----
     - `distances` contains distances from Transmitter.
-    - `SRTM data <https://www2.jpl.nasa.gov/srtm/>`_ need to be downloaded
-      manually by the user. An environment variable `SRTMDATA` has to be
-      set to point to the directory containing the .hgt files; see
-      :ref:`srtm_data`.
+    - `SRTM <https://www2.jpl.nasa.gov/srtm/>`_ data tiles (`*.hgt`) need
+      to be accessible by `pycraf`.  It is assumed that these are either
+      present in the current working directory or in the path defined by the
+      `SRTMDATA` environment variable (sub-directories are also parsed).
+      Alternatively, use the `~pycraf.pathprof.SrtmConf` manager to
+      change the directory, where `pycraf` looks for SRTM data, during
+      run-time. The `~pycraf.pathprof.SrtmConf` manager also offers
+      additional features such as automatic downloading of missing
+      tiles or applying different interpolation methods (e.g., splines).
+      For details see :ref:`working_with_srtm`.
     '''
 
     return _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step)
@@ -188,10 +194,16 @@ def srtm_height_map(
 
     Notes
     -----
-    - `SRTM data <https://www2.jpl.nasa.gov/srtm/>`_ need to be downloaded
-      manually by the user. An environment variable `SRTMDATA` has to be
-      set to point to the directory containing the .hgt files; see
-      :ref:`srtm_data`.
+    - `SRTM <https://www2.jpl.nasa.gov/srtm/>`_ data tiles (`*.hgt`) need
+      to be accessible by `pycraf`.  It is assumed that these are either
+      present in the current working directory or in the path defined by the
+      `SRTMDATA` environment variable (sub-directories are also parsed).
+      Alternatively, use the `~pycraf.pathprof.SrtmConf` manager to
+      change the directory, where `pycraf` looks for SRTM data, during
+      run-time. The `~pycraf.pathprof.SrtmConf` manager also offers
+      additional features such as automatic downloading of missing
+      tiles or applying different interpolation methods (e.g., splines).
+      For details see :ref:`working_with_srtm`.
     '''
 
     if hprof_step is None:

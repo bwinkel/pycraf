@@ -452,7 +452,7 @@ def _srtm_height_data(lons, lats):
     )
 def srtm_height_data(lons, lats):
     '''
-    SRTM terrain data (bi-linearly interpolated) extracted from ".hgt" files.
+    Interpolated SRTM terrain data extracted from ".hgt" files.
 
     Parameters
     ----------
@@ -466,11 +466,16 @@ def srtm_height_data(lons, lats):
 
     Notes
     -----
-    - `distances` contains distances from Transmitter.
-    - `SRTM data <https://www2.jpl.nasa.gov/srtm/>`_ need to be downloaded
-      manually by the user. An environment variable `SRTMDATA` has to be
-      set to point to the directory containing the .hgt files; see
-      :ref:`srtm_data`.
+    - `SRTM <https://www2.jpl.nasa.gov/srtm/>`_ data tiles (`*.hgt`) need
+      to be accessible by `pycraf`.  It is assumed that these are either
+      present in the current working directory or in the path defined by the
+      `SRTMDATA` environment variable (sub-directories are also parsed).
+      Alternatively, use the `~pycraf.pathprof.SrtmConf` manager to
+      change the directory, where `pycraf` looks for SRTM data, during
+      run-time. The `~pycraf.pathprof.SrtmConf` manager also offers
+      additional features such as automatic downloading of missing
+      tiles or applying different interpolation methods (e.g., splines).
+      For details see :ref:`working_with_srtm`.
     '''
 
     return _srtm_height_data(lons, lats)

@@ -121,18 +121,23 @@ class PathProp(cyprop._PathProp):
       parameters: `hprof_dists`, `hprof_heights`, `bearing`, and
       `back_bearing`.
 
-      If you *don't do* the automatic query from SRTM data, make sure that
-      the first element should is zero (transmitter location) and the last
-      element is the distance between Tx and Rx. Also, the given
-      `lon_t`, `lat_t` and `lon_r`, `lat_r` values should be consistent
-      with the height profile. The bearings can be set to zero, if you
-      don't need to calculate boresight angles.
+      If you *don't do* the automatic query from SRTM data, make sure
+      that the first element in `hprof_dists` is zero (transmitter
+      location) and the last element is the distance between Tx and Rx.
+      Also, the given `lon_t`, `lat_t` and `lon_r`, `lat_r` values
+      should be consistent with the height profile. The bearings can
+      be set to zero, if you don't need to calculate boresight angles.
 
-      If you *do* the automatic query from
-      `SRTM data <https://www2.jpl.nasa.gov/srtm/>`_ you need to downloaded
-      them first. Also, an environment variable `SRTMDATA` has to be
-      set to point to the directory containing the .hgt files; see
-      :ref:`srtm_data`.
+      `SRTM <https://www2.jpl.nasa.gov/srtm/>`_ data tiles (`*.hgt`) need
+      to be accessible by `pycraf`.  It is assumed that these are either
+      present in the current working directory or in the path defined by the
+      `SRTMDATA` environment variable (sub-directories are also parsed).
+      Alternatively, use the `~pycraf.pathprof.SrtmConf` manager to
+      change the directory, where `pycraf` looks for SRTM data, during
+      run-time. The `~pycraf.pathprof.SrtmConf` manager also offers
+      additional features such as automatic downloading of missing
+      tiles or applying different interpolation methods (e.g., splines).
+      For details see :ref:`working_with_srtm`.
     '''
 
     @utils.ranged_quantity_input(
@@ -747,10 +752,16 @@ def height_profile_data(
     -----
     - Path attenuation is completely symmetric, i.e., it doesn't matter if
       the transmitter or the receiver is situated in the map center.
-    - `SRTM data <https://www2.jpl.nasa.gov/srtm/>`_ need to be downloaded
-      manually by the user. An environment variable `SRTMDATA` has to be
-      set to point to the directory containing the .hgt files; see
-      :ref:`srtm_data`.
+    - `SRTM <https://www2.jpl.nasa.gov/srtm/>`_ data tiles (`*.hgt`) need
+      to be accessible by `pycraf`.  It is assumed that these are either
+      present in the current working directory or in the path defined by the
+      `SRTMDATA` environment variable (sub-directories are also parsed).
+      Alternatively, use the `~pycraf.pathprof.SrtmConf` manager to
+      change the directory, where `pycraf` looks for SRTM data, during
+      run-time. The `~pycraf.pathprof.SrtmConf` manager also offers
+      additional features such as automatic downloading of missing
+      tiles or applying different interpolation methods (e.g., splines).
+      For details see :ref:`working_with_srtm`.
     '''
 
     return cyprop.height_profile_data_cython(
