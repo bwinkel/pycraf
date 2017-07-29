@@ -66,7 +66,8 @@ after_test:
   # This step builds your wheels.
   - "%CMD_IN_ENV% python setup.py bdist_wheel"
   - "%CMD_IN_ENV% python setup.py bdist_wininst"
-  - "%CMD_IN_ENV% python setup.py bdist_msi"
+  # The following seems to break if on developer version
+  # - "%CMD_IN_ENV% python setup.py bdist_msi"
 
 artifacts:
   # bdist_wheel puts your built wheel in the dist directory
