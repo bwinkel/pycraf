@@ -1,0 +1,6 @@
+profile_midlat_winter
+=====================
+
+.. currentmodule:: pycraf.atm
+
+.. autofunction:: profile_midlat_winter

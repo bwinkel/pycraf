@@ -1,0 +1,6 @@
+make_kmz
+========
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: make_kmz

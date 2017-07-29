@@ -1,0 +1,6 @@
+satellite.get_sat
+=================
+
+.. currentmodule:: pycraf
+
+.. autoattribute:: satellite.get_sat

@@ -1,0 +1,6 @@
+annual_timepercent_from_worst_month
+===================================
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: annual_timepercent_from_worst_month

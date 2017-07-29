@@ -1,0 +1,6 @@
+refractive_index
+================
+
+.. currentmodule:: pycraf.atm
+
+.. autofunction:: refractive_index

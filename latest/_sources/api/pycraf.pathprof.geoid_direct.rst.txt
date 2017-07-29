@@ -1,0 +1,6 @@
+geoid_direct
+============
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: geoid_direct

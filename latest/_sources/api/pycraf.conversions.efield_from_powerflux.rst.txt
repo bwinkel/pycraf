@@ -1,0 +1,6 @@
+efield_from_powerflux
+=====================
+
+.. currentmodule:: pycraf.conversions
+
+.. autofunction:: efield_from_powerflux

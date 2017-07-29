@@ -1,0 +1,6 @@
+fl_G_max_from_size
+==================
+
+.. currentmodule:: pycraf.antenna
+
+.. autofunction:: fl_G_max_from_size

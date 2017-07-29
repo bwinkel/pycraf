@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pycraf.protection.cispr &#8212; pycraf v0.25.2.dev50</title>
+    
+    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.25.2.dev50',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../../../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../../../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../../../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../../../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li>
+	<a href="../../../index.html">pycraf v0.25.2.dev50</a>
+	 &#187;
+      </li>
+      <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+      
+       
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pycraf.protection.cispr</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">absolute_import</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+    <span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>  <span class="c1"># , update_wrapper</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
+<span class="kn">from</span> <span class="nn">astropy.units</span> <span class="k">import</span> <span class="n">Quantity</span><span class="p">,</span> <span class="n">UnitsError</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">utils</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cispr11_limits&#39;</span><span class="p">,</span> <span class="s1">&#39;cispr22_limits&#39;</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_cispr_limits</span><span class="p">(</span>
+        <span class="n">params</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">detector_type</span><span class="o">=</span><span class="s1">&#39;RMS&#39;</span><span class="p">,</span> <span class="n">detector_dist</span><span class="o">=</span><span class="mf">30.</span>
+        <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    The params dictionary must have the following content:</span>
+<span class="sd">    &#39;lims&#39; - list of tuples (low freq, high freq, limit in dB_uV_m)</span>
+<span class="sd">    &#39;dist&#39; - distance detector &lt;-&gt; source for which the limits are valid</span>
+<span class="sd">    &#39;meas_bw&#39; - measurement bandwidth</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">assert</span> <span class="n">params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">assert</span> <span class="n">detector_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;QP&#39;</span><span class="p">,</span> <span class="s1">&#39;RMS&#39;</span><span class="p">]</span>
+
+    <span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
+    <span class="n">Elim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">freq</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">lof</span><span class="p">,</span> <span class="n">hif</span><span class="p">,</span> <span class="n">lim</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;lims&#39;</span><span class="p">]:</span>
+
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">freq</span> <span class="o">&gt;=</span> <span class="n">lof</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">freq</span> <span class="o">&lt;</span> <span class="n">hif</span><span class="p">)</span>
+        <span class="n">Elim</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">lim</span>
+
+    <span class="c1"># 20, because area of sphere is proportional to radius ** 2</span>
+    <span class="n">Elim</span> <span class="o">+=</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;dist&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">detector_dist</span><span class="p">)</span>
+
+    <span class="c1"># According to Hasenpusch (BNetzA, priv. comm.) the CISPR standard</span>
+    <span class="c1"># detector is a quasi-peak detector with a bandwidth of 120 kHz. To</span>
+    <span class="c1"># convert to an RMS detector (which is more suitable to the RA.769) one</span>
+    <span class="c1"># has to subtract 5.5 dB.</span>
+    <span class="k">if</span> <span class="n">detector_type</span> <span class="o">==</span> <span class="s1">&#39;RMS&#39;</span><span class="p">:</span>
+        <span class="n">Elim</span> <span class="o">-=</span> <span class="mf">5.5</span>
+
+    <span class="k">return</span> <span class="n">Elim</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;meas_bw&#39;</span><span class="p">]</span>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">MHz</span><span class="p">),</span>
+    <span class="n">detector_dist</span><span class="o">=</span><span class="p">(</span><span class="mf">0.001</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_uV_m</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">kHz</span><span class="p">)</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="cispr11_limits"><a class="viewcode-back" href="../../../api/pycraf.protection.cispr11_limits.html#pycraf.protection.cispr11_limits">[docs]</a><span class="k">def</span> <span class="nf">cispr11_limits</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">detector_type</span><span class="o">=</span><span class="s1">&#39;RMS&#39;</span><span class="p">,</span> <span class="n">detector_dist</span><span class="o">=</span><span class="mf">30.</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Industrial-device limits for given frequency and distance from device</span>
+<span class="sd">    according to `CISPR-11 (EN 55011)</span>
+<span class="sd">    &lt;http://rfemcdevelopment.eu/index.php/en/emc-emi-standards/en-55011-2009&gt;`_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    freq : `~astropy.units.Quantity`</span>
+<span class="sd">        Frequency or frequency vector [Hz]</span>
+<span class="sd">    detector_type : str, optional</span>
+<span class="sd">        Detector type: &#39;QP&#39; (quasi-peak), &#39;RMS&#39; (default: &#39;RMS)</span>
+<span class="sd">    detector_dist : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        Distance between source and detector [m], (default: 30 m)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    efield_limit : `~astropy.units.Quantity`</span>
+<span class="sd">        Electric-field limit permitted by CISPR-11 at given distance.</span>
+<span class="sd">        [dB(uV^2 / m^2)]</span>
+<span class="sd">    meas_bw : `~astropy.units.Quantity`</span>
+<span class="sd">        Measure bandwidth (of detector) [kHz]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">cispr11_params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;lims&#39;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">230</span><span class="p">,</span> <span class="mf">1e20</span><span class="p">,</span> <span class="mi">37</span><span class="p">)</span>
+            <span class="p">],</span>
+        <span class="s1">&#39;dist&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+        <span class="s1">&#39;meas_bw&#39;</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">_cispr_limits</span><span class="p">(</span>
+        <span class="n">cispr11_params</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span>
+        <span class="n">detector_type</span><span class="o">=</span><span class="n">detector_type</span><span class="p">,</span> <span class="n">detector_dist</span><span class="o">=</span><span class="n">detector_dist</span>
+        <span class="p">)</span></div>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">MHz</span><span class="p">),</span>
+    <span class="n">detector_dist</span><span class="o">=</span><span class="p">(</span><span class="mf">0.001</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_uV_m</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">kHz</span><span class="p">)</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="cispr22_limits"><a class="viewcode-back" href="../../../api/pycraf.protection.cispr22_limits.html#pycraf.protection.cispr22_limits">[docs]</a><span class="k">def</span> <span class="nf">cispr22_limits</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">detector_type</span><span class="o">=</span><span class="s1">&#39;RMS&#39;</span><span class="p">,</span> <span class="n">detector_dist</span><span class="o">=</span><span class="mf">30.</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Industrial-device limits for given frequency and distance from device</span>
+<span class="sd">    according to `CISPR-22 (EN 55022)</span>
+<span class="sd">    &lt;http://www.rfemcdevelopment.eu/en/en-55022-2010&gt;`_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    freq : `~astropy.units.Quantity`</span>
+<span class="sd">        Frequency or frequency vector [MHz]</span>
+<span class="sd">    detector_type : str, optional</span>
+<span class="sd">        Detector type: &#39;QP&#39; (quasi-peak), &#39;RMS&#39; (default: &#39;RMS)</span>
+<span class="sd">    detector_dist : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        Distance between source and detector [m], (default: 30 m)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    efield_limit : `~astropy.units.Quantity`</span>
+<span class="sd">        Electric-field limit permitted by CISPR-22 at given distance.</span>
+<span class="sd">        [dB(uV^2 / m^2)]</span>
+<span class="sd">    meas_bw : `~astropy.units.Quantity`</span>
+<span class="sd">        Measure bandwidth (of detector) [kHz]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">cispr22_params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;lims&#39;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">230</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">47</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">56</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="mf">1e20</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+            <span class="p">],</span>
+        <span class="s1">&#39;dist&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+        <span class="s1">&#39;meas_bw&#39;</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span>  <span class="c1"># is this correct?</span>
+        <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">_cispr_limits</span><span class="p">(</span>
+        <span class="n">cispr22_params</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span>
+        <span class="n">detector_type</span><span class="o">=</span><span class="n">detector_type</span><span class="p">,</span> <span class="n">detector_dist</span><span class="o">=</span><span class="n">detector_dist</span>
+        <span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right"> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 29 Jul 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

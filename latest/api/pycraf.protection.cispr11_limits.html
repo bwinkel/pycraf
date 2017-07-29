@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>cispr11_limits &#8212; pycraf v0.25.2.dev50</title>
+    
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.25.2.dev50',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="cispr22_limits" href="pycraf.protection.cispr22_limits.html" />
+    <link rel="prev" title="Protection levels (pycraf.protection)" href="../protection/index.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="pycraf.protection.cispr22_limits.html" title="cispr22_limits">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="../protection/index.html" title="Protection levels (pycraf.protection)">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v0.25.2.dev50</a>
+	 &#187;
+      </li>
+      <li><a href="../protection/index.html" accesskey="U">Protection levels (<code class="docutils literal"><span class="pre">pycraf.protection</span></code>)</a> &#187;</li>
+      
+      <li>cispr11_limits</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="cispr11-limits">
+<h1>cispr11_limits<a class="headerlink" href="#cispr11-limits" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pycraf.protection.cispr11_limits">
+<code class="descclassname">pycraf.protection.</code><code class="descname">cispr11_limits</code><span class="sig-paren">(</span><em>freq</em>, <em>detector_type='RMS'</em>, <em>detector_dist=&lt;Quantity 30.0 m&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/protection/cispr.html#cispr11_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.protection.cispr11_limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Industrial-device limits for given frequency and distance from device
+according to <a class="reference external" href="http://rfemcdevelopment.eu/index.php/en/emc-emi-standards/en-55011-2009">CISPR-11 (EN 55011)</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>freq</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<blockquote>
+<div><p>Frequency or frequency vector [Hz]</p>
+</div></blockquote>
+<p><strong>detector_type</strong> : str, optional</p>
+<blockquote>
+<div><p>Detector type: &#8216;QP&#8217; (quasi-peak), &#8216;RMS&#8217; (default: &#8216;RMS)</p>
+</div></blockquote>
+<p><strong>detector_dist</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
+<blockquote>
+<div><p>Distance between source and detector [m], (default: 30 m)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>efield_limit</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<blockquote>
+<div><p>Electric-field limit permitted by CISPR-11 at given distance.
+[dB(uV^2 / m^2)]</p>
+</div></blockquote>
+<p><strong>meas_bw</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<blockquote class="last">
+<div><p>Measure bandwidth (of detector) [kHz]</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">cispr11_limits</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="../_sources/api/pycraf.protection.cispr11_limits.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 29 Jul 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

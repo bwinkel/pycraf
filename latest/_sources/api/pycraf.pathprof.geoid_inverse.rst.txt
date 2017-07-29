@@ -1,0 +1,6 @@
+geoid_inverse
+=============
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: geoid_inverse

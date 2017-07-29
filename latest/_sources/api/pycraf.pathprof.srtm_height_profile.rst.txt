@@ -1,0 +1,6 @@
+srtm_height_profile
+===================
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: srtm_height_profile

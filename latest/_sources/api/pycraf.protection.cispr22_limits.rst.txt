@@ -1,0 +1,6 @@
+cispr22_limits
+==============
+
+.. currentmodule:: pycraf.protection
+
+.. autofunction:: cispr22_limits

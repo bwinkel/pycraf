@@ -1,0 +1,6 @@
+atten_map_fast
+==============
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: atten_map_fast

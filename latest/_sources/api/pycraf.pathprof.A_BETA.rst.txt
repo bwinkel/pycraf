@@ -1,0 +1,6 @@
+A_BETA
+======
+
+.. currentmodule:: pycraf.pathprof
+
+.. autodata:: A_BETA

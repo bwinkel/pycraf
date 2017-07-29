@@ -1,0 +1,6 @@
+profile_standard
+================
+
+.. currentmodule:: pycraf.atm
+
+.. autofunction:: profile_standard

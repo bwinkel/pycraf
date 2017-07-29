@@ -1,0 +1,6 @@
+eff_area_from_gain
+==================
+
+.. currentmodule:: pycraf.conversions
+
+.. autofunction:: eff_area_from_gain

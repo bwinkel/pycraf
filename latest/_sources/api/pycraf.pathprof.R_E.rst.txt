@@ -1,0 +1,6 @@
+R_E
+===
+
+.. currentmodule:: pycraf.pathprof
+
+.. autodata:: R_E

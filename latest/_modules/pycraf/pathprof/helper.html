@@ -1,0 +1,631 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pycraf.pathprof.helper &#8212; pycraf v0.25.2.dev50</title>
+    
+    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.25.2.dev50',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../../../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../../../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../../../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../../../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li>
+	<a href="../../../index.html">pycraf v0.25.2.dev50</a>
+	 &#187;
+      </li>
+      <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+      
+       
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pycraf.pathprof.helper</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">absolute_import</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+    <span class="p">)</span>
+
+<span class="c1"># from functools import partial, lru_cache</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">RegularGridInterpolator</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">utils</span>
+
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">matplotlib</span>  <span class="c1"># pylint: disable=W0611</span>
+    <span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="k">import</span> <span class="n">Normalize</span>
+
+    <span class="c1"># On older versions of matplotlib Normalize is an old-style class</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Normalize</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">Normalize</span><span class="p">(</span><span class="n">Normalize</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">class</span> <span class="nc">Normalize</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s1">&#39;The &quot;matplotlib&quot; package is necessary to use this.&#39;</span>
+                <span class="p">)</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;R_E&#39;</span><span class="p">,</span> <span class="s1">&#39;K_BETA&#39;</span><span class="p">,</span> <span class="s1">&#39;A_BETA&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;annual_timepercent_from_worst_month&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;deltaN_N0_from_map&#39;</span><span class="p">,</span> <span class="s1">&#39;radiomet_data_for_pathcenter&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;eff_earth_radius_factor_median&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;eff_earth_radius_factor_beta&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;eff_earth_radius_median&#39;</span><span class="p">,</span> <span class="s1">&#39;eff_earth_radius_beta&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;make_kmz&#39;</span><span class="p">,</span> <span class="s1">&#39;terrain_cmap_factory&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+
+<span class="c1"># useful constants</span>
+<span class="n">R_E_VALUE</span> <span class="o">=</span> <span class="mf">6371.</span>
+<span class="n">R_E</span> <span class="o">=</span> <span class="n">R_E_VALUE</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span>  <span class="c1"># Earth radius</span>
+<span class="n">R_E</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;Earth Radius&#39;&#39;&#39;</span>
+
+<span class="n">K_BETA_VALUE</span> <span class="o">=</span> <span class="mf">3.</span>
+<span class="n">K_BETA</span> <span class="o">=</span> <span class="n">K_BETA_VALUE</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span>  <span class="c1"># eff. Earth radius factor for beta_0</span>
+<span class="n">K_BETA</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;Effective Earth radius factor for beta_0 percent&#39;&#39;&#39;</span>
+
+<span class="n">A_BETA_VALUE</span> <span class="o">=</span> <span class="mf">3.</span> <span class="o">*</span> <span class="n">R_E_VALUE</span>
+<span class="n">A_BETA</span> <span class="o">=</span> <span class="n">K_BETA_VALUE</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span>  <span class="c1"># eff. Earth radius for beta_0</span>
+<span class="n">A_BETA</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;Effective Earth radius for beta_0 percent&#39;&#39;&#39;</span>
+
+<span class="n">KML_TEMPLATE</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="s1">&lt;kml xmlns=&quot;http://www.opengis.net/kml/2.2&quot;&gt;</span>
+<span class="s1">    &lt;Folder&gt;</span>
+<span class="s1">    &lt;name&gt;Attenuation map&lt;/name&gt;</span>
+<span class="s1">    &lt;description&gt;Results from pycraf package&lt;/description&gt;</span>
+<span class="s1">    &lt;GroundOverlay&gt;</span>
+<span class="s1">        &lt;name&gt;Attenuation map on terrain&lt;/name&gt;</span>
+<span class="s1">        &lt;description&gt;Results from the pycraf package&lt;/description&gt;</span>
+<span class="s1">        &lt;color&gt;aaffffff&lt;/color&gt;</span>
+<span class="s1">        &lt;Icon&gt;&lt;href&gt;pycraf_atten_map_kmz.png&lt;/href&gt;&lt;/Icon&gt;</span>
+<span class="s1">        &lt;LatLonBox&gt;</span>
+<span class="s1">            &lt;east&gt;</span><span class="si">{:.6f}</span><span class="s1">&lt;/east&gt;</span>
+<span class="s1">            &lt;south&gt;</span><span class="si">{:.6f}</span><span class="s1">&lt;/south&gt;</span>
+<span class="s1">            &lt;west&gt;</span><span class="si">{:.6f}</span><span class="s1">&lt;/west&gt;</span>
+<span class="s1">            &lt;north&gt;</span><span class="si">{:.6f}</span><span class="s1">&lt;/north&gt;</span>
+<span class="s1">        &lt;/LatLonBox&gt;</span>
+<span class="s1">    &lt;/GroundOverlay&gt;</span>
+<span class="s1">    &lt;/Folder&gt;</span>
+<span class="s1">&lt;/kml&gt;</span>
+<span class="s1">&#39;&#39;&#39;</span>
+
+<span class="c1"># maybe, the following should only be computed on demand?</span>
+<span class="n">this_dir</span><span class="p">,</span> <span class="n">this_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">fname_refract_data</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">this_dir</span><span class="p">,</span> <span class="s1">&#39;../itudata/p.452-16&#39;</span><span class="p">,</span> <span class="s1">&#39;refract_map.npz&#39;</span>
+    <span class="p">)</span>
+<span class="n">_refract_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fname_refract_data</span><span class="p">)</span>
+
+
+<span class="n">_DN_interpolator</span> <span class="o">=</span> <span class="n">RegularGridInterpolator</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">_refract_data</span><span class="p">[</span><span class="s1">&#39;lons&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">_refract_data</span><span class="p">[</span><span class="s1">&#39;lats&#39;</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+    <span class="n">_refract_data</span><span class="p">[</span><span class="s1">&#39;dn50&#39;</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+    <span class="p">)</span>
+<span class="n">_N0_interpolator</span> <span class="o">=</span> <span class="n">RegularGridInterpolator</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">_refract_data</span><span class="p">[</span><span class="s1">&#39;lons&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">_refract_data</span><span class="p">[</span><span class="s1">&#39;lats&#39;</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+    <span class="n">_refract_data</span><span class="p">[</span><span class="s1">&#39;n050&#39;</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+    <span class="p">)</span>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">p_w</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
+    <span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">omega</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">,</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="annual_timepercent_from_worst_month"><a class="viewcode-back" href="../../../api/pycraf.pathprof.annual_timepercent_from_worst_month.html#pycraf.pathprof.annual_timepercent_from_worst_month">[docs]</a><span class="k">def</span> <span class="nf">annual_timepercent_from_worst_month</span><span class="p">(</span>
+        <span class="n">p_w</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">omega</span>
+        <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate annual equivalent time percentage, p, from worst-month time</span>
+<span class="sd">    percentage, p_w, according to ITU-R P.452-16 Eq (1).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p_w : `~astropy.units.Quantity`</span>
+<span class="sd">        worst-month time percentage [%]</span>
+<span class="sd">    phi : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic latitude of path center [deg]</span>
+<span class="sd">    omega : `~astropy.units.Quantity`</span>
+<span class="sd">        Fraction of the path over water (see Table 3) [%]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    p : `~astropy.units.Quantity`</span>
+<span class="sd">        Annual equivalent time percentage [%]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Use this function, if you want to do path propagation calculations</span>
+<span class="sd">      for the worst month case. The resulting time percentage, p, can then</span>
+<span class="sd">      be plugged into other functions. If you want just annual averages,</span>
+<span class="sd">      simply use your time percentage value as is.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">omega</span> <span class="o">/=</span> <span class="mf">100.</span>  <span class="c1"># convert from percent to fraction</span>
+
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">phi</span><span class="p">)))</span> <span class="o">**</span> <span class="mf">0.7</span>
+    <span class="n">G_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">45</span><span class="p">,</span> <span class="mf">1.1</span> <span class="o">+</span> <span class="n">tmp</span><span class="p">,</span> <span class="mf">1.1</span> <span class="o">-</span> <span class="n">tmp</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">p_w</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">G_l</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.186</span> <span class="o">*</span> <span class="n">omega</span> <span class="o">-</span> <span class="mf">0.444</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="mf">0.078</span> <span class="o">*</span> <span class="n">omega</span> <span class="o">+</span> <span class="mf">0.816</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">a</span> <span class="o">/</span> <span class="n">b</span><span class="p">)</span>
+
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">p</span><span class="p">,</span> <span class="n">p_w</span> <span class="o">/</span> <span class="mf">12.</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">p</span></div>
+
+
+<span class="k">def</span> <span class="nf">_DN_N0_from_map</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">):</span>
+
+    <span class="n">_DN</span> <span class="o">=</span> <span class="n">_DN_interpolator</span><span class="p">((</span><span class="n">lon</span> <span class="o">%</span> <span class="mi">360</span><span class="p">,</span> <span class="n">lat</span><span class="p">))</span>
+    <span class="n">_N0</span> <span class="o">=</span> <span class="n">_N0_interpolator</span><span class="p">((</span><span class="n">lon</span> <span class="o">%</span> <span class="mi">360</span><span class="p">,</span> <span class="n">lat</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">_DN</span><span class="p">,</span> <span class="n">_N0</span>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">lon</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">lat</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="deltaN_N0_from_map"><a class="viewcode-back" href="../../../api/pycraf.pathprof.deltaN_N0_from_map.html#pycraf.pathprof.deltaN_N0_from_map">[docs]</a><span class="k">def</span> <span class="nf">deltaN_N0_from_map</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Query delta_N and N_0 values from digitized maps by means of bilinear</span>
+<span class="sd">    interpolation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lon, lat : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic longitude and latitude of path center [deg]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    delta_N : `~astropy.units.Quantity`</span>
+<span class="sd">        Average radio-refractive index lapse-rate through the lowest 1 km of</span>
+<span class="sd">        the atmosphere [N-units/km == 1/km]</span>
+<span class="sd">    N_0 : `~astropy.units.Quantity`</span>
+<span class="sd">        Sea-level surface refractivity [N-units == dimless]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - The values for `delta_N` and `N_0` are queried from</span>
+<span class="sd">      a radiometeorological map provided with `ITU-R Rec. P.452</span>
+<span class="sd">      &lt;https://www.itu.int/rec/R-REC-P.452-16-201507-I/en&gt;`_.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_DN_N0_from_map</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_radiomet_data_for_pathcenter</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">d_tm</span><span class="p">,</span> <span class="n">d_lm</span><span class="p">):</span>
+    <span class="n">_DN</span> <span class="o">=</span> <span class="n">_DN_interpolator</span><span class="p">((</span><span class="n">lon</span> <span class="o">%</span> <span class="mi">360</span><span class="p">,</span> <span class="n">lat</span><span class="p">))</span>
+    <span class="n">_N0</span> <span class="o">=</span> <span class="n">_N0_interpolator</span><span class="p">((</span><span class="n">lon</span> <span class="o">%</span> <span class="mi">360</span><span class="p">,</span> <span class="n">lat</span><span class="p">))</span>
+
+    <span class="n">_tau</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">4.12e-4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">d_lm</span><span class="p">,</span> <span class="mf">2.41</span><span class="p">))</span>
+    <span class="n">_absphi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span>
+
+    <span class="n">_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="n">d_tm</span> <span class="o">/</span> <span class="p">(</span><span class="mf">16.</span> <span class="o">-</span> <span class="mf">6.6</span> <span class="o">*</span> <span class="n">_tau</span><span class="p">))</span>
+    <span class="n">_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.496</span> <span class="o">+</span> <span class="mf">0.354</span> <span class="o">*</span> <span class="n">_tau</span><span class="p">))</span>
+    <span class="n">_mu1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">_a</span> <span class="o">+</span> <span class="n">_b</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">_mu1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">_mu1</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">_mu1</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
+    <span class="n">_log_mu1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">_mu1</span><span class="p">)</span>
+
+    <span class="n">_phi_cond</span> <span class="o">=</span> <span class="n">_absphi</span> <span class="o">&lt;=</span> <span class="mf">70.</span>
+    <span class="n">_mu4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+        <span class="n">_phi_cond</span><span class="p">,</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.935</span> <span class="o">+</span> <span class="mf">0.0176</span> <span class="o">*</span> <span class="n">_absphi</span><span class="p">)</span> <span class="o">*</span> <span class="n">_log_mu1</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">_log_mu1</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="n">beta_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+        <span class="n">_phi_cond</span><span class="p">,</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.015</span> <span class="o">*</span> <span class="n">_absphi</span> <span class="o">+</span> <span class="mf">1.67</span><span class="p">)</span> <span class="o">*</span> <span class="n">_mu1</span> <span class="o">*</span> <span class="n">_mu4</span><span class="p">,</span>
+        <span class="mf">4.17</span> <span class="o">*</span> <span class="n">_mu1</span> <span class="o">*</span> <span class="n">_mu4</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_DN</span><span class="p">,</span> <span class="n">beta_0</span><span class="p">,</span> <span class="n">_N0</span>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">lon</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">lat</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">d_tm</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
+    <span class="n">d_lm</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="radiomet_data_for_pathcenter"><a class="viewcode-back" href="../../../api/pycraf.pathprof.radiomet_data_for_pathcenter.html#pycraf.pathprof.radiomet_data_for_pathcenter">[docs]</a><span class="k">def</span> <span class="nf">radiomet_data_for_pathcenter</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">d_tm</span><span class="p">,</span> <span class="n">d_lm</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate delta_N, beta_0, and N_0 values from digitized maps, according</span>
+<span class="sd">    to ITU-R P.452-16 Eq (2-4).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lon, lat : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic longitude and latitude of path center [deg]</span>
+<span class="sd">    d_tm : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        longest continuous land (inland + coastal) section of the</span>
+<span class="sd">        great-circle path [km]</span>
+<span class="sd">    d_lm : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        longest continuous inland section of the great-circle path [km]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    delta_N : `~astropy.units.Quantity`</span>
+<span class="sd">        Average radio-refractive index lapse-rate through the lowest 1 km of</span>
+<span class="sd">        the atmosphere [N-units/km == 1/km]</span>
+<span class="sd">    beta_0 : `~astropy.units.Quantity`</span>
+<span class="sd">        the time percentage for which refractive index lapse-rates</span>
+<span class="sd">        exceeding 100 N-units/km can be expected in the first 100 m</span>
+<span class="sd">        of the lower atmosphere [%]</span>
+<span class="sd">    N_0 : `~astropy.units.Quantity`</span>
+<span class="sd">        Sea-level surface refractivity [N-units == dimless]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - The values for `delta_N` and `N_0` are queried from</span>
+<span class="sd">      a radiometeorological map provided with `ITU-R Rec. P.452</span>
+<span class="sd">      &lt;https://www.itu.int/rec/R-REC-P.452-16-201507-I/en&gt;`_.</span>
+<span class="sd">    - Radio-climaticzones can be obtained from</span>
+<span class="sd">      `ITU Digitized World Map (IDWM) &lt;http://www.itu.int/pub/R-SOFT-IDWM&gt;`_.</span>
+<span class="sd">      For many applications, it is probably the case, that only inland</span>
+<span class="sd">      zones are present along the path of length d.</span>
+<span class="sd">      In this case, d_tm = d_lm = d.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_radiomet_data_for_pathcenter</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">d_tm</span><span class="p">,</span> <span class="n">d_lm</span><span class="p">)</span></div>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">lon</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">lat</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">,</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="eff_earth_radius_factor_median"><a class="viewcode-back" href="../../../api/pycraf.pathprof.eff_earth_radius_factor_median.html#pycraf.pathprof.eff_earth_radius_factor_median">[docs]</a><span class="k">def</span> <span class="nf">eff_earth_radius_factor_median</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate median effective Earth radius factor, k_50, according to</span>
+<span class="sd">    ITU-R P.452-16 Eq (5).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lon, lat : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic longitude and latitude of path center [deg]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    k50 : `~astropy.units.Quantity`</span>
+<span class="sd">        Median effective Earth radius factor [dimless]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Uses delta_N, which is derived from digitized maps (shipped with P.452)</span>
+<span class="sd">      by bilinear interpolation; see also</span>
+<span class="sd">      `~pycraf.pathprof.deltaN_N0_from_map`.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="mf">157.</span> <span class="o">/</span> <span class="p">(</span><span class="mf">157.</span> <span class="o">-</span> <span class="n">_DN_interpolator</span><span class="p">((</span><span class="n">lon</span> <span class="o">%</span> <span class="mi">360</span><span class="p">,</span> <span class="n">lat</span><span class="p">)))</span></div>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">,</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="eff_earth_radius_factor_beta"><a class="viewcode-back" href="../../../api/pycraf.pathprof.eff_earth_radius_factor_beta.html#pycraf.pathprof.eff_earth_radius_factor_beta">[docs]</a><span class="k">def</span> <span class="nf">eff_earth_radius_factor_beta</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate effective Earth radius factor exceeded for beta_0 percent</span>
+<span class="sd">    of time, k_beta, according to ITU-R P.452-16.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    k_beta : `~astropy.units.Quantity`</span>
+<span class="sd">        Effective Earth radius factor exceeded for beta_0 percent</span>
+<span class="sd">        of time [dimless]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - This is just a constant. You could also use K_BETA to avoid overhead.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">K_BETA_VALUE</span></div>
+
+
+<span class="k">def</span> <span class="nf">_eff_earth_radius_median</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">):</span>
+
+    <span class="k">return</span> <span class="n">R_E_VALUE</span> <span class="o">*</span> <span class="mf">157.</span> <span class="o">/</span> <span class="p">(</span><span class="mf">157.</span> <span class="o">-</span> <span class="n">_DN_interpolator</span><span class="p">((</span><span class="n">lon</span> <span class="o">%</span> <span class="mi">360</span><span class="p">,</span> <span class="n">lat</span><span class="p">)))</span>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">lon</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">lat</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="eff_earth_radius_median"><a class="viewcode-back" href="../../../api/pycraf.pathprof.eff_earth_radius_median.html#pycraf.pathprof.eff_earth_radius_median">[docs]</a><span class="k">def</span> <span class="nf">eff_earth_radius_median</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate median effective Earth radius, a_e, according to</span>
+<span class="sd">    ITU-R P.452-16 Eq (6a).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lon, lat : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic longitude and latitude of path center [deg]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    a_e : `~astropy.units.Quantity`</span>
+<span class="sd">        Median effective Earth radius [km]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Uses delta_N, which is derived from digitized maps (shipped with P.452)</span>
+<span class="sd">      by bilinear interpolation; see also</span>
+<span class="sd">      `~pycraf.pathprof.deltaN_N0_from_map`.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_eff_earth_radius_median</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">)</span></div>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="eff_earth_radius_beta"><a class="viewcode-back" href="../../../api/pycraf.pathprof.eff_earth_radius_beta.html#pycraf.pathprof.eff_earth_radius_beta">[docs]</a><span class="k">def</span> <span class="nf">eff_earth_radius_beta</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate effective Earth radius exceeded for beta_0 percent of time,</span>
+<span class="sd">    a_beta, according to ITU-R P.452-16 Eq (6b).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    a_beta : `~astropy.units.Quantity`</span>
+<span class="sd">        Effective Earth radius exceeded for beta_0 percent of time [km]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - This is just a constant. You could also use A_BETA to avoid overhead.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">A_BETA_VALUE</span></div>
+
+
+<div class="viewcode-block" id="make_kmz"><a class="viewcode-back" href="../../../api/pycraf.pathprof.make_kmz.html#pycraf.pathprof.make_kmz">[docs]</a><span class="k">def</span> <span class="nf">make_kmz</span><span class="p">(</span>
+        <span class="n">kmz_filename</span><span class="p">,</span> <span class="n">atten_map</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno_r&#39;</span>
+        <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Produce kmz file for use in GIS software (e.g., Google Earth).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kmz_filename : str</span>
+<span class="sd">        Output file name for .kmz-file</span>
+<span class="sd">    atten_map : 2D `~numpy.ndarray` of floats</span>
+<span class="sd">        2D array with path attenuation values</span>
+<span class="sd">    bbox : tuple of 4 floats</span>
+<span class="sd">        (east, south, west, north) edges of map [deg]</span>
+<span class="sd">    vmin, vmax : float</span>
+<span class="sd">        Lower and upper colorbar bounds.</span>
+<span class="sd">        If None, 2.5% and 97.5% percentiles of atten_map are used</span>
+<span class="sd">        (default: None)</span>
+<span class="sd">    cmap : matplotlib.colormap</span>
+<span class="sd">        (default: &#39;inferno_r&#39;)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># descriptive xml</span>
+    <span class="n">kml</span> <span class="o">=</span> <span class="n">KML_TEMPLATE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">bbox</span><span class="p">)</span>
+
+    <span class="c1"># produce jpg, use python pillow for this;</span>
+    <span class="c1"># however, we don&#39;t want this as global requirement,</span>
+    <span class="c1"># therefore, just a local import</span>
+    <span class="c1"># from PIL import Image</span>
+    <span class="c1"># from matplotlib import colors, cm</span>
+
+    <span class="k">if</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">vmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">atten_map</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="mf">2.5</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">vmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">atten_map</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="mf">97.5</span><span class="p">)</span>
+
+    <span class="c1"># norm = colors.Normalize(vmin=vmin, vmax=vmax)</span>
+    <span class="c1"># csm = cm.ScalarMappable(norm=norm, cmap=cmap)</span>
+
+    <span class="c1"># rgba = csm.to_rgba(atten_map)</span>
+    <span class="c1"># jpeg = Image.fromarray(np.int32(255 * rgba + 0.5), mode=&#39;RGBA&#39;)</span>
+
+    <span class="kn">from</span> <span class="nn">matplotlib.image</span> <span class="k">import</span> <span class="n">imsave</span>
+    <span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="n">BytesIO</span>
+
+    <span class="n">png_buf</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">()</span>
+
+    <span class="n">imsave</span><span class="p">(</span>
+        <span class="n">png_buf</span><span class="p">,</span>
+        <span class="n">atten_map</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+        <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span>
+        <span class="p">)</span>
+
+    <span class="n">png_buf</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># write as kmz (zip file)</span>
+    <span class="kn">import</span> <span class="nn">zipfile</span>
+
+    <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">kmz_filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">myzip</span><span class="p">:</span>
+        <span class="n">myzip</span><span class="o">.</span><span class="n">writestr</span><span class="p">(</span><span class="s1">&#39;pycraf_atten_map_kmz.png&#39;</span><span class="p">,</span> <span class="n">png_buf</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="n">myzip</span><span class="o">.</span><span class="n">writestr</span><span class="p">(</span><span class="s1">&#39;doc.kml&#39;</span><span class="p">,</span> <span class="n">kml</span><span class="p">)</span></div>
+
+
+<span class="k">class</span> <span class="nc">FixPointNormalize</span><span class="p">(</span><span class="n">Normalize</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    From http://stackoverflow.com/questions/40895021/python-equivalent-for-matlabs-demcmap-elevation-appropriate-colormap</span>
+<span class="sd">    by ImportanceOfBeingErnest</span>
+
+<span class="sd">    Inspired by http://stackoverflow.com/questions/20144529/shifted-colorbar-matplotlib</span>
+<span class="sd">    Subclassing Normalize to obtain a colormap with a fixpoint</span>
+<span class="sd">    somewhere in the middle of the colormap.</span>
+
+<span class="sd">    This may be useful for a `terrain` map, to set the &#39;sea level&#39;</span>
+<span class="sd">    to a color in the blue/turquise range.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sealevel</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">col_val</span><span class="o">=</span><span class="mf">0.21875</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">):</span>
+
+        <span class="c1"># sealevel is the fix point of the colormap (in data units)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sealevel</span> <span class="o">=</span> <span class="n">sealevel</span>
+        <span class="c1"># col_val is the color value in the range [0, 1]</span>
+        <span class="c1"># that should represent the sealevel.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">col_val</span> <span class="o">=</span> <span class="n">col_val</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">clip</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sealevel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmax</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">col_val</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="terrain_cmap_factory"><a class="viewcode-back" href="../../../api/pycraf.pathprof.terrain_cmap_factory.html#pycraf.pathprof.terrain_cmap_factory">[docs]</a><span class="k">def</span> <span class="nf">terrain_cmap_factory</span><span class="p">(</span><span class="n">sealevel</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1200</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Produce terrain colormap and norm to be used in plt.imshow.</span>
+
+<span class="sd">    With this, one can adjust the colors in the cmap such that the sea level</span>
+<span class="sd">    is properly defined (blue).</span>
+
+<span class="sd">    A simple use case would look like the following::</span>
+
+<span class="sd">        &gt;&gt;&gt; vmin, vmax = -20, 1200  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; terrain_cmap, terrain_norm = terrain_cmap_factory(vmax=vmax)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; plt.imshow(  # doctest: +SKIP</span>
+<span class="sd">        ...     heights, cmap=terrain_cmap, norm=terrain_norm,</span>
+<span class="sd">        ...     vmin=vmin, vmax=vmax</span>
+<span class="sd">        ...     )</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sealevel : float</span>
+<span class="sd">        The sealevel value.</span>
+<span class="sd">    vmax : float</span>
+<span class="sd">        Maximum height to cover in the colormap</span>
+<span class="sd">        (one should call plt.imshow with the same vmax option!)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    terrain_cmap : matplotlib.colors.LinearSegmentedColormap</span>
+<span class="sd">    terrain_norm : matplotlib.colors.Normalize instance</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># Combine the lower and upper range of the terrain colormap with a gap in</span>
+    <span class="c1"># the middle to let the coastline appear more prominently. Inspired by</span>
+    <span class="c1"># stackoverflow.com/questions/31051488/combining-two-matplotlib-colormaps</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">matplotlib</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s1">&#39;The &quot;matplotlib&quot; package is necessary to use this function.&#39;</span>
+            <span class="p">)</span>
+
+    <span class="n">colors_undersea</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">terrain</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.17</span><span class="p">,</span> <span class="mi">56</span><span class="p">))</span>
+    <span class="n">colors_land</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">terrain</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">200</span><span class="p">))</span>
+
+    <span class="c1"># combine them and build a new colormap</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">colors_undersea</span><span class="p">,</span> <span class="n">colors_land</span><span class="p">))</span>
+    <span class="n">terrain_cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">LinearSegmentedColormap</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span>
+        <span class="s1">&#39;terrain_normed&#39;</span><span class="p">,</span> <span class="n">colors</span>
+        <span class="p">)</span>
+    <span class="n">terrain_norm</span> <span class="o">=</span> <span class="n">FixPointNormalize</span><span class="p">(</span><span class="n">sealevel</span><span class="o">=</span><span class="n">sealevel</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">terrain_cmap</span><span class="p">,</span> <span class="n">terrain_norm</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This not a standalone python program! Use as module.&#39;</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right"> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 29 Jul 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

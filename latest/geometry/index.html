@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Geometry helpers (pycraf.geometry) &#8212; pycraf v0.25.2.dev50</title>
+    
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.25.2.dev50',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="cart_to_sphere" href="../api/pycraf.geometry.cart_to_sphere.html" />
+    <link rel="prev" title="SatelliteObserver" href="../api/pycraf.satellite.SatelliteObserver.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="../api/pycraf.geometry.cart_to_sphere.html" title="cart_to_sphere">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="../api/pycraf.satellite.SatelliteObserver.html" title="SatelliteObserver">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v0.25.2.dev50</a>
+	 &#187;
+      </li>
+      
+      <li>Geometry helpers (<code class="docutils literal"><span class="pre">pycraf.geometry</span></code>)</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="geometry-helpers-pycraf-geometry">
+<h1>Geometry helpers (<a class="reference internal" href="#module-pycraf.geometry" title="pycraf.geometry"><code class="xref py py-obj docutils literal"><span class="pre">pycraf.geometry</span></code></a>)<a class="headerlink" href="#geometry-helpers-pycraf-geometry" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-pycraf.geometry" title="pycraf.geometry"><code class="xref py py-obj docutils literal"><span class="pre">geometry</span></code></a> sub-package just offers some convenience functions
+for various geometrical calculations, e.g., in spherical coordinates.</p>
+</div>
+<div class="section" id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">Astropy Units and Quantities package</a>, which is used extensively in pycraf.</li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Spherical_coordinate_system">Spherical coordinates</a></li>
+</ul>
+</div>
+<div class="section" id="reference-api">
+<h2>Reference/API<a class="headerlink" href="#reference-api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-pycraf.geometry">
+<span id="pycraf-geometry-package"></span><h3>pycraf.geometry Package<a class="headerlink" href="#module-pycraf.geometry" title="Permalink to this headline">¶</a></h3>
+<p>Contains convenience functions for geometrical calculations on the sphere.</p>
+<div class="section" id="functions">
+<h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.cart_to_sphere.html#pycraf.geometry.cart_to_sphere" title="pycraf.geometry.cart_to_sphere"><code class="xref py py-obj docutils literal"><span class="pre">cart_to_sphere</span></code></a>(x,&nbsp;y,&nbsp;z)</td>
+<td>Spherical coordinates from Cartesian representation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.great_circle_bearing.html#pycraf.geometry.great_circle_bearing" title="pycraf.geometry.great_circle_bearing"><code class="xref py py-obj docutils literal"><span class="pre">great_circle_bearing</span></code></a>(l1,&nbsp;b1,&nbsp;l2,&nbsp;b2)</td>
+<td>Great circle bearing between points (l1, b1) and (l2, b2).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.sphere_to_cart.html#pycraf.geometry.sphere_to_cart" title="pycraf.geometry.sphere_to_cart"><code class="xref py py-obj docutils literal"><span class="pre">sphere_to_cart</span></code></a>(r,&nbsp;theta,&nbsp;phi)</td>
+<td>Spherical coordinates from Cartesian representation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.true_angular_distance.html#pycraf.geometry.true_angular_distance" title="pycraf.geometry.true_angular_distance"><code class="xref py py-obj docutils literal"><span class="pre">true_angular_distance</span></code></a>(l1,&nbsp;b1,&nbsp;l2,&nbsp;b2)</td>
+<td>True angular distance between points (l1, b1) and (l2, b2).</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">Geometry helpers (<code class="docutils literal"><span class="pre">pycraf.geometry</span></code>)</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+<li><a class="reference internal" href="#reference-api">Reference/API</a><ul>
+<li><a class="reference internal" href="#module-pycraf.geometry">pycraf.geometry Package</a><ul>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="../_sources/geometry/index.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 29 Jul 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

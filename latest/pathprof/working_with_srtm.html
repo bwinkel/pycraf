@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Working with SRTM data &#8212; pycraf v0.25.2.dev50</title>
+    
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.25.2.dev50',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Conversions (pycraf.conversions)" href="../conversions/index.html" />
+    <link rel="prev" title="Importing pycraf and subpackages" href="../importing_pycraf.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="../conversions/index.html" title="Conversions (pycraf.conversions)">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="../importing_pycraf.html" title="Importing pycraf and subpackages">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v0.25.2.dev50</a>
+	 &#187;
+      </li>
+      
+      <li>Working with SRTM data</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="working-with-srtm-data">
+<span id="working-with-srtm"></span><h1>Working with SRTM data<a class="headerlink" href="#working-with-srtm-data" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>To make full use of the path attenuation calculations provided by <code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code>
+we recommend to use NASA&#8217;s
+<a class="reference external" href="https://www2.jpl.nasa.gov/srtm/">Shuttle Radar Topography Mission (SRTM)</a>
+data for height-profile generation. <code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code> can work with so-called <em>.hgt</em>
+files, a very simple binary format. Each <em>.hgt</em> file, a so-called tile, just
+contains 1201x1201 16-bit integers. From the file naming scheme, one can infer
+the associated coordinates. Tiles contain one square-degree of data and
+are named in a very simple manner, e.g., <em>N50E006.hgt</em>. The first
+character is either &#8220;N&#8221; (North) or &#8220;S&#8221; (South), indicating whether the
+following number is positive or negative latitude. Likewise, the 4th
+character, &#8220;W&#8221; (West) or &#8220;E&#8221; (East), means negative and positive longitude.</p>
+<p>Unfortunately, we cannot provide SRTM data as part of the package, due to the
+large file sizes and legal reasons.</p>
+</div>
+<div class="section" id="obtaining-srtm-data">
+<h2>Obtaining SRTM data<a class="headerlink" href="#obtaining-srtm-data" title="Permalink to this headline">¶</a></h2>
+<p>There are various versions of SRTM data. &#8220;Official&#8221; are the Versions 1
+and 2.1 available on <a class="reference external" href="https://dds.cr.usgs.gov/srtm/">https://dds.cr.usgs.gov/srtm/</a>. There is even a NASA
+version 3, but we couldn&#8217;t find a site that allows direct download. It may
+work with an EarthData Account on
+<a class="reference external" href="https://lpdaac.usgs.gov/data_access/data_pool">https://lpdaac.usgs.gov/data_access/data_pool</a>.</p>
+<p>Then, there is a version V4.1 by <a class="reference external" href="ftp://srtm.csi.cgiar.org/SRTM_V41/SRTM_Data_GeoTiff/">CGIAR</a>
+and an unofficial version by <a class="reference external" href="http://viewfinderpanoramas.org/">viewfinderpanoramas.org</a>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Working with the SRTM data from the above sources may not be allowed for
+commercial use unless you get explicit permission to do so.
+For research or private use you may have to properly acknowledge
+the source of the data. Please check the web sites for more information!</p>
+</div>
+</div>
+<div class="section" id="configuring-pycraf-to-use-srtm-data">
+<h2>Configuring pycraf to use SRTM data<a class="headerlink" href="#configuring-pycraf-to-use-srtm-data" title="Permalink to this headline">¶</a></h2>
+<p>When you use the functionality from the  <a class="reference internal" href="index.html#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal"><span class="pre">pathprof</span></code></a> sub-package,
+<code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code> will initally assume that <em>.hgt</em> files are in the local folder
+(or a sub-directory). If you have many different projects and want to
+store the tiles in a custom (system-wide) directory, there are two options,
+explained in the following.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Placing the <em>.hgt</em> files in the current work directory (where Python
+is started) and having <code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code> look for them there seems handy, but it
+can be slow if many other sub-directories are present as <code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code> will
+recursively search for <em>.hgt</em> files.</p>
+</div>
+<div class="section" id="using-srtmdata-environment-variable">
+<h3>Using <code class="xref py py-obj docutils literal"><span class="pre">SRTMDATA</span></code> environment variable<a class="headerlink" href="#using-srtmdata-environment-variable" title="Permalink to this headline">¶</a></h3>
+<p>If you have downloaded some (or even all) tiles into a directory, you can let
+<code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code> know by defining an environment variable in the terminal where you
+run your program.</p>
+<p>On windows:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">SRTMDATA</span><span class="o">=</span><span class="n">C</span><span class="p">:</span>\<span class="p">[</span><span class="n">path</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">srtm</span><span class="p">]</span>\
+</pre></div>
+</div>
+<p>On Linux/MacOS (sh-like):</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">SRTMDATA</span><span class="o">=</span><span class="p">[</span><span class="n">path</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">srtm</span><span class="p">]</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>Of course, it is possible to make this permanent. On Linux/MacOS put it into
+your shell config file (e.g., <em>.bashrc</em>). On Windows 7+, you could click
+on the start menu, type &#8220;env&#8221; and open the dialog that allows to edit your
+user environment settings.</p>
+</div>
+<div class="section" id="changing-the-srtm-path-during-a-running-session">
+<h3>Changing the SRTM path during a running session<a class="headerlink" href="#changing-the-srtm-path-during-a-running-session" title="Permalink to this headline">¶</a></h3>
+<p>It is also possible to change pycraf&#8217;s behavior during runtime. In the
+<a class="reference internal" href="index.html#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal"><span class="pre">pathprof</span></code></a> sub-package, the <a class="reference internal" href="../api/pycraf.pathprof.SrtmConf.html#pycraf.pathprof.SrtmConf" title="pycraf.pathprof.SrtmConf"><code class="xref py py-obj docutils literal"><span class="pre">SrtmConf</span></code></a> class is
+defined, which allows to change the SRTM directory, but also makes it possible
+to download missing tiles during run-time:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pycraf.pathprof</span> <span class="k">import</span> <span class="n">SrtmConf</span>
+<span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">srtm_dir</span><span class="o">=</span><span class="s1">&#39;/path/to/srtmdir&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Alternatively, if only a temporary change of the config is desired,
+one can use <a class="reference internal" href="../api/pycraf.pathprof.SrtmConf.html#pycraf.pathprof.SrtmConf" title="pycraf.pathprof.SrtmConf"><code class="xref py py-obj docutils literal"><span class="pre">SrtmConf</span></code></a> as a context manager:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">srtm_dir</span><span class="o">=</span><span class="s1">&#39;/path/to/srtmdir&#39;</span><span class="p">):</span>
+    <span class="c1"># do stuff</span>
+</pre></div>
+</div>
+<p>Afterwards, the old settings will be re-established.</p>
+<p>It is also possible to allow downloading of missing <em>.hgt</em> files:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The default download server will be <code class="xref py py-obj docutils literal"><span class="pre">server='nasa_v2.1'</span></code>. One could
+also use the (very old) data (<code class="xref py py-obj docutils literal"><span class="pre">server='nasa_v1.0'</span></code>) or inofficial
+tiles from <a class="reference external" href="http://viewfinderpanoramas.org/">viewfinderpanoramas.org</a> (<code class="xref py py-obj docutils literal"><span class="pre">server='viewpano'</span></code>):</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">server</span><span class="o">=</span><span class="s1">&#39;viewpano&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Of course, one can set several of these options simultaneously:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+        <span class="n">srtm_dir</span><span class="o">=</span><span class="s1">&#39;/path/to/srtmdir&#39;</span><span class="p">,</span>
+        <span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">,</span>
+        <span class="n">server</span><span class="o">=</span><span class="s1">&#39;viewpano&#39;</span>
+        <span class="p">):</span>
+
+    <span class="c1"># do stuff</span>
+</pre></div>
+</div>
+<p>Last, but not least, it is possible to use different interpolation methods.
+The default method uses bi-linear interpolation (<code class="xref py py-obj docutils literal"><span class="pre">interp='linear'</span></code>). One
+can also have nearest-neighbor (<code class="xref py py-obj docutils literal"><span class="pre">interp='nearest'</span></code>) or spline
+(<code class="xref py py-obj docutils literal"><span class="pre">interp='spline'</span></code>) interpolation. The two former internally use
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html#scipy.interpolate.RegularGridInterpolator" title="(in SciPy v0.19.1)"><code class="xref py py-obj docutils literal"><span class="pre">RegularGridInterpolator</span></code></a>, the latter employs
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v0.19.1)"><code class="xref py py-obj docutils literal"><span class="pre">RectBivariateSpline</span></code></a> that also allows custom
+spline degrees (<code class="xref py py-obj docutils literal"><span class="pre">kx</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">ky</span></code>) and smoothing factor (<code class="xref py py-obj docutils literal"><span class="pre">s</span></code>).
+To change these use:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">interp</span><span class="o">=</span><span class="s1">&#39;spline&#39;</span><span class="p">,</span> <span class="n">spline_opts</span><span class="o">=</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">s</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>We refer to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v0.19.1)"><code class="xref py py-obj docutils literal"><span class="pre">RectBivariateSpline</span></code></a> description for
+further information.</p>
+</div>
+</div>
+<div class="section" id="download-links">
+<h2>Download links<a class="headerlink" href="#download-links" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/">NASA v2.1</a></li>
+<li><a class="reference external" href="https://dds.cr.usgs.gov/srtm/version1/">NASA v1.0</a></li>
+<li><a class="reference external" href="http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm">viewfinderpanoramas.org</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">Working with SRTM data</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#obtaining-srtm-data">Obtaining SRTM data</a></li>
+<li><a class="reference internal" href="#configuring-pycraf-to-use-srtm-data">Configuring pycraf to use SRTM data</a><ul>
+<li><a class="reference internal" href="#using-srtmdata-environment-variable">Using <code class="docutils literal"><span class="pre">SRTMDATA</span></code> environment variable</a></li>
+<li><a class="reference internal" href="#changing-the-srtm-path-during-a-running-session">Changing the SRTM path during a running session</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#download-links">Download links</a></li>
+</ul>
+</li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="../_sources/pathprof/working_with_srtm.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 29 Jul 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

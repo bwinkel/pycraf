@@ -1,0 +1,6 @@
+clutter_correction
+==================
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: clutter_correction

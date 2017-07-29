@@ -1,0 +1,6 @@
+geom_from_eff_area
+==================
+
+.. currentmodule:: pycraf.conversions
+
+.. autofunction:: geom_from_eff_area

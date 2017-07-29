@@ -1,0 +1,17 @@
+SatelliteObserver
+=================
+
+.. currentmodule:: pycraf.satellite
+
+.. autoclass:: SatelliteObserver
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~SatelliteObserver.azel_from_sat
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: azel_from_sat

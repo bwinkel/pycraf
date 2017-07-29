@@ -1,0 +1,6 @@
+great_circle_bearing
+====================
+
+.. currentmodule:: pycraf.geometry
+
+.. autofunction:: great_circle_bearing

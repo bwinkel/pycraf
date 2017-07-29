@@ -1,0 +1,6 @@
+cispr11_limits
+==============
+
+.. currentmodule:: pycraf.protection
+
+.. autofunction:: cispr11_limits

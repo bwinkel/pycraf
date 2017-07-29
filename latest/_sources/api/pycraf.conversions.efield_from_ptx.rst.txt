@@ -1,0 +1,6 @@
+efield_from_ptx
+===============
+
+.. currentmodule:: pycraf.conversions
+
+.. autofunction:: efield_from_ptx

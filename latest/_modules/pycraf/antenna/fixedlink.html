@@ -1,0 +1,430 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pycraf.antenna.fixedlink &#8212; pycraf v0.25.2.dev50</title>
+    
+    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.25.2.dev50',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../../../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../../../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../../../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../../../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li>
+	<a href="../../../index.html">pycraf v0.25.2.dev50</a>
+	 &#187;
+      </li>
+      <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+      
+       
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pycraf.antenna.fixedlink</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">absolute_import</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+    <span class="p">)</span>
+
+<span class="c1"># from functools import partial, lru_cache</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">utils</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;fl_pattern&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;fl_G_max_from_hpbw&#39;</span><span class="p">,</span> <span class="s1">&#39;fl_G_max_from_size&#39;</span><span class="p">,</span> <span class="s1">&#39;fl_hpbw_from_size&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_fl_pattern_2_1</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">diameter_over_wavelength</span><span class="p">,</span> <span class="n">G_max</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Antenna gain as a function of angular distance after `ITU-R Rec F.699</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-F.699-7-200604-I/en&gt;`_ 2.1.</span>
+
+<span class="sd">    Valid for 1 to 70 GHz and cases where D / wavelength &gt; 100</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+
+    <span class="c1"># the following are independent on phi, no need to compute after broadcast</span>
+    <span class="n">d_wlen</span> <span class="o">=</span> <span class="n">diameter_over_wavelength</span>
+
+    <span class="n">g1</span> <span class="o">=</span> <span class="mf">2.</span> <span class="o">+</span> <span class="mf">15.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">d_wlen</span><span class="p">)</span>  <span class="c1"># gain of first side-lobe</span>
+    <span class="n">phi_m</span> <span class="o">=</span> <span class="mf">20.</span> <span class="o">/</span> <span class="n">d_wlen</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">G_max</span> <span class="o">-</span> <span class="n">g1</span><span class="p">)</span>
+    <span class="n">phi_r</span> <span class="o">=</span> <span class="mf">15.85</span> <span class="o">*</span> <span class="n">d_wlen</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.6</span>
+
+    <span class="c1"># note automatic broadcasting should be possible</span>
+    <span class="p">(</span>
+        <span class="n">phi</span><span class="p">,</span> <span class="n">d_wlen</span><span class="p">,</span> <span class="n">G_max</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">phi_m</span><span class="p">,</span> <span class="n">phi_r</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span>
+        <span class="n">phi</span><span class="p">,</span> <span class="n">d_wlen</span><span class="p">,</span> <span class="n">G_max</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">phi_m</span><span class="p">,</span> <span class="n">phi_r</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="n">gain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="c1"># case 1:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="n">phi_m</span><span class="p">)</span>
+    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">G_max</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">-</span> <span class="mf">2.5e-3</span> <span class="o">*</span> <span class="p">(</span><span class="n">d_wlen</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">*</span> <span class="n">phi</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+
+    <span class="c1"># case 2:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">phi_m</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="n">phi_r</span><span class="p">)</span>
+    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">g1</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+    <span class="c1"># case 3:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">phi_r</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="mf">48.</span><span class="p">)</span>
+    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mf">32.</span> <span class="o">-</span> <span class="mf">25.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+
+    <span class="c1"># case 4:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="mf">48.</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;=</span> <span class="mf">180.</span><span class="p">)</span>
+    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">10.</span>
+
+    <span class="k">return</span> <span class="n">gain</span>
+
+
+<span class="k">def</span> <span class="nf">_fl_pattern_2_2</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">diameter_over_wavelength</span><span class="p">,</span> <span class="n">G_max</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Antenna gain as a function of angular distance after `ITU-R Rec F.699</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-F.699-7-200604-I/en&gt;`_ 2.2.</span>
+
+<span class="sd">    Valid for 1 to 70 GHz and cases where D / wavelength &lt;= 100</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+
+    <span class="c1"># the following are independent on phi, no need to compute after broadcast</span>
+    <span class="n">d_wlen</span> <span class="o">=</span> <span class="n">diameter_over_wavelength</span>
+
+    <span class="n">g1</span> <span class="o">=</span> <span class="mf">2.</span> <span class="o">+</span> <span class="mf">15.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">d_wlen</span><span class="p">)</span>  <span class="c1"># gain of first side-lobe</span>
+    <span class="n">phi_m</span> <span class="o">=</span> <span class="mf">20.</span> <span class="o">/</span> <span class="n">d_wlen</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">G_max</span> <span class="o">-</span> <span class="n">g1</span><span class="p">)</span>
+    <span class="n">phi_r</span> <span class="o">=</span> <span class="mf">15.85</span> <span class="o">*</span> <span class="n">d_wlen</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.6</span>
+
+    <span class="c1"># note automatic broadcasting should be possible</span>
+    <span class="p">(</span>
+        <span class="n">phi</span><span class="p">,</span> <span class="n">d_wlen</span><span class="p">,</span> <span class="n">G_max</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">phi_m</span><span class="p">,</span> <span class="n">phi_r</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span>
+        <span class="n">phi</span><span class="p">,</span> <span class="n">d_wlen</span><span class="p">,</span> <span class="n">G_max</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">phi_m</span><span class="p">,</span> <span class="n">phi_r</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="n">gain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="c1"># case 1:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="n">phi_m</span><span class="p">)</span>
+    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">G_max</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">-</span> <span class="mf">2.5e-3</span> <span class="o">*</span> <span class="p">(</span><span class="n">d_wlen</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">*</span> <span class="n">phi</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+
+    <span class="c1"># case 2:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">phi_m</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="n">phi_r</span><span class="p">)</span>
+    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">g1</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+    <span class="c1"># case 3:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">phi_r</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="mf">48.</span><span class="p">)</span>
+    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">52</span> <span class="o">-</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">d_wlen</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span> <span class="o">-</span> <span class="mi">25</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+
+    <span class="c1"># case 4:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="mf">48.</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;=</span> <span class="mf">180.</span><span class="p">)</span>
+    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">10.</span> <span class="o">-</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">d_wlen</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">gain</span>
+
+
+<span class="k">def</span> <span class="nf">_fl_pattern_2_3</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">diameter_over_wavelength</span><span class="p">,</span> <span class="n">G_max</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Antenna gain as a function of angular distance after `ITU-R Rec F.699</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-F.699-7-200604-I/en&gt;`_ 2.3.</span>
+
+<span class="sd">    Valid for 0.1 to 1 GHz and cases where D / wavelength &gt; 0.63</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+
+    <span class="c1"># the following are independent on phi, no need to compute after broadcast</span>
+    <span class="n">d_wlen</span> <span class="o">=</span> <span class="n">diameter_over_wavelength</span>
+
+    <span class="n">g1</span> <span class="o">=</span> <span class="mf">2.</span> <span class="o">+</span> <span class="mf">15.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">d_wlen</span><span class="p">)</span>  <span class="c1"># gain of first side-lobe</span>
+    <span class="n">phi_m</span> <span class="o">=</span> <span class="mf">20.</span> <span class="o">/</span> <span class="n">d_wlen</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">G_max</span> <span class="o">-</span> <span class="n">g1</span><span class="p">)</span>
+    <span class="n">phi_t</span> <span class="o">=</span> <span class="mf">100.</span> <span class="o">/</span> <span class="n">d_wlen</span>
+    <span class="n">phi_s</span> <span class="o">=</span> <span class="mf">144.5</span> <span class="o">*</span> <span class="n">d_wlen</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.2</span>
+
+    <span class="c1"># note automatic broadcasting should be possible</span>
+    <span class="p">(</span>
+        <span class="n">phi</span><span class="p">,</span> <span class="n">d_wlen</span><span class="p">,</span> <span class="n">G_max</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">phi_m</span><span class="p">,</span> <span class="n">phi_t</span><span class="p">,</span> <span class="n">phi_s</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span>
+        <span class="n">phi</span><span class="p">,</span> <span class="n">d_wlen</span><span class="p">,</span> <span class="n">G_max</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">phi_m</span><span class="p">,</span> <span class="n">phi_t</span><span class="p">,</span> <span class="n">phi_s</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="n">gain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="c1"># case 1:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="n">phi_m</span><span class="p">)</span>
+    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">G_max</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">-</span> <span class="mf">2.5e-3</span> <span class="o">*</span> <span class="p">(</span><span class="n">d_wlen</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">*</span> <span class="n">phi</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+
+    <span class="c1"># case 2:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">phi_m</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="n">phi_t</span><span class="p">)</span>
+    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">g1</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+    <span class="c1"># case 3:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">phi_t</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="n">phi_s</span><span class="p">)</span>
+    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">52</span> <span class="o">-</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">d_wlen</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span> <span class="o">-</span> <span class="mi">25</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+
+    <span class="c1"># case 4:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">phi_s</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;=</span> <span class="mf">180.</span><span class="p">)</span>
+    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.</span> <span class="o">-</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">d_wlen</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">gain</span>
+
+
+<span class="k">def</span> <span class="nf">_fl_pattern</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">diameter</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">G_max</span><span class="p">):</span>
+
+    <span class="n">d_wlen</span> <span class="o">=</span> <span class="n">diameter</span> <span class="o">/</span> <span class="n">wavelength</span>
+
+    <span class="n">phi</span><span class="p">,</span> <span class="n">d_wlen</span><span class="p">,</span> <span class="n">G_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">d_wlen</span><span class="p">,</span> <span class="n">G_max</span><span class="p">)</span>
+    <span class="n">gain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="n">tmp_mask</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.00428</span> <span class="o">&lt;</span> <span class="n">wavelength</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">wavelength</span> <span class="o">&lt;</span> <span class="mf">0.29979</span><span class="p">)</span>  <span class="c1"># 1...70 GHz</span>
+    <span class="n">mask_2_1</span> <span class="o">=</span> <span class="p">(</span><span class="n">d_wlen</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">tmp_mask</span>
+    <span class="n">mask_2_2</span> <span class="o">=</span> <span class="p">(</span><span class="n">d_wlen</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">tmp_mask</span>
+
+    <span class="n">tmp_mask</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.29979</span> <span class="o">&lt;=</span> <span class="n">wavelength</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">wavelength</span> <span class="o">&lt;</span> <span class="mf">2.99792</span><span class="p">)</span>  <span class="c1"># 0.1...1 GHz</span>
+    <span class="n">mask_2_3</span> <span class="o">=</span> <span class="p">(</span><span class="n">d_wlen</span> <span class="o">&gt;</span> <span class="mf">0.63</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">tmp_mask</span>
+
+    <span class="k">for</span> <span class="n">mask</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">mask_2_1</span><span class="p">,</span> <span class="n">_fl_pattern_2_1</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">mask_2_2</span><span class="p">,</span> <span class="n">_fl_pattern_2_2</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">mask_2_3</span><span class="p">,</span> <span class="n">_fl_pattern_2_3</span><span class="p">),</span>
+            <span class="p">]:</span>
+
+        <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">d_wlen</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">G_max</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">gain</span>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">diameter</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1000.</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">wavelength</span><span class="o">=</span><span class="p">(</span><span class="mf">0.001</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">G_max</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="fl_pattern"><a class="viewcode-back" href="../../../api/pycraf.antenna.fl_pattern.html#pycraf.antenna.fl_pattern">[docs]</a><span class="k">def</span> <span class="nf">fl_pattern</span><span class="p">(</span>
+        <span class="n">phi</span><span class="p">,</span> <span class="n">diameter</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">G_max</span>
+        <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Antenna gain as a function of angular distance after `ITU-R Rec F.699</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-F.699-7-200604-I/en&gt;`_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    phi : `~astropy.units.Quantity`</span>
+<span class="sd">        Angular distance[deg]</span>
+<span class="sd">    diameter : `~astropy.units.Quantity`</span>
+<span class="sd">        Antenna diameter [m]</span>
+<span class="sd">    wavelength : `~astropy.units.Quantity`</span>
+<span class="sd">        Observing wavelength [m]</span>
+<span class="sd">    G_max : `~astropy.units.Quantity`</span>
+<span class="sd">        Antenna maximum gain [dBi]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    gain : `~astropy.units.Quantity`</span>
+<span class="sd">        Antenna gain [dBi]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - If `G_max` is unknown, there is a helper function</span>
+<span class="sd">      `pycraf.antenna.G_max_from_HPBW` that can be used to estimate its</span>
+<span class="sd">      value.</span>
+<span class="sd">    - See `ITU-R Rec F.699</span>
+<span class="sd">      &lt;https://www.itu.int/rec/R-REC-F.699-7-200604-I/en&gt;`_ for further</span>
+<span class="sd">      explanation and applicability of this model.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_fl_pattern</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">diameter</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">G_max</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_fl_hpbw_from_size</span><span class="p">(</span><span class="n">diameter</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">):</span>
+
+    <span class="k">return</span> <span class="mf">70.</span> <span class="o">*</span> <span class="n">wavelength</span> <span class="o">/</span> <span class="n">diameter</span>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">diameter</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1000.</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">wavelength</span><span class="o">=</span><span class="p">(</span><span class="mf">0.001</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">deg</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="fl_hpbw_from_size"><a class="viewcode-back" href="../../../api/pycraf.antenna.fl_hpbw_from_size.html#pycraf.antenna.fl_hpbw_from_size">[docs]</a><span class="k">def</span> <span class="nf">fl_hpbw_from_size</span><span class="p">(</span><span class="n">diameter</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Estimate HPBW from antenna diameter after `ITU-R Rec F.699</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-F.699-7-200604-I/en&gt;`_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    diameter : `~astropy.units.Quantity`</span>
+<span class="sd">        Antenna diameter [m]</span>
+<span class="sd">    wavelength : `~astropy.units.Quantity`</span>
+<span class="sd">        Observing wavelength [m]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    hpbw : `~astropy.units.Quantity`</span>
+<span class="sd">        Antenna HPBW (3-dB point) [deg]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    See `ITU-R Rec F.699</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-F.699-7-200604-I/en&gt;`_ for further</span>
+<span class="sd">    explanation and applicability of this model.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_fl_hpbw_from_size</span><span class="p">(</span><span class="n">diameter</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_fl_G_max_from_size</span><span class="p">(</span><span class="n">diameter</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">):</span>
+
+    <span class="k">return</span> <span class="mf">20.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">diameter</span> <span class="o">/</span> <span class="n">wavelength</span><span class="p">)</span> <span class="o">+</span> <span class="mf">7.7</span>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">diameter</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1000.</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">wavelength</span><span class="o">=</span><span class="p">(</span><span class="mf">0.001</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="fl_G_max_from_size"><a class="viewcode-back" href="../../../api/pycraf.antenna.fl_G_max_from_size.html#pycraf.antenna.fl_G_max_from_size">[docs]</a><span class="k">def</span> <span class="nf">fl_G_max_from_size</span><span class="p">(</span><span class="n">diameter</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Estimate maximum gain from antenna diameter after `ITU-R Rec F.699</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-F.699-7-200604-I/en&gt;`_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    diameter : `~astropy.units.Quantity`</span>
+<span class="sd">        Antenna diameter [m]</span>
+<span class="sd">    wavelength : `~astropy.units.Quantity`</span>
+<span class="sd">        Observing wavelength [m]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    G_max : `~astropy.units.Quantity`</span>
+<span class="sd">        Antenna maximum gain [dBi]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    See `ITU-R Rec F.699</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-F.699-7-200604-I/en&gt;`_ for further</span>
+<span class="sd">    explanation and applicability of this model.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_fl_G_max_from_size</span><span class="p">(</span><span class="n">diameter</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_fl_G_max_from_hpbw</span><span class="p">(</span><span class="n">hpbw</span><span class="p">):</span>
+
+    <span class="k">return</span> <span class="mf">44.5</span> <span class="o">-</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">hpbw</span><span class="p">)</span>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">hpbw</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-3</span><span class="p">,</span> <span class="mf">90.</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="fl_G_max_from_hpbw"><a class="viewcode-back" href="../../../api/pycraf.antenna.fl_G_max_from_hpbw.html#pycraf.antenna.fl_G_max_from_hpbw">[docs]</a><span class="k">def</span> <span class="nf">fl_G_max_from_hpbw</span><span class="p">(</span><span class="n">hpbw</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Estimate maximum gain from antenna hpbw after `ITU-R Rec F.699</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-F.699-7-200604-I/en&gt;`_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hpbw : `~astropy.units.Quantity`</span>
+<span class="sd">        Antenna HPBW (3-dB point) [deg]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    G_max : `~astropy.units.Quantity`</span>
+<span class="sd">        Antenna maximum gain [dBi]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    See `ITU-R Rec F.699</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-F.699-7-200604-I/en&gt;`_ for further</span>
+<span class="sd">    explanation and applicability of this model.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_fl_G_max_from_hpbw</span><span class="p">(</span><span class="n">hpbw</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This not a standalone python program! Use as module.&#39;</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right"> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 29 Jul 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

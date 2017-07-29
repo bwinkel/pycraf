@@ -1,0 +1,6 @@
+fl_pattern
+==========
+
+.. currentmodule:: pycraf.antenna
+
+.. autofunction:: fl_pattern

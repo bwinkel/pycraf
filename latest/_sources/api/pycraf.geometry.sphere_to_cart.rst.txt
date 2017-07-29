@@ -1,0 +1,6 @@
+sphere_to_cart
+==============
+
+.. currentmodule:: pycraf.geometry
+
+.. autofunction:: sphere_to_cart

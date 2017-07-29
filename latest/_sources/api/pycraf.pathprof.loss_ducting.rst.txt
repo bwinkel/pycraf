@@ -1,0 +1,6 @@
+loss_ducting
+============
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: loss_ducting

@@ -1,0 +1,6 @@
+atten_slant_annex2
+==================
+
+.. currentmodule:: pycraf.atm
+
+.. autofunction:: atten_slant_annex2
