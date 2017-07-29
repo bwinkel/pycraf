@@ -1,7 +1,9 @@
 latest/_images/index-1.png
+latest/_images/index-11.png
 latest/_images/index-1_00_00.png
 latest/_images/index-1_01_00.png
 latest/_images/index-2.png
+latest/_images/index-21.png
 latest/_images/index-2_00_00.png
 latest/_images/index-2_01_00.png
 latest/_images/index-3.png
@@ -329,8 +331,14 @@ latest/index.html
 latest/install.html
 latest/license.html
 latest/objects.inv
+latest/pathprof/index-1.pdf
+latest/pathprof/index-1.png
 latest/pathprof/index-1.py
+latest/pathprof/index-1.svg
+latest/pathprof/index-2.pdf
+latest/pathprof/index-2.png
 latest/pathprof/index-2.py
+latest/pathprof/index-2.svg
 latest/pathprof/index-3.pdf
 latest/pathprof/index-3.png
 latest/pathprof/index-3.py
