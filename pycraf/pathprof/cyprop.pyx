@@ -1856,6 +1856,9 @@ cdef double _clutter_correction(
         double F_fc
         double A_h
 
+    if zone < 0:
+        return 0
+
     h_a = CLUTTER_DATA_V[zone, 0]
     d_k = CLUTTER_DATA_V[zone, 1]
 

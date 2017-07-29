@@ -517,7 +517,7 @@ def test_clutter_correction():
     CL = pathprof.CLUTTER
 
     cases = [
-        (CL.UNKNOWN, 5 * apu.m, 1 * apu.GHz, -0.33 * cnv.dB),
+        (CL.UNKNOWN, 5 * apu.m, 1 * apu.GHz, 0.0 * cnv.dB),
         (CL.SPARSE, 2 * apu.m, 0.5 * apu.GHz, 9.148328469292968 * cnv.dB),
         (CL.VILLAGE, 5 * apu.m, 1 * apu.GHz, -0.12008183792955418 * cnv.dB),
         (CL.SUBURBAN, 5 * apu.m, 10 * apu.GHz, 13.606900992918096 * cnv.dB),
