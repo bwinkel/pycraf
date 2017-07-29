@@ -68,7 +68,7 @@ class MultiState(object, metaclass=_MultiMeta):
         >>> MyState.foo
         1
         >>> MyState.set(foo=2)
-        <ScienceState MyState>
+        <MultiState MyState>
         >>> MyState.foo
         2
 
@@ -151,7 +151,7 @@ class MultiState(object, metaclass=_MultiMeta):
                         )
 
             def __repr__(self):
-                return ('<ScienceState {0}>'.format(self._parent.__name__))
+                return ('<MultiState {0}>'.format(self._parent.__name__))
 
         ctx = _Context(cls, cls._attributes)
         kwargs = cls.validate(**kwargs)
