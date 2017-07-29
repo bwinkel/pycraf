@@ -481,3 +481,35 @@ def test_srtm_height_data_zero(srtm_temp_dir):
         heights = srtm._srtm_height_data(lons, lats)
 
         assert_allclose(heights, np.zeros(5, dtype=np.float32))
+
+
+@remote_data(source='any')
+def test_srtm_height_data_broadcasting(srtm_temp_dir):
+
+    args_list = [
+        (-180, 180, apu.deg),
+        (-90, 90, apu.deg),
+        ]
+    check_astro_quantities(srtm.srtm_height_data, args_list)
+
+    with srtm.SrtmConf.set(srtm_dir=srtm_temp_dir, interp='linear'):
+
+        lons = np.arange(12.1005, 12.9, 0.2) * apu.deg
+        lats = np.arange(50.1005, 50.9, 0.2)[:, np.newaxis] * apu.deg
+        heights = srtm.srtm_height_data(lons, lats)
+
+        assert_quantity_allclose(heights, np.array([
+            [581.71997070, 484.48001099, 463.79998779, 736.44000244],
+            [613.00000000, 549.88000488, 636.52001953, 678.91998291],
+            [433.44000244, 416.20001221, 704.52001953, 826.08001709],
+            [358.72000122, 395.55999756, 263.83999634, 469.39999390]
+            ]) * apu.m)
+
+        heights = srtm.srtm_height_data(lons, lats.reshape((2, 2, 1)))
+
+        assert_quantity_allclose(heights, np.array([
+            [[581.71997070, 484.48001099, 463.79998779, 736.44000244],
+             [613.00000000, 549.88000488, 636.52001953, 678.91998291]],
+            [[433.44000244, 416.20001221, 704.52001953, 826.08001709],
+             [358.72000122, 395.55999756, 263.83999634, 469.39999390]]
+            ]) * apu.m)

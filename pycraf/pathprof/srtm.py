@@ -413,33 +413,27 @@ def get_tile_interpolator(ilon, ilat, interp, spline_opts):
 def _srtm_height_data(lons, lats):
     # angles in deg
 
-    # coordinates could span different tiles, so first get the unique list
-    lons = np.atleast_1d(lons)
-    lats = np.atleast_1d(lats)
-
-    # TODO user npy iterator to allow broadcasting
-    assert lons.ndim == 1 and lats.ndim == 1
-
-    heights = np.empty(lons.shape, dtype=np.float32)
+    # is there no way around constructing the full lon/lat grid?
+    lons_g, lats_g = np.broadcast_arrays(lons, lats)
+    heights = np.empty(lons_g.shape, dtype=np.float32)
 
     ilons = np.floor(lons).astype(np.int32)
     ilats = np.floor(lats).astype(np.int32)
 
-    uilonlats = set((a, b) for a, b in zip(ilons, ilats))
-
     interp = SrtmConf.interp
-    spline_opts = SrtmConf.spline_opts
+    spl_opts = SrtmConf.spline_opts
 
-    for uilon, uilat in uilonlats:
+    for uilon in np.unique(ilons):
+        for uilat in np.unique(ilats):
 
-        mask = (ilons == uilon) & (ilats == uilat)
+            mask = (ilons == uilon) & (ilats == uilat)
 
-        if interp in ['nearest', 'linear']:
-            ifunc = get_tile_interpolator(uilon, uilat, interp, None)
-            heights[mask] = ifunc((lons[mask], lats[mask]))
-        elif interp == 'spline':
-            ifunc = get_tile_interpolator(uilon, uilat, interp, spline_opts)
-            heights[mask] = ifunc(lons[mask], lats[mask], grid=False)
+            if interp in ['nearest', 'linear']:
+                ifunc = get_tile_interpolator(uilon, uilat, interp, None)
+                heights[mask] = ifunc((lons_g[mask], lats_g[mask]))
+            elif interp == 'spline':
+                ifunc = get_tile_interpolator(uilon, uilat, interp, spl_opts)
+                heights[mask] = ifunc(lons_g[mask], lats_g[mask], grid=False)
 
     return heights
 
