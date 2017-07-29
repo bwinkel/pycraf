@@ -45,8 +45,8 @@ platform:
     -x64
 
 install:
+    - "mkdir %SRTMDATA%"
     # downloading srtm data
-    # - "mkdir %SRTMDATA%"
     # - "powershell -command \"& { Invoke-WebRequest -Uri 'http://viewfinderpanoramas.org/dem3/M32.zip' -OutFile '%SRTMDATA%\\M32.zip' }\""
     # - "powershell -command \"& { Expand-Archive '%SRTMDATA%\\M32.zip' -DestinationPath '%SRTMDATA%\\' }\""
     # - "powershell -command \"& { Move-Item '%SRTMDATA%\\*\\*.hgt' '%SRTMDATA%\\' }\""

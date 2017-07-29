@@ -4,7 +4,8 @@ pycraf
 
 - *Version:* 0.25
 - *Author:* Benjamin Winkel
-- *User manual:* Hosted on `GitHub Pages <https://bwinkel.github.io/pycraf/>`_
+- *User manual:* `stable <https://bwinkel.github.io/pycraf/>`__ |
+  `developer <https://bwinkel.github.io/pycraf/latest/>`__
 
 .. image:: https://img.shields.io/pypi/v/pycraf.svg
     :target: https://pypi.python.org/pypi/pycraf

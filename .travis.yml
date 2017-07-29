@@ -133,11 +133,12 @@ matrix:
           env: MAIN_CMD='pycodestyle pycraf --count' SETUP_CMD=''
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gcc6; brew link --overwrite gcc@6; fi
 
 install:
 
+    - mkdir -p ${TRAVIS_BUILD_DIR}/srtm/
     # download SRTM data for tests
     # - wget -P ${TRAVIS_BUILD_DIR}/srtm/ http://viewfinderpanoramas.org/dem3/M32.zip
     # - wget -P ${TRAVIS_BUILD_DIR}/srtm/ http://viewfinderpanoramas.org/dem3/N32.zip
@@ -172,32 +173,36 @@ install:
 script:
    - $MAIN_CMD $SETUP_CMD
    - echo "DO_DOCS" $DO_DOCS
-   # also have to remove the c-files, generated during build
-   #  --built-docs docs/_build/html/
+   # have to remove the c-files, generated during build with
+   # git reset --hard HEAD;
+   - set -e
    - 'if [[ $TRAVIS_TAG && $DO_DOCS ]]; then
-       set -e;
-       conda install doctr;
-       git reset --hard HEAD;
-       doctr deploy . --no-require-master;
+        conda install doctr;
+        git reset --hard HEAD;
+        doctr deploy . --no-require-master --sync;
+     elif [[ $DO_DOCS ]]; then
+        conda install doctr;
+        git reset --hard HEAD;
+        doctr deploy --no-require-master --sync --built-docs docs/_build/html "latest";
      fi'
 
 after_success:
     # If coveralls.io is set up for this package, uncomment the line below.
     # The coveragerc file may be customized as needed for your package.
     - 'if [[ $SETUP_CMD == *coverage* ]]; then
-        coveralls --rcfile="pycraf/tests/coveragerc";
-      fi'
+         coveralls --rcfile="pycraf/tests/coveragerc";
+       fi'
 
     - echo "TRAVIS_TAG" $TRAVIS_TAG
     - echo "DO_DIST" $DO_DIST
     - 'if [[ $TRAVIS_TAG && $DO_DIST ]]; then
-        conda install twine;
-        python setup.py sdist;
-        python -m twine upload dist/*.tar.gz;
-      fi'
+         conda install twine;
+         python setup.py sdist;
+         python -m twine upload dist/*.tar.gz;
+       fi'
     - echo "DO_MAC_DIST" $DO_MAC_DIST
     - 'if [[ $TRAVIS_TAG && $DO_MAC_DIST ]]; then
-        conda install twine;
-        python setup.py bdist_wheel;
-        python -m twine upload dist/*.whl;
-      fi'
+         conda install twine;
+         python setup.py bdist_wheel;
+         python -m twine upload dist/*.whl;
+       fi'
