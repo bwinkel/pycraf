@@ -2,6 +2,9 @@ import matplotlib.pyplot as plt
 from astropy import units as u
 from pycraf import pathprof
 
+# allow download of missing SRTM data:
+pathprof.SrtmConf.set(download='missing')
+
 lon_t, lat_t = 6.8836 * u.deg, 50.525 * u.deg
 lon_r, lat_r = 7.3334 * u.deg, 50.635 * u.deg
 hprof_step = 100 * u.m

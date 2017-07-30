@@ -11,7 +11,9 @@ SrtmConf
    .. autosummary::
 
       ~SrtmConf.download
+      ~SrtmConf.interp
       ~SrtmConf.server
+      ~SrtmConf.spline_opts
       ~SrtmConf.srtm_dir
 
    .. rubric:: Methods Summary
@@ -23,7 +25,9 @@ SrtmConf
    .. rubric:: Attributes Documentation
 
    .. autoattribute:: download
+   .. autoattribute:: interp
    .. autoattribute:: server
+   .. autoattribute:: spline_opts
    .. autoattribute:: srtm_dir
 
    .. rubric:: Methods Documentation

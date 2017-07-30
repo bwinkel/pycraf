@@ -81,7 +81,7 @@ Installation from source
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 There are two options, if you want to build pycraf from sources. Either, you
-install the tar-ball (*.tar.gz file) from `PyPI
+install the tar-ball (`*.tar.gz` file) from `PyPI
 <https://pypi.python.org/pypi/pycraf>`_ and extract it to the directory of
 your choice, or, if you always want to stay up-to-date, clone the git
 repository:
@@ -179,13 +179,13 @@ Testing an installed pycraf
 The easiest way to test your installed version of pycraf is running
 correctly is to use the `~pycraf.test()` function::
 
-    >>> import pycraf  # doctest: +SKIP
-    >>> pycraf.test()  # doctest: +SKIP
+    import pycraf
+    pycraf.test()
 
 To run the tests for one sub-package, e.g., `conversions`, only::
 
-    >>> import pycraf  # doctest: +SKIP
-    >>> pycraf.test('conversions')  # doctest: +SKIP
+    import pycraf
+    pycraf.test('conversions')
 
 The tests should run and print out any failures, which you can report at
 the `pycraf issue tracker <http://github.com/bwinkel/pycraf/issues>`__.
@@ -200,8 +200,8 @@ the `pycraf issue tracker <http://github.com/bwinkel/pycraf/issues>`__.
     By default, the `test` function will skip over tests that require
     data from the internet. One can include them by::
 
-        >>> import pycraf  # doctest: +SKIP
-        >>> pycraf.test(remote_data='any')  # doctest: +SKIP
+        import pycraf
+        pycraf.test(remote_data='any')
 
     This will *always* download SRTM data (few tiles only) to test the
     auto-download functionality! Do this only, if you can afford the
@@ -226,15 +226,6 @@ Using SRTM data
 ---------------
 
 To make full use of the path attenuation calculations provided by pycraf,
-we recommend to use NASA's Shuttle Radar Topography Mission
+you will need to use NASA's Shuttle Radar Topography Mission
 `(SRTM) data <https://www2.jpl.nasa.gov/srtm/>`__ for height-profile
-generation. pycraf can work with so-called `.hgt` files, a very simple binary
-format. Each .hgt file, a so-called tile, just contains 1201x1201 16-bit
-integers. From the file naming scheme, one can infer the associated
-coordinates. Most tiles contain one square-degree.
-
-Unfortunately, we cannot provide SRTM data as part of the package, due to the
-large file sizes and legal reasons. But once you downloaded the necessary
-tiles (all or only a subset appropriate for your region), simply define the
-environment variable `SRTMDATA`, let it point to the folder containing the
-tiles, and pycraf will find the files when it is imported from Python.
+generation. Please see :ref:`working_with_srtm` for further details.

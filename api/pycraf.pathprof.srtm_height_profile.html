@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>srtm_height_profile &#8212; pycraf v0.25.1</title>
+    <title>srtm_height_profile &#8212; pycraf v0.25.2</title>
     
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.25.1',
+        VERSION:     '0.25.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -70,7 +70,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.1</a>
+	<a href="../index.html">pycraf v0.25.2</a>
 	 &#187;
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="docutils literal"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
@@ -148,10 +148,16 @@
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li><code class="xref py py-obj docutils literal"><span class="pre">distances</span></code> contains distances from Transmitter.</li>
-<li><a class="reference external" href="https://www2.jpl.nasa.gov/srtm/">SRTM data</a> need to be downloaded
-manually by the user. An environment variable <code class="xref py py-obj docutils literal"><span class="pre">SRTMDATA</span></code> has to be
-set to point to the directory containing the .hgt files; see
-<a class="reference internal" href="../install.html#srtm-data"><span class="std std-ref">Using SRTM data</span></a>.</li>
+<li><a class="reference external" href="https://www2.jpl.nasa.gov/srtm/">SRTM</a> data tiles (<code class="xref py py-obj docutils literal"><span class="pre">*.hgt</span></code>) need
+to be accessible by <code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code>.  It is assumed that these are either
+present in the current working directory or in the path defined by the
+<code class="xref py py-obj docutils literal"><span class="pre">SRTMDATA</span></code> environment variable (sub-directories are also parsed).
+Alternatively, use the <a class="reference internal" href="pycraf.pathprof.SrtmConf.html#pycraf.pathprof.SrtmConf" title="pycraf.pathprof.SrtmConf"><code class="xref py py-obj docutils literal"><span class="pre">SrtmConf</span></code></a> manager to
+change the directory, where <code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code> looks for SRTM data, during
+run-time. The <a class="reference internal" href="pycraf.pathprof.SrtmConf.html#pycraf.pathprof.SrtmConf" title="pycraf.pathprof.SrtmConf"><code class="xref py py-obj docutils literal"><span class="pre">SrtmConf</span></code></a> manager also offers
+additional features such as automatic downloading of missing
+tiles or applying different interpolation methods (e.g., splines).
+For details see <a class="reference internal" href="../pathprof/working_with_srtm.html#working-with-srtm"><span class="std std-ref">Working with SRTM data</span></a>.</li>
 </ul>
 </dd></dl>
 
@@ -180,7 +186,7 @@ set to point to the directory containing the .hgt files; see
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 28 Jul 2017. <br/>
+    Last built 30 Jul 2017. <br/>
   </p>
 </footer>
   </body>

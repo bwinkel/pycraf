@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v0.25.1</title>
+    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v0.25.2</title>
     
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.25.1',
+        VERSION:     '0.25.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -70,7 +70,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.1</a>
+	<a href="../index.html">pycraf v0.25.2</a>
 	 &#187;
       </li>
       
@@ -135,7 +135,8 @@ necessary to determine the effective Earth radii.</li>
 </div></blockquote>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">For most of the functionality in this module, you will need to <a class="reference internal" href="download_srtm.html#download-srtm"><span class="std std-ref">Download SRTM data</span></a>.</p>
+<p class="last">For most of the functionality in this module, you will need to download
+SRTM tile data; see <a class="reference internal" href="working_with_srtm.html#working-with-srtm"><span class="std std-ref">Working with SRTM data</span></a>.</p>
 </div>
 </div>
 <div class="section" id="getting-started">
@@ -146,6 +147,9 @@ necessary to determine the effective Earth radii.</li>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
 <span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">pathprof</span>
+
+<span class="c1"># allow download of missing SRTM data:</span>
+<span class="n">pathprof</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>
 
 <span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span> <span class="o">=</span> <span class="mf">6.8836</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.525</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
 <span class="n">lon_r</span><span class="p">,</span> <span class="n">lat_r</span> <span class="o">=</span> <span class="mf">7.3334</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.635</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
@@ -168,6 +172,10 @@ necessary to determine the effective Earth radii.</li>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Height [m]&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
 </pre></div>
+</div>
+<p>(<a class="reference external" href="../pathprof/index-1.png">png</a>, <a class="reference external" href="../pathprof/index-1.svg">svg</a>, <a class="reference external" href="../pathprof/index-1.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/index-11.png" src="../_images/index-11.png" />
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -198,32 +206,35 @@ pathprof.complete_loss function also returns the most important constituents,
 it is usually sufficient to use that. The individual functions are only
 provided for reasons of computing speed, if one is really only interested in
 one component:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">freq</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">GHz</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">pathprof</span><span class="p">,</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
 
-<span class="n">lon_tx</span><span class="p">,</span> <span class="n">lat_tx</span> <span class="o">=</span> <span class="mf">6.8836</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.525</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
-<span class="n">lon_rx</span><span class="p">,</span> <span class="n">lat_rx</span> <span class="o">=</span> <span class="mf">7.3334</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.635</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
-<span class="n">hprof_step</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>  <span class="c1"># resolution of height profile</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">freq</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">GHz</span>
 
-<span class="n">omega</span> <span class="o">=</span> <span class="mf">0.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span>  <span class="c1"># fraction of path over sea</span>
-<span class="n">temperature</span> <span class="o">=</span> <span class="mf">290.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">K</span>
-<span class="n">pressure</span> <span class="o">=</span> <span class="mf">1013.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">hPa</span>
-<span class="n">time_percent</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span>  <span class="c1"># see P.452 for explanation</span>
-<span class="n">h_tg</span><span class="p">,</span> <span class="n">h_rg</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mi">50</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
-<span class="n">G_t</span><span class="p">,</span> <span class="n">G_r</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span><span class="p">,</span> <span class="mi">15</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lon_tx</span><span class="p">,</span> <span class="n">lat_tx</span> <span class="o">=</span> <span class="mf">6.8836</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.525</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lon_rx</span><span class="p">,</span> <span class="n">lat_rx</span> <span class="o">=</span> <span class="mf">7.3334</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.635</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hprof_step</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>  <span class="c1"># resolution of height profile</span>
 
-<span class="c1"># clutter zones</span>
-<span class="n">zone_t</span><span class="p">,</span> <span class="n">zone_r</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">CLUTTER</span><span class="o">.</span><span class="n">URBAN</span><span class="p">,</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">CLUTTER</span><span class="o">.</span><span class="n">SUBURBAN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">omega</span> <span class="o">=</span> <span class="mf">0.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span>  <span class="c1"># fraction of path over sea</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">temperature</span> <span class="o">=</span> <span class="mf">290.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">K</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pressure</span> <span class="o">=</span> <span class="mf">1013.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">hPa</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time_percent</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span>  <span class="c1"># see P.452 for explanation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h_tg</span><span class="p">,</span> <span class="n">h_rg</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mi">50</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G_t</span><span class="p">,</span> <span class="n">G_r</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span><span class="p">,</span> <span class="mi">15</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span>
 
-<span class="n">pprop</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">PathProp</span><span class="p">(</span>
-    <span class="n">freq</span><span class="p">,</span>
-    <span class="n">temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span>
-    <span class="n">lon_tx</span><span class="p">,</span> <span class="n">lat_tx</span><span class="p">,</span>
-    <span class="n">lon_rx</span><span class="p">,</span> <span class="n">lat_rx</span><span class="p">,</span>
-    <span class="n">h_tg</span><span class="p">,</span> <span class="n">h_rg</span><span class="p">,</span>
-    <span class="n">hprof_step</span><span class="p">,</span>
-    <span class="n">time_percent</span><span class="p">,</span>
-    <span class="n">zone_t</span><span class="o">=</span><span class="n">zone_t</span><span class="p">,</span> <span class="n">zone_r</span><span class="o">=</span><span class="n">zone_r</span><span class="p">,</span>
-    <span class="p">)</span>
+<span class="go"># clutter zones</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zone_t</span><span class="p">,</span> <span class="n">zone_r</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">CLUTTER</span><span class="o">.</span><span class="n">URBAN</span><span class="p">,</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">CLUTTER</span><span class="o">.</span><span class="n">SUBURBAN</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprop</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">PathProp</span><span class="p">(</span>  
+<span class="gp">... </span>    <span class="n">freq</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">lon_tx</span><span class="p">,</span> <span class="n">lat_tx</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">lon_rx</span><span class="p">,</span> <span class="n">lat_rx</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">h_tg</span><span class="p">,</span> <span class="n">h_rg</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">hprof_step</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">time_percent</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">zone_t</span><span class="o">=</span><span class="n">zone_t</span><span class="p">,</span> <span class="n">zone_r</span><span class="o">=</span><span class="n">zone_r</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">)</span>
 </pre></div>
 </div>
 <p>The PathProp object is immutable, so if you want to change something, you have
@@ -255,34 +266,26 @@ inconsistencies. It is easily possible to access the parameters:</p>
 <span class="go">bearing        :    68.815620 deg</span>
 <span class="go">back_bearing   :  -110.836903 deg</span>
 <span class="go">hprof_step     :   100.000000 m</span>
-<span class="go">.</span>
-<span class="go">.</span>
-<span class="go">.</span>
+<span class="gp">...</span>
 
 <span class="go"># path elevation angles as seen from Tx, Rx</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pprop</span><span class="o">.</span><span class="n">eps_pt</span><span class="p">,</span> <span class="n">pprop</span><span class="o">.</span><span class="n">eps_pr</span><span class="p">)</span>  
-<span class="go">4.529580772837248 deg 1.883388026488473 deg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.3f}</span><span class="s1"> </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pprop</span><span class="o">.</span><span class="n">eps_pt</span><span class="p">,</span> <span class="n">pprop</span><span class="o">.</span><span class="n">eps_pr</span><span class="p">))</span>  
+<span class="go">4.530 deg 1.883 deg</span>
 </pre></div>
 </div>
 <p>With the PathProp object, it is now just one function call to get the path
 loss:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tot_loss</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">complete_loss</span><span class="p">(</span><span class="n">pprop</span><span class="p">,</span> <span class="n">G_t</span><span class="p">,</span> <span class="n">G_r</span><span class="p">)</span>  
-<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">L_bfsg</span><span class="p">,</span> <span class="n">L_bd</span><span class="p">,</span> <span class="n">L_bs</span><span class="p">,</span> <span class="n">L_ba</span><span class="p">,</span> <span class="n">L_b</span><span class="p">,</span> <span class="n">L_b_corr</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span> <span class="o">=</span> <span class="n">tot_loss</span>  
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;L_bfsg:   </span><span class="si">{0.value:5.2f}</span><span class="s1"> </span><span class="si">{0.unit}</span><span class="s1"> - &#39;</span>  
-<span class="gp">... </span>      <span class="s1">&#39;Free-space loss&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">L_bfsg</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;L_bd:     </span><span class="si">{0.value:5.2f}</span><span class="s1"> </span><span class="si">{0.unit}</span><span class="s1"> - &#39;</span>  
-<span class="gp">... </span>      <span class="s1">&#39;Basic transmission loss associated &#39;</span>
-<span class="gp">... </span>      <span class="s1">&#39;with diffraction&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">L_bd</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;L_bs:     </span><span class="si">{0.value:5.2f}</span><span class="s1"> </span><span class="si">{0.unit}</span><span class="s1"> - &#39;</span>  
-<span class="gp">... </span>      <span class="s1">&#39;Tropospheric scatter loss&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">L_bs</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;L_ba:     </span><span class="si">{0.value:5.2f}</span><span class="s1"> </span><span class="si">{0.unit}</span><span class="s1"> - &#39;</span>  
-<span class="gp">... </span>      <span class="s1">&#39;Ducting/layer reflection loss&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">L_ba</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;L_b:      </span><span class="si">{0.value:5.2f}</span><span class="s1"> </span><span class="si">{0.unit}</span><span class="s1"> - &#39;</span>  
-<span class="gp">... </span>      <span class="s1">&#39;Complete path propagation loss&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">L_b</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;L_b_corr: </span><span class="si">{0.value:5.2f}</span><span class="s1"> </span><span class="si">{0.unit}</span><span class="s1"> - &#39;</span>  
-<span class="gp">... </span>      <span class="s1">&#39;As L_b but with clutter correction&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">L_b_corr</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;L:        </span><span class="si">{0.value:5.2f}</span><span class="s1"> </span><span class="si">{0.unit}</span><span class="s1"> - &#39;</span>  
-<span class="gp">... </span>      <span class="s1">&#39;As L_b_corr but with gain correction&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">L</span><span class="p">))</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tot_loss</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">loss_complete</span><span class="p">(</span><span class="n">pprop</span><span class="p">,</span> <span class="n">G_t</span><span class="p">,</span> <span class="n">G_r</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;L_bfsg:   </span><span class="si">{:5.2f}</span><span class="s1"> - Free-space loss</span><span class="se">\n</span><span class="s1">&#39;</span>  
+<span class="gp">... </span>      <span class="s1">&#39;L_bd:     </span><span class="si">{:5.2f}</span><span class="s1"> - Basic transmission loss associated &#39;</span>
+<span class="gp">... </span>      <span class="s1">&#39;with diffraction</span><span class="se">\n</span><span class="s1">&#39;</span>
+<span class="gp">... </span>      <span class="s1">&#39;L_bs:     </span><span class="si">{:5.2f}</span><span class="s1"> - Tropospheric scatter loss</span><span class="se">\n</span><span class="s1">&#39;</span>
+<span class="gp">... </span>      <span class="s1">&#39;L_ba:     </span><span class="si">{:5.2f}</span><span class="s1"> - Ducting/layer reflection loss</span><span class="se">\n</span><span class="s1">&#39;</span>
+<span class="gp">... </span>      <span class="s1">&#39;L_b:      </span><span class="si">{:5.2f}</span><span class="s1"> - Complete path propagation loss</span><span class="se">\n</span><span class="s1">&#39;</span>
+<span class="gp">... </span>      <span class="s1">&#39;L_b_corr: </span><span class="si">{:5.2f}</span><span class="s1"> - As L_b but with clutter correction</span><span class="se">\n</span><span class="s1">&#39;</span>
+<span class="gp">... </span>      <span class="s1">&#39;L:        </span><span class="si">{:5.2f}</span><span class="s1"> - As L_b_corr but with gain &#39;</span>
+<span class="gp">... </span>      <span class="s1">&#39;correction&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">tot_loss</span><span class="p">)</span>
+<span class="gp">... </span>     <span class="p">)</span>
 <span class="go">L_bfsg:   123.34 dB - Free-space loss</span>
 <span class="go">L_bd:     173.73 dB - Basic transmission loss associated with diffraction</span>
 <span class="go">L_bs:     225.76 dB - Tropospheric scatter loss</span>
@@ -305,7 +308,9 @@ to produce terrain maps of a region:</p>
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
 <span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">pathprof</span>
 
-<span class="c1"># lon_t, lat_t = 6.52 * u.deg, 53.22 * u.deg  # Netherlands</span>
+<span class="c1"># allow download of missing SRTM data:</span>
+<span class="n">pathprof</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>
+
 <span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span> <span class="o">=</span> <span class="mf">9.943</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">54.773</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>  <span class="c1"># Northern Germany</span>
 <span class="n">map_size_lon</span><span class="p">,</span> <span class="n">map_size_lat</span> <span class="o">=</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
 <span class="n">map_resolution</span> <span class="o">=</span> <span class="mf">3.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">arcsec</span>
@@ -355,6 +360,10 @@ to produce terrain maps of a region:</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">tick_top</span><span class="p">()</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">)</span>
 </pre></div>
+</div>
+<p>(<a class="reference external" href="../pathprof/index-2.png">png</a>, <a class="reference external" href="../pathprof/index-2.svg">svg</a>, <a class="reference external" href="../pathprof/index-2.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/index-21.png" src="../_images/index-21.png" />
 </div>
 <p>Here, we made use of a special <code class="xref py py-obj docutils literal"><span class="pre">matplotlib</span></code> colormap, which can be produced
 using <a class="reference internal" href="../api/pycraf.pathprof.terrain_cmap_factory.html#pycraf.pathprof.terrain_cmap_factory" title="pycraf.pathprof.terrain_cmap_factory"><code class="xref py py-obj docutils literal"><span class="pre">terrain_cmap_factory</span></code></a>. It returns a <code class="xref py py-obj docutils literal"><span class="pre">cmap</span></code> and a
@@ -424,11 +433,45 @@ quickly determine regions where the necessary separations between a
 potential interferer and the victim terminal would be too small, potentially
 leading to radio frequency interference (RFI).</p>
 <p>The simple approach would be to create a <a class="reference internal" href="../api/pycraf.pathprof.PathProp.html#pycraf.pathprof.PathProp" title="pycraf.pathprof.PathProp"><code class="xref py py-obj docutils literal"><span class="pre">PathProp</span></code></a> instance
-for each pixel in the desired region (with the Tx being in the center of the map, and the Rx located at the other map pixels) and run the <code class="xref py py-obj docutils literal"><span class="pre">loss_total</span></code> function accordingly. This is relatively slow.
-Therefore, we added a faster alternative, <a class="reference internal" href="../api/pycraf.pathprof.atten_map_fast.html#pycraf.pathprof.atten_map_fast" title="pycraf.pathprof.atten_map_fast"><code class="xref py py-obj docutils literal"><span class="pre">atten_map_fast</span></code></a>. The idea is to generate the full height profiles only for the pixels on the map edges and re-use the arrays for the inner pixels with a clever hashing algorithm. The details of this are encapsulated in the height_profile_data function, such that the user doesn&#8217;t need to understand what&#8217;s going on under the hood:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">lon_tx</span><span class="p">,</span> <span class="n">lat_tx</span> <span class="o">=</span> <span class="mf">6.88361</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.52483</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+for each pixel in the desired region (with the Tx being in the center of the map, and the Rx located at the other map pixels) and run the <a class="reference internal" href="../api/pycraf.pathprof.loss_complete.html#pycraf.pathprof.loss_complete" title="pycraf.pathprof.loss_complete"><code class="xref py py-obj docutils literal"><span class="pre">loss_complete</span></code></a> function accordingly. This is relatively slow.
+Therefore, we added a faster alternative, <a class="reference internal" href="../api/pycraf.pathprof.atten_map_fast.html#pycraf.pathprof.atten_map_fast" title="pycraf.pathprof.atten_map_fast"><code class="xref py py-obj docutils literal"><span class="pre">atten_map_fast</span></code></a>. The idea is to generate the full height profiles only for the pixels on the map edges and re-use the arrays for the inner pixels with a clever hashing algorithm. The details of this are encapsulated in the <a class="reference internal" href="../api/pycraf.pathprof.height_profile_data.html#pycraf.pathprof.height_profile_data" title="pycraf.pathprof.height_profile_data"><code class="xref py py-obj docutils literal"><span class="pre">height_profile_data</span></code></a> function, such that the user doesn&#8217;t need to understand what&#8217;s going on under the hood:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+<span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">pathprof</span><span class="p">,</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+
+
+<span class="k">def</span> <span class="nf">plot_atten_map</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">,</span> <span class="n">total_atten</span><span class="p">):</span>
+
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+    <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">195</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+    <span class="n">cbax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">.</span><span class="mo">02</span><span class="p">))</span>
+    <span class="n">cim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
+        <span class="n">total_atten</span><span class="p">,</span>
+        <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno_r&#39;</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+        <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">lons</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lons</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">lats</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lats</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="p">)</span>
+    <span class="n">cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span>
+        <span class="n">cim</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cbax</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span>
+        <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lons</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">lons</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="nb">abs</span><span class="p">(</span><span class="n">lats</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">lats</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Path propagation loss&#39;</span><span class="p">)</span>
+    <span class="n">ctics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><span class="n">ctics</span><span class="p">)</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="s1">&#39;{:.0f} dB&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">ctics</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Longitude [deg]&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Latitude [deg]&#39;</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">tick_top</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">lon_tx</span><span class="p">,</span> <span class="n">lat_tx</span> <span class="o">=</span> <span class="mf">6.88361</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.52483</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
 <span class="n">map_size_lon</span><span class="p">,</span> <span class="n">map_size_lat</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
-<span class="n">map_resolution</span> <span class="o">=</span> <span class="mf">3.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">arcsec</span>
+<span class="n">map_resolution</span> <span class="o">=</span> <span class="mf">10.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">arcsec</span>
 
 <span class="n">freq</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">GHz</span>
 <span class="n">omega</span> <span class="o">=</span> <span class="mf">0.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span>  <span class="c1"># fraction of path over sea</span>
@@ -445,7 +488,7 @@ Therefore, we added a faster alternative, <a class="reference internal" href="..
     <span class="n">map_size_lon</span><span class="p">,</span> <span class="n">map_size_lat</span><span class="p">,</span>
     <span class="n">map_resolution</span><span class="o">=</span><span class="n">map_resolution</span><span class="p">,</span>
     <span class="n">zone_t</span><span class="o">=</span><span class="n">zone_t</span><span class="p">,</span> <span class="n">zone_r</span><span class="o">=</span><span class="n">zone_r</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="p">)</span>  <span class="c1"># dict-like</span>
 
 <span class="n">atten_maps</span><span class="p">,</span> <span class="n">eps_pt_map</span><span class="p">,</span> <span class="n">eps_pr_map</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">atten_map_fast</span><span class="p">(</span>
     <span class="n">freq</span><span class="p">,</span>
@@ -453,11 +496,22 @@ Therefore, we added a faster alternative, <a class="reference internal" href="..
     <span class="n">pressure</span><span class="p">,</span>
     <span class="n">h_tg</span><span class="p">,</span> <span class="n">h_rg</span><span class="p">,</span>
     <span class="n">timepercent</span><span class="p">,</span>
-    <span class="n">hprof_cache</span><span class="p">,</span>  <span class="c1"># dict_like</span>
+    <span class="n">hprof_cache</span><span class="p">,</span>
     <span class="p">)</span>
+
+<span class="n">lons</span> <span class="o">=</span> <span class="n">hprof_cache</span><span class="p">[</span><span class="s1">&#39;xcoords&#39;</span><span class="p">]</span>
+<span class="n">lats</span> <span class="o">=</span> <span class="n">hprof_cache</span><span class="p">[</span><span class="s1">&#39;ycoords&#39;</span><span class="p">]</span>
+<span class="c1"># index 4 is total loss without clutter/gain included:</span>
+<span class="n">total_atten</span> <span class="o">=</span> <span class="n">atten_maps</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+
+<span class="n">plot_atten_map</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">,</span> <span class="n">total_atten</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>For a fully working example, have a look at the Jupyter <a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/notebooks/03c_attenuation_maps.ipynb">tutorial notebook</a>
+<p>(<a class="reference external" href="../pathprof/index-4_01_00.png">png</a>, <a class="reference external" href="../pathprof/index-4_01_00.svg">svg</a>, <a class="reference external" href="../pathprof/index-4_01_00.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/index-4_01_00.png" src="../_images/index-4_01_00.png" />
+</div>
+<p>For a more illustrative example, have a look at the Jupyter <a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/notebooks/03c_attenuation_maps.ipynb">tutorial notebook</a>
 on this topic.</p>
 </div>
 </div>
@@ -544,7 +598,7 @@ estimation.</p>
 <td>Change maximum number of threads to use.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_data.html#pycraf.pathprof.srtm_height_data" title="pycraf.pathprof.srtm_height_data"><code class="xref py py-obj docutils literal"><span class="pre">srtm_height_data</span></code></a>(lons,&nbsp;lats)</td>
-<td>SRTM terrain data (bi-linearly interpolated) extracted from &#8221;.hgt&#8221; files.</td>
+<td>Interpolated SRTM terrain data extracted from &#8221;.hgt&#8221; files.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_map.html#pycraf.pathprof.srtm_height_map" title="pycraf.pathprof.srtm_height_map"><code class="xref py py-obj docutils literal"><span class="pre">srtm_height_map</span></code></a>(lon_c,&nbsp;lat_c,&nbsp;map_size_lon,&nbsp;...)</td>
 <td>Extract terrain map from SRTM data.</td>
@@ -729,7 +783,7 @@ estimation.</p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 28 Jul 2017. <br/>
+    Last built 30 Jul 2017. <br/>
   </p>
 </footer>
   </body>

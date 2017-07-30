@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pycraf.pathprof.heightprofile &#8212; pycraf v0.25.1</title>
+    <title>pycraf.pathprof.heightprofile &#8212; pycraf v0.25.2</title>
     
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.25.1',
+        VERSION:     '0.25.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -57,7 +57,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v0.25.1</a>
+	<a href="../../../index.html">pycraf v0.25.2</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
@@ -205,10 +205,16 @@
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    - `distances` contains distances from Transmitter.</span>
-<span class="sd">    - `SRTM data &lt;https://www2.jpl.nasa.gov/srtm/&gt;`_ need to be downloaded</span>
-<span class="sd">      manually by the user. An environment variable `SRTMDATA` has to be</span>
-<span class="sd">      set to point to the directory containing the .hgt files; see</span>
-<span class="sd">      :ref:`srtm_data`.</span>
+<span class="sd">    - `SRTM &lt;https://www2.jpl.nasa.gov/srtm/&gt;`_ data tiles (`*.hgt`) need</span>
+<span class="sd">      to be accessible by `pycraf`.  It is assumed that these are either</span>
+<span class="sd">      present in the current working directory or in the path defined by the</span>
+<span class="sd">      `SRTMDATA` environment variable (sub-directories are also parsed).</span>
+<span class="sd">      Alternatively, use the `~pycraf.pathprof.SrtmConf` manager to</span>
+<span class="sd">      change the directory, where `pycraf` looks for SRTM data, during</span>
+<span class="sd">      run-time. The `~pycraf.pathprof.SrtmConf` manager also offers</span>
+<span class="sd">      additional features such as automatic downloading of missing</span>
+<span class="sd">      tiles or applying different interpolation methods (e.g., splines).</span>
+<span class="sd">      For details see :ref:`working_with_srtm`.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">return</span> <span class="n">_srtm_height_profile</span><span class="p">(</span><span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span><span class="p">,</span> <span class="n">lon_r</span><span class="p">,</span> <span class="n">lat_r</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span></div>
@@ -263,10 +269,16 @@
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    - `SRTM data &lt;https://www2.jpl.nasa.gov/srtm/&gt;`_ need to be downloaded</span>
-<span class="sd">      manually by the user. An environment variable `SRTMDATA` has to be</span>
-<span class="sd">      set to point to the directory containing the .hgt files; see</span>
-<span class="sd">      :ref:`srtm_data`.</span>
+<span class="sd">    - `SRTM &lt;https://www2.jpl.nasa.gov/srtm/&gt;`_ data tiles (`*.hgt`) need</span>
+<span class="sd">      to be accessible by `pycraf`.  It is assumed that these are either</span>
+<span class="sd">      present in the current working directory or in the path defined by the</span>
+<span class="sd">      `SRTMDATA` environment variable (sub-directories are also parsed).</span>
+<span class="sd">      Alternatively, use the `~pycraf.pathprof.SrtmConf` manager to</span>
+<span class="sd">      change the directory, where `pycraf` looks for SRTM data, during</span>
+<span class="sd">      run-time. The `~pycraf.pathprof.SrtmConf` manager also offers</span>
+<span class="sd">      additional features such as automatic downloading of missing</span>
+<span class="sd">      tiles or applying different interpolation methods (e.g., splines).</span>
+<span class="sd">      For details see :ref:`working_with_srtm`.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">if</span> <span class="n">hprof_step</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -318,7 +330,7 @@
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 28 Jul 2017. <br/>
+    Last built 30 Jul 2017. <br/>
   </p>
 </footer>
   </body>

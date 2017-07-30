@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>SrtmConf &#8212; pycraf v0.25.1</title>
+    <title>SrtmConf &#8212; pycraf v0.25.2</title>
     
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.25.1',
+        VERSION:     '0.25.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -70,7 +70,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.1</a>
+	<a href="../index.html">pycraf v0.25.2</a>
 	 &#187;
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="docutils literal"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
@@ -117,7 +117,7 @@ There is even an option, to always force download (<code class="xref py py-obj d
 <p>The default download server will be <code class="xref py py-obj docutils literal"><span class="pre">server='nasa_v2.1'</span></code>. One could
 also use the (very old) data (<code class="xref py py-obj docutils literal"><span class="pre">server='nasa_v1.0'</span></code>) or inofficial
 tiles from viewfinderpanorama (<code class="xref py py-obj docutils literal"><span class="pre">server='viewpano'</span></code>).</p>
-<p>Of course, one can set all of these options simultaneously:</p>
+<p>Of course, one can set several of these options simultaneously:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
         <span class="n">srtm_dir</span><span class="o">=</span><span class="s1">&#39;/path/to/srtmdir&#39;</span><span class="p">,</span>
         <span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">,</span>
@@ -127,6 +127,19 @@ tiles from viewfinderpanorama (<code class="xref py py-obj docutils literal"><sp
     <span class="c1"># do stuff</span>
 </pre></div>
 </div>
+<p>Last, but not least, it is possible to use different interpolation methods.
+The default method uses bi-linear interpolation (<code class="xref py py-obj docutils literal"><span class="pre">interp='linear'</span></code>). One
+can also have nearest-neighbor (<code class="xref py py-obj docutils literal"><span class="pre">interp='nearest'</span></code>) or spline
+(<code class="xref py py-obj docutils literal"><span class="pre">interp='spline'</span></code>) interpolation. The two former internally use
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html#scipy.interpolate.RegularGridInterpolator" title="(in SciPy v0.19.1)"><code class="xref py py-obj docutils literal"><span class="pre">RegularGridInterpolator</span></code></a>, the latter employs
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v0.19.1)"><code class="xref py py-obj docutils literal"><span class="pre">RectBivariateSpline</span></code></a> that also allows custom
+spline degrees (<code class="xref py py-obj docutils literal"><span class="pre">kx</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">ky</span></code>, default: 3) and smoothing factor (<code class="xref py py-obj docutils literal"><span class="pre">s</span></code>,
+default: 0.). To change these use:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">interp</span><span class="o">=</span><span class="s1">&#39;spline&#39;</span><span class="p">,</span> <span class="n">spline_opts</span><span class="o">=</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">s</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>We refer to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v0.19.1)"><code class="xref py py-obj docutils literal"><span class="pre">RectBivariateSpline</span></code></a> description for
+further information.</p>
 <p>URLS:</p>
 <ul class="simple">
 <li><a class="reference external" href="https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/">nasa_v2.1</a></li>
@@ -143,7 +156,13 @@ tiles from viewfinderpanorama (<code class="xref py py-obj docutils literal"><sp
 <tr class="row-odd"><td><a class="reference internal" href="#pycraf.pathprof.SrtmConf.download" title="pycraf.pathprof.SrtmConf.download"><code class="xref py py-obj docutils literal"><span class="pre">download</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pycraf.pathprof.SrtmConf.server" title="pycraf.pathprof.SrtmConf.server"><code class="xref py py-obj docutils literal"><span class="pre">server</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#pycraf.pathprof.SrtmConf.interp" title="pycraf.pathprof.SrtmConf.interp"><code class="xref py py-obj docutils literal"><span class="pre">interp</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pycraf.pathprof.SrtmConf.server" title="pycraf.pathprof.SrtmConf.server"><code class="xref py py-obj docutils literal"><span class="pre">server</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pycraf.pathprof.SrtmConf.spline_opts" title="pycraf.pathprof.SrtmConf.spline_opts"><code class="xref py py-obj docutils literal"><span class="pre">spline_opts</span></code></a></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pycraf.pathprof.SrtmConf.srtm_dir" title="pycraf.pathprof.SrtmConf.srtm_dir"><code class="xref py py-obj docutils literal"><span class="pre">srtm_dir</span></code></a></td>
@@ -170,8 +189,18 @@ tiles from viewfinderpanorama (<code class="xref py py-obj docutils literal"><sp
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="pycraf.pathprof.SrtmConf.interp">
+<code class="descname">interp</code><em class="property"> = 'linear'</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.interp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="pycraf.pathprof.SrtmConf.server">
 <code class="descname">server</code><em class="property"> = 'nasa_v2.1'</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.server" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pycraf.pathprof.SrtmConf.spline_opts">
+<code class="descname">spline_opts</code><em class="property"> = (3, 0)</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.spline_opts" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -188,6 +217,8 @@ allowed. Possible values are:</p>
 <ul class="simple">
 <li><a class="reference internal" href="#pycraf.pathprof.SrtmConf.download" title="pycraf.pathprof.SrtmConf.download"><code class="xref py py-obj docutils literal"><span class="pre">download</span></code></a>:  &#8216;never&#8217;, &#8216;missing&#8217;, &#8216;always&#8217;</li>
 <li><a class="reference internal" href="#pycraf.pathprof.SrtmConf.server" title="pycraf.pathprof.SrtmConf.server"><code class="xref py py-obj docutils literal"><span class="pre">server</span></code></a>:  &#8216;nasa_v2.1&#8217;, &#8216;nasa_v1.0&#8217;, &#8216;viewpano&#8217;</li>
+<li><a class="reference internal" href="#pycraf.pathprof.SrtmConf.interp" title="pycraf.pathprof.SrtmConf.interp"><code class="xref py py-obj docutils literal"><span class="pre">interp</span></code></a>:  &#8216;nearest&#8217;, &#8216;linear&#8217;, &#8216;spline&#8217;</li>
+<li><a class="reference internal" href="#pycraf.pathprof.SrtmConf.spline_opts" title="pycraf.pathprof.SrtmConf.spline_opts"><code class="xref py py-obj docutils literal"><span class="pre">spline_opts</span></code></a>:  tuple(k, s) (k = degree, s = smoothing factor)</li>
 </ul>
 </dd></dl>
 
@@ -218,7 +249,7 @@ allowed. Possible values are:</p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 28 Jul 2017. <br/>
+    Last built 30 Jul 2017. <br/>
   </p>
 </footer>
   </body>

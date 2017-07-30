@@ -2,7 +2,9 @@ import matplotlib.pyplot as plt
 from astropy import units as u
 from pycraf import pathprof
 
-# lon_t, lat_t = 6.52 * u.deg, 53.22 * u.deg  # Netherlands
+# allow download of missing SRTM data:
+pathprof.SrtmConf.set(download='missing')
+
 lon_t, lat_t = 9.943 * u.deg, 54.773 * u.deg  # Northern Germany
 map_size_lon, map_size_lat = 1.5 * u.deg, 1.5 * u.deg
 map_resolution = 3. * u.arcsec

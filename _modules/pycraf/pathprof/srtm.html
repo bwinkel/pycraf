@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pycraf.pathprof.srtm &#8212; pycraf v0.25.1</title>
+    <title>pycraf.pathprof.srtm &#8212; pycraf v0.25.2</title>
     
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.25.1',
+        VERSION:     '0.25.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -57,7 +57,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v0.25.1</a>
+	<a href="../../../index.html">pycraf v0.25.2</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
@@ -109,7 +109,7 @@
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">lru_cache</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">RegularGridInterpolator</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">RegularGridInterpolator</span><span class="p">,</span> <span class="n">RectBivariateSpline</span>
 <span class="kn">from</span> <span class="nn">astropy.utils.data</span> <span class="k">import</span> <span class="n">get_pkg_data_filename</span><span class="p">,</span> <span class="n">download_file</span>
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">utils</span>
@@ -165,7 +165,7 @@
 <span class="sd">    also use the (very old) data (`server=&#39;nasa_v1.0&#39;`) or inofficial</span>
 <span class="sd">    tiles from viewfinderpanorama (`server=&#39;viewpano&#39;`).</span>
 
-<span class="sd">    Of course, one can set all of these options simultaneously::</span>
+<span class="sd">    Of course, one can set several of these options simultaneously::</span>
 
 <span class="sd">        with SrtmConf.set(</span>
 <span class="sd">                srtm_dir=&#39;/path/to/srtmdir&#39;,</span>
@@ -175,6 +175,20 @@
 
 <span class="sd">            # do stuff</span>
 
+<span class="sd">    Last, but not least, it is possible to use different interpolation methods.</span>
+<span class="sd">    The default method uses bi-linear interpolation (`interp=&#39;linear&#39;`). One</span>
+<span class="sd">    can also have nearest-neighbor (`interp=&#39;nearest&#39;`) or spline</span>
+<span class="sd">    (`interp=&#39;spline&#39;`) interpolation. The two former internally use</span>
+<span class="sd">    `~scipy.interpolate.RegularGridInterpolator`, the latter employs</span>
+<span class="sd">    `~scipy.interpolate.RectBivariateSpline` that also allows custom</span>
+<span class="sd">    spline degrees (`kx` and `ky`, default: 3) and smoothing factor (`s`,</span>
+<span class="sd">    default: 0.). To change these use::</span>
+
+<span class="sd">        SrtmConf.set(interp=&#39;spline&#39;, spline_opts=(k, s))</span>
+
+<span class="sd">    We refer to `~scipy.interpolate.RectBivariateSpline` description for</span>
+<span class="sd">    further information.</span>
+
 <span class="sd">    URLS:</span>
 
 <span class="sd">    - `nasa_v2.1 &lt;https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/&gt;`__</span>
@@ -182,12 +196,14 @@
 <span class="sd">    - `viewpano &lt;http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm&gt;`__</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">_attributes</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;srtm_dir&#39;</span><span class="p">,</span> <span class="s1">&#39;download&#39;</span><span class="p">,</span> <span class="s1">&#39;server&#39;</span><span class="p">)</span>
+    <span class="n">_attributes</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;srtm_dir&#39;</span><span class="p">,</span> <span class="s1">&#39;download&#39;</span><span class="p">,</span> <span class="s1">&#39;server&#39;</span><span class="p">,</span> <span class="s1">&#39;interp&#39;</span><span class="p">,</span> <span class="s1">&#39;spline_opts&#39;</span><span class="p">)</span>
 
     <span class="c1"># default values</span>
     <span class="n">srtm_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SRTMDATA&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
     <span class="n">download</span> <span class="o">=</span> <span class="s1">&#39;never&#39;</span>
     <span class="n">server</span> <span class="o">=</span> <span class="s1">&#39;nasa_v2.1&#39;</span>
+    <span class="n">interp</span> <span class="o">=</span> <span class="s1">&#39;linear&#39;</span>
+    <span class="n">spline_opts</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="SrtmConf.validate"><a class="viewcode-back" href="../../../api/pycraf.pathprof.SrtmConf.html#pycraf.pathprof.SrtmConf.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -197,6 +213,8 @@
 
 <span class="sd">        - `download`:  &#39;never&#39;, &#39;missing&#39;, &#39;always&#39;</span>
 <span class="sd">        - `server`:  &#39;nasa_v2.1&#39;, &#39;nasa_v1.0&#39;, &#39;viewpano&#39;</span>
+<span class="sd">        - `interp`:  &#39;nearest&#39;, &#39;linear&#39;, &#39;spline&#39;</span>
+<span class="sd">        - `spline_opts`:  tuple(k, s) (k = degree, s = smoothing factor)</span>
 
 <span class="sd">        &#39;&#39;&#39;</span>
 
@@ -219,6 +237,34 @@
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                         <span class="s1">&#39;Only the values &quot;nasa_v2.1&quot;, &quot;nasa_v1.0&quot;, and &#39;</span>
                         <span class="s1">&#39;&quot;viewpano&quot; are supported for &quot;server&quot; option.&#39;</span>
+                        <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;interp&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;spline&#39;</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s1">&#39;Only the values &quot;nearest&quot;, &quot;linear&quot;, and &#39;</span>
+                        <span class="s1">&#39;&quot;spline&quot; are supported for &quot;interp&quot; option.&#39;</span>
+                        <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;spline_opts&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s1">&#39;&quot;spline_opts&quot; option must be a tuple (k, s).&#39;</span>
+                        <span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s1">&#39;&quot;spline_opts&quot; option must be a tuple (k, s).&#39;</span>
+                        <span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s1">&#39;&quot;spline_opts&quot; k-value must be an int.&#39;</span>
+                        <span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s1">&#39;&quot;spline_opts&quot; s-value must be a float.&#39;</span>
                         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">kwargs</span></div></div>
@@ -415,17 +461,26 @@
     <span class="k">return</span> <span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">,</span> <span class="n">tile</span>
 
 
+<span class="c1"># cannot use SrtmConf inside to query interp and spline_opts, because</span>
+<span class="c1"># caching might cause problems</span>
 <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">36</span><span class="p">,</span> <span class="n">typed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">get_tile_interpolator</span><span class="p">(</span><span class="n">ilon</span><span class="p">,</span> <span class="n">ilat</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_tile_interpolator</span><span class="p">(</span><span class="n">ilon</span><span class="p">,</span> <span class="n">ilat</span><span class="p">,</span> <span class="n">interp</span><span class="p">,</span> <span class="n">spline_opts</span><span class="p">):</span>
     <span class="c1"># angles in deg</span>
 
     <span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">,</span> <span class="n">tile</span> <span class="o">=</span> <span class="n">get_tile_data</span><span class="p">(</span><span class="n">ilon</span><span class="p">,</span> <span class="n">ilat</span><span class="p">)</span>
     <span class="c1"># have to treat NaNs in some way; set to zero for now</span>
     <span class="n">tile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
 
-    <span class="n">_tile_interpolator</span> <span class="o">=</span> <span class="n">RegularGridInterpolator</span><span class="p">(</span>
-        <span class="p">(</span><span class="n">lons</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">lats</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">tile</span><span class="o">.</span><span class="n">T</span>
-        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">interp</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="s1">&#39;linear&#39;</span><span class="p">]:</span>
+        <span class="n">_tile_interpolator</span> <span class="o">=</span> <span class="n">RegularGridInterpolator</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">lons</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">lats</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">tile</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">interp</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">interp</span> <span class="o">==</span> <span class="s1">&#39;spline&#39;</span><span class="p">:</span>
+        <span class="n">kx</span> <span class="o">=</span> <span class="n">ky</span> <span class="o">=</span> <span class="n">spline_opts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">spline_opts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">_tile_interpolator</span> <span class="o">=</span> <span class="n">RectBivariateSpline</span><span class="p">(</span>
+            <span class="n">lons</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">lats</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tile</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">kx</span><span class="o">=</span><span class="n">kx</span><span class="p">,</span> <span class="n">ky</span><span class="o">=</span><span class="n">ky</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">,</span>
+            <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">_tile_interpolator</span>
 
@@ -433,25 +488,27 @@
 <span class="k">def</span> <span class="nf">_srtm_height_data</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">):</span>
     <span class="c1"># angles in deg</span>
 
-    <span class="c1"># coordinates could span different tiles, so first get the unique list</span>
-    <span class="n">lons</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">lons</span><span class="p">)</span>
-    <span class="n">lats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">lats</span><span class="p">)</span>
-
-    <span class="k">assert</span> <span class="n">lons</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">lats</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span>
-
-    <span class="n">heights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">lons</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="c1"># is there no way around constructing the full lon/lat grid?</span>
+    <span class="n">lons_g</span><span class="p">,</span> <span class="n">lats_g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">)</span>
+    <span class="n">heights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">lons_g</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
     <span class="n">ilons</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">lons</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
     <span class="n">ilats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">lats</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
 
-    <span class="n">uilonlats</span> <span class="o">=</span> <span class="nb">set</span><span class="p">((</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ilons</span><span class="p">,</span> <span class="n">ilats</span><span class="p">))</span>
+    <span class="n">interp</span> <span class="o">=</span> <span class="n">SrtmConf</span><span class="o">.</span><span class="n">interp</span>
+    <span class="n">spl_opts</span> <span class="o">=</span> <span class="n">SrtmConf</span><span class="o">.</span><span class="n">spline_opts</span>
 
-    <span class="k">for</span> <span class="n">uilon</span><span class="p">,</span> <span class="n">uilat</span> <span class="ow">in</span> <span class="n">uilonlats</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">uilon</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">ilons</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">uilat</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">ilats</span><span class="p">):</span>
 
-        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">ilons</span> <span class="o">==</span> <span class="n">uilon</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ilats</span> <span class="o">==</span> <span class="n">uilat</span><span class="p">)</span>
-        <span class="n">heights</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_tile_interpolator</span><span class="p">(</span><span class="n">uilon</span><span class="p">,</span> <span class="n">uilat</span><span class="p">)(</span>
-            <span class="p">(</span><span class="n">lons</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">lats</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
-            <span class="p">)</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">ilons</span> <span class="o">==</span> <span class="n">uilon</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ilats</span> <span class="o">==</span> <span class="n">uilat</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">interp</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="s1">&#39;linear&#39;</span><span class="p">]:</span>
+                <span class="n">ifunc</span> <span class="o">=</span> <span class="n">get_tile_interpolator</span><span class="p">(</span><span class="n">uilon</span><span class="p">,</span> <span class="n">uilat</span><span class="p">,</span> <span class="n">interp</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">heights</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">ifunc</span><span class="p">((</span><span class="n">lons_g</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">lats_g</span><span class="p">[</span><span class="n">mask</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">interp</span> <span class="o">==</span> <span class="s1">&#39;spline&#39;</span><span class="p">:</span>
+                <span class="n">ifunc</span> <span class="o">=</span> <span class="n">get_tile_interpolator</span><span class="p">(</span><span class="n">uilon</span><span class="p">,</span> <span class="n">uilat</span><span class="p">,</span> <span class="n">interp</span><span class="p">,</span> <span class="n">spl_opts</span><span class="p">)</span>
+                <span class="n">heights</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">ifunc</span><span class="p">(</span><span class="n">lons_g</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">lats_g</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">heights</span>
 
@@ -464,7 +521,7 @@
     <span class="p">)</span>
 <div class="viewcode-block" id="srtm_height_data"><a class="viewcode-back" href="../../../api/pycraf.pathprof.srtm_height_data.html#pycraf.pathprof.srtm_height_data">[docs]</a><span class="k">def</span> <span class="nf">srtm_height_data</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    SRTM terrain data (bi-linearly interpolated) extracted from &quot;.hgt&quot; files.</span>
+<span class="sd">    Interpolated SRTM terrain data extracted from &quot;.hgt&quot; files.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -478,11 +535,16 @@
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    - `distances` contains distances from Transmitter.</span>
-<span class="sd">    - `SRTM data &lt;https://www2.jpl.nasa.gov/srtm/&gt;`_ need to be downloaded</span>
-<span class="sd">      manually by the user. An environment variable `SRTMDATA` has to be</span>
-<span class="sd">      set to point to the directory containing the .hgt files; see</span>
-<span class="sd">      :ref:`srtm_data`.</span>
+<span class="sd">    - `SRTM &lt;https://www2.jpl.nasa.gov/srtm/&gt;`_ data tiles (`*.hgt`) need</span>
+<span class="sd">      to be accessible by `pycraf`.  It is assumed that these are either</span>
+<span class="sd">      present in the current working directory or in the path defined by the</span>
+<span class="sd">      `SRTMDATA` environment variable (sub-directories are also parsed).</span>
+<span class="sd">      Alternatively, use the `~pycraf.pathprof.SrtmConf` manager to</span>
+<span class="sd">      change the directory, where `pycraf` looks for SRTM data, during</span>
+<span class="sd">      run-time. The `~pycraf.pathprof.SrtmConf` manager also offers</span>
+<span class="sd">      additional features such as automatic downloading of missing</span>
+<span class="sd">      tiles or applying different interpolation methods (e.g., splines).</span>
+<span class="sd">      For details see :ref:`working_with_srtm`.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">return</span> <span class="n">_srtm_height_data</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">)</span></div>
@@ -509,7 +571,7 @@
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 28 Jul 2017. <br/>
+    Last built 30 Jul 2017. <br/>
   </p>
 </footer>
   </body>
