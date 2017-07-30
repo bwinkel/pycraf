@@ -133,42 +133,45 @@ it is usually sufficient to use that. The individual functions are only
 provided for reasons of computing speed, if one is really only interested in
 one component::
 
-    freq = 1. * u.GHz
+    >>> from astropy import units as u
+    >>> from pycraf import pathprof, conversions as cnv
 
-    lon_tx, lat_tx = 6.8836 * u.deg, 50.525 * u.deg
-    lon_rx, lat_rx = 7.3334 * u.deg, 50.635 * u.deg
-    hprof_step = 100 * u.m  # resolution of height profile
+    >>> freq = 1. * u.GHz
 
-    omega = 0. * u.percent  # fraction of path over sea
-    temperature = 290. * u.K
-    pressure = 1013. * u.hPa
-    time_percent = 2 * u.percent  # see P.452 for explanation
-    h_tg, h_rg = 5 * u.m, 50 * u.m
-    G_t, G_r = 0 * cnv.dBi, 15 * cnv.dBi
+    >>> lon_tx, lat_tx = 6.8836 * u.deg, 50.525 * u.deg
+    >>> lon_rx, lat_rx = 7.3334 * u.deg, 50.635 * u.deg
+    >>> hprof_step = 100 * u.m  # resolution of height profile
+
+    >>> omega = 0. * u.percent  # fraction of path over sea
+    >>> temperature = 290. * u.K
+    >>> pressure = 1013. * u.hPa
+    >>> time_percent = 2 * u.percent  # see P.452 for explanation
+    >>> h_tg, h_rg = 5 * u.m, 50 * u.m
+    >>> G_t, G_r = 0 * cnv.dBi, 15 * cnv.dBi
 
     # clutter zones
-    zone_t, zone_r = pathprof.CLUTTER.URBAN, pathprof.CLUTTER.SUBURBAN
+    >>> zone_t, zone_r = pathprof.CLUTTER.URBAN, pathprof.CLUTTER.SUBURBAN
 
-    pprop = pathprof.PathProp(
-        freq,
-        temperature, pressure,
-        lon_tx, lat_tx,
-        lon_rx, lat_rx,
-        h_tg, h_rg,
-        hprof_step,
-        time_percent,
-        zone_t=zone_t, zone_r=zone_r,
-        )
+    >>> pprop = pathprof.PathProp(  # doctest: +REMOTE_DATA
+    ...     freq,
+    ...     temperature, pressure,
+    ...     lon_tx, lat_tx,
+    ...     lon_rx, lat_rx,
+    ...     h_tg, h_rg,
+    ...     hprof_step,
+    ...     time_percent,
+    ...     zone_t=zone_t, zone_r=zone_r,
+    ...     )
 
 The PathProp object is immutable, so if you want to change something, you have
 to create a new instance. This is, because, many member attributes are
 dependent on each other and by just changing one value one could easily create
 inconsistencies. It is easily possible to access the parameters::
 
-    >>> print(repr(pprop))  # doctest: +SKIP
+    >>> print(repr(pprop))  # doctest: +REMOTE_DATA
     PathProp<Freq: 1.000 GHz>
 
-    >>> print(pprop)  # doctest: +SKIP
+    >>> print(pprop)  # doctest: +REMOTE_DATA
     version        :           16 (P.452 version; 14 or 16)
     freq           :     1.000000 GHz
     wavelen        :     0.299792 m
@@ -190,34 +193,26 @@ inconsistencies. It is easily possible to access the parameters::
     bearing        :    68.815620 deg
     back_bearing   :  -110.836903 deg
     hprof_step     :   100.000000 m
-    .
-    .
-    .
+    ...
 
     # path elevation angles as seen from Tx, Rx
-    >>> print(pprop.eps_pt, pprop.eps_pr)  # doctest: +SKIP
-    4.529580772837248 deg 1.883388026488473 deg
+    >>> print('{:.3f} {:.3f}'.format(pprop.eps_pt, pprop.eps_pr))  # doctest: +REMOTE_DATA
+    4.530 deg 1.883 deg
 
 With the PathProp object, it is now just one function call to get the path
 loss::
 
-    >>> tot_loss = pathprof.complete_loss(pprop, G_t, G_r)  # doctest: +SKIP
-    >>> (L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L) = tot_loss  # doctest: +SKIP
-    >>> print('L_bfsg:   {0.value:5.2f} {0.unit} - '  # doctest: +SKIP
-    ...       'Free-space loss'.format(L_bfsg))
-    >>> print('L_bd:     {0.value:5.2f} {0.unit} - '  # doctest: +SKIP
-    ...       'Basic transmission loss associated '
-    ...       'with diffraction'.format(L_bd))
-    >>> print('L_bs:     {0.value:5.2f} {0.unit} - '  # doctest: +SKIP
-    ...       'Tropospheric scatter loss'.format(L_bs))
-    >>> print('L_ba:     {0.value:5.2f} {0.unit} - '  # doctest: +SKIP
-    ...       'Ducting/layer reflection loss'.format(L_ba))
-    >>> print('L_b:      {0.value:5.2f} {0.unit} - '  # doctest: +SKIP
-    ...       'Complete path propagation loss'.format(L_b))
-    >>> print('L_b_corr: {0.value:5.2f} {0.unit} - '  # doctest: +SKIP
-    ...       'As L_b but with clutter correction'.format(L_b_corr))
-    >>> print('L:        {0.value:5.2f} {0.unit} - '  # doctest: +SKIP
-    ...       'As L_b_corr but with gain correction'.format(L))
+    >>> tot_loss = pathprof.loss_complete(pprop, G_t, G_r)  # doctest: +REMOTE_DATA
+    >>> print('L_bfsg:   {:5.2f} - Free-space loss\n'  # doctest: +REMOTE_DATA
+    ...       'L_bd:     {:5.2f} - Basic transmission loss associated '
+    ...       'with diffraction\n'
+    ...       'L_bs:     {:5.2f} - Tropospheric scatter loss\n'
+    ...       'L_ba:     {:5.2f} - Ducting/layer reflection loss\n'
+    ...       'L_b:      {:5.2f} - Complete path propagation loss\n'
+    ...       'L_b_corr: {:5.2f} - As L_b but with clutter correction\n'
+    ...       'L:        {:5.2f} - As L_b_corr but with gain '
+    ...       'correction'.format(*tot_loss)
+    ...      )
     L_bfsg:   123.34 dB - Free-space loss
     L_bd:     173.73 dB - Basic transmission loss associated with diffraction
     L_bs:     225.76 dB - Tropospheric scatter loss
@@ -371,37 +366,37 @@ The simple approach would be to create a `~pycraf.pathprof.PathProp` instance
 for each pixel in the desired region (with the Tx being in the center of the map, and the Rx located at the other map pixels) and run the `~pycraf.pathprof.loss_total` function accordingly. This is relatively slow.
 Therefore, we added a faster alternative, `~pycraf.pathprof.atten_map_fast`. The idea is to generate the full height profiles only for the pixels on the map edges and re-use the arrays for the inner pixels with a clever hashing algorithm. The details of this are encapsulated in the height_profile_data function, such that the user doesn't need to understand what's going on under the hood::
 
-    lon_tx, lat_tx = 6.88361 * u.deg, 50.52483 * u.deg
-    map_size_lon, map_size_lat = 0.5 * u.deg, 0.5 * u.deg
-    map_resolution = 3. * u.arcsec
+    >>> lon_tx, lat_tx = 6.88361 * u.deg, 50.52483 * u.deg
+    >>> map_size_lon, map_size_lat = 0.1 * u.deg, 0.1 * u.deg
+    >>> map_resolution = 3. * u.arcsec
 
-    freq = 1. * u.GHz
-    omega = 0. * u.percent  # fraction of path over sea
-    temperature = 290. * u.K
-    pressure = 1013. * u.hPa
-    timepercent = 2 * u.percent  # see P.452 for explanation
-    h_tg, h_rg = 50 * u.m, 10 * u.m
-    G_t, G_r = 0 * cnv.dBi, 0 * cnv.dBi
-    zone_t, zone_r = pathprof.CLUTTER.UNKNOWN, pathprof.CLUTTER.UNKNOWN
-    hprof_step = 100 * u.m
+    >>> freq = 1. * u.GHz
+    >>> omega = 0. * u.percent  # fraction of path over sea
+    >>> temperature = 290. * u.K
+    >>> pressure = 1013. * u.hPa
+    >>> timepercent = 2 * u.percent  # see P.452 for explanation
+    >>> h_tg, h_rg = 50 * u.m, 10 * u.m
+    >>> G_t, G_r = 0 * cnv.dBi, 0 * cnv.dBi
+    >>> zone_t, zone_r = pathprof.CLUTTER.UNKNOWN, pathprof.CLUTTER.UNKNOWN
+    >>> hprof_step = 100 * u.m
 
-    hprof_cache = pathprof.height_profile_data(
-        lon_tx, lat_tx,
-        map_size_lon, map_size_lat,
-        map_resolution=map_resolution,
-        zone_t=zone_t, zone_r=zone_r,
-        )
+    >>> hprof_cache = pathprof.height_profile_data(  # doctest: +REMOTE_DATA
+    ...     lon_tx, lat_tx,
+    ...     map_size_lon, map_size_lat,
+    ...     map_resolution=map_resolution,
+    ...     zone_t=zone_t, zone_r=zone_r,
+    ...     )  # dict-like
 
-    atten_maps, eps_pt_map, eps_pr_map = pathprof.atten_map_fast(
-        freq,
-        temperature,
-        pressure,
-        h_tg, h_rg,
-        timepercent,
-        hprof_cache,  # dict_like
-        )
+    >>> atten_maps, eps_pt_map, eps_pr_map = pathprof.atten_map_fast(  # doctest: +REMOTE_DATA
+    ...     freq,
+    ...     temperature,
+    ...     pressure,
+    ...     h_tg, h_rg,
+    ...     timepercent,
+    ...     hprof_cache,
+    ...     )
 
-For a fully working example, have a look at the Jupyter `tutorial notebook
+For a more illustrative example, have a look at the Jupyter `tutorial notebook
 <https://github.com/bwinkel/pycraf/tree/master/notebooks/03c_attenuation_maps.ipynb>`_
 on this topic.
 

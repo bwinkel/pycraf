@@ -187,7 +187,7 @@ class SrtmConf(utils.MultiState):
                         '"spline_opts" k-value must be an int.'
                         )
 
-                if not isinstance(v[1], float):
+                if not isinstance(v[1], (int, float)):
                     raise ValueError(
                         '"spline_opts" s-value must be a float.'
                         )

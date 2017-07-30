@@ -179,13 +179,13 @@ Testing an installed pycraf
 The easiest way to test your installed version of pycraf is running
 correctly is to use the `~pycraf.test()` function::
 
-    >>> import pycraf  # doctest: +SKIP
-    >>> pycraf.test()  # doctest: +SKIP
+    import pycraf
+    pycraf.test()
 
 To run the tests for one sub-package, e.g., `conversions`, only::
 
-    >>> import pycraf  # doctest: +SKIP
-    >>> pycraf.test('conversions')  # doctest: +SKIP
+    import pycraf
+    pycraf.test('conversions')
 
 The tests should run and print out any failures, which you can report at
 the `pycraf issue tracker <http://github.com/bwinkel/pycraf/issues>`__.
@@ -200,8 +200,8 @@ the `pycraf issue tracker <http://github.com/bwinkel/pycraf/issues>`__.
     By default, the `test` function will skip over tests that require
     data from the internet. One can include them by::
 
-        >>> import pycraf  # doctest: +SKIP
-        >>> pycraf.test(remote_data='any')  # doctest: +SKIP
+        import pycraf
+        pycraf.test(remote_data='any')
 
     This will *always* download SRTM data (few tiles only) to test the
     auto-download functionality! Do this only, if you can afford the

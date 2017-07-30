@@ -2055,7 +2055,7 @@ def height_profile_data_cython(
         int xi, yi, i
         int eidx, didx
 
-    print('using hprof_step = {:.1f} m'.format(hprof_step))
+    # print('using hprof_step = {:.1f} m'.format(hprof_step))
 
     cosdelta = 1. / np.cos(np.radians(lat_t)) if do_cos_delta else 1.
 
@@ -2070,10 +2070,10 @@ def height_profile_data_cython(
         lat_t + map_size_lat / 2 + 1.e-6,
         map_resolution,
         )
-    print(
-        xcoords[0], xcoords[len(xcoords) - 1],
-        ycoords[0], ycoords[len(ycoords) - 1]
-        )
+    # print(
+    #     xcoords[0], xcoords[len(xcoords) - 1],
+    #     ycoords[0], ycoords[len(ycoords) - 1]
+    #     )
 
     # use a 3x higher resolution version for edge coords for better accuracy
     xcoords_hi = np.arange(
@@ -2127,7 +2127,7 @@ def height_profile_data_cython(
             ]),
         ))
 
-    print('len(edge_coords)', len(edge_coords))
+    # print('len(edge_coords)', len(edge_coords))
 
     refx, refy = xcoords[0], ycoords[0]
     cdef dict dist_dict = {}, height_dict = {}
@@ -2217,7 +2217,7 @@ def height_profile_data_cython(
         ])
     maxlen_idx = np.argmax(proflengths)
     maxlen = proflengths[maxlen_idx]
-    print('maxlen', maxlen)
+    # print('maxlen', maxlen)
 
     # we can re-use the distances vector, because of equal spacing
     dist_prof = dist_dict[maxlen_idx]
