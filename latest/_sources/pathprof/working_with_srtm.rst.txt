@@ -87,37 +87,40 @@ defined, which allows to change the SRTM directory, but also makes it possible
 to download missing tiles during run-time::
 
 
-    from pycraf.pathprof import SrtmConf
-    SrtmConf.set(srtm_dir='/path/to/srtmdir')
+    >>> from pycraf.pathprof import SrtmConf
+    >>> SrtmConf.set(srtm_dir='/path/to/srtmdir')
+    <MultiState SrtmConf>
 
 Alternatively, if only a temporary change of the config is desired,
 one can use `~pycraf.pathprof.SrtmConf` as a context manager::
 
-    with SrtmConf.set(srtm_dir='/path/to/srtmdir'):
-        # do stuff
+    >>> with SrtmConf.set(srtm_dir='/path/to/srtmdir'):
+    ...     # do stuff
+    ...     pass
 
 Afterwards, the old settings will be re-established.
 
 It is also possible to allow downloading of missing *.hgt* files::
 
-    SrtmConf.set(download='missing')
+    >>> SrtmConf.set(download='missing')
+    <MultiState SrtmConf>
 
 The default download server will be `server='nasa_v2.1'`. One could
 also use the (very old) data (`server='nasa_v1.0'`) or inofficial
 tiles from `viewfinderpanoramas.org
 <http://viewfinderpanoramas.org/>`_ (`server='viewpano'`)::
 
-    SrtmConf.set(server='viewpano')
+    >>> SrtmConf.set(server='viewpano')
+    <MultiState SrtmConf>
 
 Of course, one can set several of these options simultaneously::
 
     with SrtmConf.set(
-            srtm_dir='/path/to/srtmdir',
-            download='missing',
-            server='viewpano'
-            ):
-
-        # do stuff
+           srtm_dir='/path/to/srtmdir',
+           download='missing',
+           server='viewpano'
+           ):
+       # do stuff
 
 Last, but not least, it is possible to use different interpolation methods.
 The default method uses bi-linear interpolation (`interp='linear'`). One
@@ -128,7 +131,8 @@ can also have nearest-neighbor (`interp='nearest'`) or spline
 spline degrees (`kx` and `ky`) and smoothing factor (`s`).
 To change these use::
 
-    SrtmConf.set(interp='spline', spline_opts=(k, s))
+    >>> SrtmConf.set(interp='spline', spline_opts=(3, 0))
+    <MultiState SrtmConf>
 
 We refer to `~scipy.interpolate.RectBivariateSpline` description for
 further information.

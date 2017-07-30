@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Installation &#8212; pycraf v0.25.2.dev50</title>
+    <title>Installation &#8212; pycraf v0.25.2</title>
     
     <link rel="stylesheet" href="_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.25.2.dev50',
+        VERSION:     '0.25.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -70,7 +70,7 @@
 	 |
       </li>
       <li>
-	<a href="index.html">pycraf v0.25.2.dev50</a>
+	<a href="index.html">pycraf v0.25.2</a>
 	 &#187;
       </li>
       
@@ -144,7 +144,7 @@ unless you are fully aware of the risks.</p>
 <div class="section" id="installation-from-source">
 <span id="source-install"></span><h4>Installation from source<a class="headerlink" href="#installation-from-source" title="Permalink to this headline">¶</a></h4>
 <p>There are two options, if you want to build pycraf from sources. Either, you
-install the tar-ball (<a href="#id1"><span class="problematic" id="id2">*</span></a>.tar.gz file) from <a class="reference external" href="https://pypi.python.org/pypi/pycraf">PyPI</a> and extract it to the directory of
+install the tar-ball (<code class="xref py py-obj docutils literal"><span class="pre">*.tar.gz</span></code> file) from <a class="reference external" href="https://pypi.python.org/pypi/pycraf">PyPI</a> and extract it to the directory of
 your choice, or, if you always want to stay up-to-date, clone the git
 repository:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>git clone https://github.com/bwinkel/pycraf
@@ -218,13 +218,13 @@ source with your own <em>gcc</em> compiler.</p>
 <span id="testing-installed-pycraf"></span><h3>Testing an installed pycraf<a class="headerlink" href="#testing-an-installed-pycraf" title="Permalink to this headline">¶</a></h3>
 <p>The easiest way to test your installed version of pycraf is running
 correctly is to use the <a class="reference internal" href="api/pycraf.test.html#pycraf.test" title="pycraf.test"><code class="xref py py-obj docutils literal"><span class="pre">test()</span></code></a> function:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycraf</span>  
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pycraf</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>  
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pycraf</span>
+<span class="n">pycraf</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>To run the tests for one sub-package, e.g., <code class="xref py py-obj docutils literal"><span class="pre">conversions</span></code>, only:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycraf</span>  
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pycraf</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="s1">&#39;conversions&#39;</span><span class="p">)</span>  
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pycraf</span>
+<span class="n">pycraf</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="s1">&#39;conversions&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The tests should run and print out any failures, which you can report at
@@ -238,8 +238,8 @@ pycraf source distribution directory.</p>
 <p class="first admonition-title">Note</p>
 <p>By default, the <a class="reference external" href="https://docs.python.org/3/library/test.html#module-test" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">test</span></code></a> function will skip over tests that require
 data from the internet. One can include them by:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycraf</span>  
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pycraf</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">remote_data</span><span class="o">=</span><span class="s1">&#39;any&#39;</span><span class="p">)</span>  
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pycraf</span>
+<span class="n">pycraf</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">remote_data</span><span class="o">=</span><span class="s1">&#39;any&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="last">This will <em>always</em> download SRTM data (few tiles only) to test the
@@ -305,7 +305,7 @@ generation. Please see <a class="reference internal" href="pathprof/working_with
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 29 Jul 2017. <br/>
+    Last built 30 Jul 2017. <br/>
   </p>
 </footer>
   </body>

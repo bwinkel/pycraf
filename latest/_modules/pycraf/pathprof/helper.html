@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pycraf.pathprof.helper &#8212; pycraf v0.25.2.dev50</title>
+    <title>pycraf.pathprof.helper &#8212; pycraf v0.25.2</title>
     
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.25.2.dev50',
+        VERSION:     '0.25.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -57,7 +57,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v0.25.2.dev50</a>
+	<a href="../../../index.html">pycraf v0.25.2</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
@@ -85,6 +85,7 @@
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">RegularGridInterpolator</span>
+<span class="kn">from</span> <span class="nn">astropy.utils.data</span> <span class="k">import</span> <span class="n">get_pkg_data_filename</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">utils</span>
 
@@ -150,12 +151,9 @@
 <span class="s1">&lt;/kml&gt;</span>
 <span class="s1">&#39;&#39;&#39;</span>
 
-<span class="c1"># maybe, the following should only be computed on demand?</span>
-<span class="n">this_dir</span><span class="p">,</span> <span class="n">this_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
-<span class="n">fname_refract_data</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-    <span class="n">this_dir</span><span class="p">,</span> <span class="s1">&#39;../itudata/p.452-16&#39;</span><span class="p">,</span> <span class="s1">&#39;refract_map.npz&#39;</span>
-    <span class="p">)</span>
-<span class="n">_refract_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fname_refract_data</span><span class="p">)</span>
+<span class="n">_refract_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">get_pkg_data_filename</span><span class="p">(</span>
+    <span class="s1">&#39;../itudata/p.452-16/refract_map.npz&#39;</span>
+    <span class="p">))</span>
 
 
 <span class="n">_DN_interpolator</span> <span class="o">=</span> <span class="n">RegularGridInterpolator</span><span class="p">(</span>
@@ -624,7 +622,7 @@
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 29 Jul 2017. <br/>
+    Last built 30 Jul 2017. <br/>
   </p>
 </footer>
   </body>
