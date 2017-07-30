@@ -81,7 +81,7 @@ Installation from source
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 There are two options, if you want to build pycraf from sources. Either, you
-install the tar-ball (*.tar.gz file) from `PyPI
+install the tar-ball (`*.tar.gz` file) from `PyPI
 <https://pypi.python.org/pypi/pycraf>`_ and extract it to the directory of
 your choice, or, if you always want to stay up-to-date, clone the git
 repository:

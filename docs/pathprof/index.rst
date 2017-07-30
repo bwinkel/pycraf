@@ -70,7 +70,7 @@ Height profiles
 Let's start with querying `SRTM data` and plot a height profile.
 
 .. plot::
-   :include-source:
+    :include-source:
 
     import matplotlib.pyplot as plt
     from astropy import units as u
@@ -233,7 +233,7 @@ seen, how one can query a height profile from `SRTM data`. It is also easy
 to produce terrain maps of a region:
 
 .. plot::
-   :include-source:
+    :include-source:
 
     import matplotlib.pyplot as plt
     from astropy import units as u
@@ -316,7 +316,7 @@ point. On the sphere, they would all be located on a circle, but on Earth
 it's different:
 
 .. plot::
-   :include-source:
+    :include-source:
 
     import numpy as np
     import matplotlib.pyplot as plt
@@ -363,38 +363,82 @@ potential interferer and the victim terminal would be too small, potentially
 leading to radio frequency interference (RFI).
 
 The simple approach would be to create a `~pycraf.pathprof.PathProp` instance
-for each pixel in the desired region (with the Tx being in the center of the map, and the Rx located at the other map pixels) and run the `~pycraf.pathprof.loss_total` function accordingly. This is relatively slow.
-Therefore, we added a faster alternative, `~pycraf.pathprof.atten_map_fast`. The idea is to generate the full height profiles only for the pixels on the map edges and re-use the arrays for the inner pixels with a clever hashing algorithm. The details of this are encapsulated in the height_profile_data function, such that the user doesn't need to understand what's going on under the hood::
+for each pixel in the desired region (with the Tx being in the center of the map, and the Rx located at the other map pixels) and run the `~pycraf.pathprof.loss_complete` function accordingly. This is relatively slow.
+Therefore, we added a faster alternative, `~pycraf.pathprof.atten_map_fast`. The idea is to generate the full height profiles only for the pixels on the map edges and re-use the arrays for the inner pixels with a clever hashing algorithm. The details of this are encapsulated in the `~pycraf.pathprof.height_profile_data` function, such that the user doesn't need to understand what's going on under the hood:
 
-    >>> lon_tx, lat_tx = 6.88361 * u.deg, 50.52483 * u.deg
-    >>> map_size_lon, map_size_lat = 0.1 * u.deg, 0.1 * u.deg
-    >>> map_resolution = 3. * u.arcsec
+.. plot::
+   :include-source:
 
-    >>> freq = 1. * u.GHz
-    >>> omega = 0. * u.percent  # fraction of path over sea
-    >>> temperature = 290. * u.K
-    >>> pressure = 1013. * u.hPa
-    >>> timepercent = 2 * u.percent  # see P.452 for explanation
-    >>> h_tg, h_rg = 50 * u.m, 10 * u.m
-    >>> G_t, G_r = 0 * cnv.dBi, 0 * cnv.dBi
-    >>> zone_t, zone_r = pathprof.CLUTTER.UNKNOWN, pathprof.CLUTTER.UNKNOWN
-    >>> hprof_step = 100 * u.m
+    from astropy import units as u
+    from pycraf import pathprof, conversions as cnv
 
-    >>> hprof_cache = pathprof.height_profile_data(  # doctest: +REMOTE_DATA
-    ...     lon_tx, lat_tx,
-    ...     map_size_lon, map_size_lat,
-    ...     map_resolution=map_resolution,
-    ...     zone_t=zone_t, zone_r=zone_r,
-    ...     )  # dict-like
 
-    >>> atten_maps, eps_pt_map, eps_pr_map = pathprof.atten_map_fast(  # doctest: +REMOTE_DATA
-    ...     freq,
-    ...     temperature,
-    ...     pressure,
-    ...     h_tg, h_rg,
-    ...     timepercent,
-    ...     hprof_cache,
-    ...     )
+    def plot_atten_map(lons, lats, total_atten):
+
+        import matplotlib.pyplot as plt
+
+        vmin, vmax = -5, 195
+        fig = plt.figure(figsize=(10, 10))
+        ax = fig.add_axes((0., 0., 1.0, 1.0))
+        cbax = fig.add_axes((0., 0., 1.0, .02))
+        cim = ax.imshow(
+            total_atten,
+            origin='lower', interpolation='nearest', cmap='inferno_r',
+            vmin=vmin, vmax=vmax,
+            extent=(lons[0], lons[-1], lats[0], lats[-1]),
+            )
+        cbar = fig.colorbar(
+            cim, cax=cbax, orientation='horizontal'
+            )
+        ax.set_aspect(abs(lons[-1] - lons[0]) / abs(lats[-1] - lats[0]))
+        cbar.set_label(r'Path propagation loss')
+        ctics = np.arange(30, 200, 30)
+        cbar.set_ticks(ctics)
+        cbar.ax.set_xticklabels(map('{:.0f} dB'.format, ctics))
+        ax.set_xlabel('Longitude [deg]')
+        ax.set_ylabel('Latitude [deg]')
+
+        ax.xaxis.tick_top()
+        ax.xaxis.set_label_position('top')
+        plt.show()
+
+
+    lon_tx, lat_tx = 6.88361 * u.deg, 50.52483 * u.deg
+    map_size_lon, map_size_lat = 0.5 * u.deg, 0.5 * u.deg
+    map_resolution = 10. * u.arcsec
+
+    freq = 1. * u.GHz
+    omega = 0. * u.percent  # fraction of path over sea
+    temperature = 290. * u.K
+    pressure = 1013. * u.hPa
+    timepercent = 2 * u.percent  # see P.452 for explanation
+    h_tg, h_rg = 50 * u.m, 10 * u.m
+    G_t, G_r = 0 * cnv.dBi, 0 * cnv.dBi
+    zone_t, zone_r = pathprof.CLUTTER.UNKNOWN, pathprof.CLUTTER.UNKNOWN
+    hprof_step = 100 * u.m
+
+    hprof_cache = pathprof.height_profile_data(
+        lon_tx, lat_tx,
+        map_size_lon, map_size_lat,
+        map_resolution=map_resolution,
+        zone_t=zone_t, zone_r=zone_r,
+        )  # dict-like
+
+    atten_maps, eps_pt_map, eps_pr_map = pathprof.atten_map_fast(
+        freq,
+        temperature,
+        pressure,
+        h_tg, h_rg,
+        timepercent,
+        hprof_cache,
+        )
+
+    lons = hprof_cache['xcoords']
+    lats = hprof_cache['ycoords']
+    # index 4 is total loss without clutter/gain included:
+    total_atten = atten_maps[4]
+
+    plot_atten_map(lons, lats, total_atten)
 
 For a more illustrative example, have a look at the Jupyter `tutorial notebook
 <https://github.com/bwinkel/pycraf/tree/master/notebooks/03c_attenuation_maps.ipynb>`_
