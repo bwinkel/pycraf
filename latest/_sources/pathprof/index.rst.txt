@@ -136,7 +136,7 @@ one component::
     >>> from astropy import units as u
     >>> from pycraf import pathprof, conversions as cnv
 
-    >>> pathprof.SrtmConf.set(download='missing')
+    >>> pathprof.SrtmConf.set(download='missing')  # doctest: +IGNORE_OUTPUT
 
     >>> freq = 1. * u.GHz
 
@@ -154,7 +154,7 @@ one component::
     # clutter zones
     >>> zone_t, zone_r = pathprof.CLUTTER.URBAN, pathprof.CLUTTER.SUBURBAN
 
-    >>> pprop = pathprof.PathProp(  # doctest: +REMOTE_DATA
+    >>> pprop = pathprof.PathProp(  # doctest: +REMOTE_DATA +IGNORE_OUTPUT
     ...     freq,
     ...     temperature, pressure,
     ...     lon_tx, lat_tx,

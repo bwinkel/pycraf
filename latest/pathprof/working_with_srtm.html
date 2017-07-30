@@ -158,8 +158,7 @@ user environment settings.</p>
 defined, which allows to change the SRTM directory, but also makes it possible
 to download missing tiles during run-time:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf.pathprof</span> <span class="k">import</span> <span class="n">SrtmConf</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">srtm_dir</span><span class="o">=</span><span class="s1">&#39;/path/to/srtmdir&#39;</span><span class="p">)</span>
-<span class="go">&lt;MultiState SrtmConf&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">srtm_dir</span><span class="o">=</span><span class="s1">&#39;/path/to/srtmdir&#39;</span><span class="p">)</span>  
 </pre></div>
 </div>
 <p>Alternatively, if only a temporary change of the config is desired,
@@ -171,15 +170,13 @@ one can use <a class="reference internal" href="../api/pycraf.pathprof.SrtmConf.
 </div>
 <p>Afterwards, the old settings will be re-established.</p>
 <p>It is also possible to allow downloading of missing <em>.hgt</em> files:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>
-<span class="go">&lt;MultiState SrtmConf&gt;</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>  
 </pre></div>
 </div>
 <p>The default download server will be <code class="xref py py-obj docutils literal"><span class="pre">server='nasa_v2.1'</span></code>. One could
 also use the (very old) data (<code class="xref py py-obj docutils literal"><span class="pre">server='nasa_v1.0'</span></code>) or inofficial
 tiles from <a class="reference external" href="http://viewfinderpanoramas.org/">viewfinderpanoramas.org</a> (<code class="xref py py-obj docutils literal"><span class="pre">server='viewpano'</span></code>):</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">server</span><span class="o">=</span><span class="s1">&#39;viewpano&#39;</span><span class="p">)</span>
-<span class="go">&lt;MultiState SrtmConf&gt;</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">server</span><span class="o">=</span><span class="s1">&#39;viewpano&#39;</span><span class="p">)</span>  
 </pre></div>
 </div>
 <p>Of course, one can set several of these options simultaneously:</p>
@@ -199,8 +196,7 @@ can also have nearest-neighbor (<code class="xref py py-obj docutils literal"><s
 <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v0.19.1)"><code class="xref py py-obj docutils literal"><span class="pre">RectBivariateSpline</span></code></a> that also allows custom
 spline degrees (<code class="xref py py-obj docutils literal"><span class="pre">kx</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">ky</span></code>) and smoothing factor (<code class="xref py py-obj docutils literal"><span class="pre">s</span></code>).
 To change these use:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">interp</span><span class="o">=</span><span class="s1">&#39;spline&#39;</span><span class="p">,</span> <span class="n">spline_opts</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-<span class="go">&lt;MultiState SrtmConf&gt;</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">interp</span><span class="o">=</span><span class="s1">&#39;spline&#39;</span><span class="p">,</span> <span class="n">spline_opts</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>  
 </pre></div>
 </div>
 <p>We refer to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v0.19.1)"><code class="xref py py-obj docutils literal"><span class="pre">RectBivariateSpline</span></code></a> description for
