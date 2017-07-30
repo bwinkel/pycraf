@@ -136,6 +136,8 @@ one component::
     >>> from astropy import units as u
     >>> from pycraf import pathprof, conversions as cnv
 
+    >>> pathprof.SrtmConf.set(download='missing')  # doctest: +IGNORE_OUTPUT
+
     >>> freq = 1. * u.GHz
 
     >>> lon_tx, lat_tx = 6.8836 * u.deg, 50.525 * u.deg
@@ -152,7 +154,7 @@ one component::
     # clutter zones
     >>> zone_t, zone_r = pathprof.CLUTTER.URBAN, pathprof.CLUTTER.SUBURBAN
 
-    >>> pprop = pathprof.PathProp(  # doctest: +REMOTE_DATA
+    >>> pprop = pathprof.PathProp(  # doctest: +REMOTE_DATA +IGNORE_OUTPUT
     ...     freq,
     ...     temperature, pressure,
     ...     lon_tx, lat_tx,
@@ -239,7 +241,6 @@ to produce terrain maps of a region:
     from astropy import units as u
     from pycraf import pathprof
 
-    # allow download of missing SRTM data:
     pathprof.SrtmConf.set(download='missing')
 
     lon_t, lat_t = 9.943 * u.deg, 54.773 * u.deg  # Northern Germany
@@ -402,6 +403,8 @@ Therefore, we added a faster alternative, `~pycraf.pathprof.atten_map_fast`. The
         ax.xaxis.set_label_position('top')
         plt.show()
 
+
+    pathprof.SrtmConf.set(download='missing')
 
     lon_tx, lat_tx = 6.88361 * u.deg, 50.52483 * u.deg
     map_size_lon, map_size_lat = 0.5 * u.deg, 0.5 * u.deg

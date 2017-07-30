@@ -209,6 +209,8 @@ one component:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">pathprof</span><span class="p">,</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pathprof</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>  
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">freq</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">GHz</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lon_tx</span><span class="p">,</span> <span class="n">lat_tx</span> <span class="o">=</span> <span class="mf">6.8836</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.525</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
@@ -308,7 +310,6 @@ to produce terrain maps of a region:</p>
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
 <span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">pathprof</span>
 
-<span class="c1"># allow download of missing SRTM data:</span>
 <span class="n">pathprof</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>
 
 <span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span> <span class="o">=</span> <span class="mf">9.943</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">54.773</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>  <span class="c1"># Northern Germany</span>
@@ -469,7 +470,9 @@ Therefore, we added a faster alternative, <a class="reference internal" href="..
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">lon_tx</span><span class="p">,</span> <span class="n">lat_tx</span> <span class="o">=</span> <span class="mf">6.88361</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.52483</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">pathprof</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>
+
+<span class="n">lon_tx</span><span class="p">,</span> <span class="n">lat_tx</span> <span class="o">=</span> <span class="mf">6.88361</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.52483</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
 <span class="n">map_size_lon</span><span class="p">,</span> <span class="n">map_size_lat</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
 <span class="n">map_resolution</span> <span class="o">=</span> <span class="mf">10.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">arcsec</span>
 

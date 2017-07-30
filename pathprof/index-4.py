@@ -32,6 +32,8 @@ def plot_atten_map(lons, lats, total_atten):
     plt.show()
 
 
+pathprof.SrtmConf.set(download='missing')
+
 lon_tx, lat_tx = 6.88361 * u.deg, 50.52483 * u.deg
 map_size_lon, map_size_lat = 0.5 * u.deg, 0.5 * u.deg
 map_resolution = 10. * u.arcsec
