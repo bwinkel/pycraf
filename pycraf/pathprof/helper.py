@@ -10,6 +10,7 @@ import os
 from astropy import units as apu
 import numpy as np
 from scipy.interpolate import RegularGridInterpolator
+from astropy.utils.data import get_pkg_data_filename
 from .. import conversions as cnv
 from .. import utils
 
@@ -75,12 +76,9 @@ KML_TEMPLATE = '''<?xml version="1.0" encoding="UTF-8"?>
 </kml>
 '''
 
-# maybe, the following should only be computed on demand?
-this_dir, this_filename = os.path.split(__file__)
-fname_refract_data = os.path.join(
-    this_dir, '../itudata/p.452-16', 'refract_map.npz'
-    )
-_refract_data = np.load(fname_refract_data)
+_refract_data = np.load(get_pkg_data_filename(
+    '../itudata/p.452-16/refract_map.npz'
+    ))
 
 
 _DN_interpolator = RegularGridInterpolator(

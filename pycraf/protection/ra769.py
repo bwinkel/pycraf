@@ -11,6 +11,7 @@ from astropy import units as apu
 # from astropy.units import Quantity, UnitsError
 import astropy.constants as con
 from astropy.table import QTable, Table
+from astropy.utils.data import get_pkg_data_filename
 from .. import conversions as cnv
 
 
@@ -64,8 +65,7 @@ def ra769_limits(mode='continuum', scale='dB'):
     midx = modes.index(mode)
 
     csv_name = 'ra_769_table{}_limits_{}.csv'.format(midx + 1, mode)
-    this_dir, this_filename = os.path.split(__file__)
-    csv_path = os.path.join(this_dir, '../itudata/ra.769-2', csv_name)
+    csv_path = get_pkg_data_filename('../itudata/ra.769-2/' + csv_name)
 
     csv_tab = np.genfromtxt(
         csv_path, delimiter=',', skip_header=1, names=True, dtype=np.float64

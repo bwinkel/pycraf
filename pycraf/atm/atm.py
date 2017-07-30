@@ -11,6 +11,7 @@ import numbers
 import collections
 import numpy as np
 from astropy import units as apu
+from astropy.utils.data import get_pkg_data_filename
 from .. import conversions as cnv
 from .. import utils
 
@@ -34,12 +35,11 @@ __all__ = [
     ]
 
 
-this_dir, this_filename = os.path.split(__file__)
-fname_oxygen = os.path.join(
-    this_dir, '../itudata/p.676-10', 'R-REC-P.676-10-201309_table1.csv'
+fname_oxygen = get_pkg_data_filename(
+    '../itudata/p.676-10/R-REC-P.676-10-201309_table1.csv'
     )
-fname_water = os.path.join(
-    this_dir, '../itudata/p.676-10', 'R-REC-P.676-10-201309_table2.csv'
+fname_water = get_pkg_data_filename(
+    '../itudata/p.676-10/R-REC-P.676-10-201309_table2.csv'
     )
 
 oxygen_dtype = np.dtype([
