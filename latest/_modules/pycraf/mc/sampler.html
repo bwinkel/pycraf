@@ -125,7 +125,7 @@
 <span class="sd">        &gt;&gt;&gt; print(indices)</span>
 <span class="sd">        [7 9 3 7 6 5 6 7 7 8]</span>
 
-<span class="sd">        &gt;&gt;&gt; print(mid_points[indices])</span>
+<span class="sd">        &gt;&gt;&gt; print(mid_points[indices])  # doctest: +FLOAT_CMP</span>
 <span class="sd">        [-0.25  0.75 -2.25 -0.25 -0.75 -1.25 -0.75 -0.25 -0.25  0.25]</span>
 
 <span class="sd">    Works equally simple in 2D::</span>
@@ -147,7 +147,7 @@
 <span class="sd">        [(7, 8), (9, 6), (1, 7), (7, 5), (6, 4),</span>
 <span class="sd">         (5, 7), (6, 7), (7, 6), (7, 8), (8, 6)]</span>
 
-<span class="sd">        &gt;&gt;&gt; print(list(zip(xmids[indices[0]], ymids[indices[1]])))</span>
+<span class="sd">        &gt;&gt;&gt; print(list(zip(xmids[indices[0]], ymids[indices[1]])))  # doctest: +FLOAT_CMP</span>
 <span class="sd">        [(-0.25, 2.5), (0.75, 0.5), (-3.25, 1.5), (-0.25, -0.5),</span>
 <span class="sd">         (-0.75, -1.5), (-1.25, 1.5), (-0.75, 1.5), (-0.25, 0.5),</span>
 <span class="sd">         (-0.25, 2.5), (0.25, 0.5)]</span>
@@ -166,7 +166,7 @@
 <span class="sd">        &gt;&gt;&gt; my_sampler = mc.HistogramSampler(hist2d)</span>
 <span class="sd">        &gt;&gt;&gt; with NumpyRNGContext(1):</span>
 <span class="sd">        ...     indices = my_sampler.sample(10)</span>
-<span class="sd">        &gt;&gt;&gt; print(list(zip(xmids[indices[0]], ymids[indices[1]])))</span>
+<span class="sd">        &gt;&gt;&gt; print(list(zip(xmids[indices[0]], ymids[indices[1]])))  # doctest: +FLOAT_CMP</span>
 <span class="sd">        [(-1.75, 4.5), (-0.25, 3.5), (-3.25, 1.5), (-1.75, 4.5),</span>
 <span class="sd">         (-1.75, 4.5), (-1.75, 4.5), (-1.75, 4.5), (-1.75, 4.5),</span>
 <span class="sd">         (-1.75, 4.5), (-1.25, 0.5)]</span>
@@ -183,7 +183,7 @@
 <span class="sd">        &gt;&gt;&gt; with NumpyRNGContext(1):</span>
 <span class="sd">        ...     values = kernel.resample(10)</span>
 
-<span class="sd">        &gt;&gt;&gt; print(list(zip(values[0], values[1])))</span>
+<span class="sd">        &gt;&gt;&gt; print(list(zip(values[0], values[1])))  # doctest: +FLOAT_CMP</span>
 <span class="sd">        [(-1.4708084392424643, 0.73081055816321849),</span>
 <span class="sd">         (0.088396607804818894, 3.4075844477993105),</span>
 <span class="sd">        ...</span>
