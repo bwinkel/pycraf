@@ -148,7 +148,7 @@ weighted data.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
 <span class="go">[7 9 3 7 6 5 6 7 7 8]</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">mid_points</span><span class="p">[</span><span class="n">indices</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">mid_points</span><span class="p">[</span><span class="n">indices</span><span class="p">])</span>  
 <span class="go">[-0.25  0.75 -2.25 -0.25 -0.75 -1.25 -0.75 -0.25 -0.25  0.25]</span>
 </pre></div>
 </div>
@@ -170,7 +170,7 @@ weighted data.</p>
 <span class="go">[(7, 8), (9, 6), (1, 7), (7, 5), (6, 4),</span>
 <span class="go"> (5, 7), (6, 7), (7, 6), (7, 8), (8, 6)]</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">xmids</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">ymids</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]])))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">xmids</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">ymids</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]])))</span>  
 <span class="go">[(-0.25, 2.5), (0.75, 0.5), (-3.25, 1.5), (-0.25, -0.5),</span>
 <span class="go"> (-0.75, -1.5), (-1.25, 1.5), (-0.75, 1.5), (-0.25, 0.5),</span>
 <span class="go"> (-0.25, 2.5), (0.25, 0.5)]</span>
@@ -189,7 +189,7 @@ that one bin was observed exceptionally frequent:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_sampler</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">HistogramSampler</span><span class="p">(</span><span class="n">hist2d</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">NumpyRNGContext</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">indices</span> <span class="o">=</span> <span class="n">my_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">xmids</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">ymids</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]])))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">xmids</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">ymids</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]])))</span>  
 <span class="go">[(-1.75, 4.5), (-0.25, 3.5), (-3.25, 1.5), (-1.75, 4.5),</span>
 <span class="go"> (-1.75, 4.5), (-1.75, 4.5), (-1.75, 4.5), (-1.75, 4.5),</span>
 <span class="go"> (-1.75, 4.5), (-1.25, 0.5)]</span>
@@ -200,22 +200,17 @@ often sampled from the distribution.</p>
 <p>As discussed in the notes, for some use-cases a KDE might
 be the better tool:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">gaussian_kde</span>
-</pre></div>
-</div>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kernel</span> <span class="o">=</span> <span class="n">gaussian_kde</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kernel</span> <span class="o">=</span> <span class="n">gaussian_kde</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">NumpyRNGContext</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">values</span> <span class="o">=</span> <span class="n">kernel</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="s1">&#39;(</span><span class="si">{:9.6f}</span><span class="s1">, </span><span class="si">{:9.6f}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="gp">... </span>    <span class="p">))</span>
-<span class="go">(-1.470808,  0.730811)</span>
-<span class="go">( 0.088397,  3.407584)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="go">[(-1.4708084392424643, 0.73081055816321849),</span>
+<span class="go"> (0.088396607804818894, 3.4075844477993105),</span>
 <span class="gp">...</span>
-<span class="go">(-2.097790, -0.251477)</span>
-<span class="go">( 0.261941, -0.936229)</span>
+<span class="go"> (-2.0977896525658681, -0.2514770710536518),</span>
+<span class="go"> (0.26194085609813555, -0.93622928331194344)]</span>
 </pre></div>
 </div>
 <p class="rubric">Methods Summary</p>
