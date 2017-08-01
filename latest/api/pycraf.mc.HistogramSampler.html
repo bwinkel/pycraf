@@ -199,13 +199,13 @@ that one bin was observed exceptionally frequent:</p>
 often sampled from the distribution.</p>
 <p>As discussed in the notes, for some use-cases a KDE might
 be the better tool:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">gaussian_kde</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">gaussian_kde</span>  
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">kernel</span> <span class="o">=</span> <span class="n">gaussian_kde</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">NumpyRNGContext</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kernel</span> <span class="o">=</span> <span class="n">gaussian_kde</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">NumpyRNGContext</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>  
 <span class="gp">... </span>    <span class="n">values</span> <span class="o">=</span> <span class="n">kernel</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>  
 <span class="go">[(-1.4708084392424643, 0.73081055816321849),</span>
 <span class="go"> (0.088396607804818894, 3.4075844477993105),</span>
 <span class="gp">...</span>

@@ -175,17 +175,15 @@
 <span class="sd">    often sampled from the distribution.</span>
 
 <span class="sd">    As discussed in the notes, for some use-cases a KDE might</span>
-<span class="sd">    be the better tool:</span>
+<span class="sd">    be the better tool::</span>
 
-<span class="sd">    .. doctest-skip::</span>
+<span class="sd">        &gt;&gt;&gt; from scipy.stats import gaussian_kde  # doctest: +SKIP</span>
 
-<span class="sd">        &gt;&gt;&gt; from scipy.stats import gaussian_kde</span>
-
-<span class="sd">        &gt;&gt;&gt; kernel = gaussian_kde((x, y))</span>
-<span class="sd">        &gt;&gt;&gt; with NumpyRNGContext(1):</span>
+<span class="sd">        &gt;&gt;&gt; kernel = gaussian_kde((x, y))  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; with NumpyRNGContext(1):  # doctest: +SKIP</span>
 <span class="sd">        ...     values = kernel.resample(10)</span>
 
-<span class="sd">        &gt;&gt;&gt; print(zip(values[0], values[1]))</span>
+<span class="sd">        &gt;&gt;&gt; print(*zip(values[0], values[1]))  # doctest: +SKIP +FLOAT_CMP</span>
 <span class="sd">        [(-1.4708084392424643, 0.73081055816321849),</span>
 <span class="sd">         (0.088396607804818894, 3.4075844477993105),</span>
 <span class="sd">        ...</span>
