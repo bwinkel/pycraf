@@ -61,6 +61,7 @@ latest/_modules/pycraf/atm/atm.html
 latest/_modules/pycraf/conversions/conversions.html
 latest/_modules/pycraf/geometry/geometry.html
 latest/_modules/pycraf/geospatial/geospatial.html
+latest/_modules/pycraf/mc/sampler.html
 latest/_modules/pycraf/pathprof/geodesics.html
 latest/_modules/pycraf/pathprof/heightprofile.html
 latest/_modules/pycraf/pathprof/helper.html
@@ -125,6 +126,7 @@ latest/_sources/api/pycraf.geospatial.etrs89_to_wgs84.rst.txt
 latest/_sources/api/pycraf.geospatial.utm_to_wgs84.rst.txt
 latest/_sources/api/pycraf.geospatial.wgs84_to_etrs89.rst.txt
 latest/_sources/api/pycraf.geospatial.wgs84_to_utm.rst.txt
+latest/_sources/api/pycraf.mc.HistogramSampler.rst.txt
 latest/_sources/api/pycraf.pathprof.A_BETA.rst.txt
 latest/_sources/api/pycraf.pathprof.K_BETA.rst.txt
 latest/_sources/api/pycraf.pathprof.PathProp.rst.txt
@@ -168,6 +170,7 @@ latest/_sources/importing_pycraf.rst.txt
 latest/_sources/index.rst.txt
 latest/_sources/install.rst.txt
 latest/_sources/license.rst.txt
+latest/_sources/mc/index.rst.txt
 latest/_sources/pathprof/index.rst.txt
 latest/_sources/pathprof/working_with_srtm.rst.txt
 latest/_sources/protection/index.rst.txt
@@ -275,6 +278,7 @@ latest/api/pycraf.geospatial.etrs89_to_wgs84.html
 latest/api/pycraf.geospatial.utm_to_wgs84.html
 latest/api/pycraf.geospatial.wgs84_to_etrs89.html
 latest/api/pycraf.geospatial.wgs84_to_utm.html
+latest/api/pycraf.mc.HistogramSampler.html
 latest/api/pycraf.pathprof.A_BETA.html
 latest/api/pycraf.pathprof.K_BETA.html
 latest/api/pycraf.pathprof.PathProp.html
@@ -331,6 +335,7 @@ latest/importing_pycraf.html
 latest/index.html
 latest/install.html
 latest/license.html
+latest/mc/index.html
 latest/objects.inv
 latest/pathprof/index-1.pdf
 latest/pathprof/index-1.png
