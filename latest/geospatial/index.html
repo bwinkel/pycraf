@@ -28,7 +28,7 @@
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="etrs89_to_wgs84" href="../api/pycraf.geospatial.etrs89_to_wgs84.html" />
+    <link rel="next" title="epsg_from_utm_zone" href="../api/pycraf.geospatial.epsg_from_utm_zone.html" />
     <link rel="prev" title="ra769_limits" href="../api/pycraf.protection.ra769_limits.html" />
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 <script type="text/javascript" src="../_static/copybutton.js"></script>
@@ -59,7 +59,7 @@
     <h3>Navigation</h3>
     <ul>
       <li class="right">
-	<a href="../api/pycraf.geospatial.etrs89_to_wgs84.html" title="etrs89_to_wgs84">
+	<a href="../api/pycraf.geospatial.epsg_from_utm_zone.html" title="epsg_from_utm_zone">
 	  next &raquo;
 	</a>
       </li>
@@ -141,20 +141,57 @@ around the <a class="reference external" href="http://proj4.org/">proj.4</a> sof
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.etrs89_to_wgs84.html#pycraf.geospatial.etrs89_to_wgs84" title="pycraf.geospatial.etrs89_to_wgs84"><code class="xref py py-obj docutils literal"><span class="pre">etrs89_to_wgs84</span></code></a>(elon,&nbsp;elat)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.epsg_from_utm_zone.html#pycraf.geospatial.epsg_from_utm_zone" title="pycraf.geospatial.epsg_from_utm_zone"><code class="xref py py-obj docutils literal"><span class="pre">epsg_from_utm_zone</span></code></a>(utm_zone)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.etrs89_to_wgs84.html#pycraf.geospatial.etrs89_to_wgs84" title="pycraf.geospatial.etrs89_to_wgs84"><code class="xref py py-obj docutils literal"><span class="pre">etrs89_to_wgs84</span></code></a>(elon,&nbsp;elat)</td>
 <td>Convert ETSR89 coordinates to GPS/WGS84.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.utm_to_wgs84.html#pycraf.geospatial.utm_to_wgs84" title="pycraf.geospatial.utm_to_wgs84"><code class="xref py py-obj docutils literal"><span class="pre">utm_to_wgs84</span></code></a>(ulon,&nbsp;ulat,&nbsp;zone[,&nbsp;south])</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.itrf2005_to_wgs84.html#pycraf.geospatial.itrf2005_to_wgs84" title="pycraf.geospatial.itrf2005_to_wgs84"><code class="xref py py-obj docutils literal"><span class="pre">itrf2005_to_wgs84</span></code></a>(x,&nbsp;y,&nbsp;z)</td>
+<td>Convert ITRF2005 coordinates to GPS/WGS84.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.itrf2008_to_wgs84.html#pycraf.geospatial.itrf2008_to_wgs84" title="pycraf.geospatial.itrf2008_to_wgs84"><code class="xref py py-obj docutils literal"><span class="pre">itrf2008_to_wgs84</span></code></a>(x,&nbsp;y,&nbsp;z)</td>
+<td>Convert ITRF2008 coordinates to GPS/WGS84.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.utm_to_wgs84.html#pycraf.geospatial.utm_to_wgs84" title="pycraf.geospatial.utm_to_wgs84"><code class="xref py py-obj docutils literal"><span class="pre">utm_to_wgs84</span></code></a>(ulon,&nbsp;ulat,&nbsp;zone[,&nbsp;south])</td>
 <td>Convert UTM coordinates to GPS/WGS84.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.utm_zone_from_gps.html#pycraf.geospatial.utm_zone_from_gps" title="pycraf.geospatial.utm_zone_from_gps"><code class="xref py py-obj docutils literal"><span class="pre">utm_zone_from_gps</span></code></a>(glon,&nbsp;glat)</td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.wgs84_to_etrs89.html#pycraf.geospatial.wgs84_to_etrs89" title="pycraf.geospatial.wgs84_to_etrs89"><code class="xref py py-obj docutils literal"><span class="pre">wgs84_to_etrs89</span></code></a>(glon,&nbsp;glat)</td>
 <td>Convert GPS/WGS84 coordinates to ETSR89.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.wgs84_to_itrf2005.html#pycraf.geospatial.wgs84_to_itrf2005" title="pycraf.geospatial.wgs84_to_itrf2005"><code class="xref py py-obj docutils literal"><span class="pre">wgs84_to_itrf2005</span></code></a>(glon,&nbsp;glat,&nbsp;height)</td>
+<td>Convert GPS/WGS84 coordinates to ITRF2005.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.wgs84_to_itrf2008.html#pycraf.geospatial.wgs84_to_itrf2008" title="pycraf.geospatial.wgs84_to_itrf2008"><code class="xref py py-obj docutils literal"><span class="pre">wgs84_to_itrf2008</span></code></a>(glon,&nbsp;glat,&nbsp;height)</td>
+<td>Convert GPS/WGS84 coordinates to ITRF2008.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.wgs84_to_utm.html#pycraf.geospatial.wgs84_to_utm" title="pycraf.geospatial.wgs84_to_utm"><code class="xref py py-obj docutils literal"><span class="pre">wgs84_to_utm</span></code></a>(glon,&nbsp;glat,&nbsp;zone[,&nbsp;south])</td>
 <td>Convert GPS/WGS84 coordinates to UTM.</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section" id="classes">
+<h4>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.EPSG.html#pycraf.geospatial.EPSG" title="pycraf.geospatial.EPSG"><code class="xref py py-obj docutils literal"><span class="pre">EPSG</span></code></a></td>
+<td>Enum with often used EPSG codes.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="class-inheritance-diagram">
+<h4>Class Inheritance Diagram<a class="headerlink" href="#class-inheritance-diagram" title="Permalink to this headline">¶</a></h4>
+<object data="../_images/inheritance-7f18cc7cb2ac32e75292004a8c5f76f0cd9f28f4.svg" type="image/svg+xml">
+            <p class="warning">Inheritance diagram of pycraf.geospatial.geospatial.EPSG</p></object>
 </div>
 </div>
 </div>
@@ -174,6 +211,8 @@ around the <a class="reference external" href="http://proj4.org/">proj.4</a> sof
 <li><a class="reference internal" href="#reference-api">Reference/API</a><ul>
 <li><a class="reference internal" href="#module-pycraf.geospatial">pycraf.geospatial Package</a><ul>
 <li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#class-inheritance-diagram">Class Inheritance Diagram</a></li>
 </ul>
 </li>
 </ul>

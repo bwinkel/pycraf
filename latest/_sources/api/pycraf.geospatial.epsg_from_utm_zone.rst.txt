@@ -1,0 +1,6 @@
+epsg_from_utm_zone
+==================
+
+.. currentmodule:: pycraf.geospatial
+
+.. autofunction:: epsg_from_utm_zone

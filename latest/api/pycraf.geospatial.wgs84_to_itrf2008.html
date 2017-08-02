@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>utm_to_wgs84 &#8212; pycraf v0.25.3.dev50</title>
+    <title>wgs84_to_itrf2008 &#8212; pycraf v0.25.3.dev50</title>
     
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -28,8 +28,8 @@
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="utm_zone_from_gps" href="pycraf.geospatial.utm_zone_from_gps.html" />
-    <link rel="prev" title="itrf2008_to_wgs84" href="pycraf.geospatial.itrf2008_to_wgs84.html" />
+    <link rel="next" title="wgs84_to_utm" href="pycraf.geospatial.wgs84_to_utm.html" />
+    <link rel="prev" title="wgs84_to_itrf2005" href="pycraf.geospatial.wgs84_to_itrf2005.html" />
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 <script type="text/javascript" src="../_static/copybutton.js"></script>
 
@@ -59,12 +59,12 @@
     <h3>Navigation</h3>
     <ul>
       <li class="right">
-	<a href="pycraf.geospatial.utm_zone_from_gps.html" title="utm_zone_from_gps">
+	<a href="pycraf.geospatial.wgs84_to_utm.html" title="wgs84_to_utm">
 	  next &raquo;
 	</a>
       </li>
       <li class="right">
-	<a href="pycraf.geospatial.itrf2008_to_wgs84.html" title="itrf2008_to_wgs84">
+	<a href="pycraf.geospatial.wgs84_to_itrf2005.html" title="wgs84_to_itrf2005">
 	  &laquo; previous
 	</a>
 	 |
@@ -75,7 +75,7 @@
       </li>
       <li><a href="../geospatial/index.html" accesskey="U">Geographical frames (<code class="docutils literal"><span class="pre">pycraf.geospatial</span></code>)</a> &#187;</li>
       
-      <li>utm_to_wgs84</li> 
+      <li>wgs84_to_itrf2008</li> 
     </ul>
 </div>
   
@@ -85,52 +85,36 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="utm-to-wgs84">
-<h1>utm_to_wgs84<a class="headerlink" href="#utm-to-wgs84" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="wgs84-to-itrf2008">
+<h1>wgs84_to_itrf2008<a class="headerlink" href="#wgs84-to-itrf2008" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="pycraf.geospatial.utm_to_wgs84">
-<code class="descclassname">pycraf.geospatial.</code><code class="descname">utm_to_wgs84</code><span class="sig-paren">(</span><em>ulon</em>, <em>ulat</em>, <em>zone</em>, <em>south=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#utm_to_wgs84"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.geospatial.utm_to_wgs84" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert UTM coordinates to GPS/WGS84.</p>
+<dt id="pycraf.geospatial.wgs84_to_itrf2008">
+<code class="descclassname">pycraf.geospatial.</code><code class="descname">wgs84_to_itrf2008</code><span class="sig-paren">(</span><em>glon</em>, <em>glat</em>, <em>height</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#wgs84_to_itrf2008"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.geospatial.wgs84_to_itrf2008" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert GPS/WGS84 coordinates to ITRF2008.</p>
+<p>ITRF is the <a class="reference external" href="https://en.wikipedia.org/wiki/International_Terrestrial_Reference_System">International Terrestrial Reference System</a>.
+(A geocentric coordinate system.)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ulon, ulat</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>glon, glat</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
-<div><p>UTM longitude and latitude [m]</p>
+<div><p>GPS/WGS84 longitude and latitude [deg]</p>
 </div></blockquote>
-<p><strong>zone</strong> : int</p>
+<p><strong>height</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
-<div><p>UTM zone (e.g., 32 for longitudes 6 E to 12 E); see <a class="reference external" href="https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system">Wikipedia</a>
-for more information on the zones</p>
-</div></blockquote>
-<p><strong>south</strong> : bool</p>
-<blockquote>
-<div><p>Hemisphere; set to True for southern hemisphere (default: False)</p>
+<div><p>Height (amsl) [m]</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>glon, glat</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>x, y, z</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote class="last">
-<div><p>GPS/WGS84 longitude and latitude [deg]</p>
+<div><p>ITRF2008 geocentric coordinates, (x, y, z) [m]</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Notes</p>
-<ul>
-<li><p class="first">Uses</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>+proj<span class="o">=</span>utm +zone<span class="o">=</span>xx +ellps<span class="o">=</span>WGS84 +datum<span class="o">=</span>WGS84 +units<span class="o">=</span>m +no_defs <span class="o">[</span>+south<span class="o">]</span>
-</pre></div>
-</div>
-<p>for <code class="xref py py-obj docutils literal"><span class="pre">pyproj</span></code> setup (inverse transformation). Only one zone per function
-call is allowed.</p>
-</li>
-<li><p class="first">This function uses only the longitudal zone scheme. There is also
-the NATO system, which introduces latitude bands.</p>
-</li>
-</ul>
 </dd></dl>
 
 </div>
@@ -142,7 +126,7 @@ the NATO system, which introduces latitude bands.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
 <ul>
-<li><a class="reference internal" href="#">utm_to_wgs84</a></li>
+<li><a class="reference internal" href="#">wgs84_to_itrf2008</a></li>
 </ul>
 
 
@@ -152,7 +136,7 @@ the NATO system, which introduces latitude bands.</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="../_sources/api/pycraf.geospatial.utm_to_wgs84.rst.txt"
+    <a href="../_sources/api/pycraf.geospatial.wgs84_to_itrf2008.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>

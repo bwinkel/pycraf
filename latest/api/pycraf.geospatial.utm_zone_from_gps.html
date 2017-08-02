@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>wgs84_to_etrs89 &#8212; pycraf v0.25.3.dev50</title>
+    <title>utm_zone_from_gps &#8212; pycraf v0.25.3.dev50</title>
     
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -28,8 +28,8 @@
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="wgs84_to_itrf2005" href="pycraf.geospatial.wgs84_to_itrf2005.html" />
-    <link rel="prev" title="utm_zone_from_gps" href="pycraf.geospatial.utm_zone_from_gps.html" />
+    <link rel="next" title="wgs84_to_etrs89" href="pycraf.geospatial.wgs84_to_etrs89.html" />
+    <link rel="prev" title="utm_to_wgs84" href="pycraf.geospatial.utm_to_wgs84.html" />
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 <script type="text/javascript" src="../_static/copybutton.js"></script>
 
@@ -59,12 +59,12 @@
     <h3>Navigation</h3>
     <ul>
       <li class="right">
-	<a href="pycraf.geospatial.wgs84_to_itrf2005.html" title="wgs84_to_itrf2005">
+	<a href="pycraf.geospatial.wgs84_to_etrs89.html" title="wgs84_to_etrs89">
 	  next &raquo;
 	</a>
       </li>
       <li class="right">
-	<a href="pycraf.geospatial.utm_zone_from_gps.html" title="utm_zone_from_gps">
+	<a href="pycraf.geospatial.utm_to_wgs84.html" title="utm_to_wgs84">
 	  &laquo; previous
 	</a>
 	 |
@@ -75,7 +75,7 @@
       </li>
       <li><a href="../geospatial/index.html" accesskey="U">Geographical frames (<code class="docutils literal"><span class="pre">pycraf.geospatial</span></code>)</a> &#187;</li>
       
-      <li>wgs84_to_etrs89</li> 
+      <li>utm_zone_from_gps</li> 
     </ul>
 </div>
   
@@ -85,40 +85,12 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="wgs84-to-etrs89">
-<h1>wgs84_to_etrs89<a class="headerlink" href="#wgs84-to-etrs89" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="utm-zone-from-gps">
+<h1>utm_zone_from_gps<a class="headerlink" href="#utm-zone-from-gps" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="pycraf.geospatial.wgs84_to_etrs89">
-<code class="descclassname">pycraf.geospatial.</code><code class="descname">wgs84_to_etrs89</code><span class="sig-paren">(</span><em>glon</em>, <em>glat</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#wgs84_to_etrs89"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.geospatial.wgs84_to_etrs89" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert GPS/WGS84 coordinates to ETSR89.</p>
-<p>ETRS89 is the European Terrestrial Reference System.
-(Using a Lambert Equal Area projection.)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>glon, glat</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>GPS/WGS84 longitude and latitude [deg]</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>elon, elat</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote class="last">
-<div><p>ETRS89 longitude and latitude [m]</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>Uses</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>+proj<span class="o">=</span>laea +lat_0<span class="o">=</span><span class="m">52</span> +lon_0<span class="o">=</span><span class="m">10</span> +x_0<span class="o">=</span><span class="m">4321000</span> +y_0<span class="o">=</span><span class="m">3210000</span>
-+ellps<span class="o">=</span>GRS80 +units<span class="o">=</span>m +no_defs
-</pre></div>
-</div>
-<p>for pyproj setup (forward transformation).</p>
-</dd></dl>
+<dt id="pycraf.geospatial.utm_zone_from_gps">
+<code class="descclassname">pycraf.geospatial.</code><code class="descname">utm_zone_from_gps</code><span class="sig-paren">(</span><em>glon</em>, <em>glat</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#utm_zone_from_gps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.geospatial.utm_zone_from_gps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 
@@ -129,7 +101,7 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
 <ul>
-<li><a class="reference internal" href="#">wgs84_to_etrs89</a></li>
+<li><a class="reference internal" href="#">utm_zone_from_gps</a></li>
 </ul>
 
 
@@ -139,7 +111,7 @@
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="../_sources/api/pycraf.geospatial.wgs84_to_etrs89.rst.txt"
+    <a href="../_sources/api/pycraf.geospatial.utm_zone_from_gps.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
