@@ -21,7 +21,8 @@ if not _ASTROPY_SETUP_:
     from . import conversions
     from . import geometry
     from . import geospatial
-    from . import utils
+    from . import mc
     from . import pathprof
     from . import protection
     from . import satellite
+    from . import utils
