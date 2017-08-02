@@ -1,5 +1,14 @@
 0.25.3 (unreleased)
 ====================
+New Features
+------------
+
+pycraf.geospatial
+^^^^^^^^^^^^^^^^^
+- This sub-package was heavily re-factored. One can now work with EPSG
+  or ESRI codes (see docs) and there is a factory to produce arbitrary
+  transforms, which come with correct docstrings and quantity/range
+  checker (i.e, proper unit handling). Also, we finally made ITRF work.
 
 0.25.2 (2017-07-30)
 ====================

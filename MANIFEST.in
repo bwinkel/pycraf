@@ -42,3 +42,4 @@ prune astropy_helpers/astropy_helpers/tests
 # recursive-include pycraf *.py
 recursive-include pycraf/itudata *
 recursive-include pycraf/pathprof/data *
+recursive-include pycraf *.npz *.npy *.hdf5 *.json
