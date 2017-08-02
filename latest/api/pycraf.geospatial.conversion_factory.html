@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>conversion_factory &#8212; pycraf v0.25.3.dev50</title>
+    
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.25.3.dev50',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="epsg_from_utm_zone" href="pycraf.geospatial.epsg_from_utm_zone.html" />
+    <link rel="prev" title="Geographical frames (pycraf.geospatial)" href="../geospatial/index.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="pycraf.geospatial.epsg_from_utm_zone.html" title="epsg_from_utm_zone">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="../geospatial/index.html" title="Geographical frames (pycraf.geospatial)">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v0.25.3.dev50</a>
+	 &#187;
+      </li>
+      <li><a href="../geospatial/index.html" accesskey="U">Geographical frames (<code class="docutils literal"><span class="pre">pycraf.geospatial</span></code>)</a> &#187;</li>
+      
+      <li>conversion_factory</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="conversion-factory">
+<h1>conversion_factory<a class="headerlink" href="#conversion-factory" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pycraf.geospatial.conversion_factory">
+<code class="descclassname">pycraf.geospatial.</code><code class="descname">conversion_factory</code><span class="sig-paren">(</span><em>sys_in</em>, <em>sys_out</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#conversion_factory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.geospatial.conversion_factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>A factory to produce conversion functions (decorated with
+<code class="xref py py-obj docutils literal"><span class="pre">ranged_quantity_input</span></code> for unit handling).</p>
+<p>The returned function will automatically have the correct
+signature (e.g., lon/lat &#8211;&gt; x/y, or x/y/z &#8211;&gt; lon/lat/height)
+depending on the chosen input and output projections.
+Also a proper docstring is produced.</p>
+<p>While <a class="reference internal" href="../geospatial/index.html#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal"><span class="pre">geospatial</span></code></a> comes with several convenience
+transform functions, the user could also simply built all
+of the with the <a class="reference internal" href="#pycraf.geospatial.conversion_factory" title="pycraf.geospatial.conversion_factory"><code class="xref py py-obj docutils literal"><span class="pre">conversion_factory</span></code></a>.
+For example, the conversion from WGS84 to ETRS89 is simply:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">geospatial</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wgs84_to_etrs89</span> <span class="o">=</span> <span class="n">geospatial</span><span class="o">.</span><span class="n">conversion_factory</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">geospatial</span><span class="o">.</span><span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">,</span> <span class="n">geospatial</span><span class="o">.</span><span class="n">EPSG</span><span class="o">.</span><span class="n">ETRS89</span>
+<span class="gp">... </span>    <span class="p">)</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#pycraf.geospatial.conversion_factory" title="pycraf.geospatial.conversion_factory"><code class="xref py py-obj docutils literal"><span class="pre">conversion_factory</span></code></a> can be used
+to work with more uncommon projections. As an example,
+consider the Gauss-Kruger projection, which is defined
+for various zones (like UTM) but also with different zone
+widths. This would make it completely unhandy, to wrap
+all of the <code class="xref py py-obj docutils literal"><span class="pre">pyproj</span></code> transforms in <code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code> only for adding
+unit-checking.</p>
+<p>A lot (thousands!) of projections are pre-defined and have
+a so-called <em>EPSG</em> code, e.g. <a class="reference external" href="http://spatialreference.org/">WGS84=&#8221;EPSG:4326&#8221;.
+The website `spatialreference.org</a> is very useful to find
+information on <em>EPSG</em> codes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sys_in, sys_out</strong> : str, int, EPSG</p>
+<blockquote>
+<div><p>Input and output projection for the desired coordinate
+transformation. If a string, this is directly fed into the
+<code class="xref py py-obj docutils literal"><span class="pre">Proj</span></code> class. If an integer, it is treated as
+an <em>EPSG</em> code and the <code class="xref py py-obj docutils literal"><span class="pre">Proj</span></code> class is instantiated
+with <code class="xref py py-obj docutils literal"><span class="pre">&quot;+init=epsg:{code}&quot;</span></code>. For convenience, a couple of
+common systems are defined in the <a class="reference internal" href="pycraf.geospatial.EPSG.html#pycraf.geospatial.EPSG" title="pycraf.geospatial.EPSG"><code class="xref py py-obj docutils literal"><span class="pre">EPSG</span></code></a>
+Enum (which just holds the associated <em>EPSG</em> code for
+each name), e.g., <code class="xref py py-obj docutils literal"><span class="pre">EPSG.WGS84</span> <span class="pre">==</span> <span class="pre">4326</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>transform_func</strong> : Function</p>
+<blockquote class="last">
+<div><p>Transform function with unit decorator
+(<code class="xref py py-obj docutils literal"><span class="pre">ranged_quantity_input</span></code>).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>To define a &#8220;Gauss-Kruger Zone 4 (Germany)&#8221; to GPS/WGS84 transform:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">geospatial</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># see http://spatialreference.org/ref/epsg/31467/</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wgs84_to_etrs89</span> <span class="o">=</span> <span class="n">geospatial</span><span class="o">.</span><span class="n">conversion_factory</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">geospatial</span><span class="o">.</span><span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">,</span> <span class="mi">31467</span>
+<span class="gp">... </span>    <span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">conversion_factory</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="../_sources/api/pycraf.geospatial.conversion_factory.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 02 Aug 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

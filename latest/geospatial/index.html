@@ -28,7 +28,7 @@
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="epsg_from_utm_zone" href="../api/pycraf.geospatial.epsg_from_utm_zone.html" />
+    <link rel="next" title="conversion_factory" href="../api/pycraf.geospatial.conversion_factory.html" />
     <link rel="prev" title="ra769_limits" href="../api/pycraf.protection.ra769_limits.html" />
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 <script type="text/javascript" src="../_static/copybutton.js"></script>
@@ -59,7 +59,7 @@
     <h3>Navigation</h3>
     <ul>
       <li class="right">
-	<a href="../api/pycraf.geospatial.epsg_from_utm_zone.html" title="epsg_from_utm_zone">
+	<a href="../api/pycraf.geospatial.conversion_factory.html" title="conversion_factory">
 	  next &raquo;
 	</a>
       </li>
@@ -141,34 +141,37 @@ around the <a class="reference external" href="http://proj4.org/">proj.4</a> sof
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.epsg_from_utm_zone.html#pycraf.geospatial.epsg_from_utm_zone" title="pycraf.geospatial.epsg_from_utm_zone"><code class="xref py py-obj docutils literal"><span class="pre">epsg_from_utm_zone</span></code></a>(utm_zone)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.conversion_factory.html#pycraf.geospatial.conversion_factory" title="pycraf.geospatial.conversion_factory"><code class="xref py py-obj docutils literal"><span class="pre">conversion_factory</span></code></a>(sys_in,&nbsp;sys_out)</td>
+<td>A factory to produce conversion functions (decorated with <code class="xref py py-obj docutils literal"><span class="pre">ranged_quantity_input</span></code> for unit handling).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.epsg_from_utm_zone.html#pycraf.geospatial.epsg_from_utm_zone" title="pycraf.geospatial.epsg_from_utm_zone"><code class="xref py py-obj docutils literal"><span class="pre">epsg_from_utm_zone</span></code></a>(utm_zone)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.etrs89_to_wgs84.html#pycraf.geospatial.etrs89_to_wgs84" title="pycraf.geospatial.etrs89_to_wgs84"><code class="xref py py-obj docutils literal"><span class="pre">etrs89_to_wgs84</span></code></a>(elon,&nbsp;elat)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.etrs89_to_wgs84.html#pycraf.geospatial.etrs89_to_wgs84" title="pycraf.geospatial.etrs89_to_wgs84"><code class="xref py py-obj docutils literal"><span class="pre">etrs89_to_wgs84</span></code></a>(elon,&nbsp;elat)</td>
 <td>Convert ETSR89 coordinates to GPS/WGS84.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.itrf2005_to_wgs84.html#pycraf.geospatial.itrf2005_to_wgs84" title="pycraf.geospatial.itrf2005_to_wgs84"><code class="xref py py-obj docutils literal"><span class="pre">itrf2005_to_wgs84</span></code></a>(x,&nbsp;y,&nbsp;z)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.itrf2005_to_wgs84.html#pycraf.geospatial.itrf2005_to_wgs84" title="pycraf.geospatial.itrf2005_to_wgs84"><code class="xref py py-obj docutils literal"><span class="pre">itrf2005_to_wgs84</span></code></a>(x,&nbsp;y,&nbsp;z)</td>
 <td>Convert ITRF2005 coordinates to GPS/WGS84.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.itrf2008_to_wgs84.html#pycraf.geospatial.itrf2008_to_wgs84" title="pycraf.geospatial.itrf2008_to_wgs84"><code class="xref py py-obj docutils literal"><span class="pre">itrf2008_to_wgs84</span></code></a>(x,&nbsp;y,&nbsp;z)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.itrf2008_to_wgs84.html#pycraf.geospatial.itrf2008_to_wgs84" title="pycraf.geospatial.itrf2008_to_wgs84"><code class="xref py py-obj docutils literal"><span class="pre">itrf2008_to_wgs84</span></code></a>(x,&nbsp;y,&nbsp;z)</td>
 <td>Convert ITRF2008 coordinates to GPS/WGS84.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.utm_to_wgs84.html#pycraf.geospatial.utm_to_wgs84" title="pycraf.geospatial.utm_to_wgs84"><code class="xref py py-obj docutils literal"><span class="pre">utm_to_wgs84</span></code></a>(ulon,&nbsp;ulat,&nbsp;zone[,&nbsp;south])</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.utm_to_wgs84.html#pycraf.geospatial.utm_to_wgs84" title="pycraf.geospatial.utm_to_wgs84"><code class="xref py py-obj docutils literal"><span class="pre">utm_to_wgs84</span></code></a>(ulon,&nbsp;ulat,&nbsp;utm_zone)</td>
 <td>Convert UTM coordinates to GPS/WGS84.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.utm_zone_from_gps.html#pycraf.geospatial.utm_zone_from_gps" title="pycraf.geospatial.utm_zone_from_gps"><code class="xref py py-obj docutils literal"><span class="pre">utm_zone_from_gps</span></code></a>(glon,&nbsp;glat)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.utm_zone_from_gps.html#pycraf.geospatial.utm_zone_from_gps" title="pycraf.geospatial.utm_zone_from_gps"><code class="xref py py-obj docutils literal"><span class="pre">utm_zone_from_gps</span></code></a>(glon,&nbsp;glat)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.wgs84_to_etrs89.html#pycraf.geospatial.wgs84_to_etrs89" title="pycraf.geospatial.wgs84_to_etrs89"><code class="xref py py-obj docutils literal"><span class="pre">wgs84_to_etrs89</span></code></a>(glon,&nbsp;glat)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.wgs84_to_etrs89.html#pycraf.geospatial.wgs84_to_etrs89" title="pycraf.geospatial.wgs84_to_etrs89"><code class="xref py py-obj docutils literal"><span class="pre">wgs84_to_etrs89</span></code></a>(glon,&nbsp;glat)</td>
 <td>Convert GPS/WGS84 coordinates to ETSR89.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.wgs84_to_itrf2005.html#pycraf.geospatial.wgs84_to_itrf2005" title="pycraf.geospatial.wgs84_to_itrf2005"><code class="xref py py-obj docutils literal"><span class="pre">wgs84_to_itrf2005</span></code></a>(glon,&nbsp;glat,&nbsp;height)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.wgs84_to_itrf2005.html#pycraf.geospatial.wgs84_to_itrf2005" title="pycraf.geospatial.wgs84_to_itrf2005"><code class="xref py py-obj docutils literal"><span class="pre">wgs84_to_itrf2005</span></code></a>(glon,&nbsp;glat,&nbsp;height)</td>
 <td>Convert GPS/WGS84 coordinates to ITRF2005.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.wgs84_to_itrf2008.html#pycraf.geospatial.wgs84_to_itrf2008" title="pycraf.geospatial.wgs84_to_itrf2008"><code class="xref py py-obj docutils literal"><span class="pre">wgs84_to_itrf2008</span></code></a>(glon,&nbsp;glat,&nbsp;height)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.wgs84_to_itrf2008.html#pycraf.geospatial.wgs84_to_itrf2008" title="pycraf.geospatial.wgs84_to_itrf2008"><code class="xref py py-obj docutils literal"><span class="pre">wgs84_to_itrf2008</span></code></a>(glon,&nbsp;glat,&nbsp;height)</td>
 <td>Convert GPS/WGS84 coordinates to ITRF2008.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.wgs84_to_utm.html#pycraf.geospatial.wgs84_to_utm" title="pycraf.geospatial.wgs84_to_utm"><code class="xref py py-obj docutils literal"><span class="pre">wgs84_to_utm</span></code></a>(glon,&nbsp;glat,&nbsp;zone[,&nbsp;south])</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.wgs84_to_utm.html#pycraf.geospatial.wgs84_to_utm" title="pycraf.geospatial.wgs84_to_utm"><code class="xref py py-obj docutils literal"><span class="pre">wgs84_to_utm</span></code></a>(glon,&nbsp;glat,&nbsp;utm_zone)</td>
 <td>Convert GPS/WGS84 coordinates to UTM.</td>
 </tr>
 </tbody>

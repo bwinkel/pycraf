@@ -124,6 +124,7 @@ latest/_sources/api/pycraf.geometry.great_circle_bearing.rst.txt
 latest/_sources/api/pycraf.geometry.sphere_to_cart.rst.txt
 latest/_sources/api/pycraf.geometry.true_angular_distance.rst.txt
 latest/_sources/api/pycraf.geospatial.EPSG.rst.txt
+latest/_sources/api/pycraf.geospatial.conversion_factory.rst.txt
 latest/_sources/api/pycraf.geospatial.epsg_from_utm_zone.rst.txt
 latest/_sources/api/pycraf.geospatial.etrs89_to_wgs84.rst.txt
 latest/_sources/api/pycraf.geospatial.itrf2005_to_wgs84.rst.txt
@@ -283,6 +284,7 @@ latest/api/pycraf.geometry.great_circle_bearing.html
 latest/api/pycraf.geometry.sphere_to_cart.html
 latest/api/pycraf.geometry.true_angular_distance.html
 latest/api/pycraf.geospatial.EPSG.html
+latest/api/pycraf.geospatial.conversion_factory.html
 latest/api/pycraf.geospatial.epsg_from_utm_zone.html
 latest/api/pycraf.geospatial.etrs89_to_wgs84.html
 latest/api/pycraf.geospatial.itrf2005_to_wgs84.html

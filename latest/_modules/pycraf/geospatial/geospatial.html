@@ -106,21 +106,71 @@
     <span class="s1">&#39;itrf2005_to_wgs84&#39;</span><span class="p">,</span> <span class="s1">&#39;wgs84_to_itrf2005&#39;</span><span class="p">,</span>
     <span class="s1">&#39;itrf2008_to_wgs84&#39;</span><span class="p">,</span> <span class="s1">&#39;wgs84_to_itrf2008&#39;</span><span class="p">,</span>
     <span class="c1"># &#39;custom_epsg_to_wgs84&#39;, &#39;wgs84_to_custom_epsg&#39;,</span>
+    <span class="s1">&#39;conversion_factory&#39;</span><span class="p">,</span>
     <span class="p">]</span>
 
 
 <div class="viewcode-block" id="EPSG"><a class="viewcode-back" href="../../../api/pycraf.geospatial.EPSG.html#pycraf.geospatial.EPSG">[docs]</a><span class="k">class</span> <span class="nc">EPSG</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Enum with often used EPSG codes.</span>
+
+<span class="sd">    See also</span>
+
+<span class="sd">    - http://gothos.info/2011/04/common-map-projection-definitions/</span>
+<span class="sd">    - https://www.nceas.ucsb.edu/scicomp/recipes/projections</span>
+<span class="sd">    - http://www.epsg.org/Portals/0/373-07-1.pdf</span>
+
+<span class="sd">    TODO: some codes use different units (e.g., feet instead of m);</span>
+<span class="sd">    need to handle this!!!</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">WGS84</span> <span class="o">=</span> <span class="mi">4326</span>
-    <span class="n">ETRS89</span> <span class="o">=</span> <span class="mi">4258</span>
+    <span class="n">WGS84</span> <span class="o">=</span> <span class="mi">4326</span>  <span class="c1"># GPS WGS84 (simply longitude and latitude); World Geodetic System</span>
+    <span class="n">ETRS89</span> <span class="o">=</span> <span class="mi">3035</span>  <span class="c1"># http://spatialreference.org/ref/epsg/etrs89-etrs-laea/</span>
     <span class="n">ITRF00</span> <span class="o">=</span> <span class="mi">4919</span>
     <span class="n">ITRF05</span> <span class="o">=</span> <span class="mi">4896</span>
-    <span class="n">ITRF08</span> <span class="o">=</span> <span class="mi">5332</span></div>
+    <span class="n">ITRF08</span> <span class="o">=</span> <span class="mi">5332</span>
+    <span class="n">NAD83</span> <span class="o">=</span> <span class="mi">4269</span>  <span class="c1"># North American Datum of 1983</span>
+    <span class="c1"># ROBINSON = 54030  # World Robinson</span>
+    <span class="c1"># MOLLWEIDE =</span>
+    <span class="n">WEB_MERC</span> <span class="o">=</span> <span class="mi">3857</span>  <span class="c1"># web mercator used by many web apps (Google maps, OSM)</span></div>
+
+
+<span class="k">class</span> <span class="nc">ESRI</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+
+    <span class="n">ROBINSON</span> <span class="o">=</span> <span class="mi">54030</span>  <span class="c1"># World Robinson</span>
+    <span class="n">MOLLWEIDE</span> <span class="o">=</span> <span class="mi">54009</span>  <span class="c1">#</span>
 
 
 <span class="n">UTM_ZONE_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^(?P&lt;zone&gt;[1-9]|[1-5][0-9]|60)(?P&lt;ns&gt;[nsNS])$&#39;</span><span class="p">)</span>
+
+
+<span class="n">DOC_TEMPLATE</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">    Convert coordinates from `sys_in` to `sys_out`.</span>
+
+<span class="s1">    - `sys_in`: </span><span class="si">{sys_in}</span><span class="s1"></span>
+<span class="s1">    - `sys_out`: </span><span class="si">{sys_out}</span><span class="s1"></span>
+
+<span class="s1">    Parameters</span>
+<span class="s1">    ----------</span>
+<span class="s1">    </span><span class="si">{parameters}</span><span class="s1"></span>
+<span class="s1">    Returns</span>
+<span class="s1">    -------</span>
+<span class="s1">    </span><span class="si">{returns}</span><span class="s1"></span>
+
+<span class="s1">    &#39;&#39;&#39;</span>
+<span class="n">DOC_LONLAT_2D</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;lon, lat : `~astropy.units.Quantity`</span>
+<span class="s1">        </span><span class="si">{}</span><span class="s1"> longitude and latitude [deg]</span>
+<span class="s1">    &#39;&#39;&#39;</span>
+<span class="n">DOC_LONLAT_3D</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;lon, lat : `~astropy.units.Quantity`</span>
+<span class="s1">        </span><span class="si">{}</span><span class="s1"> longitude and latitude [deg]</span>
+<span class="s1">    height : `~astropy.units.Quantity`</span>
+<span class="s1">        Height (amsl) [m]</span>
+<span class="s1">    &#39;&#39;&#39;</span>
+<span class="n">DOC_WORLD_2D</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;x, y : `~astropy.units.Quantity`</span>
+<span class="s1">        </span><span class="si">{}</span><span class="s1"> world coordinates [m]</span>
+<span class="s1">    &#39;&#39;&#39;</span>
+<span class="n">DOC_WORLD_3D</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;x, y, z : `~astropy.units.Quantity`</span>
+<span class="s1">        </span><span class="si">{}</span><span class="s1"> geocentric coordinates [m]</span>
+<span class="s1">    &#39;&#39;&#39;</span>
 
 
 <span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
@@ -153,21 +203,29 @@
 
     <span class="n">zone</span><span class="p">,</span> <span class="n">ns</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
 
+    <span class="c1"># if ns.upper() == &#39;N&#39;:</span>
+    <span class="c1">#     return &#39;EPSG:326{:02d}&#39;.format(int(zone))</span>
+    <span class="c1"># elif ns.upper() == &#39;S&#39;:</span>
+    <span class="c1">#     return &#39;EPSG:327{:02d}&#39;.format(int(zone))</span>
     <span class="k">if</span> <span class="n">ns</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;N&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;EPSG:326</span><span class="si">{:02d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">zone</span><span class="p">))</span>
+        <span class="k">return</span> <span class="mi">32600</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">zone</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">ns</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;S&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;EPSG:327</span><span class="si">{:02d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">zone</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="mi">32700</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">zone</span><span class="p">)</span></div>
 
 
 <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">typed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">_create_proj</span><span class="p">(</span><span class="n">sys1</span><span class="p">,</span> <span class="n">sys2</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">south</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_create_transform</span><span class="p">(</span><span class="n">sys1</span><span class="p">,</span> <span class="n">sys2</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Helper function to create and cache pyproj.Proj instances,</span>
-<span class="sd">    or transform functions.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    Helper function to create and cache pyproj.transform with the</span>
+<span class="sd">    desired coordinate projections binded.</span>
 
-    <span class="k">def</span> <span class="nf">_c</span><span class="p">(</span><span class="n">epsg_enum</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;+init=epsg:</span><span class="si">{:04d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">epsg_enum</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+<span class="sd">    sys1, sys2 must be one of</span>
+<span class="sd">        str (pyproj compatible)</span>
+<span class="sd">        EPSG (enum)</span>
+<span class="sd">        int (epsg code)</span>
+
+<span class="sd">    returns transform function</span>
+<span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">pyproj</span> <span class="k">import</span> <span class="n">Proj</span><span class="p">,</span> <span class="n">transform</span>
@@ -176,75 +234,25 @@
             <span class="s1">&#39;The &quot;pyproj&quot; package is necessary to use this function.&#39;</span>
             <span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">sys1</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">EPSG</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sys1</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">EPSG</span><span class="p">))):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-            <span class="s1">&#39;sys1/2 must be strings or EPSG enums: </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys1</span><span class="p">,</span> <span class="n">sys2</span><span class="p">)</span>
-            <span class="p">)</span>
+    <span class="n">sys</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys1</span><span class="p">,</span> <span class="n">sys2</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
 
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sys1</span><span class="p">,</span> <span class="n">EPSG</span><span class="p">):</span>
-        <span class="n">sys1</span> <span class="o">=</span> <span class="n">_c</span><span class="p">(</span><span class="n">sys1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">EPSG</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;Coordinate description for sys1 must be one of &#39;</span>
+                <span class="s1">&#39;(int, str, EPSG); got </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="p">)</span>
 
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sys1</span><span class="p">,</span> <span class="n">EPSG</span><span class="p">):</span>
-        <span class="n">sys2</span> <span class="o">=</span> <span class="n">_c</span><span class="p">(</span><span class="n">sys2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;+init=epsg:</span><span class="si">{:04d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
-    <span class="k">if</span> <span class="n">sys1</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;EPSG:&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">sys2</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;EPSG:&#39;</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">EPSG</span><span class="p">):</span>
+            <span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;+init=epsg:</span><span class="si">{:04d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">Proj</span><span class="p">(</span><span class="n">sys1</span><span class="p">),</span> <span class="n">Proj</span><span class="p">(</span><span class="n">sys2</span><span class="p">))</span>
+    <span class="n">proj1</span> <span class="o">=</span> <span class="n">Proj</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">proj2</span> <span class="o">=</span> <span class="n">Proj</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
-    <span class="k">elif</span> <span class="n">sys1</span> <span class="o">==</span> <span class="s1">&#39;UTM&#39;</span> <span class="ow">and</span> <span class="n">sys2</span> <span class="o">==</span> <span class="s1">&#39;WGS84&#39;</span><span class="p">:</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">zone</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;zone must be an integer&#39;</span><span class="p">)</span>
-
-        <span class="n">_proj_str</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s1">&#39;+proj=utm +ellps=WGS84 +datum=WGS84 +units=m +no_defs &#39;</span>
-            <span class="s1">&#39;+zone=</span><span class="si">{:d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">zone</span><span class="p">)</span>
-            <span class="p">)</span>
-        <span class="k">if</span> <span class="n">south</span><span class="p">:</span>
-            <span class="n">_proj_str</span> <span class="o">+=</span> <span class="s1">&#39;+south&#39;</span>
-
-        <span class="k">return</span> <span class="n">Proj</span><span class="p">(</span><span class="n">_proj_str</span><span class="p">)</span>
-
-    <span class="k">elif</span> <span class="n">sys1</span> <span class="o">==</span> <span class="s1">&#39;ETRS89&#39;</span> <span class="ow">and</span> <span class="n">sys2</span> <span class="o">==</span> <span class="s1">&#39;WGS84&#39;</span><span class="p">:</span>
-
-        <span class="n">_proj_str</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s1">&#39;+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 &#39;</span>
-            <span class="s1">&#39;+ellps=GRS80 +units=m +no_defs&#39;</span>
-            <span class="p">)</span>
-        <span class="k">return</span> <span class="n">Proj</span><span class="p">(</span><span class="n">_proj_str</span><span class="p">)</span>
-
-    <span class="c1"># Note: if you need ITRF2000, use &quot;epsg:4919&quot;</span>
-    <span class="k">elif</span> <span class="n">sys1</span> <span class="o">==</span> <span class="s1">&#39;WGS84&#39;</span> <span class="ow">and</span> <span class="n">sys2</span> <span class="o">==</span> <span class="s1">&#39;ITRF05&#39;</span><span class="p">:</span>
-
-        <span class="n">sys1</span> <span class="o">=</span> <span class="s1">&#39;+init=epsg:</span><span class="si">{:04d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="n">sys2</span> <span class="o">=</span> <span class="s1">&#39;+init=epsg:</span><span class="si">{:04d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">EPSG</span><span class="o">.</span><span class="n">ITRF05</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">Proj</span><span class="p">(</span><span class="n">sys1</span><span class="p">),</span> <span class="n">Proj</span><span class="p">(</span><span class="n">sys2</span><span class="p">))</span>
-
-    <span class="k">elif</span> <span class="n">sys1</span> <span class="o">==</span> <span class="s1">&#39;ITRF05&#39;</span> <span class="ow">and</span> <span class="n">sys2</span> <span class="o">==</span> <span class="s1">&#39;WGS84&#39;</span><span class="p">:</span>
-
-        <span class="n">wgs84</span> <span class="o">=</span> <span class="n">Proj</span><span class="p">(</span><span class="s1">&#39;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&#39;</span><span class="p">)</span>
-        <span class="n">itrf05</span> <span class="o">=</span> <span class="n">Proj</span><span class="p">(</span><span class="s1">&#39;+init=epsg:4896&#39;</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">itrf05</span><span class="p">,</span> <span class="n">wgs84</span><span class="p">)</span>
-
-    <span class="k">elif</span> <span class="n">sys1</span> <span class="o">==</span> <span class="s1">&#39;WGS84&#39;</span> <span class="ow">and</span> <span class="n">sys2</span> <span class="o">==</span> <span class="s1">&#39;ITRF08&#39;</span><span class="p">:</span>
-
-        <span class="n">wgs84</span> <span class="o">=</span> <span class="n">Proj</span><span class="p">(</span><span class="s1">&#39;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&#39;</span><span class="p">)</span>
-        <span class="n">itrf08</span> <span class="o">=</span> <span class="n">Proj</span><span class="p">(</span><span class="s1">&#39;+init=epsg:5332&#39;</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">wgs84</span><span class="p">,</span> <span class="n">itrf08</span><span class="p">)</span>
-
-    <span class="k">elif</span> <span class="n">sys1</span> <span class="o">==</span> <span class="s1">&#39;ITRF08&#39;</span> <span class="ow">and</span> <span class="n">sys2</span> <span class="o">==</span> <span class="s1">&#39;WGS84&#39;</span><span class="p">:</span>
-
-        <span class="n">wgs84</span> <span class="o">=</span> <span class="n">Proj</span><span class="p">(</span><span class="s1">&#39;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&#39;</span><span class="p">)</span>
-        <span class="n">itrf08</span> <span class="o">=</span> <span class="n">Proj</span><span class="p">(</span><span class="s1">&#39;+init=epsg:5332&#39;</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">itrf08</span><span class="p">,</span> <span class="n">wgs84</span><span class="p">)</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
-            <span class="s1">&#39;requested conversion not supported </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys1</span><span class="p">,</span> <span class="n">sys2</span><span class="p">)</span>
-            <span class="p">)</span>
+    <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">proj1</span><span class="p">,</span> <span class="n">proj2</span><span class="p">)</span>
 
 
 <span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
@@ -252,7 +260,7 @@
     <span class="n">ulat</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">)</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="utm_to_wgs84"><a class="viewcode-back" href="../../../api/pycraf.geospatial.utm_to_wgs84.html#pycraf.geospatial.utm_to_wgs84">[docs]</a><span class="k">def</span> <span class="nf">utm_to_wgs84</span><span class="p">(</span><span class="n">ulon</span><span class="p">,</span> <span class="n">ulat</span><span class="p">,</span> <span class="n">zone</span><span class="p">,</span> <span class="n">south</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="utm_to_wgs84"><a class="viewcode-back" href="../../../api/pycraf.geospatial.utm_to_wgs84.html#pycraf.geospatial.utm_to_wgs84">[docs]</a><span class="k">def</span> <span class="nf">utm_to_wgs84</span><span class="p">(</span><span class="n">ulon</span><span class="p">,</span> <span class="n">ulat</span><span class="p">,</span> <span class="n">utm_zone</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Convert UTM coordinates to GPS/WGS84.</span>
 
@@ -260,12 +268,11 @@
 <span class="sd">    ----------</span>
 <span class="sd">    ulon, ulat : `~astropy.units.Quantity`</span>
 <span class="sd">        UTM longitude and latitude [m]</span>
-<span class="sd">    zone : int</span>
-<span class="sd">        UTM zone (e.g., 32 for longitudes 6 E to 12 E); see `Wikipedia</span>
+<span class="sd">    utm_zone : str</span>
+<span class="sd">        UTM zone string (e.g., 32N for longitudes 6 E to 12 E,</span>
+<span class="sd">        northern hemisphere); see `Wikipedia</span>
 <span class="sd">        &lt;https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system&gt;`_</span>
 <span class="sd">        for more information on the zones</span>
-<span class="sd">    south : bool</span>
-<span class="sd">        Hemisphere; set to True for southern hemisphere (default: False)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -274,21 +281,13 @@
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    - Uses</span>
-
-<span class="sd">      .. code-block:: bash</span>
-
-<span class="sd">          +proj=utm +zone=xx +ellps=WGS84 +datum=WGS84 +units=m +no_defs [+south]</span>
-
-<span class="sd">      for `pyproj` setup (inverse transformation). Only one zone per function</span>
-<span class="sd">      call is allowed.</span>
 <span class="sd">    - This function uses only the longitudal zone scheme. There is also</span>
 <span class="sd">      the NATO system, which introduces latitude bands.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">_proj</span> <span class="o">=</span> <span class="n">_create_proj</span><span class="p">(</span><span class="s1">&#39;UTM&#39;</span><span class="p">,</span> <span class="s1">&#39;WGS84&#39;</span><span class="p">,</span> <span class="n">zone</span><span class="p">,</span> <span class="n">south</span><span class="p">)</span>
+    <span class="n">epsg</span> <span class="o">=</span> <span class="n">epsg_from_utm_zone</span><span class="p">(</span><span class="n">utm_zone</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">_proj</span><span class="p">(</span><span class="n">ulon</span><span class="p">,</span> <span class="n">ulat</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_create_transform</span><span class="p">(</span><span class="n">epsg</span><span class="p">,</span> <span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">)(</span><span class="n">ulon</span><span class="p">,</span> <span class="n">ulat</span><span class="p">)</span></div>
 
 
 <span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
@@ -296,7 +295,7 @@
     <span class="n">glat</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="wgs84_to_utm"><a class="viewcode-back" href="../../../api/pycraf.geospatial.wgs84_to_utm.html#pycraf.geospatial.wgs84_to_utm">[docs]</a><span class="k">def</span> <span class="nf">wgs84_to_utm</span><span class="p">(</span><span class="n">glon</span><span class="p">,</span> <span class="n">glat</span><span class="p">,</span> <span class="n">zone</span><span class="p">,</span> <span class="n">south</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="wgs84_to_utm"><a class="viewcode-back" href="../../../api/pycraf.geospatial.wgs84_to_utm.html#pycraf.geospatial.wgs84_to_utm">[docs]</a><span class="k">def</span> <span class="nf">wgs84_to_utm</span><span class="p">(</span><span class="n">glon</span><span class="p">,</span> <span class="n">glat</span><span class="p">,</span> <span class="n">utm_zone</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Convert GPS/WGS84 coordinates to UTM.</span>
 
@@ -304,12 +303,11 @@
 <span class="sd">    ----------</span>
 <span class="sd">    glon, glat : `~astropy.units.Quantity`</span>
 <span class="sd">        GPS/WGS84 longitude and latitude [deg]</span>
-<span class="sd">    zone : int</span>
-<span class="sd">        UTM zone (e.g., 32 for longitudes 6 E to 12 E); see `Wikipedia</span>
+<span class="sd">    utm_zone : str</span>
+<span class="sd">        UTM zone string (e.g., 32N for longitudes 6 E to 12 E,</span>
+<span class="sd">        northern hemisphere); see `Wikipedia</span>
 <span class="sd">        &lt;https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system&gt;`_</span>
 <span class="sd">        for more information on the zones</span>
-<span class="sd">    south : bool</span>
-<span class="sd">        Hemisphere; set to True for southern hemisphere (default: False)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -318,26 +316,18 @@
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    - Uses</span>
-
-<span class="sd">      .. code-block:: bash</span>
-
-<span class="sd">          +proj=utm +zone=xx +ellps=WGS84 +datum=WGS84 +units=m +no_defs [+south]</span>
-
-<span class="sd">      for `pyproj` setup (forward transformation). Only one zone per function</span>
-<span class="sd">      call is allowed.</span>
 <span class="sd">    - This function uses only the longitudal zone scheme. There is also</span>
 <span class="sd">      the NATO system, which introduces latitude bands.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">_proj</span> <span class="o">=</span> <span class="n">_create_proj</span><span class="p">(</span><span class="s1">&#39;UTM&#39;</span><span class="p">,</span> <span class="s1">&#39;WGS84&#39;</span><span class="p">,</span> <span class="n">zone</span><span class="p">,</span> <span class="n">south</span><span class="p">)</span>
+    <span class="n">epsg</span> <span class="o">=</span> <span class="n">epsg_from_utm_zone</span><span class="p">(</span><span class="n">utm_zone</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">_proj</span><span class="p">(</span><span class="n">glon</span><span class="p">,</span> <span class="n">glat</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_create_transform</span><span class="p">(</span><span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">,</span> <span class="n">epsg</span><span class="p">)(</span><span class="n">glon</span><span class="p">,</span> <span class="n">glat</span><span class="p">)</span></div>
 
 
 <span class="c1"># This is for Western Germany (Effelsberg)</span>
-<span class="n">utm_to_wgs84_32N</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">utm_to_wgs84</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">south</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">wgs84_to_utm_32N</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">wgs84_to_utm</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">south</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">utm_to_wgs84_32N</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">utm_to_wgs84</span><span class="p">,</span> <span class="n">utm_zone</span><span class="o">=</span><span class="s1">&#39;32N&#39;</span><span class="p">)</span>
+<span class="n">wgs84_to_utm_32N</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">wgs84_to_utm</span><span class="p">,</span> <span class="n">utm_zone</span><span class="o">=</span><span class="s1">&#39;32N&#39;</span><span class="p">)</span>
 
 
 <span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
@@ -362,21 +352,9 @@
 <span class="sd">    glon, glat : `~astropy.units.Quantity`</span>
 <span class="sd">        GPS/WGS84 longitude and latitude [deg]</span>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    Uses</span>
-
-<span class="sd">    .. code-block:: bash</span>
-
-<span class="sd">        +proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000</span>
-<span class="sd">        +ellps=GRS80 +units=m +no_defs</span>
-
-<span class="sd">    for pyproj setup (inverse transformation).</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">_proj</span> <span class="o">=</span> <span class="n">_create_proj</span><span class="p">(</span><span class="s1">&#39;ETRS89&#39;</span><span class="p">,</span> <span class="s1">&#39;WGS84&#39;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">_proj</span><span class="p">(</span><span class="n">elon</span><span class="p">,</span> <span class="n">elat</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_create_transform</span><span class="p">(</span><span class="n">EPSG</span><span class="o">.</span><span class="n">ETRS89</span><span class="p">,</span> <span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">)(</span><span class="n">elon</span><span class="p">,</span> <span class="n">elat</span><span class="p">)</span></div>
 
 
 <span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
@@ -400,22 +378,9 @@
 <span class="sd">    -------</span>
 <span class="sd">    elon, elat : `~astropy.units.Quantity`</span>
 <span class="sd">        ETRS89 longitude and latitude [m]</span>
-
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    Uses</span>
-
-<span class="sd">    .. code-block:: bash</span>
-
-<span class="sd">        +proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000</span>
-<span class="sd">        +ellps=GRS80 +units=m +no_defs</span>
-
-<span class="sd">    for pyproj setup (forward transformation).</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">_proj</span> <span class="o">=</span> <span class="n">_create_proj</span><span class="p">(</span><span class="s1">&#39;ETRS89&#39;</span><span class="p">,</span> <span class="s1">&#39;WGS84&#39;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">_proj</span><span class="p">(</span><span class="n">glon</span><span class="p">,</span> <span class="n">glat</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_create_transform</span><span class="p">(</span><span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">,</span> <span class="n">EPSG</span><span class="o">.</span><span class="n">ETRS89</span><span class="p">)(</span><span class="n">glon</span><span class="p">,</span> <span class="n">glat</span><span class="p">)</span></div>
 
 
 <span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
@@ -445,9 +410,7 @@
 <span class="sd">        ITRF2005 geocentric coordinates, (x, y, z) [m]</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">_transform</span> <span class="o">=</span> <span class="n">_create_proj</span><span class="p">(</span><span class="s1">&#39;WGS84&#39;</span><span class="p">,</span> <span class="s1">&#39;ITRF05&#39;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">_transform</span><span class="p">(</span><span class="n">glon</span><span class="p">,</span> <span class="n">glat</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_create_transform</span><span class="p">(</span><span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">,</span> <span class="n">EPSG</span><span class="o">.</span><span class="n">ITRF05</span><span class="p">)(</span><span class="n">glon</span><span class="p">,</span> <span class="n">glat</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span></div>
 
 
 <span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
@@ -477,9 +440,7 @@
 <span class="sd">        Height (amsl) [m]</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">_transform</span> <span class="o">=</span> <span class="n">_create_proj</span><span class="p">(</span><span class="s1">&#39;ITRF05&#39;</span><span class="p">,</span> <span class="s1">&#39;WGS84&#39;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">_transform</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_create_transform</span><span class="p">(</span><span class="n">EPSG</span><span class="o">.</span><span class="n">ITRF05</span><span class="p">,</span> <span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">)(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span></div>
 
 
 <span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
@@ -509,9 +470,7 @@
 <span class="sd">        ITRF2008 geocentric coordinates, (x, y, z) [m]</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">_transform</span> <span class="o">=</span> <span class="n">_create_proj</span><span class="p">(</span><span class="s1">&#39;WGS84&#39;</span><span class="p">,</span> <span class="s1">&#39;ITRF08&#39;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">_transform</span><span class="p">(</span><span class="n">glon</span><span class="p">,</span> <span class="n">glat</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_create_transform</span><span class="p">(</span><span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">,</span> <span class="n">EPSG</span><span class="o">.</span><span class="n">ITRF08</span><span class="p">)(</span><span class="n">glon</span><span class="p">,</span> <span class="n">glat</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span></div>
 
 
 <span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
@@ -541,10 +500,155 @@
 <span class="sd">        Height (amsl) [m]</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">_transform</span> <span class="o">=</span> <span class="n">_create_proj</span><span class="p">(</span><span class="s1">&#39;ITRF08&#39;</span><span class="p">,</span> <span class="s1">&#39;WGS84&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_create_transform</span><span class="p">(</span><span class="n">EPSG</span><span class="o">.</span><span class="n">ITRF08</span><span class="p">,</span> <span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">)(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span></div>
 
-    <span class="k">return</span> <span class="n">_transform</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="conversion_factory"><a class="viewcode-back" href="../../../api/pycraf.geospatial.conversion_factory.html#pycraf.geospatial.conversion_factory">[docs]</a><span class="k">def</span> <span class="nf">conversion_factory</span><span class="p">(</span><span class="n">sys_in</span><span class="p">,</span> <span class="n">sys_out</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    A factory to produce conversion functions (decorated with</span>
+<span class="sd">    `~pycraf.utils.ranged_quantity_input` for unit handling).</span>
+
+<span class="sd">    The returned function will automatically have the correct</span>
+<span class="sd">    signature (e.g., lon/lat --&gt; x/y, or x/y/z --&gt; lon/lat/height)</span>
+<span class="sd">    depending on the chosen input and output projections.</span>
+<span class="sd">    Also a proper docstring is produced.</span>
+
+<span class="sd">    While `~pycraf.geospatial` comes with several convenience</span>
+<span class="sd">    transform functions, the user could also simply built all</span>
+<span class="sd">    of the with the `~pycraf.geospatial.conversion_factory`.</span>
+<span class="sd">    For example, the conversion from WGS84 to ETRS89 is simply::</span>
+
+<span class="sd">        &gt;&gt;&gt; from pycraf import geospatial</span>
+<span class="sd">        &gt;&gt;&gt; import astropy.units as u</span>
+
+<span class="sd">        &gt;&gt;&gt; wgs84_to_etrs89 = geospatial.conversion_factory(</span>
+<span class="sd">        ...     geospatial.EPSG.WGS84, geospatial.EPSG.ETRS89</span>
+<span class="sd">        ...     )</span>
+
+<span class="sd">    The `~pycraf.geospatial.conversion_factory` can be used</span>
+<span class="sd">    to work with more uncommon projections. As an example,</span>
+<span class="sd">    consider the Gauss-Kruger projection, which is defined</span>
+<span class="sd">    for various zones (like UTM) but also with different zone</span>
+<span class="sd">    widths. This would make it completely unhandy, to wrap</span>
+<span class="sd">    all of the `~pyproj` transforms in `~pycraf` only for adding</span>
+<span class="sd">    unit-checking.</span>
+
+<span class="sd">    A lot (thousands!) of projections are pre-defined and have</span>
+<span class="sd">    a so-called *EPSG* code, e.g. `WGS84=&quot;EPSG:4326&quot;.</span>
+<span class="sd">    The website `spatialreference.org</span>
+<span class="sd">    &lt;http://spatialreference.org/&gt;`__ is very useful to find</span>
+<span class="sd">    information on *EPSG* codes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sys_in, sys_out : str, int, EPSG</span>
+<span class="sd">        Input and output projection for the desired coordinate</span>
+<span class="sd">        transformation. If a string, this is directly fed into the</span>
+<span class="sd">        `~pyproj.Proj` class. If an integer, it is treated as</span>
+<span class="sd">        an *EPSG* code and the `~pyproj.Proj` class is instantiated</span>
+<span class="sd">        with `&quot;+init=epsg:{code}&quot;`. For convenience, a couple of</span>
+<span class="sd">        common systems are defined in the `~pycraf.geospatial.EPSG`</span>
+<span class="sd">        Enum (which just holds the associated *EPSG* code for</span>
+<span class="sd">        each name), e.g., `EPSG.WGS84 == 4326`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    transform_func : Function</span>
+<span class="sd">        Transform function with unit decorator</span>
+<span class="sd">        (`~pycraf.utils.ranged_quantity_input`).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    To define a &quot;Gauss-Kruger Zone 4 (Germany)&quot; to GPS/WGS84 transform::</span>
+
+<span class="sd">        &gt;&gt;&gt; from pycraf import geospatial</span>
+<span class="sd">        &gt;&gt;&gt; import astropy.units as u</span>
+
+<span class="sd">        &gt;&gt;&gt; # see http://spatialreference.org/ref/epsg/31467/</span>
+<span class="sd">        &gt;&gt;&gt; wgs84_to_etrs89 = geospatial.conversion_factory(</span>
+<span class="sd">        ...     geospatial.EPSG.WGS84, 31467</span>
+<span class="sd">        ...     )</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="kn">import</span> <span class="nn">inspect</span>
+
+    <span class="n">_transform</span> <span class="o">=</span> <span class="n">_create_transform</span><span class="p">(</span><span class="n">sys_in</span><span class="p">,</span> <span class="n">sys_out</span><span class="p">)</span>
+
+    <span class="n">needs_3d</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">is_geocent</span><span class="p">()</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">_transform</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">_transform</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">is_latlong</span><span class="p">():</span>
+        <span class="n">deco_in_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">lon</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+            <span class="n">lat</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="n">doc_in</span> <span class="o">=</span> <span class="n">DOC_LONLAT_2D</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;`sys_in`&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">needs_3d</span><span class="p">:</span>
+            <span class="n">deco_in_kwargs</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+            <span class="n">doc_in</span> <span class="o">=</span> <span class="n">DOC_LONLAT_3D</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;`sys_in`&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">deco_in_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+            <span class="n">y</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="n">doc_in</span> <span class="o">=</span> <span class="n">DOC_WORLD_2D</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;`sys_in`&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">needs_3d</span><span class="p">:</span>
+            <span class="n">deco_in_kwargs</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+            <span class="n">doc_in</span> <span class="o">=</span> <span class="n">DOC_WORLD_3D</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;`sys_in`&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">_transform</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">is_latlong</span><span class="p">():</span>
+        <span class="n">deco_out_tuple</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">)</span> <span class="k">if</span> <span class="n">needs_3d</span> <span class="k">else</span> <span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="n">doc_out</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">DOC_LONLAT_3D</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;`sys_out`&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">needs_3d</span> <span class="k">else</span>
+            <span class="n">DOC_LONLAT_2D</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;`sys_out`&#39;</span><span class="p">)</span>
+            <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">deco_out_tuple</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">)</span> <span class="k">if</span> <span class="n">needs_3d</span> <span class="k">else</span> <span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="n">doc_out</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">DOC_WORLD_3D</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;`sys_out`&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">needs_3d</span> <span class="k">else</span>
+            <span class="n">DOC_WORLD_2D</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;`sys_out`&#39;</span><span class="p">)</span>
+            <span class="p">)</span>
+
+    <span class="c1"># do another wrap (don&#39;t want to mess with the partial-signature)</span>
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+
+        <span class="k">return</span> <span class="n">_transform</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="n">doc_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">sys_in</span><span class="o">=</span><span class="n">sys_in</span><span class="p">,</span> <span class="n">sys_out</span><span class="o">=</span><span class="n">sys_out</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">doc_in</span><span class="p">,</span> <span class="n">returns</span><span class="o">=</span><span class="n">doc_out</span>
+        <span class="p">)</span>
+    <span class="n">transform</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">DOC_TEMPLATE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">doc_kwargs</span><span class="p">)</span>
+
+    <span class="c1"># need to create new signature:</span>
+    <span class="n">oldsig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span>
+    <span class="n">newsig</span> <span class="o">=</span> <span class="n">oldsig</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="p">(</span>
+        <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">POSITIONAL_ONLY</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">deco_in_kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="p">))</span>
+
+    <span class="n">transform</span><span class="o">.</span><span class="n">__signature__</span> <span class="o">=</span> <span class="n">newsig</span>
+
+    <span class="c1"># it&#39;s important to apply the decorator after the signature has</span>
+    <span class="c1"># changed, because the decorator is parsing the signature</span>
+    <span class="c1"># during definition, i.e., it is not possible to do</span>
+    <span class="c1">#</span>
+    <span class="c1">#   @dec</span>
+    <span class="c1">#   def func(*args):</span>
+    <span class="c1">#       # do stuff</span>
+    <span class="c1">#</span>
+    <span class="c1"># and only then change the signature</span>
+
+    <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+        <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">output_unit</span><span class="o">=</span><span class="n">deco_out_tuple</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">deco_in_kwargs</span><span class="p">,</span>
+        <span class="p">)(</span><span class="n">transform</span><span class="p">)</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>

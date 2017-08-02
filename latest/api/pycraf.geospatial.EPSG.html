@@ -92,6 +92,14 @@
 <em class="property">class </em><code class="descclassname">pycraf.geospatial.</code><code class="descname">EPSG</code><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#EPSG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.geospatial.EPSG" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
 <p>Enum with often used EPSG codes.</p>
+<p>See also</p>
+<ul class="simple">
+<li><a class="reference external" href="http://gothos.info/2011/04/common-map-projection-definitions/">http://gothos.info/2011/04/common-map-projection-definitions/</a></li>
+<li><a class="reference external" href="https://www.nceas.ucsb.edu/scicomp/recipes/projections">https://www.nceas.ucsb.edu/scicomp/recipes/projections</a></li>
+<li><a class="reference external" href="http://www.epsg.org/Portals/0/373-07-1.pdf">http://www.epsg.org/Portals/0/373-07-1.pdf</a></li>
+</ul>
+<p>TODO: some codes use different units (e.g., feet instead of m);
+need to handle this!!!</p>
 <p class="rubric">Attributes Summary</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -111,6 +119,12 @@
 <tr class="row-even"><td><a class="reference internal" href="#pycraf.geospatial.EPSG.ITRF08" title="pycraf.geospatial.EPSG.ITRF08"><code class="xref py py-obj docutils literal"><span class="pre">ITRF08</span></code></a></td>
 <td></td>
 </tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pycraf.geospatial.EPSG.NAD83" title="pycraf.geospatial.EPSG.NAD83"><code class="xref py py-obj docutils literal"><span class="pre">NAD83</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pycraf.geospatial.EPSG.WEB_MERC" title="pycraf.geospatial.EPSG.WEB_MERC"><code class="xref py py-obj docutils literal"><span class="pre">WEB_MERC</span></code></a></td>
+<td></td>
+</tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pycraf.geospatial.EPSG.WGS84" title="pycraf.geospatial.EPSG.WGS84"><code class="xref py py-obj docutils literal"><span class="pre">WGS84</span></code></a></td>
 <td></td>
 </tr>
@@ -119,7 +133,7 @@
 <p class="rubric">Attributes Documentation</p>
 <dl class="attribute">
 <dt id="pycraf.geospatial.EPSG.ETRS89">
-<code class="descname">ETRS89</code><em class="property"> = 4258</em><a class="headerlink" href="#pycraf.geospatial.EPSG.ETRS89" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ETRS89</code><em class="property"> = 3035</em><a class="headerlink" href="#pycraf.geospatial.EPSG.ETRS89" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -135,6 +149,16 @@
 <dl class="attribute">
 <dt id="pycraf.geospatial.EPSG.ITRF08">
 <code class="descname">ITRF08</code><em class="property"> = 5332</em><a class="headerlink" href="#pycraf.geospatial.EPSG.ITRF08" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pycraf.geospatial.EPSG.NAD83">
+<code class="descname">NAD83</code><em class="property"> = 4269</em><a class="headerlink" href="#pycraf.geospatial.EPSG.NAD83" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pycraf.geospatial.EPSG.WEB_MERC">
+<code class="descname">WEB_MERC</code><em class="property"> = 3857</em><a class="headerlink" href="#pycraf.geospatial.EPSG.WEB_MERC" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

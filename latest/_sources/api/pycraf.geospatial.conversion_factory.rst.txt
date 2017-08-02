@@ -1,0 +1,6 @@
+conversion_factory
+==================
+
+.. currentmodule:: pycraf.geospatial
+
+.. autofunction:: conversion_factory
