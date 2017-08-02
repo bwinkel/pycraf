@@ -145,6 +145,8 @@ weighted data.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_sampler</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">HistogramSampler</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">NumpyRNGContext</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">indices</span> <span class="o">=</span> <span class="n">my_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="c1"># Note that you could also do</span>
+<span class="gp">... </span>    <span class="c1"># indices = my_sampler(10)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
 <span class="go">[7 9 3 7 6 5 6 7 7 8]</span>
 
@@ -220,12 +222,27 @@ be the better tool:</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pycraf.mc.HistogramSampler.sample" title="pycraf.mc.HistogramSampler.sample"><code class="xref py py-obj docutils literal"><span class="pre">sample</span></code></a>(n)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pycraf.mc.HistogramSampler.__call__" title="pycraf.mc.HistogramSampler.__call__"><code class="xref py py-obj docutils literal"><span class="pre">__call__</span></code></a>(n)</td>
+<td>Convenience method to allow using an <em>instance</em> of</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pycraf.mc.HistogramSampler.sample" title="pycraf.mc.HistogramSampler.sample"><code class="xref py py-obj docutils literal"><span class="pre">sample</span></code></a>(n)</td>
 <td>Sample from the (discrete) density distribution.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="pycraf.mc.HistogramSampler.__call__">
+<code class="descname">__call__</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience method to allow using an <em>instance</em> of
+<a class="reference internal" href="#pycraf.mc.HistogramSampler" title="pycraf.mc.HistogramSampler"><code class="xref py py-obj docutils literal"><span class="pre">HistogramSampler</span></code></a> like a function:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">my_sampler</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">HistogramSampler</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
+<span class="n">my_sampler</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Calls <a class="reference internal" href="#pycraf.mc.HistogramSampler.sample" title="pycraf.mc.HistogramSampler.sample"><code class="xref py py-obj docutils literal"><span class="pre">sample</span></code></a> internally.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="pycraf.mc.HistogramSampler.sample">
 <code class="descname">sample</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler.sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler.sample" title="Permalink to this definition">¶</a></dt>
@@ -242,7 +259,8 @@ be the better tool:</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Indices</strong> : tuple of <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a></p>
 <blockquote class="last">
-<div><p>The indices of the drawn samples. See
+<div><p>The indices of the drawn samples with respect to the
+discrete density array (aka histogram object). See
 <a class="reference internal" href="#pycraf.mc.HistogramSampler" title="pycraf.mc.HistogramSampler"><code class="xref py py-obj docutils literal"><span class="pre">HistogramSampler</span></code></a> for examples of use.</p>
 </div></blockquote>
 </td>
@@ -278,7 +296,7 @@ be the better tool:</p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 01 Aug 2017. <br/>
+    Last built 02 Aug 2017. <br/>
   </p>
 </footer>
   </body>

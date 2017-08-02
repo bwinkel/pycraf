@@ -122,6 +122,8 @@
 <span class="sd">        &gt;&gt;&gt; my_sampler = mc.HistogramSampler(hist)</span>
 <span class="sd">        &gt;&gt;&gt; with NumpyRNGContext(1):</span>
 <span class="sd">        ...     indices = my_sampler.sample(10)</span>
+<span class="sd">        ...     # Note that you could also do</span>
+<span class="sd">        ...     # indices = my_sampler(10)</span>
 <span class="sd">        &gt;&gt;&gt; print(indices)</span>
 <span class="sd">        [7 9 3 7 6 5 6 7 7 8]</span>
 
@@ -230,7 +232,8 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Indices : tuple of `~numpy.ndarray`</span>
-<span class="sd">            The indices of the drawn samples. See</span>
+<span class="sd">            The indices of the drawn samples with respect to the</span>
+<span class="sd">            discrete density array (aka histogram object). See</span>
 <span class="sd">            `~pycraf.mc.HistogramSampler` for examples of use.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
 
@@ -242,7 +245,20 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">indices</span></div></div>
+            <span class="k">return</span> <span class="n">indices</span></div>
+
+<div class="viewcode-block" id="HistogramSampler.__call__"><a class="viewcode-back" href="../../../api/pycraf.mc.HistogramSampler.html#pycraf.mc.HistogramSampler.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Convenience method to allow using an *instance* of</span>
+<span class="sd">        `~pycraf.mc.HistogramSampler` like a function::</span>
+
+<span class="sd">            my_sampler = mc.HistogramSampler(hist)</span>
+<span class="sd">            my_sampler(10)</span>
+
+<span class="sd">        Calls `~pycraf.mc.HistogramSampler.sample` internally.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
@@ -262,7 +278,7 @@
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 01 Aug 2017. <br/>
+    Last built 02 Aug 2017. <br/>
   </p>
 </footer>
   </body>
