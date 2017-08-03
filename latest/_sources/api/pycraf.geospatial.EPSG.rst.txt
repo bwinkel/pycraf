@@ -14,7 +14,6 @@ EPSG
       ~EPSG.ITRF00
       ~EPSG.ITRF05
       ~EPSG.ITRF08
-      ~EPSG.NAD83
       ~EPSG.WEB_MERC
       ~EPSG.WGS84
 
@@ -24,6 +23,5 @@ EPSG
    .. autoattribute:: ITRF00
    .. autoattribute:: ITRF05
    .. autoattribute:: ITRF08
-   .. autoattribute:: NAD83
    .. autoattribute:: WEB_MERC
    .. autoattribute:: WGS84

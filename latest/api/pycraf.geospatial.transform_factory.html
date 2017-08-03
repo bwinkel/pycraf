@@ -172,6 +172,8 @@ such as &#8216;ft&#8217; if desired.</li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wgs84_to_etrs89</span> <span class="o">=</span> <span class="n">geospatial</span><span class="o">.</span><span class="n">transform_factory</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">geospatial</span><span class="o">.</span><span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">,</span> <span class="mi">31467</span>
 <span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wgs84_to_etrs89</span><span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mi">50</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">)</span>  
+<span class="go">(&lt;Quantity 3285004.0360039757 m&gt;, &lt;Quantity 5544720.4017482875 m&gt;)</span>
 </pre></div>
 </div>
 <p>If an <em>ESRI</em> system is desired, either use the integer code and
@@ -183,10 +185,14 @@ set <code class="xref py py-obj docutils literal"><span class="pre">code_[in,out
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wgs84_to_mollweide</span> <span class="o">=</span> <span class="n">geospatial</span><span class="o">.</span><span class="n">transform_factory</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">geospatial</span><span class="o">.</span><span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">,</span> <span class="mi">54009</span><span class="p">,</span> <span class="n">code_out</span><span class="o">=</span><span class="s1">&#39;esri&#39;</span>
 <span class="gp">... </span>    <span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># or</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">wgs84_to_mollweide</span> <span class="o">=</span> <span class="n">geospatial</span><span class="o">.</span><span class="n">transform_factory</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">geospatial</span><span class="o">.</span><span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">,</span> <span class="n">geospatial</span><span class="o">.</span><span class="n">ESRI</span><span class="o">.</span><span class="n">MOLLWEIDE</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wgs84_to_mollweide</span><span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mi">50</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">)</span>  
+<span class="go">(&lt;Quantity 456379.9117263066 m&gt;, &lt;Quantity 5873471.95621065 m&gt;)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mollweide_to_wgs84</span> <span class="o">=</span> <span class="n">geospatial</span><span class="o">.</span><span class="n">transform_factory</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">geospatial</span><span class="o">.</span><span class="n">ESRI</span><span class="o">.</span><span class="n">MOLLWEIDE</span><span class="p">,</span> <span class="n">geospatial</span><span class="o">.</span><span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span>
 <span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mollweide_to_wgs84</span><span class="p">(</span><span class="mf">456379.912</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mf">5873471.956</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>  
+<span class="go">(&lt;Quantity 6.000000003439825 deg&gt;, &lt;Quantity 49.999999997988475 deg&gt;)</span>
 </pre></div>
 </div>
 </dd></dl>

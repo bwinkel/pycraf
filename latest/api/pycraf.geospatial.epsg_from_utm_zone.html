@@ -90,7 +90,31 @@
 <dl class="function">
 <dt id="pycraf.geospatial.epsg_from_utm_zone">
 <code class="descclassname">pycraf.geospatial.</code><code class="descname">epsg_from_utm_zone</code><span class="sig-paren">(</span><em>utm_zone</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#epsg_from_utm_zone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.geospatial.epsg_from_utm_zone" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>EPSG number for UTM zone code.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>utm_zone</strong> : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">array</span></code></a>, str</p>
+<blockquote>
+<div><p>UTM zone code(s)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>epsg</strong> : int</p>
+<blockquote class="last">
+<div><p>EPSG code for the UTM zone</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Unlike <a class="reference internal" href="pycraf.geospatial.utm_zone_from_gps.html#pycraf.geospatial.utm_zone_from_gps" title="pycraf.geospatial.utm_zone_from_gps"><code class="xref py py-obj docutils literal"><span class="pre">utm_zone_from_gps</span></code></a> this function does
+not support broadcasting. This is because the transform
+functions also not allow to convert arrays of coordinates
+with different projections (or EPSG codes).</p>
+</dd></dl>
 
 </div>
 

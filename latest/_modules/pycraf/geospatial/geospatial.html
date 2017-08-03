@@ -101,11 +101,10 @@
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;EPSG&#39;</span><span class="p">,</span> <span class="s1">&#39;ESRI&#39;</span><span class="p">,</span> <span class="s1">&#39;utm_zone_from_gps&#39;</span><span class="p">,</span> <span class="s1">&#39;epsg_from_utm_zone&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;utm_to_wgs84&#39;</span><span class="p">,</span> <span class="s1">&#39;wgs84_to_utm&#39;</span><span class="p">,</span>  <span class="c1"># &#39;utm_to_wgs84_32N&#39;,</span>
+    <span class="s1">&#39;utm_to_wgs84&#39;</span><span class="p">,</span> <span class="s1">&#39;wgs84_to_utm&#39;</span><span class="p">,</span>
     <span class="s1">&#39;etrs89_to_wgs84&#39;</span><span class="p">,</span> <span class="s1">&#39;wgs84_to_etrs89&#39;</span><span class="p">,</span>
     <span class="s1">&#39;itrf2005_to_wgs84&#39;</span><span class="p">,</span> <span class="s1">&#39;wgs84_to_itrf2005&#39;</span><span class="p">,</span>
     <span class="s1">&#39;itrf2008_to_wgs84&#39;</span><span class="p">,</span> <span class="s1">&#39;wgs84_to_itrf2008&#39;</span><span class="p">,</span>
-    <span class="c1"># &#39;custom_epsg_to_wgs84&#39;, &#39;wgs84_to_custom_epsg&#39;,</span>
     <span class="s1">&#39;transform_factory&#39;</span><span class="p">,</span>
     <span class="p">]</span>
 
@@ -113,42 +112,74 @@
 <div class="viewcode-block" id="EPSG"><a class="viewcode-back" href="../../../api/pycraf.geospatial.EPSG.html#pycraf.geospatial.EPSG">[docs]</a><span class="k">class</span> <span class="nc">EPSG</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Enum with often used EPSG codes.</span>
-
-<span class="sd">    See also</span>
-
-<span class="sd">    - http://gothos.info/2011/04/common-map-projection-definitions/</span>
-<span class="sd">    - https://www.nceas.ucsb.edu/scicomp/recipes/projections</span>
-<span class="sd">    - http://www.epsg.org/Portals/0/373-07-1.pdf</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="c1">#: World Geodetic System; GPS WGS84 (simply longitude and latitude)</span>
+    <span class="c1"># See also</span>
+    <span class="c1"># - http://gothos.info/2011/04/common-map-projection-definitions/</span>
+    <span class="c1"># - https://www.nceas.ucsb.edu/scicomp/recipes/projections</span>
+    <span class="c1"># - http://www.epsg.org/Portals/0/373-07-1.pdf</span>
+
+    <span class="c1">#: World Geodetic System:</span>
+    <span class="c1">#: `GPS (WGS84) &lt;http://spatialreference.org/ref/epsg/4326/&gt;`__.</span>
+    <span class="c1">#: (Simply the geographical longitude and latitude.)</span>
     <span class="n">WGS84</span> <span class="o">=</span> <span class="mi">4326</span>
 
-    <span class="c1">#: ETRS89</span>
-    <span class="n">ETRS89</span> <span class="o">=</span> <span class="mi">3035</span>  <span class="c1"># http://spatialreference.org/ref/epsg/etrs89-etrs-laea/</span>
+    <span class="c1">#: European Terrestrial Reference System:</span>
+    <span class="c1">#: `ETRS89 (GRS80) &lt;http://spatialreference.org/ref/epsg/etrs89-etrs-laea/&gt;`__.</span>
+    <span class="c1">#: Single CRS for all Europe.</span>
+    <span class="n">ETRS89</span> <span class="o">=</span> <span class="mi">3035</span>
+
+    <span class="c1">#: International Terrestrial Reference Frame, Datum 2000:</span>
+    <span class="c1">#: `ITRF2000 (GRS80) &lt;http://spatialreference.org/ref/epsg/4919/&gt;`__.</span>
+    <span class="c1">#: Geocentric system.</span>
     <span class="n">ITRF00</span> <span class="o">=</span> <span class="mi">4919</span>
+
+    <span class="c1">#: International Terrestrial Reference Frame, Datum 2005:</span>
+    <span class="c1">#: `ITRF2005 (GRS80) &lt;http://spatialreference.org/ref/epsg/4896/&gt;`__.</span>
+    <span class="c1">#: Geocentric system.</span>
     <span class="n">ITRF05</span> <span class="o">=</span> <span class="mi">4896</span>
+
+    <span class="c1">#: International Terrestrial Reference Frame, Datum 2008:</span>
+    <span class="c1">#: `ITRF2008 (GRS80) &lt;https://epsg.io/5332&gt;`__.</span>
+    <span class="c1">#: Geocentric system.</span>
     <span class="n">ITRF08</span> <span class="o">=</span> <span class="mi">5332</span>
-    <span class="n">NAD83</span> <span class="o">=</span> <span class="mi">4269</span>  <span class="c1"># North American Datum of 1983</span>
-    <span class="c1"># ROBINSON = 54030  # World Robinson</span>
-    <span class="c1"># MOLLWEIDE =</span>
-    <span class="n">WEB_MERC</span> <span class="o">=</span> <span class="mi">3857</span>  <span class="c1"># web mercator used by many web apps (Google maps, OSM)</span></div>
+
+    <span class="c1"># #: North American Datum of 1983:</span>
+    <span class="c1"># #: `NAD83 (GRS80) &lt;http://spatialreference.org/ref/epsg/4269/&gt;`__.</span>
+    <span class="c1"># NAD83 = 4269  # not correct</span>
+
+    <span class="c1">#: Variant of Mercator projection; de facto standard for Web mapping applications:</span>
+    <span class="c1">#: `Web Mercator (WGS84) &lt;http://spatialreference.org/ref/sr-org/7483/&gt;`__.</span>
+    <span class="n">WEB_MERC</span> <span class="o">=</span> <span class="mi">3857</span></div>
 
 
 <div class="viewcode-block" id="ESRI"><a class="viewcode-back" href="../../../api/pycraf.geospatial.ESRI.html#pycraf.geospatial.ESRI">[docs]</a><span class="k">class</span> <span class="nc">ESRI</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Enum with often used EPSG codes.</span>
-
+<span class="sd">    Enum with often used ESRI codes.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="c1"># EQC = 54002  # World Equidistant Cylindrical</span>
-    <span class="n">MERCATOR</span> <span class="o">=</span> <span class="mi">54004</span>  <span class="c1"># World Mercator</span>
-    <span class="n">SINUSOIDAL</span> <span class="o">=</span> <span class="mi">54008</span>  <span class="c1"># World Sinusoidal</span>
-    <span class="n">MOLLWEIDE</span> <span class="o">=</span> <span class="mi">54009</span>  <span class="c1"># World Mollweide</span>
-    <span class="n">GALL</span> <span class="o">=</span> <span class="mi">54016</span>  <span class="c1"># World Gall Stereographic</span>
-    <span class="n">BONNE</span> <span class="o">=</span> <span class="mi">54024</span>  <span class="c1"># World Bonne</span>
-    <span class="n">STEREO</span> <span class="o">=</span> <span class="mi">54026</span>  <span class="c1"># World Stereographic</span>
-    <span class="n">ROBINSON</span> <span class="o">=</span> <span class="mi">54030</span>  <span class="c1"># World Robinson</span></div>
+
+    <span class="c1">#: `World Mercator (WGS84) &lt;http://spatialreference.org/ref/esri/54004/&gt;`__</span>
+    <span class="n">MERCATOR</span> <span class="o">=</span> <span class="mi">54004</span>
+
+    <span class="c1">#: `World Sinusoidal (WGS84) &lt;http://spatialreference.org/ref/esri/54008/&gt;`__</span>
+    <span class="n">SINUSOIDAL</span> <span class="o">=</span> <span class="mi">54008</span>
+
+    <span class="c1">#: `World Mollweide (WGS84) &lt;http://spatialreference.org/ref/esri/54009/&gt;`__</span>
+    <span class="n">MOLLWEIDE</span> <span class="o">=</span> <span class="mi">54009</span>
+
+    <span class="c1">#: `World Gall Stereographic (WGS84) &lt;http://spatialreference.org/ref/esri/54016/&gt;`__</span>
+    <span class="n">GALL</span> <span class="o">=</span> <span class="mi">54016</span>
+
+    <span class="c1">#: `World Bonne (WGS84) &lt;http://spatialreference.org/ref/esri/54024/&gt;`__</span>
+    <span class="n">BONNE</span> <span class="o">=</span> <span class="mi">54024</span>
+
+    <span class="c1">#: `World Stereographic (WGS84) &lt;http://spatialreference.org/ref/esri/54026/&gt;`__</span>
+    <span class="n">STEREO</span> <span class="o">=</span> <span class="mi">54026</span>
+
+    <span class="c1">#: `World Robinson (WGS84) &lt;http://spatialreference.org/ref/esri/54030/&gt;`__</span>
+    <span class="n">ROBINSON</span> <span class="o">=</span> <span class="mi">54030</span></div>
 
 
 <span class="n">UTM_ZONE_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^(?P&lt;zone&gt;[1-9]|[1-5][0-9]|60)(?P&lt;ns&gt;[nsNS])$&#39;</span><span class="p">)</span>
@@ -190,6 +221,19 @@
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">)</span>
 <div class="viewcode-block" id="utm_zone_from_gps"><a class="viewcode-back" href="../../../api/pycraf.geospatial.utm_zone_from_gps.html#pycraf.geospatial.utm_zone_from_gps">[docs]</a><span class="k">def</span> <span class="nf">utm_zone_from_gps</span><span class="p">(</span><span class="n">glon</span><span class="p">,</span> <span class="n">glat</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    UTM zone code from GPS coordinates.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    glon, glat : `~astropy.units.Quantity`</span>
+<span class="sd">        GPS/WGS84 longitude and latitude [deg]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    utm_zone : `~numpy.array`, str</span>
+<span class="sd">        UTM zone code(s)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="n">glon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">glon</span><span class="p">)</span>
     <span class="n">glat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">glat</span><span class="p">)</span>
@@ -207,6 +251,26 @@
 
 
 <div class="viewcode-block" id="epsg_from_utm_zone"><a class="viewcode-back" href="../../../api/pycraf.geospatial.epsg_from_utm_zone.html#pycraf.geospatial.epsg_from_utm_zone">[docs]</a><span class="k">def</span> <span class="nf">epsg_from_utm_zone</span><span class="p">(</span><span class="n">utm_zone</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    EPSG number for UTM zone code.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    utm_zone : `~numpy.array`, str</span>
+<span class="sd">        UTM zone code(s)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    epsg : int</span>
+<span class="sd">        EPSG code for the UTM zone</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Unlike `~pycraf.geospatial.utm_zone_from_gps` this function does</span>
+<span class="sd">    not support broadcasting. This is because the transform</span>
+<span class="sd">    functions also not allow to convert arrays of coordinates</span>
+<span class="sd">    with different projections (or EPSG codes).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="n">match</span> <span class="o">=</span> <span class="n">UTM_ZONE_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">utm_zone</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">match</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">())</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
@@ -214,10 +278,6 @@
 
     <span class="n">zone</span><span class="p">,</span> <span class="n">ns</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
 
-    <span class="c1"># if ns.upper() == &#39;N&#39;:</span>
-    <span class="c1">#     return &#39;EPSG:326{:02d}&#39;.format(int(zone))</span>
-    <span class="c1"># elif ns.upper() == &#39;S&#39;:</span>
-    <span class="c1">#     return &#39;EPSG:327{:02d}&#39;.format(int(zone))</span>
     <span class="k">if</span> <span class="n">ns</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;N&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">32600</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">zone</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">ns</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;S&#39;</span><span class="p">:</span>
@@ -266,7 +326,7 @@
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">EPSG</span><span class="p">,</span> <span class="n">ESRI</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
                 <span class="s1">&#39;Coordinate description for sys</span><span class="si">{}</span><span class="s1"> must be one of &#39;</span>
                 <span class="s1">&#39;(int, str, EPSG, ESRI); got </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
                 <span class="p">)</span>
@@ -609,6 +669,8 @@
 <span class="sd">        &gt;&gt;&gt; wgs84_to_etrs89 = geospatial.transform_factory(</span>
 <span class="sd">        ...     geospatial.EPSG.WGS84, 31467</span>
 <span class="sd">        ...     )</span>
+<span class="sd">        &gt;&gt;&gt; wgs84_to_etrs89(6 * u.deg, 50 * u.deg)  # doctest: +FLOAT_CMP</span>
+<span class="sd">        (&lt;Quantity 3285004.0360039757 m&gt;, &lt;Quantity 5544720.4017482875 m&gt;)</span>
 
 <span class="sd">    If an *ESRI* system is desired, either use the integer code and</span>
 <span class="sd">    set `code_[in,out] = &#39;esri&#39;`, or use the ESRI enum::</span>
@@ -620,10 +682,14 @@
 <span class="sd">        &gt;&gt;&gt; wgs84_to_mollweide = geospatial.transform_factory(</span>
 <span class="sd">        ...     geospatial.EPSG.WGS84, 54009, code_out=&#39;esri&#39;</span>
 <span class="sd">        ...     )</span>
-<span class="sd">        &gt;&gt;&gt; # or</span>
-<span class="sd">        &gt;&gt;&gt; wgs84_to_mollweide = geospatial.transform_factory(</span>
-<span class="sd">        ...     geospatial.EPSG.WGS84, geospatial.ESRI.MOLLWEIDE</span>
+<span class="sd">        &gt;&gt;&gt; wgs84_to_mollweide(6 * u.deg, 50 * u.deg)  # doctest: +FLOAT_CMP</span>
+<span class="sd">        (&lt;Quantity 456379.9117263066 m&gt;, &lt;Quantity 5873471.95621065 m&gt;)</span>
+
+<span class="sd">        &gt;&gt;&gt; mollweide_to_wgs84 = geospatial.transform_factory(</span>
+<span class="sd">        ...     geospatial.ESRI.MOLLWEIDE, geospatial.EPSG.WGS84</span>
 <span class="sd">        ...     )</span>
+<span class="sd">        &gt;&gt;&gt; mollweide_to_wgs84(456379.912 * u.m, 5873471.956 * u.m)  # doctest: +FLOAT_CMP</span>
+<span class="sd">        (&lt;Quantity 6.000000003439825 deg&gt;, &lt;Quantity 49.999999997988475 deg&gt;)</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
