@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ESRI &#8212; pycraf v0.25.3.dev50</title>
+    
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.25.3.dev50',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Satellites (pycraf.satellite)" href="../satellite/index.html" />
+    <link rel="prev" title="EPSG" href="pycraf.geospatial.EPSG.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="../satellite/index.html" title="Satellites (pycraf.satellite)">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="pycraf.geospatial.EPSG.html" title="EPSG">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v0.25.3.dev50</a>
+	 &#187;
+      </li>
+      <li><a href="../geospatial/index.html" accesskey="U">Geographical frames (<code class="docutils literal"><span class="pre">pycraf.geospatial</span></code>)</a> &#187;</li>
+      
+      <li>ESRI</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="esri">
+<h1>ESRI<a class="headerlink" href="#esri" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pycraf.geospatial.ESRI">
+<em class="property">class </em><code class="descclassname">pycraf.geospatial.</code><code class="descname">ESRI</code><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#ESRI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.geospatial.ESRI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<p>Enum with often used EPSG codes.</p>
+<p class="rubric">Attributes Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pycraf.geospatial.ESRI.BONNE" title="pycraf.geospatial.ESRI.BONNE"><code class="xref py py-obj docutils literal"><span class="pre">BONNE</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pycraf.geospatial.ESRI.GALL" title="pycraf.geospatial.ESRI.GALL"><code class="xref py py-obj docutils literal"><span class="pre">GALL</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pycraf.geospatial.ESRI.MERCATOR" title="pycraf.geospatial.ESRI.MERCATOR"><code class="xref py py-obj docutils literal"><span class="pre">MERCATOR</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pycraf.geospatial.ESRI.MOLLWEIDE" title="pycraf.geospatial.ESRI.MOLLWEIDE"><code class="xref py py-obj docutils literal"><span class="pre">MOLLWEIDE</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pycraf.geospatial.ESRI.ROBINSON" title="pycraf.geospatial.ESRI.ROBINSON"><code class="xref py py-obj docutils literal"><span class="pre">ROBINSON</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pycraf.geospatial.ESRI.SINUSOIDAL" title="pycraf.geospatial.ESRI.SINUSOIDAL"><code class="xref py py-obj docutils literal"><span class="pre">SINUSOIDAL</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pycraf.geospatial.ESRI.STEREO" title="pycraf.geospatial.ESRI.STEREO"><code class="xref py py-obj docutils literal"><span class="pre">STEREO</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes Documentation</p>
+<dl class="attribute">
+<dt id="pycraf.geospatial.ESRI.BONNE">
+<code class="descname">BONNE</code><em class="property"> = 54024</em><a class="headerlink" href="#pycraf.geospatial.ESRI.BONNE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pycraf.geospatial.ESRI.GALL">
+<code class="descname">GALL</code><em class="property"> = 54016</em><a class="headerlink" href="#pycraf.geospatial.ESRI.GALL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pycraf.geospatial.ESRI.MERCATOR">
+<code class="descname">MERCATOR</code><em class="property"> = 54004</em><a class="headerlink" href="#pycraf.geospatial.ESRI.MERCATOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pycraf.geospatial.ESRI.MOLLWEIDE">
+<code class="descname">MOLLWEIDE</code><em class="property"> = 54009</em><a class="headerlink" href="#pycraf.geospatial.ESRI.MOLLWEIDE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pycraf.geospatial.ESRI.ROBINSON">
+<code class="descname">ROBINSON</code><em class="property"> = 54030</em><a class="headerlink" href="#pycraf.geospatial.ESRI.ROBINSON" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pycraf.geospatial.ESRI.SINUSOIDAL">
+<code class="descname">SINUSOIDAL</code><em class="property"> = 54008</em><a class="headerlink" href="#pycraf.geospatial.ESRI.SINUSOIDAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pycraf.geospatial.ESRI.STEREO">
+<code class="descname">STEREO</code><em class="property"> = 54026</em><a class="headerlink" href="#pycraf.geospatial.ESRI.STEREO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">ESRI</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="../_sources/api/pycraf.geospatial.ESRI.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 03 Aug 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

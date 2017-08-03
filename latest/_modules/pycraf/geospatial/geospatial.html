@@ -100,13 +100,13 @@
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;EPSG&#39;</span><span class="p">,</span> <span class="s1">&#39;utm_zone_from_gps&#39;</span><span class="p">,</span> <span class="s1">&#39;epsg_from_utm_zone&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;EPSG&#39;</span><span class="p">,</span> <span class="s1">&#39;ESRI&#39;</span><span class="p">,</span> <span class="s1">&#39;utm_zone_from_gps&#39;</span><span class="p">,</span> <span class="s1">&#39;epsg_from_utm_zone&#39;</span><span class="p">,</span>
     <span class="s1">&#39;utm_to_wgs84&#39;</span><span class="p">,</span> <span class="s1">&#39;wgs84_to_utm&#39;</span><span class="p">,</span>  <span class="c1"># &#39;utm_to_wgs84_32N&#39;,</span>
     <span class="s1">&#39;etrs89_to_wgs84&#39;</span><span class="p">,</span> <span class="s1">&#39;wgs84_to_etrs89&#39;</span><span class="p">,</span>
     <span class="s1">&#39;itrf2005_to_wgs84&#39;</span><span class="p">,</span> <span class="s1">&#39;wgs84_to_itrf2005&#39;</span><span class="p">,</span>
     <span class="s1">&#39;itrf2008_to_wgs84&#39;</span><span class="p">,</span> <span class="s1">&#39;wgs84_to_itrf2008&#39;</span><span class="p">,</span>
     <span class="c1"># &#39;custom_epsg_to_wgs84&#39;, &#39;wgs84_to_custom_epsg&#39;,</span>
-    <span class="s1">&#39;conversion_factory&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;transform_factory&#39;</span><span class="p">,</span>
     <span class="p">]</span>
 
 
@@ -119,11 +119,12 @@
 <span class="sd">    - http://gothos.info/2011/04/common-map-projection-definitions/</span>
 <span class="sd">    - https://www.nceas.ucsb.edu/scicomp/recipes/projections</span>
 <span class="sd">    - http://www.epsg.org/Portals/0/373-07-1.pdf</span>
-
-<span class="sd">    TODO: some codes use different units (e.g., feet instead of m);</span>
-<span class="sd">    need to handle this!!!</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">WGS84</span> <span class="o">=</span> <span class="mi">4326</span>  <span class="c1"># GPS WGS84 (simply longitude and latitude); World Geodetic System</span>
+
+    <span class="c1">#: World Geodetic System; GPS WGS84 (simply longitude and latitude)</span>
+    <span class="n">WGS84</span> <span class="o">=</span> <span class="mi">4326</span>
+
+    <span class="c1">#: ETRS89</span>
     <span class="n">ETRS89</span> <span class="o">=</span> <span class="mi">3035</span>  <span class="c1"># http://spatialreference.org/ref/epsg/etrs89-etrs-laea/</span>
     <span class="n">ITRF00</span> <span class="o">=</span> <span class="mi">4919</span>
     <span class="n">ITRF05</span> <span class="o">=</span> <span class="mi">4896</span>
@@ -134,10 +135,20 @@
     <span class="n">WEB_MERC</span> <span class="o">=</span> <span class="mi">3857</span>  <span class="c1"># web mercator used by many web apps (Google maps, OSM)</span></div>
 
 
-<span class="k">class</span> <span class="nc">ESRI</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="ESRI"><a class="viewcode-back" href="../../../api/pycraf.geospatial.ESRI.html#pycraf.geospatial.ESRI">[docs]</a><span class="k">class</span> <span class="nc">ESRI</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Enum with often used EPSG codes.</span>
 
-    <span class="n">ROBINSON</span> <span class="o">=</span> <span class="mi">54030</span>  <span class="c1"># World Robinson</span>
-    <span class="n">MOLLWEIDE</span> <span class="o">=</span> <span class="mi">54009</span>  <span class="c1">#</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># EQC = 54002  # World Equidistant Cylindrical</span>
+    <span class="n">MERCATOR</span> <span class="o">=</span> <span class="mi">54004</span>  <span class="c1"># World Mercator</span>
+    <span class="n">SINUSOIDAL</span> <span class="o">=</span> <span class="mi">54008</span>  <span class="c1"># World Sinusoidal</span>
+    <span class="n">MOLLWEIDE</span> <span class="o">=</span> <span class="mi">54009</span>  <span class="c1"># World Mollweide</span>
+    <span class="n">GALL</span> <span class="o">=</span> <span class="mi">54016</span>  <span class="c1"># World Gall Stereographic</span>
+    <span class="n">BONNE</span> <span class="o">=</span> <span class="mi">54024</span>  <span class="c1"># World Bonne</span>
+    <span class="n">STEREO</span> <span class="o">=</span> <span class="mi">54026</span>  <span class="c1"># World Stereographic</span>
+    <span class="n">ROBINSON</span> <span class="o">=</span> <span class="mi">54030</span>  <span class="c1"># World Robinson</span></div>
 
 
 <span class="n">UTM_ZONE_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^(?P&lt;zone&gt;[1-9]|[1-5][0-9]|60)(?P&lt;ns&gt;[nsNS])$&#39;</span><span class="p">)</span>
@@ -214,17 +225,33 @@
 
 
 <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">typed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">_create_transform</span><span class="p">(</span><span class="n">sys1</span><span class="p">,</span> <span class="n">sys2</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_create_transform</span><span class="p">(</span><span class="n">sys1</span><span class="p">,</span> <span class="n">sys2</span><span class="p">,</span> <span class="n">code_in</span><span class="o">=</span><span class="s1">&#39;epsg&#39;</span><span class="p">,</span> <span class="n">code_out</span><span class="o">=</span><span class="s1">&#39;epsg&#39;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Helper function to create and cache pyproj.transform with the</span>
-<span class="sd">    desired coordinate projections binded.</span>
+<span class="sd">    Helper function to create and cache `~pyproj.transform` functions</span>
+<span class="sd">    with the desired coordinate projections binded.</span>
 
-<span class="sd">    sys1, sys2 must be one of</span>
-<span class="sd">        str (pyproj compatible)</span>
-<span class="sd">        EPSG (enum)</span>
-<span class="sd">        int (epsg code)</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sys_in, sys_out : str, int, EPSG, ESRI</span>
+<span class="sd">        Input and output projection for the desired coordinate</span>
+<span class="sd">        transformation. If a string, this is directly fed into the</span>
+<span class="sd">        `~pyproj.Proj` class. If an integer, it is treated as an</span>
+<span class="sd">        *EPSG* or *ESRI* code and the `~pyproj.Proj` class is</span>
+<span class="sd">        instantiated with `&quot;+init=epsg:{code}&quot;` or</span>
+<span class="sd">        `&quot;+init=esri:{code}&quot;`, depending on the `code_[in,out]` value.</span>
+<span class="sd">        For convenience, a couple of common systems are defined in the</span>
+<span class="sd">        `~pycraf.geospatial.EPSG` and `~pycraf.geospatial.ESRI` Enums</span>
+<span class="sd">        (which just hold the associated *EPSG* or *ESRI* code for each</span>
+<span class="sd">        name), e.g., `EPSG.WGS84 == 4326`.</span>
+<span class="sd">    code_in, code_out : {&#39;epsg&#39;, &#39;esri&#39;}</span>
+<span class="sd">        Whether to interpret integer-valued `sys_[in,out]` arguments</span>
+<span class="sd">        as *EPSG* or *ESRI* code. (default: &#39;epsg&#39;)</span>
 
-<span class="sd">    returns transform function</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    transform_func : Function</span>
+<span class="sd">        Transform function created from binding `~pyproj.transform`</span>
+<span class="sd">        with the two desired projections.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">try</span><span class="p">:</span>
@@ -235,19 +262,28 @@
             <span class="p">)</span>
 
     <span class="n">sys</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys1</span><span class="p">,</span> <span class="n">sys2</span><span class="p">]</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="p">[</span><span class="n">code_in</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">code_out</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">EPSG</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">EPSG</span><span class="p">,</span> <span class="n">ESRI</span><span class="p">)):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s1">&#39;Coordinate description for sys1 must be one of &#39;</span>
-                <span class="s1">&#39;(int, str, EPSG); got </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="s1">&#39;Coordinate description for sys</span><span class="si">{}</span><span class="s1"> must be one of &#39;</span>
+                <span class="s1">&#39;(int, str, EPSG, ESRI); got </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="p">)</span>
+        <span class="k">if</span> <span class="n">code</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;epsg&#39;</span><span class="p">,</span> <span class="s1">&#39;esri&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;`code` type for sys</span><span class="si">{}</span><span class="s2"> must be &#39;epsg&#39; or &#39;esri&#39;; &quot;</span>
+                <span class="s2">&quot;got </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">code</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
                 <span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;+init=epsg:</span><span class="si">{:04d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;+init=</span><span class="si">{}</span><span class="s1">:</span><span class="si">{:04d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">code</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">EPSG</span><span class="p">):</span>
             <span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;+init=epsg:</span><span class="si">{:04d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ESRI</span><span class="p">):</span>
+            <span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;+init=esri:</span><span class="si">{:04d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
     <span class="n">proj1</span> <span class="o">=</span> <span class="n">Proj</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">proj2</span> <span class="o">=</span> <span class="n">Proj</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -503,7 +539,7 @@
     <span class="k">return</span> <span class="n">_create_transform</span><span class="p">(</span><span class="n">EPSG</span><span class="o">.</span><span class="n">ITRF08</span><span class="p">,</span> <span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">)(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="conversion_factory"><a class="viewcode-back" href="../../../api/pycraf.geospatial.conversion_factory.html#pycraf.geospatial.conversion_factory">[docs]</a><span class="k">def</span> <span class="nf">conversion_factory</span><span class="p">(</span><span class="n">sys_in</span><span class="p">,</span> <span class="n">sys_out</span><span class="p">):</span>
+<div class="viewcode-block" id="transform_factory"><a class="viewcode-back" href="../../../api/pycraf.geospatial.transform_factory.html#pycraf.geospatial.transform_factory">[docs]</a><span class="k">def</span> <span class="nf">transform_factory</span><span class="p">(</span><span class="n">sys_in</span><span class="p">,</span> <span class="n">sys_out</span><span class="p">,</span> <span class="n">code_in</span><span class="o">=</span><span class="s1">&#39;epsg&#39;</span><span class="p">,</span> <span class="n">code_out</span><span class="o">=</span><span class="s1">&#39;epsg&#39;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    A factory to produce conversion functions (decorated with</span>
 <span class="sd">    `~pycraf.utils.ranged_quantity_input` for unit handling).</span>
@@ -515,17 +551,17 @@
 
 <span class="sd">    While `~pycraf.geospatial` comes with several convenience</span>
 <span class="sd">    transform functions, the user could also simply built all</span>
-<span class="sd">    of the with the `~pycraf.geospatial.conversion_factory`.</span>
+<span class="sd">    of the with the `~pycraf.geospatial.transform_factory`.</span>
 <span class="sd">    For example, the conversion from WGS84 to ETRS89 is simply::</span>
 
 <span class="sd">        &gt;&gt;&gt; from pycraf import geospatial</span>
 <span class="sd">        &gt;&gt;&gt; import astropy.units as u</span>
 
-<span class="sd">        &gt;&gt;&gt; wgs84_to_etrs89 = geospatial.conversion_factory(</span>
+<span class="sd">        &gt;&gt;&gt; wgs84_to_etrs89 = geospatial.transform_factory(</span>
 <span class="sd">        ...     geospatial.EPSG.WGS84, geospatial.EPSG.ETRS89</span>
 <span class="sd">        ...     )</span>
 
-<span class="sd">    The `~pycraf.geospatial.conversion_factory` can be used</span>
+<span class="sd">    The `~pycraf.geospatial.transform_factory` can be used</span>
 <span class="sd">    to work with more uncommon projections. As an example,</span>
 <span class="sd">    consider the Gauss-Kruger projection, which is defined</span>
 <span class="sd">    for various zones (like UTM) but also with different zone</span>
@@ -534,22 +570,27 @@
 <span class="sd">    unit-checking.</span>
 
 <span class="sd">    A lot (thousands!) of projections are pre-defined and have</span>
-<span class="sd">    a so-called *EPSG* code, e.g. `WGS84=&quot;EPSG:4326&quot;.</span>
+<span class="sd">    a so-called *EPSG* code, e.g. `WGS84=&quot;EPSG:4326&quot;`.</span>
 <span class="sd">    The website `spatialreference.org</span>
 <span class="sd">    &lt;http://spatialreference.org/&gt;`__ is very useful to find</span>
 <span class="sd">    information on *EPSG* codes.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    sys_in, sys_out : str, int, EPSG</span>
+<span class="sd">    sys_in, sys_out : str, int, EPSG, ESRI</span>
 <span class="sd">        Input and output projection for the desired coordinate</span>
 <span class="sd">        transformation. If a string, this is directly fed into the</span>
-<span class="sd">        `~pyproj.Proj` class. If an integer, it is treated as</span>
-<span class="sd">        an *EPSG* code and the `~pyproj.Proj` class is instantiated</span>
-<span class="sd">        with `&quot;+init=epsg:{code}&quot;`. For convenience, a couple of</span>
-<span class="sd">        common systems are defined in the `~pycraf.geospatial.EPSG`</span>
-<span class="sd">        Enum (which just holds the associated *EPSG* code for</span>
-<span class="sd">        each name), e.g., `EPSG.WGS84 == 4326`.</span>
+<span class="sd">        `~pyproj.Proj` class. If an integer, it is treated as an</span>
+<span class="sd">        *EPSG* or *ESRI* code and the `~pyproj.Proj` class is</span>
+<span class="sd">        instantiated with `&quot;+init=epsg:{code}&quot;` or</span>
+<span class="sd">        `&quot;+init=esri:{code}&quot;`, depending on the `code_[in,out]` value.</span>
+<span class="sd">        For convenience, a couple of common systems are defined in the</span>
+<span class="sd">        `~pycraf.geospatial.EPSG` and `~pycraf.geospatial.ESRI` Enums</span>
+<span class="sd">        (which just hold the associated *EPSG* or *ESRI* code for each</span>
+<span class="sd">        name), e.g., `EPSG.WGS84 == 4326`.</span>
+<span class="sd">    code_in, code_out : {&#39;epsg&#39;, &#39;esri&#39;}</span>
+<span class="sd">        Whether to interpret integer-valued `sys_[in,out]` arguments</span>
+<span class="sd">        as *EPSG* or *ESRI* code. (default: &#39;epsg&#39;)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -565,15 +606,44 @@
 <span class="sd">        &gt;&gt;&gt; import astropy.units as u</span>
 
 <span class="sd">        &gt;&gt;&gt; # see http://spatialreference.org/ref/epsg/31467/</span>
-<span class="sd">        &gt;&gt;&gt; wgs84_to_etrs89 = geospatial.conversion_factory(</span>
+<span class="sd">        &gt;&gt;&gt; wgs84_to_etrs89 = geospatial.transform_factory(</span>
 <span class="sd">        ...     geospatial.EPSG.WGS84, 31467</span>
 <span class="sd">        ...     )</span>
+
+<span class="sd">    If an *ESRI* system is desired, either use the integer code and</span>
+<span class="sd">    set `code_[in,out] = &#39;esri&#39;`, or use the ESRI enum::</span>
+
+<span class="sd">        &gt;&gt;&gt; from pycraf import geospatial</span>
+<span class="sd">        &gt;&gt;&gt; import astropy.units as u</span>
+
+<span class="sd">        &gt;&gt;&gt; # see http://spatialreference.org/ref/esri/54009/</span>
+<span class="sd">        &gt;&gt;&gt; wgs84_to_mollweide = geospatial.transform_factory(</span>
+<span class="sd">        ...     geospatial.EPSG.WGS84, 54009, code_out=&#39;esri&#39;</span>
+<span class="sd">        ...     )</span>
+<span class="sd">        &gt;&gt;&gt; # or</span>
+<span class="sd">        &gt;&gt;&gt; wgs84_to_mollweide = geospatial.transform_factory(</span>
+<span class="sd">        ...     geospatial.EPSG.WGS84, geospatial.ESRI.MOLLWEIDE</span>
+<span class="sd">        ...     )</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - `pyproj` also allows to preserve the units (`preserve_units=True`);</span>
+<span class="sd">      some EPSG systems use different distance units, such as ft.</span>
+<span class="sd">      Per default, `pyproj` will convert these to meters.</span>
+<span class="sd">      The `~pycraf.utils.ranged_quantity_input` will automatically</span>
+<span class="sd">      convert your inputs to the correct unit (i.e., &#39;m&#39; for distances),</span>
+<span class="sd">      but the outputs will always be in meters (or degrees).</span>
+<span class="sd">      Use `~astropy.units` functions to convert to something else</span>
+<span class="sd">      such as &#39;ft&#39; if desired.</span>
+
 
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="kn">import</span> <span class="nn">inspect</span>
 
-    <span class="n">_transform</span> <span class="o">=</span> <span class="n">_create_transform</span><span class="p">(</span><span class="n">sys_in</span><span class="p">,</span> <span class="n">sys_out</span><span class="p">)</span>
+    <span class="n">_transform</span> <span class="o">=</span> <span class="n">_create_transform</span><span class="p">(</span>
+        <span class="n">sys_in</span><span class="p">,</span> <span class="n">sys_out</span><span class="p">,</span> <span class="n">code_in</span><span class="o">=</span><span class="n">code_in</span><span class="p">,</span> <span class="n">code_out</span><span class="o">=</span><span class="n">code_out</span>
+        <span class="p">)</span>
 
     <span class="n">needs_3d</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">is_geocent</span><span class="p">()</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">_transform</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
 
@@ -620,6 +690,10 @@
 
         <span class="k">return</span> <span class="n">_transform</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
 
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sys_in</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">sys_in</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">code_in</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">sys_in</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sys_out</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">sys_out</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">code_out</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">sys_out</span><span class="p">)</span>
     <span class="n">doc_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">sys_in</span><span class="o">=</span><span class="n">sys_in</span><span class="p">,</span> <span class="n">sys_out</span><span class="o">=</span><span class="n">sys_out</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">doc_in</span><span class="p">,</span> <span class="n">returns</span><span class="o">=</span><span class="n">doc_out</span>
         <span class="p">)</span>
@@ -672,7 +746,7 @@
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 02 Aug 2017. <br/>
+    Last built 03 Aug 2017. <br/>
   </p>
 </footer>
   </body>
