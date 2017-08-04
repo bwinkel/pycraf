@@ -101,13 +101,12 @@ matrix:
         - os: linux
           env: SETUP_CMD='test'
 
-        # Check for sphinx doc build warnings - we do this first because it
-        # may run for a long time
+        # This first builds docs, then runs tests and uploads if
+        # successful, only
         - os: linux
           env:
-            # - SETUP_CMD='build_docs -w'
             - SETUP_CMD='build_docs'
-            - DO_DOCS=YES
+            - UPLOAD_DOCS=YES
 
         # Now try Astropy dev with the latest 3.x.
         - os: linux
@@ -119,8 +118,8 @@ matrix:
         # versions of Python, we can vary Python and Numpy versions at the same
         # time.
 
-        - os: linux
-          env: PYTHON_VERSION=3.5 NUMPY_VERSION=1.11
+        # - os: linux
+        #   env: PYTHON_VERSION=3.5 NUMPY_VERSION=1.11
 
         # Do a PEP8 test with pycodestyle
         - os: linux
@@ -139,12 +138,6 @@ before_install:
 install:
 
     - mkdir -p ${TRAVIS_BUILD_DIR}/srtm/
-    # download SRTM data for tests
-    # - wget -P ${TRAVIS_BUILD_DIR}/srtm/ http://viewfinderpanoramas.org/dem3/M32.zip
-    # - wget -P ${TRAVIS_BUILD_DIR}/srtm/ http://viewfinderpanoramas.org/dem3/N32.zip
-    # - unzip ${TRAVIS_BUILD_DIR}/srtm/M32.zip -d ${TRAVIS_BUILD_DIR}/srtm/
-    # - unzip ${TRAVIS_BUILD_DIR}/srtm/N32.zip -d ${TRAVIS_BUILD_DIR}/srtm/
-    # - mv ${TRAVIS_BUILD_DIR}/srtm/{M,N}*/*.hgt ${TRAVIS_BUILD_DIR}/srtm/
 
     # We now use the ci-helpers package to set up our testing environment.
     # This is done by using Miniconda and then using conda and pip to install
@@ -160,7 +153,6 @@ install:
     - git clone git://github.com/astropy/ci-helpers.git
     - source ci-helpers/travis/setup_conda.sh
 
-
     # As described above, using ci-helpers, you should be able to set up an
     # environment with dependencies installed using conda and pip, but in some
     # cases this may not provide enough flexibility in how to install a
@@ -172,18 +164,19 @@ install:
 
 script:
    - $MAIN_CMD $SETUP_CMD
-   - echo "DO_DOCS" $DO_DOCS
+   - echo "UPLOAD_DOCS" $UPLOAD_DOCS
    # have to remove the c-files, generated during build with
    # git reset --hard HEAD;
    - set -e
-   - 'if [[ $TRAVIS_TAG && $DO_DOCS ]]; then
+   - 'if [[ $UPLOAD_DOCS ]]; then
+        $MAIN_CMD test --remote-data=any;
         conda install doctr;
         git reset --hard HEAD;
-        doctr deploy . --no-require-master --sync;
-     elif [[ $DO_DOCS ]]; then
-        conda install doctr;
-        git reset --hard HEAD;
-        doctr deploy --no-require-master --sync --built-docs docs/_build/html "latest";
+        if [[ $TRAVIS_TAG ]]; then
+          doctr deploy . --no-require-master --sync;
+        else
+          doctr deploy --no-require-master --sync --built-docs docs/_build/html "latest";
+        fi
      fi'
 
 after_success:
