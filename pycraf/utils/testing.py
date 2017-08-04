@@ -74,7 +74,7 @@ def check_astro_quantities(
             inv_lowval -= tiny_fraction(inv_lowval)
             _args[case] = inv_lowval * _args[case].unit
 
-            with pytest.raises(AssertionError):
+            with pytest.raises(ValueError):
                 func(*_args, **kwargs)
 
         _args = deepcopy(args)
@@ -84,7 +84,7 @@ def check_astro_quantities(
             inv_hival += tiny_fraction(inv_hival)
             _args[case] = inv_hival * _args[case].unit
 
-            with pytest.raises(AssertionError):
+            with pytest.raises(ValueError):
                 func(*_args, **kwargs)
 
         # test for wrong unit
@@ -112,7 +112,7 @@ def check_astro_quantities(
             inv_lowval -= tiny_fraction(inv_lowval)
             _kwargs[var] = inv_lowval * _kwargs[var].unit
 
-            with pytest.raises(AssertionError):
+            with pytest.raises(ValueError):
                 func(*args, **_kwargs)
 
         _kwargs = deepcopy(kwargs)
@@ -122,7 +122,7 @@ def check_astro_quantities(
             inv_hival += tiny_fraction(inv_hival)
             _kwargs[var] = inv_hival * _kwargs[var].unit
 
-            with pytest.raises(AssertionError):
+            with pytest.raises(ValueError):
                 func(*args, **_kwargs)
 
         # test for wrong unit

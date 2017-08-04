@@ -45,6 +45,7 @@ Available modules
    satellite/index
    geometry/index
    mc/index
+   utils/index
 
 .. automodapi:: pycraf
     :no-heading:
