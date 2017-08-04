@@ -1,0 +1,311 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ranged_quantity_input &#8212; pycraf v0.25.3.dev50</title>
+    
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.25.3.dev50',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="MultiState" href="pycraf.utils.MultiState.html" />
+    <link rel="prev" title="check_astro_quantities" href="pycraf.utils.check_astro_quantities.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="pycraf.utils.MultiState.html" title="MultiState">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="pycraf.utils.check_astro_quantities.html" title="check_astro_quantities">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v0.25.3.dev50</a>
+	 &#187;
+      </li>
+      <li><a href="../utils/index.html" accesskey="U">Utilities (<code class="docutils literal"><span class="pre">pycraf.utils</span></code>)</a> &#187;</li>
+      
+      <li>ranged_quantity_input</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ranged-quantity-input">
+<h1>ranged_quantity_input<a class="headerlink" href="#ranged-quantity-input" title="Permalink to this headline">¶</a></h1>
+<dl class="data">
+<dt id="pycraf.utils.ranged_quantity_input">
+<code class="descclassname">pycraf.utils.</code><code class="descname">ranged_quantity_input</code><em class="property"> = &lt;bound method RangedQuantityInput.as_decorator of &lt;class 'pycraf.utils.decorators.RangedQuantityInput'&gt;&gt;</em><a class="headerlink" href="#pycraf.utils.ranged_quantity_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>A decorator for validating the units of arguments to functions.</p>
+<p>This decorator was adapted from <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.quantity_input.html#astropy.units.quantity_input" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">quantity_input</span></code></a>,
+but adds range checking and the possibilities to strip
+the units before feeding into the decorated function.
+It also allows to apply a new unit to the returned value
+(<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.quantity_input.html#astropy.units.quantity_input" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">quantity_input</span></code></a> only does this in conjuction
+with type annotations).</p>
+<p>A <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.UnitsError.html#astropy.units.UnitsError" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">UnitsError</span></code></a> will be raised if the unit
+attribute of the argument is not equivalent to the unit
+specified to the decorator or in the annotation. If the
+argument has no unit attribute, i.e. it is not a Quantity
+object, a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">ValueError</span></code></a> will be raised.</p>
+<p>Where an equivalency is specified in the decorator, the
+function will be executed with that equivalency in force.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>func</strong> : function</p>
+<blockquote>
+<div><p>The function to decorate.</p>
+</div></blockquote>
+<p><strong>**kwargs</strong> : any number of key word arguments</p>
+<blockquote>
+<div><p>The function argument names and ranges that are to be checked
+for the decorated function. Must have the form
+<code class="xref py py-obj docutils literal"><span class="pre">param=(min,</span> <span class="pre">max,</span> <span class="pre">unit)</span></code>, e.g.:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="nd">@ranged_quantity_input</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">),</span> <span class="n">b</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">s</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">b</span>
+</pre></div>
+</div>
+<p>will check that input <code class="xref py py-obj docutils literal"><span class="pre">a</span></code> has unit of meters (or equivalent)
+and is in the range between zero and one meters; and that
+<code class="xref py py-obj docutils literal"><span class="pre">b</span></code> is at least zero seconds.</p>
+</div></blockquote>
+<p><strong>equivalencies</strong> : list of functions</p>
+<blockquote>
+<div><p>Equivalencies functions to apply (see <a class="reference external" href="http://docs.astropy.org/en/stable/units/equivalencies.html">Astropy docs</a>).</p>
+</div></blockquote>
+<p><strong>strip_input_units</strong> : bool, optional</p>
+<blockquote>
+<div><p>Whether to strip units from parameters. Only applied
+to parameters that are &#8220;registered&#8221; in the decorator,
+see examples. (default: False)</p>
+</div></blockquote>
+<p><strong>output_unit</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Unit.html#astropy.units.Unit" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Unit</span></code></a> or tuple of <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Unit.html#astropy.units.Unit" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Unit</span></code></a>, optional</p>
+<blockquote>
+<div><p>Add units to the return value(s) of the decorated function.
+Note that internally the given units are <em>multiplied</em> with
+the return values, which means you should only use this
+if you have stripped the units from the input (or otherwise
+made sure that the return values are unit-less).</p>
+</div></blockquote>
+<p><strong>allow_none</strong> : bool, optional</p>
+<blockquote>
+<div><p>Allow to use <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a> as default value; see examples.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ranged_quantity_input</strong> : function decorator</p>
+<blockquote class="last">
+<div><p>Function decorator to check units and value ranges.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The checking of arguments inside variable arguments to a
+function is not supported (i.e. *arg or **kwargs).</p>
+<p class="rubric">Examples</p>
+<p>In the most basic form, <a class="reference internal" href="#pycraf.utils.ranged_quantity_input" title="pycraf.utils.ranged_quantity_input"><code class="xref py py-obj docutils literal"><span class="pre">ranged_quantity_input</span></code></a>
+behaves like <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.quantity_input.html#astropy.units.quantity_input" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">quantity_input</span></code></a>, but adds
+range checking:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf.utils</span> <span class="k">import</span> <span class="n">ranged_quantity_input</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@ranged_quantity_input</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">))</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">**</span> <span class="mi">2</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+<span class="go">&lt;Quantity 0.25 m2&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">Argument &#39;a&#39; to function &#39;func&#39; out of range</span>
+<span class="go">(allowed 0 to 1 m).</span>
+</pre></div>
+</div>
+<p>It is possible to disable range checking, for the lower, upper,
+or both bounds, e.g.:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@ranged_quantity_input</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">))</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">**</span> <span class="mi">2</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+<span class="go">&lt;Quantity 4.0 m2&gt;</span>
+</pre></div>
+</div>
+<p>Often one wants to add units support to third-party functions,
+which expect simple types:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># this is defined somewhere else</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">_func</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span> <span class="s1">&#39;No Way!&#39;</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">**</span> <span class="mi">2</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_func</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">AssertionError</span>: <span class="n">No Way!</span>
+</pre></div>
+</div>
+<p>We can do the following to the rescue:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@ranged_quantity_input</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">),</span> <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">_func</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># which is the same as</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># func = ranged_quantity_input(</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#    a=(0, 1, u.m), strip_input_units=True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#    )(_func)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+<span class="go">0.25</span>
+</pre></div>
+</div>
+<p>However, by doing this there are still no units for the output.
+We can fix this with the <code class="xref py py-obj docutils literal"><span class="pre">output_unit</span></code> option:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@ranged_quantity_input</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">a</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">output_unit</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">_func</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+<span class="go">&lt;Quantity 0.25 m2&gt;</span>
+</pre></div>
+</div>
+<p>If you have several return values (tuple), just provide a tuple
+of output units.</p>
+<p>The decorator also works flawlessly with default values:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@ranged_quantity_input</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">))</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">**</span> <span class="mi">2</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">()</span>
+<span class="go">&lt;Quantity 0.25 m2&gt;</span>
+</pre></div>
+</div>
+<p>However, sometimes one wants to use <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a> as default, which will
+fail, because <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a> has no unit:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@ranged_quantity_input</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">))</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">**</span> <span class="mi">2</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">()</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">TypeError</span>: <span class="n">Argument &#39;a&#39; to function &#39;func&#39; has no &#39;unit&#39;</span>
+<span class="go">attribute. You may want to pass in an astropy Quantity instead.</span>
+</pre></div>
+</div>
+<p>One can use the <code class="xref py py-obj docutils literal"><span class="pre">allow_none</span></code> option, to deal with such cases:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@ranged_quantity_input</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">),</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">a</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">**</span> <span class="mi">2</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">()</span>
+<span class="go">0.25</span>
+</pre></div>
+</div>
+<p>and of course, the unit check still works,  if a something other
+than <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a> is provided:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">astropy.units.core.UnitsError</span>: <span class="n">Argument &#39;a&#39; to function</span>
+<span class="go">&#39;func&#39; must be in units convertible to &#39;m&#39;.</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">ranged_quantity_input</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="../_sources/api/pycraf.utils.ranged_quantity_input.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 04 Aug 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

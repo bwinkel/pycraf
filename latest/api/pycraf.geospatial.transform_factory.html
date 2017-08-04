@@ -91,7 +91,7 @@
 <dt id="pycraf.geospatial.transform_factory">
 <code class="descclassname">pycraf.geospatial.</code><code class="descname">transform_factory</code><span class="sig-paren">(</span><em>sys_in</em>, <em>sys_out</em>, <em>code_in='epsg'</em>, <em>code_out='epsg'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#transform_factory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.geospatial.transform_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>A factory to produce conversion functions (decorated with
-<code class="xref py py-obj docutils literal"><span class="pre">ranged_quantity_input</span></code> for unit handling).</p>
+<a class="reference internal" href="pycraf.utils.ranged_quantity_input.html#pycraf.utils.ranged_quantity_input" title="pycraf.utils.ranged_quantity_input"><code class="xref py py-obj docutils literal"><span class="pre">ranged_quantity_input</span></code></a> for unit handling).</p>
 <p>The returned function will automatically have the correct
 signature (e.g., lon/lat &#8211;&gt; x/y, or x/y/z &#8211;&gt; lon/lat/height)
 depending on the chosen input and output projections.
@@ -146,7 +146,7 @@ as <em>EPSG</em> or <em>ESRI</em> code. (default: &#8216;epsg&#8217;)</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>transform_func</strong> : Function</p>
 <blockquote class="last">
 <div><p>Transform function with unit decorator
-(<code class="xref py py-obj docutils literal"><span class="pre">ranged_quantity_input</span></code>).</p>
+(<a class="reference internal" href="pycraf.utils.ranged_quantity_input.html#pycraf.utils.ranged_quantity_input" title="pycraf.utils.ranged_quantity_input"><code class="xref py py-obj docutils literal"><span class="pre">ranged_quantity_input</span></code></a>).</p>
 </div></blockquote>
 </td>
 </tr>
@@ -157,7 +157,7 @@ as <em>EPSG</em> or <em>ESRI</em> code. (default: &#8216;epsg&#8217;)</p>
 <li><code class="xref py py-obj docutils literal"><span class="pre">pyproj</span></code> also allows to preserve the units (<code class="xref py py-obj docutils literal"><span class="pre">preserve_units=True</span></code>);
 some EPSG systems use different distance units, such as ft.
 Per default, <code class="xref py py-obj docutils literal"><span class="pre">pyproj</span></code> will convert these to meters.
-The <code class="xref py py-obj docutils literal"><span class="pre">ranged_quantity_input</span></code> will automatically
+The <a class="reference internal" href="pycraf.utils.ranged_quantity_input.html#pycraf.utils.ranged_quantity_input" title="pycraf.utils.ranged_quantity_input"><code class="xref py py-obj docutils literal"><span class="pre">ranged_quantity_input</span></code></a> will automatically
 convert your inputs to the correct unit (i.e., &#8216;m&#8217; for distances),
 but the outputs will always be in meters (or degrees).
 Use <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">units</span></code></a> functions to convert to something else
