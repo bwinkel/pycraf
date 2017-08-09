@@ -129,8 +129,8 @@ required:
 
 * setuptools
 * cython 0.23 or later
-* numpy 1.8 or later
-* astropy 1.1 or later
+* numpy 1.11 or later
+* astropy 1.3 or later (2.0 recommended)
 * scipy 0.15 or later
 * pytest 2.6 or later
 

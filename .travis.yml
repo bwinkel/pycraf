@@ -91,7 +91,20 @@ matrix:
             - CXX='g++-6'
             - CPP='g++-6'
             - LD='gcc-6'
+
+        # We have to make the MacOS release based on rather old numpy version
+        # otherwise users will keep getting "incompatible API" errors
+        # (For more information on ABI problems with numpy see:
+        # https://stackoverflow.com/questions/17709641/valueerror-numpy-dtype-has-the-wrong-size-try-recompiling/18369312)
+        - os: osx
+          osx_image: xcode8.3
+          env:
+            - CC='gcc-6'
+            - CXX='g++-6'
+            - CPP='g++-6'
+            - LD='gcc-6'
             - DO_MAC_DIST=YES
+            - NUMPY_VERSION=1.11
 
         # Do a coverage test.
         - os: linux
