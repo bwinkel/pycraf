@@ -12,13 +12,13 @@ pycraf has the following strict requirements:
 - `setuptools <https://pythonhosted.org/setuptools/>`__: Used for the package
   installation.
 
-- `Cython <http://cython.org/>`__ 1.8 or later
+- `Cython <http://cython.org/>`__ 0.23 or later
 
-- `NumPy <http://www.numpy.org/>`__ 1.8 or later
+- `NumPy <http://www.numpy.org/>`__ 1.11 or later
 
-- `SciPy <https://scipy.org/>`__: Used in various routines.
+- `SciPy <https://scipy.org/>`__: 0.15 or later
 
-- `astropy <http://www.astropy.org/>`__: Used all over the place.
+- `astropy <http://www.astropy.org/>`__: 1.3 or later (2.0 recommended)
 
 - `pytest <https://pypi.python.org/pypi/pytest>`__ 2.6 or later
 

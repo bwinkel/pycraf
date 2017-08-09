@@ -1,0 +1,6 @@
+utm_zone_from_gps
+=================
+
+.. currentmodule:: pycraf.geospatial
+
+.. autofunction:: utm_zone_from_gps

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>profile_midlat_summer &#8212; pycraf v0.25.2</title>
+    <title>profile_midlat_summer &#8212; pycraf v0.25.3</title>
     
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.25.2',
+        VERSION:     '0.25.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -70,7 +70,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.2</a>
+	<a href="../index.html">pycraf v0.25.3</a>
 	 &#187;
       </li>
       <li><a href="../atm/index.html" accesskey="U">Atmospheric models (<code class="docutils literal"><span class="pre">pycraf.atm</span></code>)</a> &#187;</li>
@@ -89,44 +89,44 @@
 <h1>profile_midlat_summer<a class="headerlink" href="#profile-midlat-summer" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.atm.profile_midlat_summer">
-<code class="descclassname">pycraf.atm.</code><code class="descname">profile_midlat_summer</code><span class="sig-paren">(</span><em>height</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#profile_midlat_summer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.atm.profile_midlat_summer" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.atm.</code><code class="descname">profile_midlat_summer</code><span class="sig-paren">(</span><em>height</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#profile_midlat_summer"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.3/pycraf/atm/atm.py#L647" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.profile_midlat_summer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mid latitude summer height profiles according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.835-5-201202-I/en">ITU-R P.835-5</a>.</p>
 <p>Valid for geographic latitudes <img class="math" src="../_images/math/26a966e1c86395dacaa2abf63ddd17036c5d76e4.png" alt="22^\circ &lt; \vert \phi\vert &lt; 45^\circ"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>height</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>height</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Height above ground [km]</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>temp</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>temp</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Temperature [K]</p>
 </div></blockquote>
-<p><strong>press</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>press</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Total pressure [hPa]</p>
 </div></blockquote>
-<p><strong>rho_w</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>rho_w</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Water vapor density [g / m**3]</p>
 </div></blockquote>
-<p><strong>press_w</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>press_w</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Water vapor partial pressure [hPa]</p>
 </div></blockquote>
-<p><strong>n_index</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>n_index</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Refractive index [dimless]</p>
 </div></blockquote>
-<p><strong>humidity_water</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>humidity_water</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Relative humidity if water vapor was in form of liquid water [%]</p>
 </div></blockquote>
-<p><strong>humidity_ice</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>humidity_ice</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote class="last">
 <div><p>Relative humidity if water vapor was in form of ice [%]</p>
 </div></blockquote>
@@ -155,13 +155,14 @@
     </div>
 <footer class="footer">
   <p class="pull-right">
+    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.3/docs/api/pycraf.atm.profile_midlat_summer.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.atm.profile_midlat_summer.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 30 Jul 2017. <br/>
+    Last built 09 Aug 2017. <br/>
   </p>
 </footer>
   </body>

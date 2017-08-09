@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Monte-Carlo helpers (pycraf.mc) &#8212; pycraf v0.25.3</title>
+    
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.25.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="HistogramSampler" href="../api/pycraf.mc.HistogramSampler.html" />
+    <link rel="prev" title="true_angular_distance" href="../api/pycraf.geometry.true_angular_distance.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="../api/pycraf.mc.HistogramSampler.html" title="HistogramSampler">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="../api/pycraf.geometry.true_angular_distance.html" title="true_angular_distance">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v0.25.3</a>
+	 &#187;
+      </li>
+      
+      <li>Monte-Carlo helpers (<code class="docutils literal"><span class="pre">pycraf.mc</span></code>)</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="monte-carlo-helpers-pycraf-mc">
+<h1>Monte-Carlo helpers (<a class="reference internal" href="#module-pycraf.mc" title="pycraf.mc"><code class="xref py py-obj docutils literal"><span class="pre">pycraf.mc</span></code></a>)<a class="headerlink" href="#monte-carlo-helpers-pycraf-mc" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-pycraf.mc" title="pycraf.mc"><code class="xref py py-obj docutils literal"><span class="pre">mc</span></code></a> subpackage</p>
+</div>
+<div class="section" id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://jakevdp.github.io/blog/2013/12/01/kernel-density-estimation/">Kernel density estimation (KDE)</a>, blog by Jake Vanderplas.</li>
+<li><a class="reference external" href="https://docs.scipy.org/doc/scipy-0.15.1/reference/generated/scipy.stats.gaussian_kde.html#scipy.stats.gaussian_kde">Scipy gaussian_kde</a></li>
+</ul>
+</div>
+<div class="section" id="reference-api">
+<h2>Reference/API<a class="headerlink" href="#reference-api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-pycraf.mc">
+<span id="pycraf-mc-package"></span><h3>pycraf.mc Package<a class="headerlink" href="#module-pycraf.mc" title="Permalink to this headline">¶</a></h3>
+<p>This subpackage contains various little convenience functions to
+help with Monte-Carlo type compatiblity studies.</p>
+<div class="section" id="classes">
+<h4>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.mc.HistogramSampler.html#pycraf.mc.HistogramSampler" title="pycraf.mc.HistogramSampler"><code class="xref py py-obj docutils literal"><span class="pre">HistogramSampler</span></code></a>(histvals)</td>
+<td>Sampler to get random values obeying a discrete(!) density distribution.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">Monte-Carlo helpers (<code class="docutils literal"><span class="pre">pycraf.mc</span></code>)</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+<li><a class="reference internal" href="#reference-api">Reference/API</a><ul>
+<li><a class="reference internal" href="#module-pycraf.mc">pycraf.mc Package</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.3/docs/mc/index.rst">Edit This Page on Github</a> &nbsp;
+    <a href="../_sources/mc/index.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 09 Aug 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

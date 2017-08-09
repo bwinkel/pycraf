@@ -1,0 +1,29 @@
+ESRI
+====
+
+.. currentmodule:: pycraf.geospatial
+
+.. autoclass:: ESRI
+   :show-inheritance:
+
+   .. rubric:: Attributes Summary
+
+   .. autosummary::
+
+      ~ESRI.BONNE
+      ~ESRI.GALL
+      ~ESRI.MERCATOR
+      ~ESRI.MOLLWEIDE
+      ~ESRI.ROBINSON
+      ~ESRI.SINUSOIDAL
+      ~ESRI.STEREO
+
+   .. rubric:: Attributes Documentation
+
+   .. autoattribute:: BONNE
+   .. autoattribute:: GALL
+   .. autoattribute:: MERCATOR
+   .. autoattribute:: MOLLWEIDE
+   .. autoattribute:: ROBINSON
+   .. autoattribute:: SINUSOIDAL
+   .. autoattribute:: STEREO

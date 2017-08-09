@@ -1,0 +1,6 @@
+check_astro_quantities
+======================
+
+.. currentmodule:: pycraf.utils
+
+.. autofunction:: check_astro_quantities

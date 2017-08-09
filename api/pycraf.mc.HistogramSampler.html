@@ -1,0 +1,304 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HistogramSampler &#8212; pycraf v0.25.3</title>
+    
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.25.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Utilities (pycraf.utils)" href="../utils/index.html" />
+    <link rel="prev" title="Monte-Carlo helpers (pycraf.mc)" href="../mc/index.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="../utils/index.html" title="Utilities (pycraf.utils)">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="../mc/index.html" title="Monte-Carlo helpers (pycraf.mc)">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v0.25.3</a>
+	 &#187;
+      </li>
+      <li><a href="../mc/index.html" accesskey="U">Monte-Carlo helpers (<code class="docutils literal"><span class="pre">pycraf.mc</span></code>)</a> &#187;</li>
+      
+      <li>HistogramSampler</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="histogramsampler">
+<h1>HistogramSampler<a class="headerlink" href="#histogramsampler" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pycraf.mc.HistogramSampler">
+<em class="property">class </em><code class="descclassname">pycraf.mc.</code><code class="descname">HistogramSampler</code><span class="sig-paren">(</span><em>histvals</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.3/pycraf/mc/sampler.py#L10" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Sampler to get random values obeying a discrete(!) density distribution.</p>
+<p>With this class, one can use discrete densities (think of them as
+binned entities, aka histograms) to get random samples that follow
+the same (binned) distribution as the histogram. For simplicity
+the returned values are the N-dim indices that need to be fed
+into the histogram bin-ranges if one wants to convert them
+to physical values (see examples, below).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>histvals</strong> : N-D <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a></p>
+<blockquote>
+<div><p>Discrete density distribution. (This is the histogram array, which
+one would get out of <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.histogram.html#numpy.histogram" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">histogram</span></code></a> functions.)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>hist_sampler</strong> : <a class="reference internal" href="#pycraf.mc.HistogramSampler" title="pycraf.mc.HistogramSampler"><code class="xref py py-obj docutils literal"><span class="pre">HistogramSampler</span></code></a></p>
+<blockquote class="last">
+<div><p>A <a class="reference internal" href="#pycraf.mc.HistogramSampler" title="pycraf.mc.HistogramSampler"><code class="xref py py-obj docutils literal"><span class="pre">HistogramSampler</span></code></a> instance.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Even if you have continuous data to start with, using the histogram
+approach obviously works, as well (as is demonstrated in the examples).
+However, one looses the &#8220;continuous&#8221; property in the process.
+The resulting samples will always be just be able to work
+out the bin, but no continuous quantity can be reconstructed.
+For many use cases this is probably fine, but in others one
+might be better of by using Kernel Density Estimation.
+There is a function for this in <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/stats.html#module-scipy.stats" title="(in SciPy v0.19.1)"><code class="xref py py-obj docutils literal"><span class="pre">stats</span></code></a>
+(<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gaussian_kde.html#scipy.stats.gaussian_kde" title="(in SciPy v0.19.1)"><code class="xref py py-obj docutils literal"><span class="pre">gaussian_kde</span></code></a>), which even allows works with
+multi-variate data and allows one to sample from the KDE PDF
+(see also the examples). Unfortunately, one cannot work with
+weighted data.</p>
+<p class="rubric">Examples</p>
+<p>A trivial one-dimensional use case:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy.utils.misc</span> <span class="k">import</span> <span class="n">NumpyRNGContext</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">mc</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">NumpyRNGContext</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mid_points</span> <span class="o">=</span> <span class="p">(</span><span class="n">bins</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_sampler</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">HistogramSampler</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">NumpyRNGContext</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">indices</span> <span class="o">=</span> <span class="n">my_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="c1"># Note that you could also do</span>
+<span class="gp">... </span>    <span class="c1"># indices = my_sampler(10)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+<span class="go">[7 9 3 7 6 5 6 7 7 8]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">mid_points</span><span class="p">[</span><span class="n">indices</span><span class="p">])</span>  
+<span class="go">[-0.25  0.75 -2.25 -0.25 -0.75 -1.25 -0.75 -0.25 -0.25  0.25]</span>
+</pre></div>
+</div>
+<p>Works equally simple in 2D:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">NumpyRNGContext</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hist2d</span><span class="p">,</span> <span class="n">xbins</span><span class="p">,</span> <span class="n">ybins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram2d</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="nb">range</span><span class="o">=</span><span class="p">((</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xmids</span> <span class="o">=</span> <span class="p">(</span><span class="n">xbins</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">xbins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ymids</span> <span class="o">=</span> <span class="p">(</span><span class="n">ybins</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">ybins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_sampler</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">HistogramSampler</span><span class="p">(</span><span class="n">hist2d</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">NumpyRNGContext</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">indices</span> <span class="o">=</span> <span class="n">my_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">indices</span><span class="p">)))</span>
+<span class="go">[(7, 8), (9, 6), (1, 7), (7, 5), (6, 4),</span>
+<span class="go"> (5, 7), (6, 7), (7, 6), (7, 8), (8, 6)]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">xmids</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">ymids</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]])))</span>  
+<span class="go">[(-0.25, 2.5), (0.75, 0.5), (-3.25, 1.5), (-0.25, -0.5),</span>
+<span class="go"> (-0.75, -1.5), (-1.25, 1.5), (-0.75, 1.5), (-0.25, 0.5),</span>
+<span class="go"> (-0.25, 2.5), (0.25, 0.5)]</span>
+</pre></div>
+</div>
+<p>It is also easily possible to apply weights. Just assume
+that one bin was observed exceptionally frequent:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span><span class="p">[</span><span class="mi">500</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hist2d</span><span class="p">,</span> <span class="n">xbins</span><span class="p">,</span> <span class="n">ybins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram2d</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="nb">range</span><span class="o">=</span><span class="p">((</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">weights</span><span class="o">=</span><span class="n">weights</span>
+<span class="gp">... </span>    <span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_sampler</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">HistogramSampler</span><span class="p">(</span><span class="n">hist2d</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">NumpyRNGContext</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">indices</span> <span class="o">=</span> <span class="n">my_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">xmids</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">ymids</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]])))</span>  
+<span class="go">[(-1.75, 4.5), (-0.25, 3.5), (-3.25, 1.5), (-1.75, 4.5),</span>
+<span class="go"> (-1.75, 4.5), (-1.75, 4.5), (-1.75, 4.5), (-1.75, 4.5),</span>
+<span class="go"> (-1.75, 4.5), (-1.25, 0.5)]</span>
+</pre></div>
+</div>
+<p>As can be seen, the value <code class="xref py py-obj docutils literal"><span class="pre">((1.25,</span> <span class="pre">-1.5))</span></code> is now exceptionally
+often sampled from the distribution.</p>
+<p>As discussed in the notes, for some use-cases a KDE might
+be the better tool:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">gaussian_kde</span>  
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kernel</span> <span class="o">=</span> <span class="n">gaussian_kde</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">NumpyRNGContext</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>  
+<span class="gp">... </span>    <span class="n">values</span> <span class="o">=</span> <span class="n">kernel</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>  
+<span class="go">[(-1.4708084392424643, 0.73081055816321849),</span>
+<span class="go"> (0.088396607804818894, 3.4075844477993105),</span>
+<span class="gp">...</span>
+<span class="go"> (-2.0977896525658681, -0.2514770710536518),</span>
+<span class="go"> (0.26194085609813555, -0.93622928331194344)]</span>
+</pre></div>
+</div>
+<p class="rubric">Methods Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pycraf.mc.HistogramSampler.__call__" title="pycraf.mc.HistogramSampler.__call__"><code class="xref py py-obj docutils literal"><span class="pre">__call__</span></code></a>(n)</td>
+<td>Convenience method to allow using an <em>instance</em> of</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pycraf.mc.HistogramSampler.sample" title="pycraf.mc.HistogramSampler.sample"><code class="xref py py-obj docutils literal"><span class="pre">sample</span></code></a>(n)</td>
+<td>Sample from the (discrete) density distribution.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="pycraf.mc.HistogramSampler.__call__">
+<code class="descname">__call__</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler.__call__"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.3/pycraf/mc/sampler.py#L175" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience method to allow using an <em>instance</em> of
+<a class="reference internal" href="#pycraf.mc.HistogramSampler" title="pycraf.mc.HistogramSampler"><code class="xref py py-obj docutils literal"><span class="pre">HistogramSampler</span></code></a> like a function:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">my_sampler</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">HistogramSampler</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
+<span class="n">my_sampler</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Calls <a class="reference internal" href="#pycraf.mc.HistogramSampler.sample" title="pycraf.mc.HistogramSampler.sample"><code class="xref py py-obj docutils literal"><span class="pre">sample</span></code></a> internally.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pycraf.mc.HistogramSampler.sample">
+<code class="descname">sample</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler.sample"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.3/pycraf/mc/sampler.py#L148" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample from the (discrete) density distribution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n</strong> : int</p>
+<blockquote>
+<div><p>Number of samples to draw.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Indices</strong> : tuple of <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a></p>
+<blockquote class="last">
+<div><p>The indices of the drawn samples with respect to the
+discrete density array (aka histogram object). See
+<a class="reference internal" href="#pycraf.mc.HistogramSampler" title="pycraf.mc.HistogramSampler"><code class="xref py py-obj docutils literal"><span class="pre">HistogramSampler</span></code></a> for examples of use.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">HistogramSampler</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.3/docs/api/pycraf.mc.HistogramSampler.rst">Edit This Page on Github</a> &nbsp;
+    <a href="../_sources/api/pycraf.mc.HistogramSampler.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 09 Aug 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+HistogramSampler
+================
+
+.. currentmodule:: pycraf.mc
+
+.. autoclass:: HistogramSampler
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~HistogramSampler.__call__
+      ~HistogramSampler.sample
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: __call__
+   .. automethod:: sample

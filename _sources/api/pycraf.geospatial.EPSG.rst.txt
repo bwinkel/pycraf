@@ -1,0 +1,27 @@
+EPSG
+====
+
+.. currentmodule:: pycraf.geospatial
+
+.. autoclass:: EPSG
+   :show-inheritance:
+
+   .. rubric:: Attributes Summary
+
+   .. autosummary::
+
+      ~EPSG.ETRS89
+      ~EPSG.ITRF00
+      ~EPSG.ITRF05
+      ~EPSG.ITRF08
+      ~EPSG.WEB_MERC
+      ~EPSG.WGS84
+
+   .. rubric:: Attributes Documentation
+
+   .. autoattribute:: ETRS89
+   .. autoattribute:: ITRF00
+   .. autoattribute:: ITRF05
+   .. autoattribute:: ITRF08
+   .. autoattribute:: WEB_MERC
+   .. autoattribute:: WGS84

@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>EPSG &#8212; pycraf v0.25.3</title>
+    
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.25.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ESRI" href="pycraf.geospatial.ESRI.html" />
+    <link rel="prev" title="wgs84_to_utm" href="pycraf.geospatial.wgs84_to_utm.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="pycraf.geospatial.ESRI.html" title="ESRI">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="pycraf.geospatial.wgs84_to_utm.html" title="wgs84_to_utm">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v0.25.3</a>
+	 &#187;
+      </li>
+      <li><a href="../geospatial/index.html" accesskey="U">Geographical frames (<code class="docutils literal"><span class="pre">pycraf.geospatial</span></code>)</a> &#187;</li>
+      
+      <li>EPSG</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="epsg">
+<h1>EPSG<a class="headerlink" href="#epsg" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pycraf.geospatial.EPSG">
+<em class="property">class </em><code class="descclassname">pycraf.geospatial.</code><code class="descname">EPSG</code><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#EPSG"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.3/pycraf/geospatial/geospatial.py#L37" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.geospatial.EPSG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<p>Enum with often used EPSG codes.</p>
+<p class="rubric">Attributes Summary</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pycraf.geospatial.EPSG.ETRS89" title="pycraf.geospatial.EPSG.ETRS89"><code class="xref py py-obj docutils literal"><span class="pre">ETRS89</span></code></a></td>
+<td>European Terrestrial Reference System: <a class="reference external" href="http://spatialreference.org/ref/epsg/etrs89-etrs-laea/">ETRS89 (GRS80)</a>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pycraf.geospatial.EPSG.ITRF00" title="pycraf.geospatial.EPSG.ITRF00"><code class="xref py py-obj docutils literal"><span class="pre">ITRF00</span></code></a></td>
+<td>International Terrestrial Reference Frame, Datum 2000: <a class="reference external" href="http://spatialreference.org/ref/epsg/4919/">ITRF2000 (GRS80)</a>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pycraf.geospatial.EPSG.ITRF05" title="pycraf.geospatial.EPSG.ITRF05"><code class="xref py py-obj docutils literal"><span class="pre">ITRF05</span></code></a></td>
+<td>International Terrestrial Reference Frame, Datum 2005: <a class="reference external" href="http://spatialreference.org/ref/epsg/4896/">ITRF2005 (GRS80)</a>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pycraf.geospatial.EPSG.ITRF08" title="pycraf.geospatial.EPSG.ITRF08"><code class="xref py py-obj docutils literal"><span class="pre">ITRF08</span></code></a></td>
+<td>International Terrestrial Reference Frame, Datum 2008: <a class="reference external" href="https://epsg.io/5332">ITRF2008 (GRS80)</a>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pycraf.geospatial.EPSG.WEB_MERC" title="pycraf.geospatial.EPSG.WEB_MERC"><code class="xref py py-obj docutils literal"><span class="pre">WEB_MERC</span></code></a></td>
+<td>Variant of Mercator projection; de facto standard for Web mapping applications: <a class="reference external" href="http://spatialreference.org/ref/sr-org/7483/">Web Mercator (WGS84)</a>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pycraf.geospatial.EPSG.WGS84" title="pycraf.geospatial.EPSG.WGS84"><code class="xref py py-obj docutils literal"><span class="pre">WGS84</span></code></a></td>
+<td>World Geodetic System: <a class="reference external" href="http://spatialreference.org/ref/epsg/4326/">GPS (WGS84)</a>.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes Documentation</p>
+<dl class="attribute">
+<dt id="pycraf.geospatial.EPSG.ETRS89">
+<code class="descname">ETRS89</code><em class="property"> = 3035</em><a class="headerlink" href="#pycraf.geospatial.EPSG.ETRS89" title="Permalink to this definition">¶</a></dt>
+<dd><p>European Terrestrial Reference System:
+<a class="reference external" href="http://spatialreference.org/ref/epsg/etrs89-etrs-laea/">ETRS89 (GRS80)</a>.
+Single CRS for all Europe.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pycraf.geospatial.EPSG.ITRF00">
+<code class="descname">ITRF00</code><em class="property"> = 4919</em><a class="headerlink" href="#pycraf.geospatial.EPSG.ITRF00" title="Permalink to this definition">¶</a></dt>
+<dd><p>International Terrestrial Reference Frame, Datum 2000:
+<a class="reference external" href="http://spatialreference.org/ref/epsg/4919/">ITRF2000 (GRS80)</a>.
+Geocentric system.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pycraf.geospatial.EPSG.ITRF05">
+<code class="descname">ITRF05</code><em class="property"> = 4896</em><a class="headerlink" href="#pycraf.geospatial.EPSG.ITRF05" title="Permalink to this definition">¶</a></dt>
+<dd><p>International Terrestrial Reference Frame, Datum 2005:
+<a class="reference external" href="http://spatialreference.org/ref/epsg/4896/">ITRF2005 (GRS80)</a>.
+Geocentric system.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pycraf.geospatial.EPSG.ITRF08">
+<code class="descname">ITRF08</code><em class="property"> = 5332</em><a class="headerlink" href="#pycraf.geospatial.EPSG.ITRF08" title="Permalink to this definition">¶</a></dt>
+<dd><p>International Terrestrial Reference Frame, Datum 2008:
+<a class="reference external" href="https://epsg.io/5332">ITRF2008 (GRS80)</a>.
+Geocentric system.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pycraf.geospatial.EPSG.WEB_MERC">
+<code class="descname">WEB_MERC</code><em class="property"> = 3857</em><a class="headerlink" href="#pycraf.geospatial.EPSG.WEB_MERC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variant of Mercator projection; de facto standard for Web mapping applications:
+<a class="reference external" href="http://spatialreference.org/ref/sr-org/7483/">Web Mercator (WGS84)</a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pycraf.geospatial.EPSG.WGS84">
+<code class="descname">WGS84</code><em class="property"> = 4326</em><a class="headerlink" href="#pycraf.geospatial.EPSG.WGS84" title="Permalink to this definition">¶</a></dt>
+<dd><p>World Geodetic System:
+<a class="reference external" href="http://spatialreference.org/ref/epsg/4326/">GPS (WGS84)</a>.
+(Simply the geographical longitude and latitude.)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">EPSG</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.3/docs/api/pycraf.geospatial.EPSG.rst">Edit This Page on Github</a> &nbsp;
+    <a href="../_sources/api/pycraf.geospatial.EPSG.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 09 Aug 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

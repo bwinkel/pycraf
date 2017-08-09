@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>fl_G_max_from_size &#8212; pycraf v0.25.2</title>
+    <title>fl_G_max_from_size &#8212; pycraf v0.25.3</title>
     
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.25.2',
+        VERSION:     '0.25.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -70,7 +70,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.2</a>
+	<a href="../index.html">pycraf v0.25.3</a>
 	 &#187;
       </li>
       <li><a href="../antenna/index.html" accesskey="U">Antenna patterns (<code class="docutils literal"><span class="pre">pycraf.antenna</span></code>)</a> &#187;</li>
@@ -89,23 +89,23 @@
 <h1>fl_G_max_from_size<a class="headerlink" href="#fl-g-max-from-size" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.antenna.fl_G_max_from_size">
-<code class="descclassname">pycraf.antenna.</code><code class="descname">fl_G_max_from_size</code><span class="sig-paren">(</span><em>diameter</em>, <em>wavelength</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/antenna/fixedlink.html#fl_G_max_from_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.antenna.fl_G_max_from_size" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.antenna.</code><code class="descname">fl_G_max_from_size</code><span class="sig-paren">(</span><em>diameter</em>, <em>wavelength</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/antenna/fixedlink.html#fl_G_max_from_size"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.3/pycraf/antenna/fixedlink.py#L264" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.antenna.fl_G_max_from_size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimate maximum gain from antenna diameter after <a class="reference external" href="https://www.itu.int/rec/R-REC-F.699-7-200604-I/en">ITU-R Rec F.699</a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>diameter</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>diameter</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Antenna diameter [m]</p>
 </div></blockquote>
-<p><strong>wavelength</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>wavelength</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Observing wavelength [m]</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>G_max</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>G_max</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote class="last">
 <div><p>Antenna maximum gain [dBi]</p>
 </div></blockquote>
@@ -137,13 +137,14 @@ explanation and applicability of this model.</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
+    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.3/docs/api/pycraf.antenna.fl_G_max_from_size.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.antenna.fl_G_max_from_size.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 30 Jul 2017. <br/>
+    Last built 09 Aug 2017. <br/>
   </p>
 </footer>
   </body>

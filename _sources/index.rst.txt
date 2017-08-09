@@ -44,6 +44,8 @@ Available modules
    geospatial/index
    satellite/index
    geometry/index
+   mc/index
+   utils/index
 
 .. automodapi:: pycraf
     :no-heading:
@@ -64,7 +66,7 @@ Project details
 Acknowledgments
 ***************
 
-This code is makes use of the excellent work provided by the
+This code makes use of the excellent work provided by the
 `Astropy <http://www.astropy.org/>`__ community. pycraf uses the Astropy package and also the
 `Astropy Package Template <https://github.com/astropy/package-template>`__
 for the packaging.

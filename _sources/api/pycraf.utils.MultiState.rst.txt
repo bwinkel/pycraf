@@ -1,0 +1,19 @@
+MultiState
+==========
+
+.. currentmodule:: pycraf.utils
+
+.. autoclass:: MultiState
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~MultiState.set
+      ~MultiState.validate
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: set
+   .. automethod:: validate

@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pycraf.utils.multistate &#8212; pycraf v0.25.3</title>
+    
+    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.25.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../../../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../../../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../../../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../../../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li>
+	<a href="../../../index.html">pycraf v0.25.3</a>
+	 &#187;
+      </li>
+      <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+      
+       
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pycraf.utils.multistate</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MultiState&#39;</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">_MultiMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s1">&#39;_attributes&#39;</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s1">&#39;&quot;_attributes&quot; must be a tuple!&#39;</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;set&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s1">&#39;_attributes&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s1">&#39;Option &quot;set&quot; not in list of allowed attributes!&#39;</span>
+                <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s1">&#39;_attributes&#39;</span><span class="p">]:</span>
+
+            <span class="k">if</span> <span class="n">attr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s1">&#39;Must set default value for option &quot;</span><span class="si">{}</span><span class="s1">&quot; during subclass &#39;</span>
+                    <span class="s1">&#39;creation!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span>
+                    <span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__setattr__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="s1">&#39;Setting attributes directy is not allowed. Use &quot;set&quot; method!&#39;</span>
+            <span class="p">)</span>
+
+
+<div class="viewcode-block" id="MultiState"><a class="viewcode-back" href="../../../api/pycraf.utils.MultiState.html#pycraf.utils.MultiState">[docs]</a><span class="k">class</span> <span class="nc">MultiState</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">_MultiMeta</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Multi state subclasses are used to manage global items.</span>
+
+<span class="sd">    `MultiState` is a so-called Singleton, which means that no instances</span>
+<span class="sd">    can be created. This way, it is guaranteed that only one `MultiState`</span>
+<span class="sd">    entity exists. Thus it offers the possibilty to handle a &quot;global&quot;</span>
+<span class="sd">    state, because from anywhere in the code, one could query the</span>
+<span class="sd">    current state and react to it. One usecase would be to</span>
+<span class="sd">    temporarily allow downloading of files, otherwise being forbidden.</span>
+
+<span class="sd">    The `MultiState` class is not useful on its own, but you have to</span>
+<span class="sd">    subclass it::</span>
+
+<span class="sd">        &gt;&gt;&gt; from pycraf.utils import MultiState</span>
+<span class="sd">        &gt;&gt;&gt; class MyState(MultiState):</span>
+<span class="sd">        ...</span>
+<span class="sd">        ...     # define list of allowed attributes</span>
+<span class="sd">        ...     _attributes = (&#39;foo&#39;, &#39;bar&#39;)</span>
+<span class="sd">        ...</span>
+<span class="sd">        ...     # set default values</span>
+<span class="sd">        ...     foo = 1</span>
+<span class="sd">        ...     bar = &quot;guido&quot;</span>
+
+<span class="sd">    It is mandatory to provide a tuple of allowed attributes and to</span>
+<span class="sd">    create these instance attributes and assign default values.</span>
+<span class="sd">    During class creation, this will be validated, for convenience.</span>
+
+<span class="sd">    After defining the state class, one can do the following::</span>
+
+<span class="sd">        &gt;&gt;&gt; MyState.foo</span>
+<span class="sd">        1</span>
+<span class="sd">        &gt;&gt;&gt; MyState.set(foo=2)</span>
+<span class="sd">        &lt;MultiState MyState&gt;</span>
+<span class="sd">        &gt;&gt;&gt; MyState.foo</span>
+<span class="sd">        2</span>
+
+<span class="sd">    The `set` method returns a context manager,::</span>
+
+<span class="sd">        &gt;&gt;&gt; with MyState.set(foo=&quot;dave&quot;, bar=10):</span>
+<span class="sd">        ...     print(MyState.foo, MyState.bar)</span>
+<span class="sd">        dave 10</span>
+
+<span class="sd">        &gt;&gt;&gt; print(MyState.foo, MyState.bar)</span>
+<span class="sd">        2 guido</span>
+
+<span class="sd">    which makes it possible to temporarily change the state object and</span>
+<span class="sd">    go back to the original value, once the `with` scope has ended.</span>
+
+<span class="sd">    Note, that one cannot set the attributes directly (to ensure</span>
+<span class="sd">    that the validation method is always run)::</span>
+
+<span class="sd">        &gt;&gt;&gt; MyState.foo = 0</span>
+<span class="sd">        Traceback (most recent call last):</span>
+<span class="sd">        ...</span>
+<span class="sd">        RuntimeError: Setting attributes directy is not allowed. Use &quot;set&quot; method!</span>
+
+<span class="sd">    Subclasses will generally override `validate` to convert from any</span>
+<span class="sd">    of the acceptable inputs (such as strings) to the appropriate</span>
+<span class="sd">    internal objects::</span>
+
+<span class="sd">        class MyState(MultiState):</span>
+
+<span class="sd">            # define list of allowed attributes</span>
+<span class="sd">            _attributes = (&#39;foo&#39;, &#39;bar&#39;)</span>
+
+<span class="sd">            # set default values</span>
+<span class="sd">            foo = 1</span>
+<span class="sd">            bar = &quot;guido&quot;</span>
+
+<span class="sd">            @classmethod</span>
+<span class="sd">            def validate(cls, **kwargs):</span>
+<span class="sd">                assert isinstance(kwargs[&#39;foo&#39;], int)</span>
+<span class="sd">                # etc.</span>
+<span class="sd">                return kwargs</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This class was adapted from the `~astropy.utils.state.ScienceState` class.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">_attributes</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;This class is a singleton.  Do not instantiate.&#39;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="MultiState.set"><a class="viewcode-back" href="../../../api/pycraf.utils.MultiState.html#pycraf.utils.MultiState.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the current science state value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_attributes</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s1">&#39;Option &quot;</span><span class="si">{}</span><span class="s1">&quot; not in list of allowed attributes!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                    <span class="p">)</span>
+
+        <span class="k">class</span> <span class="nc">_Context</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="n">parent</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_values</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+
+            <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">pass</span>
+
+            <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span>
+                        <span class="p">)</span>
+
+            <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;&lt;MultiState </span><span class="si">{0}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+
+        <span class="n">ctx</span> <span class="o">=</span> <span class="n">_Context</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_attributes</span><span class="p">)</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ctx</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="MultiState.validate"><a class="viewcode-back" href="../../../api/pycraf.utils.MultiState.html#pycraf.utils.MultiState.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Validate the keyword arguments and return the (converted) kwargs</span>
+<span class="sd">        dictionary.</span>
+
+<span class="sd">        You should override this method if you want to enable validation</span>
+<span class="sd">        of your attributes.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        One doesn&#39;t need to validate the following things, as it is already</span>
+<span class="sd">        take care of by the `MultiState` class:</span>
+
+<span class="sd">        - Check that each argument is assigned with a default.</span>
+<span class="sd">        - Check that the kwargs keys are in _attributes tuple.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="n">kwargs</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right"> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 09 Aug 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

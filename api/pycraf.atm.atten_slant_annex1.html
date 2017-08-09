@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>atten_slant_annex1 &#8212; pycraf v0.25.2</title>
+    <title>atten_slant_annex1 &#8212; pycraf v0.25.3</title>
     
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.25.2',
+        VERSION:     '0.25.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -70,7 +70,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.2</a>
+	<a href="../index.html">pycraf v0.25.3</a>
 	 &#187;
       </li>
       <li><a href="../atm/index.html" accesskey="U">Atmospheric models (<code class="docutils literal"><span class="pre">pycraf.atm</span></code>)</a> &#187;</li>
@@ -89,7 +89,7 @@
 <h1>atten_slant_annex1<a class="headerlink" href="#atten-slant-annex1" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.atm.atten_slant_annex1">
-<code class="descclassname">pycraf.atm.</code><code class="descname">atten_slant_annex1</code><span class="sig-paren">(</span><em>freq_grid</em>, <em>elevation</em>, <em>obs_alt</em>, <em>profile_func</em>, <em>t_bg=&lt;Quantity 2.73 K&gt;</em>, <em>max_path_length=&lt;Quantity 1000.0 km&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#atten_slant_annex1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycraf.atm.atten_slant_annex1" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.atm.</code><code class="descname">atten_slant_annex1</code><span class="sig-paren">(</span><em>freq_grid</em>, <em>elevation</em>, <em>obs_alt</em>, <em>profile_func</em>, <em>t_bg=&lt;Quantity 2.73 K&gt;</em>, <em>max_path_length=&lt;Quantity 1000.0 km&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#atten_slant_annex1"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.3/pycraf/atm/atm.py#L1404" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.atten_slant_annex1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Path attenuation for a slant path through full atmosphere according to
 <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>
 Eq (17-20).</p>
@@ -97,15 +97,15 @@ Eq (17-20).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>freq_grid</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>freq_grid</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Frequencies at which to calculate line-width shapes [GHz]</p>
 </div></blockquote>
-<p><strong>elev</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, scalar</p>
+<p><strong>elev</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, scalar</p>
 <blockquote>
 <div><p>(Apparent) elevation of source as seen from observer [deg]</p>
 </div></blockquote>
-<p><strong>obs_alt</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, scalar</p>
+<p><strong>obs_alt</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, scalar</p>
 <blockquote>
 <div><p>Height of observer above sea-level [m]</p>
 </div></blockquote>
@@ -114,7 +114,7 @@ Eq (17-20).</p>
 <div><p>A height profile function having the same signature as
 <a class="reference internal" href="pycraf.atm.profile_standard.html#pycraf.atm.profile_standard" title="pycraf.atm.profile_standard"><code class="xref py py-obj docutils literal"><span class="pre">profile_standard</span></code></a></p>
 </div></blockquote>
-<p><strong>t_bg</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, scalar, optional</p>
+<p><strong>t_bg</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, scalar, optional</p>
 <blockquote>
 <div><p>Background temperature, i.e. temperature just after the outermost
 layer (default: 2.73 K)</p>
@@ -122,23 +122,23 @@ layer (default: 2.73 K)</p>
 temperature of the CMB (if Earth-Space path), but at lower
 frequencies, Galactic foreground contribution might play a role.</p>
 </div></blockquote>
-<p><strong>max_path_length</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, scalar</p>
+<p><strong>max_path_length</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, scalar</p>
 <blockquote>
 <div><p>Maximal length of path before stopping iteration [km]
 (default: 1000 km; useful for terrestrial paths)</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>total_atten</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>total_atten</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Total attenuation along path [dB]</p>
 </div></blockquote>
-<p><strong>Refraction</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>Refraction</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Offset with respect to a hypothetical straight path, i.e., the
 correction between real and apparent source elevation [deg]</p>
 </div></blockquote>
-<p><strong>t_ebb (K)</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>t_ebb (K)</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote class="last">
 <div><p>Equivalent black body temperature of the atmosphere (accounting
 for any outside contribution, e.g., from CMB) [K]</p>
@@ -174,13 +174,14 @@ dummy values for the rest.</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
+    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.3/docs/api/pycraf.atm.atten_slant_annex1.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.atm.atten_slant_annex1.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 30 Jul 2017. <br/>
+    Last built 09 Aug 2017. <br/>
   </p>
 </footer>
   </body>
