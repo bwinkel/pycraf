@@ -1,3 +1,6 @@
+0.25.4 (unreleased)
+====================
+
 0.25.3 (2017-08-09)
 ====================
 
@@ -9,15 +12,16 @@ pycraf.geospatial
 - This sub-package was heavily re-factored. One can now work with EPSG
   or ESRI codes (see docs) and there is a factory to produce arbitrary
   transforms, which come with correct docstrings and quantity/range
-  checker (i.e, proper unit handling). Also, we finally made ITRF work.
+  checker (i.e, proper unit handling). Also, we finally made ITRF
+  work. [#6892]
 
 Bugfixes
 --------
 - Increase minimal numpy version to 1.11 to avoid build conflicts with
   MacOS and Windows wheels. The wheels are now built with this minimal
   numpy version (1.11) rather than the latest version. Users of wheels
-  have to have the same numpy version as the one with which pycraf wheels
-  were built.
+  have to have at least the same numpy version as the one with which
+  pycraf wheels were built. [#2139]
 
 
 0.25.2 (2017-07-30)
