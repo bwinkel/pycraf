@@ -58,6 +58,8 @@ latest/_modules/pycraf/antenna/fixedlink.html
 latest/_modules/pycraf/antenna/imt.html
 latest/_modules/pycraf/antenna/ras.html
 latest/_modules/pycraf/atm/atm.html
+latest/_modules/pycraf/atm/atm_helper.html
+latest/_modules/pycraf/atm/profiles.html
 latest/_modules/pycraf/conversions/conversions.html
 latest/_modules/pycraf/geometry/geometry.html
 latest/_modules/pycraf/geospatial/geospatial.html

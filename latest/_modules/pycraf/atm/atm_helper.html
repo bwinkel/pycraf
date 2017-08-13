@@ -1,0 +1,414 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pycraf.atm.atm_helper &#8212; pycraf v0.25.4.dev50</title>
+    
+    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.25.4.dev50',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../../../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../../../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../../../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../../../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li>
+	<a href="../../../index.html">pycraf v0.25.4.dev50</a>
+	 &#187;
+      </li>
+      <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+      
+       
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pycraf.atm.atm_helper</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">astropy.utils.data</span> <span class="k">import</span> <span class="n">get_pkg_data_filename</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;RESONANCES_OXYGEN&#39;</span><span class="p">,</span> <span class="s1">&#39;RESONANCES_WATER&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;refractive_index&#39;</span><span class="p">,</span> <span class="s1">&#39;saturation_water_pressure&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;pressure_water_from_humidity&#39;</span><span class="p">,</span> <span class="s1">&#39;humidity_from_pressure_water&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;pressure_water_from_rho_water&#39;</span><span class="p">,</span> <span class="s1">&#39;rho_water_from_pressure_water&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;opacity_from_atten&#39;</span><span class="p">,</span> <span class="s1">&#39;atten_from_opacity&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+
+<span class="n">fname_oxygen</span> <span class="o">=</span> <span class="n">get_pkg_data_filename</span><span class="p">(</span>
+    <span class="s1">&#39;../itudata/p.676-10/R-REC-P.676-10-201309_table1.csv&#39;</span>
+    <span class="p">)</span>
+<span class="n">fname_water</span> <span class="o">=</span> <span class="n">get_pkg_data_filename</span><span class="p">(</span>
+    <span class="s1">&#39;../itudata/p.676-10/R-REC-P.676-10-201309_table2.csv&#39;</span>
+    <span class="p">)</span>
+
+<span class="n">oxygen_dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([</span>
+    <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;f0&#39;</span><span class="p">,</span> <span class="s1">&#39;a1&#39;</span><span class="p">,</span> <span class="s1">&#39;a2&#39;</span><span class="p">,</span> <span class="s1">&#39;a3&#39;</span><span class="p">,</span> <span class="s1">&#39;a4&#39;</span><span class="p">,</span> <span class="s1">&#39;a5&#39;</span><span class="p">,</span> <span class="s1">&#39;a6&#39;</span><span class="p">]</span>
+    <span class="p">])</span>
+<span class="n">water_dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([</span>
+    <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;f0&#39;</span><span class="p">,</span> <span class="s1">&#39;b1&#39;</span><span class="p">,</span> <span class="s1">&#39;b2&#39;</span><span class="p">,</span> <span class="s1">&#39;b3&#39;</span><span class="p">,</span> <span class="s1">&#39;b4&#39;</span><span class="p">,</span> <span class="s1">&#39;b5&#39;</span><span class="p">,</span> <span class="s1">&#39;b6&#39;</span><span class="p">]</span>
+    <span class="p">])</span>
+<span class="n">RESONANCES_OXYGEN</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span>
+    <span class="n">fname_oxygen</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">oxygen_dtype</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;;&#39;</span>
+    <span class="p">)</span>
+<span class="n">RESONANCES_WATER</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span>
+    <span class="n">fname_water</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">water_dtype</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;;&#39;</span>
+    <span class="p">)</span>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">atten</span><span class="o">=</span><span class="p">(</span><span class="mf">1.000000000001</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span> <span class="n">elev</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="opacity_from_atten"><a class="viewcode-back" href="../../../api/pycraf.atm.opacity_from_atten.html#pycraf.atm.opacity_from_atten">[docs]</a><span class="k">def</span> <span class="nf">opacity_from_atten</span><span class="p">(</span><span class="n">atten</span><span class="p">,</span> <span class="n">elev</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Atmospheric opacity derived from attenuation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    atten : `~astropy.units.Quantity`</span>
+<span class="sd">        Atmospheric attenuation [dB or dimless]</span>
+<span class="sd">    elev : `~astropy.units.Quantity`</span>
+<span class="sd">        Elevation [deg]</span>
+<span class="sd">        This is used to calculate the so-called Airmass, AM = 1 / sin(elev)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tau : `~astropy.units.Quantity`</span>
+<span class="sd">        Atmospheric opacity [dimless aka neper]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">AM_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">elev</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">AM_inv</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">atten</span><span class="p">)</span></div>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">tau</span><span class="o">=</span><span class="p">(</span><span class="mf">0.000000000001</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span> <span class="n">elev</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="atten_from_opacity"><a class="viewcode-back" href="../../../api/pycraf.atm.atten_from_opacity.html#pycraf.atm.atten_from_opacity">[docs]</a><span class="k">def</span> <span class="nf">atten_from_opacity</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">elev</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Atmospheric attenuation derived from opacity.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tau : `~astropy.units.Quantity`</span>
+<span class="sd">        Atmospheric opacity [dimless aka neper]</span>
+<span class="sd">    elev : `~astropy.units.Quantity`</span>
+<span class="sd">        Elevation [deg]</span>
+
+<span class="sd">        This is used to calculate the so-called Airmass, AM = 1 / sin(elev)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    atten : `~astropy.units.Quantity`</span>
+<span class="sd">        Atmospheric attenuation [dB or dimless]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">AM</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">elev</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tau</span> <span class="o">*</span> <span class="n">AM</span><span class="p">))</span></div>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">temp</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
+    <span class="n">press</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
+    <span class="n">press_w</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="refractive_index"><a class="viewcode-back" href="../../../api/pycraf.atm.refractive_index.html#pycraf.atm.refractive_index">[docs]</a><span class="k">def</span> <span class="nf">refractive_index</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">press_w</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Refractive index according to `ITU-R P.453-12</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.453-12-201609-I/en&gt;`_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    temp : `~astropy.units.Quantity`</span>
+<span class="sd">        Air temperature [K]</span>
+<span class="sd">    press : `~astropy.units.Quantity`</span>
+<span class="sd">        Total air pressure [hPa]</span>
+<span class="sd">    press_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor partial pressure [hPa]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    n_index : `~astropy.units.Quantity`</span>
+<span class="sd">        Refractive index [dimless]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="mi">1</span> <span class="o">+</span> <span class="mf">1e-6</span> <span class="o">/</span> <span class="n">temp</span> <span class="o">*</span> <span class="p">(</span>
+            <span class="mf">77.6</span> <span class="o">*</span> <span class="n">press</span> <span class="o">-</span> <span class="mf">5.6</span> <span class="o">*</span> <span class="n">press_w</span> <span class="o">+</span>
+            <span class="mf">3.75e5</span> <span class="o">*</span> <span class="n">press_w</span> <span class="o">/</span> <span class="n">temp</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">temp</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
+    <span class="n">press</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">hPa</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="saturation_water_pressure"><a class="viewcode-back" href="../../../api/pycraf.atm.saturation_water_pressure.html#pycraf.atm.saturation_water_pressure">[docs]</a><span class="k">def</span> <span class="nf">saturation_water_pressure</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="s1">&#39;water&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Saturation water pressure according to `ITU-R P.453-12</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.453-12-201609-I/en&gt;`_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    temp : `~astropy.units.Quantity`</span>
+<span class="sd">        Air temperature [K]</span>
+<span class="sd">    press : `~astropy.units.Quantity`</span>
+<span class="sd">        Total air pressure [hPa]</span>
+<span class="sd">    wet_type : str, optional</span>
+<span class="sd">        Type of wet material: &#39;water&#39;, &#39;ice&#39;</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    press_sat : `~astropy.units.Quantity`</span>
+<span class="sd">        Saturation water vapor pressure, e_s [hPa]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_saturation_water_pressure</span><span class="p">(</span>
+        <span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="n">wet_type</span>
+        <span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_saturation_water_pressure</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">wet_type</span><span class="p">):</span>
+    <span class="c1"># temp_C is temperature in Celcius</span>
+    <span class="n">temp_C</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">-</span> <span class="mf">273.15</span>
+
+    <span class="k">assert</span> <span class="n">wet_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;water&#39;</span><span class="p">,</span> <span class="s1">&#39;ice&#39;</span><span class="p">]</span>
+
+    <span class="n">EF</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mf">1.</span> <span class="o">+</span> <span class="mf">1.e-4</span> <span class="o">*</span> <span class="p">(</span><span class="mf">7.2</span> <span class="o">+</span> <span class="n">press</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.0320</span> <span class="o">+</span> <span class="mf">5.9e-6</span> <span class="o">*</span> <span class="n">temp_C</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">wet_type</span> <span class="o">==</span> <span class="s1">&#39;water&#39;</span> <span class="k">else</span>
+        <span class="mf">1.</span> <span class="o">+</span> <span class="mf">1.e-4</span> <span class="o">*</span> <span class="p">(</span><span class="mf">2.2</span> <span class="o">+</span> <span class="n">press</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.0382</span> <span class="o">+</span> <span class="mf">6.4e-6</span> <span class="o">*</span> <span class="n">temp_C</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="p">)</span>
+
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="mf">6.1121</span><span class="p">,</span> <span class="mf">18.678</span><span class="p">,</span> <span class="mf">257.14</span><span class="p">,</span> <span class="mf">234.5</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">wet_type</span> <span class="o">==</span> <span class="s1">&#39;water&#39;</span> <span class="k">else</span>
+        <span class="p">(</span><span class="mf">6.1115</span><span class="p">,</span> <span class="mf">23.036</span><span class="p">,</span> <span class="mf">279.82</span><span class="p">,</span> <span class="mf">333.7</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="n">e_s</span> <span class="o">=</span> <span class="n">EF</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">b</span> <span class="o">-</span> <span class="n">temp_C</span> <span class="o">/</span> <span class="n">d</span><span class="p">)</span> <span class="o">*</span> <span class="n">temp_C</span> <span class="o">/</span> <span class="p">(</span><span class="n">c</span> <span class="o">+</span> <span class="n">temp_C</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">e_s</span>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">temp</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
+    <span class="n">press</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
+    <span class="n">humidity</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">hPa</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="pressure_water_from_humidity"><a class="viewcode-back" href="../../../api/pycraf.atm.pressure_water_from_humidity.html#pycraf.atm.pressure_water_from_humidity">[docs]</a><span class="k">def</span> <span class="nf">pressure_water_from_humidity</span><span class="p">(</span>
+        <span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">humidity</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="s1">&#39;water&#39;</span>
+        <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Water pressure according to `ITU-R P.453-12</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.453-12-201609-I/en&gt;`_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    temp : `~astropy.units.Quantity`</span>
+<span class="sd">        Air temperature [K]</span>
+<span class="sd">    press : `~astropy.units.Quantity`</span>
+<span class="sd">        Total air pressure [hPa]</span>
+<span class="sd">    humidity : `~astropy.units.Quantity`</span>
+<span class="sd">        Relative humidity [%]</span>
+<span class="sd">    wet_type : str, optional</span>
+<span class="sd">        Type of wet material: &#39;water&#39;, &#39;ice&#39;</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    press_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor partial pressure [hPa]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">e_s</span> <span class="o">=</span> <span class="n">_saturation_water_pressure</span><span class="p">(</span>
+        <span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="n">wet_type</span>
+        <span class="p">)</span>
+
+    <span class="n">press_w</span> <span class="o">=</span> <span class="n">humidity</span> <span class="o">/</span> <span class="mf">100.</span> <span class="o">*</span> <span class="n">e_s</span>
+
+    <span class="k">return</span> <span class="n">press_w</span></div>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">temp</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
+    <span class="n">press</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
+    <span class="n">press_w</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">percent</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="humidity_from_pressure_water"><a class="viewcode-back" href="../../../api/pycraf.atm.humidity_from_pressure_water.html#pycraf.atm.humidity_from_pressure_water">[docs]</a><span class="k">def</span> <span class="nf">humidity_from_pressure_water</span><span class="p">(</span>
+        <span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">press_w</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="s1">&#39;water&#39;</span>
+        <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Relative humidity according to `ITU-R P.453-12</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.453-12-201609-I/en&gt;`_.</span>
+
+<span class="sd">    wet_type - &#39;water&#39; or &#39;ice&#39;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    temp : `~astropy.units.Quantity`</span>
+<span class="sd">        Air temperature [K]</span>
+<span class="sd">    press : `~astropy.units.Quantity`</span>
+<span class="sd">        Total air pressure [hPa]</span>
+<span class="sd">    press_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor partial pressure [hPa]</span>
+<span class="sd">    wet_type : str, optional</span>
+<span class="sd">        Type of wet material: &#39;water&#39;, &#39;ice&#39;</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    humidity : `~astropy.units.Quantity`</span>
+<span class="sd">        Relative humidity [%]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">e_s</span> <span class="o">=</span> <span class="n">_saturation_water_pressure</span><span class="p">(</span>
+        <span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="n">wet_type</span>
+        <span class="p">)</span>
+
+    <span class="n">humidity</span> <span class="o">=</span> <span class="mf">100.</span> <span class="o">*</span> <span class="n">press_w</span> <span class="o">/</span> <span class="n">e_s</span>
+
+    <span class="k">return</span> <span class="n">humidity</span></div>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">temp</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
+    <span class="n">rho_w</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">hPa</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="pressure_water_from_rho_water"><a class="viewcode-back" href="../../../api/pycraf.atm.pressure_water_from_rho_water.html#pycraf.atm.pressure_water_from_rho_water">[docs]</a><span class="k">def</span> <span class="nf">pressure_water_from_rho_water</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">rho_w</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Water pressure according to `ITU-R P.453-12</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.453-12-201609-I/en&gt;`_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    temp : `~astropy.units.Quantity`</span>
+<span class="sd">        Air temperature [K]</span>
+<span class="sd">    rho_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor density [g / m**3]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    press_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor partial pressure [hPa]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">press_w</span> <span class="o">=</span> <span class="n">rho_w</span> <span class="o">*</span> <span class="n">temp</span> <span class="o">/</span> <span class="mf">216.7</span>
+
+    <span class="k">return</span> <span class="n">press_w</span></div>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">temp</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
+    <span class="n">press_w</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="rho_water_from_pressure_water"><a class="viewcode-back" href="../../../api/pycraf.atm.rho_water_from_pressure_water.html#pycraf.atm.rho_water_from_pressure_water">[docs]</a><span class="k">def</span> <span class="nf">rho_water_from_pressure_water</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press_w</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Water density according to `ITU-R P.453-12</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.453-12-201609-I/en&gt;`_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    temp : `~astropy.units.Quantity`</span>
+<span class="sd">        Air temperature [K]</span>
+<span class="sd">    press_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor partial pressure [hPa]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    rho_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor density [g / m**3]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">rho_w</span> <span class="o">=</span> <span class="n">press_w</span> <span class="o">*</span> <span class="mf">216.7</span> <span class="o">/</span> <span class="n">temp</span>
+
+    <span class="k">return</span> <span class="n">rho_w</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right"> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 13 Aug 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

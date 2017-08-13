@@ -1,0 +1,675 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pycraf.atm.profiles &#8212; pycraf v0.25.4.dev50</title>
+    
+    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.25.4.dev50',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../../../_static/copybutton.js"></script>
+
+
+  </head>
+  <body role="document">
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../../../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../../../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../../../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li>
+	<a href="../../../index.html">pycraf v0.25.4.dev50</a>
+	 &#187;
+      </li>
+      <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+      
+       
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pycraf.atm.profiles</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">.atm_helper</span> <span class="k">import</span> <span class="n">refractive_index</span><span class="p">,</span> <span class="n">humidity_from_pressure_water</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;profile_standard&#39;</span><span class="p">,</span> <span class="s1">&#39;profile_lowlat&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;profile_midlat_summer&#39;</span><span class="p">,</span> <span class="s1">&#39;profile_midlat_winter&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;profile_highlat_summer&#39;</span><span class="p">,</span> <span class="s1">&#39;profile_highlat_winter&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">height</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">84.99999999</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="profile_standard"><a class="viewcode-back" href="../../../api/pycraf.atm.profile_standard.html#pycraf.atm.profile_standard">[docs]</a><span class="k">def</span> <span class="nf">profile_standard</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Standard height profiles according to `ITU-R P.835-5</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.835-5-201202-I/en&gt;`_, Annex 1.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    height : `~astropy.units.Quantity`</span>
+<span class="sd">        Height above ground [km]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    temp : `~astropy.units.Quantity`</span>
+<span class="sd">        Temperature [K]</span>
+<span class="sd">    press : `~astropy.units.Quantity`</span>
+<span class="sd">        Total pressure [hPa]</span>
+<span class="sd">    rho_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor density [g / m**3]</span>
+<span class="sd">    press_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor partial pressure [hPa]</span>
+<span class="sd">    n_index : `~astropy.units.Quantity`</span>
+<span class="sd">        Refractive index [dimless]</span>
+<span class="sd">    humidity_water : `~astropy.units.Quantity`</span>
+<span class="sd">        Relative humidity if water vapor was in form of liquid water [%]</span>
+<span class="sd">    humidity_ice : `~astropy.units.Quantity`</span>
+<span class="sd">        Relative humidity if water vapor was in form of ice [%]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    For convenience, derived quantities like water density/pressure</span>
+<span class="sd">    and refraction indices are also returned.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># height = np.asarray(height)  # this is not sufficient for masking :-(</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
+    <span class="n">_height</span> <span class="o">=</span> <span class="n">height</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+    <span class="c1"># to make this work with numpy arrays</span>
+    <span class="c1"># lets first find the correct index for every height</span>
+
+    <span class="n">layer_heights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">11.</span><span class="p">,</span> <span class="mf">20.</span><span class="p">,</span> <span class="mf">32.</span><span class="p">,</span> <span class="mf">47.</span><span class="p">,</span> <span class="mf">51.</span><span class="p">,</span> <span class="mf">71.</span><span class="p">,</span> <span class="mf">85.</span><span class="p">])</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">_height</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">lh</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layer_heights</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">indices</span><span class="p">[</span><span class="n">_height</span> <span class="o">&gt;</span> <span class="n">lh</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+
+    <span class="n">T0</span> <span class="o">=</span> <span class="mf">288.15</span>  <span class="c1"># K</span>
+    <span class="n">P0</span> <span class="o">=</span> <span class="mf">1013.25</span>  <span class="c1"># hPa</span>
+    <span class="n">rho0</span> <span class="o">=</span> <span class="mf">7.5</span>  <span class="c1"># g / m^3</span>
+    <span class="n">h0</span> <span class="o">=</span> <span class="mf">2.</span>  <span class="c1"># km</span>
+    <span class="n">layer_temp_gradients</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">6.5</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">2.8</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">])</span>
+    <span class="n">layer_start_temperatures</span> <span class="o">=</span> <span class="p">[</span><span class="n">T0</span><span class="p">]</span>
+    <span class="n">layer_start_pressures</span> <span class="o">=</span> <span class="p">[</span><span class="n">P0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer_heights</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+
+        <span class="n">dh</span> <span class="o">=</span> <span class="n">layer_heights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">layer_heights</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">Ti</span> <span class="o">=</span> <span class="n">layer_start_temperatures</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">Li</span> <span class="o">=</span> <span class="n">layer_temp_gradients</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">Pi</span> <span class="o">=</span> <span class="n">layer_start_pressures</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># print(i, Ti, Li, Pi, i - 1 not in [1, 4])</span>
+        <span class="n">layer_start_temperatures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Ti</span> <span class="o">+</span> <span class="n">dh</span> <span class="o">*</span> <span class="n">Li</span><span class="p">)</span>
+        <span class="n">layer_start_pressures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Pi</span> <span class="o">*</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">Ti</span> <span class="o">/</span> <span class="p">(</span><span class="n">Ti</span> <span class="o">+</span> <span class="n">Li</span> <span class="o">*</span> <span class="n">dh</span><span class="p">))</span> <span class="o">**</span> <span class="p">(</span><span class="mf">34.163</span> <span class="o">/</span> <span class="n">Li</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="k">else</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">34.163</span> <span class="o">*</span> <span class="n">dh</span> <span class="o">/</span> <span class="n">Ti</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+    <span class="n">layer_start_temperatures</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">layer_start_temperatures</span><span class="p">)</span>
+    <span class="n">layer_start_pressures</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">layer_start_pressures</span><span class="p">)</span>
+
+    <span class="n">temperatures</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">layer_start_temperatures</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">+</span>
+        <span class="p">(</span><span class="n">_height</span> <span class="o">-</span> <span class="n">layer_heights</span><span class="p">[</span><span class="n">indices</span><span class="p">])</span> <span class="o">*</span> <span class="n">layer_temp_gradients</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="n">pressures</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">temperatures</span><span class="p">)</span>
+
+    <span class="c1"># gradient zero</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+    <span class="n">indm</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">dhm</span> <span class="o">=</span> <span class="p">(</span><span class="n">_height</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">layer_heights</span><span class="p">[</span><span class="n">indm</span><span class="p">])</span>
+    <span class="n">pressures</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">layer_start_pressures</span><span class="p">[</span><span class="n">indm</span><span class="p">]</span> <span class="o">*</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">34.163</span> <span class="o">*</span> <span class="n">dhm</span> <span class="o">/</span> <span class="n">layer_start_temperatures</span><span class="p">[</span><span class="n">indm</span><span class="p">])</span>
+        <span class="p">)</span>
+
+    <span class="c1"># gradient non-zero</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+    <span class="n">indm</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">dhm</span> <span class="o">=</span> <span class="p">(</span><span class="n">_height</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">layer_heights</span><span class="p">[</span><span class="n">indm</span><span class="p">])</span>
+    <span class="n">Lim</span> <span class="o">=</span> <span class="n">layer_temp_gradients</span><span class="p">[</span><span class="n">indm</span><span class="p">]</span>
+    <span class="n">Tim</span> <span class="o">=</span> <span class="n">layer_start_temperatures</span><span class="p">[</span><span class="n">indm</span><span class="p">]</span>
+    <span class="n">pressures</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">layer_start_pressures</span><span class="p">[</span><span class="n">indm</span><span class="p">]</span> <span class="o">*</span>
+        <span class="p">(</span><span class="n">Tim</span> <span class="o">/</span> <span class="p">(</span><span class="n">Tim</span> <span class="o">+</span> <span class="n">Lim</span> <span class="o">*</span> <span class="n">dhm</span><span class="p">))</span> <span class="o">**</span> <span class="p">(</span><span class="mf">34.163</span> <span class="o">/</span> <span class="n">Lim</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="n">rho_water</span> <span class="o">=</span> <span class="n">rho0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">_height</span> <span class="o">/</span> <span class="n">h0</span><span class="p">)</span>
+    <span class="n">pressures_water</span> <span class="o">=</span> <span class="n">rho_water</span> <span class="o">*</span> <span class="n">temperatures</span> <span class="o">/</span> <span class="mf">216.7</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">pressures_water</span> <span class="o">/</span> <span class="n">pressures</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">2.e-6</span>
+    <span class="n">pressures_water</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">pressures</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">*</span> <span class="mf">2.e-6</span>
+    <span class="n">rho_water</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">pressures_water</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">/</span> <span class="n">temperatures</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">*</span> <span class="mf">216.7</span>
+
+    <span class="n">temperatures</span> <span class="o">=</span> <span class="n">apu</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="n">temperatures</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">height</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">)</span>
+    <span class="n">pressures</span> <span class="o">=</span> <span class="n">apu</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="n">pressures</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">height</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">)</span>
+    <span class="n">pressures_water</span> <span class="o">=</span> <span class="n">apu</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span>
+        <span class="n">pressures_water</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">height</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span>
+        <span class="p">)</span>
+    <span class="n">rho_water</span> <span class="o">=</span> <span class="n">apu</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span>
+        <span class="n">rho_water</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">height</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">apu</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span>
+        <span class="p">)</span>
+
+    <span class="n">ref_indices</span> <span class="o">=</span> <span class="n">refractive_index</span><span class="p">(</span><span class="n">temperatures</span><span class="p">,</span> <span class="n">pressures</span><span class="p">,</span> <span class="n">pressures_water</span><span class="p">)</span>
+    <span class="n">humidities_water</span> <span class="o">=</span> <span class="n">humidity_from_pressure_water</span><span class="p">(</span>
+        <span class="n">temperatures</span><span class="p">,</span> <span class="n">pressures</span><span class="p">,</span> <span class="n">pressures_water</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="s1">&#39;water&#39;</span>
+        <span class="p">)</span>
+    <span class="n">humidities_ice</span> <span class="o">=</span> <span class="n">humidity_from_pressure_water</span><span class="p">(</span>
+        <span class="n">temperatures</span><span class="p">,</span> <span class="n">pressures</span><span class="p">,</span> <span class="n">pressures_water</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="s1">&#39;ice&#39;</span>
+        <span class="p">)</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">temperatures</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span>
+        <span class="n">pressures</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span>
+        <span class="n">rho_water</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span>
+        <span class="n">pressures_water</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span>
+        <span class="n">ref_indices</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span>
+        <span class="n">humidities_water</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span>
+        <span class="n">humidities_ice</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span>
+        <span class="p">)</span>
+
+    <span class="c1"># return tuple(v.reshape(height.shape) for v in result)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="nd">@apu</span><span class="o">.</span><span class="n">quantity_input</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_profile_helper</span><span class="p">(</span>
+        <span class="n">height</span><span class="p">,</span>
+        <span class="n">temp_heights</span><span class="p">,</span> <span class="n">temp_funcs</span><span class="p">,</span>
+        <span class="n">press_heights</span><span class="p">,</span> <span class="n">press_funcs</span><span class="p">,</span>
+        <span class="n">rho_heights</span><span class="p">,</span> <span class="n">rho_funcs</span><span class="p">,</span>
+        <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Helper function for specialized profiles.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    height : `~astropy.units.Quantity`</span>
+<span class="sd">        Height above ground [km]</span>
+<span class="sd">    {temp,press,rho}_heights : list of floats</span>
+<span class="sd">        Height steps for which piece-wise functions are defined</span>
+<span class="sd">    {temp,press,rho}_funcs - list of functions</span>
+<span class="sd">        Functions that return the desired quantity for a given height interval</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    temp : `~astropy.units.Quantity`</span>
+<span class="sd">        Temperature [K]</span>
+<span class="sd">    press : `~astropy.units.Quantity`</span>
+<span class="sd">        Total pressure [hPa]</span>
+<span class="sd">    rho_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor density [g / m**3]</span>
+<span class="sd">    press_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor partial pressure [hPa]</span>
+<span class="sd">    n_index : `~astropy.units.Quantity`</span>
+<span class="sd">        Refractive index [dimless]</span>
+<span class="sd">    humidity_water : `~astropy.units.Quantity`</span>
+<span class="sd">        Relative humidity if water vapor was in form of liquid water [%]</span>
+<span class="sd">    humidity_ice : `~astropy.units.Quantity`</span>
+<span class="sd">        Relative humidity if water vapor was in form of ice [%]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">height</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
+    <span class="n">_height</span> <span class="o">=</span> <span class="n">height</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">_height</span> <span class="o">&lt;</span> <span class="n">temp_heights</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="p">(</span>
+        <span class="s1">&#39;profile only defined below </span><span class="si">{}</span><span class="s1"> km height!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">temp_heights</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">_height</span> <span class="o">&gt;=</span> <span class="n">temp_heights</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">(</span>
+        <span class="s1">&#39;profile only defined above </span><span class="si">{}</span><span class="s1"> km height!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">temp_heights</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="p">)</span>
+
+    <span class="n">temperature</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">height</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">pressure</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">height</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">pressure_water</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">height</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">rho_water</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">height</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="n">Pstarts</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">press_heights</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">Pstarts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">press_funcs</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">](</span><span class="n">Pstarts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">press_heights</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+    <span class="c1"># calculate temperature profile</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">temp_heights</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">hmin</span><span class="p">,</span> <span class="n">hmax</span> <span class="o">=</span> <span class="n">temp_heights</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">temp_heights</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">_height</span> <span class="o">&gt;=</span> <span class="n">hmin</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">_height</span> <span class="o">&lt;</span> <span class="n">hmax</span><span class="p">)</span>
+        <span class="n">temperature</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">temp_funcs</span><span class="p">[</span><span class="n">i</span><span class="p">])(</span><span class="n">_height</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+
+    <span class="c1"># calculate pressure profile</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">press_heights</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">hmin</span><span class="p">,</span> <span class="n">hmax</span> <span class="o">=</span> <span class="n">press_heights</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">press_heights</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">_height</span> <span class="o">&gt;=</span> <span class="n">hmin</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">_height</span> <span class="o">&lt;</span> <span class="n">hmax</span><span class="p">)</span>
+        <span class="n">pressure</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">press_funcs</span><span class="p">[</span><span class="n">i</span><span class="p">])(</span><span class="n">Pstarts</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">_height</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+
+    <span class="c1"># calculate rho profile</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rho_heights</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">hmin</span><span class="p">,</span> <span class="n">hmax</span> <span class="o">=</span> <span class="n">rho_heights</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">rho_heights</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">_height</span> <span class="o">&gt;=</span> <span class="n">hmin</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">_height</span> <span class="o">&lt;</span> <span class="n">hmax</span><span class="p">)</span>
+        <span class="n">rho_water</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">rho_funcs</span><span class="p">[</span><span class="n">i</span><span class="p">])(</span><span class="n">_height</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+
+    <span class="c1"># calculate pressure_water profile</span>
+    <span class="n">pressure_water</span> <span class="o">=</span> <span class="n">rho_water</span> <span class="o">*</span> <span class="n">temperature</span> <span class="o">/</span> <span class="mf">216.7</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">pressure_water</span> <span class="o">/</span> <span class="n">pressure</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">2.e-6</span>
+    <span class="n">pressure_water</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">pressure</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">*</span> <span class="mf">2.e-6</span>
+    <span class="n">rho_water</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">pressure_water</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">/</span> <span class="n">temperature</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">*</span> <span class="mf">216.7</span>
+
+    <span class="n">temperature</span> <span class="o">=</span> <span class="n">apu</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="n">temperature</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">height</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">)</span>
+    <span class="n">pressure</span> <span class="o">=</span> <span class="n">apu</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="n">pressure</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">height</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">)</span>
+    <span class="n">pressure_water</span> <span class="o">=</span> <span class="n">apu</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span>
+        <span class="n">pressure_water</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">height</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span>
+        <span class="p">)</span>
+    <span class="n">rho_water</span> <span class="o">=</span> <span class="n">apu</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span>
+        <span class="n">rho_water</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">height</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">apu</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span>
+        <span class="p">)</span>
+
+    <span class="n">ref_index</span> <span class="o">=</span> <span class="n">refractive_index</span><span class="p">(</span><span class="n">temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">pressure_water</span><span class="p">)</span>
+    <span class="n">humidity_water</span> <span class="o">=</span> <span class="n">humidity_from_pressure_water</span><span class="p">(</span>
+        <span class="n">temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">pressure_water</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="s1">&#39;water&#39;</span>
+        <span class="p">)</span>
+    <span class="n">humidity_ice</span> <span class="o">=</span> <span class="n">humidity_from_pressure_water</span><span class="p">(</span>
+        <span class="n">temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">pressure_water</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="s1">&#39;ice&#39;</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">temperature</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span>
+        <span class="n">pressure</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span>
+        <span class="n">rho_water</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span>
+        <span class="n">pressure_water</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span>
+        <span class="n">ref_index</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span>
+        <span class="n">humidity_water</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span>
+        <span class="n">humidity_ice</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span>
+        <span class="p">)</span>
+
+
+<div class="viewcode-block" id="profile_lowlat"><a class="viewcode-back" href="../../../api/pycraf.atm.profile_lowlat.html#pycraf.atm.profile_lowlat">[docs]</a><span class="k">def</span> <span class="nf">profile_lowlat</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Low latitude height profiles according to `ITU-R P.835-5</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.835-5-201202-I/en&gt;`_.</span>
+
+<span class="sd">    Valid for geographic latitudes :math:`\\vert \\phi\\vert &lt; 22^\\circ`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    height : `~astropy.units.Quantity`</span>
+<span class="sd">        Height above ground [km]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    temp : `~astropy.units.Quantity`</span>
+<span class="sd">        Temperature [K]</span>
+<span class="sd">    press : `~astropy.units.Quantity`</span>
+<span class="sd">        Total pressure [hPa]</span>
+<span class="sd">    rho_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor density [g / m**3]</span>
+<span class="sd">    press_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor partial pressure [hPa]</span>
+<span class="sd">    n_index : `~astropy.units.Quantity`</span>
+<span class="sd">        Refractive index [dimless]</span>
+<span class="sd">    humidity_water : `~astropy.units.Quantity`</span>
+<span class="sd">        Relative humidity if water vapor was in form of liquid water [%]</span>
+<span class="sd">    humidity_ice : `~astropy.units.Quantity`</span>
+<span class="sd">        Relative humidity if water vapor was in form of ice [%]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">temp_heights</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">17.</span><span class="p">,</span> <span class="mf">47.</span><span class="p">,</span> <span class="mf">52.</span><span class="p">,</span> <span class="mf">80.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">]</span>
+    <span class="n">temp_funcs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">300.4222</span> <span class="o">-</span> <span class="mf">6.3533</span> <span class="o">*</span> <span class="n">h</span> <span class="o">+</span> <span class="mf">0.005886</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mi">194</span> <span class="o">+</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mf">17.</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2.533</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">270.</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">270.</span> <span class="o">-</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mf">52.</span><span class="p">)</span> <span class="o">*</span> <span class="mf">3.0714</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">184.</span><span class="p">,</span>
+        <span class="p">]</span>
+
+    <span class="n">press_heights</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="mf">72.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">]</span>
+    <span class="n">press_funcs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">Pstart</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="mf">1012.0306</span> <span class="o">-</span> <span class="mf">109.0338</span> <span class="o">*</span> <span class="n">h</span> <span class="o">+</span> <span class="mf">3.6316</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">Pstart</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="n">Pstart</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.147</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mi">10</span><span class="p">)),</span>
+        <span class="k">lambda</span> <span class="n">Pstart</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="n">Pstart</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.165</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mi">72</span><span class="p">)),</span>
+        <span class="p">]</span>
+
+    <span class="n">rho_heights</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">15.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">]</span>
+    <span class="n">rho_funcs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">19.6542</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+            <span class="o">-</span><span class="mf">0.2313</span> <span class="o">*</span> <span class="n">h</span> <span class="o">-</span>
+            <span class="mf">0.1122</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span>
+            <span class="mf">0.01351</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">3</span> <span class="o">-</span>
+            <span class="mf">0.0005923</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">4</span>
+            <span class="p">),</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
+        <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">_profile_helper</span><span class="p">(</span>
+        <span class="n">height</span><span class="p">,</span>
+        <span class="n">temp_heights</span><span class="p">,</span> <span class="n">temp_funcs</span><span class="p">,</span>
+        <span class="n">press_heights</span><span class="p">,</span> <span class="n">press_funcs</span><span class="p">,</span>
+        <span class="n">rho_heights</span><span class="p">,</span> <span class="n">rho_funcs</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="profile_midlat_summer"><a class="viewcode-back" href="../../../api/pycraf.atm.profile_midlat_summer.html#pycraf.atm.profile_midlat_summer">[docs]</a><span class="k">def</span> <span class="nf">profile_midlat_summer</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Mid latitude summer height profiles according to `ITU-R P.835-5</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.835-5-201202-I/en&gt;`_.</span>
+
+<span class="sd">    Valid for geographic latitudes :math:`22^\\circ &lt; \\vert \\phi\\vert &lt; 45^\\circ`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    height : `~astropy.units.Quantity`</span>
+<span class="sd">        Height above ground [km]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    temp : `~astropy.units.Quantity`</span>
+<span class="sd">        Temperature [K]</span>
+<span class="sd">    press : `~astropy.units.Quantity`</span>
+<span class="sd">        Total pressure [hPa]</span>
+<span class="sd">    rho_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor density [g / m**3]</span>
+<span class="sd">    press_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor partial pressure [hPa]</span>
+<span class="sd">    n_index : `~astropy.units.Quantity`</span>
+<span class="sd">        Refractive index [dimless]</span>
+<span class="sd">    humidity_water : `~astropy.units.Quantity`</span>
+<span class="sd">        Relative humidity if water vapor was in form of liquid water [%]</span>
+<span class="sd">    humidity_ice : `~astropy.units.Quantity`</span>
+<span class="sd">        Relative humidity if water vapor was in form of ice [%]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">temp_heights</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">13.</span><span class="p">,</span> <span class="mf">17.</span><span class="p">,</span> <span class="mf">47.</span><span class="p">,</span> <span class="mf">53.</span><span class="p">,</span> <span class="mf">80.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">]</span>
+    <span class="n">temp_funcs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">294.9838</span> <span class="o">-</span> <span class="mf">5.2159</span> <span class="o">*</span> <span class="n">h</span> <span class="o">-</span> <span class="mf">0.07109</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">215.15</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">215.15</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">0.008128</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mf">17.</span><span class="p">)),</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">275.</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">275.</span> <span class="o">+</span> <span class="mf">20.</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">0.06</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mf">53.</span><span class="p">))),</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">175.</span><span class="p">,</span>
+        <span class="p">]</span>
+
+    <span class="n">press_heights</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="mf">72.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">]</span>
+    <span class="n">press_funcs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">Pstart</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="mf">1012.8186</span> <span class="o">-</span> <span class="mf">111.5569</span> <span class="o">*</span> <span class="n">h</span> <span class="o">+</span> <span class="mf">3.8646</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">Pstart</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="n">Pstart</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.147</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mi">10</span><span class="p">)),</span>
+        <span class="k">lambda</span> <span class="n">Pstart</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="n">Pstart</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.165</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mi">72</span><span class="p">)),</span>
+        <span class="p">]</span>
+
+    <span class="n">rho_heights</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">15.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">]</span>
+    <span class="n">rho_funcs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">14.3542</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+            <span class="o">-</span><span class="mf">0.4174</span> <span class="o">*</span> <span class="n">h</span> <span class="o">-</span> <span class="mf">0.02290</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.001007</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">3</span>
+            <span class="p">),</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
+        <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">_profile_helper</span><span class="p">(</span>
+        <span class="n">height</span><span class="p">,</span>
+        <span class="n">temp_heights</span><span class="p">,</span> <span class="n">temp_funcs</span><span class="p">,</span>
+        <span class="n">press_heights</span><span class="p">,</span> <span class="n">press_funcs</span><span class="p">,</span>
+        <span class="n">rho_heights</span><span class="p">,</span> <span class="n">rho_funcs</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="profile_midlat_winter"><a class="viewcode-back" href="../../../api/pycraf.atm.profile_midlat_winter.html#pycraf.atm.profile_midlat_winter">[docs]</a><span class="k">def</span> <span class="nf">profile_midlat_winter</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Mid latitude winter height profiles according to `ITU-R P.835-5</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.835-5-201202-I/en&gt;`_.</span>
+
+<span class="sd">    Valid for geographic latitudes :math:`22^\\circ &lt; \\vert \\phi\\vert &lt; 45^\\circ`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    height : `~astropy.units.Quantity`</span>
+<span class="sd">        Height above ground [km]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    temp : `~astropy.units.Quantity`</span>
+<span class="sd">        Temperature [K]</span>
+<span class="sd">    press : `~astropy.units.Quantity`</span>
+<span class="sd">        Total pressure [hPa]</span>
+<span class="sd">    rho_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor density [g / m**3]</span>
+<span class="sd">    press_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor partial pressure [hPa]</span>
+<span class="sd">    n_index : `~astropy.units.Quantity`</span>
+<span class="sd">        Refractive index [dimless]</span>
+<span class="sd">    humidity_water : `~astropy.units.Quantity`</span>
+<span class="sd">        Relative humidity if water vapor was in form of liquid water [%]</span>
+<span class="sd">    humidity_ice : `~astropy.units.Quantity`</span>
+<span class="sd">        Relative humidity if water vapor was in form of ice [%]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">temp_heights</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="mf">33.</span><span class="p">,</span> <span class="mf">47.</span><span class="p">,</span> <span class="mf">53.</span><span class="p">,</span> <span class="mf">80.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">]</span>
+    <span class="n">temp_funcs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">272.7241</span> <span class="o">-</span> <span class="mf">3.6517</span> <span class="o">*</span> <span class="n">h</span> <span class="o">-</span> <span class="mf">0.1759</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">218.</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">218.</span> <span class="o">+</span> <span class="mf">3.3571</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mf">33.</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">265.</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">265.</span> <span class="o">-</span> <span class="mf">2.0370</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mf">53.</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">210.</span><span class="p">,</span>
+        <span class="p">]</span>
+
+    <span class="n">press_heights</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="mf">72.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">]</span>
+    <span class="n">press_funcs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">Pstart</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="mf">1018.8627</span> <span class="o">-</span> <span class="mf">124.2954</span> <span class="o">*</span> <span class="n">h</span> <span class="o">+</span> <span class="mf">4.8307</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">Pstart</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="n">Pstart</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.147</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mi">10</span><span class="p">)),</span>
+        <span class="k">lambda</span> <span class="n">Pstart</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="n">Pstart</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.155</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mi">72</span><span class="p">)),</span>
+        <span class="p">]</span>
+
+    <span class="n">rho_heights</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">]</span>
+    <span class="n">rho_funcs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">3.4742</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+            <span class="o">-</span><span class="mf">0.2697</span> <span class="o">*</span> <span class="n">h</span> <span class="o">-</span> <span class="mf">0.03604</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.0004489</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">3</span>
+            <span class="p">),</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
+        <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">_profile_helper</span><span class="p">(</span>
+        <span class="n">height</span><span class="p">,</span>
+        <span class="n">temp_heights</span><span class="p">,</span> <span class="n">temp_funcs</span><span class="p">,</span>
+        <span class="n">press_heights</span><span class="p">,</span> <span class="n">press_funcs</span><span class="p">,</span>
+        <span class="n">rho_heights</span><span class="p">,</span> <span class="n">rho_funcs</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="profile_highlat_summer"><a class="viewcode-back" href="../../../api/pycraf.atm.profile_highlat_summer.html#pycraf.atm.profile_highlat_summer">[docs]</a><span class="k">def</span> <span class="nf">profile_highlat_summer</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    High latitude summer height profiles according to `ITU-R P.835-5</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.835-5-201202-I/en&gt;`_.</span>
+
+<span class="sd">    Valid for geographic latitudes :math:`\\vert \\phi\\vert &gt; 45^\\circ`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    height : `~astropy.units.Quantity`</span>
+<span class="sd">        Height above ground [km]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    temp : `~astropy.units.Quantity`</span>
+<span class="sd">        Temperature [K]</span>
+<span class="sd">    press : `~astropy.units.Quantity`</span>
+<span class="sd">        Total pressure [hPa]</span>
+<span class="sd">    rho_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor density [g / m**3]</span>
+<span class="sd">    press_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor partial pressure [hPa]</span>
+<span class="sd">    n_index : `~astropy.units.Quantity`</span>
+<span class="sd">        Refractive index [dimless]</span>
+<span class="sd">    humidity_water : `~astropy.units.Quantity`</span>
+<span class="sd">        Relative humidity if water vapor was in form of liquid water [%]</span>
+<span class="sd">    humidity_ice : `~astropy.units.Quantity`</span>
+<span class="sd">        Relative humidity if water vapor was in form of ice [%]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">temp_heights</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="mf">23.</span><span class="p">,</span> <span class="mf">48.</span><span class="p">,</span> <span class="mf">53.</span><span class="p">,</span> <span class="mf">79.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">]</span>
+    <span class="n">temp_funcs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">286.8374</span> <span class="o">-</span> <span class="mf">4.7805</span> <span class="o">*</span> <span class="n">h</span> <span class="o">-</span> <span class="mf">0.1402</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">225.</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">225.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">0.008317</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mf">23.</span><span class="p">)),</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">277.</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">277.</span> <span class="o">-</span> <span class="mf">4.0769</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mf">53.</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">171.</span><span class="p">,</span>
+        <span class="p">]</span>
+
+    <span class="n">press_heights</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="mf">72.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">]</span>
+    <span class="n">press_funcs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">Pstart</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="mf">1008.0278</span> <span class="o">-</span> <span class="mf">113.2494</span> <span class="o">*</span> <span class="n">h</span> <span class="o">+</span> <span class="mf">3.9408</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">Pstart</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="n">Pstart</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.147</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mi">10</span><span class="p">)),</span>
+        <span class="k">lambda</span> <span class="n">Pstart</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="n">Pstart</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.165</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mi">72</span><span class="p">)),</span>
+        <span class="p">]</span>
+
+    <span class="n">rho_heights</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">15.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">]</span>
+    <span class="n">rho_funcs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">8.988</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+            <span class="o">-</span><span class="mf">0.3614</span> <span class="o">*</span> <span class="n">h</span> <span class="o">-</span> <span class="mf">0.005402</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="mf">0.001955</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">3</span>
+            <span class="p">),</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
+        <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">_profile_helper</span><span class="p">(</span>
+        <span class="n">height</span><span class="p">,</span>
+        <span class="n">temp_heights</span><span class="p">,</span> <span class="n">temp_funcs</span><span class="p">,</span>
+        <span class="n">press_heights</span><span class="p">,</span> <span class="n">press_funcs</span><span class="p">,</span>
+        <span class="n">rho_heights</span><span class="p">,</span> <span class="n">rho_funcs</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="profile_highlat_winter"><a class="viewcode-back" href="../../../api/pycraf.atm.profile_highlat_winter.html#pycraf.atm.profile_highlat_winter">[docs]</a><span class="k">def</span> <span class="nf">profile_highlat_winter</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    High latitude winter height profiles according to `ITU-R P.835-5</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.835-5-201202-I/en&gt;`_.</span>
+
+<span class="sd">    Valid for geographic latitudes :math:`\\vert \\phi\\vert &gt; 45^\\circ`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    height : `~astropy.units.Quantity`</span>
+<span class="sd">        Height above ground [km]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    temp : `~astropy.units.Quantity`</span>
+<span class="sd">        Temperature [K]</span>
+<span class="sd">    press : `~astropy.units.Quantity`</span>
+<span class="sd">        Total pressure [hPa]</span>
+<span class="sd">    rho_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor density [g / m**3]</span>
+<span class="sd">    press_w : `~astropy.units.Quantity`</span>
+<span class="sd">        Water vapor partial pressure [hPa]</span>
+<span class="sd">    n_index : `~astropy.units.Quantity`</span>
+<span class="sd">        Refractive index [dimless]</span>
+<span class="sd">    humidity_water : `~astropy.units.Quantity`</span>
+<span class="sd">        Relative humidity if water vapor was in form of liquid water [%]</span>
+<span class="sd">    humidity_ice : `~astropy.units.Quantity`</span>
+<span class="sd">        Relative humidity if water vapor was in form of ice [%]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">temp_heights</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">8.5</span><span class="p">,</span> <span class="mf">30.</span><span class="p">,</span> <span class="mf">50.</span><span class="p">,</span> <span class="mf">54.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">]</span>
+    <span class="n">temp_funcs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">257.4345</span> <span class="o">+</span> <span class="mf">2.3474</span> <span class="o">*</span> <span class="n">h</span> <span class="o">-</span> <span class="mf">1.5479</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.08473</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">217.5</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">217.5</span> <span class="o">+</span> <span class="mf">2.125</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mf">30.</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">260.</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">260.</span> <span class="o">-</span> <span class="mf">1.667</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mf">54.</span><span class="p">),</span>
+        <span class="p">]</span>
+
+    <span class="n">press_heights</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="mf">72.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">]</span>
+    <span class="n">press_funcs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">Pstart</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="mf">1010.8828</span> <span class="o">-</span> <span class="mf">122.2411</span> <span class="o">*</span> <span class="n">h</span> <span class="o">+</span> <span class="mf">4.554</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">Pstart</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="n">Pstart</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.147</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mi">10</span><span class="p">)),</span>
+        <span class="k">lambda</span> <span class="n">Pstart</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="n">Pstart</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.150</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="mi">72</span><span class="p">)),</span>
+        <span class="p">]</span>
+
+    <span class="n">rho_heights</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">]</span>
+    <span class="n">rho_funcs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">1.2319</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+            <span class="mf">0.07481</span> <span class="o">*</span> <span class="n">h</span> <span class="o">-</span> <span class="mf">0.0981</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.00281</span> <span class="o">*</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">3</span>
+            <span class="p">),</span>
+        <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
+        <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">_profile_helper</span><span class="p">(</span>
+        <span class="n">height</span><span class="p">,</span>
+        <span class="n">temp_heights</span><span class="p">,</span> <span class="n">temp_funcs</span><span class="p">,</span>
+        <span class="n">press_heights</span><span class="p">,</span> <span class="n">press_funcs</span><span class="p">,</span>
+        <span class="n">rho_heights</span><span class="p">,</span> <span class="n">rho_funcs</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right"> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
+    Last built 13 Aug 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>
