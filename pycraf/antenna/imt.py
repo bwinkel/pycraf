@@ -33,7 +33,7 @@ def _A_EH(phi, A_m, phi_3db):
     Returns
     -------
     A_EH : np.ndarray, float
-        Antenna element's horizontal radiation pattern [dB]
+        Antenna element's horizontal radiation pattern [dBi]
     '''
 
     return -np.minimum(12 * (phi / phi_3db) ** 2, A_m)
@@ -56,7 +56,7 @@ def _A_EV(theta, SLA_nu, theta_3db):
     Returns
     -------
     A_EV : np.ndarray, float
-        Antenna element's vertical radiation pattern [dB]
+        Antenna element's vertical radiation pattern [dBi]
     '''
 
     return -np.minimum(12 * ((theta - 90.) / theta_3db) ** 2, SLA_nu)
@@ -85,7 +85,7 @@ def _imt2020_single_element_pattern(
     SLA_nu=(0, None, cnv.dimless),
     phi_3db=(0, None, apu.deg),
     theta_3db=(0, None, apu.deg),
-    strip_input_units=True, output_unit=cnv.dB
+    strip_input_units=True, output_unit=cnv.dBi
     )
 def imt2020_single_element_pattern(
         azim, elev,
@@ -117,7 +117,11 @@ def imt2020_single_element_pattern(
     Returns
     -------
     A_E : `~astropy.units.Quantity`
-        Single antenna element's pattern [dB]
+        Single antenna element's pattern [dBi]
+
+    Notes
+    -----
+    Further information can be found in 3GPP TR 37.840 Section 5.4.4.
     '''
 
     return _imt2020_single_element_pattern(
@@ -136,6 +140,7 @@ def _imt2020_composite_pattern(
         phi_3db, theta_3db,
         d_H, d_V,
         N_H, N_V,
+        rho,
         ):
 
     phi = azim
@@ -176,7 +181,10 @@ def _imt2020_composite_pattern(
         for n in range(N_V):
             tmp += w(m, n) * nu(m, n)
 
-    return A_E + 10 * np.log10(np.abs(tmp) ** 2)
+    # account for correlation level
+    tmp = 1 + rho * (np.abs(tmp) ** 2 - 1)
+
+    return A_E + 10 * np.log10(tmp)
 
 
 @utils.ranged_quantity_input(
@@ -191,6 +199,7 @@ def _imt2020_composite_pattern(
     theta_3db=(0, None, apu.deg),
     d_H=(0, None, cnv.dimless),
     d_V=(0, None, cnv.dimless),
+    rho=(0, 1, cnv.dimless),
     strip_input_units=True, output_unit=cnv.dB
     )
 def imt2020_composite_pattern(
@@ -201,6 +210,7 @@ def imt2020_composite_pattern(
         phi_3db, theta_3db,
         d_H, d_V,
         N_H, N_V,
+        rho=1 * cnv.dimless,
         ):
     '''
     Composite (array) antenna pattern according to `IMT.MODEL
@@ -223,11 +233,17 @@ def imt2020_composite_pattern(
         [dimless]
     N_H, N_V : int
         Horizontal/Vertical number of single antenna elements
+    rho : float, optional
+        Correlation level (see 3GPP TR 37.840, 5.4.4.1.4, default: 1)
 
     Returns
     -------
     A_A : `~astropy.units.Quantity`
         Composite (array) antenna pattern of beam `i` [dB]
+
+    Notes
+    -----
+    Further information can be found in 3GPP TR 37.840 Section 5.4.4.
     '''
 
     return _imt2020_composite_pattern(
@@ -238,6 +254,7 @@ def imt2020_composite_pattern(
         phi_3db, theta_3db,
         d_H, d_V,
         N_H, N_V,
+        rho,
         )
 
 
