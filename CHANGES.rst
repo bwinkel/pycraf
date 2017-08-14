@@ -1,6 +1,16 @@
 0.25.4 (unreleased)
 ====================
 
+New Features
+------------
+
+pycraf.pathprof
+^^^^^^^^^^^^^^^
+- Add a method, `geoid_area` to calculate surface area on the WGS84
+  ellipsoid. Only rectangular limits (absolute coordinates) are supported.
+  This can be used to determine the area of SRTM pixels (in km^2).
+
+
 0.25.3 (2017-08-09)
 ====================
 

@@ -8,10 +8,10 @@ from __future__ import (
 from astropy import units as apu
 import numpy as np
 from .. import utils
-from .cygeodesics import inverse_cython, direct_cython
+from .cygeodesics import inverse_cython, direct_cython, area_wgs84_cython
 
 
-__all__ = ['geoid_inverse', 'geoid_direct']
+__all__ = ['geoid_inverse', 'geoid_direct', 'geoid_area']
 
 
 @utils.ranged_quantity_input(
@@ -123,6 +123,42 @@ def geoid_direct(
     return direct_cython(
         lon1, lat1, bearing1, dist, eps=eps, maxiter=maxiter, wrap=True
         )
+
+
+@utils.ranged_quantity_input(
+    lon1=(-np.pi, np.pi, apu.rad),
+    lon2=(-np.pi, np.pi, apu.rad),
+    lat1=(-np.pi / 2, np.pi / 2, apu.rad),
+    lat2=(-np.pi / 2, np.pi / 2, apu.rad),
+    strip_input_units=True,
+    output_unit=(apu.m ** 2)
+    )
+def geoid_area(lon1, lon2, lat1, lat2):
+    '''
+    Calculate WGS84 surface area over interval [lon1, lon2] and [lat1, lat2].
+
+    Parameters
+    ----------
+    lon1 : `~astropy.units.Quantity`
+        Geographic longitude of lower bound [rad]
+    lon2 : `~astropy.units.Quantity`
+        Geographic longitude of upper bound [rad]
+    lat1 : `~astropy.units.Quantity`
+        Geographic latitude of lower bound [rad]
+    lat2 : `~astropy.units.Quantity`
+        Geographic latitude of upper bound [rad]
+
+    Returns
+    -------
+    area : `~astropy.units.Quantity`
+        Surface area in given interval [m^2]
+
+    Notes
+    -----
+    This was adapted from a thread on `math.stackexchange.com <https://math.stackexchange.com/questions/1379341/how-to-find-the-surface-area-of-revolution-of-an-ellipsoid-from-ellipse-rotating>`__.
+    '''
+
+    return area_wgs84_cython(lon1, lon2, lat1, lat2)
 
 
 if __name__ == '__main__':

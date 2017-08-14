@@ -24,6 +24,8 @@ np.import_array()
 
 cdef double WGS_a = 6378137.0
 cdef double WGS_b = 6356752.314245
+cdef double WGS_eps = 1 - (WGS_b / WGS_a) ** 2
+cdef double WGS_ieps = 1 - (WGS_a / WGS_b) ** 2
 cdef double WGS_f = 1 / 298.257223563
 cdef double DEG2RAD = M_PI / 180.
 cdef double RAD2DEG = 180. / M_PI
@@ -315,6 +317,79 @@ def direct_cython(
             np.PyArray_MultiIter_NEXT(it)
 
     return lon2_arr, lat2_arr, bearing2_arr
+
+
+cdef double ellipse_radius(double phi_rad, double a, double b) nogil:
+
+    return a * b / sqrt(
+        (a * sin(phi_rad)) ** 2 + (b * cos(phi_rad)) ** 2
+        )
+
+
+cdef double _area_wgs84(
+        double lon1_rad, double lon2_rad,
+        double lat1_rad, double lat2_rad
+        ) nogil:
+    '''
+    Adapted from https://math.stackexchange.com/questions/1379341/how-to-find-the-surface-area-of-revolution-of-an-ellipsoid-from-ellipse-rotating
+    '''
+
+    cdef:
+
+        double xi1, xi2, i1, i2, area
+
+    xi1 = asin(
+        WGS_ieps / WGS_b * sin(lat1_rad) *
+        ellipse_radius(lat1_rad, WGS_a, WGS_b)
+        )
+    xi2 = asin(
+        WGS_ieps / WGS_b * sin(lat2_rad) *
+        ellipse_radius(lat2_rad, WGS_a, WGS_b)
+        )
+
+    i1 = 0.5 * xi1 + 0.25 * sin(2 * xi1)
+    i2 = 0.5 * xi2 + 0.25 * sin(2 * xi2)
+
+    area = (lon2_rad - lon1_rad) * WGS_a * WGS_b / WGS_ieps * (i2 - i1)
+
+    return area
+
+
+def area_wgs84_cython(lon1_rad, lon2_rad, lat1_rad, lat2_rad):
+
+    cdef:
+
+        np.broadcast broadcast, it
+        np.ndarray area_arr
+
+    # Turn all inputs into arrays
+    kwargs = dict(dtype=np.double, order='C', copy=False, subok=True)
+    lon1_rad = np.array(lon1_rad, **kwargs)
+    lon2_rad = np.array(lon2_rad, **kwargs)
+    lat1_rad = np.array(lat1_rad, **kwargs)
+    lat2_rad = np.array(lat2_rad, **kwargs)
+
+    broadcast = np.broadcast(lon1_rad, lon2_rad, lat1_rad, lat2_rad)
+    area_arr = np.empty(broadcast.shape + (), dtype=np.double)
+
+    it = np.broadcast(
+        lon1_rad, lon2_rad, lat1_rad, lat2_rad,
+        area_arr,
+        )
+
+    with nogil:
+        while np.PyArray_MultiIter_NOTDONE(it):
+
+            (<double*> Py_Iter_DATA(it, 4))[0] = _area_wgs84(
+                (<double*> Py_Iter_DATA(it, 0))[0],
+                (<double*> Py_Iter_DATA(it, 1))[0],
+                (<double*> Py_Iter_DATA(it, 2))[0],
+                (<double*> Py_Iter_DATA(it, 3))[0],
+                )
+
+            np.PyArray_MultiIter_NEXT(it)
+
+    return area_arr
 
 
 cdef inline int find_in_ordered(

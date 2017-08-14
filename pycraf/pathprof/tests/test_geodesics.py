@@ -228,3 +228,57 @@ class TestGeodesics:
             gglib['bearing2'],
             atol=1.e-6,
             )
+
+    def test_geoid_area(self):
+
+        # testing against geographic-lib
+        args_list = [
+            (-np.pi, np.pi, apu.rad),
+            (-np.pi, np.pi, apu.rad),
+            (-np.pi / 2, np.pi / 2, apu.rad),
+            (-np.pi / 2, np.pi / 2, apu.rad),
+            ]
+
+        check_astro_quantities(pathprof.geoid_area, args_list)
+
+        lon1 = np.array([-0.5, 6, 7, -180, 10])
+        lon2 = np.array([0.5, 7, 6, 180, 40])
+        lat1 = np.array([-0.5, 50, 50, -90, 30])
+        lat2 = np.array([0.5, 51, 51, 90, 60])
+
+        area = pathprof.geoid_area(
+            lon1 * apu.deg, lon2 * apu.deg,
+            lat1 * apu.deg, lat2 * apu.deg,
+            )
+
+        assert_quantity_allclose(
+            area.to_value(apu.km ** 2),
+            np.array([
+                1.23918686e+04, 7.83488948e+03, -7.83488948e+03,
+                5.09490053e+08, 7.75889348e+06
+                ])
+            )
+
+        lons = np.linspace(0, 180, 6)
+        lats = np.linspace(0, 90, 6)
+
+        area = pathprof.geoid_area(
+            lons[1:] * apu.deg, lons[:-1] * apu.deg,
+            lats[1:, np.newaxis] * apu.deg, lats[:-1, np.newaxis] * apu.deg,
+            )
+
+        assert_quantity_allclose(
+            area.to_value(apu.km ** 2),
+            np.array([
+                [7896050.19052842, 7896050.19052842, 7896050.19052842,
+                 7896050.19052842, 7896050.19052842],
+                [7110472.64473981, 7110472.64473981, 7110472.64473981,
+                 7110472.64473981, 7110472.64473981],
+                [5626711.01884766, 5626711.01884766, 5626711.01884766,
+                 5626711.01884766, 5626711.01884766],
+                [3602222.87978228, 3602222.87978228, 3602222.87978228,
+                 3602222.87978228, 3602222.87978228],
+                [1239045.92382274, 1239045.92382274, 1239045.92382274,
+                 1239045.92382274, 1239045.92382274]
+                ])
+            )
