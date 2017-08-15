@@ -10,6 +10,10 @@ pycraf.pathprof
   ellipsoid. Only rectangular limits (absolute coordinates) are supported.
   This can be used to determine the area of SRTM pixels (in km^2).
 
+pycraf.antenna
+^^^^^^^^^^^^^^^
+- Add correlation-level parameter to `imt2020_composite_pattern` function.
+
 
 0.25.3 (2017-08-09)
 ====================

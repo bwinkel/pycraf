@@ -233,8 +233,8 @@ def imt2020_composite_pattern(
         [dimless]
     N_H, N_V : int
         Horizontal/Vertical number of single antenna elements
-    rho : float, optional
-        Correlation level (see 3GPP TR 37.840, 5.4.4.1.4, default: 1)
+    rho : `~astropy.units.Quantity`, optional
+        Correlation level (see 3GPP TR 37.840, 5.4.4.1.4, default: 1) [dimless]
 
     Returns
     -------
