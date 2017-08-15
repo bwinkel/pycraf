@@ -58,8 +58,6 @@ latest/_modules/pycraf/antenna/fixedlink.html
 latest/_modules/pycraf/antenna/imt.html
 latest/_modules/pycraf/antenna/ras.html
 latest/_modules/pycraf/atm/atm.html
-latest/_modules/pycraf/atm/atm_helper.html
-latest/_modules/pycraf/atm/profiles.html
 latest/_modules/pycraf/conversions/conversions.html
 latest/_modules/pycraf/geometry/geometry.html
 latest/_modules/pycraf/geospatial/geospatial.html
@@ -155,6 +153,7 @@ latest/_sources/api/pycraf.pathprof.eff_earth_radius_beta.rst.txt
 latest/_sources/api/pycraf.pathprof.eff_earth_radius_factor_beta.rst.txt
 latest/_sources/api/pycraf.pathprof.eff_earth_radius_factor_median.rst.txt
 latest/_sources/api/pycraf.pathprof.eff_earth_radius_median.rst.txt
+latest/_sources/api/pycraf.pathprof.geoid_area.rst.txt
 latest/_sources/api/pycraf.pathprof.geoid_direct.rst.txt
 latest/_sources/api/pycraf.pathprof.geoid_inverse.rst.txt
 latest/_sources/api/pycraf.pathprof.height_profile_data.rst.txt
@@ -320,6 +319,7 @@ latest/api/pycraf.pathprof.eff_earth_radius_beta.html
 latest/api/pycraf.pathprof.eff_earth_radius_factor_beta.html
 latest/api/pycraf.pathprof.eff_earth_radius_factor_median.html
 latest/api/pycraf.pathprof.eff_earth_radius_median.html
+latest/api/pycraf.pathprof.geoid_area.html
 latest/api/pycraf.pathprof.geoid_direct.html
 latest/api/pycraf.pathprof.geoid_inverse.html
 latest/api/pycraf.pathprof.height_profile_data.html

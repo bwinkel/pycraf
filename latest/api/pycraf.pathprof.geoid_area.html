@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>geoid_inverse &#8212; pycraf v0.25.4.dev50</title>
+    <title>geoid_area &#8212; pycraf v0.25.4.dev50</title>
     
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -28,8 +28,8 @@
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="height_profile_data" href="pycraf.pathprof.height_profile_data.html" />
-    <link rel="prev" title="geoid_direct" href="pycraf.pathprof.geoid_direct.html" />
+    <link rel="next" title="geoid_direct" href="pycraf.pathprof.geoid_direct.html" />
+    <link rel="prev" title="eff_earth_radius_median" href="pycraf.pathprof.eff_earth_radius_median.html" />
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 <script type="text/javascript" src="../_static/copybutton.js"></script>
 
@@ -59,12 +59,12 @@
     <h3>Navigation</h3>
     <ul>
       <li class="right">
-	<a href="pycraf.pathprof.height_profile_data.html" title="height_profile_data">
+	<a href="pycraf.pathprof.geoid_direct.html" title="geoid_direct">
 	  next &raquo;
 	</a>
       </li>
       <li class="right">
-	<a href="pycraf.pathprof.geoid_direct.html" title="geoid_direct">
+	<a href="pycraf.pathprof.eff_earth_radius_median.html" title="eff_earth_radius_median">
 	  &laquo; previous
 	</a>
 	 |
@@ -75,7 +75,7 @@
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="docutils literal"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
       
-      <li>geoid_inverse</li> 
+      <li>geoid_area</li> 
     </ul>
 </div>
   
@@ -85,64 +85,44 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="geoid-inverse">
-<h1>geoid_inverse<a class="headerlink" href="#geoid-inverse" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="geoid-area">
+<h1>geoid_area<a class="headerlink" href="#geoid-area" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="pycraf.pathprof.geoid_inverse">
-<code class="descclassname">pycraf.pathprof.</code><code class="descname">geoid_inverse</code><span class="sig-paren">(</span><em>lon1</em>, <em>lat1</em>, <em>lon2</em>, <em>lat2</em>, <em>eps=1e-12</em>, <em>maxiter=50</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/geodesics.html#geoid_inverse"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/geodesics.py#L17" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.geoid_inverse" title="Permalink to this definition">¶</a></dt>
-<dd><p>Solve inverse Geodesics problem using Vincenty&#8217;s formulae.</p>
-<p>Using an iterative approach, the distance and relative bearings between
-two points (P1, and P2) on the Geoid (Earth ellipsoid) are determined;
-see also <a class="reference external" href="https://en.wikipedia.org/wiki/Vincenty's_formulae">Wikipedia</a>.</p>
+<dt id="pycraf.pathprof.geoid_area">
+<code class="descclassname">pycraf.pathprof.</code><code class="descname">geoid_area</code><span class="sig-paren">(</span><em>lon1</em>, <em>lon2</em>, <em>lat1</em>, <em>lat2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/geodesics.html#geoid_area"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/geodesics.py#L128" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.geoid_area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate WGS84 surface area over interval [lon1, lon2] and [lat1, lat2].</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lon1</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
-<div><p>Geographic longitude of P1 [rad]</p>
-</div></blockquote>
-<p><strong>lat1</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Geographic latitude of P1 [rad]</p>
+<div><p>Geographic longitude of lower bound [rad]</p>
 </div></blockquote>
 <p><strong>lon2</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
-<div><p>Geographic longitude of P2 [rad]</p>
+<div><p>Geographic longitude of upper bound [rad]</p>
+</div></blockquote>
+<p><strong>lat1</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<blockquote>
+<div><p>Geographic latitude of lower bound [rad]</p>
 </div></blockquote>
 <p><strong>lat2</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
-<div><p>Geographic latitude of P2 [rad]</p>
-</div></blockquote>
-<p><strong>eps</strong> : float, optional</p>
-<blockquote>
-<div><p>Accuracy of calculation (default: 1.e-12)</p>
-</div></blockquote>
-<p><strong>maxiter</strong> : int, optional</p>
-<blockquote>
-<div><p>Maximum number of iterations to perform (default: 50)</p>
+<div><p>Geographic latitude of upper bound [rad]</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>distance</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Distance between P1 and P2 [m]</p>
-</div></blockquote>
-<p><strong>bearing1</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Start bearing [rad]</p>
-</div></blockquote>
-<p><strong>bearing2</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>area</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote class="last">
-<div><p>Back-bearing [rad]</p>
+<div><p>Surface area in given interval [m^2]</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>The iteration will stop if either the desired accuracy (<code class="xref py py-obj docutils literal"><span class="pre">eps</span></code>) is reached
-or the number of iterations exceeds <code class="xref py py-obj docutils literal"><span class="pre">maxiter</span></code>.</p>
+<p>This was adapted from a thread on <a class="reference external" href="https://math.stackexchange.com/questions/1379341/how-to-find-the-surface-area-of-revolution-of-an-ellipsoid-from-ellipse-rotating">math.stackexchange.com</a>.</p>
 </dd></dl>
 
 </div>
@@ -154,7 +134,7 @@ or the number of iterations exceeds <code class="xref py py-obj docutils literal
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
 <ul>
-<li><a class="reference internal" href="#">geoid_inverse</a></li>
+<li><a class="reference internal" href="#">geoid_area</a></li>
 </ul>
 
 
@@ -164,8 +144,8 @@ or the number of iterations exceeds <code class="xref py py-obj docutils literal
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/master/docs/api/pycraf.pathprof.geoid_inverse.rst">Edit This Page on Github</a> &nbsp;
-    <a href="../_sources/api/pycraf.pathprof.geoid_inverse.rst.txt"
+    <a href="http://github.com/bwinkel/pycraf/tree/master/docs/api/pycraf.pathprof.geoid_area.rst">Edit This Page on Github</a> &nbsp;
+    <a href="../_sources/api/pycraf.pathprof.geoid_area.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>

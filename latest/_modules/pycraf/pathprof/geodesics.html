@@ -83,10 +83,10 @@
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">utils</span>
-<span class="kn">from</span> <span class="nn">.cygeodesics</span> <span class="k">import</span> <span class="n">inverse_cython</span><span class="p">,</span> <span class="n">direct_cython</span>
+<span class="kn">from</span> <span class="nn">.cygeodesics</span> <span class="k">import</span> <span class="n">inverse_cython</span><span class="p">,</span> <span class="n">direct_cython</span><span class="p">,</span> <span class="n">area_wgs84_cython</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;geoid_inverse&#39;</span><span class="p">,</span> <span class="s1">&#39;geoid_direct&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;geoid_inverse&#39;</span><span class="p">,</span> <span class="s1">&#39;geoid_direct&#39;</span><span class="p">,</span> <span class="s1">&#39;geoid_area&#39;</span><span class="p">]</span>
 
 
 <span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
@@ -200,6 +200,42 @@
         <span class="p">)</span></div>
 
 
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">lon1</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">),</span>
+    <span class="n">lon2</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">),</span>
+    <span class="n">lat1</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">),</span>
+    <span class="n">lat2</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">)</span>
+<div class="viewcode-block" id="geoid_area"><a class="viewcode-back" href="../../../api/pycraf.pathprof.geoid_area.html#pycraf.pathprof.geoid_area">[docs]</a><span class="k">def</span> <span class="nf">geoid_area</span><span class="p">(</span><span class="n">lon1</span><span class="p">,</span> <span class="n">lon2</span><span class="p">,</span> <span class="n">lat1</span><span class="p">,</span> <span class="n">lat2</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate WGS84 surface area over interval [lon1, lon2] and [lat1, lat2].</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lon1 : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic longitude of lower bound [rad]</span>
+<span class="sd">    lon2 : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic longitude of upper bound [rad]</span>
+<span class="sd">    lat1 : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic latitude of lower bound [rad]</span>
+<span class="sd">    lat2 : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic latitude of upper bound [rad]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    area : `~astropy.units.Quantity`</span>
+<span class="sd">        Surface area in given interval [m^2]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This was adapted from a thread on `math.stackexchange.com &lt;https://math.stackexchange.com/questions/1379341/how-to-find-the-surface-area-of-revolution-of-an-ellipsoid-from-ellipse-rotating&gt;`__.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">area_wgs84_cython</span><span class="p">(</span><span class="n">lon1</span><span class="p">,</span> <span class="n">lon2</span><span class="p">,</span> <span class="n">lat1</span><span class="p">,</span> <span class="n">lat2</span><span class="p">)</span></div>
+
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This not a standalone python program! Use as module.&#39;</span><span class="p">)</span>
 </pre></div>
@@ -221,7 +257,7 @@
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 13 Aug 2017. <br/>
+    Last built 15 Aug 2017. <br/>
   </p>
 </footer>
   </body>
