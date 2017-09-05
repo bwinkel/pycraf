@@ -14,6 +14,11 @@ pycraf.antenna
 ^^^^^^^^^^^^^^^
 - Add correlation-level parameter to `imt2020_composite_pattern` function.
 
+pycraf.protection
+^^^^^^^^^^^^^^^
+- Add the possibility to generate VLBI threshold values in `ra769_limits`
+  function, as contained in Table 3 of RA.769. Furthermore, it is now
+  possible to specify the integration time to be used for the thresholds.
 
 0.25.3 (2017-08-09)
 ====================

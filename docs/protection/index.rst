@@ -23,14 +23,17 @@ are provided.
 Using `pycraf.protection`
 =========================
 
+RA.769
+------
+
 The function `~pycraf.protection.ra769_limits` returns a
-`~astropy.table.Table` object that resembles (Table 1 and 2) from
+`~astropy.table.Table` object that resembles (Table 1 to 3) from
 `ITU-R Rec. RA.769 <https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en>`_::
 
     >>> import astropy.units as u
     >>> from pycraf import protection
 
-    >>> protection.ra769_limits()
+    >>> protection.ra769_limits(mode='continuum')
     <Table length=21>
     frequency bandwidth   T_A   ...     Slim_nu        Efield    Efield_norm
        MHz       MHz       K    ... dB(W / (Hz m2)) dB(uV2 / m2) dB(uV2 / m2)
@@ -49,6 +52,51 @@ The function `~pycraf.protection.ra769_limits` returns a
        150000      8000      14 ...          -223.2         21.6        -17.4
        224000      8000      20 ...          -218.2         26.6        -12.4
        270000      8000      25 ...          -215.8         29.0        -10.0
+
+For VLBI the returned table object looks a bit different::
+
+    >>> protection.ra769_limits(mode='vlbi')
+    <Table length=21>
+    frequency   T_A     T_rx      Slim_nu
+       MHz       K       K    dB(W / (Hz m2))
+     float64  float64 float64     float64
+    --------- ------- ------- ---------------
+           13   50000      60          -217.6
+           26   15000      60          -217.2
+           74     750      60          -220.7
+          152     150      60          -220.3
+          325      40      60          -216.9
+          408      25      60          -215.6
+          ...     ...     ...             ...
+        31550      18      65          -178.0
+        43000      25      65          -174.9
+        89000      12      30          -171.9
+       150000      14      30          -167.2
+       224000      20      43          -162.1
+       270000      25      50          -159.8
+
+This is because the VLBI thresholds are not based on the RMS (after a certain
+integration time and with a certain bandwidth), but on the system temperature
+(typical receiver noise values and antenna temperatures). The thresholds are
+defined as 1% of Tsys.
+
+For continuum and spectral modes, it is possible to use a different
+integration time::
+
+  >>> plim_2000s = protection.ra769_limits(mode='continuum')[7]['Plim']
+  >>> for itime in [15 * u.min, 1 * u.h, 2 * u.h, 5 * u.h, 10 * u.h]:
+  ...     tab = protection.ra769_limits(mode='continuum', integ_time=itime)
+  ...     # print values of footnote (1) of tables 1 and 2 in RA.769
+  ...     print('{:.1f} dB'.format(tab[7]['Plim'] - plim_2000s))
+  1.7 dB
+  -1.3 dB
+  -2.8 dB
+  -4.8 dB
+  -6.3 dB
+
+
+CISPR limits
+------------
 
 The two functions `~pycraf.protection.cispr11_limits` and
 `~pycraf.protection.cispr22_limits` have a different call signature (see

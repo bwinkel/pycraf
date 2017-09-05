@@ -124,6 +124,13 @@ SPEC_LIMS_DB_VALUES = [
     0.707106781187, -205.174940994, -146.6027401, -223.7414224, 21.9535315816,
     ]
 
+VLBI_LIMS_VALUES = [
+    27321.043322845562, 1059608.0665059818, 159488145.94716346
+    ]
+VLBI_LIMS_DB_VALUES = [
+    -215.63502720045301, -199.74854744197285, -177.97271590607113
+    ]
+
 COL_NAMES = [
     'frequency',
     'bandwidth',
@@ -166,6 +173,8 @@ COL_UNITS_DB = [
     cnv.dB_uV_m,
     ]
 
+VLBI_COL_IDXS = [0, 2, 3, 8]
+
 
 def test_cispr_limits_qtable_column():
 
@@ -207,6 +216,8 @@ def test_ra769_limits():
     cont_lims_dB = prot.ra769_limits(mode='continuum', scale='dB')
     spec_lims = prot.ra769_limits(mode='spectroscopy', scale='linear')
     spec_lims_dB = prot.ra769_limits(mode='spectroscopy', scale='dB')
+    vlbi_lims = prot.ra769_limits(mode='vlbi', scale='linear')
+    vlbi_lims_dB = prot.ra769_limits(mode='vlbi', scale='dB')
 
     # test some "random" elements in all tables (values and units)
     # prefer derived quantities
@@ -230,6 +241,14 @@ def test_ra769_limits():
         assert_allclose(spec_lims[row][col], SPEC_LIMS_VALUES[idx], **TOL_KWARGS)
         assert_allclose(spec_lims_dB[row][col], SPEC_LIMS_DB_VALUES[idx])
 
+    for idx, (row, col) in enumerate([
+            (5, 'Slim_nu'),
+            (10, 'Slim_nu'),
+            (15, 'Slim_nu'),
+            ]):
+        assert_allclose(vlbi_lims[row][col], VLBI_LIMS_VALUES[idx], **TOL_KWARGS)
+        assert_allclose(vlbi_lims_dB[row][col], VLBI_LIMS_DB_VALUES[idx])
+
     for colname, colunit in zip(COL_NAMES, COL_UNITS):
         assert cont_lims.columns[colname].unit == colunit
         assert spec_lims.columns[colname].unit == colunit
@@ -237,3 +256,9 @@ def test_ra769_limits():
     for colname, colunit in zip(COL_NAMES, COL_UNITS_DB):
         assert cont_lims_dB.columns[colname].unit == colunit
         assert spec_lims_dB.columns[colname].unit == colunit
+
+    for colidx in VLBI_COL_IDXS:
+        colname = COL_NAMES[colidx]
+        colunit, colunit_db = COL_UNITS[colidx], COL_UNITS_DB[colidx]
+        assert vlbi_lims.columns[colname].unit == colunit
+        assert vlbi_lims_dB.columns[colname].unit == colunit_db
