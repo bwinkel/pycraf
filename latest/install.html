@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Installation &#8212; pycraf v0.25.4.dev50</title>
-    
     <link rel="stylesheet" href="_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -35,7 +32,7 @@
 
 
   </head>
-  <body role="document">
+  <body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
@@ -126,7 +123,7 @@ supported.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Use the <code class="docutils literal"><span class="pre">--no-deps</span></code> flag if you already have dependency packages
-installed, since otherwise pip will sometimes try to &#8220;help&#8221; you
+installed, since otherwise pip will sometimes try to “help” you
 by upgrading your installation, which may not always be desired.</p>
 </div>
 <div class="admonition note">
@@ -165,11 +162,11 @@ However, the <a class="reference external" href="https://pypi.python.org/pypi/py
 dependency and unfortunately, the official
 <a class="reference external" href="https://pypi.python.org/pypi/pyproj">pyproj</a> repository on PyPI contains
 only the sources. You can download a
-suitable wheel from <a class="reference external" href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyproj">Christoph Gohlke&#8217;s package site</a>. Then use</p>
+suitable wheel from <a class="reference external" href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyproj">Christoph Gohlke’s package site</a>. Then use</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>pip install <span class="o">[</span>path-to-wheel<span class="o">]</span>/pyproj‑*.whl
 </pre></div>
 </div>
-<p>If you&#8217;re using <a class="reference external" href="https://www.continuum.io/downloads">Anaconda</a>
+<p>If you’re using <a class="reference external" href="https://www.continuum.io/downloads">Anaconda</a>
 (recommended), it gets much simpler</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>conda install -c conda-forge pyproj
 pip install pycraf
@@ -178,17 +175,17 @@ pip install pycraf
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">If you are desperate, you can install pycraf from source even on Windows.
-You&#8217;ll need to install a suitable C-compiler; &lt;see here
+You’ll need to install a suitable C-compiler; &lt;see here
 &lt;<a class="reference external" href="https://matthew-brett.github.io/pydagogue/python_msvc.html#visual-studio-versions-used-to-compile-distributed-python-binaries">https://matthew-brett.github.io/pydagogue/python_msvc.html#visual-studio-versions-used-to-compile-distributed-python-binaries</a>&gt;`__. The pycraf
 package needs Python 3.5 or later, which means VC++ Version 14 is
 mandatory. The easiest way to obtain it, is by installing the
 <a class="reference external" href="http://landinghub.visualstudio.com/visual-cpp-build-tools">Visual C++ 2015 Build Tools</a> which is
-&#8220;only&#8221; 4 GBytes large...</p>
+“only” 4 GBytes large…</p>
 </div>
 </div>
 <div class="section" id="installation-on-macos">
 <span id="macos-install"></span><h4>Installation on MacOS<a class="headerlink" href="#installation-on-macos" title="Permalink to this headline">¶</a></h4>
-<p>Even though we also provide a binary wheel for MacOS, it seems you&#8217;ll still
+<p>Even though we also provide a binary wheel for MacOS, it seems you’ll still
 have to install a C-compiler, in particular <em>gcc-6</em>. The clang compiler
 seems not to support OpenMP in a way that is needed by pycraf:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>brew install gcc6
@@ -261,7 +258,7 @@ python setup.py <span class="nb">test</span> --remote-data<span class="o">=</spa
 <div class="section" id="using-srtm-data">
 <span id="srtm-data"></span><h3>Using SRTM data<a class="headerlink" href="#using-srtm-data" title="Permalink to this headline">¶</a></h3>
 <p>To make full use of the path attenuation calculations provided by pycraf,
-you will need to use NASA&#8217;s Shuttle Radar Topography Mission
+you will need to use NASA’s Shuttle Radar Topography Mission
 <a class="reference external" href="https://www2.jpl.nasa.gov/srtm/">(SRTM) data</a> for height-profile
 generation. Please see <a class="reference internal" href="pathprof/working_with_srtm.html#working-with-srtm"><span class="std std-ref">Working with SRTM data</span></a> for further details.</p>
 </div>
@@ -305,8 +302,8 @@ generation. Please see <a class="reference internal" href="pathprof/working_with
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 05 Sep 2017. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
+    Last built 08 Sep 2017. <br/>
   </p>
 </footer>
   </body>

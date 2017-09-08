@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>SrtmConf &#8212; pycraf v0.25.4.dev50</title>
-    
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -35,7 +32,7 @@
 
 
   </head>
-  <body role="document">
+  <body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
@@ -92,10 +89,10 @@
 <em class="property">class </em><code class="descclassname">pycraf.pathprof.</code><code class="descname">SrtmConf</code><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#SrtmConf"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/srtm.py#L62" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.SrtmConf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pycraf.utils.MultiState.html#pycraf.utils.MultiState" title="pycraf.utils.multistate.MultiState"><code class="docutils literal"><span class="pre">pycraf.utils.MultiState</span></code></a></p>
 <p>Provide a global state to adjust SRTM configuration.</p>
-<p>By default, <code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code> will look for SRTM &#8216;.hgt&#8217; files (the terrain data)
+<p>By default, <code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code> will look for SRTM ‘.hgt’ files (the terrain data)
 in the SRTMDATA environment variable. If this is not defined, the
-local directory (&#8216;./&#8217;) is used for look-up. It is possible during
-run-time to change the directory where to look for &#8216;.hgt&#8217; files
+local directory (‘./’) is used for look-up. It is possible during
+run-time to change the directory where to look for ‘.hgt’ files
 with the <a class="reference internal" href="#pycraf.pathprof.SrtmConf" title="pycraf.pathprof.SrtmConf"><code class="xref py py-obj docutils literal"><span class="pre">SrtmConf</span></code></a> manager:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pycraf.pathprof</span> <span class="k">import</span> <span class="n">SrtmConf</span>
 <span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">srtm_dir</span><span class="o">=</span><span class="s1">&#39;/path/to/srtmdir&#39;</span><span class="p">)</span>
@@ -108,7 +105,7 @@ one can use <a class="reference internal" href="#pycraf.pathprof.SrtmConf" title
 </pre></div>
 </div>
 <p>Afterwards, the old settings will be re-established. It is also possible
-to allow downloading of missing &#8216;.hgt&#8217; files:</p>
+to allow downloading of missing ‘.hgt’ files:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -215,9 +212,9 @@ further information.</p>
 <dd><p>This checks, if the provided inputs for <a class="reference internal" href="#pycraf.pathprof.SrtmConf.download" title="pycraf.pathprof.SrtmConf.download"><code class="xref py py-obj docutils literal"><span class="pre">download</span></code></a> and <a class="reference internal" href="#pycraf.pathprof.SrtmConf.server" title="pycraf.pathprof.SrtmConf.server"><code class="xref py py-obj docutils literal"><span class="pre">server</span></code></a> are
 allowed. Possible values are:</p>
 <ul class="simple">
-<li><a class="reference internal" href="#pycraf.pathprof.SrtmConf.download" title="pycraf.pathprof.SrtmConf.download"><code class="xref py py-obj docutils literal"><span class="pre">download</span></code></a>:  &#8216;never&#8217;, &#8216;missing&#8217;, &#8216;always&#8217;</li>
-<li><a class="reference internal" href="#pycraf.pathprof.SrtmConf.server" title="pycraf.pathprof.SrtmConf.server"><code class="xref py py-obj docutils literal"><span class="pre">server</span></code></a>:  &#8216;nasa_v2.1&#8217;, &#8216;nasa_v1.0&#8217;, &#8216;viewpano&#8217;</li>
-<li><a class="reference internal" href="#pycraf.pathprof.SrtmConf.interp" title="pycraf.pathprof.SrtmConf.interp"><code class="xref py py-obj docutils literal"><span class="pre">interp</span></code></a>:  &#8216;nearest&#8217;, &#8216;linear&#8217;, &#8216;spline&#8217;</li>
+<li><a class="reference internal" href="#pycraf.pathprof.SrtmConf.download" title="pycraf.pathprof.SrtmConf.download"><code class="xref py py-obj docutils literal"><span class="pre">download</span></code></a>:  ‘never’, ‘missing’, ‘always’</li>
+<li><a class="reference internal" href="#pycraf.pathprof.SrtmConf.server" title="pycraf.pathprof.SrtmConf.server"><code class="xref py py-obj docutils literal"><span class="pre">server</span></code></a>:  ‘nasa_v2.1’, ‘nasa_v1.0’, ‘viewpano’</li>
+<li><a class="reference internal" href="#pycraf.pathprof.SrtmConf.interp" title="pycraf.pathprof.SrtmConf.interp"><code class="xref py py-obj docutils literal"><span class="pre">interp</span></code></a>:  ‘nearest’, ‘linear’, ‘spline’</li>
 <li><a class="reference internal" href="#pycraf.pathprof.SrtmConf.spline_opts" title="pycraf.pathprof.SrtmConf.spline_opts"><code class="xref py py-obj docutils literal"><span class="pre">spline_opts</span></code></a>:  tuple(k, s) (k = degree, s = smoothing factor)</li>
 </ul>
 </dd></dl>
@@ -249,8 +246,8 @@ allowed. Possible values are:</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 05 Sep 2017. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
+    Last built 08 Sep 2017. <br/>
   </p>
 </footer>
   </body>

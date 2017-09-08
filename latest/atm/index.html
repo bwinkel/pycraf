@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Atmospheric models (pycraf.atm) &#8212; pycraf v0.25.4.dev50</title>
-    
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -35,7 +32,7 @@
 
 
   </head>
-  <body role="document">
+  <body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
@@ -93,7 +90,7 @@ attenuation, which is relevant for various purposes. Examples would be to
 calculate the propagation loss associated with a terrestrial path, or a
 so-called slant path between a terminal at large height (e.g., a satellite)
 and an Earth terminal. The latter case is also of interest for observations
-of deep-space objects, as Earth&#8217;s atmosphere dampens the signal of interest.
+of deep-space objects, as Earth’s atmosphere dampens the signal of interest.
 Especially, in astronomy one needs to correct for such attenuation effects to
 determine the original intensity of an object.</p>
 <p>The relevant
@@ -102,7 +99,7 @@ contains two models. The Annex-1 model is more accurate and is valid for
 frequencies between 1 and 1000 GHz. It constructs the attenuation spectrum
 from the Debye continuum absorption and water and oxygen resonance lines. In
 contrast, Annex-2 is based on a simpler empirical method, that works for
-frequencies up to 350 GHz only. It doesn&#8217;t work with layers but assumes just
+frequencies up to 350 GHz only. It doesn’t work with layers but assumes just
 a one-layer slab having an effective temperature, which would produce the
 same overall loss as the multi-layered model. Of course, this effective
 temperature has nothing to do with the true physical temperature (profile)
@@ -116,7 +113,7 @@ significantly. The former determines the specific attenuation for hundreds of
 different layers and as such height profiles for temperature and pressures
 are necessary. These are provided in
 <a class="reference external" href="https://www.itu.int/rec/R-REC-P.835-5-201202-I/en">ITU-R Rec. P.835-5</a>.
-The <a class="reference internal" href="#module-pycraf.atm" title="pycraf.atm"><code class="xref py py-obj docutils literal"><span class="pre">atm</span></code></a> sub-package contains the &#8220;Standard profile&#8221;
+The <a class="reference internal" href="#module-pycraf.atm" title="pycraf.atm"><code class="xref py py-obj docutils literal"><span class="pre">atm</span></code></a> sub-package contains the “Standard profile”
 (<a class="reference internal" href="../api/pycraf.atm.profile_standard.html#pycraf.atm.profile_standard" title="pycraf.atm.profile_standard"><code class="xref py py-obj docutils literal"><span class="pre">profile_standard</span></code></a>) and five more specialized profiles,
 associated with the geographic latitude and season
 (<a class="reference internal" href="../api/pycraf.atm.profile_highlat_summer.html#pycraf.atm.profile_highlat_summer" title="pycraf.atm.profile_highlat_summer"><code class="xref py py-obj docutils literal"><span class="pre">profile_highlat_summer</span></code></a>, <a class="reference internal" href="../api/pycraf.atm.profile_highlat_winter.html#pycraf.atm.profile_highlat_winter" title="pycraf.atm.profile_highlat_winter"><code class="xref py py-obj docutils literal"><span class="pre">profile_highlat_winter</span></code></a>,
@@ -127,7 +124,7 @@ associated with the geographic latitude and season
 <h2>Using <a class="reference internal" href="#module-pycraf.atm" title="pycraf.atm"><code class="xref py py-obj docutils literal"><span class="pre">pycraf.atm</span></code></a><a class="headerlink" href="#using-pycraf-atm" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="height-profiles">
 <h3>Height profiles<a class="headerlink" href="#height-profiles" title="Permalink to this headline">¶</a></h3>
-<p>Let&#8217;s start with having a look at the atmospheric standard height profile:</p>
+<p>Let’s start with having a look at the atmospheric standard height profile:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
@@ -409,16 +406,16 @@ which has a modified algorithm for Annex 2. We will implement this soon.</p>
 <tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.atten_from_opacity.html#pycraf.atm.atten_from_opacity" title="pycraf.atm.atten_from_opacity"><code class="xref py py-obj docutils literal"><span class="pre">atten_from_opacity</span></code></a>(tau,&nbsp;elev)</td>
 <td>Atmospheric attenuation derived from opacity.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.atten_slant_annex1.html#pycraf.atm.atten_slant_annex1" title="pycraf.atm.atten_slant_annex1"><code class="xref py py-obj docutils literal"><span class="pre">atten_slant_annex1</span></code></a>(freq_grid,&nbsp;elevation,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.atten_slant_annex1.html#pycraf.atm.atten_slant_annex1" title="pycraf.atm.atten_slant_annex1"><code class="xref py py-obj docutils literal"><span class="pre">atten_slant_annex1</span></code></a>(freq_grid,&nbsp;elevation,&nbsp;…)</td>
 <td>Path attenuation for a slant path through full atmosphere according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a> Eq (17-20).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.atten_slant_annex2.html#pycraf.atm.atten_slant_annex2" title="pycraf.atm.atten_slant_annex2"><code class="xref py py-obj docutils literal"><span class="pre">atten_slant_annex2</span></code></a>(atten_dry,&nbsp;atten_wet,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.atten_slant_annex2.html#pycraf.atm.atten_slant_annex2" title="pycraf.atm.atten_slant_annex2"><code class="xref py py-obj docutils literal"><span class="pre">atten_slant_annex2</span></code></a>(atten_dry,&nbsp;atten_wet,&nbsp;…)</td>
 <td>Simple path attenuation for slant path through full atmosphere according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Eq (28).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.atten_specific_annex1.html#pycraf.atm.atten_specific_annex1" title="pycraf.atm.atten_specific_annex1"><code class="xref py py-obj docutils literal"><span class="pre">atten_specific_annex1</span></code></a>(freq_grid,&nbsp;press_dry,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.atten_specific_annex1.html#pycraf.atm.atten_specific_annex1" title="pycraf.atm.atten_specific_annex1"><code class="xref py py-obj docutils literal"><span class="pre">atten_specific_annex1</span></code></a>(freq_grid,&nbsp;press_dry,&nbsp;…)</td>
 <td>Specific (one layer) atmospheric attenuation according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Annex 1.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.atten_specific_annex2.html#pycraf.atm.atten_specific_annex2" title="pycraf.atm.atten_specific_annex2"><code class="xref py py-obj docutils literal"><span class="pre">atten_specific_annex2</span></code></a>(freq_grid,&nbsp;press,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.atten_specific_annex2.html#pycraf.atm.atten_specific_annex2" title="pycraf.atm.atten_specific_annex2"><code class="xref py py-obj docutils literal"><span class="pre">atten_specific_annex2</span></code></a>(freq_grid,&nbsp;press,&nbsp;…)</td>
 <td>Specific (one layer) atmospheric attenuation based on a simplified algorithm according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Annex 2.1.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.atten_terrestrial.html#pycraf.atm.atten_terrestrial" title="pycraf.atm.atten_terrestrial"><code class="xref py py-obj docutils literal"><span class="pre">atten_terrestrial</span></code></a>(specific_atten,&nbsp;path_length)</td>
@@ -430,13 +427,13 @@ which has a modified algorithm for Annex 2. We will implement this soon.</p>
 <tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.equivalent_height_wet.html#pycraf.atm.equivalent_height_wet" title="pycraf.atm.equivalent_height_wet"><code class="xref py py-obj docutils literal"><span class="pre">equivalent_height_wet</span></code></a>(freq_grid,&nbsp;press)</td>
 <td>Equivalent height for wet air according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Annex 2.2.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.humidity_from_pressure_water.html#pycraf.atm.humidity_from_pressure_water" title="pycraf.atm.humidity_from_pressure_water"><code class="xref py py-obj docutils literal"><span class="pre">humidity_from_pressure_water</span></code></a>(temp,&nbsp;press,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.humidity_from_pressure_water.html#pycraf.atm.humidity_from_pressure_water" title="pycraf.atm.humidity_from_pressure_water"><code class="xref py py-obj docutils literal"><span class="pre">humidity_from_pressure_water</span></code></a>(temp,&nbsp;press,&nbsp;…)</td>
 <td>Relative humidity according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.453-12-201609-I/en">ITU-R P.453-12</a>.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.opacity_from_atten.html#pycraf.atm.opacity_from_atten" title="pycraf.atm.opacity_from_atten"><code class="xref py py-obj docutils literal"><span class="pre">opacity_from_atten</span></code></a>(atten,&nbsp;elev)</td>
 <td>Atmospheric opacity derived from attenuation.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.pressure_water_from_humidity.html#pycraf.atm.pressure_water_from_humidity" title="pycraf.atm.pressure_water_from_humidity"><code class="xref py py-obj docutils literal"><span class="pre">pressure_water_from_humidity</span></code></a>(temp,&nbsp;press,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.pressure_water_from_humidity.html#pycraf.atm.pressure_water_from_humidity" title="pycraf.atm.pressure_water_from_humidity"><code class="xref py py-obj docutils literal"><span class="pre">pressure_water_from_humidity</span></code></a>(temp,&nbsp;press,&nbsp;…)</td>
 <td>Water pressure according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.453-12-201609-I/en">ITU-R P.453-12</a>.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.pressure_water_from_rho_water.html#pycraf.atm.pressure_water_from_rho_water" title="pycraf.atm.pressure_water_from_rho_water"><code class="xref py py-obj docutils literal"><span class="pre">pressure_water_from_rho_water</span></code></a>(temp,&nbsp;rho_w)</td>
@@ -466,7 +463,7 @@ which has a modified algorithm for Annex 2. We will implement this soon.</p>
 <tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.rho_water_from_pressure_water.html#pycraf.atm.rho_water_from_pressure_water" title="pycraf.atm.rho_water_from_pressure_water"><code class="xref py py-obj docutils literal"><span class="pre">rho_water_from_pressure_water</span></code></a>(temp,&nbsp;press_w)</td>
 <td>Water density according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.453-12-201609-I/en">ITU-R P.453-12</a>.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.saturation_water_pressure.html#pycraf.atm.saturation_water_pressure" title="pycraf.atm.saturation_water_pressure"><code class="xref py py-obj docutils literal"><span class="pre">saturation_water_pressure</span></code></a>(temp,&nbsp;press[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.saturation_water_pressure.html#pycraf.atm.saturation_water_pressure" title="pycraf.atm.saturation_water_pressure"><code class="xref py py-obj docutils literal"><span class="pre">saturation_water_pressure</span></code></a>(temp,&nbsp;press[,&nbsp;…])</td>
 <td>Saturation water pressure according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.453-12-201609-I/en">ITU-R P.453-12</a>.</td>
 </tr>
 </tbody>
@@ -517,8 +514,8 @@ which has a modified algorithm for Annex 2. We will implement this soon.</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 05 Sep 2017. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
+    Last built 08 Sep 2017. <br/>
   </p>
 </footer>
   </body>

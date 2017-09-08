@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v0.25.4.dev50</title>
-    
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -35,7 +32,7 @@
 
 
   </head>
-  <body role="document">
+  <body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
@@ -116,7 +113,7 @@ For longer separations, other effects start to play a more important role:</p>
 <p>Especially, for diffraction loss, information on the terrain heights is
 needed. Therefore, <code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code> implements functions to query
 <code class="xref py py-obj docutils literal"><span class="pre">SRTM</span> <span class="pre">data</span></code>, which was obtained from
-a space shuttle mission. SRTM data has high spatial resolution of 3&#8221; (90 m),
+a space shuttle mission. SRTM data has high spatial resolution of 3” (90 m),
 which makes it more than appropriate for path propagation calculations.</p>
 <p>In order to calculate the overall path attenuation, pycraf follows the
 algorithm proposed in <a class="reference external" href="https://www.itu.int/rec/R-REC-P.452-16-201507-I/en">ITU-R Recommendation P.452</a>. We refer the user
@@ -128,8 +125,8 @@ the P.452 calculations, that fall in the following categories:</p>
 <div><ul class="simple">
 <li>Height profile (terrain map) construction.</li>
 <li>Determination of Geodesics (the Great-circle path equivalent on the
-Earth&#8217;s ellipsoid, the so-called Geoid).</li>
-<li>Finding radiometerological data for the path&#8217;s midpoint, which is also
+Earth’s ellipsoid, the so-called Geoid).</li>
+<li>Finding radiometerological data for the path’s midpoint, which is also
 necessary to determine the effective Earth radii.</li>
 </ul>
 </div></blockquote>
@@ -143,7 +140,7 @@ SRTM tile data; see <a class="reference internal" href="working_with_srtm.html#w
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="height-profiles">
 <span id="pathprof-getting-started-height-profile"></span><h3>Height profiles<a class="headerlink" href="#height-profiles" title="Permalink to this headline">¶</a></h3>
-<p>Let&#8217;s start with querying <code class="xref py py-obj docutils literal"><span class="pre">SRTM</span> <span class="pre">data</span></code> and plot a height profile.</p>
+<p>Let’s start with querying <code class="xref py py-obj docutils literal"><span class="pre">SRTM</span> <span class="pre">data</span></code> and plot a height profile.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
 <span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">pathprof</span>
@@ -375,7 +372,7 @@ using <a class="reference internal" href="../api/pycraf.pathprof.terrain_cmap_fa
 <p class="last">Internally, the height-profile generation with
 <a class="reference internal" href="../api/pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal"><span class="pre">srtm_height_profile</span></code></a> calls two Geodesics helper
 functions provided in pycraf: <a class="reference internal" href="../api/pycraf.pathprof.geoid_inverse.html#pycraf.pathprof.geoid_inverse" title="pycraf.pathprof.geoid_inverse"><code class="xref py py-obj docutils literal"><span class="pre">geoid_inverse</span></code></a> and
-<a class="reference internal" href="../api/pycraf.pathprof.geoid_direct.html#pycraf.pathprof.geoid_direct" title="pycraf.pathprof.geoid_direct"><code class="xref py py-obj docutils literal"><span class="pre">geoid_direct</span></code></a>. They solve the &#8220;Geodesics problem&#8221; using
+<a class="reference internal" href="../api/pycraf.pathprof.geoid_direct.html#pycraf.pathprof.geoid_direct" title="pycraf.pathprof.geoid_direct"><code class="xref py py-obj docutils literal"><span class="pre">geoid_direct</span></code></a>. They solve the “Geodesics problem” using
 <a class="reference external" href="https://en.wikipedia.org/wiki/Vincenty's_formulae">Vincenty’s formulae</a>.
 The underlying method is based on an iterative approach
 and is used to find the distance and relative bearings between two points
@@ -386,7 +383,7 @@ great-circle paths on a sphere, but on the Geoid.</p>
 <p>Another useful feature of the Geodesics functionality is that one can query
 the Geographical coordinates of points at a certain distance from a central
 point. On the sphere, they would all be located on a circle, but on Earth
-it&#8217;s different:</p>
+it’s different:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
@@ -421,7 +418,7 @@ it&#8217;s different:</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Make no mistake, the apparent distortion mostly comes from projecting the
-&#8220;sphere&#8221; to a flat projection. However, if one calculates the angular
+“sphere” to a flat projection. However, if one calculates the angular
 distances with the formula for the sphere, there is some deviation
 (from North to South). For many cases where only rough estimates are
 needed it will be sufficient to treat the Geoid as a normal sphere.</p>
@@ -435,7 +432,7 @@ potential interferer and the victim terminal would be too small, potentially
 leading to radio frequency interference (RFI).</p>
 <p>The simple approach would be to create a <a class="reference internal" href="../api/pycraf.pathprof.PathProp.html#pycraf.pathprof.PathProp" title="pycraf.pathprof.PathProp"><code class="xref py py-obj docutils literal"><span class="pre">PathProp</span></code></a> instance
 for each pixel in the desired region (with the Tx being in the center of the map, and the Rx located at the other map pixels) and run the <a class="reference internal" href="../api/pycraf.pathprof.loss_complete.html#pycraf.pathprof.loss_complete" title="pycraf.pathprof.loss_complete"><code class="xref py py-obj docutils literal"><span class="pre">loss_complete</span></code></a> function accordingly. This is relatively slow.
-Therefore, we added a faster alternative, <a class="reference internal" href="../api/pycraf.pathprof.atten_map_fast.html#pycraf.pathprof.atten_map_fast" title="pycraf.pathprof.atten_map_fast"><code class="xref py py-obj docutils literal"><span class="pre">atten_map_fast</span></code></a>. The idea is to generate the full height profiles only for the pixels on the map edges and re-use the arrays for the inner pixels with a clever hashing algorithm. The details of this are encapsulated in the <a class="reference internal" href="../api/pycraf.pathprof.height_profile_data.html#pycraf.pathprof.height_profile_data" title="pycraf.pathprof.height_profile_data"><code class="xref py py-obj docutils literal"><span class="pre">height_profile_data</span></code></a> function, such that the user doesn&#8217;t need to understand what&#8217;s going on under the hood:</p>
+Therefore, we added a faster alternative, <a class="reference internal" href="../api/pycraf.pathprof.atten_map_fast.html#pycraf.pathprof.atten_map_fast" title="pycraf.pathprof.atten_map_fast"><code class="xref py py-obj docutils literal"><span class="pre">atten_map_fast</span></code></a>. The idea is to generate the full height profiles only for the pixels on the map edges and re-use the arrays for the inner pixels with a clever hashing algorithm. The details of this are encapsulated in the <a class="reference internal" href="../api/pycraf.pathprof.height_profile_data.html#pycraf.pathprof.height_profile_data" title="pycraf.pathprof.height_profile_data"><code class="xref py py-obj docutils literal"><span class="pre">height_profile_data</span></code></a> function, such that the user doesn’t need to understand what’s going on under the hood:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
 <span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">pathprof</span><span class="p">,</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
 
@@ -540,16 +537,16 @@ estimation.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.annual_timepercent_from_worst_month.html#pycraf.pathprof.annual_timepercent_from_worst_month" title="pycraf.pathprof.annual_timepercent_from_worst_month"><code class="xref py py-obj docutils literal"><span class="pre">annual_timepercent_from_worst_month</span></code></a>(p_w,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.annual_timepercent_from_worst_month.html#pycraf.pathprof.annual_timepercent_from_worst_month" title="pycraf.pathprof.annual_timepercent_from_worst_month"><code class="xref py py-obj docutils literal"><span class="pre">annual_timepercent_from_worst_month</span></code></a>(p_w,&nbsp;…)</td>
 <td>Calculate annual equivalent time percentage, p, from worst-month time percentage, p_w, according to ITU-R P.452-16 Eq (1).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.atten_map_fast.html#pycraf.pathprof.atten_map_fast" title="pycraf.pathprof.atten_map_fast"><code class="xref py py-obj docutils literal"><span class="pre">atten_map_fast</span></code></a>(freq,&nbsp;temperature,&nbsp;pressure,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.atten_map_fast.html#pycraf.pathprof.atten_map_fast" title="pycraf.pathprof.atten_map_fast"><code class="xref py py-obj docutils literal"><span class="pre">atten_map_fast</span></code></a>(freq,&nbsp;temperature,&nbsp;pressure,&nbsp;…)</td>
 <td>Calculate attenuation maps using a fast method.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.clutter_correction.html#pycraf.pathprof.clutter_correction" title="pycraf.pathprof.clutter_correction"><code class="xref py py-obj docutils literal"><span class="pre">clutter_correction</span></code></a>(h_g,&nbsp;zone,&nbsp;freq)</td>
 <td>Calculate the Clutter loss of a propagating radio wave according to ITU-R P.452-16 Eq (57).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.clutter_imt.html#pycraf.pathprof.clutter_imt" title="pycraf.pathprof.clutter_imt"><code class="xref py py-obj docutils literal"><span class="pre">clutter_imt</span></code></a>(freq,&nbsp;dist,&nbsp;location_percent[,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.clutter_imt.html#pycraf.pathprof.clutter_imt" title="pycraf.pathprof.clutter_imt"><code class="xref py py-obj docutils literal"><span class="pre">clutter_imt</span></code></a>(freq,&nbsp;dist,&nbsp;location_percent[,&nbsp;…])</td>
 <td>Calculate the Clutter loss according to IMT.CLUTTER document (method 2).</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.deltaN_N0_from_map.html#pycraf.pathprof.deltaN_N0_from_map" title="pycraf.pathprof.deltaN_N0_from_map"><code class="xref py py-obj docutils literal"><span class="pre">deltaN_N0_from_map</span></code></a>(lon,&nbsp;lat)</td>
@@ -570,13 +567,13 @@ estimation.</p>
 <tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.geoid_area.html#pycraf.pathprof.geoid_area" title="pycraf.pathprof.geoid_area"><code class="xref py py-obj docutils literal"><span class="pre">geoid_area</span></code></a>(lon1,&nbsp;lon2,&nbsp;lat1,&nbsp;lat2)</td>
 <td>Calculate WGS84 surface area over interval [lon1, lon2] and [lat1, lat2].</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.geoid_direct.html#pycraf.pathprof.geoid_direct" title="pycraf.pathprof.geoid_direct"><code class="xref py py-obj docutils literal"><span class="pre">geoid_direct</span></code></a>(lon1,&nbsp;lat1,&nbsp;bearing1,&nbsp;dist[,&nbsp;...])</td>
-<td>Solve direct Geodesics problem using Vincenty&#8217;s formulae.</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.geoid_direct.html#pycraf.pathprof.geoid_direct" title="pycraf.pathprof.geoid_direct"><code class="xref py py-obj docutils literal"><span class="pre">geoid_direct</span></code></a>(lon1,&nbsp;lat1,&nbsp;bearing1,&nbsp;dist[,&nbsp;…])</td>
+<td>Solve direct Geodesics problem using Vincenty’s formulae.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.geoid_inverse.html#pycraf.pathprof.geoid_inverse" title="pycraf.pathprof.geoid_inverse"><code class="xref py py-obj docutils literal"><span class="pre">geoid_inverse</span></code></a>(lon1,&nbsp;lat1,&nbsp;lon2,&nbsp;lat2[,&nbsp;eps,&nbsp;...])</td>
-<td>Solve inverse Geodesics problem using Vincenty&#8217;s formulae.</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.geoid_inverse.html#pycraf.pathprof.geoid_inverse" title="pycraf.pathprof.geoid_inverse"><code class="xref py py-obj docutils literal"><span class="pre">geoid_inverse</span></code></a>(lon1,&nbsp;lat1,&nbsp;lon2,&nbsp;lat2[,&nbsp;eps,&nbsp;…])</td>
+<td>Solve inverse Geodesics problem using Vincenty’s formulae.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.height_profile_data.html#pycraf.pathprof.height_profile_data" title="pycraf.pathprof.height_profile_data"><code class="xref py py-obj docutils literal"><span class="pre">height_profile_data</span></code></a>(lon_t,&nbsp;lat_t,&nbsp;...[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.height_profile_data.html#pycraf.pathprof.height_profile_data" title="pycraf.pathprof.height_profile_data"><code class="xref py py-obj docutils literal"><span class="pre">height_profile_data</span></code></a>(lon_t,&nbsp;lat_t,&nbsp;…[,&nbsp;…])</td>
 <td>Calculate height profiles and auxillary maps needed for <a class="reference internal" href="../api/pycraf.pathprof.atten_map_fast.html#pycraf.pathprof.atten_map_fast" title="pycraf.pathprof.atten_map_fast"><code class="xref py py-obj docutils literal"><span class="pre">atten_map_fast</span></code></a>.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.loss_complete.html#pycraf.pathprof.loss_complete" title="pycraf.pathprof.loss_complete"><code class="xref py py-obj docutils literal"><span class="pre">loss_complete</span></code></a>(pathprop[,&nbsp;G_t,&nbsp;G_r])</td>
@@ -594,22 +591,22 @@ estimation.</p>
 <tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.loss_troposcatter.html#pycraf.pathprof.loss_troposcatter" title="pycraf.pathprof.loss_troposcatter"><code class="xref py py-obj docutils literal"><span class="pre">loss_troposcatter</span></code></a>(pathprop[,&nbsp;G_t,&nbsp;G_r])</td>
 <td>Calculate the tropospheric scatter loss, L_bs, of a propagating radio wave according to ITU-R P.452-16 Eq (45).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.make_kmz.html#pycraf.pathprof.make_kmz" title="pycraf.pathprof.make_kmz"><code class="xref py py-obj docutils literal"><span class="pre">make_kmz</span></code></a>(kmz_filename,&nbsp;atten_map,&nbsp;bbox[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.make_kmz.html#pycraf.pathprof.make_kmz" title="pycraf.pathprof.make_kmz"><code class="xref py py-obj docutils literal"><span class="pre">make_kmz</span></code></a>(kmz_filename,&nbsp;atten_map,&nbsp;bbox[,&nbsp;…])</td>
 <td>Produce kmz file for use in GIS software (e.g., Google Earth).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.radiomet_data_for_pathcenter.html#pycraf.pathprof.radiomet_data_for_pathcenter" title="pycraf.pathprof.radiomet_data_for_pathcenter"><code class="xref py py-obj docutils literal"><span class="pre">radiomet_data_for_pathcenter</span></code></a>(lon,&nbsp;lat,&nbsp;d_tm,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.radiomet_data_for_pathcenter.html#pycraf.pathprof.radiomet_data_for_pathcenter" title="pycraf.pathprof.radiomet_data_for_pathcenter"><code class="xref py py-obj docutils literal"><span class="pre">radiomet_data_for_pathcenter</span></code></a>(lon,&nbsp;lat,&nbsp;d_tm,&nbsp;…)</td>
 <td>Calculate delta_N, beta_0, and N_0 values from digitized maps, according to ITU-R P.452-16 Eq (2-4).</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.set_num_threads.html#pycraf.pathprof.set_num_threads" title="pycraf.pathprof.set_num_threads"><code class="xref py py-obj docutils literal"><span class="pre">set_num_threads</span></code></a>(int&nbsp;nthreads)</td>
 <td>Change maximum number of threads to use.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_data.html#pycraf.pathprof.srtm_height_data" title="pycraf.pathprof.srtm_height_data"><code class="xref py py-obj docutils literal"><span class="pre">srtm_height_data</span></code></a>(lons,&nbsp;lats)</td>
-<td>Interpolated SRTM terrain data extracted from &#8221;.hgt&#8221; files.</td>
+<td>Interpolated SRTM terrain data extracted from “.hgt” files.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_map.html#pycraf.pathprof.srtm_height_map" title="pycraf.pathprof.srtm_height_map"><code class="xref py py-obj docutils literal"><span class="pre">srtm_height_map</span></code></a>(lon_c,&nbsp;lat_c,&nbsp;map_size_lon,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_map.html#pycraf.pathprof.srtm_height_map" title="pycraf.pathprof.srtm_height_map"><code class="xref py py-obj docutils literal"><span class="pre">srtm_height_map</span></code></a>(lon_c,&nbsp;lat_c,&nbsp;map_size_lon,&nbsp;…)</td>
 <td>Extract terrain map from SRTM data.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal"><span class="pre">srtm_height_profile</span></code></a>(lon_t,&nbsp;lat_t,&nbsp;lon_r,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal"><span class="pre">srtm_height_profile</span></code></a>(lon_t,&nbsp;lat_t,&nbsp;lon_r,&nbsp;…)</td>
 <td>Extract a height profile from SRTM data.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.terrain_cmap_factory.html#pycraf.pathprof.terrain_cmap_factory" title="pycraf.pathprof.terrain_cmap_factory"><code class="xref py py-obj docutils literal"><span class="pre">terrain_cmap_factory</span></code></a>([sealevel,&nbsp;vmax])</td>
@@ -629,7 +626,7 @@ estimation.</p>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CLUTTER</span></code></td>
 <td>Clutter types are defined according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.452-16-201507-I/en">ITU-R Recommendation P.452-16</a>.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.PathProp.html#pycraf.pathprof.PathProp" title="pycraf.pathprof.PathProp"><code class="xref py py-obj docutils literal"><span class="pre">PathProp</span></code></a>(freq,&nbsp;temperature,&nbsp;pressure,&nbsp;lon_t,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.pathprof.PathProp.html#pycraf.pathprof.PathProp" title="pycraf.pathprof.PathProp"><code class="xref py py-obj docutils literal"><span class="pre">PathProp</span></code></a>(freq,&nbsp;temperature,&nbsp;pressure,&nbsp;lon_t,&nbsp;…)</td>
 <td>Container class that holds all path profile properties.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.pathprof.SrtmConf.html#pycraf.pathprof.SrtmConf" title="pycraf.pathprof.SrtmConf"><code class="xref py py-obj docutils literal"><span class="pre">SrtmConf</span></code></a>()</td>
@@ -789,8 +786,8 @@ estimation.</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 05 Sep 2017. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
+    Last built 08 Sep 2017. <br/>
   </p>
 </footer>
   </body>

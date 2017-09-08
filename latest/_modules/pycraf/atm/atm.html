@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>pycraf.atm.atm &#8212; pycraf v0.25.4.dev50</title>
-    
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -33,7 +30,7 @@
 
 
   </head>
-  <body role="document">
+  <body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../../../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
@@ -131,11 +128,11 @@
     <span class="p">)</span>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="opacity_from_atten"><a class="viewcode-back" href="../../../api/pycraf.atm.opacity_from_atten.html#pycraf.atm.opacity_from_atten">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">atten</span><span class="o">=</span><span class="p">(</span><span class="mf">1.000000000001</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span> <span class="n">elev</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="opacity_from_atten"><a class="viewcode-back" href="../../../api/pycraf.atm.opacity_from_atten.html#pycraf.atm.opacity_from_atten">[docs]</a><span class="k">def</span> <span class="nf">opacity_from_atten</span><span class="p">(</span><span class="n">atten</span><span class="p">,</span> <span class="n">elev</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">opacity_from_atten</span><span class="p">(</span><span class="n">atten</span><span class="p">,</span> <span class="n">elev</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Atmospheric opacity derived from attenuation.</span>
 
@@ -158,11 +155,11 @@
     <span class="k">return</span> <span class="n">AM_inv</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">atten</span><span class="p">)</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="atten_from_opacity"><a class="viewcode-back" href="../../../api/pycraf.atm.atten_from_opacity.html#pycraf.atm.atten_from_opacity">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">tau</span><span class="o">=</span><span class="p">(</span><span class="mf">0.000000000001</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span> <span class="n">elev</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="atten_from_opacity"><a class="viewcode-back" href="../../../api/pycraf.atm.atten_from_opacity.html#pycraf.atm.atten_from_opacity">[docs]</a><span class="k">def</span> <span class="nf">atten_from_opacity</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">elev</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">atten_from_opacity</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">elev</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Atmospheric attenuation derived from opacity.</span>
 
@@ -186,13 +183,13 @@
     <span class="k">return</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tau</span> <span class="o">*</span> <span class="n">AM</span><span class="p">))</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="refractive_index"><a class="viewcode-back" href="../../../api/pycraf.atm.refractive_index.html#pycraf.atm.refractive_index">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">temp</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
     <span class="n">press</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">press_w</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="refractive_index"><a class="viewcode-back" href="../../../api/pycraf.atm.refractive_index.html#pycraf.atm.refractive_index">[docs]</a><span class="k">def</span> <span class="nf">refractive_index</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">press_w</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">refractive_index</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">press_w</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Refractive index according to `ITU-R P.453-12</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.453-12-201609-I/en&gt;`_.</span>
@@ -220,12 +217,12 @@
         <span class="p">)</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="saturation_water_pressure"><a class="viewcode-back" href="../../../api/pycraf.atm.saturation_water_pressure.html#pycraf.atm.saturation_water_pressure">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">temp</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
     <span class="n">press</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">hPa</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="saturation_water_pressure"><a class="viewcode-back" href="../../../api/pycraf.atm.saturation_water_pressure.html#pycraf.atm.saturation_water_pressure">[docs]</a><span class="k">def</span> <span class="nf">saturation_water_pressure</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="s1">&#39;water&#39;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">saturation_water_pressure</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="s1">&#39;water&#39;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Saturation water pressure according to `ITU-R P.453-12</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.453-12-201609-I/en&gt;`_.</span>
@@ -272,13 +269,13 @@
     <span class="k">return</span> <span class="n">e_s</span>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="pressure_water_from_humidity"><a class="viewcode-back" href="../../../api/pycraf.atm.pressure_water_from_humidity.html#pycraf.atm.pressure_water_from_humidity">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">temp</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
     <span class="n">press</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">humidity</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">hPa</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="pressure_water_from_humidity"><a class="viewcode-back" href="../../../api/pycraf.atm.pressure_water_from_humidity.html#pycraf.atm.pressure_water_from_humidity">[docs]</a><span class="k">def</span> <span class="nf">pressure_water_from_humidity</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">pressure_water_from_humidity</span><span class="p">(</span>
         <span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">humidity</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="s1">&#39;water&#39;</span>
         <span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
@@ -311,13 +308,13 @@
     <span class="k">return</span> <span class="n">press_w</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="humidity_from_pressure_water"><a class="viewcode-back" href="../../../api/pycraf.atm.humidity_from_pressure_water.html#pycraf.atm.humidity_from_pressure_water">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">temp</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
     <span class="n">press</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">press_w</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">percent</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="humidity_from_pressure_water"><a class="viewcode-back" href="../../../api/pycraf.atm.humidity_from_pressure_water.html#pycraf.atm.humidity_from_pressure_water">[docs]</a><span class="k">def</span> <span class="nf">humidity_from_pressure_water</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">humidity_from_pressure_water</span><span class="p">(</span>
         <span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">press_w</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="s1">&#39;water&#39;</span>
         <span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
@@ -352,12 +349,12 @@
     <span class="k">return</span> <span class="n">humidity</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="pressure_water_from_rho_water"><a class="viewcode-back" href="../../../api/pycraf.atm.pressure_water_from_rho_water.html#pycraf.atm.pressure_water_from_rho_water">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">temp</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
     <span class="n">rho_w</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">hPa</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="pressure_water_from_rho_water"><a class="viewcode-back" href="../../../api/pycraf.atm.pressure_water_from_rho_water.html#pycraf.atm.pressure_water_from_rho_water">[docs]</a><span class="k">def</span> <span class="nf">pressure_water_from_rho_water</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">rho_w</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">pressure_water_from_rho_water</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">rho_w</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Water pressure according to `ITU-R P.453-12</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.453-12-201609-I/en&gt;`_.</span>
@@ -380,12 +377,12 @@
     <span class="k">return</span> <span class="n">press_w</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="rho_water_from_pressure_water"><a class="viewcode-back" href="../../../api/pycraf.atm.rho_water_from_pressure_water.html#pycraf.atm.rho_water_from_pressure_water">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">temp</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
     <span class="n">press_w</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="rho_water_from_pressure_water"><a class="viewcode-back" href="../../../api/pycraf.atm.rho_water_from_pressure_water.html#pycraf.atm.rho_water_from_pressure_water">[docs]</a><span class="k">def</span> <span class="nf">rho_water_from_pressure_water</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press_w</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">rho_water_from_pressure_water</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press_w</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Water density according to `ITU-R P.453-12</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.453-12-201609-I/en&gt;`_.</span>
@@ -408,11 +405,11 @@
     <span class="k">return</span> <span class="n">rho_w</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="profile_standard"><a class="viewcode-back" href="../../../api/pycraf.atm.profile_standard.html#pycraf.atm.profile_standard">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">height</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">84.99999999</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="profile_standard"><a class="viewcode-back" href="../../../api/pycraf.atm.profile_standard.html#pycraf.atm.profile_standard">[docs]</a><span class="k">def</span> <span class="nf">profile_standard</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">profile_standard</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Standard height profiles according to `ITU-R P.835-5</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.835-5-201202-I/en&gt;`_, Annex 1.</span>
@@ -1270,14 +1267,14 @@
     <span class="k">return</span> <span class="n">atten_o2</span> <span class="o">*</span> <span class="mf">0.182</span> <span class="o">*</span> <span class="n">freq_grid</span><span class="p">,</span> <span class="n">atten_h2o</span> <span class="o">*</span> <span class="mf">0.182</span> <span class="o">*</span> <span class="n">freq_grid</span>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="atten_specific_annex1"><a class="viewcode-back" href="../../../api/pycraf.atm.atten_specific_annex1.html#pycraf.atm.atten_specific_annex1">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">freq_grid</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">GHz</span><span class="p">),</span>
     <span class="n">press_dry</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">press_w</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">temp</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">)</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="atten_specific_annex1"><a class="viewcode-back" href="../../../api/pycraf.atm.atten_specific_annex1.html#pycraf.atm.atten_specific_annex1">[docs]</a><span class="k">def</span> <span class="nf">atten_specific_annex1</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">atten_specific_annex1</span><span class="p">(</span>
         <span class="n">freq_grid</span><span class="p">,</span> <span class="n">press_dry</span><span class="p">,</span> <span class="n">press_w</span><span class="p">,</span> <span class="n">temp</span>
         <span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
@@ -1314,12 +1311,12 @@
         <span class="p">)</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="atten_terrestrial"><a class="viewcode-back" href="../../../api/pycraf.atm.atten_terrestrial.html#pycraf.atm.atten_terrestrial">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">specific_atten</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
     <span class="n">path_length</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="atten_terrestrial"><a class="viewcode-back" href="../../../api/pycraf.atm.atten_terrestrial.html#pycraf.atm.atten_terrestrial">[docs]</a><span class="k">def</span> <span class="nf">atten_terrestrial</span><span class="p">(</span><span class="n">specific_atten</span><span class="p">,</span> <span class="n">path_length</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">atten_terrestrial</span><span class="p">(</span><span class="n">specific_atten</span><span class="p">,</span> <span class="n">path_length</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Total path attenuation for a path close to the ground (i.e., one layer),</span>
 <span class="sd">    according to `ITU-R P.676-10</span>
@@ -1476,7 +1473,7 @@
     <span class="k">return</span> <span class="n">path_params</span><span class="p">,</span> <span class="n">refraction</span>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="atten_slant_annex1"><a class="viewcode-back" href="../../../api/pycraf.atm.atten_slant_annex1.html#pycraf.atm.atten_slant_annex1">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">freq_grid</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">GHz</span><span class="p">),</span>
     <span class="n">elevation</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">obs_alt</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
@@ -1484,7 +1481,7 @@
     <span class="n">max_path_length</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">)</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="atten_slant_annex1"><a class="viewcode-back" href="../../../api/pycraf.atm.atten_slant_annex1.html#pycraf.atm.atten_slant_annex1">[docs]</a><span class="k">def</span> <span class="nf">atten_slant_annex1</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">atten_slant_annex1</span><span class="p">(</span>
         <span class="n">freq_grid</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span> <span class="n">obs_alt</span><span class="p">,</span> <span class="n">profile_func</span><span class="p">,</span>
         <span class="n">t_bg</span><span class="o">=</span><span class="mf">2.73</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="n">max_path_length</span><span class="o">=</span><span class="mf">1000.</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span>
         <span class="p">):</span>
@@ -1728,14 +1725,14 @@
     <span class="k">return</span> <span class="n">atten_dry</span><span class="p">,</span> <span class="n">atten_wet</span>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="atten_specific_annex2"><a class="viewcode-back" href="../../../api/pycraf.atm.atten_specific_annex2.html#pycraf.atm.atten_specific_annex2">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">freq_grid</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="mf">350.</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">GHz</span><span class="p">),</span>
     <span class="n">press</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">rho_w</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span><span class="p">),</span>
     <span class="n">temp</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">)</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="atten_specific_annex2"><a class="viewcode-back" href="../../../api/pycraf.atm.atten_specific_annex2.html#pycraf.atm.atten_specific_annex2">[docs]</a><span class="k">def</span> <span class="nf">atten_specific_annex2</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">rho_w</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">atten_specific_annex2</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">rho_w</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Specific (one layer) atmospheric attenuation based on a simplified</span>
 <span class="sd">    algorithm according to `ITU-R P.676-10</span>
@@ -1769,12 +1766,12 @@
         <span class="p">)</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="equivalent_height_dry"><a class="viewcode-back" href="../../../api/pycraf.atm.equivalent_height_dry.html#pycraf.atm.equivalent_height_dry">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">freq_grid</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="mf">350.</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">GHz</span><span class="p">),</span>
     <span class="n">press</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">km</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="equivalent_height_dry"><a class="viewcode-back" href="../../../api/pycraf.atm.equivalent_height_dry.html#pycraf.atm.equivalent_height_dry">[docs]</a><span class="k">def</span> <span class="nf">equivalent_height_dry</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">press</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">equivalent_height_dry</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">press</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Equivalent height for dry air according to `ITU-R P.676-10</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.676-10-201309-S/en&gt;`_, Annex 2.2.</span>
@@ -1816,12 +1813,12 @@
     <span class="k">return</span> <span class="n">h_0</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="equivalent_height_wet"><a class="viewcode-back" href="../../../api/pycraf.atm.equivalent_height_wet.html#pycraf.atm.equivalent_height_wet">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">freq_grid</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="mf">350.</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">GHz</span><span class="p">),</span>
     <span class="n">press</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">km</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="equivalent_height_wet"><a class="viewcode-back" href="../../../api/pycraf.atm.equivalent_height_wet.html#pycraf.atm.equivalent_height_wet">[docs]</a><span class="k">def</span> <span class="nf">equivalent_height_wet</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">press</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">equivalent_height_wet</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">press</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Equivalent height for wet air according to `ITU-R P.676-10</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.676-10-201309-S/en&gt;`_, Annex 2.2.</span>
@@ -1858,7 +1855,7 @@
     <span class="k">return</span> <span class="n">h_w</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="atten_slant_annex2"><a class="viewcode-back" href="../../../api/pycraf.atm.atten_slant_annex2.html#pycraf.atm.atten_slant_annex2">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">atten_dry</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
     <span class="n">atten_wet</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
     <span class="n">h_dry</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
@@ -1866,7 +1863,7 @@
     <span class="n">elev</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="atten_slant_annex2"><a class="viewcode-back" href="../../../api/pycraf.atm.atten_slant_annex2.html#pycraf.atm.atten_slant_annex2">[docs]</a><span class="k">def</span> <span class="nf">atten_slant_annex2</span><span class="p">(</span><span class="n">atten_dry</span><span class="p">,</span> <span class="n">atten_wet</span><span class="p">,</span> <span class="n">h_dry</span><span class="p">,</span> <span class="n">h_wet</span><span class="p">,</span> <span class="n">elev</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">atten_slant_annex2</span><span class="p">(</span><span class="n">atten_dry</span><span class="p">,</span> <span class="n">atten_wet</span><span class="p">,</span> <span class="n">h_dry</span><span class="p">,</span> <span class="n">h_wet</span><span class="p">,</span> <span class="n">elev</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Simple path attenuation for slant path through full atmosphere according to</span>
 <span class="sd">    `ITU-R P.676-10 &lt;https://www.itu.int/rec/R-REC-P.676-10-201309-S/en&gt;`_,</span>
@@ -1918,8 +1915,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 05 Sep 2017. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
+    Last built 08 Sep 2017. <br/>
   </p>
 </footer>
   </body>
