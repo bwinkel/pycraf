@@ -243,6 +243,57 @@ def test_imt2020_composite_pattern():
         )
 
 
+def test_imt2020_composite_pattern_broadcast():
+
+    azims = np.linspace(-50, 50, 3) * apu.deg
+    elevs = np.linspace(-65, 65, 3) * apu.deg
+
+    azim_i, elev_j = [0, 10] * apu.deg, [0, 5] * apu.deg
+
+    G_Emax = 5 * cnv.dB
+    A_m, SLA_nu = 30. * cnv.dimless, 30. * cnv.dimless
+    azim_3db, elev_3db = 65. * apu.deg, 65. * apu.deg
+
+    d_H, d_V = 0.5 * cnv.dimless, 0.5 * cnv.dimless
+    N_H, N_V = 8, 8
+
+    gains_array = imt.imt2020_composite_pattern(
+        azims[np.newaxis, :, np.newaxis, np.newaxis],
+        elevs[:, np.newaxis, np.newaxis, np.newaxis],
+        azim_i[np.newaxis, np.newaxis, np.newaxis],
+        elev_j[np.newaxis, np.newaxis, :, np.newaxis],
+        G_Emax,
+        A_m, SLA_nu,
+        azim_3db, elev_3db,
+        d_H, d_V,
+        N_H, N_V,
+        )
+
+    assert_quantity_allclose(
+        gains_array,
+        [
+            [[[-28.44916445, -20.56675583],
+              [-29.83977323, -22.01867205]],
+             [[-7.59590143, -16.00107479],
+              [-8.98651206, -17.3092823]],
+             [[-28.44916445, -59.40173918],
+              [-29.83977323, -58.8273068]]],
+            [[[-15.46860319, -0.93379455],
+              [-17.25319963, -2.69413352]],
+             [[23.0618, 14.65663147],
+              [21.2772007, 12.95442963]],
+             [[-15.46860319, -5.31790286],
+              [-17.25319963, -7.02605587]]],
+            [[[-28.44916445, -20.5667544],
+              [-49.57172209, -41.75039869]],
+             [[-7.59590143, -16.00107002],
+              [-28.7182579, -37.04088974]],
+             [[-28.44916445, -59.40173918],
+              [-49.57172209, -78.5662747]]]
+            ] * cnv.dB
+        )
+
+
 def test_fl_pattern():
 
     args_list = [
