@@ -155,13 +155,24 @@ def _imt2020_composite_pattern(
         phi_3db, theta_3db
         )
 
+    # pre-compute some quantities for speed-up
+    _dV_cos_theta = d_V * np.cos(np.radians(theta))
+    _dH_sin_theta_sin_phi = (
+        d_H * np.sin(np.radians(theta)) * np.sin(np.radians(phi))
+        )
+
+    _dV_sin_theta_i = d_V * np.sin(np.radians(theta_i))
+    _dH_cos_theta_i_sin_phi_i = (
+        d_H * np.cos(np.radians(theta_i)) * np.sin(np.radians(phi_i))
+        )
+
     def nu(m, n):
         '''m, n zero-based (unlike in IMT.MODEL document, Table 4'''
 
         return np.exp(
             1j * 2 * np.pi * (
-                n * d_V * np.cos(np.radians(theta)) +
-                m * d_H * np.sin(np.radians(theta)) * np.sin(np.radians(phi))
+                n * _dV_cos_theta +
+                m * _dH_sin_theta_sin_phi
                 )
             )
 
@@ -170,9 +181,8 @@ def _imt2020_composite_pattern(
 
         return np.exp(
             1j * 2 * np.pi * (
-                n * d_V * np.sin(np.radians(theta_i)) +
-                m * d_H * np.cos(np.radians(theta_i)) *
-                np.sin(np.radians(phi_i))
+                n * _dV_sin_theta_i +
+                m * _dH_cos_theta_i_sin_phi_i
                 )
             ) / np.sqrt(N_H * N_V)
 
