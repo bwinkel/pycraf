@@ -290,7 +290,8 @@ def test_imt2020_composite_pattern_broadcast():
               [-28.7182579, -37.04088974]],
              [[-28.44916445, -59.40173918],
               [-49.57172209, -78.5662747]]]
-            ] * cnv.dB
+            ] * cnv.dB,
+        atol=1.e-4 * cnv.dB, rtol=1.e-6
         )
 
 
