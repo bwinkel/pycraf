@@ -97,13 +97,25 @@ def great_circle_bearing(l1, b1, l2, b2):
     return np.degrees(np.arctan2(a, b))
 
 
+def _cart_to_sphere(x, y, z, broadcast_arrays=True):
+
+    r = np.sqrt(x ** 2 + y ** 2 + z ** 2)
+    theta = 90 - np.degrees(np.arccos(z / r))
+    phi = np.degrees(np.arctan2(y, x))
+
+    if broadcast_arrays:
+        r, phi, theta = np.broadcast_arrays(r, phi, theta)
+
+    return r, phi, theta
+
+
 @utils.ranged_quantity_input(
     x=(None, None, apu.m),
     y=(None, None, apu.m),
     z=(None, None, apu.m),
     strip_input_units=True, output_unit=(apu.m, apu.deg, apu.deg)
     )
-def cart_to_sphere(x, y, z):
+def cart_to_sphere(x, y, z, broadcast_arrays=True):
     '''
     Spherical coordinates from Cartesian representation.
 
@@ -116,10 +128,14 @@ def cart_to_sphere(x, y, z):
     -------
     r : `~astropy.units.Quantity`
         Radial distance [m]
-    theta : `~astropy.units.Quantity`
-        Elevation [deg]
     phi : `~astropy.units.Quantity`
         Azimuth [deg]
+    theta : `~astropy.units.Quantity`
+        Elevation [deg]
+    broadcast_arrays : boolean, optional
+        If 'True', output arrays will be broadcasted to dense
+        matrices, otherwise the returned arrays will be a
+        sparse representation (default: True)
 
     Notes
     -----
@@ -127,11 +143,21 @@ def cart_to_sphere(x, y, z):
     to the (positive) `z` axis, but the elevation above the `x`-`y` plane.
     '''
 
-    r = np.sqrt(x ** 2 + y ** 2 + z ** 2)
-    theta = 90 - np.degrees(np.arccos(z / r))
-    phi = np.degrees(np.arctan2(y, x))
+    return _cart_to_sphere(x, y, z, broadcast_arrays=broadcast_arrays)
 
-    return r, theta, phi
+
+def _sphere_to_cart(r, phi, theta, broadcast_arrays=True):
+
+    theta = 90. - theta
+
+    x = r * np.sin(np.radians(theta)) * np.cos(np.radians(phi))
+    y = r * np.sin(np.radians(theta)) * np.sin(np.radians(phi))
+    z = r * np.cos(np.radians(theta))
+
+    if broadcast_arrays:
+        x, y, z = np.broadcast_arrays(x, y, z)
+
+    return x, y, z
 
 
 @utils.ranged_quantity_input(
@@ -140,7 +166,7 @@ def cart_to_sphere(x, y, z):
     phi=(None, None, apu.deg),
     strip_input_units=True, output_unit=(apu.m, apu.m, apu.m)
     )
-def sphere_to_cart(r, theta, phi):
+def sphere_to_cart(r, phi, theta, broadcast_arrays=True):
     '''
     Spherical coordinates from Cartesian representation.
 
@@ -148,10 +174,14 @@ def sphere_to_cart(r, theta, phi):
     ----------
     r : `~astropy.units.Quantity`
         Radial distance [m]
-    theta : `~astropy.units.Quantity`
-        Elevation [deg]
     phi : `~astropy.units.Quantity`
         Azimuth [deg]
+    theta : `~astropy.units.Quantity`
+        Elevation [deg]
+    broadcast_arrays : boolean, optional
+        If 'True', output arrays will be broadcasted to dense
+        matrices, otherwise the returned arrays will be a
+        sparse representation (default: True)
 
     Returns
     -------
@@ -164,10 +194,6 @@ def sphere_to_cart(r, theta, phi):
     to the (positive) `z` axis, but the elevation above the `x`-`y` plane.
     '''
 
-    theta = 90. - theta
+    return _sphere_to_cart(r, phi, theta, broadcast_arrays=broadcast_arrays)
 
-    x = r * np.sin(np.radians(theta)) * np.cos(np.radians(phi))
-    y = r * np.sin(np.radians(theta)) * np.sin(np.radians(phi))
-    z = r * np.cos(np.radians(theta))
 
-    return x, y, z
