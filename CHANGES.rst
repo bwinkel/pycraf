@@ -4,15 +4,21 @@
 New Features
 ------------
 
+pycraf.antenna
+^^^^^^^^^^^^^^^
+- Add correlation-level parameter to `imt2020_composite_pattern` function.
+
+pycraf.geometry
+^^^^^^^^^^^^^^^
+- Add various convenience functions to create 3D rotation matrices from
+  rotation axis or Euler angles (and vice versa). Streamline the geometry
+  subpackage to allow proper numpy broadcasting.
+
 pycraf.pathprof
 ^^^^^^^^^^^^^^^
 - Add a method, `geoid_area` to calculate surface area on the WGS84
   ellipsoid. Only rectangular limits (absolute coordinates) are supported.
   This can be used to determine the area of SRTM pixels (in km^2).
-
-pycraf.antenna
-^^^^^^^^^^^^^^^
-- Add correlation-level parameter to `imt2020_composite_pattern` function.
 
 pycraf.protection
 ^^^^^^^^^^^^^^^

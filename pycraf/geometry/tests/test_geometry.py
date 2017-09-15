@@ -13,13 +13,112 @@ from numpy.testing import assert_equal, assert_allclose
 from astropy.tests.helper import assert_quantity_allclose
 from astropy import units as apu
 from astropy.units import Quantity
+from astropy.utils.data import get_pkg_data_filename
 from ... import conversions as cnv
 from ... import geometry
 from ...utils import check_astro_quantities
 from astropy.utils.misc import NumpyRNGContext
 
 
+def produce_rotmat_test_cases():
+
+    with NumpyRNGContext(1):
+        # initial (temporary) axis values
+        rx_i, ry_i, rz_i = np.random.uniform(-1, 1, (3, 50))
+        angle_i = np.random.uniform(-180., 180., 50)
+
+    Rs_i = geometry.geometry._rotmat_from_rotaxis(rx_i, ry_i, rz_i, angle_i)
+
+    rx, ry, rz, angle = geometry.geometry._rotaxis_from_rotmat(Rs_i)
+    # Note that the rotaxis_from_rotmat result is not unique, therefore
+    # we have to calculate the Rs again from the returned values and
+    # compare with the original Rs
+
+    Rs = geometry.geometry._rotmat_from_rotaxis(rx, ry, rz, angle)
+
+    assert np.allclose(Rs_i, Rs)
+
+    a3_xyz, a2_xyz, a1_xyz = geometry.geometry._eulerangle_from_rotmat(
+        Rs, etype='xyz'
+        )
+
+    Rxyz = geometry.multiply_matrices(
+        geometry.geometry._Rz(a3_xyz),
+        geometry.geometry._Ry(a2_xyz),
+        geometry.geometry._Rx(a1_xyz),
+        )
+
+    assert np.allclose(Rs, Rxyz)
+
+    a3_zxz, a2_zxz, a1_zxz = geometry.geometry._eulerangle_from_rotmat(
+        Rs, etype='zxz'
+        )
+
+    Rzxz = geometry.multiply_matrices(
+        geometry.geometry._Rz(a3_zxz),
+        geometry.geometry._Rx(a2_zxz),
+        geometry.geometry._Rz(a1_zxz),
+        )
+
+    assert np.allclose(Rs, Rzxz)
+
+    np.savez(
+        '/tmp/rotmat_cases.npz',
+        rx=rx, ry=ry, rz=rz, angle=angle,
+        Rs=Rs, Rxyz=Rxyz, Rzxz=Rzxz,
+        a1_xyz=a1_xyz, a2_xyz=a2_xyz, a3_xyz=a3_xyz,
+        a1_zxz=a1_zxz, a2_zxz=a2_zxz, a3_zxz=a3_zxz,
+        )
+
+
+# Warning: if you want to produce new test cases (replacing the old ones)
+# you better make sure, that everything is 100% correct
+# produce_rotmat_test_cases()
+
+
 TOL_KWARGS = {'atol': 1.e-4, 'rtol': 1.e-4}
+R_X = np.array([
+    [[[1., 0., 0.],
+      [0., 1., 0.],
+      [0., 0., 1.]],
+     [[1., 0., 0.],
+      [0., 0.9961947, 0.08715574],
+      [0., -0.08715574, 0.9961947]]],
+    [[[1., 0., 0.],
+      [0., 0.98480775, 0.17364818],
+      [0., -0.17364818, 0.98480775]],
+     [[1., 0., 0.],
+      [0., 0.96592583, 0.25881905],
+      [0., -0.25881905, 0.96592583]]]
+    ])
+R_Y = np.array([
+    [[[1., 0., 0.],
+      [0., 1., 0.],
+      [0., 0., 1.]],
+     [[0.9961947, 0., -0.08715574],
+      [0., 1., 0.],
+      [0.08715574, 0., 0.9961947]]],
+    [[[0.98480775, 0., -0.17364818],
+      [0., 1., 0.],
+      [0.17364818, 0., 0.98480775]],
+     [[0.96592583, 0., -0.25881905],
+      [0., 1., 0.],
+      [0.25881905, 0., 0.96592583]]]
+    ])
+R_Z = np.array([
+    [[[1., 0., 0.],
+      [0., 1., 0.],
+      [0., 0., 1.]],
+     [[0.9961947, 0.08715574, 0.],
+      [-0.08715574, 0.9961947, 0.],
+      [0., 0., 1.]]],
+    [[[0.98480775, 0.17364818, 0.],
+      [-0.17364818, 0.98480775, 0.],
+      [0., 0., 1.]],
+     [[0.96592583, 0.25881905, 0.],
+      [-0.25881905, 0.96592583, 0.],
+      [0., 0., 1.]]]
+    ])
 
 
 def test_true_angular_distance():
@@ -224,3 +323,143 @@ def test_sphere_to_cart_broadcast():
     assert_quantity_allclose(_x, x, atol=1.e-8 * apu.m)
     assert_quantity_allclose(_y, y)
     assert_quantity_allclose(_z, z)
+
+
+def test_rotation_matrix_generation():
+
+    angle = Quantity([[0., 5.], [10., 15.]], apu.deg)
+
+    for k, R in zip(['Rx', 'Ry', 'Rz'], [R_X, R_Y, R_Z]):
+
+        pfunc = getattr(geometry, k)
+        args_list = [
+            (None, None, apu.deg),
+            ]
+        check_astro_quantities(pfunc, args_list)
+
+        _R = pfunc(angle)
+        assert_allclose(_R, R)
+
+
+def test_multiply_matrices():
+
+    assert_allclose(
+        geometry.multiply_matrices(R_X[0, 1], R_Y[1, 1], R_Z[1, 0]),
+        np.array([
+            [0.95125124, 0.16773126, -0.25881905],
+            [-0.15077253, 0.98497734, 0.08418598],
+            [0.26905152, -0.04105921, 0.96225019]
+            ]),
+        atol=1.e-6
+        )
+
+    assert_allclose(
+        geometry.multiply_matrices(R_X[0, 1], R_X[1, :]),
+        np.array([
+            [[1., 0., 0.],
+             [0., 0.96592583, 0.25881904],
+             [0., -0.25881904, 0.96592583]],
+            [[1., 0., 0.],
+             [0., 0.93969263, 0.34202015],
+             [0., -0.34202015, 0.93969263]]
+            ]),
+        atol=1.e-6
+        )
+
+
+def test_rotmat_from_rotaxis():
+
+    pfunc = geometry.rotmat_from_rotaxis
+    args_list = [
+        (None, None, apu.m),
+        (None, None, apu.m),
+        (None, None, apu.m),
+        (None, None, apu.deg),
+        ]
+    check_astro_quantities(pfunc, args_list)
+
+    dat = np.load(get_pkg_data_filename('data/rotmat_cases.npz'))
+
+    rx, ry, rz, angle, Rs = (
+        dat[k] for k in ['rx', 'ry', 'rz', 'angle', 'Rs']
+        )
+
+    Rs2 = pfunc(rx * apu.m, ry * apu.m, rz * apu.m, angle * apu.deg)
+    assert np.allclose(Rs2, Rs)
+
+    rx, ry, rz, angle = (
+        dat[k].reshape((10, 5)) for k in ['rx', 'ry', 'rz', 'angle']
+        )
+
+    Rs2 = pfunc(rx * apu.m, ry * apu.m, rz * apu.m, angle * apu.deg)
+    assert np.allclose(Rs2, Rs.reshape((10, 5, 3, 3)))
+
+
+def test_rotaxis_from_rotmat():
+
+    pfunc = geometry.rotaxis_from_rotmat
+
+    dat = np.load(get_pkg_data_filename('data/rotmat_cases.npz'))
+
+    rx, ry, rz, angle, Rs = (
+        dat[k] for k in ['rx', 'ry', 'rz', 'angle', 'Rs']
+        )
+
+    rx2, ry2, rz2, angle2 = pfunc(Rs)
+    assert_quantity_allclose(rx2, rx * apu.m)
+    assert_quantity_allclose(ry2, ry * apu.m)
+    assert_quantity_allclose(rz2, rz * apu.m)
+    assert_quantity_allclose(angle2, angle * apu.deg)
+
+    rx, ry, rz, angle = (
+        dat[k].reshape((10, 5)) for k in ['rx', 'ry', 'rz', 'angle']
+        )
+
+    rx2, ry2, rz2, angle2 = pfunc(Rs.reshape((10, 5, 3, 3)))
+    assert_quantity_allclose(rx2, rx * apu.m)
+    assert_quantity_allclose(ry2, ry * apu.m)
+    assert_quantity_allclose(rz2, rz * apu.m)
+    assert_quantity_allclose(angle2, angle * apu.deg)
+
+
+def test_eulerangle_from_rotmat():
+
+    pfunc = geometry.eulerangle_from_rotmat
+
+    dat = np.load(get_pkg_data_filename('data/rotmat_cases.npz'))
+
+    a1_xyz, a2_xyz, a3_xyz, Rs = (
+        dat[k] for k in ['a1_xyz', 'a2_xyz', 'a3_xyz', 'Rs']
+        )
+
+    a3_xyz2, a2_xyz2, a1_xyz2 = pfunc(Rs, etype='xyz')
+    assert_quantity_allclose(a1_xyz2, a1_xyz * apu.deg)
+    assert_quantity_allclose(a2_xyz2, a2_xyz * apu.deg)
+    assert_quantity_allclose(a3_xyz2, a3_xyz * apu.deg)
+
+    a1_xyz, a2_xyz, a3_xyz = (
+        dat[k].reshape((10, 5)) for k in ['a1_xyz', 'a2_xyz', 'a3_xyz']
+        )
+
+    a3_xyz2, a2_xyz2, a1_xyz2 = pfunc(Rs.reshape((10, 5, 3, 3)), etype='xyz')
+    assert_quantity_allclose(a1_xyz2, a1_xyz * apu.deg)
+    assert_quantity_allclose(a2_xyz2, a2_xyz * apu.deg)
+    assert_quantity_allclose(a3_xyz2, a3_xyz * apu.deg)
+
+    a1_zxz, a2_zxz, a3_zxz, Rs = (
+        dat[k] for k in ['a1_zxz', 'a2_zxz', 'a3_zxz', 'Rs']
+        )
+
+    a3_zxz2, a2_zxz2, a1_zxz2 = pfunc(Rs, etype='zxz')
+    assert_quantity_allclose(a1_zxz2, a1_zxz * apu.deg)
+    assert_quantity_allclose(a2_zxz2, a2_zxz * apu.deg)
+    assert_quantity_allclose(a3_zxz2, a3_zxz * apu.deg)
+
+    a1_zxz, a2_zxz, a3_zxz = (
+        dat[k].reshape((10, 5)) for k in ['a1_zxz', 'a2_zxz', 'a3_zxz']
+        )
+
+    a3_zxz2, a2_zxz2, a1_zxz2 = pfunc(Rs.reshape((10, 5, 3, 3)), etype='zxz')
+    assert_quantity_allclose(a1_zxz2, a1_zxz * apu.deg)
+    assert_quantity_allclose(a2_zxz2, a2_zxz * apu.deg)
+    assert_quantity_allclose(a3_zxz2, a3_zxz * apu.deg)
