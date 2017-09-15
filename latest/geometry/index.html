@@ -25,7 +25,7 @@
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="cart_to_sphere" href="../api/pycraf.geometry.cart_to_sphere.html" />
+    <link rel="next" title="Rx" href="../api/pycraf.geometry.Rx.html" />
     <link rel="prev" title="SatelliteObserver" href="../api/pycraf.satellite.SatelliteObserver.html" />
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 <script type="text/javascript" src="../_static/copybutton.js"></script>
@@ -56,7 +56,7 @@
     <h3>Navigation</h3>
     <ul>
       <li class="right">
-	<a href="../api/pycraf.geometry.cart_to_sphere.html" title="cart_to_sphere">
+	<a href="../api/pycraf.geometry.Rx.html" title="Rx">
 	  next &raquo;
 	</a>
       </li>
@@ -108,13 +108,25 @@ for various geometrical calculations, e.g., in spherical coordinates.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.cart_to_sphere.html#pycraf.geometry.cart_to_sphere" title="pycraf.geometry.cart_to_sphere"><code class="xref py py-obj docutils literal"><span class="pre">cart_to_sphere</span></code></a>(x,&nbsp;y,&nbsp;z)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.Rx.html#pycraf.geometry.Rx" title="pycraf.geometry.Rx"><code class="xref py py-obj docutils literal"><span class="pre">Rx</span></code></a>(angle)</td>
+<td>Construct rotation matrix about x-axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.Ry.html#pycraf.geometry.Ry" title="pycraf.geometry.Ry"><code class="xref py py-obj docutils literal"><span class="pre">Ry</span></code></a>(angle)</td>
+<td>Construct rotation matrix about y-axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.Rz.html#pycraf.geometry.Rz" title="pycraf.geometry.Rz"><code class="xref py py-obj docutils literal"><span class="pre">Rz</span></code></a>(angle)</td>
+<td>Construct rotation matrix about z-axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.cart_to_sphere.html#pycraf.geometry.cart_to_sphere" title="pycraf.geometry.cart_to_sphere"><code class="xref py py-obj docutils literal"><span class="pre">cart_to_sphere</span></code></a>(x,&nbsp;y,&nbsp;z[,&nbsp;broadcast_arrays])</td>
 <td>Spherical coordinates from Cartesian representation.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.great_circle_bearing.html#pycraf.geometry.great_circle_bearing" title="pycraf.geometry.great_circle_bearing"><code class="xref py py-obj docutils literal"><span class="pre">great_circle_bearing</span></code></a>(l1,&nbsp;b1,&nbsp;l2,&nbsp;b2)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.great_circle_bearing.html#pycraf.geometry.great_circle_bearing" title="pycraf.geometry.great_circle_bearing"><code class="xref py py-obj docutils literal"><span class="pre">great_circle_bearing</span></code></a>(l1,&nbsp;b1,&nbsp;l2,&nbsp;b2)</td>
 <td>Great circle bearing between points (l1, b1) and (l2, b2).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.sphere_to_cart.html#pycraf.geometry.sphere_to_cart" title="pycraf.geometry.sphere_to_cart"><code class="xref py py-obj docutils literal"><span class="pre">sphere_to_cart</span></code></a>(r,&nbsp;theta,&nbsp;phi)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.multiply_matrices.html#pycraf.geometry.multiply_matrices" title="pycraf.geometry.multiply_matrices"><code class="xref py py-obj docutils literal"><span class="pre">multiply_matrices</span></code></a>(*matrices)</td>
+<td>Matrix-multiply the matrices in the given list.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.sphere_to_cart.html#pycraf.geometry.sphere_to_cart" title="pycraf.geometry.sphere_to_cart"><code class="xref py py-obj docutils literal"><span class="pre">sphere_to_cart</span></code></a>(r,&nbsp;phi,&nbsp;theta[,&nbsp;broadcast_arrays])</td>
 <td>Spherical coordinates from Cartesian representation.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.true_angular_distance.html#pycraf.geometry.true_angular_distance" title="pycraf.geometry.true_angular_distance"><code class="xref py py-obj docutils literal"><span class="pre">true_angular_distance</span></code></a>(l1,&nbsp;b1,&nbsp;l2,&nbsp;b2)</td>
@@ -162,7 +174,7 @@ for various geometrical calculations, e.g., in spherical coordinates.</p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 11 Sep 2017. <br/>
+    Last built 15 Sep 2017. <br/>
   </p>
 </footer>
   </body>

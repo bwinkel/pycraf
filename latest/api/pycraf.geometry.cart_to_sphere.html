@@ -26,7 +26,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="great_circle_bearing" href="pycraf.geometry.great_circle_bearing.html" />
-    <link rel="prev" title="Geometry helpers (pycraf.geometry)" href="../geometry/index.html" />
+    <link rel="prev" title="Rz" href="pycraf.geometry.Rz.html" />
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 <script type="text/javascript" src="../_static/copybutton.js"></script>
 
@@ -61,7 +61,7 @@
 	</a>
       </li>
       <li class="right">
-	<a href="../geometry/index.html" title="Geometry helpers (pycraf.geometry)">
+	<a href="pycraf.geometry.Rz.html" title="Rz">
 	  &laquo; previous
 	</a>
 	 |
@@ -86,7 +86,7 @@
 <h1>cart_to_sphere<a class="headerlink" href="#cart-to-sphere" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.geometry.cart_to_sphere">
-<code class="descclassname">pycraf.geometry.</code><code class="descname">cart_to_sphere</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geometry/geometry.html#cart_to_sphere"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/geometry/geometry.py#L100" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.geometry.cart_to_sphere" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.geometry.</code><code class="descname">cart_to_sphere</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em>, <em>broadcast_arrays=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geometry/geometry.html#cart_to_sphere"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/geometry/geometry.py#L115" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.geometry.cart_to_sphere" title="Permalink to this definition">¶</a></dt>
 <dd><p>Spherical coordinates from Cartesian representation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -102,13 +102,19 @@
 <blockquote>
 <div><p>Radial distance [m]</p>
 </div></blockquote>
+<p><strong>phi</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<blockquote>
+<div><p>Azimuth [deg]</p>
+</div></blockquote>
 <p><strong>theta</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Elevation [deg]</p>
 </div></blockquote>
-<p><strong>phi</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>broadcast_arrays</strong> : boolean, optional</p>
 <blockquote class="last">
-<div><p>Azimuth [deg]</p>
+<div><p>If ‘True’, output arrays will be broadcasted to dense
+matrices, otherwise the returned arrays will be a
+sparse representation (default: True)</p>
 </div></blockquote>
 </td>
 </tr>
@@ -145,7 +151,7 @@ to the (positive) <code class="xref py py-obj docutils literal"><span class="pre
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 11 Sep 2017. <br/>
+    Last built 15 Sep 2017. <br/>
   </p>
 </footer>
   </body>

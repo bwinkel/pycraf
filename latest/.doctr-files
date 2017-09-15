@@ -121,8 +121,12 @@ latest/_sources/api/pycraf.conversions.prx_from_ptx.rst.txt
 latest/_sources/api/pycraf.conversions.ptx_from_efield.rst.txt
 latest/_sources/api/pycraf.conversions.ptx_from_powerflux.rst.txt
 latest/_sources/api/pycraf.conversions.ptx_from_prx.rst.txt
+latest/_sources/api/pycraf.geometry.Rx.rst.txt
+latest/_sources/api/pycraf.geometry.Ry.rst.txt
+latest/_sources/api/pycraf.geometry.Rz.rst.txt
 latest/_sources/api/pycraf.geometry.cart_to_sphere.rst.txt
 latest/_sources/api/pycraf.geometry.great_circle_bearing.rst.txt
+latest/_sources/api/pycraf.geometry.multiply_matrices.rst.txt
 latest/_sources/api/pycraf.geometry.sphere_to_cart.rst.txt
 latest/_sources/api/pycraf.geometry.true_angular_distance.rst.txt
 latest/_sources/api/pycraf.geospatial.EPSG.rst.txt
@@ -287,8 +291,12 @@ latest/api/pycraf.conversions.prx_from_ptx.html
 latest/api/pycraf.conversions.ptx_from_efield.html
 latest/api/pycraf.conversions.ptx_from_powerflux.html
 latest/api/pycraf.conversions.ptx_from_prx.html
+latest/api/pycraf.geometry.Rx.html
+latest/api/pycraf.geometry.Ry.html
+latest/api/pycraf.geometry.Rz.html
 latest/api/pycraf.geometry.cart_to_sphere.html
 latest/api/pycraf.geometry.great_circle_bearing.html
+latest/api/pycraf.geometry.multiply_matrices.html
 latest/api/pycraf.geometry.sphere_to_cart.html
 latest/api/pycraf.geometry.true_angular_distance.html
 latest/api/pycraf.geospatial.EPSG.html
