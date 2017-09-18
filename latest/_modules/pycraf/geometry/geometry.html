@@ -86,8 +86,8 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;true_angular_distance&#39;</span><span class="p">,</span> <span class="s1">&#39;great_circle_bearing&#39;</span><span class="p">,</span>
     <span class="s1">&#39;cart_to_sphere&#39;</span><span class="p">,</span> <span class="s1">&#39;sphere_to_cart&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Rx&#39;</span><span class="p">,</span> <span class="s1">&#39;Ry&#39;</span><span class="p">,</span> <span class="s1">&#39;Rz&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;multiply_matrices&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Rx&#39;</span><span class="p">,</span> <span class="s1">&#39;Ry&#39;</span><span class="p">,</span> <span class="s1">&#39;Rz&#39;</span><span class="p">,</span> <span class="s1">&#39;multiply_matrices&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;rotaxis_from_rotmat&#39;</span><span class="p">,</span> <span class="s1">&#39;rotmat_from_rotaxis&#39;</span><span class="p">,</span> <span class="s1">&#39;eulerangle_from_rotmat&#39;</span><span class="p">,</span>
     <span class="p">]</span>
 
 
@@ -159,12 +159,15 @@
 <span class="sd">        Great circle bearing [deg]</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">sin_diff_lon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">l2</span> <span class="o">-</span> <span class="n">l1</span><span class="p">))</span>
-    <span class="n">cos_diff_lon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">l2</span> <span class="o">-</span> <span class="n">l1</span><span class="p">))</span>
-    <span class="n">sin_lat1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">b1</span><span class="p">))</span>
-    <span class="n">sin_lat2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">b2</span><span class="p">))</span>
-    <span class="n">cos_lat1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">b1</span><span class="p">))</span>
-    <span class="n">cos_lat2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">b2</span><span class="p">))</span>
+    <span class="n">diff_lon_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">l2</span> <span class="o">-</span> <span class="n">l1</span><span class="p">)</span>
+    <span class="n">b1_rad</span><span class="p">,</span> <span class="n">b2_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">b1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">b2</span><span class="p">)</span>
+
+    <span class="n">sin_diff_lon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">diff_lon_rad</span><span class="p">)</span>
+    <span class="n">cos_diff_lon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">diff_lon_rad</span><span class="p">)</span>
+    <span class="n">sin_lat1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">b1_rad</span><span class="p">)</span>
+    <span class="n">sin_lat2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">b2_rad</span><span class="p">)</span>
+    <span class="n">cos_lat1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">b1_rad</span><span class="p">)</span>
+    <span class="n">cos_lat2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">b2_rad</span><span class="p">)</span>
 
     <span class="n">a</span> <span class="o">=</span> <span class="n">cos_lat2</span> <span class="o">*</span> <span class="n">sin_diff_lon</span>
     <span class="n">b</span> <span class="o">=</span> <span class="n">cos_lat1</span> <span class="o">*</span> <span class="n">sin_lat2</span> <span class="o">-</span> <span class="n">sin_lat1</span> <span class="o">*</span> <span class="n">cos_lat2</span> <span class="o">*</span> <span class="n">cos_diff_lon</span>
@@ -223,11 +226,12 @@
 
 <span class="k">def</span> <span class="nf">_sphere_to_cart</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">broadcast_arrays</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 
-    <span class="n">theta</span> <span class="o">=</span> <span class="mf">90.</span> <span class="o">-</span> <span class="n">theta</span>
+    <span class="n">c_t</span><span class="p">,</span> <span class="n">s_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">theta</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span>
+    <span class="n">c_p</span><span class="p">,</span> <span class="n">s_p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">phi</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span>
 
-    <span class="n">x</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span>
-    <span class="n">z</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">c_t</span> <span class="o">*</span> <span class="n">c_p</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">c_t</span> <span class="o">*</span> <span class="n">s_p</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">s_t</span>
 
     <span class="k">if</span> <span class="n">broadcast_arrays</span><span class="p">:</span>
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
@@ -272,9 +276,9 @@
     <span class="k">return</span> <span class="n">_sphere_to_cart</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">broadcast_arrays</span><span class="o">=</span><span class="n">broadcast_arrays</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">_Rx</span><span class="p">(</span><span class="n">angle_rad</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_Rx</span><span class="p">(</span><span class="n">angle</span><span class="p">):</span>
 
-    <span class="n">angle_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">angle_rad</span><span class="p">)</span>
+    <span class="n">angle_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
     <span class="n">sin_a</span><span class="p">,</span> <span class="n">cos_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle_rad</span><span class="o">.</span><span class="n">flat</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle_rad</span><span class="o">.</span><span class="n">flat</span><span class="p">)</span>
         <span class="p">)</span>
@@ -285,9 +289,9 @@
     <span class="k">return</span> <span class="n">R</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">angle_rad</span><span class="o">.</span><span class="n">shape</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 
 
-<span class="k">def</span> <span class="nf">_Ry</span><span class="p">(</span><span class="n">angle_rad</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_Ry</span><span class="p">(</span><span class="n">angle</span><span class="p">):</span>
 
-    <span class="n">angle_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">angle_rad</span><span class="p">)</span>
+    <span class="n">angle_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
     <span class="n">sin_a</span><span class="p">,</span> <span class="n">cos_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle_rad</span><span class="o">.</span><span class="n">flat</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle_rad</span><span class="o">.</span><span class="n">flat</span><span class="p">)</span>
         <span class="p">)</span>
@@ -298,9 +302,9 @@
     <span class="k">return</span> <span class="n">R</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">angle_rad</span><span class="o">.</span><span class="n">shape</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 
 
-<span class="k">def</span> <span class="nf">_Rz</span><span class="p">(</span><span class="n">angle_rad</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_Rz</span><span class="p">(</span><span class="n">angle</span><span class="p">):</span>
 
-    <span class="n">angle_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">angle_rad</span><span class="p">)</span>
+    <span class="n">angle_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
     <span class="n">sin_a</span><span class="p">,</span> <span class="n">cos_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle_rad</span><span class="o">.</span><span class="n">flat</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle_rad</span><span class="o">.</span><span class="n">flat</span><span class="p">)</span>
         <span class="p">)</span>
@@ -312,7 +316,7 @@
 
 
 <div class="viewcode-block" id="Rx"><a class="viewcode-back" href="../../../api/pycraf.geometry.Rx.html#pycraf.geometry.Rx">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">angle</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">),</span>
+    <span class="n">angle</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">Rx</span><span class="p">(</span><span class="n">angle</span><span class="p">):</span>
@@ -322,7 +326,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    angle : `~astropy.units.Quantity`</span>
-<span class="sd">        Rotation angle [rad]</span>
+<span class="sd">        Rotation angle [deg]</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -340,7 +344,7 @@
 
 
 <div class="viewcode-block" id="Ry"><a class="viewcode-back" href="../../../api/pycraf.geometry.Ry.html#pycraf.geometry.Ry">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">angle</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">),</span>
+    <span class="n">angle</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">Ry</span><span class="p">(</span><span class="n">angle</span><span class="p">):</span>
@@ -350,7 +354,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    angle : `~astropy.units.Quantity`</span>
-<span class="sd">        Rotation angle [rad]</span>
+<span class="sd">        Rotation angle [deg]</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -368,7 +372,7 @@
 
 
 <div class="viewcode-block" id="Rz"><a class="viewcode-back" href="../../../api/pycraf.geometry.Rz.html#pycraf.geometry.Rz">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">angle</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">rad</span><span class="p">),</span>
+    <span class="n">angle</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">Rz</span><span class="p">(</span><span class="n">angle</span><span class="p">):</span>
@@ -378,7 +382,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    angle : `~astropy.units.Quantity`</span>
-<span class="sd">        Rotation angle [rad]</span>
+<span class="sd">        Rotation angle [deg]</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -402,7 +406,9 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    matrices : list of `~numpy.array`</span>
-<span class="sd">        List of (stacks of) rotation matrices.</span>
+<span class="sd">        List of (stacks of) rotation matrices. The order of the</span>
+<span class="sd">        multiplication is &#39;R = R1.R2.R3&#39;, if &#39;*matrices = (R1, R2, R3)&#39;.</span>
+<span class="sd">        (This means, that &#39;R3&#39; is applied first.)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -416,9 +422,233 @@
 <span class="sd">    internally).</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
+    <span class="c1"># Note, rotation matrices are associative, therefore we can replace</span>
+    <span class="c1"># return reduce(lambda a, b: np.matmul(b, a), matrices[::-1])</span>
+    <span class="c1"># by</span>
     <span class="k">return</span> <span class="n">reduce</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">,</span> <span class="n">matrices</span><span class="p">)</span></div>
 
 
+<span class="k">def</span> <span class="nf">_rotmat_from_rotaxis</span><span class="p">(</span><span class="n">rotax_x</span><span class="p">,</span> <span class="n">rotax_y</span><span class="p">,</span> <span class="n">rotax_z</span><span class="p">,</span> <span class="n">angle_deg</span><span class="p">):</span>
+
+    <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="n">angle_deg</span><span class="p">,</span> <span class="n">rotax_x</span><span class="p">,</span> <span class="n">rotax_y</span><span class="p">,</span> <span class="n">rotax_z</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">angle_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">angle_deg</span><span class="p">)</span>
+
+    <span class="n">rot_axes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">rotax_x</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">rotax_y</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">rotax_z</span><span class="p">),</span>
+        <span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="n">d</span> <span class="o">=</span> <span class="n">rot_axes</span>
+    <span class="n">d</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">rot_axes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">W</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">W</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">W</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">W</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">W</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">W</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">W2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span>
+
+    <span class="n">_a</span> <span class="o">=</span> <span class="n">angle_rad</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="n">eye</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">mtxs</span> <span class="o">=</span> <span class="n">eye</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">_a</span><span class="p">)</span> <span class="o">*</span> <span class="n">W</span> <span class="o">+</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">_a</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">W2</span>
+
+    <span class="k">return</span> <span class="n">mtxs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sh</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="rotmat_from_rotaxis"><a class="viewcode-back" href="../../../api/pycraf.geometry.rotmat_from_rotaxis.html#pycraf.geometry.rotmat_from_rotaxis">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">rotax_x</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">rotax_y</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">rotax_z</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">angle</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">rotmat_from_rotaxis</span><span class="p">(</span><span class="n">rotax_x</span><span class="p">,</span> <span class="n">rotax_y</span><span class="p">,</span> <span class="n">rotax_z</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Construct rotation matrix from cartesian rotation axis and angle.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rotax_{x,y,z} : `~astropy.units.Quantity`</span>
+<span class="sd">        Cartesian components (x, y, z) of rotation axis [m]</span>
+<span class="sd">    angle : `~astropy.units.Quantity`</span>
+<span class="sd">        Rotation angle [deg]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    R : `~numpy.array`</span>
+<span class="sd">        Rotation matrix [no units!]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Broadcasting is supported. The rotation axis vector will be</span>
+<span class="sd">    normalized in the function (otherwise it&#39;s magnitude would change</span>
+<span class="sd">    the effective rotation angle).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_rotmat_from_rotaxis</span><span class="p">(</span><span class="n">rotax_x</span><span class="p">,</span> <span class="n">rotax_y</span><span class="p">,</span> <span class="n">rotax_z</span><span class="p">,</span> <span class="n">angle</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_rotaxis_from_rotmat</span><span class="p">(</span><span class="n">R</span><span class="p">):</span>
+
+    <span class="c1"># see Wikipedia (https://en.wikipedia.org/wiki/Axis–angle_representation)</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+
+    <span class="n">rot_angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span>
+        <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">axis1</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis2</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="n">norm</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span> <span class="o">/</span> <span class="mf">2.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rot_angle</span><span class="p">)</span>  <span class="c1"># different sign (vs. Wikipedia)</span>
+
+    <span class="n">rotax_x</span> <span class="o">=</span> <span class="n">norm</span> <span class="o">*</span> <span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">R</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">rotax_y</span> <span class="o">=</span> <span class="n">norm</span> <span class="o">*</span> <span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">R</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">rotax_z</span> <span class="o">=</span> <span class="n">norm</span> <span class="o">*</span> <span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">R</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">rotax_x</span><span class="p">,</span> <span class="n">rotax_y</span><span class="p">,</span> <span class="n">rotax_z</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">rot_angle</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="rotaxis_from_rotmat"><a class="viewcode-back" href="../../../api/pycraf.geometry.rotaxis_from_rotmat.html#pycraf.geometry.rotaxis_from_rotmat">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">rotaxis_from_rotmat</span><span class="p">(</span><span class="n">R</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Cartesian rotation axis and angle from rotation matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    R : `~numpy.array`</span>
+<span class="sd">        Rotation matrix [no units!]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    rotax_{x,y,z} : `~astropy.units.Quantity`</span>
+<span class="sd">        Cartesian components (x, y, z) of rotation axis [m]</span>
+<span class="sd">    angle : `~astropy.units.Quantity`</span>
+<span class="sd">        Rotation angle [deg]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Broadcasting is supported. The returned rotation axis vector is</span>
+<span class="sd">    normalized (otherwise it&#39;s magnitude would change the effective</span>
+<span class="sd">    rotation angle).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_rotaxis_from_rotmat</span><span class="p">(</span><span class="n">R</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_eulerangle_from_rotmat</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">etype</span><span class="o">=</span><span class="s1">&#39;xyz&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Euler angles from a rotation matrix.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># see https://www.geometrictools.com/Documentation/EulerAngles.pdf</span>
+
+    <span class="k">assert</span> <span class="n">etype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">,</span> <span class="s1">&#39;zxz&#39;</span><span class="p">]</span>
+
+    <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="n">do_squeeze</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">R</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">do_squeeze</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">alpha_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">alpha_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">alpha_3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">etype</span> <span class="o">==</span> <span class="s1">&#39;xyz&#39;</span><span class="p">:</span>
+
+        <span class="n">mask1</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="n">sub_R</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="n">mask1</span><span class="p">]</span>
+        <span class="n">alpha_1</span><span class="p">[</span><span class="n">mask1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">alpha_2</span><span class="p">[</span><span class="n">mask1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="o">-</span><span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">alpha_3</span><span class="p">[</span><span class="n">mask1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span>
+
+        <span class="n">mask2</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">sub_R</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="n">mask2</span><span class="p">]</span>
+        <span class="n">alpha_1</span><span class="p">[</span><span class="n">mask2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">alpha_2</span><span class="p">[</span><span class="n">mask2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="o">-</span><span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">alpha_3</span><span class="p">[</span><span class="n">mask2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span>
+
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="o">~</span><span class="n">mask1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">mask2</span><span class="p">)</span>
+        <span class="n">sub_R</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">alpha_1</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="n">alpha_2</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="o">-</span><span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">alpha_3</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># why are the signs opposite to the EulerAngles.pdf document</span>
+        <span class="c1"># (only for zyx, not for zxz?)</span>
+        <span class="n">alpha_1</span><span class="p">,</span> <span class="n">alpha_2</span><span class="p">,</span> <span class="n">alpha_3</span> <span class="o">=</span> <span class="o">-</span><span class="n">alpha_1</span><span class="p">,</span> <span class="o">-</span><span class="n">alpha_2</span><span class="p">,</span> <span class="o">-</span><span class="n">alpha_3</span>
+
+    <span class="k">elif</span> <span class="n">etype</span> <span class="o">==</span> <span class="s1">&#39;zxz&#39;</span><span class="p">:</span>
+
+        <span class="n">mask1</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="n">sub_R</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="n">mask1</span><span class="p">]</span>
+        <span class="n">alpha_1</span><span class="p">[</span><span class="n">mask1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">alpha_2</span><span class="p">[</span><span class="n">mask1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">alpha_3</span><span class="p">[</span><span class="n">mask1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="o">-</span><span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">mask2</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">sub_R</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="n">mask2</span><span class="p">]</span>
+        <span class="n">alpha_1</span><span class="p">[</span><span class="n">mask2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">alpha_2</span><span class="p">[</span><span class="n">mask2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="n">alpha_3</span><span class="p">[</span><span class="n">mask2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="o">-</span><span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="o">~</span><span class="n">mask1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">mask2</span><span class="p">)</span>
+        <span class="n">sub_R</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">alpha_1</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">alpha_2</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="n">alpha_3</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="o">-</span><span class="n">sub_R</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+        <span class="c1"># again, the above seems to be wrong; this fixes it:</span>
+        <span class="n">alpha_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="n">alpha_1</span>
+        <span class="n">alpha_1</span> <span class="o">=</span> <span class="p">(</span><span class="n">alpha_1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="n">alpha_3</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="n">alpha_3</span>
+        <span class="n">alpha_3</span> <span class="o">=</span> <span class="p">(</span><span class="n">alpha_3</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+
+    <span class="n">alpha_1</span><span class="p">,</span> <span class="n">alpha_2</span><span class="p">,</span> <span class="n">alpha_3</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">alpha_1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">alpha_2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">alpha_3</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_squeeze</span><span class="p">:</span>
+        <span class="n">alpha_1</span><span class="p">,</span> <span class="n">alpha_2</span><span class="p">,</span> <span class="n">alpha_3</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">alpha_1</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">alpha_2</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">alpha_3</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">alpha_3</span><span class="p">,</span> <span class="n">alpha_2</span><span class="p">,</span> <span class="n">alpha_1</span>
+
+
+<div class="viewcode-block" id="eulerangle_from_rotmat"><a class="viewcode-back" href="../../../api/pycraf.geometry.eulerangle_from_rotmat.html#pycraf.geometry.eulerangle_from_rotmat">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">eulerangle_from_rotmat</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">etype</span><span class="o">=</span><span class="s1">&#39;xyz&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Cartesian rotation axis and angle from rotation matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    R : `~numpy.array`</span>
+<span class="sd">        Rotation matrix [no units!]</span>
+<span class="sd">    etype : str, optional, &#39;xyz&#39; or &#39;zxz&#39;</span>
+<span class="sd">        Desired Euler-angle ordering. (default: &#39;xyz&#39;)</span>
+
+<span class="sd">        The ordering &#39;xyz&#39; refers to the case where first a rotation</span>
+<span class="sd">        about the x-axis is performed, then about y and last about</span>
+<span class="sd">        z-axis, i.e., R = Rz(alpha3).Ry(alpha2).Rx(alpha1). Likewise</span>
+<span class="sd">        for ordering &#39;zxz&#39; it is R = Rz(alpha3).Rx(alpha2).Rz(alpha1)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    angle_{1, 2, 3} : `~astropy.units.Quantity`</span>
+<span class="sd">        Euler rotation angles [deg]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Broadcasting is supported. Note the returned Euler angles are</span>
+<span class="sd">    not unique.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_eulerangle_from_rotmat</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">etype</span><span class="o">=</span><span class="n">etype</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -438,7 +668,7 @@
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 15 Sep 2017. <br/>
+    Last built 18 Sep 2017. <br/>
   </p>
 </footer>
   </body>

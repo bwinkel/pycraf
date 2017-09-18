@@ -1342,8 +1342,13 @@
         <span class="c1"># need to do try/finally because &quot;threshold&quot; cannot be overridden</span>
         <span class="c1"># with array2string</span>
         <span class="n">pops</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">get_printoptions</span><span class="p">()</span>
+
+        <span class="n">format_spec</span> <span class="o">=</span> <span class="s1">&#39;.</span><span class="si">{}</span><span class="s1">g&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pops</span><span class="p">[</span><span class="s1">&#39;precision&#39;</span><span class="p">])</span>
+        <span class="k">def</span> <span class="nf">float_formatter</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Latex</span><span class="o">.</span><span class="n">format_exponential_notation</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">format_spec</span><span class="o">=</span><span class="n">format_spec</span><span class="p">)</span>
+
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">formatter</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;float_kind&#39;</span><span class="p">:</span> <span class="n">Latex</span><span class="o">.</span><span class="n">format_exponential_notation</span><span class="p">}</span>
+            <span class="n">formatter</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;float_kind&#39;</span><span class="p">:</span> <span class="n">float_formatter</span><span class="p">}</span>
             <span class="k">if</span> <span class="n">conf</span><span class="o">.</span><span class="n">latex_array_threshold</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                 <span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="n">conf</span><span class="o">.</span><span class="n">latex_array_threshold</span><span class="p">,</span>
                                     <span class="n">formatter</span><span class="o">=</span><span class="n">formatter</span><span class="p">)</span>
@@ -1351,8 +1356,7 @@
             <span class="c1"># the view is needed for the scalar case - value might be float</span>
             <span class="n">latex_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array2string</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">),</span>
-                <span class="n">style</span><span class="o">=</span><span class="p">(</span><span class="n">Latex</span><span class="o">.</span><span class="n">format_exponential_notation</span>
-                       <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;f&#39;</span> <span class="k">else</span> <span class="nb">repr</span><span class="p">),</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">(</span><span class="n">float_formatter</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;f&#39;</span> <span class="k">else</span> <span class="nb">repr</span><span class="p">),</span>
                 <span class="n">max_line_width</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="s1">&#39;,~&#39;</span><span class="p">)</span>
             <span class="n">latex_value</span> <span class="o">=</span> <span class="n">latex_value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;...&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;\dots&#39;</span><span class="p">)</span>
         <span class="k">finally</span><span class="p">:</span>
@@ -1789,7 +1793,7 @@
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 15 Sep 2017. <br/>
+    Last built 18 Sep 2017. <br/>
   </p>
 </footer>
   </body>

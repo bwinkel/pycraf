@@ -88,11 +88,130 @@
 <p>The <a class="reference internal" href="#module-pycraf.geometry" title="pycraf.geometry"><code class="xref py py-obj docutils literal"><span class="pre">geometry</span></code></a> sub-package just offers some convenience functions
 for various geometrical calculations, e.g., in spherical coordinates.</p>
 </div>
+<div class="section" id="using-pycraf-geometry">
+<h2>Using <a class="reference internal" href="#module-pycraf.geometry" title="pycraf.geometry"><code class="xref py py-obj docutils literal"><span class="pre">pycraf.geometry</span></code></a><a class="headerlink" href="#using-pycraf-geometry" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="spherical-coordinates">
+<h3>Spherical coordinates<a class="headerlink" href="#spherical-coordinates" title="Permalink to this headline">¶</a></h3>
+<p>One can convert between cartesian and spherical coordinates using the two
+functions <a class="reference internal" href="../api/pycraf.geometry.cart_to_sphere.html#pycraf.geometry.cart_to_sphere" title="pycraf.geometry.cart_to_sphere"><code class="xref py py-obj docutils literal"><span class="pre">cart_to_sphere</span></code></a> and
+<a class="reference internal" href="../api/pycraf.geometry.sphere_to_cart.html#pycraf.geometry.sphere_to_cart" title="pycraf.geometry.sphere_to_cart"><code class="xref py py-obj docutils literal"><span class="pre">sphere_to_cart</span></code></a>:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">geometry</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">,</span> <span class="n">az</span><span class="p">,</span> <span class="n">el</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mi">0</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mi">90</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>  <span class="c1"># z-axis</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">geometry</span><span class="o">.</span><span class="n">sphere_to_cart</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">)</span>  
+<span class="go">(&lt;Quantity 0.0 m&gt;, &lt;Quantity 0.0 m&gt;, &lt;Quantity 1.0 m&gt;)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">200</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mf">1.1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span><span class="p">,</span> <span class="mi">500</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">geometry</span><span class="o">.</span><span class="n">cart_to_sphere</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>  
+<span class="go">(&lt;Quantity 1224.745 m&gt;, &lt;Quantity 79.69515 deg&gt;, &lt;Quantity 24.09484 deg&gt;)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In contrast to the often-used mathematical convention, pycraf does not
+work with the zenith distances but height above the horizon (i.e.,
+elevation).</p>
+</div>
+<p>Very useful are the two functions <a class="reference internal" href="../api/pycraf.geometry.true_angular_distance.html#pycraf.geometry.true_angular_distance" title="pycraf.geometry.true_angular_distance"><code class="xref py py-obj docutils literal"><span class="pre">true_angular_distance</span></code></a>
+and <a class="reference internal" href="../api/pycraf.geometry.great_circle_bearing.html#pycraf.geometry.great_circle_bearing" title="pycraf.geometry.great_circle_bearing"><code class="xref py py-obj docutils literal"><span class="pre">great_circle_bearing</span></code></a>, which allow to determine
+the true angular separation between two points on the sphere and the
+bearing of a point on the sphere w.r.t. another point:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l1</span><span class="p">,</span> <span class="n">b1</span> <span class="o">=</span> <span class="mi">25</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mi">34</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l2</span><span class="p">,</span> <span class="n">b2</span> <span class="o">=</span> <span class="mi">19</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mi">54</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">geometry</span><span class="o">.</span><span class="n">true_angular_distance</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">l2</span><span class="p">,</span> <span class="n">b2</span><span class="p">)</span>  
+<span class="go">&lt;Quantity 20.4425 deg&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">geometry</span><span class="o">.</span><span class="n">great_circle_bearing</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">l2</span><span class="p">,</span> <span class="n">b2</span><span class="p">)</span>  
+<span class="go">&lt;Quantity -10.1317 deg&gt;</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If you need angular distances/bearings on the Geoid with high accuracy
+use the Geodesics methods in the <a class="reference internal" href="../pathprof/index.html#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal"><span class="pre">pathprof</span></code></a> subpackage.</p>
+</div>
+</div>
+<div class="section" id="rotation-matrices">
+<h3>Rotation matrices<a class="headerlink" href="#rotation-matrices" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes one needs to rotate quantities (e.g., antenna diagrams) in 3D space
+when using compatibility studies. In pycraf a few routines are provided that
+offer basic functionality. Rotations are easily performed using matrix
+algebra, where <img class="math" src="../_images/math/47f0914036f00bab8bfd2be9526d0381ec7b421c.png" alt="\vec y=R\vec x"/>. Rotation matrices must be orthogonal
+(<img class="math" src="../_images/math/062473ce6b7837be9e0423c79de5972e55399ee2.png" alt="R^{-1}=R^\mathrm{T}"/>) and have determinant <img class="math" src="../_images/math/5ef86b80bd192882db0c0884cbd5e849590a8a6f.png" alt="\det R=+1"/>.</p>
+<p>Two easy ways are implemented in pycraf to construct rotation matrices. The
+first is via concatenation, <img class="math" src="../_images/math/049388c4c6171ede5cfb76ecdc72dfc681c659c5.png" alt="R=R_z(\alpha_3)R_y(\alpha_2)R_x(\alpha_1)"/>, of the three basic rotation matrices:</p>
+<div class="math">
+<p><img src="../_images/math/35068b9c78527702a6de83e1101505178f34fcb9.png" alt="R_x = \begin{bmatrix}
+1 &amp; 0 &amp; 0 \\
+0 &amp; \cos \theta &amp; -\sin \theta \\
+0 &amp; \sin \theta &amp; \cos \theta
+\end{bmatrix},
+R_y = \begin{bmatrix}
+\cos \theta &amp; 0 &amp; \sin \theta\\
+0 &amp; 1 &amp; 0 \\
+-\sin \theta &amp; 0 &amp; \cos \theta
+\end{bmatrix},
+R_z = \begin{bmatrix}
+\cos \theta &amp; -\sin \theta &amp; 0 \\
+\sin \theta &amp; \cos \theta &amp; 0 \\
+0 &amp; 0 &amp; 1
+\end{bmatrix}"/></p>
+</div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">One can also use other combinations of the basic rotation matrices (in
+total there are 24 different possibilities). Apart from the ‘xyz’ order,
+a common scheme is ‘zxz’, i.e.,
+<img class="math" src="../_images/math/613a0349601f132250ee5b333aec292aa106d6c5.png" alt="R=R_z(\alpha_3)R_x(\alpha_2)R_z(\alpha_1)"/>.
+The rotation angles are often called Euler angles.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The right-most matrix is applied first, but since rotation matrices are
+associative one can just calculate the matrix multiplication (in any
+order) and apply the result to the target vector.</p>
+</div>
+<p>Example:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">multiply_matrices</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">geometry</span><span class="o">.</span><span class="n">Rz</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">geometry</span><span class="o">.</span><span class="n">Ry</span><span class="p">(</span><span class="mi">30</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">geometry</span><span class="o">.</span><span class="n">Rx</span><span class="p">(</span><span class="mi">15</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span>  
+<span class="go">array([[ 0.85286853, -0.04028776, -0.52056908],</span>
+<span class="go">       [ 0.15038373,  0.97372297,  0.17102137],</span>
+<span class="go">       [ 0.5       , -0.22414387,  0.8365163 ]])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vector</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">vector</span><span class="p">)</span>  
+<span class="go">&lt;Quantity [ 1.73286, 3.70323,-2.06961] m&gt;</span>
+</pre></div>
+</div>
+<p>The second approach is by specifying a rotation axis and angle and use
+<a class="reference external" href="https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula">Rodrigues’ Rotation Formula</a>:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rotax</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rotang</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R2</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">rotmat_from_rotaxis</span><span class="p">(</span><span class="o">*</span><span class="n">rotax</span><span class="p">,</span> <span class="n">rotang</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R2</span>  
+<span class="go">array([[ 0.98889169, -0.14241824, -0.04254725],</span>
+<span class="go">       [ 0.14568539,  0.98546118,  0.08741867],</span>
+<span class="go">       [ 0.02947865, -0.09264611,  0.99526263]])</span>
+</pre></div>
+</div>
+<p>It is possible to extract the Euler angles or the rotation axis/angle from
+a given rotation matrix, with the functions
+<a class="reference internal" href="../api/pycraf.geometry.eulerangle_from_rotmat.html#pycraf.geometry.eulerangle_from_rotmat" title="pycraf.geometry.eulerangle_from_rotmat"><code class="xref py py-obj docutils literal"><span class="pre">eulerangle_from_rotmat</span></code></a> and
+<a class="reference internal" href="../api/pycraf.geometry.rotaxis_from_rotmat.html#pycraf.geometry.rotaxis_from_rotmat" title="pycraf.geometry.rotaxis_from_rotmat"><code class="xref py py-obj docutils literal"><span class="pre">rotaxis_from_rotmat</span></code></a>, but keep in mind that the solution
+is not unique!</p>
+</div>
+</div>
 <div class="section" id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">Astropy Units and Quantities package</a>, which is used extensively in pycraf.</li>
 <li><a class="reference external" href="https://en.wikipedia.org/wiki/Spherical_coordinate_system">Spherical coordinates</a></li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Rotation_matrix">Rotation matrix</a></li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula">Rodrigues’ Rotation Formula</a></li>
 </ul>
 </div>
 <div class="section" id="reference-api">
@@ -120,16 +239,25 @@ for various geometrical calculations, e.g., in spherical coordinates.</p>
 <tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.cart_to_sphere.html#pycraf.geometry.cart_to_sphere" title="pycraf.geometry.cart_to_sphere"><code class="xref py py-obj docutils literal"><span class="pre">cart_to_sphere</span></code></a>(x,&nbsp;y,&nbsp;z[,&nbsp;broadcast_arrays])</td>
 <td>Spherical coordinates from Cartesian representation.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.great_circle_bearing.html#pycraf.geometry.great_circle_bearing" title="pycraf.geometry.great_circle_bearing"><code class="xref py py-obj docutils literal"><span class="pre">great_circle_bearing</span></code></a>(l1,&nbsp;b1,&nbsp;l2,&nbsp;b2)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.eulerangle_from_rotmat.html#pycraf.geometry.eulerangle_from_rotmat" title="pycraf.geometry.eulerangle_from_rotmat"><code class="xref py py-obj docutils literal"><span class="pre">eulerangle_from_rotmat</span></code></a>(R[,&nbsp;etype])</td>
+<td>Cartesian rotation axis and angle from rotation matrix.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.great_circle_bearing.html#pycraf.geometry.great_circle_bearing" title="pycraf.geometry.great_circle_bearing"><code class="xref py py-obj docutils literal"><span class="pre">great_circle_bearing</span></code></a>(l1,&nbsp;b1,&nbsp;l2,&nbsp;b2)</td>
 <td>Great circle bearing between points (l1, b1) and (l2, b2).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.multiply_matrices.html#pycraf.geometry.multiply_matrices" title="pycraf.geometry.multiply_matrices"><code class="xref py py-obj docutils literal"><span class="pre">multiply_matrices</span></code></a>(*matrices)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.multiply_matrices.html#pycraf.geometry.multiply_matrices" title="pycraf.geometry.multiply_matrices"><code class="xref py py-obj docutils literal"><span class="pre">multiply_matrices</span></code></a>(*matrices)</td>
 <td>Matrix-multiply the matrices in the given list.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.sphere_to_cart.html#pycraf.geometry.sphere_to_cart" title="pycraf.geometry.sphere_to_cart"><code class="xref py py-obj docutils literal"><span class="pre">sphere_to_cart</span></code></a>(r,&nbsp;phi,&nbsp;theta[,&nbsp;broadcast_arrays])</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.rotaxis_from_rotmat.html#pycraf.geometry.rotaxis_from_rotmat" title="pycraf.geometry.rotaxis_from_rotmat"><code class="xref py py-obj docutils literal"><span class="pre">rotaxis_from_rotmat</span></code></a>(R)</td>
+<td>Cartesian rotation axis and angle from rotation matrix.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.rotmat_from_rotaxis.html#pycraf.geometry.rotmat_from_rotaxis" title="pycraf.geometry.rotmat_from_rotaxis"><code class="xref py py-obj docutils literal"><span class="pre">rotmat_from_rotaxis</span></code></a>(rotax_x,&nbsp;rotax_y,&nbsp;…)</td>
+<td>Construct rotation matrix from cartesian rotation axis and angle.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.sphere_to_cart.html#pycraf.geometry.sphere_to_cart" title="pycraf.geometry.sphere_to_cart"><code class="xref py py-obj docutils literal"><span class="pre">sphere_to_cart</span></code></a>(r,&nbsp;phi,&nbsp;theta[,&nbsp;broadcast_arrays])</td>
 <td>Spherical coordinates from Cartesian representation.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.true_angular_distance.html#pycraf.geometry.true_angular_distance" title="pycraf.geometry.true_angular_distance"><code class="xref py py-obj docutils literal"><span class="pre">true_angular_distance</span></code></a>(l1,&nbsp;b1,&nbsp;l2,&nbsp;b2)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.true_angular_distance.html#pycraf.geometry.true_angular_distance" title="pycraf.geometry.true_angular_distance"><code class="xref py py-obj docutils literal"><span class="pre">true_angular_distance</span></code></a>(l1,&nbsp;b1,&nbsp;l2,&nbsp;b2)</td>
 <td>True angular distance between points (l1, b1) and (l2, b2).</td>
 </tr>
 </tbody>
@@ -148,6 +276,11 @@ for various geometrical calculations, e.g., in spherical coordinates.</p>
 <ul>
 <li><a class="reference internal" href="#">Geometry helpers (<code class="docutils literal"><span class="pre">pycraf.geometry</span></code>)</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#using-pycraf-geometry">Using <code class="docutils literal"><span class="pre">pycraf.geometry</span></code></a><ul>
+<li><a class="reference internal" href="#spherical-coordinates">Spherical coordinates</a></li>
+<li><a class="reference internal" href="#rotation-matrices">Rotation matrices</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#see-also">See Also</a></li>
 <li><a class="reference internal" href="#reference-api">Reference/API</a><ul>
 <li><a class="reference internal" href="#module-pycraf.geometry">pycraf.geometry Package</a><ul>
@@ -174,7 +307,7 @@ for various geometrical calculations, e.g., in spherical coordinates.</p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 15 Sep 2017. <br/>
+    Last built 18 Sep 2017. <br/>
   </p>
 </footer>
   </body>

@@ -13,7 +13,7 @@ A_m, SLA_nu = 30. * cnv.dimless, 30. * cnv.dimless
 azim_3db, elev_3db = 65. * u.deg, 65. * u.deg
 
 gains_single = imt2020_single_element_pattern(
-    azims[:, np.newaxis], elevs[np.newaxis],
+    azims[np.newaxis], elevs[:, np.newaxis],
     G_Emax,
     A_m, SLA_nu,
     azim_3db, elev_3db
@@ -57,6 +57,7 @@ for i, azim_i in enumerate(u.Quantity([0, 30], u.deg)):
             N_H, N_V,
             ).to(cnv.dB).value
 
+        gains_array[gains_array < -100] = -100  # fix blanks (-infty)
         im = ax.imshow(
             gains_array, extent=(
                 azims[0].value, azims[-1].value,

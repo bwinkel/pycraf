@@ -117,7 +117,7 @@ be useful for generic compatibility studies in the spurious/out-of-band domain
 <span class="n">azim_3db</span><span class="p">,</span> <span class="n">elev_3db</span> <span class="o">=</span> <span class="mf">65.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">65.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
 
 <span class="n">gains_single</span> <span class="o">=</span> <span class="n">imt2020_single_element_pattern</span><span class="p">(</span>
-    <span class="n">azims</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">elevs</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+    <span class="n">azims</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">elevs</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
     <span class="n">G_Emax</span><span class="p">,</span>
     <span class="n">A_m</span><span class="p">,</span> <span class="n">SLA_nu</span><span class="p">,</span>
     <span class="n">azim_3db</span><span class="p">,</span> <span class="n">elev_3db</span>
@@ -166,6 +166,7 @@ be useful for generic compatibility studies in the spurious/out-of-band domain
             <span class="n">N_H</span><span class="p">,</span> <span class="n">N_V</span><span class="p">,</span>
             <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 
+        <span class="n">gains_array</span><span class="p">[</span><span class="n">gains_array</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">100</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span>  <span class="c1"># fix blanks (-infty)</span>
         <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
             <span class="n">gains_array</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">(</span>
                 <span class="n">azims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">azims</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
@@ -368,7 +369,7 @@ IMT.MODEL document (<a class="reference external" href="https://www.itu.int/md/R
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 15 Sep 2017. <br/>
+    Last built 18 Sep 2017. <br/>
   </p>
 </footer>
   </body>
