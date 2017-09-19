@@ -1438,8 +1438,11 @@
     <span class="n">delta_n</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">path_length</span> <span class="o">=</span> <span class="mi">0</span>
 
+    <span class="c1"># find start layer index that is associated with observers altitude</span>
+    <span class="n">start_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">heights</span><span class="p">,</span> <span class="n">obs_alt</span> <span class="o">/</span> <span class="mf">1000.</span><span class="p">)</span>
+
     <span class="c1"># TODO: this is certainly a case for cython</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">heights</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">heights</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
 
         <span class="n">r_n</span> <span class="o">=</span> <span class="n">radii</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="n">d_n</span> <span class="o">=</span> <span class="n">deltas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
@@ -1916,7 +1919,7 @@
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 18 Sep 2017. <br/>
+    Last built 19 Sep 2017. <br/>
   </p>
 </footer>
   </body>
