@@ -26,6 +26,12 @@ pycraf.protection
   function, as contained in Table 3 of RA.769. Furthermore, it is now
   possible to specify the integration time to be used for the thresholds.
 
+Bugfixes
+--------
+- In `atm.atten_slant_annex1` the `obs_alt` parameter was not properly
+  accounted for. This led to significant errors for high-altitude
+  observers.
+
 0.25.3 (2017-08-09)
 ====================
 

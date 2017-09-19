@@ -1366,8 +1366,11 @@ def _prepare_path(elev, obs_alt, profile_func, max_path_length=1000.):
     delta_n = 0
     path_length = 0
 
+    # find start layer index that is associated with observers altitude
+    start_i = np.searchsorted(heights, obs_alt / 1000.)
+
     # TODO: this is certainly a case for cython
-    for i in range(len(heights) - 1):
+    for i in range(start_i, len(heights) - 1):
 
         r_n = radii[i]
         d_n = deltas[i]

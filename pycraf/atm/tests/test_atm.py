@@ -511,20 +511,20 @@ class TestConversions:
         assert_quantity_allclose(
             atten,
             np.array([
-                1.0279145660e-01, 2.6893903556e-01, 4.9024818093e-01,
-                1.5542565085e+02, 1.8943476778e+00
+                9.17888952e-02, 2.27186797e-01, 4.17408787e-01,
+                1.49256587e+02, 1.53137568e+00
                 ]) * cnv.dB
             )
 
         assert_quantity_allclose(
-            refract, Quantity(-0.03139748093503248, apu.deg)
+            refract, Quantity(-0.0296029844612025, apu.deg)
             )
 
         assert_quantity_allclose(
             tebb,
             Quantity([
-                8.8560899728, 18.8378849911, 31.25205135,
-                286.3083466743, 99.2258260009
+                8.15077217, 16.24830323, 26.92802459, 283.63773569,
+                82.86419308
                 ], apu.K)
             )
 
