@@ -2466,8 +2466,8 @@ def atten_map_fast_cython(
                 pp.bearing = bearing_map_v[yi, xi]
                 pp.back_bearing = back_bearing_map_v[yi, xi]
 
-                pp.d_tm = pp.distance
-                pp.d_lm = pp.distance
+                # pp.d_tm = pp.distance  # already set above
+                # pp.d_lm = pp.distance
 
                 pp.lon_mid = lon_mid_map_v[yi, xi]
                 pp.lat_mid = lat_mid_map_v[yi, xi]
@@ -2507,6 +2507,151 @@ def atten_map_fast_cython(
         free(pp)
 
     return atten_map, eps_pt_map, eps_pr_map
+
+
+def atten_path_fast_cython(
+        double freq,
+        double temperature,
+        double pressure,
+        double h_tg, double h_rg,
+        double time_percent,
+        double[::1] lon_v, double[::1] lat_v,
+        double[::1] dist_v,
+        double[::1] height_v, double[::1] zheight_v,
+        double bearing, double[::1] backbearing_v,
+        double[::1] omega_v,
+        double[::1] d_tm_v, double[::1] d_lm_v,
+        double[::1] d_ct_v, double[::1] d_cr_v,
+        int zone_t, int[::1] zone_r_v,
+        double delta_N, double N0, double beta0,
+        int polarization=0,
+        int version=16,
+        ):
+
+
+    # TODO: implement map-based clutter handling; currently, only a single
+    # clutter zone type is possible for each of Tx and Rx
+
+    assert time_percent <= 50.
+    assert version == 14 or version == 16
+
+    assert (
+        lon_v.size == lat_v.size ==
+        dist_v.size == height_v.size == zheight_v.size ==
+        backbearing_v.size ==
+        omega_v.size ==
+        d_tm_v.size == d_lm_v.size == d_ct_v.size == d_cr_v.size ==
+        zone_r_v.size
+        )
+    assert zone_t >= -1 and zone_t <= 11
+    assert np.all(zone_r_v >= -1) and np.all(zone_r_v <= 11)
+
+    cdef:
+        # must set gains to zero, because gain is direction dependent
+        double G_t = 0., G_r = 0.
+        ppstruct *pp
+        int i, max_path_length = dist_v.size
+
+        double[:, ::1] clutter_data_v = CLUTTER_DATA
+
+        double L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
+
+    # atten_map stores path attenuation
+    atten_path = np.zeros((6, max_path_length), dtype=np.float64)
+
+    # also store path elevation angles as seen at Rx/Tx
+    eps_pt_path = np.zeros((max_path_length), dtype=np.float64)
+    eps_pr_path = np.zeros((max_path_length), dtype=np.float64)
+
+    cdef:
+        double[:, :] atten_path_v = atten_path
+        double[:] eps_pt_path_v = eps_pt_path
+        double[:] eps_pr_path_v = eps_pr_path
+
+    with nogil, parallel():
+
+        pp = <ppstruct *> malloc(sizeof(ppstruct))
+        if pp == NULL:
+            abort()
+
+        pp.version = version
+        pp.freq = freq
+        pp.wavelen = 0.299792458 / freq
+        pp.temperature = temperature
+        pp.pressure = pressure
+        pp.lon_t = lon_v[0]
+        pp.lat_t = lat_v[0]
+        pp.zone_t = zone_t
+        pp.h_tg = h_tg
+        pp.h_rg = h_rg
+        pp.h_tg_in = h_tg
+        pp.h_rg_in = h_rg
+        pp.bearing = bearing
+
+        pp.hprof_step = 30.  # dummy
+        pp.time_percent = time_percent
+        pp.polarization = polarization
+
+        pp.delta_N = delta_N
+        pp.beta0 = beta0
+        pp.N0 = N0
+
+        # for algorithmic reasons, it is not possible to calculated the
+        # attens for the first 5 or so steps; start at index 6
+        for i in prange(6, max_path_length, schedule='guided', chunksize=10):
+
+            pp.omega = omega_v[i]
+            pp.lon_r = lon_v[i]
+            pp.lat_r = lat_v[i]
+            pp.zone_r = zone_r_v[i]
+
+            if pp.zone_t == CLUTTER.UNKNOWN:
+                pp.h_tg = h_tg
+            else:
+                pp.h_tg = f_max(clutter_data_v[pp.zone_t, 0], h_tg)
+
+            if pp.zone_r == CLUTTER.UNKNOWN:
+                pp.h_rg = h_rg
+            else:
+                pp.h_rg = f_max(clutter_data_v[pp.zone_r, 0], h_rg)
+
+            pp.d_tm = d_tm_v[i]
+            pp.d_lm = d_lm_v[i]
+            pp.d_ct = d_ct_v[i]
+            pp.d_cr = d_cr_v[i]
+
+            pp.distance = dist_v[i]
+            pp.back_bearing = backbearing_v[i]
+
+            pp.lon_mid = lon_v[i // 2]
+            pp.lat_mid = lat_v[i // 2]
+
+            _process_path(
+                pp,
+                # dists_v,
+                # heights_v,
+                # zheights_v,
+                dist_v[0:i + 1],
+                height_v[0:i + 1],
+                zheight_v[0:i + 1],
+                )
+
+            (
+                L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
+                ) = _path_attenuation_complete(pp[0], G_t, G_r)
+
+            atten_path_v[0, i] = L_bfsg
+            atten_path_v[1, i] = L_bd
+            atten_path_v[2, i] = L_bs
+            atten_path_v[3, i] = L_ba
+            atten_path_v[4, i] = L_b
+            atten_path_v[5, i] = L_b_corr
+            eps_pt_path_v[i] = pp.eps_pt
+            eps_pr_path_v[i] = pp.eps_pr
+
+        free(pp)
+
+    return atten_path, eps_pt_path, eps_pr_path
 
 # ############################################################################
 # Atmospheric attenuation (Annex 2)
