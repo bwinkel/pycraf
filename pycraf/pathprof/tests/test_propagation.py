@@ -39,7 +39,7 @@ MAP_KEYS = [
     'dist_map', 'd_ct_map', 'd_cr_map', 'd_lm_map', 'd_tm_map',
     'zone_t_map', 'zone_r_map', 'bearing_map', 'back_bearing_map',
     'N0_map', 'delta_N_map', 'beta0_map', 'path_idx_map',
-    'pix_dist_map', 'dist_end_idx_map'
+    'pix_dist_map', 'dist_end_idx_map', 'omega_map'
     ]
 
 

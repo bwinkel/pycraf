@@ -1918,6 +1918,7 @@ def height_profile_data_cython(
         int zone_t=CLUTTER.UNKNOWN, int zone_r=CLUTTER.UNKNOWN,
         d_tm=None, d_lm=None,
         d_ct=None, d_cr=None,
+        omega=None,
         ):
 
     '''
@@ -1952,6 +1953,9 @@ def height_profile_data_cython(
         Distance over land from transmitter/receiver antenna to the coast
         along great circle interference path [km]
         (default: 50000 km)
+    omega : double, optional
+        Fraction of the path over water [%] (see Table 3)
+        (default: 0%)
 
     Returns
     -------
@@ -1999,6 +2003,10 @@ def height_profile_data_cython(
         - "d_lm_map", "d_tm_map" : `~numpy.ndarray` 2D (float; (mx, my))
 
           The `d_lm` and `d_tm` values for each pixel in the map.
+
+        - "omega_map" : `~numpy.ndarray` 2D (float; (mx, my))
+
+          The `omega` values for each pixel in the map.
 
         - "zone_t_map", "zone_r_map" : `~numpy.ndarray` 2D (CLUTTER enum; (mx, my))
 
@@ -2206,6 +2214,11 @@ def height_profile_data_cython(
     else:
         d_cr_map = np.full_like(dist_map, d_cr)
 
+    if omega is None:
+        omega_map = np.full_like(dist_map, 0.)
+    else:
+        omega_map = np.full_like(dist_map, omega)
+
     # dict access not possible with nogil
     # will store height profile dict in a 2D array, even though this
     # needs somewhat more memory
@@ -2263,6 +2276,7 @@ def height_profile_data_cython(
     hprof_data['d_lm_map'] = d_lm_map
     hprof_data['d_ct_map'] = d_ct_map
     hprof_data['d_cr_map'] = d_cr_map
+    hprof_data['omega_map'] = omega_map
 
     hprof_data['dist_prof'] = dist_prof
     hprof_data['height_profs'] = height_profs
@@ -2278,7 +2292,6 @@ def atten_map_fast_cython(
         double h_tg, double h_rg,
         double time_percent,
         object hprof_data not None,  # dict_like
-        double omega=0,
         int polarization=0,
         int version=16,
         ):
@@ -2300,9 +2313,6 @@ def atten_map_fast_cython(
     hprof_data : dict, dict-like
         Dictionary with height profiles and auxillary maps as
         calculated with `~pycraf.pathprof.height_profile_data`.
-    omega : double, optional
-        Fraction of the path over water [%] (see Table 3)
-        (default: 0%)
     polarization : int, optional
         Polarization (default: 0)
         Allowed values are: 0 - horizontal, 1 - vertical
@@ -2394,6 +2404,7 @@ def atten_map_fast_cython(
         double[:, :] d_lm_map_v = _cf(hprof_data['d_lm_map'])
         double[:, :] d_ct_map_v = _cf(hprof_data['d_ct_map'])
         double[:, :] d_cr_map_v = _cf(hprof_data['d_cr_map'])
+        double[:, :] omega_map_v = _cf(hprof_data['omega_map'])
 
         double[:, :] bearing_map_v = _cf(hprof_data['bearing_map'])
         double[:, :] back_bearing_map_v = _cf(hprof_data['back_bearing_map'])
@@ -2429,7 +2440,6 @@ def atten_map_fast_cython(
         pp.time_percent = time_percent
         # TODO: add functionality to produce the following
         # five parameters programmatically (using some kind of Geo-Data)
-        pp.omega = omega
         pp.polarization = polarization
 
         for yi in prange(ylen, schedule='guided', chunksize=10):
@@ -2461,6 +2471,7 @@ def atten_map_fast_cython(
                 pp.d_lm = d_lm_map_v[yi, xi]
                 pp.d_ct = d_ct_map_v[yi, xi]
                 pp.d_cr = d_cr_map_v[yi, xi]
+                pp.omega = omega_map_v[yi, xi]
 
                 pp.distance = dist_map_v[yi, xi]
                 pp.bearing = bearing_map_v[yi, xi]

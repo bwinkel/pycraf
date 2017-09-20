@@ -594,6 +594,7 @@ def clutter_imt(
     d_lm=(None, None, apu.m),
     d_ct=(None, None, apu.m),
     d_cr=(None, None, apu.m),
+    omega_percent=(0, 100, apu.percent),
     strip_input_units=True, allow_none=True, output_unit=None
     )
 def height_profile_data(
@@ -604,6 +605,7 @@ def height_profile_data(
         zone_t=cyprop.CLUTTER.UNKNOWN, zone_r=cyprop.CLUTTER.UNKNOWN,
         d_tm=None, d_lm=None,
         d_ct=None, d_cr=None,
+        omega_percent=0 * apu.percent,
         ):
 
     '''
@@ -659,6 +661,9 @@ def height_profile_data(
         Distance over land from transmitter/receiver antenna to the coast
         along great circle interference path [km]
         (default: 50000 km)
+    omega_percent : `~astropy.units.Quantity`, optional
+        Fraction of the path over water [%] (see Table 3)
+        (default: 0%)
 
     Returns
     -------
@@ -706,6 +711,10 @@ def height_profile_data(
         - "d_lm_map", "d_tm_map" : `~numpy.ndarray` 2D (float; (mx, my))
 
           The `d_lm` and `d_tm` values for each pixel in the map.
+
+        - "omega_map" : `~numpy.ndarray` 2D (float; (mx, my))
+
+          The `omega` values for each pixel in the map.
 
         - "zone_t_map", "zone_r_map" : `~numpy.ndarray` 2D (CLUTTER enum; (mx, my))
 
@@ -772,6 +781,7 @@ def height_profile_data(
         zone_t=zone_t, zone_r=zone_r,
         d_tm=d_tm, d_lm=d_lm,
         d_ct=d_ct, d_cr=d_cr,
+        omega=omega_percent,
         )
 
 
@@ -782,7 +792,6 @@ def height_profile_data(
     h_tg=(None, None, apu.m),
     h_rg=(None, None, apu.m),
     timepercent=(0, 50, apu.percent),
-    omega_percent=(0, 100, apu.percent),
     strip_input_units=True,
     output_unit=(cnv.dB, apu.deg, apu.deg)
     )
@@ -793,7 +802,6 @@ def atten_map_fast(
         h_tg, h_rg,
         timepercent,
         hprof_data,  # dict_like
-        omega=0 * apu.percent,
         polarization=0,
         version=16,
         ):
@@ -815,9 +823,6 @@ def atten_map_fast(
     hprof_data : dict, dict-like
         Dictionary with height profiles and auxillary maps as
         calculated with `~pycraf.pathprof.height_profile_data`.
-    omega : `~astropy.units.Quantity`, optional
-        Fraction of the path over water [%] (see Table 3)
-        (default: 0%)
     polarization : int, optional
         Polarization (default: 0)
         Allowed values are: 0 - horizontal, 1 - vertical
@@ -858,7 +863,6 @@ def atten_map_fast(
         h_tg, h_rg,
         timepercent,
         hprof_data,  # dict_like
-        omega=omega,
         polarization=polarization,
         version=version,
         )
