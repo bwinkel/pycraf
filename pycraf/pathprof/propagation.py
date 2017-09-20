@@ -20,7 +20,7 @@ __all__ = [
     'loss_freespace', 'loss_troposcatter', 'loss_ducting',
     'loss_diffraction', 'loss_complete',
     'clutter_correction', 'clutter_imt',
-    'height_profile_data', 'atten_map_fast',
+    'height_map_data', 'atten_map_fast',
     ]
 
 # Note, we have to curry the quantities here, because Cython produces
@@ -597,7 +597,7 @@ def clutter_imt(
     omega_percent=(0, 100, apu.percent),
     strip_input_units=True, allow_none=True, output_unit=None
     )
-def height_profile_data(
+def height_map_data(
         lon_t, lat_t,
         map_size_lon, map_size_lat,
         map_resolution=3. * apu.arcsec,
@@ -669,7 +669,7 @@ def height_profile_data(
     -------
     hprof_data : dict
         Dictionary with height profiles and auxillary data as
-        calculated with `~pycraf.pathprof.height_profile_data`.
+        calculated with `~pycraf.pathprof.height_map_data`.
 
         The dictionary contains the following entities (the map dimension
         is mx * my):
@@ -773,7 +773,7 @@ def height_profile_data(
       For details see :ref:`working_with_srtm`.
     '''
 
-    return cyprop.height_profile_data_cython(
+    return cyprop.height_map_data_cython(
         lon_t, lat_t,
         map_size_lon, map_size_lat,
         map_resolution=map_resolution,
@@ -822,7 +822,7 @@ def atten_map_fast(
         Time percentage [%] (maximal 50%)
     hprof_data : dict, dict-like
         Dictionary with height profiles and auxillary maps as
-        calculated with `~pycraf.pathprof.height_profile_data`.
+        calculated with `~pycraf.pathprof.height_map_data`.
     polarization : int, optional
         Polarization (default: 0)
         Allowed values are: 0 - horizontal, 1 - vertical

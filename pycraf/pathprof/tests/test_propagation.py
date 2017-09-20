@@ -286,11 +286,11 @@ class TestPropagation:
                 assert_quantity_allclose(losses[k], loss_true[k])
 
     @skip_h5py
-    def test_height_profile_data_h5py(self, tmpdir_factory):
+    def test_height_map_data_h5py(self, tmpdir_factory):
 
         import h5py
 
-        hprof_data_cache = pathprof.height_profile_data(
+        hprof_data_cache = pathprof.height_map_data(
             6.5 * apu.deg, 50.5 * apu.deg,
             900 * apu.arcsec, 900 * apu.arcsec,
             map_resolution=30 * apu.arcsec,
@@ -397,9 +397,9 @@ class TestPropagation:
             assert_allclose(h5f['eps_pt_map'], eps_pt_map)
             assert_allclose(h5f['eps_pr_map'], eps_pr_map)
 
-    def test_height_profile_data_npz(self, tmpdir_factory):
+    def test_height_map_data_npz(self, tmpdir_factory):
 
-        hprof_data_cache = pathprof.height_profile_data(
+        hprof_data_cache = pathprof.height_map_data(
             6.5 * apu.deg, 50.5 * apu.deg,
             900 * apu.arcsec, 900 * apu.arcsec,
             map_resolution=30 * apu.arcsec,

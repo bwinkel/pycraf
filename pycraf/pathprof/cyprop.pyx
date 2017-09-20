@@ -1910,7 +1910,7 @@ def clutter_correction_cython(
 
 # TODO: d_tm, d_lm, d_ct, and d_cr need to be calculated for each pixel!
 # Likewise for clutter zones.
-def height_profile_data_cython(
+def height_map_data_cython(
         double lon_t, double lat_t,
         double map_size_lon, double map_size_lat,
         double map_resolution=3. / 3600.,
@@ -1961,7 +1961,7 @@ def height_profile_data_cython(
     -------
     hprof_data : dict
         Dictionary with height profiles and auxillary data as
-        calculated with `~pycraf.pathprof.height_profile_data`.
+        calculated with `~pycraf.pathprof.height_map_data`.
 
         The dictionary contains the following entities (the map dimension
         is mx * my):
@@ -2312,7 +2312,7 @@ def atten_map_fast_cython(
         Time percentage [%] (maximal 50%)
     hprof_data : dict, dict-like
         Dictionary with height profiles and auxillary maps as
-        calculated with `~pycraf.pathprof.height_profile_data`.
+        calculated with `~pycraf.pathprof.height_map_data`.
     polarization : int, optional
         Polarization (default: 0)
         Allowed values are: 0 - horizontal, 1 - vertical
