@@ -1,4 +1,4 @@
-0.25.4 (unreleased)
+0.25.4 (2017-09-21)
 ====================
 
 New Features
@@ -6,31 +6,49 @@ New Features
 
 pycraf.antenna
 ^^^^^^^^^^^^^^^
-- Add correlation-level parameter to `imt2020_composite_pattern` function.
+- Add correlation-level parameter to `imt2020_composite_pattern`
+  function. [#c57b]
 
 pycraf.geometry
 ^^^^^^^^^^^^^^^
 - Add various convenience functions to create 3D rotation matrices from
   rotation axis or Euler angles (and vice versa). Streamline the geometry
-  subpackage to allow proper numpy broadcasting.
+  subpackage to allow proper numpy broadcasting. [#c970]
 
 pycraf.pathprof
 ^^^^^^^^^^^^^^^
 - Add a method, `geoid_area` to calculate surface area on the WGS84
   ellipsoid. Only rectangular limits (absolute coordinates) are supported.
-  This can be used to determine the area of SRTM pixels (in km^2).
+  This can be used to determine the area of SRTM pixels (in km^2). [#678f]
+- Add a method `atten_path_fast`, which can be used to calculate attenuations
+  for full paths very quickly (compared to the manual approach); also see
+  tutorial notebooks. To produce the necessary aux-data dictionary,
+  two functions are available: `height_path_data` and
+  `height_path_data_generic`. To avoid confusion and to streamline
+  everything, the function `heigth_profile_data` was renamed to
+  `height_map_data`. [#9d6a]
 
 pycraf.protection
 ^^^^^^^^^^^^^^^
 - Add the possibility to generate VLBI threshold values in `ra769_limits`
   function, as contained in Table 3 of RA.769. Furthermore, it is now
-  possible to specify the integration time to be used for the thresholds.
+  possible to specify the integration time to be used for the
+  thresholds. [#8a15]
+
+Documentation
+-------------
+
+- Add a notebook about how to tilt or rotate IMT2020 antenna patterns.
+- Various updates.
 
 Bugfixes
 --------
 - In `atm.atten_slant_annex1` the `obs_alt` parameter was not properly
   accounted for. This led to significant errors for high-altitude
-  observers.
+  observers. [#f616]
+- The function `imt2020_composite_pattern` in the antenna subpackage
+  now allows better broadcasting of input arrays. Speed was also
+  improved. [#b8ac, #1219]
 
 0.25.3 (2017-08-09)
 ====================
