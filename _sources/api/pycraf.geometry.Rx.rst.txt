@@ -1,0 +1,6 @@
+Rx
+==
+
+.. currentmodule:: pycraf.geometry
+
+.. autofunction:: Rx

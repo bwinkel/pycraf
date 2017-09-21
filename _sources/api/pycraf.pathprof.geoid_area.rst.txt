@@ -1,0 +1,6 @@
+geoid_area
+==========
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: geoid_area

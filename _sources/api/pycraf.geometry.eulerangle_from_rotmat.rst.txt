@@ -1,0 +1,6 @@
+eulerangle_from_rotmat
+======================
+
+.. currentmodule:: pycraf.geometry
+
+.. autofunction:: eulerangle_from_rotmat

@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>transform_factory &#8212; pycraf v0.25.3</title>
-    
+    <title>transform_factory &#8212; pycraf v0.25.4</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.25.3',
+        VERSION:     '0.25.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -35,7 +32,7 @@
 
 
   </head>
-  <body role="document">
+  <body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
@@ -70,7 +67,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.3</a>
+	<a href="../index.html">pycraf v0.25.4</a>
 	 &#187;
       </li>
       <li><a href="../geospatial/index.html" accesskey="U">Geographical frames (<code class="docutils literal"><span class="pre">pycraf.geospatial</span></code>)</a> &#187;</li>
@@ -89,11 +86,11 @@
 <h1>transform_factory<a class="headerlink" href="#transform-factory" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.geospatial.transform_factory">
-<code class="descclassname">pycraf.geospatial.</code><code class="descname">transform_factory</code><span class="sig-paren">(</span><em>sys_in</em>, <em>sys_out</em>, <em>code_in='epsg'</em>, <em>code_out='epsg'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#transform_factory"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.3/pycraf/geospatial/geospatial.py#L527" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.geospatial.transform_factory" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.geospatial.</code><code class="descname">transform_factory</code><span class="sig-paren">(</span><em>sys_in</em>, <em>sys_out</em>, <em>code_in='epsg'</em>, <em>code_out='epsg'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#transform_factory"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.4/pycraf/geospatial/geospatial.py#L527" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.geospatial.transform_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>A factory to produce conversion functions (decorated with
 <a class="reference internal" href="pycraf.utils.ranged_quantity_input.html#pycraf.utils.ranged_quantity_input" title="pycraf.utils.ranged_quantity_input"><code class="xref py py-obj docutils literal"><span class="pre">ranged_quantity_input</span></code></a> for unit handling).</p>
 <p>The returned function will automatically have the correct
-signature (e.g., lon/lat &#8211;&gt; x/y, or x/y/z &#8211;&gt; lon/lat/height)
+signature (e.g., lon/lat –&gt; x/y, or x/y/z –&gt; lon/lat/height)
 depending on the chosen input and output projections.
 Also a proper docstring is produced.</p>
 <p>While <a class="reference internal" href="../geospatial/index.html#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal"><span class="pre">geospatial</span></code></a> comes with several convenience
@@ -136,10 +133,10 @@ For convenience, a couple of common systems are defined in the
 (which just hold the associated <em>EPSG</em> or <em>ESRI</em> code for each
 name), e.g., <code class="xref py py-obj docutils literal"><span class="pre">EPSG.WGS84</span> <span class="pre">==</span> <span class="pre">4326</span></code>.</p>
 </div></blockquote>
-<p><strong>code_in, code_out</strong> : {&#8216;epsg&#8217;, &#8216;esri&#8217;}</p>
+<p><strong>code_in, code_out</strong> : {‘epsg’, ‘esri’}</p>
 <blockquote>
 <div><p>Whether to interpret integer-valued <code class="xref py py-obj docutils literal"><span class="pre">sys_[in,out]</span></code> arguments
-as <em>EPSG</em> or <em>ESRI</em> code. (default: &#8216;epsg&#8217;)</p>
+as <em>EPSG</em> or <em>ESRI</em> code. (default: ‘epsg’)</p>
 </div></blockquote>
 </td>
 </tr>
@@ -158,13 +155,13 @@ as <em>EPSG</em> or <em>ESRI</em> code. (default: &#8216;epsg&#8217;)</p>
 some EPSG systems use different distance units, such as ft.
 Per default, <code class="xref py py-obj docutils literal"><span class="pre">pyproj</span></code> will convert these to meters.
 The <a class="reference internal" href="pycraf.utils.ranged_quantity_input.html#pycraf.utils.ranged_quantity_input" title="pycraf.utils.ranged_quantity_input"><code class="xref py py-obj docutils literal"><span class="pre">ranged_quantity_input</span></code></a> will automatically
-convert your inputs to the correct unit (i.e., &#8216;m&#8217; for distances),
+convert your inputs to the correct unit (i.e., ‘m’ for distances),
 but the outputs will always be in meters (or degrees).
-Use <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">units</span></code></a> functions to convert to something else
-such as &#8216;ft&#8217; if desired.</li>
+Use <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">units</span></code></a> functions to convert to something else
+such as ‘ft’ if desired.</li>
 </ul>
 <p class="rubric">Examples</p>
-<p>To define a &#8220;Gauss-Kruger Zone 4 (Germany)&#8221; to GPS/WGS84 transform:</p>
+<p>To define a “Gauss-Kruger Zone 4 (Germany)” to GPS/WGS84 transform:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">geospatial</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
 
@@ -216,14 +213,14 @@ set <code class="xref py py-obj docutils literal"><span class="pre">code_[in,out
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.3/docs/api/pycraf.geospatial.transform_factory.rst">Edit This Page on Github</a> &nbsp;
+    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.4/docs/api/pycraf.geospatial.transform_factory.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.geospatial.transform_factory.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 09 Aug 2017. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
+    Last built 21 Sep 2017. <br/>
   </p>
 </footer>
   </body>

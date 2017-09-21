@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Antenna patterns (pycraf.antenna) &#8212; pycraf v0.25.3</title>
-    
+    <title>Antenna patterns (pycraf.antenna) &#8212; pycraf v0.25.4</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.25.3',
+        VERSION:     '0.25.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -35,7 +32,7 @@
 
 
   </head>
-  <body role="document">
+  <body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
@@ -70,7 +67,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.3</a>
+	<a href="../index.html">pycraf v0.25.4</a>
 	 &#187;
       </li>
       
@@ -120,7 +117,7 @@ be useful for generic compatibility studies in the spurious/out-of-band domain
 <span class="n">azim_3db</span><span class="p">,</span> <span class="n">elev_3db</span> <span class="o">=</span> <span class="mf">65.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">65.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
 
 <span class="n">gains_single</span> <span class="o">=</span> <span class="n">imt2020_single_element_pattern</span><span class="p">(</span>
-    <span class="n">azims</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">elevs</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+    <span class="n">azims</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">elevs</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
     <span class="n">G_Emax</span><span class="p">,</span>
     <span class="n">A_m</span><span class="p">,</span> <span class="n">SLA_nu</span><span class="p">,</span>
     <span class="n">azim_3db</span><span class="p">,</span> <span class="n">elev_3db</span>
@@ -169,6 +166,7 @@ be useful for generic compatibility studies in the spurious/out-of-band domain
             <span class="n">N_H</span><span class="p">,</span> <span class="n">N_V</span><span class="p">,</span>
             <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 
+        <span class="n">gains_array</span><span class="p">[</span><span class="n">gains_array</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">100</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span>  <span class="c1"># fix blanks (-infty)</span>
         <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
             <span class="n">gains_array</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">(</span>
                 <span class="n">azims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">azims</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
@@ -291,7 +289,7 @@ compatibility studies. At the moment, the following are implemented:</p>
 be used for AI 1.13 IMT2020 studies. These are defined in the so-called
 IMT.MODEL document (<a class="reference external" href="https://www.itu.int/md/R15-TG5.1-C-0036">ITU-R TG 5/1 document 5-1/36</a>).</li>
 <li>A pattern that can be used for radio telescopes (<a class="reference external" href="https://www.itu.int/rec/R-REC-RA.1631-0-200305-I/en">ITU-R Rec. RA.1631-0</a>).</li>
-<li>Pattern for fixed wireless systems (&#8220;fixed-links&#8221;), as defined in
+<li>Pattern for fixed wireless systems (“fixed-links”), as defined in
 <a class="reference external" href="https://www.itu.int/rec/R-REC-F.699-7-200604-I/en">ITU-R Rec. F.699-7</a>.</li>
 </ul>
 <div class="section" id="functions">
@@ -314,13 +312,13 @@ IMT.MODEL document (<a class="reference external" href="https://www.itu.int/md/R
 <tr class="row-even"><td><a class="reference internal" href="../api/pycraf.antenna.fl_pattern.html#pycraf.antenna.fl_pattern" title="pycraf.antenna.fl_pattern"><code class="xref py py-obj docutils literal"><span class="pre">fl_pattern</span></code></a>(phi,&nbsp;diameter,&nbsp;wavelength,&nbsp;G_max)</td>
 <td>Antenna gain as a function of angular distance after <a class="reference external" href="https://www.itu.int/rec/R-REC-F.699-7-200604-I/en">ITU-R Rec F.699</a>.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.antenna.imt2020_composite_pattern.html#pycraf.antenna.imt2020_composite_pattern" title="pycraf.antenna.imt2020_composite_pattern"><code class="xref py py-obj docutils literal"><span class="pre">imt2020_composite_pattern</span></code></a>(azim,&nbsp;elev,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.antenna.imt2020_composite_pattern.html#pycraf.antenna.imt2020_composite_pattern" title="pycraf.antenna.imt2020_composite_pattern"><code class="xref py py-obj docutils literal"><span class="pre">imt2020_composite_pattern</span></code></a>(azim,&nbsp;elev,&nbsp;…[,&nbsp;rho])</td>
 <td>Composite (array) antenna pattern according to <a class="reference external" href="https://www.itu.int/md/R15-TG5.1-C-0036">IMT.MODEL</a> document.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.antenna.imt2020_single_element_pattern.html#pycraf.antenna.imt2020_single_element_pattern" title="pycraf.antenna.imt2020_single_element_pattern"><code class="xref py py-obj docutils literal"><span class="pre">imt2020_single_element_pattern</span></code></a>(azim,&nbsp;elev,&nbsp;...)</td>
-<td>Single antenna element&#8217;s pattern according to <a class="reference external" href="https://www.itu.int/md/R15-TG5.1-C-0036">IMT.MODEL</a> document.</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.antenna.imt2020_single_element_pattern.html#pycraf.antenna.imt2020_single_element_pattern" title="pycraf.antenna.imt2020_single_element_pattern"><code class="xref py py-obj docutils literal"><span class="pre">imt2020_single_element_pattern</span></code></a>(azim,&nbsp;elev,&nbsp;…)</td>
+<td>Single antenna element’s pattern according to <a class="reference external" href="https://www.itu.int/md/R15-TG5.1-C-0036">IMT.MODEL</a> document.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.antenna.ras_pattern.html#pycraf.antenna.ras_pattern" title="pycraf.antenna.ras_pattern"><code class="xref py py-obj docutils literal"><span class="pre">ras_pattern</span></code></a>(phi,&nbsp;diameter,&nbsp;wavelength[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.antenna.ras_pattern.html#pycraf.antenna.ras_pattern" title="pycraf.antenna.ras_pattern"><code class="xref py py-obj docutils literal"><span class="pre">ras_pattern</span></code></a>(phi,&nbsp;diameter,&nbsp;wavelength[,&nbsp;…])</td>
 <td>Antenna gain as a function of angular distance after <a class="reference external" href="https://www.itu.int/rec/R-REC-RA.1631-0-200305-I/en">ITU-R Rec RA.1631</a>.</td>
 </tr>
 </tbody>
@@ -364,14 +362,14 @@ IMT.MODEL document (<a class="reference external" href="https://www.itu.int/md/R
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.3/docs/antenna/index.rst">Edit This Page on Github</a> &nbsp;
+    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.4/docs/antenna/index.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/antenna/index.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 09 Aug 2017. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
+    Last built 21 Sep 2017. <br/>
   </p>
 </footer>
   </body>

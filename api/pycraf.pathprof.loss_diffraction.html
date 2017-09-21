@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>loss_diffraction &#8212; pycraf v0.25.3</title>
-    
+    <title>loss_diffraction &#8212; pycraf v0.25.4</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.25.3',
+        VERSION:     '0.25.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -35,7 +32,7 @@
 
 
   </head>
-  <body role="document">
+  <body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
@@ -70,7 +67,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.3</a>
+	<a href="../index.html">pycraf v0.25.4</a>
 	 &#187;
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="docutils literal"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
@@ -89,7 +86,7 @@
 <h1>loss_diffraction<a class="headerlink" href="#loss-diffraction" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.pathprof.loss_diffraction">
-<code class="descclassname">pycraf.pathprof.</code><code class="descname">loss_diffraction</code><span class="sig-paren">(</span><em>pathprop</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#loss_diffraction"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.3/pycraf/pathprof/propagation.py#L338" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.loss_diffraction" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.pathprof.</code><code class="descname">loss_diffraction</code><span class="sig-paren">(</span><em>pathprop</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#loss_diffraction"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.4/pycraf/pathprof/propagation.py#L341" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.loss_diffraction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the Diffraction loss of a propagating radio
 wave according to ITU-R P.452-16 Eq (14-44).</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -103,15 +100,15 @@ of the path (e.g., geometry).</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>L_d_50</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>L_d_50</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Median diffraction loss [dB]</p>
 </div></blockquote>
-<p><strong>L_dp</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>L_dp</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Diffraction loss not exceeded for p% time, [dB]</p>
 </div></blockquote>
-<p><strong>L_bd_50</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>L_bd_50</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Median basic transmission loss associated with
 diffraction [dB]:</p>
@@ -119,7 +116,7 @@ diffraction [dB]:</p>
 </pre></div>
 </div>
 </div></blockquote>
-<p><strong>L_bd</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>L_bd</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Basic transmission loss associated with diffraction not
 exceeded for p% time [dB]:</p>
@@ -127,7 +124,7 @@ exceeded for p% time [dB]:</p>
 </pre></div>
 </div>
 </div></blockquote>
-<p><strong>L_min_b0p</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>L_min_b0p</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote class="last">
 <div><p>Notional minimum basic transmission loss associated with
 LoS propagation and over-sea sub-path diffraction</p>
@@ -163,14 +160,14 @@ account a free-space loss component for the diffraction path)</li>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.3/docs/api/pycraf.pathprof.loss_diffraction.rst">Edit This Page on Github</a> &nbsp;
+    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.4/docs/api/pycraf.pathprof.loss_diffraction.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.pathprof.loss_diffraction.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 09 Aug 2017. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
+    Last built 21 Sep 2017. <br/>
   </p>
 </footer>
   </body>

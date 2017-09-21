@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>pycraf.protection.ra769 &#8212; pycraf v0.25.3</title>
-    
+    <title>pycraf.protection.ra769 &#8212; pycraf v0.25.4</title>
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.25.3',
+        VERSION:     '0.25.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -33,7 +30,7 @@
 
 
   </head>
-  <body role="document">
+  <body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../../../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
@@ -57,7 +54,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v0.25.3</a>
+	<a href="../../../index.html">pycraf v0.25.4</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
@@ -88,12 +85,14 @@
 <span class="kn">from</span> <span class="nn">astropy.table</span> <span class="k">import</span> <span class="n">QTable</span><span class="p">,</span> <span class="n">Table</span>
 <span class="kn">from</span> <span class="nn">astropy.utils.data</span> <span class="k">import</span> <span class="n">get_pkg_data_filename</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">utils</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ra769_limits&#39;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="ra769_limits"><a class="viewcode-back" href="../../../api/pycraf.protection.ra769_limits.html#pycraf.protection.ra769_limits">[docs]</a><span class="k">def</span> <span class="nf">ra769_limits</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;continuum&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;dB&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="ra769_limits"><a class="viewcode-back" href="../../../api/pycraf.protection.ra769_limits.html#pycraf.protection.ra769_limits">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span><span class="n">integ_time</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">s</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">ra769_limits</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;continuum&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;dB&#39;</span><span class="p">,</span> <span class="n">integ_time</span><span class="o">=</span><span class="mf">2000.</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">s</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Limits for spectral line and continuum observations according to</span>
 <span class="sd">    `ITU-R Rec RA.769 &lt;https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en&gt;`_.</span>
@@ -102,9 +101,15 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    mode : str, optional</span>
-<span class="sd">        Observing mode: &#39;continuum&#39;, &#39;spectroscopy&#39; (default: &#39;continuum&#39;)</span>
+<span class="sd">        Observing mode: &#39;continuum&#39;, &#39;spectroscopy&#39;, or &#39;vlbi&#39;</span>
+<span class="sd">        (default: &#39;continuum&#39;)</span>
 <span class="sd">    scale : str, optional</span>
 <span class="sd">        Default scale to use: &#39;linear&#39;, &#39;dB&#39; (default: &#39;linear&#39;)</span>
+<span class="sd">    integ_time : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        Integration time [s] (default: 2000)</span>
+
+<span class="sd">        Note, if `mode=&#39;vlbi&#39;` integration time is irrelevant, because the</span>
+<span class="sd">        limits are based on 1% of the receiver noise plus antenna temperature.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -124,6 +129,15 @@
 <span class="sd">        - &quot;Efield&quot; [uV/m, db(uV^2/m^2)]</span>
 <span class="sd">        - &quot;Efield_norm&quot;, normalized to 1 MHz bandwidth [uV/m, db(uV^2/m^2)]</span>
 
+<span class="sd">        If `mode=&#39;vlbi&#39;` the returned table has the following entries, only</span>
+
+<span class="sd">        - &quot;frequency&quot; [MHz]</span>
+<span class="sd">        - &quot;bandwidth&quot; [MHz]</span>
+<span class="sd">        - &quot;T_A&quot; [K]</span>
+<span class="sd">        - &quot;T_rx&quot; [K]</span>
+<span class="sd">        - &quot;Slim_nu&quot; [Jy, dB(W/m^2/Hz)]</span>
+
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    Because all columns are Astropy Quantities (see</span>
@@ -132,14 +146,17 @@
 <span class="sd">    scale to use initially.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">modes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;continuum&#39;</span><span class="p">,</span> <span class="s1">&#39;spectroscopy&#39;</span><span class="p">]</span>
+    <span class="n">modes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;continuum&#39;</span><span class="p">,</span> <span class="s1">&#39;spectroscopy&#39;</span><span class="p">,</span> <span class="s1">&#39;vlbi&#39;</span><span class="p">]</span>
     <span class="n">scales</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;dB&#39;</span><span class="p">]</span>
 
-    <span class="k">assert</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">modes</span><span class="p">,</span> <span class="s1">&#39;mode must be either &quot;continuum&quot; or &quot;spectroscopy&quot;&#39;</span>
+    <span class="k">assert</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">modes</span><span class="p">,</span> <span class="p">(</span>
+        <span class="s1">&#39;mode must be either &quot;continuum&quot;, &quot;spectroscopy&quot;, or &quot;vlbi&quot;&#39;</span>
+        <span class="p">)</span>
     <span class="k">assert</span> <span class="n">scale</span> <span class="ow">in</span> <span class="n">scales</span><span class="p">,</span> <span class="s1">&#39;scale must be either &quot;linear&quot; or &quot;dB&quot;&#39;</span>
-    <span class="n">midx</span> <span class="o">=</span> <span class="n">modes</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
 
-    <span class="n">csv_name</span> <span class="o">=</span> <span class="s1">&#39;ra_769_table</span><span class="si">{}</span><span class="s1">_limits_</span><span class="si">{}</span><span class="s1">.csv&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">midx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+    <span class="n">csv_mode</span> <span class="o">=</span> <span class="n">mode</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">!=</span> <span class="s1">&#39;vlbi&#39;</span> <span class="k">else</span> <span class="s1">&#39;continuum&#39;</span>
+    <span class="n">midx</span> <span class="o">=</span> <span class="n">modes</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">csv_mode</span><span class="p">)</span>
+    <span class="n">csv_name</span> <span class="o">=</span> <span class="s1">&#39;ra_769_table</span><span class="si">{}</span><span class="s1">_limits_</span><span class="si">{}</span><span class="s1">.csv&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">midx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">csv_mode</span><span class="p">)</span>
     <span class="n">csv_path</span> <span class="o">=</span> <span class="n">get_pkg_data_filename</span><span class="p">(</span><span class="s1">&#39;../itudata/ra.769-2/&#39;</span> <span class="o">+</span> <span class="n">csv_name</span><span class="p">)</span>
 
     <span class="n">csv_tab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span>
@@ -147,62 +164,93 @@
         <span class="p">)</span>
 
     <span class="n">qtab</span> <span class="o">=</span> <span class="n">QTable</span><span class="p">(</span><span class="n">meta</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;RA.769 </span><span class="si">{}</span><span class="s1"> limits&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">)})</span>
-    <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">csv_tab</span><span class="p">[</span><span class="s1">&#39;freq0&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">MHz</span>
-    <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">csv_tab</span><span class="p">[</span><span class="s1">&#39;Delta_f&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">MHz</span>
+    <span class="n">freq</span> <span class="o">=</span> <span class="n">csv_tab</span><span class="p">[</span><span class="s1">&#39;freq0&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">MHz</span>
+    <span class="n">bandwidth</span> <span class="o">=</span> <span class="n">csv_tab</span><span class="p">[</span><span class="s1">&#39;Delta_f&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">MHz</span>
+
+    <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">!=</span> <span class="s1">&#39;vlbi&#39;</span><span class="p">:</span>
+        <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bandwidth</span>
     <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;T_A&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">csv_tab</span><span class="p">[</span><span class="s1">&#39;T_A&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span>
     <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;T_rx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">csv_tab</span><span class="p">[</span><span class="s1">&#39;T_rx&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span>
 
-    <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;T_rms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="p">(</span><span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;T_A&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;T_rx&#39;</span><span class="p">])</span> <span class="o">/</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2000.</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">s</span> <span class="o">*</span> <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">])</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">mK</span><span class="p">)</span>
-    <span class="n">P_rms_nu</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">k_B</span> <span class="o">*</span> <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;T_rms&#39;</span><span class="p">]</span>
-    <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;P_rms_nu&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">P_rms_nu</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
-        <span class="n">apu</span><span class="o">.</span><span class="n">Watt</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_Hz</span>
-        <span class="p">)</span>
-    <span class="n">Plim</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">P_rms_nu</span> <span class="o">*</span> <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">]</span>
-    <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;Plim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Plim</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">Watt</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>
-    <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;Plim_nu&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">Plim</span> <span class="o">/</span> <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
-        <span class="n">apu</span><span class="o">.</span><span class="n">W</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_Hz</span>
-        <span class="p">)</span>
-    <span class="n">Slim</span> <span class="o">=</span> <span class="mf">4.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">con</span><span class="o">.</span><span class="n">c</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Plim</span>
-    <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;Slim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Slim</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
-        <span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">Watt</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2</span>
-        <span class="p">)</span>
-    <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;Slim_nu&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">Slim</span> <span class="o">/</span> <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
-        <span class="n">apu</span><span class="o">.</span><span class="n">Jy</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2_Hz</span>
-        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">!=</span> <span class="s1">&#39;vlbi&#39;</span><span class="p">:</span>
 
-    <span class="c1"># field strength from full bandwidth:</span>
-    <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;Efield&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">R0</span> <span class="o">*</span> <span class="n">Slim</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
-        <span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">microvolt</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">)</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_uV_m</span>
-        <span class="p">)</span>
-    <span class="c1"># qtab[&#39;Efield2&#39;] = (qtab[&#39;Efield&#39;] ** 2).to(dB_uV_m)</span>
+        <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;T_rms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;T_A&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;T_rx&#39;</span><span class="p">])</span> <span class="o">/</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">integ_time</span> <span class="o">*</span> <span class="n">bandwidth</span><span class="p">)</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">mK</span><span class="p">)</span>
 
-    <span class="c1"># now normalize for 1 MHz BW for comparison with spectroscopy</span>
-    <span class="c1"># TODO: is this correct???</span>
-    <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;Efield_norm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
-        <span class="n">cnv</span><span class="o">.</span><span class="n">R0</span> <span class="o">*</span> <span class="n">Slim</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">MHz</span> <span class="o">/</span> <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">MHz</span><span class="p">)</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
-        <span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">microvolt</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">)</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_uV_m</span>
-        <span class="p">)</span>
-    <span class="c1"># qtab[&#39;Efield2_norm&#39;] = (qtab[&#39;Efield_norm&#39;] ** 2).to(dB_uV_m)</span>
+        <span class="n">P_rms_nu</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">k_B</span> <span class="o">*</span> <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;T_rms&#39;</span><span class="p">]</span>
+        <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;P_rms_nu&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">P_rms_nu</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+            <span class="n">apu</span><span class="o">.</span><span class="n">Watt</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_Hz</span>
+            <span class="p">)</span>
+
+        <span class="n">Plim</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span> <span class="o">*</span> <span class="n">P_rms_nu</span> <span class="o">*</span> <span class="n">bandwidth</span>
+        <span class="n">Slim</span> <span class="o">=</span> <span class="mf">4.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">con</span><span class="o">.</span><span class="n">c</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">freq</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Plim</span>
+
+        <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;Plim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Plim</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">Watt</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>
+        <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;Plim_nu&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">Plim</span> <span class="o">/</span> <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+            <span class="n">apu</span><span class="o">.</span><span class="n">W</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_Hz</span>
+            <span class="p">)</span>
+        <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;Slim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Slim</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">Watt</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2</span>
+            <span class="p">)</span>
+        <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;Slim_nu&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">Slim</span> <span class="o">/</span> <span class="n">bandwidth</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+            <span class="n">apu</span><span class="o">.</span><span class="n">Jy</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2_Hz</span>
+            <span class="p">)</span>
+
+        <span class="c1"># field strength from full bandwidth:</span>
+        <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;Efield&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">R0</span> <span class="o">*</span> <span class="n">Slim</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">microvolt</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">)</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_uV_m</span>
+            <span class="p">)</span>
+        <span class="c1"># qtab[&#39;Efield2&#39;] = (qtab[&#39;Efield&#39;] ** 2).to(dB_uV_m)</span>
+
+        <span class="c1"># now normalize for 1 MHz BW for comparison with spectroscopy</span>
+        <span class="c1"># TODO: is this correct???</span>
+        <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;Efield_norm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+            <span class="n">cnv</span><span class="o">.</span><span class="n">R0</span> <span class="o">*</span> <span class="n">Slim</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">MHz</span> <span class="o">/</span> <span class="n">bandwidth</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">MHz</span><span class="p">)</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">microvolt</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">)</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_uV_m</span>
+            <span class="p">)</span>
+        <span class="c1"># qtab[&#39;Efield2_norm&#39;] = (qtab[&#39;Efield_norm&#39;] ** 2).to(dB_uV_m)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="c1"># The tolerable interference level is determined by the requirement</span>
+        <span class="c1"># that the power level of the interfering signal should be no more</span>
+        <span class="c1"># than 1% of the receiver noise power to prevent serious errors in</span>
+        <span class="c1"># the measurement of the amplitude of the cosmic signals.</span>
+        <span class="n">Plim_nu</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span> <span class="o">*</span> <span class="n">con</span><span class="o">.</span><span class="n">k_B</span> <span class="o">*</span> <span class="p">(</span><span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;T_rx&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;T_A&#39;</span><span class="p">])</span>
+        <span class="n">Slim_nu</span> <span class="o">=</span> <span class="mf">4.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">con</span><span class="o">.</span><span class="n">c</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">freq</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Plim_nu</span>
+
+        <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;Slim_nu&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Slim_nu</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+            <span class="n">apu</span><span class="o">.</span><span class="n">Jy</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2_Hz</span>
+            <span class="p">)</span>
 
     <span class="c1"># table formatting doesn&#39;t seem to work for QTable, so we convert</span>
     <span class="n">tab</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">qtab</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;bandwidth&#39;</span><span class="p">,</span> <span class="s1">&#39;T_A&#39;</span><span class="p">,</span> <span class="s1">&#39;T_rx&#39;</span><span class="p">]:</span>
-        <span class="n">tab</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%.0f</span><span class="s1">&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">tab</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%.0f</span><span class="s1">&#39;</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">pass</span>
 
     <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;T_rms&#39;</span><span class="p">]:</span>
-        <span class="n">tab</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%.3f</span><span class="s1">&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">tab</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%.3f</span><span class="s1">&#39;</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">pass</span>
 
     <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span>
             <span class="s1">&#39;P_rms_nu&#39;</span><span class="p">,</span>
             <span class="s1">&#39;Plim&#39;</span><span class="p">,</span> <span class="s1">&#39;Plim_nu&#39;</span><span class="p">,</span> <span class="s1">&#39;Slim&#39;</span><span class="p">,</span> <span class="s1">&#39;Slim_nu&#39;</span><span class="p">,</span>
             <span class="s1">&#39;Efield&#39;</span><span class="p">,</span> <span class="s1">&#39;Efield_norm&#39;</span>
             <span class="p">]:</span>
-        <span class="n">tab</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%.1e</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="s1">&#39;</span><span class="si">%.1f</span><span class="s1">&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">tab</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%.1e</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="s1">&#39;</span><span class="si">%.1f</span><span class="s1">&#39;</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">pass</span>
 
     <span class="k">return</span> <span class="n">tab</span></div>
 </pre></div>
@@ -223,8 +271,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 09 Aug 2017. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
+    Last built 21 Sep 2017. <br/>
   </p>
 </footer>
   </body>

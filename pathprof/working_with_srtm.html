@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Working with SRTM data &#8212; pycraf v0.25.3</title>
-    
+    <title>Working with SRTM data &#8212; pycraf v0.25.4</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.25.3',
+        VERSION:     '0.25.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -35,7 +32,7 @@
 
 
   </head>
-  <body role="document">
+  <body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
@@ -70,7 +67,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.3</a>
+	<a href="../index.html">pycraf v0.25.4</a>
 	 &#187;
       </li>
       
@@ -89,24 +86,24 @@
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>To make full use of the path attenuation calculations provided by <code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code>
-we recommend to use NASA&#8217;s
+we recommend to use NASA’s
 <a class="reference external" href="https://www2.jpl.nasa.gov/srtm/">Shuttle Radar Topography Mission (SRTM)</a>
 data for height-profile generation. <code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code> can work with so-called <em>.hgt</em>
 files, a very simple binary format. Each <em>.hgt</em> file, a so-called tile, just
 contains 1201x1201 16-bit integers. From the file naming scheme, one can infer
 the associated coordinates. Tiles contain one square-degree of data and
 are named in a very simple manner, e.g., <em>N50E006.hgt</em>. The first
-character is either &#8220;N&#8221; (North) or &#8220;S&#8221; (South), indicating whether the
+character is either “N” (North) or “S” (South), indicating whether the
 following number is positive or negative latitude. Likewise, the 4th
-character, &#8220;W&#8221; (West) or &#8220;E&#8221; (East), means negative and positive longitude.</p>
+character, “W” (West) or “E” (East), means negative and positive longitude.</p>
 <p>Unfortunately, we cannot provide SRTM data as part of the package, due to the
 large file sizes and legal reasons.</p>
 </div>
 <div class="section" id="obtaining-srtm-data">
 <h2>Obtaining SRTM data<a class="headerlink" href="#obtaining-srtm-data" title="Permalink to this headline">¶</a></h2>
-<p>There are various versions of SRTM data. &#8220;Official&#8221; are the Versions 1
+<p>There are various versions of SRTM data. “Official” are the Versions 1
 and 2.1 available on <a class="reference external" href="https://dds.cr.usgs.gov/srtm/">https://dds.cr.usgs.gov/srtm/</a>. There is even a NASA
-version 3, but we couldn&#8217;t find a site that allows direct download. It may
+version 3, but we couldn’t find a site that allows direct download. It may
 work with an EarthData Account on
 <a class="reference external" href="https://lpdaac.usgs.gov/data_access/data_pool">https://lpdaac.usgs.gov/data_access/data_pool</a>.</p>
 <p>Then, there is a version V4.1 by <a class="reference external" href="ftp://srtm.csi.cgiar.org/SRTM_V41/SRTM_Data_GeoTiff/">CGIAR</a>
@@ -148,12 +145,12 @@ run your program.</p>
 </div>
 <p>Of course, it is possible to make this permanent. On Linux/MacOS put it into
 your shell config file (e.g., <em>.bashrc</em>). On Windows 7+, you could click
-on the start menu, type &#8220;env&#8221; and open the dialog that allows to edit your
+on the start menu, type “env” and open the dialog that allows to edit your
 user environment settings.</p>
 </div>
 <div class="section" id="changing-the-srtm-path-during-a-running-session">
 <h3>Changing the SRTM path during a running session<a class="headerlink" href="#changing-the-srtm-path-during-a-running-session" title="Permalink to this headline">¶</a></h3>
-<p>It is also possible to change pycraf&#8217;s behavior during runtime. In the
+<p>It is also possible to change pycraf’s behavior during runtime. In the
 <a class="reference internal" href="index.html#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal"><span class="pre">pathprof</span></code></a> sub-package, the <a class="reference internal" href="../api/pycraf.pathprof.SrtmConf.html#pycraf.pathprof.SrtmConf" title="pycraf.pathprof.SrtmConf"><code class="xref py py-obj docutils literal"><span class="pre">SrtmConf</span></code></a> class is
 defined, which allows to change the SRTM directory, but also makes it possible
 to download missing tiles during run-time:</p>
@@ -240,14 +237,14 @@ further information.</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.3/docs/pathprof/working_with_srtm.rst">Edit This Page on Github</a> &nbsp;
+    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.4/docs/pathprof/working_with_srtm.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/pathprof/working_with_srtm.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 09 Aug 2017. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
+    Last built 21 Sep 2017. <br/>
   </p>
 </footer>
   </body>

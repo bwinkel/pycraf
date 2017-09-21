@@ -1,0 +1,6 @@
+Ry
+==
+
+.. currentmodule:: pycraf.geometry
+
+.. autofunction:: Ry

@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>pycraf.pathprof.propagation &#8212; pycraf v0.25.3</title>
-    
+    <title>pycraf.pathprof.propagation &#8212; pycraf v0.25.4</title>
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.25.3',
+        VERSION:     '0.25.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -33,7 +30,7 @@
 
 
   </head>
-  <body role="document">
+  <body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../../../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
@@ -57,7 +54,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v0.25.3</a>
+	<a href="../../../index.html">pycraf v0.25.4</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
@@ -85,6 +82,8 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">cyprop</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">heightprofile</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">helper</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">utils</span>
 <span class="c1"># import ipdb</span>
@@ -95,7 +94,8 @@
     <span class="s1">&#39;loss_freespace&#39;</span><span class="p">,</span> <span class="s1">&#39;loss_troposcatter&#39;</span><span class="p">,</span> <span class="s1">&#39;loss_ducting&#39;</span><span class="p">,</span>
     <span class="s1">&#39;loss_diffraction&#39;</span><span class="p">,</span> <span class="s1">&#39;loss_complete&#39;</span><span class="p">,</span>
     <span class="s1">&#39;clutter_correction&#39;</span><span class="p">,</span> <span class="s1">&#39;clutter_imt&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;height_profile_data&#39;</span><span class="p">,</span> <span class="s1">&#39;atten_map_fast&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;height_map_data&#39;</span><span class="p">,</span> <span class="s1">&#39;atten_map_fast&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;height_path_data&#39;</span><span class="p">,</span> <span class="s1">&#39;height_path_data_generic&#39;</span><span class="p">,</span> <span class="s1">&#39;atten_path_fast&#39;</span><span class="p">,</span>
     <span class="p">]</span>
 
 <span class="c1"># Note, we have to curry the quantities here, because Cython produces</span>
@@ -319,10 +319,10 @@
             <span class="p">)</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="loss_freespace"><a class="viewcode-back" href="../../../api/pycraf.pathprof.loss_freespace.html#pycraf.pathprof.loss_freespace">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">)</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="loss_freespace"><a class="viewcode-back" href="../../../api/pycraf.pathprof.loss_freespace.html#pycraf.pathprof.loss_freespace">[docs]</a><span class="k">def</span> <span class="nf">loss_freespace</span><span class="p">(</span><span class="n">pathprop</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">loss_freespace</span><span class="p">(</span><span class="n">pathprop</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate the free-space loss, L_bfsg, of a propagating radio wave</span>
 <span class="sd">    according to ITU-R P.452-16 Eq (8-12).</span>
@@ -359,12 +359,12 @@
     <span class="k">return</span> <span class="n">cyprop</span><span class="o">.</span><span class="n">free_space_loss_bfsg_cython</span><span class="p">(</span><span class="n">pathprop</span><span class="p">)</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="loss_troposcatter"><a class="viewcode-back" href="../../../api/pycraf.pathprof.loss_troposcatter.html#pycraf.pathprof.loss_troposcatter">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">G_t</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span><span class="p">),</span>
     <span class="n">G_r</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="loss_troposcatter"><a class="viewcode-back" href="../../../api/pycraf.pathprof.loss_troposcatter.html#pycraf.pathprof.loss_troposcatter">[docs]</a><span class="k">def</span> <span class="nf">loss_troposcatter</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">loss_troposcatter</span><span class="p">(</span>
         <span class="n">pathprop</span><span class="p">,</span> <span class="n">G_t</span><span class="o">=</span><span class="mf">0.</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span><span class="p">,</span> <span class="n">G_r</span><span class="o">=</span><span class="mf">0.</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span><span class="p">,</span>
         <span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
@@ -389,8 +389,8 @@
     <span class="k">return</span> <span class="n">cyprop</span><span class="o">.</span><span class="n">tropospheric_scatter_loss_bs_cython</span><span class="p">(</span><span class="n">pathprop</span><span class="p">,</span> <span class="n">G_t</span><span class="p">,</span> <span class="n">G_r</span><span class="p">)</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span><span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">)</span>
-<div class="viewcode-block" id="loss_ducting"><a class="viewcode-back" href="../../../api/pycraf.pathprof.loss_ducting.html#pycraf.pathprof.loss_ducting">[docs]</a><span class="k">def</span> <span class="nf">loss_ducting</span><span class="p">(</span><span class="n">pathprop</span><span class="p">):</span>
+<div class="viewcode-block" id="loss_ducting"><a class="viewcode-back" href="../../../api/pycraf.pathprof.loss_ducting.html#pycraf.pathprof.loss_ducting">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span><span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">loss_ducting</span><span class="p">(</span><span class="n">pathprop</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate the ducting/layer reflection loss, L_ba, of a propagating radio</span>
 <span class="sd">    wave according to ITU-R P.452-16 Eq (46-56).</span>
@@ -410,10 +410,10 @@
     <span class="k">return</span> <span class="n">cyprop</span><span class="o">.</span><span class="n">ducting_loss_ba_cython</span><span class="p">(</span><span class="n">pathprop</span><span class="p">)</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="loss_diffraction"><a class="viewcode-back" href="../../../api/pycraf.pathprof.loss_diffraction.html#pycraf.pathprof.loss_diffraction">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">)</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="loss_diffraction"><a class="viewcode-back" href="../../../api/pycraf.pathprof.loss_diffraction.html#pycraf.pathprof.loss_diffraction">[docs]</a><span class="k">def</span> <span class="nf">loss_diffraction</span><span class="p">(</span><span class="n">pathprop</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">loss_diffraction</span><span class="p">(</span><span class="n">pathprop</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate the Diffraction loss of a propagating radio</span>
 <span class="sd">    wave according to ITU-R P.452-16 Eq (14-44).</span>
@@ -456,13 +456,13 @@
     <span class="k">return</span> <span class="n">cyprop</span><span class="o">.</span><span class="n">diffraction_loss_complete_cython</span><span class="p">(</span><span class="n">pathprop</span><span class="p">)</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="loss_complete"><a class="viewcode-back" href="../../../api/pycraf.pathprof.loss_complete.html#pycraf.pathprof.loss_complete">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">G_t</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span><span class="p">),</span>
     <span class="n">G_r</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">)</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="loss_complete"><a class="viewcode-back" href="../../../api/pycraf.pathprof.loss_complete.html#pycraf.pathprof.loss_complete">[docs]</a><span class="k">def</span> <span class="nf">loss_complete</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">loss_complete</span><span class="p">(</span>
         <span class="n">pathprop</span><span class="p">,</span> <span class="n">G_t</span><span class="o">=</span><span class="mf">0.</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span><span class="p">,</span> <span class="n">G_r</span><span class="o">=</span><span class="mf">0.</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span><span class="p">,</span>
         <span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
@@ -503,13 +503,13 @@
     <span class="k">return</span> <span class="n">cyprop</span><span class="o">.</span><span class="n">path_attenuation_complete_cython</span><span class="p">(</span><span class="n">pathprop</span><span class="p">,</span> <span class="n">G_t</span><span class="p">,</span> <span class="n">G_r</span><span class="p">)</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="clutter_correction"><a class="viewcode-back" href="../../../api/pycraf.pathprof.clutter_correction.html#pycraf.pathprof.clutter_correction">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">h_g</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
     <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">GHz</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="clutter_correction"><a class="viewcode-back" href="../../../api/pycraf.pathprof.clutter_correction.html#pycraf.pathprof.clutter_correction">[docs]</a><span class="k">def</span> <span class="nf">clutter_correction</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">clutter_correction</span><span class="p">(</span>
         <span class="n">h_g</span><span class="p">,</span> <span class="n">zone</span><span class="p">,</span> <span class="n">freq</span>
         <span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
@@ -595,13 +595,13 @@
     <span class="k">return</span> <span class="n">L_clutter</span>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="clutter_imt"><a class="viewcode-back" href="../../../api/pycraf.pathprof.clutter_imt.html#pycraf.pathprof.clutter_imt">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">GHz</span><span class="p">),</span>
     <span class="n">dist</span><span class="o">=</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
     <span class="n">location_percent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="clutter_imt"><a class="viewcode-back" href="../../../api/pycraf.pathprof.clutter_imt.html#pycraf.pathprof.clutter_imt">[docs]</a><span class="k">def</span> <span class="nf">clutter_imt</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">clutter_imt</span><span class="p">(</span>
         <span class="n">freq</span><span class="p">,</span>
         <span class="n">dist</span><span class="p">,</span>
         <span class="n">location_percent</span><span class="p">,</span>
@@ -659,7 +659,7 @@
 
 
 <span class="c1"># TODO: do we want to convert output dictionary arrays to quantities?</span>
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="height_map_data"><a class="viewcode-back" href="../../../api/pycraf.pathprof.height_map_data.html#pycraf.pathprof.height_map_data">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">lon_t</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">lat_t</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">map_size_lon</span><span class="o">=</span><span class="p">(</span><span class="mf">0.002</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
@@ -669,9 +669,10 @@
     <span class="n">d_lm</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
     <span class="n">d_ct</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
     <span class="n">d_cr</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">omega_percent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="height_profile_data"><a class="viewcode-back" href="../../../api/pycraf.pathprof.height_profile_data.html#pycraf.pathprof.height_profile_data">[docs]</a><span class="k">def</span> <span class="nf">height_profile_data</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">height_map_data</span><span class="p">(</span>
         <span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span><span class="p">,</span>
         <span class="n">map_size_lon</span><span class="p">,</span> <span class="n">map_size_lat</span><span class="p">,</span>
         <span class="n">map_resolution</span><span class="o">=</span><span class="mf">3.</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">arcsec</span><span class="p">,</span>
@@ -679,6 +680,7 @@
         <span class="n">zone_t</span><span class="o">=</span><span class="n">cyprop</span><span class="o">.</span><span class="n">CLUTTER</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">,</span> <span class="n">zone_r</span><span class="o">=</span><span class="n">cyprop</span><span class="o">.</span><span class="n">CLUTTER</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">,</span>
         <span class="n">d_tm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">d_lm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">d_ct</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">d_cr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">omega_percent</span><span class="o">=</span><span class="mi">0</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">,</span>
         <span class="p">):</span>
 
     <span class="sd">&#39;&#39;&#39;</span>
@@ -734,12 +736,15 @@
 <span class="sd">        Distance over land from transmitter/receiver antenna to the coast</span>
 <span class="sd">        along great circle interference path [km]</span>
 <span class="sd">        (default: 50000 km)</span>
+<span class="sd">    omega_percent : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        Fraction of the path over water [%] (see Table 3)</span>
+<span class="sd">        (default: 0%)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    hprof_data : dict</span>
 <span class="sd">        Dictionary with height profiles and auxillary data as</span>
-<span class="sd">        calculated with `~pycraf.pathprof.height_profile_data`.</span>
+<span class="sd">        calculated with `~pycraf.pathprof.height_map_data`.</span>
 
 <span class="sd">        The dictionary contains the following entities (the map dimension</span>
 <span class="sd">        is mx * my):</span>
@@ -770,6 +775,9 @@
 <span class="sd">          Longitude and latitude path center coordinates for each pixel</span>
 <span class="sd">          w.r.t. map center.</span>
 
+<span class="sd">          This is returned for information, only. It is not</span>
+<span class="sd">          needed by `~pycraf.atten_map_fast`!</span>
+
 <span class="sd">        - &quot;dist_map&quot; : `~numpy.ndarray` 2D (float; (mx, my))</span>
 
 <span class="sd">          Distances to map center for each pixel.</span>
@@ -782,6 +790,10 @@
 
 <span class="sd">          The `d_lm` and `d_tm` values for each pixel in the map.</span>
 
+<span class="sd">        - &quot;omega_map&quot; : `~numpy.ndarray` 2D (float; (mx, my))</span>
+
+<span class="sd">          The `omega` values for each pixel in the map.</span>
+
 <span class="sd">        - &quot;zone_t_map&quot;, &quot;zone_r_map&quot; : `~numpy.ndarray` 2D (CLUTTER enum; (mx, my))</span>
 
 <span class="sd">          The clutter zone types `zone_t` and `zone_r` for each pixel in the</span>
@@ -790,6 +802,9 @@
 <span class="sd">        - &quot;bearing_map&quot;, &quot;back_bearing_map&quot; : `~numpy.ndarray` 2D (float; (mx, my))</span>
 
 <span class="sd">          The `bearing` and `backbearing` values for each pixel in the map.</span>
+
+<span class="sd">          This is returned for information, only. It is not</span>
+<span class="sd">          needed by `~pycraf.atten_map_fast`!</span>
 
 <span class="sd">        - &quot;N0_map&quot;, &quot;delta_N_map&quot;, &quot;beta0_map&quot; : `~numpy.ndarray` 2D (float; (mx, my))</span>
 
@@ -839,7 +854,7 @@
 <span class="sd">      For details see :ref:`working_with_srtm`.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="k">return</span> <span class="n">cyprop</span><span class="o">.</span><span class="n">height_profile_data_cython</span><span class="p">(</span>
+    <span class="k">return</span> <span class="n">cyprop</span><span class="o">.</span><span class="n">height_map_data_cython</span><span class="p">(</span>
         <span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span><span class="p">,</span>
         <span class="n">map_size_lon</span><span class="p">,</span> <span class="n">map_size_lat</span><span class="p">,</span>
         <span class="n">map_resolution</span><span class="o">=</span><span class="n">map_resolution</span><span class="p">,</span>
@@ -847,28 +862,27 @@
         <span class="n">zone_t</span><span class="o">=</span><span class="n">zone_t</span><span class="p">,</span> <span class="n">zone_r</span><span class="o">=</span><span class="n">zone_r</span><span class="p">,</span>
         <span class="n">d_tm</span><span class="o">=</span><span class="n">d_tm</span><span class="p">,</span> <span class="n">d_lm</span><span class="o">=</span><span class="n">d_lm</span><span class="p">,</span>
         <span class="n">d_ct</span><span class="o">=</span><span class="n">d_ct</span><span class="p">,</span> <span class="n">d_cr</span><span class="o">=</span><span class="n">d_cr</span><span class="p">,</span>
+        <span class="n">omega</span><span class="o">=</span><span class="n">omega_percent</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 
-<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="atten_map_fast"><a class="viewcode-back" href="../../../api/pycraf.pathprof.atten_map_fast.html#pycraf.pathprof.atten_map_fast">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">GHz</span><span class="p">),</span>
     <span class="n">temperature</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
     <span class="n">pressure</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">h_tg</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
     <span class="n">h_rg</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
     <span class="n">timepercent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
-    <span class="n">omega_percent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">)</span>
     <span class="p">)</span>
-<div class="viewcode-block" id="atten_map_fast"><a class="viewcode-back" href="../../../api/pycraf.pathprof.atten_map_fast.html#pycraf.pathprof.atten_map_fast">[docs]</a><span class="k">def</span> <span class="nf">atten_map_fast</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">atten_map_fast</span><span class="p">(</span>
         <span class="n">freq</span><span class="p">,</span>
         <span class="n">temperature</span><span class="p">,</span>
         <span class="n">pressure</span><span class="p">,</span>
         <span class="n">h_tg</span><span class="p">,</span> <span class="n">h_rg</span><span class="p">,</span>
         <span class="n">timepercent</span><span class="p">,</span>
         <span class="n">hprof_data</span><span class="p">,</span>  <span class="c1"># dict_like</span>
-        <span class="n">omega</span><span class="o">=</span><span class="mi">0</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">,</span>
         <span class="n">polarization</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">version</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
         <span class="p">):</span>
@@ -889,10 +903,7 @@
 <span class="sd">        Time percentage [%] (maximal 50%)</span>
 <span class="sd">    hprof_data : dict, dict-like</span>
 <span class="sd">        Dictionary with height profiles and auxillary maps as</span>
-<span class="sd">        calculated with `~pycraf.pathprof.height_profile_data`.</span>
-<span class="sd">    omega : `~astropy.units.Quantity`, optional</span>
-<span class="sd">        Fraction of the path over water [%] (see Table 3)</span>
-<span class="sd">        (default: 0%)</span>
+<span class="sd">        calculated with `~pycraf.pathprof.height_map_data`.</span>
 <span class="sd">    polarization : int, optional</span>
 <span class="sd">        Polarization (default: 0)</span>
 <span class="sd">        Allowed values are: 0 - horizontal, 1 - vertical</span>
@@ -933,7 +944,462 @@
         <span class="n">h_tg</span><span class="p">,</span> <span class="n">h_rg</span><span class="p">,</span>
         <span class="n">timepercent</span><span class="p">,</span>
         <span class="n">hprof_data</span><span class="p">,</span>  <span class="c1"># dict_like</span>
-        <span class="n">omega</span><span class="o">=</span><span class="n">omega</span><span class="p">,</span>
+        <span class="n">polarization</span><span class="o">=</span><span class="n">polarization</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="height_path_data"><a class="viewcode-back" href="../../../api/pycraf.pathprof.height_path_data.html#pycraf.pathprof.height_path_data">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">lon_t</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">lat_t</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">lon_r</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">lat_r</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">step</span><span class="o">=</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.e5</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">height_path_data</span><span class="p">(</span>
+        <span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span><span class="p">,</span>
+        <span class="n">lon_r</span><span class="p">,</span> <span class="n">lat_r</span><span class="p">,</span>
+        <span class="n">step</span><span class="p">,</span>
+        <span class="n">zone_t</span><span class="o">=</span><span class="n">cyprop</span><span class="o">.</span><span class="n">CLUTTER</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">,</span> <span class="n">zone_r</span><span class="o">=</span><span class="n">cyprop</span><span class="o">.</span><span class="n">CLUTTER</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">,</span>
+        <span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate height profile auxillary data needed for</span>
+<span class="sd">    `~pycraf.pathprof.atten_path_fast`.</span>
+
+<span class="sd">    This can be used to cache height-profile data. Since it is independent</span>
+<span class="sd">    of frequency, timepercent, Tx and Rx heights, etc., one can re-use</span>
+<span class="sd">    it to save computing time when doing batch jobs. It is assumed that</span>
+<span class="sd">    the Tx is at a fixed position, while the Rx &quot;moves&quot; accross the</span>
+<span class="sd">    specified paths (since the attenuation is completely symmetric,</span>
+<span class="sd">    this is without loss of generality).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lon_t, lat_t : double</span>
+<span class="sd">        Geographic longitude/latitude of start point (transmitter) [deg]</span>
+<span class="sd">    lon_r, lat_r : double</span>
+<span class="sd">        Geographic longitude/latitude of end point (receiver) [deg]</span>
+<span class="sd">    step : double</span>
+<span class="sd">        Distance resolution of height profile along path [m]</span>
+<span class="sd">    zone_t, zone_r : CLUTTER enum, optional</span>
+<span class="sd">        Clutter type for transmitter/receiver terminal.</span>
+<span class="sd">        (default: CLUTTER.UNKNOWN)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    hprof_data : dict</span>
+<span class="sd">        Dictionary with height profile auxillary data.</span>
+
+<span class="sd">        The dictionary contains the following entities (the path length</span>
+<span class="sd">        is m):</span>
+
+<span class="sd">        - &quot;lons&quot;, &quot;lats&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          Longitudes and latitudes of path.</span>
+
+<span class="sd">          This is returned for information, only. It is not</span>
+<span class="sd">          needed by `~pycraf.pathprof.atten_path_fast`!</span>
+
+<span class="sd">        - &quot;lon_mids&quot;, &quot;lat_mids&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          Path center longitudes and latitudes of path. The values</span>
+<span class="sd">          at index `i` in these arrays are the midpoints of the</span>
+<span class="sd">          paths from `lons[0]` to `lons[i]` (likewise for `lats`).</span>
+
+<span class="sd">          This is returned for information, only. It is not</span>
+<span class="sd">          needed by `~pycraf.pathprof.atten_path_fast`!</span>
+
+<span class="sd">        - &quot;distances&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          Distances of each point in the path from Tx position.</span>
+
+<span class="sd">        - &quot;heights&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          Height profile.</span>
+
+<span class="sd">        - &quot;bearing&quot; : float</span>
+
+<span class="sd">          Start bearing of path.</span>
+
+<span class="sd">          This is returned for information, only. It is not</span>
+<span class="sd">          needed by `~pycraf.pathprof.atten_path_fast`!</span>
+
+<span class="sd">        - &quot;backbearings&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          Back-bearing of each point in the path.</span>
+
+<span class="sd">          This is returned for information, only. It is not</span>
+<span class="sd">          needed by `~pycraf.pathprof.atten_path_fast`!</span>
+
+<span class="sd">        - &quot;omega&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          The `omega` values for each point in the path.</span>
+
+<span class="sd">        - &quot;d_tm&quot;, &quot;d_lm&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          The `d_tm` and `d_lm` values for each point in the path.</span>
+
+<span class="sd">        - &quot;d_ct&quot;, &quot;d_cr&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          The `d_ct` and `d_cr` values for each point in the path.</span>
+
+<span class="sd">        - &quot;zone_t&quot; : int</span>
+
+<span class="sd">          Clutter type at Tx.</span>
+
+<span class="sd">        - &quot;zone_r&quot; : `~numpy.ndarray` 1D (int; (m,))</span>
+
+<span class="sd">          Clutter type at Rx. (Currently only a single type is used.)</span>
+
+<span class="sd">        - &quot;N0&quot;, &quot;delta_N&quot;, &quot;beta0&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          The `N0`, `delta_N`, and `beta0` values for each point in the path.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Currently, no sea or lake bodies are accounted for. Also the clutter</span>
+<span class="sd">    type of the receiver is fixed, while one could also think of using</span>
+<span class="sd">    different clutter types (in the array). You can modify the returned</span>
+<span class="sd">    arrays in `hprof_data`, of course, before feeding into</span>
+<span class="sd">    `~pycraf.pathprof.atten_path_fast`.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="p">(</span>
+        <span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">distances</span><span class="p">,</span> <span class="n">heights</span><span class="p">,</span>
+        <span class="n">bearing</span><span class="p">,</span> <span class="n">back_bearing</span><span class="p">,</span> <span class="n">backbearings</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">heightprofile</span><span class="o">.</span><span class="n">_srtm_height_profile</span><span class="p">(</span>
+            <span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span><span class="p">,</span> <span class="n">lon_r</span><span class="p">,</span> <span class="n">lat_r</span><span class="p">,</span> <span class="n">step</span>
+            <span class="p">)</span>
+
+    <span class="c1"># TODO: query the following programmatically</span>
+    <span class="c1"># for now assume land-paths, only</span>
+    <span class="n">omega</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">heights</span><span class="p">)</span>
+    <span class="n">d_tm</span> <span class="o">=</span> <span class="n">distances</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">d_lm</span> <span class="o">=</span> <span class="n">distances</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">d_ct</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">heights</span><span class="p">,</span> <span class="mi">50000</span><span class="p">)</span>
+    <span class="n">d_cr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">heights</span><span class="p">,</span> <span class="mi">50000</span><span class="p">)</span>
+
+    <span class="c1"># radiomet data:</span>
+    <span class="c1"># get path centers for each pair of pixels (0 - i)</span>
+    <span class="n">mid_idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">//</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">distances</span><span class="p">))]</span>
+    <span class="n">lon_mids</span> <span class="o">=</span> <span class="n">lons</span><span class="p">[</span><span class="n">mid_idx</span><span class="p">]</span>
+    <span class="n">lat_mids</span> <span class="o">=</span> <span class="n">lats</span><span class="p">[</span><span class="n">mid_idx</span><span class="p">]</span>
+
+    <span class="n">delta_N</span><span class="p">,</span> <span class="n">beta0</span><span class="p">,</span> <span class="n">N0</span> <span class="o">=</span> <span class="n">helper</span><span class="o">.</span><span class="n">_radiomet_data_for_pathcenter</span><span class="p">(</span>
+        <span class="n">lon_mids</span><span class="p">,</span> <span class="n">lat_mids</span><span class="p">,</span> <span class="n">d_tm</span><span class="p">,</span> <span class="n">d_lm</span>
+        <span class="p">)</span>
+
+    <span class="n">hprof_data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;lons&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lons</span>  <span class="c1"># &lt;-- ignored</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;lats&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lats</span>  <span class="c1"># &lt;-- ignored</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;lon_mids&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lon_mids</span>  <span class="c1"># &lt;-- ignored</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;lat_mids&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lat_mids</span>  <span class="c1"># &lt;-- ignored</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;distances&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">distances</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;heights&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">heights</span>
+    <span class="c1"># hprof_data[&#39;zheights&#39;] = np.zeros_like(heights)</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;bearing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bearing</span>  <span class="c1"># &lt;-- scalar</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;backbearings&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">backbearings</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;omega&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">omega</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;d_tm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d_tm</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;d_lm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d_lm</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;d_ct&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d_ct</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;d_cr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d_cr</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;zone_t&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">zone_t</span>  <span class="c1"># &lt;-- scalar</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;zone_r&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">heights</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">zone_r</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;delta_N&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">delta_N</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;N0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">N0</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;beta0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta0</span>
+
+    <span class="k">return</span> <span class="n">hprof_data</span></div>
+
+
+<div class="viewcode-block" id="height_path_data_generic"><a class="viewcode-back" href="../../../api/pycraf.pathprof.height_path_data_generic.html#pycraf.pathprof.height_path_data_generic">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">distance</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
+    <span class="n">step</span><span class="o">=</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.e5</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">lon_mid</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">lat_mid</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">height_path_data_generic</span><span class="p">(</span>
+        <span class="n">distance</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span>
+        <span class="n">lon_mid</span><span class="p">,</span> <span class="n">lat_mid</span><span class="p">,</span>
+        <span class="n">zone_t</span><span class="o">=</span><span class="n">cyprop</span><span class="o">.</span><span class="n">CLUTTER</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">,</span> <span class="n">zone_r</span><span class="o">=</span><span class="n">cyprop</span><span class="o">.</span><span class="n">CLUTTER</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">,</span>
+        <span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate height profile auxillary data needed for</span>
+<span class="sd">    `~pycraf.pathprof.atten_path_fast`.</span>
+
+<span class="sd">    This can be used to cache height-profile data. Since it is independent</span>
+<span class="sd">    of frequency, timepercent, Tx and Rx heights, etc., one can re-use</span>
+<span class="sd">    it to save computing time when doing batch jobs. It is assumed that</span>
+<span class="sd">    the Tx is at a fixed position, while the Rx &quot;moves&quot; accross the</span>
+<span class="sd">    specified paths (since the attenuation is completely symmetric,</span>
+<span class="sd">    this is without loss of generality).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    distance : double</span>
+<span class="sd">        Maximal path length [km]</span>
+<span class="sd">    step : double</span>
+<span class="sd">        Distance resolution of height profile along path [m]</span>
+<span class="sd">    lon_mid, lat_mid : double</span>
+<span class="sd">        Geographic longitude/latitude of path&#39;s mid point [deg]</span>
+
+<span class="sd">        This is needed to query radiometerological values.</span>
+<span class="sd">    zone_t, zone_r : CLUTTER enum, optional</span>
+<span class="sd">        Clutter type for transmitter/receiver terminal.</span>
+<span class="sd">        (default: CLUTTER.UNKNOWN)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    hprof_data : dict</span>
+<span class="sd">        Dictionary with height profile auxillary data.</span>
+
+<span class="sd">        The dictionary contains the following entities (the path length</span>
+<span class="sd">        is m):</span>
+
+<span class="sd">        - &quot;lons&quot;, &quot;lats&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          Longitudes and latitudes of path.</span>
+
+<span class="sd">          This is returned for information, only. It is not</span>
+<span class="sd">          needed by `~pycraf.pathprof.atten_path_fast`!</span>
+
+<span class="sd">        - &quot;lon_mids&quot;, &quot;lat_mids&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          Path center longitudes and latitudes of path. The values</span>
+<span class="sd">          at index `i` in these arrays are the midpoints of the</span>
+<span class="sd">          paths from `lons[0]` to `lons[i]` (likewise for `lats`).</span>
+
+<span class="sd">          This is returned for information, only. It is not</span>
+<span class="sd">          needed by `~pycraf.pathprof.atten_path_fast`!</span>
+
+<span class="sd">        - &quot;distances&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          Distances of each point in the path from Tx position.</span>
+
+<span class="sd">        - &quot;heights&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          Height profile.</span>
+
+<span class="sd">        - &quot;bearing&quot; : float</span>
+
+<span class="sd">          Start bearing of path.</span>
+
+<span class="sd">          This is returned for information, only. It is not</span>
+<span class="sd">          needed by `~pycraf.pathprof.atten_path_fast`!</span>
+
+<span class="sd">        - &quot;backbearings&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          Back-bearing of each point in the path.</span>
+
+<span class="sd">          This is returned for information, only. It is not</span>
+<span class="sd">          needed by `~pycraf.pathprof.atten_path_fast`!</span>
+
+<span class="sd">        - &quot;omega&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          The `omega` values for each point in the path.</span>
+
+<span class="sd">        - &quot;d_tm&quot;, &quot;d_lm&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          The `d_tm` and `d_lm` values for each point in the path.</span>
+
+<span class="sd">        - &quot;d_ct&quot;, &quot;d_cr&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          The `d_ct` and `d_cr` values for each point in the path.</span>
+
+<span class="sd">        - &quot;zone_t&quot; : int</span>
+
+<span class="sd">          Clutter type at Tx.</span>
+
+<span class="sd">        - &quot;zone_r&quot; : `~numpy.ndarray` 1D (int; (m,))</span>
+
+<span class="sd">          Clutter type at Rx. (Currently only a single type is used.)</span>
+
+<span class="sd">        - &quot;N0&quot;, &quot;delta_N&quot;, &quot;beta0&quot; : `~numpy.ndarray` 1D (float; (m,))</span>
+
+<span class="sd">          The `N0`, `delta_N`, and `beta0` values for each point in the path.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Currently, no sea or lake bodies are accounted for. Also the clutter</span>
+<span class="sd">    type of the receiver is fixed, while one could also think of using</span>
+<span class="sd">    different clutter types (in the array). You can modify the returned</span>
+<span class="sd">    arrays in `hprof_data`, of course, before feeding into</span>
+<span class="sd">    `~pycraf.pathprof.atten_path_fast`.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">step</span> <span class="o">/=</span> <span class="mf">1000.</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">distance</span> <span class="o">+</span> <span class="n">step</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
+    <span class="n">heights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>
+
+    <span class="c1"># TODO: query the following programmatically</span>
+    <span class="c1"># for now assume land-paths, only</span>
+    <span class="n">omega</span> <span class="o">=</span> <span class="n">heights</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">d_tm</span> <span class="o">=</span> <span class="n">distances</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">d_lm</span> <span class="o">=</span> <span class="n">distances</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">d_ct</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">heights</span><span class="p">,</span> <span class="mi">50000</span><span class="p">)</span>
+    <span class="n">d_cr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">heights</span><span class="p">,</span> <span class="mi">50000</span><span class="p">)</span>
+
+    <span class="c1"># radiomet data:</span>
+    <span class="c1"># assume all points on path have equal radiomet values</span>
+    <span class="n">lon_mids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">heights</span><span class="p">,</span> <span class="n">lon_mid</span><span class="p">)</span>
+    <span class="n">lat_mids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">heights</span><span class="p">,</span> <span class="n">lat_mid</span><span class="p">)</span>
+
+    <span class="n">delta_N</span><span class="p">,</span> <span class="n">beta0</span><span class="p">,</span> <span class="n">N0</span> <span class="o">=</span> <span class="n">helper</span><span class="o">.</span><span class="n">_radiomet_data_for_pathcenter</span><span class="p">(</span>
+        <span class="n">lon_mids</span><span class="p">,</span> <span class="n">lat_mids</span><span class="p">,</span> <span class="n">d_tm</span><span class="p">,</span> <span class="n">d_lm</span>
+        <span class="p">)</span>
+
+    <span class="n">hprof_data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;distances&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">distances</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;heights&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">heights</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;omega&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">omega</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;d_tm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d_tm</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;d_lm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d_lm</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;d_ct&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d_ct</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;d_cr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d_cr</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;zone_t&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">zone_t</span>  <span class="c1"># &lt;-- scalar</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;zone_r&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">heights</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">zone_r</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;delta_N&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">delta_N</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;N0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">N0</span>
+    <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;beta0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta0</span>
+
+    <span class="k">return</span> <span class="n">hprof_data</span></div>
+
+
+<div class="viewcode-block" id="atten_path_fast"><a class="viewcode-back" href="../../../api/pycraf.pathprof.atten_path_fast.html#pycraf.pathprof.atten_path_fast">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">GHz</span><span class="p">),</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
+    <span class="n">pressure</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
+    <span class="n">h_tg</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">h_rg</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">timepercent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">atten_path_fast</span><span class="p">(</span>
+        <span class="n">freq</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="p">,</span>
+        <span class="n">pressure</span><span class="p">,</span>
+        <span class="n">h_tg</span><span class="p">,</span> <span class="n">h_rg</span><span class="p">,</span>
+        <span class="n">timepercent</span><span class="p">,</span>
+        <span class="n">hprof_data</span><span class="p">,</span>  <span class="c1"># dict_like</span>
+        <span class="n">polarization</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+        <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate attenuation along a path using a parallelized method.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    freq : `~astropy.units.Quantity`</span>
+<span class="sd">        Frequency of radiation [GHz]</span>
+<span class="sd">    temperature : `~astropy.units.Quantity`</span>
+<span class="sd">        Temperature (K)</span>
+<span class="sd">    pressure : `~astropy.units.Quantity`</span>
+<span class="sd">        Pressure (hPa)</span>
+<span class="sd">    h_tg, h_rg : `~astropy.units.Quantity`</span>
+<span class="sd">        Transmitter/receiver heights over ground [m]</span>
+<span class="sd">    timepercent : `~astropy.units.Quantity`</span>
+<span class="sd">        Time percentage [%] (maximal 50%)</span>
+<span class="sd">    hprof_data : dict, dict-like</span>
+<span class="sd">        Dictionary with height profile auxillary data as</span>
+<span class="sd">        calculated with `~pycraf.pathprof.height_path_data` or</span>
+<span class="sd">        `~pycraf.pathprof.height_path_data_generic`.</span>
+<span class="sd">    polarization : int, optional</span>
+<span class="sd">        Polarization (default: 0)</span>
+<span class="sd">        Allowed values are: 0 - horizontal, 1 - vertical</span>
+<span class="sd">    version : int, optional</span>
+<span class="sd">        ITU-R Rec. P.452 version. Allowed values are: 14, 16</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    atten_path : 2D `~numpy.ndarray`</span>
+<span class="sd">        Attenuation values along path. First dimension has length 6,</span>
+<span class="sd">        which refers to:</span>
+
+<span class="sd">        0) L_bfsg - Free-space loss [dB]</span>
+<span class="sd">        1) L_bd - Basic transmission loss associated with diffraction</span>
+<span class="sd">           not exceeded for p% time [dB]; L_bd = L_b0p + L_dp</span>
+<span class="sd">        2) L_bs - Tropospheric scatter loss [dB]</span>
+<span class="sd">        3) L_ba - Ducting/layer reflection loss [dB]</span>
+<span class="sd">        4) L_b - Complete path propagation loss [dB]</span>
+<span class="sd">        5) L_b_corr - As L_b but with clutter correction [dB]</span>
+
+<span class="sd">        (i.e., the output of path_attenuation_complete without</span>
+<span class="sd">        gain-corrected values)</span>
+<span class="sd">    eps_pt_path : 1D `~numpy.ndarray`</span>
+<span class="sd">        Elevation angles along path w.r.t. Tx [deg]</span>
+<span class="sd">    eps_pr_path : 1D `~numpy.ndarray`</span>
+<span class="sd">        Elevation angles along path w.r.t. Rx [deg]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - The diffraction-loss algorithm was changed between ITU-R P.452</span>
+<span class="sd">      version 14 and 15. The former used a Deygout method, the new one</span>
+<span class="sd">      is based on a Bullington calculation with correction terms.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    A typical usage would be::</span>
+
+<span class="sd">       import numpy as np</span>
+<span class="sd">       import matplotlib.pyplot as plt</span>
+<span class="sd">       from astropy import units as u</span>
+<span class="sd">       from pycraf import pathprof</span>
+
+
+<span class="sd">       lon_t, lat_t = 6.8836 * u.deg, 50.525 * u.deg</span>
+<span class="sd">       lon_r, lat_r = 7.3334 * u.deg, 50.635 * u.deg</span>
+<span class="sd">       hprof_step = 100 * u.m</span>
+
+<span class="sd">       hprof_data = pathprof.height_path_data(</span>
+<span class="sd">           lon_t, lat_t, lon_r, lat_r, hprof_step,</span>
+<span class="sd">           zone_t=pathprof.CLUTTER.URBAN, zone_r=pathprof.CLUTTER.SUBURBAN,</span>
+<span class="sd">           )</span>
+
+<span class="sd">       plt.plot(hprof_data[&#39;distances&#39;], hprof_data[&#39;heights&#39;], &#39;k-&#39;)</span>
+<span class="sd">       plt.grid()</span>
+<span class="sd">       plt.show()</span>
+
+<span class="sd">       freq = 1. * u.GHz</span>
+<span class="sd">       temperature = 290. * u.K</span>
+<span class="sd">       pressure = 1013. * u.hPa</span>
+<span class="sd">       h_tg, h_rg = 5. * u.m, 50. * u.m</span>
+<span class="sd">       time_percent = 2. * u.percent</span>
+
+<span class="sd">       atten_path, eps_pt_path, eps_pr_path = pathprof.atten_path_fast(</span>
+<span class="sd">           freq, temperature, pressure,</span>
+<span class="sd">           h_tg, h_rg, time_percent,</span>
+<span class="sd">           hprof_data,</span>
+<span class="sd">           )</span>
+
+<span class="sd">       plt.plot(hprof_data[&#39;distances&#39;], atten_path.T, &#39;-&#39;)</span>
+<span class="sd">       plt.ylim((50, 275))</span>
+<span class="sd">       plt.grid()</span>
+<span class="sd">       plt.legend(</span>
+<span class="sd">           [&#39;LOS&#39;, &#39;Diffraction&#39;, &#39;Troposcatter&#39;, &#39;Ducting&#39;,</span>
+<span class="sd">           &#39;Total&#39;, &#39;Total w. clutter&#39;</span>
+<span class="sd">           ], fontsize=10, loc=&#39;lower right&#39;)</span>
+<span class="sd">       plt.show()</span>
+
+<span class="sd">       plt.plot(hprof_data[&#39;distances&#39;], eps_pt_path, &#39;b-&#39;)</span>
+<span class="sd">       plt.plot(hprof_data[&#39;distances&#39;], eps_pr_path, &#39;r-&#39;)</span>
+<span class="sd">       plt.grid()</span>
+<span class="sd">       plt.show()</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">cyprop</span><span class="o">.</span><span class="n">atten_path_fast_cython</span><span class="p">(</span>
+        <span class="n">freq</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="p">,</span>
+        <span class="n">pressure</span><span class="p">,</span>
+        <span class="n">h_tg</span><span class="p">,</span> <span class="n">h_rg</span><span class="p">,</span>
+        <span class="n">timepercent</span><span class="p">,</span>
+        <span class="n">hprof_data</span><span class="p">,</span>  <span class="c1"># dict_like</span>
         <span class="n">polarization</span><span class="o">=</span><span class="n">polarization</span><span class="p">,</span>
         <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
         <span class="p">)</span></div>
@@ -959,8 +1425,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 09 Aug 2017. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
+    Last built 21 Sep 2017. <br/>
   </p>
 </footer>
   </body>

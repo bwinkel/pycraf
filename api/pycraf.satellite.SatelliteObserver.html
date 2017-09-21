@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>SatelliteObserver &#8212; pycraf v0.25.3</title>
-    
+    <title>SatelliteObserver &#8212; pycraf v0.25.4</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.25.3',
+        VERSION:     '0.25.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -35,7 +32,7 @@
 
 
   </head>
-  <body role="document">
+  <body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
@@ -70,7 +67,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.3</a>
+	<a href="../index.html">pycraf v0.25.4</a>
 	 &#187;
       </li>
       <li><a href="../satellite/index.html" accesskey="U">Satellites (<code class="docutils literal"><span class="pre">pycraf.satellite</span></code>)</a> &#187;</li>
@@ -89,18 +86,18 @@
 <h1>SatelliteObserver<a class="headerlink" href="#satelliteobserver" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pycraf.satellite.SatelliteObserver">
-<em class="property">class </em><code class="descclassname">pycraf.satellite.</code><code class="descname">SatelliteObserver</code><span class="sig-paren">(</span><em>obs_location</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/satellite/satellite.html#SatelliteObserver"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.3/pycraf/satellite/satellite.py#L97" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.satellite.SatelliteObserver" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pycraf.satellite.</code><code class="descname">SatelliteObserver</code><span class="sig-paren">(</span><em>obs_location</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/satellite/satellite.html#SatelliteObserver"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.4/pycraf/satellite/satellite.py#L97" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.satellite.SatelliteObserver" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>Calculate position of a satellite relative to an observer on Earth.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>obs_location</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.coordinates.EarthLocation.html#astropy.coordinates.EarthLocation" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">EarthLocation</span></code></a> or tuple</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>obs_location</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.coordinates.EarthLocation.html#astropy.coordinates.EarthLocation" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">EarthLocation</span></code></a> or tuple</p>
 <blockquote>
 <div><p>Location of observer.</p>
 <p>This must be in a form that can be casted to
-<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.coordinates.EarthLocation.html#astropy.coordinates.EarthLocation" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">EarthLocation</span></code></a>.</p>
+<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.coordinates.EarthLocation.html#astropy.coordinates.EarthLocation" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">EarthLocation</span></code></a>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -132,7 +129,7 @@
 <p class="rubric">Methods Documentation</p>
 <dl class="method">
 <dt id="pycraf.satellite.SatelliteObserver.azel_from_sat">
-<code class="descname">azel_from_sat</code><span class="sig-paren">(</span><em>satellite_or_tle</em>, <em>obstime</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/satellite/satellite.html#SatelliteObserver.azel_from_sat"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.3/pycraf/satellite/satellite.py#L240" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.satellite.SatelliteObserver.azel_from_sat" title="Permalink to this definition">¶</a></dt>
+<code class="descname">azel_from_sat</code><span class="sig-paren">(</span><em>satellite_or_tle</em>, <em>obstime</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/satellite/satellite.html#SatelliteObserver.azel_from_sat"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.4/pycraf/satellite/satellite.py#L240" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.satellite.SatelliteObserver.azel_from_sat" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -141,7 +138,7 @@
 <blockquote>
 <div><p>Satellite object or TLE</p>
 </div></blockquote>
-<p><strong>obstime</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.time.Time.html#astropy.time.Time" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">Time</span></code></a></p>
+<p><strong>obstime</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.time.Time.html#astropy.time.Time" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Time</span></code></a></p>
 <blockquote>
 <div><p>Time of observation</p>
 </div></blockquote>
@@ -189,14 +186,14 @@
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.3/docs/api/pycraf.satellite.SatelliteObserver.rst">Edit This Page on Github</a> &nbsp;
+    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.4/docs/api/pycraf.satellite.SatelliteObserver.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.satellite.SatelliteObserver.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 09 Aug 2017. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
+    Last built 21 Sep 2017. <br/>
   </p>
 </footer>
   </body>

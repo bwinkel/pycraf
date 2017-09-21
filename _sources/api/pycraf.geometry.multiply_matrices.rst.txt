@@ -1,0 +1,6 @@
+multiply_matrices
+=================
+
+.. currentmodule:: pycraf.geometry
+
+.. autofunction:: multiply_matrices

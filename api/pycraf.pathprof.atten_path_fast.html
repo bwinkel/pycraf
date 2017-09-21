@@ -1,0 +1,245 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>atten_path_fast &#8212; pycraf v0.25.4</title>
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.25.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="clutter_correction" href="pycraf.pathprof.clutter_correction.html" />
+    <link rel="prev" title="atten_map_fast" href="pycraf.pathprof.atten_map_fast.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../_static/copybutton.js"></script>
+
+
+  </head>
+  <body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="pycraf.pathprof.clutter_correction.html" title="clutter_correction">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="pycraf.pathprof.atten_map_fast.html" title="atten_map_fast">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v0.25.4</a>
+	 &#187;
+      </li>
+      <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="docutils literal"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
+      
+      <li>atten_path_fast</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="atten-path-fast">
+<h1>atten_path_fast<a class="headerlink" href="#atten-path-fast" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pycraf.pathprof.atten_path_fast">
+<code class="descclassname">pycraf.pathprof.</code><code class="descname">atten_path_fast</code><span class="sig-paren">(</span><em>freq</em>, <em>temperature</em>, <em>pressure</em>, <em>h_tg</em>, <em>h_rg</em>, <em>timepercent</em>, <em>hprof_data</em>, <em>polarization=0</em>, <em>version=16</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#atten_path_fast"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.4/pycraf/pathprof/propagation.py#L1201" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.atten_path_fast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate attenuation along a path using a parallelized method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>freq</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<blockquote>
+<div><p>Frequency of radiation [GHz]</p>
+</div></blockquote>
+<p><strong>temperature</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<blockquote>
+<div><p>Temperature (K)</p>
+</div></blockquote>
+<p><strong>pressure</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<blockquote>
+<div><p>Pressure (hPa)</p>
+</div></blockquote>
+<p><strong>h_tg, h_rg</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<blockquote>
+<div><p>Transmitter/receiver heights over ground [m]</p>
+</div></blockquote>
+<p><strong>timepercent</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<blockquote>
+<div><p>Time percentage [%] (maximal 50%)</p>
+</div></blockquote>
+<p><strong>hprof_data</strong> : dict, dict-like</p>
+<blockquote>
+<div><p>Dictionary with height profile auxillary data as
+calculated with <a class="reference internal" href="pycraf.pathprof.height_path_data.html#pycraf.pathprof.height_path_data" title="pycraf.pathprof.height_path_data"><code class="xref py py-obj docutils literal"><span class="pre">height_path_data</span></code></a> or
+<a class="reference internal" href="pycraf.pathprof.height_path_data_generic.html#pycraf.pathprof.height_path_data_generic" title="pycraf.pathprof.height_path_data_generic"><code class="xref py py-obj docutils literal"><span class="pre">height_path_data_generic</span></code></a>.</p>
+</div></blockquote>
+<p><strong>polarization</strong> : int, optional</p>
+<blockquote>
+<div><p>Polarization (default: 0)
+Allowed values are: 0 - horizontal, 1 - vertical</p>
+</div></blockquote>
+<p><strong>version</strong> : int, optional</p>
+<blockquote>
+<div><p>ITU-R Rec. P.452 version. Allowed values are: 14, 16</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>atten_path</strong> : 2D <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a></p>
+<blockquote>
+<div><p>Attenuation values along path. First dimension has length 6,
+which refers to:</p>
+<ol class="arabic simple" start="0">
+<li>L_bfsg - Free-space loss [dB]</li>
+<li>L_bd - Basic transmission loss associated with diffraction
+not exceeded for p% time [dB]; L_bd = L_b0p + L_dp</li>
+<li>L_bs - Tropospheric scatter loss [dB]</li>
+<li>L_ba - Ducting/layer reflection loss [dB]</li>
+<li>L_b - Complete path propagation loss [dB]</li>
+<li>L_b_corr - As L_b but with clutter correction [dB]</li>
+</ol>
+<p>(i.e., the output of path_attenuation_complete without
+gain-corrected values)</p>
+</div></blockquote>
+<p><strong>eps_pt_path</strong> : 1D <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a></p>
+<blockquote>
+<div><p>Elevation angles along path w.r.t. Tx [deg]</p>
+</div></blockquote>
+<p><strong>eps_pr_path</strong> : 1D <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a></p>
+<blockquote class="last">
+<div><p>Elevation angles along path w.r.t. Rx [deg]</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>The diffraction-loss algorithm was changed between ITU-R P.452
+version 14 and 15. The former used a Deygout method, the new one
+is based on a Bullington calculation with correction terms.</li>
+</ul>
+<p class="rubric">Examples</p>
+<p>A typical usage would be:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+<span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">pathprof</span>
+
+<span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span> <span class="o">=</span> <span class="mf">6.8836</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.525</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<span class="n">lon_r</span><span class="p">,</span> <span class="n">lat_r</span> <span class="o">=</span> <span class="mf">7.3334</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.635</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<span class="n">hprof_step</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
+
+<span class="n">hprof_data</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">height_path_data</span><span class="p">(</span>
+    <span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span><span class="p">,</span> <span class="n">lon_r</span><span class="p">,</span> <span class="n">lat_r</span><span class="p">,</span> <span class="n">hprof_step</span><span class="p">,</span>
+    <span class="n">zone_t</span><span class="o">=</span><span class="n">pathprof</span><span class="o">.</span><span class="n">CLUTTER</span><span class="o">.</span><span class="n">URBAN</span><span class="p">,</span> <span class="n">zone_r</span><span class="o">=</span><span class="n">pathprof</span><span class="o">.</span><span class="n">CLUTTER</span><span class="o">.</span><span class="n">SUBURBAN</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;distances&#39;</span><span class="p">],</span> <span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;heights&#39;</span><span class="p">],</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">freq</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">GHz</span>
+<span class="n">temperature</span> <span class="o">=</span> <span class="mf">290.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">K</span>
+<span class="n">pressure</span> <span class="o">=</span> <span class="mf">1013.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">hPa</span>
+<span class="n">h_tg</span><span class="p">,</span> <span class="n">h_rg</span> <span class="o">=</span> <span class="mf">5.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mf">50.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
+<span class="n">time_percent</span> <span class="o">=</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span>
+
+<span class="n">atten_path</span><span class="p">,</span> <span class="n">eps_pt_path</span><span class="p">,</span> <span class="n">eps_pr_path</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">atten_path_fast</span><span class="p">(</span>
+    <span class="n">freq</span><span class="p">,</span> <span class="n">temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span>
+    <span class="n">h_tg</span><span class="p">,</span> <span class="n">h_rg</span><span class="p">,</span> <span class="n">time_percent</span><span class="p">,</span>
+    <span class="n">hprof_data</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;distances&#39;</span><span class="p">],</span> <span class="n">atten_path</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">((</span><span class="mi">50</span><span class="p">,</span> <span class="mi">275</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
+    <span class="p">[</span><span class="s1">&#39;LOS&#39;</span><span class="p">,</span> <span class="s1">&#39;Diffraction&#39;</span><span class="p">,</span> <span class="s1">&#39;Troposcatter&#39;</span><span class="p">,</span> <span class="s1">&#39;Ducting&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="s1">&#39;Total w. clutter&#39;</span>
+    <span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower right&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;distances&#39;</span><span class="p">],</span> <span class="n">eps_pt_path</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;distances&#39;</span><span class="p">],</span> <span class="n">eps_pr_path</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">atten_path_fast</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.4/docs/api/pycraf.pathprof.atten_path_fast.rst">Edit This Page on Github</a> &nbsp;
+    <a href="../_sources/api/pycraf.pathprof.atten_path_fast.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2017, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
+    Last built 21 Sep 2017. <br/>
+  </p>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+rotmat_from_rotaxis
+===================
+
+.. currentmodule:: pycraf.geometry
+
+.. autofunction:: rotmat_from_rotaxis

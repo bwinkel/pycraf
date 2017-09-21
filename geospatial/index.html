@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Geographical frames (pycraf.geospatial) &#8212; pycraf v0.25.3</title>
-    
+    <title>Geographical frames (pycraf.geospatial) &#8212; pycraf v0.25.4</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.25.3',
+        VERSION:     '0.25.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -35,7 +32,7 @@
 
 
   </head>
-  <body role="document">
+  <body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
@@ -70,7 +67,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.3</a>
+	<a href="../index.html">pycraf v0.25.4</a>
 	 &#187;
       </li>
       
@@ -99,7 +96,7 @@ based on EPSG/ESRI codes or <code class="xref py py-obj docutils literal"><span 
 <p class="last">Internally, the <a class="reference internal" href="#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal"><span class="pre">pycraf.geospatial</span></code></a> module uses the <a class="reference external" href="https://pypi.python.org/pypi/pyproj">pyproj</a> package, which itself is a wrapper
 around the <a class="reference external" href="http://proj4.org/">proj.4</a> software for the transformation.
 In principle, one could use <code class="xref py py-obj docutils literal"><span class="pre">pyproj</span></code> directly, but <a class="reference internal" href="#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal"><span class="pre">pycraf.geospatial</span></code></a>
-offers unit checking (by making use of the <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">units</span></code></a>
+offers unit checking (by making use of the <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">units</span></code></a>
 functionality.)</p>
 </div>
 <p>There are thousands of pre-defined frames (which one can work with by simply
@@ -182,7 +179,7 @@ directly query the EPSG code (if needed):</p>
 <div class="section" id="imperial-units">
 <h3>Imperial units<a class="headerlink" href="#imperial-units" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="xref py py-obj docutils literal"><span class="pre">proj4</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">pyproj</span></code> software packages allow to work with frames that
-are historical or of regional interest, only. Some of these don&#8217;t work
+are historical or of regional interest, only. Some of these don’t work
 with units of Meters, but feet, etc. Per default, <code class="xref py py-obj docutils literal"><span class="pre">pyproj</span></code> silently
 converts all world (=physical) units to Meters (input and/or output).
 One can specifically ask for the original units by doing:</p>
@@ -207,7 +204,7 @@ One can specifically ask for the original units by doing:</p>
 </pre></div>
 </div>
 <p>The <a class="reference internal" href="#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal"><span class="pre">geospatial</span></code></a> sub-package makes life a bit easier,
-because we can use the <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v2.0.1)"><code class="xref py py-obj docutils literal"><span class="pre">units</span></code></a> conversion:</p>
+because we can use the <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">units</span></code></a> conversion:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">transform_factory</span><span class="p">(</span><span class="mi">4626</span><span class="p">,</span> <span class="mi">3452</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="o">-</span><span class="mf">92.105819</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">30.447921</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span>  
@@ -223,7 +220,7 @@ because we can use the <a class="reference external" href="http://docs.astropy.o
 </div>
 <p>Unfortunately, there seems to be no way to ask <code class="xref py py-obj docutils literal"><span class="pre">pyproj</span></code> about which
 original unit is tied to an EPSG code (although it internally must
-know it, otherwise, it wouldn&#8217;t work correctly).</p>
+know it, otherwise, it wouldn’t work correctly).</p>
 </div>
 <div class="section" id="geocentric-systems">
 <h3>Geocentric systems<a class="headerlink" href="#geocentric-systems" title="Permalink to this headline">¶</a></h3>
@@ -276,7 +273,7 @@ around the <a class="reference external" href="http://proj4.org/">proj.4</a> sof
 <tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.itrf2008_to_wgs84.html#pycraf.geospatial.itrf2008_to_wgs84" title="pycraf.geospatial.itrf2008_to_wgs84"><code class="xref py py-obj docutils literal"><span class="pre">itrf2008_to_wgs84</span></code></a>(x,&nbsp;y,&nbsp;z)</td>
 <td>Convert ITRF2008 coordinates to GPS/WGS84.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.transform_factory.html#pycraf.geospatial.transform_factory" title="pycraf.geospatial.transform_factory"><code class="xref py py-obj docutils literal"><span class="pre">transform_factory</span></code></a>(sys_in,&nbsp;sys_out[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geospatial.transform_factory.html#pycraf.geospatial.transform_factory" title="pycraf.geospatial.transform_factory"><code class="xref py py-obj docutils literal"><span class="pre">transform_factory</span></code></a>(sys_in,&nbsp;sys_out[,&nbsp;…])</td>
 <td>A factory to produce conversion functions (decorated with <a class="reference internal" href="../api/pycraf.utils.ranged_quantity_input.html#pycraf.utils.ranged_quantity_input" title="pycraf.utils.ranged_quantity_input"><code class="xref py py-obj docutils literal"><span class="pre">ranged_quantity_input</span></code></a> for unit handling).</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geospatial.utm_to_wgs84.html#pycraf.geospatial.utm_to_wgs84" title="pycraf.geospatial.utm_to_wgs84"><code class="xref py py-obj docutils literal"><span class="pre">utm_to_wgs84</span></code></a>(ulon,&nbsp;ulat,&nbsp;utm_zone)</td>
@@ -355,14 +352,14 @@ around the <a class="reference external" href="http://proj4.org/">proj.4</a> sof
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.3/docs/geospatial/index.rst">Edit This Page on Github</a> &nbsp;
+    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.4/docs/geospatial/index.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/geospatial/index.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.6. &nbsp;
-    Last built 09 Aug 2017. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
+    Last built 21 Sep 2017. <br/>
   </p>
 </footer>
   </body>
