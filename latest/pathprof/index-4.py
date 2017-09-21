@@ -48,7 +48,7 @@ G_t, G_r = 0 * cnv.dBi, 0 * cnv.dBi
 zone_t, zone_r = pathprof.CLUTTER.UNKNOWN, pathprof.CLUTTER.UNKNOWN
 hprof_step = 100 * u.m
 
-hprof_cache = pathprof.height_profile_data(
+hprof_cache = pathprof.height_map_data(
     lon_tx, lat_tx,
     map_size_lon, map_size_lat,
     map_resolution=map_resolution,

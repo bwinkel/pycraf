@@ -1,0 +1,6 @@
+height_map_data
+===============
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: height_map_data

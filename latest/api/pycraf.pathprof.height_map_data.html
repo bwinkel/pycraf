@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>height_profile_data &#8212; pycraf v0.25.4.dev50</title>
+    <title>height_map_data &#8212; pycraf v0.25.4.dev50</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -25,7 +25,7 @@
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="loss_complete" href="pycraf.pathprof.loss_complete.html" />
+    <link rel="next" title="height_path_data" href="pycraf.pathprof.height_path_data.html" />
     <link rel="prev" title="geoid_inverse" href="pycraf.pathprof.geoid_inverse.html" />
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 <script type="text/javascript" src="../_static/copybutton.js"></script>
@@ -56,7 +56,7 @@
     <h3>Navigation</h3>
     <ul>
       <li class="right">
-	<a href="pycraf.pathprof.loss_complete.html" title="loss_complete">
+	<a href="pycraf.pathprof.height_path_data.html" title="height_path_data">
 	  next &raquo;
 	</a>
       </li>
@@ -72,7 +72,7 @@
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="docutils literal"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
       
-      <li>height_profile_data</li> 
+      <li>height_map_data</li> 
     </ul>
 </div>
   
@@ -82,11 +82,11 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="height-profile-data">
-<h1>height_profile_data<a class="headerlink" href="#height-profile-data" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="height-map-data">
+<h1>height_map_data<a class="headerlink" href="#height-map-data" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="pycraf.pathprof.height_profile_data">
-<code class="descclassname">pycraf.pathprof.</code><code class="descname">height_profile_data</code><span class="sig-paren">(</span><em>lon_t</em>, <em>lat_t</em>, <em>map_size_lon</em>, <em>map_size_lat</em>, <em>map_resolution=&lt;Quantity 3.0 arcsec&gt;</em>, <em>do_cos_delta=True</em>, <em>zone_t=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em>zone_r=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em>d_tm=None</em>, <em>d_lm=None</em>, <em>d_ct=None</em>, <em>d_cr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#height_profile_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L587" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.height_profile_data" title="Permalink to this definition">¶</a></dt>
+<dt id="pycraf.pathprof.height_map_data">
+<code class="descclassname">pycraf.pathprof.</code><code class="descname">height_map_data</code><span class="sig-paren">(</span><em>lon_t</em>, <em>lat_t</em>, <em>map_size_lon</em>, <em>map_size_lat</em>, <em>map_resolution=&lt;Quantity 3.0 arcsec&gt;</em>, <em>do_cos_delta=True</em>, <em>zone_t=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em>zone_r=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em>d_tm=None</em>, <em>d_lm=None</em>, <em>d_ct=None</em>, <em>d_cr=None</em>, <em>omega_percent=&lt;Quantity 0.0 %&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#height_map_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L590" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.height_map_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate height profiles and auxillary maps needed for
 <a class="reference internal" href="pycraf.pathprof.atten_map_fast.html#pycraf.pathprof.atten_map_fast" title="pycraf.pathprof.atten_map_fast"><code class="xref py py-obj docutils literal"><span class="pre">atten_map_fast</span></code></a>.</p>
 <p>This can be used to cache height-profile data. Since it is independent
@@ -153,12 +153,17 @@ great-circle path [km]
 along great circle interference path [km]
 (default: 50000 km)</p>
 </div></blockquote>
+<p><strong>omega_percent</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
+<blockquote>
+<div><p>Fraction of the path over water [%] (see Table 3)
+(default: 0%)</p>
+</div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>hprof_data</strong> : dict</p>
 <blockquote class="last">
 <div><p>Dictionary with height profiles and auxillary data as
-calculated with <a class="reference internal" href="#pycraf.pathprof.height_profile_data" title="pycraf.pathprof.height_profile_data"><code class="xref py py-obj docutils literal"><span class="pre">height_profile_data</span></code></a>.</p>
+calculated with <a class="reference internal" href="#pycraf.pathprof.height_map_data" title="pycraf.pathprof.height_map_data"><code class="xref py py-obj docutils literal"><span class="pre">height_map_data</span></code></a>.</p>
 <p>The dictionary contains the following entities (the map dimension
 is mx * my):</p>
 <ul>
@@ -181,6 +186,8 @@ in the map</p>
 <li><p class="first">“lon_mid_map”, “lat_mid_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>Longitude and latitude path center coordinates for each pixel
 w.r.t. map center.</p>
+<p>This is returned for information, only. It is not
+needed by <code class="xref py py-obj docutils literal"><span class="pre">atten_map_fast</span></code>!</p>
 </li>
 <li><p class="first">“dist_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>Distances to map center for each pixel.</p>
@@ -191,12 +198,17 @@ w.r.t. map center.</p>
 <li><p class="first">“d_lm_map”, “d_tm_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>The <code class="xref py py-obj docutils literal"><span class="pre">d_lm</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">d_tm</span></code> values for each pixel in the map.</p>
 </li>
+<li><p class="first">“omega_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
+<p>The <code class="xref py py-obj docutils literal"><span class="pre">omega</span></code> values for each pixel in the map.</p>
+</li>
 <li><p class="first">“zone_t_map”, “zone_r_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (CLUTTER enum; (mx, my))</p>
 <p>The clutter zone types <code class="xref py py-obj docutils literal"><span class="pre">zone_t</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">zone_r</span></code> for each pixel in the
 map.</p>
 </li>
 <li><p class="first">“bearing_map”, “back_bearing_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>The <code class="xref py py-obj docutils literal"><span class="pre">bearing</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">backbearing</span></code> values for each pixel in the map.</p>
+<p>This is returned for information, only. It is not
+needed by <code class="xref py py-obj docutils literal"><span class="pre">atten_map_fast</span></code>!</p>
 </li>
 <li><p class="first">“N0_map”, “delta_N_map”, “beta0_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>The <code class="xref py py-obj docutils literal"><span class="pre">N0</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">delta_N</span></code>, and <code class="xref py py-obj docutils literal"><span class="pre">beta0</span></code> values for each pixel in the map.</p>
@@ -255,7 +267,7 @@ For details see <a class="reference internal" href="../pathprof/working_with_srt
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
 <ul>
-<li><a class="reference internal" href="#">height_profile_data</a></li>
+<li><a class="reference internal" href="#">height_map_data</a></li>
 </ul>
 
 
@@ -265,14 +277,14 @@ For details see <a class="reference internal" href="../pathprof/working_with_srt
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/master/docs/api/pycraf.pathprof.height_profile_data.rst">Edit This Page on Github</a> &nbsp;
-    <a href="../_sources/api/pycraf.pathprof.height_profile_data.rst.txt"
+    <a href="http://github.com/bwinkel/pycraf/tree/master/docs/api/pycraf.pathprof.height_map_data.rst">Edit This Page on Github</a> &nbsp;
+    <a href="../_sources/api/pycraf.pathprof.height_map_data.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 19 Sep 2017. <br/>
+    Last built 21 Sep 2017. <br/>
   </p>
 </footer>
   </body>

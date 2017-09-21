@@ -365,7 +365,7 @@ leading to radio frequency interference (RFI).
 
 The simple approach would be to create a `~pycraf.pathprof.PathProp` instance
 for each pixel in the desired region (with the Tx being in the center of the map, and the Rx located at the other map pixels) and run the `~pycraf.pathprof.loss_complete` function accordingly. This is relatively slow.
-Therefore, we added a faster alternative, `~pycraf.pathprof.atten_map_fast`. The idea is to generate the full height profiles only for the pixels on the map edges and re-use the arrays for the inner pixels with a clever hashing algorithm. The details of this are encapsulated in the `~pycraf.pathprof.height_profile_data` function, such that the user doesn't need to understand what's going on under the hood:
+Therefore, we added a faster alternative, `~pycraf.pathprof.atten_map_fast`. The idea is to generate the full height profiles only for the pixels on the map edges and re-use the arrays for the inner pixels with a clever hashing algorithm. The details of this are encapsulated in the `~pycraf.pathprof.height_map_data` function, such that the user doesn't need to understand what's going on under the hood:
 
 .. plot::
    :include-source:
@@ -420,7 +420,7 @@ Therefore, we added a faster alternative, `~pycraf.pathprof.atten_map_fast`. The
     zone_t, zone_r = pathprof.CLUTTER.UNKNOWN, pathprof.CLUTTER.UNKNOWN
     hprof_step = 100 * u.m
 
-    hprof_cache = pathprof.height_profile_data(
+    hprof_cache = pathprof.height_map_data(
         lon_tx, lat_tx,
         map_size_lon, map_size_lat,
         map_resolution=map_resolution,

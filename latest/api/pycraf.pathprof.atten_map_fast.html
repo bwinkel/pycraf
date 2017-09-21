@@ -25,7 +25,7 @@
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="clutter_correction" href="pycraf.pathprof.clutter_correction.html" />
+    <link rel="next" title="atten_path_fast" href="pycraf.pathprof.atten_path_fast.html" />
     <link rel="prev" title="annual_timepercent_from_worst_month" href="pycraf.pathprof.annual_timepercent_from_worst_month.html" />
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 <script type="text/javascript" src="../_static/copybutton.js"></script>
@@ -56,7 +56,7 @@
     <h3>Navigation</h3>
     <ul>
       <li class="right">
-	<a href="pycraf.pathprof.clutter_correction.html" title="clutter_correction">
+	<a href="pycraf.pathprof.atten_path_fast.html" title="atten_path_fast">
 	  next &raquo;
 	</a>
       </li>
@@ -86,7 +86,7 @@
 <h1>atten_map_fast<a class="headerlink" href="#atten-map-fast" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.pathprof.atten_map_fast">
-<code class="descclassname">pycraf.pathprof.</code><code class="descname">atten_map_fast</code><span class="sig-paren">(</span><em>freq</em>, <em>temperature</em>, <em>pressure</em>, <em>h_tg</em>, <em>h_rg</em>, <em>timepercent</em>, <em>hprof_data</em>, <em>omega=&lt;Quantity 0.0 %&gt;</em>, <em>polarization=0</em>, <em>version=16</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#atten_map_fast"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L778" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.atten_map_fast" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.pathprof.</code><code class="descname">atten_map_fast</code><span class="sig-paren">(</span><em>freq</em>, <em>temperature</em>, <em>pressure</em>, <em>h_tg</em>, <em>h_rg</em>, <em>timepercent</em>, <em>hprof_data</em>, <em>polarization=0</em>, <em>version=16</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#atten_map_fast"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L797" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.atten_map_fast" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate attenuation maps using a fast method.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -115,12 +115,7 @@
 <p><strong>hprof_data</strong> : dict, dict-like</p>
 <blockquote>
 <div><p>Dictionary with height profiles and auxillary maps as
-calculated with <a class="reference internal" href="pycraf.pathprof.height_profile_data.html#pycraf.pathprof.height_profile_data" title="pycraf.pathprof.height_profile_data"><code class="xref py py-obj docutils literal"><span class="pre">height_profile_data</span></code></a>.</p>
-</div></blockquote>
-<p><strong>omega</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
-<blockquote>
-<div><p>Fraction of the path over water [%] (see Table 3)
-(default: 0%)</p>
+calculated with <a class="reference internal" href="pycraf.pathprof.height_map_data.html#pycraf.pathprof.height_map_data" title="pycraf.pathprof.height_map_data"><code class="xref py py-obj docutils literal"><span class="pre">height_map_data</span></code></a>.</p>
 </div></blockquote>
 <p><strong>polarization</strong> : int, optional</p>
 <blockquote>
@@ -194,7 +189,7 @@ is based on a Bullington calculation with correction terms.</li>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 19 Sep 2017. <br/>
+    Last built 21 Sep 2017. <br/>
   </p>
 </footer>
   </body>

@@ -159,6 +159,7 @@ latest/_sources/api/pycraf.pathprof.R_E.rst.txt
 latest/_sources/api/pycraf.pathprof.SrtmConf.rst.txt
 latest/_sources/api/pycraf.pathprof.annual_timepercent_from_worst_month.rst.txt
 latest/_sources/api/pycraf.pathprof.atten_map_fast.rst.txt
+latest/_sources/api/pycraf.pathprof.atten_path_fast.rst.txt
 latest/_sources/api/pycraf.pathprof.clutter_correction.rst.txt
 latest/_sources/api/pycraf.pathprof.clutter_imt.rst.txt
 latest/_sources/api/pycraf.pathprof.deltaN_N0_from_map.rst.txt
@@ -169,7 +170,9 @@ latest/_sources/api/pycraf.pathprof.eff_earth_radius_median.rst.txt
 latest/_sources/api/pycraf.pathprof.geoid_area.rst.txt
 latest/_sources/api/pycraf.pathprof.geoid_direct.rst.txt
 latest/_sources/api/pycraf.pathprof.geoid_inverse.rst.txt
-latest/_sources/api/pycraf.pathprof.height_profile_data.rst.txt
+latest/_sources/api/pycraf.pathprof.height_map_data.rst.txt
+latest/_sources/api/pycraf.pathprof.height_path_data.rst.txt
+latest/_sources/api/pycraf.pathprof.height_path_data_generic.rst.txt
 latest/_sources/api/pycraf.pathprof.loss_complete.rst.txt
 latest/_sources/api/pycraf.pathprof.loss_diffraction.rst.txt
 latest/_sources/api/pycraf.pathprof.loss_ducting.rst.txt
@@ -332,6 +335,7 @@ latest/api/pycraf.pathprof.R_E.html
 latest/api/pycraf.pathprof.SrtmConf.html
 latest/api/pycraf.pathprof.annual_timepercent_from_worst_month.html
 latest/api/pycraf.pathprof.atten_map_fast.html
+latest/api/pycraf.pathprof.atten_path_fast.html
 latest/api/pycraf.pathprof.clutter_correction.html
 latest/api/pycraf.pathprof.clutter_imt.html
 latest/api/pycraf.pathprof.deltaN_N0_from_map.html
@@ -342,7 +346,9 @@ latest/api/pycraf.pathprof.eff_earth_radius_median.html
 latest/api/pycraf.pathprof.geoid_area.html
 latest/api/pycraf.pathprof.geoid_direct.html
 latest/api/pycraf.pathprof.geoid_inverse.html
-latest/api/pycraf.pathprof.height_profile_data.html
+latest/api/pycraf.pathprof.height_map_data.html
+latest/api/pycraf.pathprof.height_path_data.html
+latest/api/pycraf.pathprof.height_path_data_generic.html
 latest/api/pycraf.pathprof.loss_complete.html
 latest/api/pycraf.pathprof.loss_diffraction.html
 latest/api/pycraf.pathprof.loss_ducting.html
