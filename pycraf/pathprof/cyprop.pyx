@@ -1992,6 +1992,9 @@ def height_map_data_cython(
           Longitude and latitude path center coordinates for each pixel
           w.r.t. map center.
 
+          This is returned for information, only. It is not
+          needed by `~pycraf.atten_map_fast_cython`!
+
         - "dist_map" : `~numpy.ndarray` 2D (float; (mx, my))
 
           Distances to map center for each pixel.
@@ -2016,6 +2019,9 @@ def height_map_data_cython(
         - "bearing_map", "back_bearing_map" : `~numpy.ndarray` 2D (float; (mx, my))
 
           The `bearing` and `backbearing` values for each pixel in the map.
+
+          This is returned for information, only. It is not
+          needed by `~pycraf.atten_map_fast_cython`!
 
         - "N0_map", "delta_N_map", "beta0_map" : `~numpy.ndarray` 2D (float; (mx, my))
 
@@ -2230,7 +2236,6 @@ def height_map_data_cython(
         ])
     maxlen_idx = np.argmax(proflengths)
     maxlen = proflengths[maxlen_idx]
-    # print('maxlen', maxlen)
 
     # we can re-use the distances vector, because of equal spacing
     dist_prof = dist_dict[maxlen_idx]
@@ -2391,8 +2396,6 @@ def atten_map_fast_cython(
 
         int[:, :] path_idx_map_v = _cf(hprof_data['path_idx_map'])
         int[:, :] dist_end_idx_map_v = _cf(hprof_data['dist_end_idx_map'])
-        double[:, :] lon_mid_map_v = _cf(hprof_data['lon_mid_map'])
-        double[:, :] lat_mid_map_v = _cf(hprof_data['lat_mid_map'])
         double[:, :] dist_map_v = _cf(hprof_data['dist_map'])
         double[:, :] delta_N_map_v = _cf(hprof_data['delta_N_map'])
         double[:, :] beta0_map_v = _cf(hprof_data['beta0_map'])
@@ -2406,14 +2409,9 @@ def atten_map_fast_cython(
         double[:, :] d_cr_map_v = _cf(hprof_data['d_cr_map'])
         double[:, :] omega_map_v = _cf(hprof_data['omega_map'])
 
-        double[:, :] bearing_map_v = _cf(hprof_data['bearing_map'])
-        double[:, :] back_bearing_map_v = _cf(hprof_data['back_bearing_map'])
-
         double[::1] dist_prof_v = _cf(hprof_data['dist_prof'])
         double[:, ::1] height_profs_v = _cf(hprof_data['height_profs'])
         double[::1] zheight_prof_v = _cf(hprof_data['zheight_prof'])
-
-        # double[::1] dists_v, heights_v, zheights_v
 
     xlen = len(xcoords)
     ylen = len(ycoords)
@@ -2474,14 +2472,6 @@ def atten_map_fast_cython(
                 pp.omega = omega_map_v[yi, xi]
 
                 pp.distance = dist_map_v[yi, xi]
-                pp.bearing = bearing_map_v[yi, xi]
-                pp.back_bearing = back_bearing_map_v[yi, xi]
-
-                # pp.d_tm = pp.distance  # already set above
-                # pp.d_lm = pp.distance
-
-                pp.lon_mid = lon_mid_map_v[yi, xi]
-                pp.lat_mid = lat_mid_map_v[yi, xi]
 
                 pp.delta_N = delta_N_map_v[yi, xi]
                 pp.beta0 = beta0_map_v[yi, xi]
@@ -2520,92 +2510,6 @@ def atten_map_fast_cython(
     return atten_map, eps_pt_map, eps_pr_map
 
 
-def height_path_data_cython(
-        double lon_t, double lat_t,
-        double lon_r, double lat_r,
-        double step,
-        int zone_t=CLUTTER.UNKNOWN, int zone_r=CLUTTER.UNKNOWN,
-        ):
-
-    '''
-    Calculate height profile auxillary data needed for atten_path_fast.
-
-    This can be used to cache height-profile data. Since it is independent
-    of frequency, timepercent, Tx and Rx heights, etc., one can re-use
-    it to save computing time when doing batch jobs.
-
-    Parameters
-    ----------
-    lon_t, lat_t : double
-        Geographic longitude/latitude of start point (transmitter) [deg]
-    lon_r, lat_r : double
-        Geographic longitude/latitude of end point (receiver) [deg]
-    step : double
-        Distance resolution of height profile along path [m]
-    zone_t, zone_r : CLUTTER enum, optional
-        Clutter type for transmitter/receiver terminal.
-        (default: CLUTTER.UNKNOWN)
-
-    Returns
-    -------
-    hprof_data : dict
-        Dictionary with height profile auxillary data as
-        calculated with `~pycraf.pathprof.height_path_data`.
-
-        The dictionary contains the following entities (the path length
-        is m):
-    '''
-
-    (
-        lons, lats, distance, distances, heights,
-        bearing, back_bearing, backbearings
-        ) = heightprofile._srtm_height_profile(
-            lon_t, lat_t, lon_r, lat_r, step
-            )
-
-    maxsize = len(distances)
-    # TODO: query the following programmatically
-    # for now assume land-paths, only
-    omega = np.zeros_like(heights)
-    d_tm = np.full_like(heights, distance)
-    d_lm = np.full_like(heights, distance)
-    d_ct = np.full_like(heights, 50000)
-    d_cr = np.full_like(heights, 50000)
-
-    # radiomet data:
-    # get path centers for each pair of pixels (0 - i)
-    mid_idx = [i // 2 for i in range(len(distances))]
-    lon_mids = lons[mid_idx]
-    lat_mids = lats[mid_idx]
-
-    delta_N, beta0, N0 = helper._radiomet_data_for_pathcenter(
-        lon_mids, lat_mids, d_tm, d_lm
-        )
-
-    hprof_data = {}
-    hprof_data['lons'] = lons  # <-- ignored
-    hprof_data['lats'] = lats  # <-- ignored
-    hprof_data['lon_mids'] = lon_mids  # <-- ignored
-    hprof_data['lat_mids'] = lat_mids  # <-- ignored
-    hprof_data['distances'] = distances
-    hprof_data['heights'] = heights
-    hprof_data['zheights'] = np.zeros_like(heights)
-    hprof_data['bearing'] = bearing  # <-- scalar
-    hprof_data['backbearings'] = backbearings
-    hprof_data['omega'] = omega
-    hprof_data['d_tm'] = d_tm
-    hprof_data['d_lm'] = d_lm
-    hprof_data['d_ct'] = d_ct
-    hprof_data['d_cr'] = d_cr
-    hprof_data['zone_t'] = zone_t  # <-- scalar
-    hprof_data['zone_r'] = np.full(heights.shape, zone_r, dtype=np.int32)
-    hprof_data['delta_N'] = delta_N
-    hprof_data['N0'] = N0
-    hprof_data['beta0'] = beta0
-
-    return hprof_data
-
-
 def atten_path_fast_cython(
         double freq,
         double temperature,
@@ -2618,37 +2522,55 @@ def atten_path_fast_cython(
         ):
 
     '''
-    import numpy as np
-    import matplotlib.pyplot as plt
-    from pycraf import pathprof
+    Calculate attenuation along a path using a parallelized method.
 
+    Parameters
+    ----------
+    freq : double
+        Frequency of radiation [GHz]
+    temperature : double
+        Temperature (K)
+    pressure : double
+        Pressure (hPa)
+    h_tg, h_rg : double
+        Transmitter/receiver heights over ground [m]
+    timepercent : double
+        Time percentage [%] (maximal 50%)
+    hprof_data : dict, dict-like
+        Dictionary with height profile auxillary data as
+        calculated with `~pycraf.pathprof.height_path_data`.
+    polarization : int, optional
+        Polarization (default: 0)
+        Allowed values are: 0 - horizontal, 1 - vertical
+    version : int, optional
+        ITU-R Rec. P.452 version. Allowed values are: 14, 16
 
-    freq = 1.
-    temperature = 290.
-    pressure = 1013.
-    h_tg, h_rg = 5., 50.
-    time_percent = 2.
+    Returns
+    -------
+    atten_path : 2D `~numpy.ndarray`
+        Attenuation values along path. First dimension has length 6,
+        which refers to:
 
-    lon_t, lat_t = 6.8836, 50.525
-    lon_r, lat_r = 7.3334, 50.635
-    hprof_step = 100
+        0) L_bfsg - Free-space loss [dB]
+        1) L_bd - Basic transmission loss associated with diffraction
+           not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
+        2) L_bs - Tropospheric scatter loss [dB]
+        3) L_ba - Ducting/layer reflection loss [dB]
+        4) L_b - Complete path propagation loss [dB]
+        5) L_b_corr - As L_b but with clutter correction [dB]
 
-    hprof_data = pathprof.cyprop.height_path_data_cython(
-        lon_t, lat_t, lon_r, lat_r, hprof_step,
-        zone_t=pathprof.CLUTTER.URBAN, zone_r=pathprof.CLUTTER.SUBURBAN,
-        )
+        (i.e., the output of path_attenuation_complete without
+        gain-corrected values)
+    eps_pt_path : 1D `~numpy.ndarray`
+        Elevation angles along path w.r.t. Tx [deg]
+    eps_pr_path : 1D `~numpy.ndarray`
+        Elevation angles along path w.r.t. Rx [deg]
 
-    atten_path, eps_pt_path, eps_pr_path = pathprof.cyprop.atten_path_fast_cython(
-        freq, temperature, pressure,
-        h_tg, h_rg, time_percent,
-        hprof_data,
-        )
-
-    plt.plot(hprof_data['distances'], atten_path[-1], 'k-')
-    plt.ylim((50, 350))
-    plt.grid()
-    plt.show()
-
+    Notes
+    -----
+    - The diffraction-loss algorithm was changed between ITU-R P.452
+      version 14 and 15. The former used a Deygout method, the new one
+      is based on a Bullington calculation with correction terms.
     '''
 
     # TODO: implement map-based clutter handling; currently, only a single
@@ -2670,9 +2592,7 @@ def atten_path_fast_cython(
 
         double[::1] distances_v = _cf(hprof_data['distances'])
         double[::1] heights_v = _cf(hprof_data['heights'])
-        double[::1] zheights_v = _cf(hprof_data['zheights'])
-        double bearing = hprof_data['bearing']
-        double[::1] backbearings_v = _cf(hprof_data['backbearings'])
+        double[::1] zheights_v = np.zeros_like(_cf(hprof_data['heights']))
         double[::1] omega_v = _cf(hprof_data['omega'])
         double[::1] d_tm_v = _cf(hprof_data['d_tm'])
         double[::1] d_lm_v = _cf(hprof_data['d_lm'])
@@ -2699,15 +2619,14 @@ def atten_path_fast_cython(
         double[:] eps_pr_path_v = eps_pr_path
 
     assert (
-        # lon_v.size == lat_v.size ==
         distances_v.size == heights_v.size == zheights_v.size ==
-        backbearings_v.size ==
         omega_v.size ==
         d_tm_v.size == d_lm_v.size == d_ct_v.size == d_cr_v.size ==
         zone_r_v.size
         )
     assert zone_t >= -1 and zone_t <= 11
-    assert np.all(hprof_data['zone_r'] >= -1) and np.all(hprof_data['zone_r'] <= 11)
+    assert np.all(hprof_data['zone_r'] >= -1)
+    assert np.all(hprof_data['zone_r'] <= 11)
 
     with nogil, parallel():
 
@@ -2720,14 +2639,11 @@ def atten_path_fast_cython(
         pp.wavelen = 0.299792458 / freq
         pp.temperature = temperature
         pp.pressure = pressure
-        # pp.lon_t = lon_v[0]
-        # pp.lat_t = lat_v[0]
         pp.zone_t = zone_t
         pp.h_tg = h_tg
         pp.h_rg = h_rg
         pp.h_tg_in = h_tg
         pp.h_rg_in = h_rg
-        pp.bearing = bearing
 
         pp.hprof_step = 30.  # dummy
         pp.time_percent = time_percent
@@ -2737,8 +2653,6 @@ def atten_path_fast_cython(
         # attens for the first 5 or so steps; start at index 6
         for i in prange(6, max_path_length, schedule='guided', chunksize=10):
 
-            # pp.lon_r = lon_v[i]
-            # pp.lat_r = lat_v[i]
             pp.zone_r = zone_r_v[i]
 
             if pp.zone_t == CLUTTER.UNKNOWN:
@@ -2762,16 +2676,9 @@ def atten_path_fast_cython(
             pp.N0 = N0_v[i]
 
             pp.distance = distances_v[i]
-            pp.back_bearing = backbearings_v[i]
-
-            # pp.lon_mid = lon_v[i // 2]
-            # pp.lat_mid = lat_v[i // 2]
 
             _process_path(
                 pp,
-                # dists_v,
-                # heights_v,
-                # zheights_v,
                 distances_v[0:i + 1],
                 heights_v[0:i + 1],
                 zheights_v[0:i + 1],

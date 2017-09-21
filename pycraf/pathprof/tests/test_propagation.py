@@ -504,6 +504,139 @@ class TestPropagation:
             assert_allclose(true_dat['eps_pt_map'], eps_pt_map)
             assert_allclose(true_dat['eps_pr_map'], eps_pr_map)
 
+    def test_atten_path_fast(self):
+
+        # testing against the slow approach
+
+        lon_t, lat_t = 6.8836 * apu.deg, 50.525 * apu.deg
+        lon_r, lat_r = 7.3334 * apu.deg, 50.635 * apu.deg
+        hprof_step = 100 * apu.m
+
+        freq = 1. * apu.GHz
+        temperature = 290. * apu.K
+        pressure = 1013. * apu.hPa
+        h_tg, h_rg = 5. * apu.m, 50. * apu.m
+        time_percent = 2. * apu.percent
+
+        zone_t, zone_r = pathprof.CLUTTER.URBAN, pathprof.CLUTTER.SUBURBAN
+
+        hprof_data = pathprof.height_path_data(
+            lon_t, lat_t, lon_r, lat_r, hprof_step,
+            zone_t=zone_t, zone_r=zone_r,
+            )
+
+        atten_path_f, eps_pt_path_f, eps_pr_path_f = pathprof.atten_path_fast(
+            freq, temperature, pressure,
+            h_tg, h_rg, time_percent,
+            hprof_data,
+            )
+
+        (
+            lons, lats, distance, distances, heights,
+            bearing, back_bearing, back_bearings
+            ) = pathprof.srtm_height_profile(
+                lon_t, lat_t, lon_r, lat_r, hprof_step
+                )
+
+        atten_path = np.zeros((6, len(distances)), dtype=np.float64)
+        eps_pt_path = np.zeros((len(distances)), dtype=np.float64)
+        eps_pr_path = np.zeros((len(distances)), dtype=np.float64)
+
+        for idx in range(6, len(distances)):
+
+            pprop = pathprof.PathProp(
+                freq,
+                temperature, pressure,
+                lon_t, lat_t,
+                lons[idx], lats[idx],
+                h_tg, h_rg,
+                hprof_step,
+                time_percent,
+                zone_t=zone_t, zone_r=zone_r,
+                hprof_dists=distances[:idx + 1],
+                hprof_heights=heights[:idx + 1],
+                hprof_bearing=bearing,
+                hprof_backbearing=back_bearings[idx],
+                # delta_N=hprof_data['delta_N'][idx] * cnv.dimless / apu.km,
+                # N0=hprof_data['N0'][idx] * cnv.dimless,
+                )
+
+            eps_pt_path[idx] = pprop.eps_pt.value
+            eps_pr_path[idx] = pprop.eps_pr.value
+            tot_loss = pathprof.loss_complete(pprop)
+            atten_path[:, idx] = apu.Quantity(tot_loss).value[:-1]
+
+        assert np.allclose(atten_path, atten_path_f.value, atol=1.e-3)
+        assert np.allclose(eps_pt_path, eps_pt_path_f.value, atol=1.e-6)
+        assert np.allclose(eps_pr_path, eps_pr_path_f.value, atol=1.e-6)
+
+    def test_atten_path_fast_generic(self):
+
+        # testing against the slow approach
+
+        hprof_step = 100 * apu.m
+        lon_mid, lat_mid = 6 * apu.deg, 50 * apu.deg
+        lon_t = lon_mid - 0.5 * apu.deg
+        lon_r = lon_mid + 0.5 * apu.deg
+
+        freq = 1. * apu.GHz
+        temperature = 290. * apu.K
+        pressure = 1013. * apu.hPa
+        h_tg, h_rg = 5. * apu.m, 50. * apu.m
+        time_percent = 2. * apu.percent
+
+        (
+            lons, lats, distance, distances, heights,
+            bearing, back_bearing, back_bearings
+            ) = pathprof.srtm_height_profile(
+                lon_t, lat_mid, lon_r, lat_mid, hprof_step
+                )
+
+        zone_t, zone_r = pathprof.CLUTTER.URBAN, pathprof.CLUTTER.SUBURBAN
+
+        hprof_data = pathprof.height_path_data_generic(
+            distance, hprof_step, lon_mid, lat_mid,
+            zone_t=zone_t, zone_r=zone_r,
+            )
+
+        atten_path_f, eps_pt_path_f, eps_pr_path_f = pathprof.atten_path_fast(
+            freq, temperature, pressure,
+            h_tg, h_rg, time_percent,
+            hprof_data,
+            )
+
+        atten_path = np.zeros((6, len(distances)), dtype=np.float64)
+        eps_pt_path = np.zeros((len(distances)), dtype=np.float64)
+        eps_pr_path = np.zeros((len(distances)), dtype=np.float64)
+
+        for idx in range(6, len(distances)):
+
+            pprop = pathprof.PathProp(
+                freq,
+                temperature, pressure,
+                lon_t, lat_mid,
+                lons[idx], lats[idx],
+                h_tg, h_rg,
+                hprof_step,
+                time_percent,
+                zone_t=zone_t, zone_r=zone_r,
+                hprof_dists=distances[:idx + 1],
+                hprof_heights=0 * heights[:idx + 1],
+                hprof_bearing=bearing,
+                hprof_backbearing=back_bearings[idx],
+                delta_N=hprof_data['delta_N'][idx] * cnv.dimless / apu.km,
+                N0=hprof_data['N0'][idx] * cnv.dimless,
+                )
+
+            eps_pt_path[idx] = pprop.eps_pt.value
+            eps_pr_path[idx] = pprop.eps_pr.value
+            tot_loss = pathprof.loss_complete(pprop)
+            atten_path[:, idx] = apu.Quantity(tot_loss).value[:-1]
+
+        assert np.allclose(atten_path, atten_path_f.value, atol=1.e-3)
+        assert np.allclose(eps_pt_path, eps_pt_path_f.value, atol=1.e-6)
+        assert np.allclose(eps_pr_path, eps_pr_path_f.value, atol=1.e-6)
+
 
 def test_clutter_correction():
 

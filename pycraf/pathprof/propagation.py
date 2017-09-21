@@ -10,6 +10,8 @@ from astropy import units as apu
 import numpy as np
 
 from . import cyprop
+from . import heightprofile
+from . import helper
 from .. import conversions as cnv
 from .. import utils
 # import ipdb
@@ -21,6 +23,7 @@ __all__ = [
     'loss_diffraction', 'loss_complete',
     'clutter_correction', 'clutter_imt',
     'height_map_data', 'atten_map_fast',
+    'height_path_data', 'height_path_data_generic', 'atten_path_fast',
     ]
 
 # Note, we have to curry the quantities here, because Cython produces
@@ -700,6 +703,9 @@ def height_map_data(
           Longitude and latitude path center coordinates for each pixel
           w.r.t. map center.
 
+          This is returned for information, only. It is not
+          needed by `~pycraf.atten_map_fast`!
+
         - "dist_map" : `~numpy.ndarray` 2D (float; (mx, my))
 
           Distances to map center for each pixel.
@@ -724,6 +730,9 @@ def height_map_data(
         - "bearing_map", "back_bearing_map" : `~numpy.ndarray` 2D (float; (mx, my))
 
           The `bearing` and `backbearing` values for each pixel in the map.
+
+          This is returned for information, only. It is not
+          needed by `~pycraf.atten_map_fast`!
 
         - "N0_map", "delta_N_map", "beta0_map" : `~numpy.ndarray` 2D (float; (mx, my))
 
@@ -857,6 +866,462 @@ def atten_map_fast(
     '''
 
     return cyprop.atten_map_fast_cython(
+        freq,
+        temperature,
+        pressure,
+        h_tg, h_rg,
+        timepercent,
+        hprof_data,  # dict_like
+        polarization=polarization,
+        version=version,
+        )
+
+
+@utils.ranged_quantity_input(
+    lon_t=(-180, 180, apu.deg),
+    lat_t=(-90, 90, apu.deg),
+    lon_r=(-180, 180, apu.deg),
+    lat_r=(-90, 90, apu.deg),
+    step=(1., 1.e5, apu.m),
+    strip_input_units=True,
+    )
+def height_path_data(
+        lon_t, lat_t,
+        lon_r, lat_r,
+        step,
+        zone_t=cyprop.CLUTTER.UNKNOWN, zone_r=cyprop.CLUTTER.UNKNOWN,
+        ):
+
+    '''
+    Calculate height profile auxillary data needed for
+    `~pycraf.pathprof.atten_path_fast`.
+
+    This can be used to cache height-profile data. Since it is independent
+    of frequency, timepercent, Tx and Rx heights, etc., one can re-use
+    it to save computing time when doing batch jobs. It is assumed that
+    the Tx is at a fixed position, while the Rx "moves" accross the
+    specified paths (since the attenuation is completely symmetric,
+    this is without loss of generality).
+
+    Parameters
+    ----------
+    lon_t, lat_t : double
+        Geographic longitude/latitude of start point (transmitter) [deg]
+    lon_r, lat_r : double
+        Geographic longitude/latitude of end point (receiver) [deg]
+    step : double
+        Distance resolution of height profile along path [m]
+    zone_t, zone_r : CLUTTER enum, optional
+        Clutter type for transmitter/receiver terminal.
+        (default: CLUTTER.UNKNOWN)
+
+    Returns
+    -------
+    hprof_data : dict
+        Dictionary with height profile auxillary data.
+
+        The dictionary contains the following entities (the path length
+        is m):
+
+        - "lons", "lats" : `~numpy.ndarray` 1D (float; (m,))
+
+          Longitudes and latitudes of path.
+
+          This is returned for information, only. It is not
+          needed by `~pycraf.pathprof.atten_path_fast`!
+
+        - "lon_mids", "lat_mids" : `~numpy.ndarray` 1D (float; (m,))
+
+          Path center longitudes and latitudes of path. The values
+          at index `i` in these arrays are the midpoints of the
+          paths from `lons[0]` to `lons[i]` (likewise for `lats`).
+
+          This is returned for information, only. It is not
+          needed by `~pycraf.pathprof.atten_path_fast`!
+
+        - "distances" : `~numpy.ndarray` 1D (float; (m,))
+
+          Distances of each point in the path from Tx position.
+
+        - "heights" : `~numpy.ndarray` 1D (float; (m,))
+
+          Height profile.
+
+        - "bearing" : float
+
+          Start bearing of path.
+
+          This is returned for information, only. It is not
+          needed by `~pycraf.pathprof.atten_path_fast`!
+
+        - "backbearings" : `~numpy.ndarray` 1D (float; (m,))
+
+          Back-bearing of each point in the path.
+
+          This is returned for information, only. It is not
+          needed by `~pycraf.pathprof.atten_path_fast`!
+
+        - "omega" : `~numpy.ndarray` 1D (float; (m,))
+
+          The `omega` values for each point in the path.
+
+        - "d_tm", "d_lm" : `~numpy.ndarray` 1D (float; (m,))
+
+          The `d_tm` and `d_lm` values for each point in the path.
+
+        - "d_ct", "d_cr" : `~numpy.ndarray` 1D (float; (m,))
+
+          The `d_ct` and `d_cr` values for each point in the path.
+
+        - "zone_t" : int
+
+          Clutter type at Tx.
+
+        - "zone_r" : `~numpy.ndarray` 1D (int; (m,))
+
+          Clutter type at Rx. (Currently only a single type is used.)
+
+        - "N0", "delta_N", "beta0" : `~numpy.ndarray` 1D (float; (m,))
+
+          The `N0`, `delta_N`, and `beta0` values for each point in the path.
+
+    Notes
+    -----
+    Currently, no sea or lake bodies are accounted for. Also the clutter
+    type of the receiver is fixed, while one could also think of using
+    different clutter types (in the array). You can modify the returned
+    arrays in `hprof_data`, of course, before feeding into
+    `~pycraf.pathprof.atten_path_fast`.
+    '''
+
+    (
+        lons, lats, distance, distances, heights,
+        bearing, back_bearing, backbearings
+        ) = heightprofile._srtm_height_profile(
+            lon_t, lat_t, lon_r, lat_r, step
+            )
+
+    # TODO: query the following programmatically
+    # for now assume land-paths, only
+    omega = np.zeros_like(heights)
+    d_tm = distances.copy()
+    d_lm = distances.copy()
+    d_ct = np.full_like(heights, 50000)
+    d_cr = np.full_like(heights, 50000)
+
+    # radiomet data:
+    # get path centers for each pair of pixels (0 - i)
+    mid_idx = [i // 2 for i in range(len(distances))]
+    lon_mids = lons[mid_idx]
+    lat_mids = lats[mid_idx]
+
+    delta_N, beta0, N0 = helper._radiomet_data_for_pathcenter(
+        lon_mids, lat_mids, d_tm, d_lm
+        )
+
+    hprof_data = {}
+    hprof_data['lons'] = lons  # <-- ignored
+    hprof_data['lats'] = lats  # <-- ignored
+    hprof_data['lon_mids'] = lon_mids  # <-- ignored
+    hprof_data['lat_mids'] = lat_mids  # <-- ignored
+    hprof_data['distances'] = distances
+    hprof_data['heights'] = heights
+    # hprof_data['zheights'] = np.zeros_like(heights)
+    hprof_data['bearing'] = bearing  # <-- scalar
+    hprof_data['backbearings'] = backbearings
+    hprof_data['omega'] = omega
+    hprof_data['d_tm'] = d_tm
+    hprof_data['d_lm'] = d_lm
+    hprof_data['d_ct'] = d_ct
+    hprof_data['d_cr'] = d_cr
+    hprof_data['zone_t'] = zone_t  # <-- scalar
+    hprof_data['zone_r'] = np.full(heights.shape, zone_r, dtype=np.int32)
+    hprof_data['delta_N'] = delta_N
+    hprof_data['N0'] = N0
+    hprof_data['beta0'] = beta0
+
+    return hprof_data
+
+
+@utils.ranged_quantity_input(
+    distance=(0, None, apu.km),
+    step=(1., 1.e5, apu.m),
+    lon_mid=(-180, 360, apu.deg),
+    lat_mid=(-90, 90, apu.deg),
+    strip_input_units=True,
+    )
+def height_path_data_generic(
+        distance, step,
+        lon_mid, lat_mid,
+        zone_t=cyprop.CLUTTER.UNKNOWN, zone_r=cyprop.CLUTTER.UNKNOWN,
+        ):
+
+    '''
+    Calculate height profile auxillary data needed for
+    `~pycraf.pathprof.atten_path_fast`.
+
+    This can be used to cache height-profile data. Since it is independent
+    of frequency, timepercent, Tx and Rx heights, etc., one can re-use
+    it to save computing time when doing batch jobs. It is assumed that
+    the Tx is at a fixed position, while the Rx "moves" accross the
+    specified paths (since the attenuation is completely symmetric,
+    this is without loss of generality).
+
+    Parameters
+    ----------
+    distance : double
+        Maximal path length [km]
+    step : double
+        Distance resolution of height profile along path [m]
+    lon_mid, lat_mid : double
+        Geographic longitude/latitude of path's mid point [deg]
+
+        This is needed to query radiometerological values.
+    zone_t, zone_r : CLUTTER enum, optional
+        Clutter type for transmitter/receiver terminal.
+        (default: CLUTTER.UNKNOWN)
+
+    Returns
+    -------
+    hprof_data : dict
+        Dictionary with height profile auxillary data.
+
+        The dictionary contains the following entities (the path length
+        is m):
+
+        - "lons", "lats" : `~numpy.ndarray` 1D (float; (m,))
+
+          Longitudes and latitudes of path.
+
+          This is returned for information, only. It is not
+          needed by `~pycraf.pathprof.atten_path_fast`!
+
+        - "lon_mids", "lat_mids" : `~numpy.ndarray` 1D (float; (m,))
+
+          Path center longitudes and latitudes of path. The values
+          at index `i` in these arrays are the midpoints of the
+          paths from `lons[0]` to `lons[i]` (likewise for `lats`).
+
+          This is returned for information, only. It is not
+          needed by `~pycraf.pathprof.atten_path_fast`!
+
+        - "distances" : `~numpy.ndarray` 1D (float; (m,))
+
+          Distances of each point in the path from Tx position.
+
+        - "heights" : `~numpy.ndarray` 1D (float; (m,))
+
+          Height profile.
+
+        - "bearing" : float
+
+          Start bearing of path.
+
+          This is returned for information, only. It is not
+          needed by `~pycraf.pathprof.atten_path_fast`!
+
+        - "backbearings" : `~numpy.ndarray` 1D (float; (m,))
+
+          Back-bearing of each point in the path.
+
+          This is returned for information, only. It is not
+          needed by `~pycraf.pathprof.atten_path_fast`!
+
+        - "omega" : `~numpy.ndarray` 1D (float; (m,))
+
+          The `omega` values for each point in the path.
+
+        - "d_tm", "d_lm" : `~numpy.ndarray` 1D (float; (m,))
+
+          The `d_tm` and `d_lm` values for each point in the path.
+
+        - "d_ct", "d_cr" : `~numpy.ndarray` 1D (float; (m,))
+
+          The `d_ct` and `d_cr` values for each point in the path.
+
+        - "zone_t" : int
+
+          Clutter type at Tx.
+
+        - "zone_r" : `~numpy.ndarray` 1D (int; (m,))
+
+          Clutter type at Rx. (Currently only a single type is used.)
+
+        - "N0", "delta_N", "beta0" : `~numpy.ndarray` 1D (float; (m,))
+
+          The `N0`, `delta_N`, and `beta0` values for each point in the path.
+
+    Notes
+    -----
+    Currently, no sea or lake bodies are accounted for. Also the clutter
+    type of the receiver is fixed, while one could also think of using
+    different clutter types (in the array). You can modify the returned
+    arrays in `hprof_data`, of course, before feeding into
+    `~pycraf.pathprof.atten_path_fast`.
+    '''
+
+    step /= 1000.
+    distances = np.arange(0, distance + step, step)
+    heights = np.zeros_like(distances)
+
+    # TODO: query the following programmatically
+    # for now assume land-paths, only
+    omega = heights.copy()
+    d_tm = distances.copy()
+    d_lm = distances.copy()
+    d_ct = np.full_like(heights, 50000)
+    d_cr = np.full_like(heights, 50000)
+
+    # radiomet data:
+    # assume all points on path have equal radiomet values
+    lon_mids = np.full_like(heights, lon_mid)
+    lat_mids = np.full_like(heights, lat_mid)
+
+    delta_N, beta0, N0 = helper._radiomet_data_for_pathcenter(
+        lon_mids, lat_mids, d_tm, d_lm
+        )
+
+    hprof_data = {}
+    hprof_data['distances'] = distances
+    hprof_data['heights'] = heights
+    hprof_data['omega'] = omega
+    hprof_data['d_tm'] = d_tm
+    hprof_data['d_lm'] = d_lm
+    hprof_data['d_ct'] = d_ct
+    hprof_data['d_cr'] = d_cr
+    hprof_data['zone_t'] = zone_t  # <-- scalar
+    hprof_data['zone_r'] = np.full(heights.shape, zone_r, dtype=np.int32)
+    hprof_data['delta_N'] = delta_N
+    hprof_data['N0'] = N0
+    hprof_data['beta0'] = beta0
+
+    return hprof_data
+
+
+@utils.ranged_quantity_input(
+    freq=(0.1, 100, apu.GHz),
+    temperature=(None, None, apu.K),
+    pressure=(None, None, apu.hPa),
+    h_tg=(None, None, apu.m),
+    h_rg=(None, None, apu.m),
+    timepercent=(0, 50, apu.percent),
+    strip_input_units=True,
+    output_unit=(cnv.dB, apu.deg, apu.deg)
+    )
+def atten_path_fast(
+        freq,
+        temperature,
+        pressure,
+        h_tg, h_rg,
+        timepercent,
+        hprof_data,  # dict_like
+        polarization=0,
+        version=16,
+        ):
+    '''
+    Calculate attenuation along a path using a parallelized method.
+
+    Parameters
+    ----------
+    freq : `~astropy.units.Quantity`
+        Frequency of radiation [GHz]
+    temperature : `~astropy.units.Quantity`
+        Temperature (K)
+    pressure : `~astropy.units.Quantity`
+        Pressure (hPa)
+    h_tg, h_rg : `~astropy.units.Quantity`
+        Transmitter/receiver heights over ground [m]
+    timepercent : `~astropy.units.Quantity`
+        Time percentage [%] (maximal 50%)
+    hprof_data : dict, dict-like
+        Dictionary with height profile auxillary data as
+        calculated with `~pycraf.pathprof.height_path_data` or
+        `~pycraf.pathprof.height_path_data_generic`.
+    polarization : int, optional
+        Polarization (default: 0)
+        Allowed values are: 0 - horizontal, 1 - vertical
+    version : int, optional
+        ITU-R Rec. P.452 version. Allowed values are: 14, 16
+
+    Returns
+    -------
+    atten_path : 2D `~numpy.ndarray`
+        Attenuation values along path. First dimension has length 6,
+        which refers to:
+
+        0) L_bfsg - Free-space loss [dB]
+        1) L_bd - Basic transmission loss associated with diffraction
+           not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
+        2) L_bs - Tropospheric scatter loss [dB]
+        3) L_ba - Ducting/layer reflection loss [dB]
+        4) L_b - Complete path propagation loss [dB]
+        5) L_b_corr - As L_b but with clutter correction [dB]
+
+        (i.e., the output of path_attenuation_complete without
+        gain-corrected values)
+    eps_pt_path : 1D `~numpy.ndarray`
+        Elevation angles along path w.r.t. Tx [deg]
+    eps_pr_path : 1D `~numpy.ndarray`
+        Elevation angles along path w.r.t. Rx [deg]
+
+    Notes
+    -----
+    - The diffraction-loss algorithm was changed between ITU-R P.452
+      version 14 and 15. The former used a Deygout method, the new one
+      is based on a Bullington calculation with correction terms.
+
+    Examples
+    --------
+
+    A typical usage would be::
+
+       import numpy as np
+       import matplotlib.pyplot as plt
+       from astropy import units as u
+       from pycraf import pathprof
+
+
+       lon_t, lat_t = 6.8836 * u.deg, 50.525 * u.deg
+       lon_r, lat_r = 7.3334 * u.deg, 50.635 * u.deg
+       hprof_step = 100 * u.m
+
+       hprof_data = pathprof.height_path_data(
+           lon_t, lat_t, lon_r, lat_r, hprof_step,
+           zone_t=pathprof.CLUTTER.URBAN, zone_r=pathprof.CLUTTER.SUBURBAN,
+           )
+
+       plt.plot(hprof_data['distances'], hprof_data['heights'], 'k-')
+       plt.grid()
+       plt.show()
+
+       freq = 1. * u.GHz
+       temperature = 290. * u.K
+       pressure = 1013. * u.hPa
+       h_tg, h_rg = 5. * u.m, 50. * u.m
+       time_percent = 2. * u.percent
+
+       atten_path, eps_pt_path, eps_pr_path = pathprof.atten_path_fast(
+           freq, temperature, pressure,
+           h_tg, h_rg, time_percent,
+           hprof_data,
+           )
+
+       plt.plot(hprof_data['distances'], atten_path.T, '-')
+       plt.ylim((50, 275))
+       plt.grid()
+       plt.legend(
+           ['LOS', 'Diffraction', 'Troposcatter', 'Ducting',
+           'Total', 'Total w. clutter'
+           ], fontsize=10, loc='lower right')
+       plt.show()
+
+       plt.plot(hprof_data['distances'], eps_pt_path, 'b-')
+       plt.plot(hprof_data['distances'], eps_pr_path, 'r-')
+       plt.grid()
+       plt.show()
+    '''
+
+    return cyprop.atten_path_fast_cython(
         freq,
         temperature,
         pressure,
