@@ -86,7 +86,7 @@
 <h1>atten_path_fast<a class="headerlink" href="#atten-path-fast" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.pathprof.atten_path_fast">
-<code class="descclassname">pycraf.pathprof.</code><code class="descname">atten_path_fast</code><span class="sig-paren">(</span><em>freq</em>, <em>temperature</em>, <em>pressure</em>, <em>h_tg</em>, <em>h_rg</em>, <em>timepercent</em>, <em>hprof_data</em>, <em>polarization=0</em>, <em>version=16</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#atten_path_fast"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L1201" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.atten_path_fast" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.pathprof.</code><code class="descname">atten_path_fast</code><span class="sig-paren">(</span><em>freq</em>, <em>temperature</em>, <em>pressure</em>, <em>h_tg</em>, <em>h_rg</em>, <em>timepercent</em>, <em>hprof_data</em>, <em>polarization=0</em>, <em>version=16</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#atten_path_fast"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L1228" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.atten_path_fast" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate attenuation along a path using a parallelized method.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -129,29 +129,29 @@ Allowed values are: 0 - horizontal, 1 - vertical</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>atten_path</strong> : 2D <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a></p>
-<blockquote>
-<div><p>Attenuation values along path. First dimension has length 6,
-which refers to:</p>
-<ol class="arabic simple" start="0">
-<li>L_bfsg - Free-space loss [dB]</li>
-<li>L_bd - Basic transmission loss associated with diffraction
-not exceeded for p% time [dB]; L_bd = L_b0p + L_dp</li>
-<li>L_bs - Tropospheric scatter loss [dB]</li>
-<li>L_ba - Ducting/layer reflection loss [dB]</li>
-<li>L_b - Complete path propagation loss [dB]</li>
-<li>L_b_corr - As L_b but with clutter correction [dB]</li>
-</ol>
-<p>(i.e., the output of path_attenuation_complete without
-gain-corrected values)</p>
-</div></blockquote>
-<p><strong>eps_pt_path</strong> : 1D <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a></p>
-<blockquote>
-<div><p>Elevation angles along path w.r.t. Tx [deg]</p>
-</div></blockquote>
-<p><strong>eps_pr_path</strong> : 1D <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>results</strong> : dict</p>
 <blockquote class="last">
-<div><p>Elevation angles along path w.r.t. Rx [deg]</p>
+<div><p>Results of the path attenuation calculation. Each entry
+in the dictionary is a 1D <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> containing
+the associated value for the path.
+The following entries are contained:</p>
+<ul class="simple">
+<li><code class="xref py py-obj docutils literal"><span class="pre">L_bfsg</span></code> - Free-space loss [dB]</li>
+<li><dl class="first docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">L_bd</span></code> - Basic transmission loss associated with diffraction</dt>
+<dd>not exceeded for p% time [dB]; L_bd = L_b0p + L_dp</dd>
+</dl>
+</li>
+<li><code class="xref py py-obj docutils literal"><span class="pre">L_bs</span></code> - Tropospheric scatter loss [dB]</li>
+<li><code class="xref py py-obj docutils literal"><span class="pre">L_ba</span></code> - Ducting/layer reflection loss [dB]</li>
+<li><code class="xref py py-obj docutils literal"><span class="pre">L_b</span></code> - Complete path propagation loss [dB]</li>
+<li><code class="xref py py-obj docutils literal"><span class="pre">L_b_corr</span></code> - As L_b but with clutter correction [dB]</li>
+<li><code class="xref py py-obj docutils literal"><span class="pre">eps_pt</span></code> - Elevation angle of paths w.r.t. Tx [deg]</li>
+<li><code class="xref py py-obj docutils literal"><span class="pre">eps_pr</span></code> - Elevation angle of paths w.r.t. Rx [deg]</li>
+<li><code class="xref py py-obj docutils literal"><span class="pre">d_lt</span></code> - Distance to horizon w.r.t. Tx [km]</li>
+<li><code class="xref py py-obj docutils literal"><span class="pre">d_lr</span></code> - Distance to horizon w.r.t. Rx [km]</li>
+<li><code class="xref py py-obj docutils literal"><span class="pre">path_type</span></code> - Path type (0 - LoS, 1 - Trans-horizon)</li>
+</ul>
 </div></blockquote>
 </td>
 </tr>
@@ -162,6 +162,8 @@ gain-corrected values)</p>
 <li>The diffraction-loss algorithm was changed between ITU-R P.452
 version 14 and 15. The former used a Deygout method, the new one
 is based on a Bullington calculation with correction terms.</li>
+<li>In future versions, more entries may be added to the results
+dictionary.</li>
 </ul>
 <p class="rubric">Examples</p>
 <p>A typical usage would be:</p>
@@ -189,13 +191,15 @@ is based on a Bullington calculation with correction terms.</li>
 <span class="n">h_tg</span><span class="p">,</span> <span class="n">h_rg</span> <span class="o">=</span> <span class="mf">5.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mf">50.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
 <span class="n">time_percent</span> <span class="o">=</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span>
 
-<span class="n">atten_path</span><span class="p">,</span> <span class="n">eps_pt_path</span><span class="p">,</span> <span class="n">eps_pr_path</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">atten_path_fast</span><span class="p">(</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">atten_path_fast</span><span class="p">(</span>
     <span class="n">freq</span><span class="p">,</span> <span class="n">temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span>
     <span class="n">h_tg</span><span class="p">,</span> <span class="n">h_rg</span><span class="p">,</span> <span class="n">time_percent</span><span class="p">,</span>
     <span class="n">hprof_data</span><span class="p">,</span>
     <span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;distances&#39;</span><span class="p">],</span> <span class="n">atten_path</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;L_bfsg&#39;</span><span class="p">,</span> <span class="s1">&#39;L_bd&#39;</span><span class="p">,</span> <span class="s1">&#39;L_bs&#39;</span><span class="p">,</span> <span class="s1">&#39;L_ba&#39;</span><span class="p">,</span> <span class="s1">&#39;L_b&#39;</span><span class="p">,</span> <span class="s1">&#39;L_b_corr&#39;</span><span class="p">]:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hprof_data</span><span class="p">[</span><span class="s1">&#39;distances&#39;</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+
 <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">((</span><span class="mi">50</span><span class="p">,</span> <span class="mi">275</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
@@ -237,8 +241,8 @@ is based on a Bullington calculation with correction terms.</li>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 21 Sep 2017. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4. &nbsp;
+    Last built 13 Oct 2017. <br/>
   </p>
 </footer>
   </body>

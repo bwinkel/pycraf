@@ -874,7 +874,6 @@
     <span class="n">h_rg</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
     <span class="n">timepercent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">)</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">atten_map_fast</span><span class="p">(</span>
         <span class="n">freq</span><span class="p">,</span>
@@ -902,8 +901,9 @@
 <span class="sd">    timepercent : `~astropy.units.Quantity`</span>
 <span class="sd">        Time percentage [%] (maximal 50%)</span>
 <span class="sd">    hprof_data : dict, dict-like</span>
-<span class="sd">        Dictionary with height profiles and auxillary maps as</span>
-<span class="sd">        calculated with `~pycraf.pathprof.height_map_data`.</span>
+<span class="sd">        Dictionary with height profiles and auxillary maps</span>
+<span class="sd">        of dimension `(my, mx)` as calculated with</span>
+<span class="sd">        `~pycraf.pathprof.height_map_data`.</span>
 <span class="sd">    polarization : int, optional</span>
 <span class="sd">        Polarization (default: 0)</span>
 <span class="sd">        Allowed values are: 0 - horizontal, 1 - vertical</span>
@@ -912,32 +912,45 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    atten_map : 3D `~numpy.ndarray`</span>
-<span class="sd">        Attenuation maps. First dimension has length 6, which refers to:</span>
+<span class="sd">    results : dict</span>
+<span class="sd">        Results of the path attenuation calculation. Each entry</span>
+<span class="sd">        in the dictionary is a 2D `~numpy.ndarray` containing</span>
+<span class="sd">        the associated value for the map of dimension `(my, mx)`.</span>
+<span class="sd">        The following entries are contained:</span>
 
-<span class="sd">        0) L_bfsg - Free-space loss [dB]</span>
-<span class="sd">        1) L_bd - Basic transmission loss associated with diffraction</span>
-<span class="sd">           not exceeded for p% time [dB]; L_bd = L_b0p + L_dp</span>
-<span class="sd">        2) L_bs - Tropospheric scatter loss [dB]</span>
-<span class="sd">        3) L_ba - Ducting/layer reflection loss [dB]</span>
-<span class="sd">        4) L_b - Complete path propagation loss [dB]</span>
-<span class="sd">        5) L_b_corr - As L_b but with clutter correction [dB]</span>
+<span class="sd">        - `L_bfsg` - Free-space loss [dB]</span>
 
-<span class="sd">        (i.e., the output of path_attenuation_complete without</span>
-<span class="sd">        gain-corrected values)</span>
-<span class="sd">    eps_pt_map : 2D `~numpy.ndarray`</span>
-<span class="sd">        Elevation angle of paths w.r.t. Tx [deg]</span>
-<span class="sd">    eps_pr_map : 2D `~numpy.ndarray`</span>
-<span class="sd">        Elevation angle of paths w.r.t. Rx [deg]</span>
+<span class="sd">        - `L_bd` - Basic transmission loss associated with diffraction</span>
+<span class="sd">            not exceeded for p% time [dB]; L_bd = L_b0p + L_dp</span>
+
+<span class="sd">        - `L_bs` - Tropospheric scatter loss [dB]</span>
+
+<span class="sd">        - `L_ba` - Ducting/layer reflection loss [dB]</span>
+
+<span class="sd">        - `L_b` - Complete path propagation loss [dB]</span>
+
+<span class="sd">        - `L_b_corr` - As L_b but with clutter correction [dB]</span>
+
+<span class="sd">        - `eps_pt` - Elevation angle of paths w.r.t. Tx [deg]</span>
+
+<span class="sd">        - `eps_pr` - Elevation angle of paths w.r.t. Rx [deg]</span>
+
+<span class="sd">        - `d_lt` - Distance to horizon w.r.t. Tx [km]</span>
+
+<span class="sd">        - `d_lr` - Distance to horizon w.r.t. Rx [km]</span>
+
+<span class="sd">        - `path_type` - Path type (0 - LoS, 1 - Trans-horizon)</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    - The diffraction-loss algorithm was changed between ITU-R P.452</span>
 <span class="sd">      version 14 and 15. The former used a Deygout method, the new one</span>
 <span class="sd">      is based on a Bullington calculation with correction terms.</span>
+<span class="sd">    - In future versions, more entries may be added to the results</span>
+<span class="sd">      dictionary.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="k">return</span> <span class="n">cyprop</span><span class="o">.</span><span class="n">atten_map_fast_cython</span><span class="p">(</span>
+    <span class="n">float_res</span><span class="p">,</span> <span class="n">int_res</span> <span class="o">=</span> <span class="n">cyprop</span><span class="o">.</span><span class="n">atten_map_fast_cython</span><span class="p">(</span>
         <span class="n">freq</span><span class="p">,</span>
         <span class="n">temperature</span><span class="p">,</span>
         <span class="n">pressure</span><span class="p">,</span>
@@ -946,7 +959,21 @@
         <span class="n">hprof_data</span><span class="p">,</span>  <span class="c1"># dict_like</span>
         <span class="n">polarization</span><span class="o">=</span><span class="n">polarization</span><span class="p">,</span>
         <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
-        <span class="p">)</span></div>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;L_bfsg&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
+        <span class="s1">&#39;L_bd&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
+        <span class="s1">&#39;L_bs&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
+        <span class="s1">&#39;L_ba&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
+        <span class="s1">&#39;L_b&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
+        <span class="s1">&#39;L_b_corr&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
+        <span class="s1">&#39;eps_pt&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span>
+        <span class="s1">&#39;eps_pr&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span>
+        <span class="s1">&#39;d_lt&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span>
+        <span class="s1">&#39;d_lr&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span>
+        <span class="s1">&#39;path_type&#39;</span><span class="p">:</span> <span class="n">int_res</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="p">}</span></div>
 
 
 <div class="viewcode-block" id="height_path_data"><a class="viewcode-back" href="../../../api/pycraf.pathprof.height_path_data.html#pycraf.pathprof.height_path_data">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
@@ -1278,7 +1305,6 @@
     <span class="n">h_rg</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
     <span class="n">timepercent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">)</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">atten_path_fast</span><span class="p">(</span>
         <span class="n">freq</span><span class="p">,</span>
@@ -1317,83 +1343,97 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    atten_path : 2D `~numpy.ndarray`</span>
-<span class="sd">        Attenuation values along path. First dimension has length 6,</span>
-<span class="sd">        which refers to:</span>
+<span class="sd">    results : dict</span>
+<span class="sd">        Results of the path attenuation calculation. Each entry</span>
+<span class="sd">        in the dictionary is a 1D `~numpy.ndarray` containing</span>
+<span class="sd">        the associated value for the path.</span>
+<span class="sd">        The following entries are contained:</span>
 
-<span class="sd">        0) L_bfsg - Free-space loss [dB]</span>
-<span class="sd">        1) L_bd - Basic transmission loss associated with diffraction</span>
-<span class="sd">           not exceeded for p% time [dB]; L_bd = L_b0p + L_dp</span>
-<span class="sd">        2) L_bs - Tropospheric scatter loss [dB]</span>
-<span class="sd">        3) L_ba - Ducting/layer reflection loss [dB]</span>
-<span class="sd">        4) L_b - Complete path propagation loss [dB]</span>
-<span class="sd">        5) L_b_corr - As L_b but with clutter correction [dB]</span>
+<span class="sd">        - `L_bfsg` - Free-space loss [dB]</span>
 
-<span class="sd">        (i.e., the output of path_attenuation_complete without</span>
-<span class="sd">        gain-corrected values)</span>
-<span class="sd">    eps_pt_path : 1D `~numpy.ndarray`</span>
-<span class="sd">        Elevation angles along path w.r.t. Tx [deg]</span>
-<span class="sd">    eps_pr_path : 1D `~numpy.ndarray`</span>
-<span class="sd">        Elevation angles along path w.r.t. Rx [deg]</span>
+<span class="sd">        - `L_bd` - Basic transmission loss associated with diffraction</span>
+<span class="sd">            not exceeded for p% time [dB]; L_bd = L_b0p + L_dp</span>
+
+<span class="sd">        - `L_bs` - Tropospheric scatter loss [dB]</span>
+
+<span class="sd">        - `L_ba` - Ducting/layer reflection loss [dB]</span>
+
+<span class="sd">        - `L_b` - Complete path propagation loss [dB]</span>
+
+<span class="sd">        - `L_b_corr` - As L_b but with clutter correction [dB]</span>
+
+<span class="sd">        - `eps_pt` - Elevation angle of paths w.r.t. Tx [deg]</span>
+
+<span class="sd">        - `eps_pr` - Elevation angle of paths w.r.t. Rx [deg]</span>
+
+<span class="sd">        - `d_lt` - Distance to horizon w.r.t. Tx [km]</span>
+
+<span class="sd">        - `d_lr` - Distance to horizon w.r.t. Rx [km]</span>
+
+<span class="sd">        - `path_type` - Path type (0 - LoS, 1 - Trans-horizon)</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    - The diffraction-loss algorithm was changed between ITU-R P.452</span>
 <span class="sd">      version 14 and 15. The former used a Deygout method, the new one</span>
 <span class="sd">      is based on a Bullington calculation with correction terms.</span>
+<span class="sd">    - In future versions, more entries may be added to the results</span>
+<span class="sd">      dictionary.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 
 <span class="sd">    A typical usage would be::</span>
 
-<span class="sd">       import numpy as np</span>
-<span class="sd">       import matplotlib.pyplot as plt</span>
-<span class="sd">       from astropy import units as u</span>
-<span class="sd">       from pycraf import pathprof</span>
+<span class="sd">        import numpy as np</span>
+<span class="sd">        import matplotlib.pyplot as plt</span>
+<span class="sd">        from astropy import units as u</span>
+<span class="sd">        from pycraf import pathprof</span>
 
 
-<span class="sd">       lon_t, lat_t = 6.8836 * u.deg, 50.525 * u.deg</span>
-<span class="sd">       lon_r, lat_r = 7.3334 * u.deg, 50.635 * u.deg</span>
-<span class="sd">       hprof_step = 100 * u.m</span>
+<span class="sd">        lon_t, lat_t = 6.8836 * u.deg, 50.525 * u.deg</span>
+<span class="sd">        lon_r, lat_r = 7.3334 * u.deg, 50.635 * u.deg</span>
+<span class="sd">        hprof_step = 100 * u.m</span>
 
-<span class="sd">       hprof_data = pathprof.height_path_data(</span>
-<span class="sd">           lon_t, lat_t, lon_r, lat_r, hprof_step,</span>
-<span class="sd">           zone_t=pathprof.CLUTTER.URBAN, zone_r=pathprof.CLUTTER.SUBURBAN,</span>
-<span class="sd">           )</span>
+<span class="sd">        hprof_data = pathprof.height_path_data(</span>
+<span class="sd">            lon_t, lat_t, lon_r, lat_r, hprof_step,</span>
+<span class="sd">            zone_t=pathprof.CLUTTER.URBAN, zone_r=pathprof.CLUTTER.SUBURBAN,</span>
+<span class="sd">            )</span>
 
-<span class="sd">       plt.plot(hprof_data[&#39;distances&#39;], hprof_data[&#39;heights&#39;], &#39;k-&#39;)</span>
-<span class="sd">       plt.grid()</span>
-<span class="sd">       plt.show()</span>
+<span class="sd">        plt.plot(hprof_data[&#39;distances&#39;], hprof_data[&#39;heights&#39;], &#39;k-&#39;)</span>
+<span class="sd">        plt.grid()</span>
+<span class="sd">        plt.show()</span>
 
-<span class="sd">       freq = 1. * u.GHz</span>
-<span class="sd">       temperature = 290. * u.K</span>
-<span class="sd">       pressure = 1013. * u.hPa</span>
-<span class="sd">       h_tg, h_rg = 5. * u.m, 50. * u.m</span>
-<span class="sd">       time_percent = 2. * u.percent</span>
+<span class="sd">        freq = 1. * u.GHz</span>
+<span class="sd">        temperature = 290. * u.K</span>
+<span class="sd">        pressure = 1013. * u.hPa</span>
+<span class="sd">        h_tg, h_rg = 5. * u.m, 50. * u.m</span>
+<span class="sd">        time_percent = 2. * u.percent</span>
 
-<span class="sd">       atten_path, eps_pt_path, eps_pr_path = pathprof.atten_path_fast(</span>
-<span class="sd">           freq, temperature, pressure,</span>
-<span class="sd">           h_tg, h_rg, time_percent,</span>
-<span class="sd">           hprof_data,</span>
-<span class="sd">           )</span>
+<span class="sd">        results = pathprof.atten_path_fast(</span>
+<span class="sd">            freq, temperature, pressure,</span>
+<span class="sd">            h_tg, h_rg, time_percent,</span>
+<span class="sd">            hprof_data,</span>
+<span class="sd">            )</span>
 
-<span class="sd">       plt.plot(hprof_data[&#39;distances&#39;], atten_path.T, &#39;-&#39;)</span>
-<span class="sd">       plt.ylim((50, 275))</span>
-<span class="sd">       plt.grid()</span>
-<span class="sd">       plt.legend(</span>
-<span class="sd">           [&#39;LOS&#39;, &#39;Diffraction&#39;, &#39;Troposcatter&#39;, &#39;Ducting&#39;,</span>
-<span class="sd">           &#39;Total&#39;, &#39;Total w. clutter&#39;</span>
-<span class="sd">           ], fontsize=10, loc=&#39;lower right&#39;)</span>
-<span class="sd">       plt.show()</span>
+<span class="sd">        for k in [&#39;L_bfsg&#39;, &#39;L_bd&#39;, &#39;L_bs&#39;, &#39;L_ba&#39;, &#39;L_b&#39;, &#39;L_b_corr&#39;]:</span>
+<span class="sd">            plt.plot(hprof_data[&#39;distances&#39;], results[k], &#39;-&#39;)</span>
 
-<span class="sd">       plt.plot(hprof_data[&#39;distances&#39;], eps_pt_path, &#39;b-&#39;)</span>
-<span class="sd">       plt.plot(hprof_data[&#39;distances&#39;], eps_pr_path, &#39;r-&#39;)</span>
-<span class="sd">       plt.grid()</span>
-<span class="sd">       plt.show()</span>
+<span class="sd">        plt.ylim((50, 275))</span>
+<span class="sd">        plt.grid()</span>
+<span class="sd">        plt.legend(</span>
+<span class="sd">            [&#39;LOS&#39;, &#39;Diffraction&#39;, &#39;Troposcatter&#39;, &#39;Ducting&#39;,</span>
+<span class="sd">            &#39;Total&#39;, &#39;Total w. clutter&#39;</span>
+<span class="sd">            ], fontsize=10, loc=&#39;lower right&#39;)</span>
+<span class="sd">        plt.show()</span>
+
+<span class="sd">        plt.plot(hprof_data[&#39;distances&#39;], eps_pt_path, &#39;b-&#39;)</span>
+<span class="sd">        plt.plot(hprof_data[&#39;distances&#39;], eps_pr_path, &#39;r-&#39;)</span>
+<span class="sd">        plt.grid()</span>
+<span class="sd">        plt.show()</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="k">return</span> <span class="n">cyprop</span><span class="o">.</span><span class="n">atten_path_fast_cython</span><span class="p">(</span>
+    <span class="n">float_res</span><span class="p">,</span> <span class="n">int_res</span> <span class="o">=</span> <span class="n">cyprop</span><span class="o">.</span><span class="n">atten_path_fast_cython</span><span class="p">(</span>
         <span class="n">freq</span><span class="p">,</span>
         <span class="n">temperature</span><span class="p">,</span>
         <span class="n">pressure</span><span class="p">,</span>
@@ -1402,7 +1442,21 @@
         <span class="n">hprof_data</span><span class="p">,</span>  <span class="c1"># dict_like</span>
         <span class="n">polarization</span><span class="o">=</span><span class="n">polarization</span><span class="p">,</span>
         <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
-        <span class="p">)</span></div>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;L_bfsg&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
+        <span class="s1">&#39;L_bd&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
+        <span class="s1">&#39;L_bs&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
+        <span class="s1">&#39;L_ba&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
+        <span class="s1">&#39;L_b&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
+        <span class="s1">&#39;L_b_corr&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
+        <span class="s1">&#39;eps_pt&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span>
+        <span class="s1">&#39;eps_pr&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span>
+        <span class="s1">&#39;d_lt&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span>
+        <span class="s1">&#39;d_lr&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span>
+        <span class="s1">&#39;path_type&#39;</span><span class="p">:</span> <span class="n">int_res</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="p">}</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
@@ -1425,8 +1479,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 21 Sep 2017. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4. &nbsp;
+    Last built 13 Oct 2017. <br/>
   </p>
 </footer>
   </body>
