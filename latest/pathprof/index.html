@@ -465,9 +465,9 @@ Therefore, we added a faster alternative, <a class="reference internal" href="..
     <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">tick_top</span><span class="p">()</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-
-<span class="n">pathprof</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">pathprof</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>
 
 <span class="n">lon_tx</span><span class="p">,</span> <span class="n">lat_tx</span> <span class="o">=</span> <span class="mf">6.88361</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.52483</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
 <span class="n">map_size_lon</span><span class="p">,</span> <span class="n">map_size_lat</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
@@ -502,10 +502,14 @@ Therefore, we added a faster alternative, <a class="reference internal" href="..
 <span class="n">lons</span> <span class="o">=</span> <span class="n">hprof_cache</span><span class="p">[</span><span class="s1">&#39;xcoords&#39;</span><span class="p">]</span>
 <span class="n">lats</span> <span class="o">=</span> <span class="n">hprof_cache</span><span class="p">[</span><span class="s1">&#39;ycoords&#39;</span><span class="p">]</span>
 <span class="c1"># index 4 is total loss without clutter/gain included:</span>
-<span class="n">total_atten</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;L_b&#39;</span><span class="p">]</span>
+<span class="n">total_atten</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;L_b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
 
 <span class="n">plot_atten_map</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">,</span> <span class="n">total_atten</span><span class="p">)</span>
 </pre></div>
+</div>
+<p>(<a class="reference external" href="../pathprof/index-4_01_00.png">png</a>, <a class="reference external" href="../pathprof/index-4_01_00.svg">svg</a>, <a class="reference external" href="../pathprof/index-4_01_00.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/index-4_01_00.png" src="../_images/index-4_01_00.png" />
 </div>
 <p>For a more illustrative example, have a look at the Jupyter <a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/notebooks/03c_attenuation_maps.ipynb">tutorial notebook</a>
 on this topic.</p>
@@ -792,7 +796,7 @@ estimation.</p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4. &nbsp;
-    Last built 13 Oct 2017. <br/>
+    Last built 14 Oct 2017. <br/>
   </p>
 </footer>
   </body>

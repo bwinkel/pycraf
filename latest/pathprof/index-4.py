@@ -67,6 +67,6 @@ results = pathprof.atten_map_fast(
 lons = hprof_cache['xcoords']
 lats = hprof_cache['ycoords']
 # index 4 is total loss without clutter/gain included:
-total_atten = results['L_b']
+total_atten = results['L_b'].value
 
 plot_atten_map(lons, lats, total_atten)
