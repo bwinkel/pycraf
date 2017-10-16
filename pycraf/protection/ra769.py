@@ -19,7 +19,7 @@ from .. import utils
 __all__ = ['ra769_limits']
 
 
-@utils.ranged_quantity_input(integ_time=(1, None, apu.s))
+@utils.ranged_quantity_input(integ_time=(1e-9, None, apu.s))
 def ra769_limits(mode='continuum', scale='dB', integ_time=2000. * apu.s):
     '''
     Limits for spectral line and continuum observations according to
