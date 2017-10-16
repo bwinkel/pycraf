@@ -1,5 +1,13 @@
 0.25.5.dev (unreleased)
-====================
+=======================
+
+API Changes
+-----------
+- The functions `pathprof.atten_path_fast` and `pathprof.atten_map_fast`
+  now return dictionaries. This makes it easier to add new return values
+  in the future (without API breaking). Three new parameters are returned
+  for now: the type of path (Line-of-sight or Trans-horizon) and the
+  distance of the horizon w.r.t. Tx/Rx.
 
 0.25.4 (2017-09-21)
 ====================

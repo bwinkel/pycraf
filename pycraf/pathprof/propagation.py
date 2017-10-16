@@ -802,7 +802,6 @@ def height_map_data(
     h_rg=(None, None, apu.m),
     timepercent=(0, 50, apu.percent),
     strip_input_units=True,
-    output_unit=(cnv.dB, apu.deg, apu.deg)
     )
 def atten_map_fast(
         freq,
@@ -830,8 +829,9 @@ def atten_map_fast(
     timepercent : `~astropy.units.Quantity`
         Time percentage [%] (maximal 50%)
     hprof_data : dict, dict-like
-        Dictionary with height profiles and auxillary maps as
-        calculated with `~pycraf.pathprof.height_map_data`.
+        Dictionary with height profiles and auxillary maps
+        of dimension `(my, mx)` as calculated with
+        `~pycraf.pathprof.height_map_data`.
     polarization : int, optional
         Polarization (default: 0)
         Allowed values are: 0 - horizontal, 1 - vertical
@@ -840,32 +840,45 @@ def atten_map_fast(
 
     Returns
     -------
-    atten_map : 3D `~numpy.ndarray`
-        Attenuation maps. First dimension has length 6, which refers to:
+    results : dict
+        Results of the path attenuation calculation. Each entry
+        in the dictionary is a 2D `~numpy.ndarray` containing
+        the associated value for the map of dimension `(my, mx)`.
+        The following entries are contained:
 
-        0) L_bfsg - Free-space loss [dB]
-        1) L_bd - Basic transmission loss associated with diffraction
-           not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
-        2) L_bs - Tropospheric scatter loss [dB]
-        3) L_ba - Ducting/layer reflection loss [dB]
-        4) L_b - Complete path propagation loss [dB]
-        5) L_b_corr - As L_b but with clutter correction [dB]
+        - `L_bfsg` - Free-space loss [dB]
 
-        (i.e., the output of path_attenuation_complete without
-        gain-corrected values)
-    eps_pt_map : 2D `~numpy.ndarray`
-        Elevation angle of paths w.r.t. Tx [deg]
-    eps_pr_map : 2D `~numpy.ndarray`
-        Elevation angle of paths w.r.t. Rx [deg]
+        - `L_bd` - Basic transmission loss associated with diffraction
+            not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
+
+        - `L_bs` - Tropospheric scatter loss [dB]
+
+        - `L_ba` - Ducting/layer reflection loss [dB]
+
+        - `L_b` - Complete path propagation loss [dB]
+
+        - `L_b_corr` - As L_b but with clutter correction [dB]
+
+        - `eps_pt` - Elevation angle of paths w.r.t. Tx [deg]
+
+        - `eps_pr` - Elevation angle of paths w.r.t. Rx [deg]
+
+        - `d_lt` - Distance to horizon w.r.t. Tx [km]
+
+        - `d_lr` - Distance to horizon w.r.t. Rx [km]
+
+        - `path_type` - Path type (0 - LoS, 1 - Trans-horizon)
 
     Notes
     -----
     - The diffraction-loss algorithm was changed between ITU-R P.452
       version 14 and 15. The former used a Deygout method, the new one
       is based on a Bullington calculation with correction terms.
+    - In future versions, more entries may be added to the results
+      dictionary.
     '''
 
-    return cyprop.atten_map_fast_cython(
+    float_res, int_res = cyprop.atten_map_fast_cython(
         freq,
         temperature,
         pressure,
@@ -875,6 +888,20 @@ def atten_map_fast(
         polarization=polarization,
         version=version,
         )
+
+    return {
+        'L_bfsg': float_res[0] * cnv.dB,
+        'L_bd': float_res[1] * cnv.dB,
+        'L_bs': float_res[2] * cnv.dB,
+        'L_ba': float_res[3] * cnv.dB,
+        'L_b': float_res[4] * cnv.dB,
+        'L_b_corr': float_res[5] * cnv.dB,
+        'eps_pt': float_res[6] * apu.deg,
+        'eps_pr': float_res[7] * apu.deg,
+        'd_lt': float_res[8] * apu.km,
+        'd_lr': float_res[9] * apu.km,
+        'path_type': int_res[0],
+        }
 
 
 @utils.ranged_quantity_input(
@@ -1206,7 +1233,6 @@ def height_path_data_generic(
     h_rg=(None, None, apu.m),
     timepercent=(0, 50, apu.percent),
     strip_input_units=True,
-    output_unit=(cnv.dB, apu.deg, apu.deg)
     )
 def atten_path_fast(
         freq,
@@ -1245,83 +1271,97 @@ def atten_path_fast(
 
     Returns
     -------
-    atten_path : 2D `~numpy.ndarray`
-        Attenuation values along path. First dimension has length 6,
-        which refers to:
+    results : dict
+        Results of the path attenuation calculation. Each entry
+        in the dictionary is a 1D `~numpy.ndarray` containing
+        the associated value for the path.
+        The following entries are contained:
 
-        0) L_bfsg - Free-space loss [dB]
-        1) L_bd - Basic transmission loss associated with diffraction
-           not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
-        2) L_bs - Tropospheric scatter loss [dB]
-        3) L_ba - Ducting/layer reflection loss [dB]
-        4) L_b - Complete path propagation loss [dB]
-        5) L_b_corr - As L_b but with clutter correction [dB]
+        - `L_bfsg` - Free-space loss [dB]
 
-        (i.e., the output of path_attenuation_complete without
-        gain-corrected values)
-    eps_pt_path : 1D `~numpy.ndarray`
-        Elevation angles along path w.r.t. Tx [deg]
-    eps_pr_path : 1D `~numpy.ndarray`
-        Elevation angles along path w.r.t. Rx [deg]
+        - `L_bd` - Basic transmission loss associated with diffraction
+            not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
+
+        - `L_bs` - Tropospheric scatter loss [dB]
+
+        - `L_ba` - Ducting/layer reflection loss [dB]
+
+        - `L_b` - Complete path propagation loss [dB]
+
+        - `L_b_corr` - As L_b but with clutter correction [dB]
+
+        - `eps_pt` - Elevation angle of paths w.r.t. Tx [deg]
+
+        - `eps_pr` - Elevation angle of paths w.r.t. Rx [deg]
+
+        - `d_lt` - Distance to horizon w.r.t. Tx [km]
+
+        - `d_lr` - Distance to horizon w.r.t. Rx [km]
+
+        - `path_type` - Path type (0 - LoS, 1 - Trans-horizon)
 
     Notes
     -----
     - The diffraction-loss algorithm was changed between ITU-R P.452
       version 14 and 15. The former used a Deygout method, the new one
       is based on a Bullington calculation with correction terms.
+    - In future versions, more entries may be added to the results
+      dictionary.
 
     Examples
     --------
 
     A typical usage would be::
 
-       import numpy as np
-       import matplotlib.pyplot as plt
-       from astropy import units as u
-       from pycraf import pathprof
+        import numpy as np
+        import matplotlib.pyplot as plt
+        from astropy import units as u
+        from pycraf import pathprof
 
 
-       lon_t, lat_t = 6.8836 * u.deg, 50.525 * u.deg
-       lon_r, lat_r = 7.3334 * u.deg, 50.635 * u.deg
-       hprof_step = 100 * u.m
+        lon_t, lat_t = 6.8836 * u.deg, 50.525 * u.deg
+        lon_r, lat_r = 7.3334 * u.deg, 50.635 * u.deg
+        hprof_step = 100 * u.m
 
-       hprof_data = pathprof.height_path_data(
-           lon_t, lat_t, lon_r, lat_r, hprof_step,
-           zone_t=pathprof.CLUTTER.URBAN, zone_r=pathprof.CLUTTER.SUBURBAN,
-           )
+        hprof_data = pathprof.height_path_data(
+            lon_t, lat_t, lon_r, lat_r, hprof_step,
+            zone_t=pathprof.CLUTTER.URBAN, zone_r=pathprof.CLUTTER.SUBURBAN,
+            )
 
-       plt.plot(hprof_data['distances'], hprof_data['heights'], 'k-')
-       plt.grid()
-       plt.show()
+        plt.plot(hprof_data['distances'], hprof_data['heights'], 'k-')
+        plt.grid()
+        plt.show()
 
-       freq = 1. * u.GHz
-       temperature = 290. * u.K
-       pressure = 1013. * u.hPa
-       h_tg, h_rg = 5. * u.m, 50. * u.m
-       time_percent = 2. * u.percent
+        freq = 1. * u.GHz
+        temperature = 290. * u.K
+        pressure = 1013. * u.hPa
+        h_tg, h_rg = 5. * u.m, 50. * u.m
+        time_percent = 2. * u.percent
 
-       atten_path, eps_pt_path, eps_pr_path = pathprof.atten_path_fast(
-           freq, temperature, pressure,
-           h_tg, h_rg, time_percent,
-           hprof_data,
-           )
+        results = pathprof.atten_path_fast(
+            freq, temperature, pressure,
+            h_tg, h_rg, time_percent,
+            hprof_data,
+            )
 
-       plt.plot(hprof_data['distances'], atten_path.T, '-')
-       plt.ylim((50, 275))
-       plt.grid()
-       plt.legend(
-           ['LOS', 'Diffraction', 'Troposcatter', 'Ducting',
-           'Total', 'Total w. clutter'
-           ], fontsize=10, loc='lower right')
-       plt.show()
+        for k in ['L_bfsg', 'L_bd', 'L_bs', 'L_ba', 'L_b', 'L_b_corr']:
+            plt.plot(hprof_data['distances'], results[k], '-')
 
-       plt.plot(hprof_data['distances'], eps_pt_path, 'b-')
-       plt.plot(hprof_data['distances'], eps_pr_path, 'r-')
-       plt.grid()
-       plt.show()
+        plt.ylim((50, 275))
+        plt.grid()
+        plt.legend(
+            ['LOS', 'Diffraction', 'Troposcatter', 'Ducting',
+            'Total', 'Total w. clutter'
+            ], fontsize=10, loc='lower right')
+        plt.show()
+
+        plt.plot(hprof_data['distances'], eps_pt_path, 'b-')
+        plt.plot(hprof_data['distances'], eps_pr_path, 'r-')
+        plt.grid()
+        plt.show()
     '''
 
-    return cyprop.atten_path_fast_cython(
+    float_res, int_res = cyprop.atten_path_fast_cython(
         freq,
         temperature,
         pressure,
@@ -1331,6 +1371,20 @@ def atten_path_fast(
         polarization=polarization,
         version=version,
         )
+
+    return {
+        'L_bfsg': float_res[0] * cnv.dB,
+        'L_bd': float_res[1] * cnv.dB,
+        'L_bs': float_res[2] * cnv.dB,
+        'L_ba': float_res[3] * cnv.dB,
+        'L_b': float_res[4] * cnv.dB,
+        'L_b_corr': float_res[5] * cnv.dB,
+        'eps_pt': float_res[6] * apu.deg,
+        'eps_pr': float_res[7] * apu.deg,
+        'd_lt': float_res[8] * apu.km,
+        'd_lr': float_res[9] * apu.km,
+        'path_type': int_res[0],
+        }
 
 
 if __name__ == '__main__':

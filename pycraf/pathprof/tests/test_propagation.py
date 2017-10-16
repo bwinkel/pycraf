@@ -69,6 +69,16 @@ class TestPropagation:
                 [(0, 0), (20, 30)],
             ))
 
+        self.fast_cases = list(
+            # freq, (h_tg, h_rg), time_percent, version, (G_t, G_r)
+            product(
+                [0.1, 1., 10.],
+                [(50, 50), (200, 200)],
+                [2, 10, 50],
+                [14, 16],
+                [(0, 0)],
+            ))
+
         self.pprop_template = (
             'cases/pprop_{:.2f}ghz_{:.2f}m_{:.2f}m_{:.2f}percent_v{:d}.json'
             )
@@ -343,12 +353,13 @@ class TestPropagation:
 
         tfile = get_pkg_data_filename('fastmap/hprof.hdf5')
         hprof_data_cache = h5py.File(tfile, 'r')
+        # tdir = tmpdir_factory.mktemp('fastmap')
 
-        for case in self.cases:
+        for case in self.fast_cases:
 
             freq, (h_tg, h_rg), time_percent, version, (G_t, G_r) = case
 
-            atten_map, eps_pt_map, eps_pr_map = pathprof.atten_map_fast(
+            results = pathprof.atten_map_fast(
                 freq * apu.GHz,
                 self.temperature,
                 self.pressure,
@@ -357,23 +368,25 @@ class TestPropagation:
                 hprof_data_cache,  # dict_like
                 version=version,
                 )
+            for k in results:
+                try:
+                    results[k] = results[k].value
+                except AttributeError:
+                    pass
 
-            atten_map = atten_map.to(cnv.dB).value
-            eps_pt_map = eps_pt_map.to(apu.deg).value
-            eps_pr_map = eps_pr_map.to(apu.deg).value
-
-            tfile = get_pkg_data_filename(
-                self.fastmap_template.format(
-                    freq, h_tg, h_rg, time_percent, version, 'hdf5'
-                    ))
+            fname = self.fastmap_template.format(
+                freq, h_tg, h_rg, time_percent, version, 'hdf5'
+                )
+            tfile = get_pkg_data_filename(fname)  # comment out if not exists
 
             # Warning: if uncommenting, the test cases will be overwritten
             # do this only, if you need to update the h5py files
             # (make sure, that results are correct!)
+            # tfile = str(tdir.join(fname.replace('fastmap/', '')))
+            # print('writing temporary files to', tdir)
             # with h5py.File(tfile, 'w') as h5f:
-            #     h5f['atten_map'] = atten_map
-            #     h5f['eps_pt_map'] = eps_pt_map
-            #     h5f['eps_pr_map'] = eps_pr_map
+            #     for k, v in results.items():
+            #         h5f[k] = v
 
             print(tfile)
             h5f = h5py.File(tfile, 'r')
@@ -381,21 +394,17 @@ class TestPropagation:
             # Note conversion to some ndarray type necessary, as h5py
             # returns <HDF5 dataset> types
             tol_kwargs = {'atol': 1.e-6, 'rtol': 1.e-6}
-            # atten_map[0, 0, 0] = 10
             # for some super-strange reason, index 9, 13 is completely off
             # on travis and appveyor (only diffraction)
             # as it is only one pixel, we ignore it here for now
-            h5_atten_map = np.squeeze(h5f['atten_map'])
-            h5_atten_map[:, 9, 13] = atten_map[:, 9, 13]
+            for k, v in results.items():
+                v2 = np.squeeze(h5f[k])
+                v2[9, 13] = v[9, 13]
+                assert_allclose(v, v2, **tol_kwargs)
 
-            idx = np.where(np.abs(h5_atten_map - atten_map) > 1.e-6)
-            for i, y, x in zip(*idx):
-                print(i, y, x, h5_atten_map[i, y, x], atten_map[i, y, x])
-            assert_allclose(
-                h5_atten_map, atten_map, **tol_kwargs
-                )
-            assert_allclose(h5f['eps_pt_map'], eps_pt_map)
-            assert_allclose(h5f['eps_pr_map'], eps_pr_map)
+            # idx = np.where(np.abs(h5_atten_map - atten_map) > 1.e-6)
+            # for i, y, x in zip(*idx):
+            #     print(i, y, x, h5_atten_map[i, y, x], atten_map[i, y, x])
 
     def test_height_map_data_npz(self, tmpdir_factory):
 
@@ -449,12 +458,13 @@ class TestPropagation:
 
         tfile = get_pkg_data_filename('fastmap/hprof.npz')
         hprof_data_cache = np.load(tfile)
+        # tdir = tmpdir_factory.mktemp('fastmap')
 
-        for case in self.cases:
+        for case in self.fast_cases:
 
             freq, (h_tg, h_rg), time_percent, version, (G_t, G_r) = case
 
-            atten_map, eps_pt_map, eps_pr_map = pathprof.atten_map_fast(
+            results = pathprof.atten_map_fast(
                 freq * apu.GHz,
                 self.temperature,
                 self.pressure,
@@ -464,45 +474,41 @@ class TestPropagation:
                 version=version,
                 )
 
-            atten_map = atten_map.to(cnv.dB).value
-            eps_pt_map = eps_pt_map.to(apu.deg).value
-            eps_pr_map = eps_pr_map.to(apu.deg).value
+            for k in results:
+                try:
+                    results[k] = results[k].value
+                except AttributeError:
+                    pass
 
             fname = self.fastmap_template.format(
                 freq, h_tg, h_rg, time_percent, version, 'npz'
                 )
+            tfile = get_pkg_data_filename(fname)  # comment out if not exists
 
             # Warning: if uncommenting, the test cases will be overwritten
             # do this only, if you need to update the npz files
             # (make sure, that results are correct!)
-            # np.savez(
-            #     '/tmp/' + fname, atten_map=atten_map,
-            #     eps_pt_map=eps_pt_map, eps_pr_map=eps_pr_map
-            #     )
-            # continue
+            # tfile = str(tdir.join(fname.replace('fastmap/', '')))
+            # np.savez(tfile, **results)
 
-            tfile = get_pkg_data_filename(fname)
             print(tfile)
             true_dat = np.load(tfile)
 
             # Note conversion to some ndarray type necessary, as h5py
             # returns <HDF5 dataset> types
             tol_kwargs = {'atol': 1.e-6, 'rtol': 1.e-6}
-            # atten_map[0, 0, 0] = 10
             # for some super-strange reason, index 9, 13 is completely off
             # on travis and appveyor (only diffraction)
             # as it is only one pixel, we ignore it here for now
-            t_atten_map = np.squeeze(true_dat['atten_map'])
-            t_atten_map[:, 9, 13] = atten_map[:, 9, 13]
 
-            idx = np.where(np.abs(t_atten_map - atten_map) > 1.e-6)
-            for i, y, x in zip(*idx):
-                print(i, y, x, t_atten_map[i, y, x], atten_map[i, y, x])
-            assert_allclose(
-                t_atten_map, atten_map, **tol_kwargs
-                )
-            assert_allclose(true_dat['eps_pt_map'], eps_pt_map)
-            assert_allclose(true_dat['eps_pr_map'], eps_pr_map)
+            # idx = np.where(np.abs(t_atten_map - atten_map) > 1.e-6)
+            # for i, y, x in zip(*idx):
+            #     print(i, y, x, t_atten_map[i, y, x], atten_map[i, y, x])
+
+            for k, v in results.items():
+                v2 = np.squeeze(true_dat[k])
+                v2[9, 13] = v[9, 13]
+                assert_allclose(v, v2, **tol_kwargs)
 
     def test_atten_path_fast(self):
 
@@ -525,7 +531,7 @@ class TestPropagation:
             zone_t=zone_t, zone_r=zone_r,
             )
 
-        atten_path_f, eps_pt_path_f, eps_pr_path_f = pathprof.atten_path_fast(
+        results = pathprof.atten_path_fast(
             freq, temperature, pressure,
             h_tg, h_rg, time_percent,
             hprof_data,
@@ -541,6 +547,8 @@ class TestPropagation:
         atten_path = np.zeros((6, len(distances)), dtype=np.float64)
         eps_pt_path = np.zeros((len(distances)), dtype=np.float64)
         eps_pr_path = np.zeros((len(distances)), dtype=np.float64)
+        d_lt_path = np.zeros((len(distances)), dtype=np.float64)
+        d_lr_path = np.zeros((len(distances)), dtype=np.float64)
 
         for idx in range(6, len(distances)):
 
@@ -563,12 +571,23 @@ class TestPropagation:
 
             eps_pt_path[idx] = pprop.eps_pt.value
             eps_pr_path[idx] = pprop.eps_pr.value
+            d_lt_path[idx] = pprop.d_lt.value
+            d_lr_path[idx] = pprop.d_lr.value
             tot_loss = pathprof.loss_complete(pprop)
             atten_path[:, idx] = apu.Quantity(tot_loss).value[:-1]
 
-        assert np.allclose(atten_path, atten_path_f.value, atol=1.e-3)
-        assert np.allclose(eps_pt_path, eps_pt_path_f.value, atol=1.e-6)
-        assert np.allclose(eps_pr_path, eps_pr_path_f.value, atol=1.e-6)
+        assert np.allclose(atten_path[0], results['L_bfsg'].value, atol=1.e-3)
+        assert np.allclose(atten_path[1], results['L_bd'].value, atol=1.e-3)
+        assert np.allclose(atten_path[2], results['L_bs'].value, atol=1.e-3)
+        assert np.allclose(atten_path[3], results['L_ba'].value, atol=1.e-3)
+        assert np.allclose(atten_path[4], results['L_b'].value, atol=1.e-3)
+        assert np.allclose(atten_path[5], results['L_b_corr'].value, atol=1.e-3)
+
+        assert np.allclose(eps_pt_path, results['eps_pt'].value, atol=1.e-6)
+        assert np.allclose(eps_pr_path, results['eps_pr'].value, atol=1.e-6)
+
+        assert np.allclose(d_lt_path, results['d_lt'].value, atol=1.e-6)
+        assert np.allclose(d_lr_path, results['d_lr'].value, atol=1.e-6)
 
     def test_atten_path_fast_generic(self):
 
@@ -599,7 +618,7 @@ class TestPropagation:
             zone_t=zone_t, zone_r=zone_r,
             )
 
-        atten_path_f, eps_pt_path_f, eps_pr_path_f = pathprof.atten_path_fast(
+        results = pathprof.atten_path_fast(
             freq, temperature, pressure,
             h_tg, h_rg, time_percent,
             hprof_data,
@@ -608,6 +627,8 @@ class TestPropagation:
         atten_path = np.zeros((6, len(distances)), dtype=np.float64)
         eps_pt_path = np.zeros((len(distances)), dtype=np.float64)
         eps_pr_path = np.zeros((len(distances)), dtype=np.float64)
+        d_lt_path = np.zeros((len(distances)), dtype=np.float64)
+        d_lr_path = np.zeros((len(distances)), dtype=np.float64)
 
         for idx in range(6, len(distances)):
 
@@ -630,12 +651,23 @@ class TestPropagation:
 
             eps_pt_path[idx] = pprop.eps_pt.value
             eps_pr_path[idx] = pprop.eps_pr.value
+            d_lt_path[idx] = pprop.d_lt.value
+            d_lr_path[idx] = pprop.d_lr.value
             tot_loss = pathprof.loss_complete(pprop)
             atten_path[:, idx] = apu.Quantity(tot_loss).value[:-1]
 
-        assert np.allclose(atten_path, atten_path_f.value, atol=1.e-3)
-        assert np.allclose(eps_pt_path, eps_pt_path_f.value, atol=1.e-6)
-        assert np.allclose(eps_pr_path, eps_pr_path_f.value, atol=1.e-6)
+        assert np.allclose(atten_path[0], results['L_bfsg'].value, atol=1.e-3)
+        assert np.allclose(atten_path[1], results['L_bd'].value, atol=1.e-3)
+        assert np.allclose(atten_path[2], results['L_bs'].value, atol=1.e-3)
+        assert np.allclose(atten_path[3], results['L_ba'].value, atol=1.e-3)
+        assert np.allclose(atten_path[4], results['L_b'].value, atol=1.e-3)
+        assert np.allclose(atten_path[5], results['L_b_corr'].value, atol=1.e-3)
+
+        assert np.allclose(eps_pt_path, results['eps_pt'].value, atol=1.e-6)
+        assert np.allclose(eps_pr_path, results['eps_pr'].value, atol=1.e-6)
+
+        assert np.allclose(d_lt_path, results['d_lt'].value, atol=1.e-6)
+        assert np.allclose(d_lr_path, results['d_lr'].value, atol=1.e-6)
 
 
 def test_clutter_correction():

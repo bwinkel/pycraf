@@ -2326,8 +2326,17 @@ def atten_map_fast_cython(
 
     Returns
     -------
-    atten_map : 3D `~numpy.ndarray`
-        Attenuation maps. First dimension has length 6, which refers to:
+    float_results : 3D `~numpy.ndarray`
+
+        Results of the calculation. The first and second dimension
+        refer to the maps, while the third axis has the following
+        meaning:
+
+        0-5: Attenuation maps (i.e., the output of
+            path_attenuation_complete without gain-corrected values)
+        6-7: Path elevation angles
+        8-9: Path horizon distances (for LoS paths, this is distance
+            to Bullington point)
 
         0) L_bfsg - Free-space loss [dB]
         1) L_bd - Basic transmission loss associated with diffraction
@@ -2336,13 +2345,16 @@ def atten_map_fast_cython(
         3) L_ba - Ducting/layer reflection loss [dB]
         4) L_b - Complete path propagation loss [dB]
         5) L_b_corr - As L_b but with clutter correction [dB]
+        6) eps_pt - Elevation angle of paths w.r.t. Tx [deg]
+        7) eps_pr - Elevation angle of paths w.r.t. Rx [deg]
+        8) d_lt - Distance to horizon w.r.t. Tx [km]
+        9) d_lr - Distance to horizon w.r.t. Rx [km]
 
-        (i.e., the output of path_attenuation_complete without
-        gain-corrected values)
-    eps_pt_map : 2D `~numpy.ndarray`
-        Elevation angle of paths w.r.t. Tx [deg]
-    eps_pr_map : 2D `~numpy.ndarray`
-        Elevation angle of paths w.r.t. Rx [deg]
+    int_results : 3D `~numpy.ndarray`
+
+        As `float_results` but for integer-typed values:
+
+        0) path_type - Regular path type (0 - LoS, 1 - Trans-horizon)
 
     Notes
     -----
@@ -2370,17 +2382,12 @@ def atten_map_fast_cython(
 
     xcoords, ycoords = hprof_data['xcoords'], hprof_data['ycoords']
 
-    # atten_map stores path attenuation
-    atten_map = np.zeros((6, len(ycoords), len(xcoords)), dtype=np.float64)
-
-    # also store path elevation angles as seen at Rx/Tx
-    eps_pt_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
-    eps_pr_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
+    float_res = np.zeros((10, len(ycoords), len(xcoords)), dtype=np.float64)
+    int_res = np.zeros((1, len(ycoords), len(xcoords)), dtype=np.int32)
 
     cdef:
-        double[:, :, :] atten_map_v = atten_map
-        double[:, :] eps_pt_map_v = eps_pt_map
-        double[:, :] eps_pr_map_v = eps_pr_map
+        double[:, :, :] float_res_v = float_res
+        int[:, :, :] int_res_v = int_res
 
         # since we allow all dict_like objects for hprof_data,
         # we have to make sure, that arrays are numpy and contiguous
@@ -2496,18 +2503,22 @@ def atten_map_fast_cython(
                     L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
                     ) = _path_attenuation_complete(pp[0], G_t, G_r)
 
-                atten_map_v[0, yi, xi] = L_bfsg
-                atten_map_v[1, yi, xi] = L_bd
-                atten_map_v[2, yi, xi] = L_bs
-                atten_map_v[3, yi, xi] = L_ba
-                atten_map_v[4, yi, xi] = L_b
-                atten_map_v[5, yi, xi] = L_b_corr
-                eps_pt_map_v[yi, xi] = pp.eps_pt
-                eps_pr_map_v[yi, xi] = pp.eps_pr
+                float_res_v[0, yi, xi] = L_bfsg
+                float_res_v[1, yi, xi] = L_bd
+                float_res_v[2, yi, xi] = L_bs
+                float_res_v[3, yi, xi] = L_ba
+                float_res_v[4, yi, xi] = L_b
+                float_res_v[5, yi, xi] = L_b_corr
+                float_res_v[6, yi, xi] = pp.eps_pt
+                float_res_v[7, yi, xi] = pp.eps_pr
+                float_res_v[8, yi, xi] = pp.d_lt
+                float_res_v[9, yi, xi] = pp.d_lr
+
+                int_res_v[0, yi, xi] = pp.path_type
 
         free(pp)
 
-    return atten_map, eps_pt_map, eps_pr_map
+    return float_res, int_res
 
 
 def atten_path_fast_cython(
@@ -2566,6 +2577,35 @@ def atten_path_fast_cython(
     eps_pr_path : 1D `~numpy.ndarray`
         Elevation angles along path w.r.t. Rx [deg]
 
+    float_results : 2D `~numpy.ndarray`
+
+        Results of the calculation. The second dimension refers to
+        the path, while the first axis has the following meaning:
+
+        0-5: Attenuation maps (i.e., the output of
+            path_attenuation_complete without gain-corrected values)
+        6-7: Path elevation angles
+        8-9: Path horizon distances (for LoS paths, this is distance
+            to Bullington point)
+
+        0) L_bfsg - Free-space loss [dB]
+        1) L_bd - Basic transmission loss associated with diffraction
+           not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
+        2) L_bs - Tropospheric scatter loss [dB]
+        3) L_ba - Ducting/layer reflection loss [dB]
+        4) L_b - Complete path propagation loss [dB]
+        5) L_b_corr - As L_b but with clutter correction [dB]
+        6) eps_pt - Elevation angle of paths w.r.t. Tx [deg]
+        7) eps_pr - Elevation angle of paths w.r.t. Rx [deg]
+        8) d_lt - Distance to horizon w.r.t. Tx [km]
+        9) d_lr - Distance to horizon w.r.t. Rx [km]
+
+    int_results : 2D `~numpy.ndarray`
+
+        As `float_results` but for integer-typed values:
+
+        0) path_type - Regular path type (0 - LoS, 1 - Trans-horizon)
+
     Notes
     -----
     - The diffraction-loss algorithm was changed between ITU-R P.452
@@ -2606,17 +2646,12 @@ def atten_path_fast_cython(
 
         int i, max_path_length = distances_v.size
 
-    # atten_map stores path attenuation
-    atten_path = np.zeros((6, max_path_length), dtype=np.float64)
-
-    # also store path elevation angles as seen at Rx/Tx
-    eps_pt_path = np.zeros((max_path_length), dtype=np.float64)
-    eps_pr_path = np.zeros((max_path_length), dtype=np.float64)
+    float_res = np.zeros((10, max_path_length), dtype=np.float64)
+    int_res = np.zeros((1, max_path_length), dtype=np.int32)
 
     cdef:
-        double[:, :] atten_path_v = atten_path
-        double[:] eps_pt_path_v = eps_pt_path
-        double[:] eps_pr_path_v = eps_pr_path
+        double[:, :] float_res_v = float_res
+        int[:, :] int_res_v = int_res
 
     assert (
         distances_v.size == heights_v.size == zheights_v.size ==
@@ -2688,18 +2723,22 @@ def atten_path_fast_cython(
                 L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
                 ) = _path_attenuation_complete(pp[0], G_t, G_r)
 
-            atten_path_v[0, i] = L_bfsg
-            atten_path_v[1, i] = L_bd
-            atten_path_v[2, i] = L_bs
-            atten_path_v[3, i] = L_ba
-            atten_path_v[4, i] = L_b
-            atten_path_v[5, i] = L_b_corr
-            eps_pt_path_v[i] = pp.eps_pt
-            eps_pr_path_v[i] = pp.eps_pr
+            float_res_v[0, i] = L_bfsg
+            float_res_v[1, i] = L_bd
+            float_res_v[2, i] = L_bs
+            float_res_v[3, i] = L_ba
+            float_res_v[4, i] = L_b
+            float_res_v[5, i] = L_b_corr
+            float_res_v[6, i] = pp.eps_pt
+            float_res_v[7, i] = pp.eps_pr
+            float_res_v[8, i] = pp.d_lt
+            float_res_v[9, i] = pp.d_lr
+
+            int_res_v[0, i] = pp.path_type
 
         free(pp)
 
-    return atten_path, eps_pt_path, eps_pr_path
+    return float_res, int_res
 
 # ############################################################################
 # Atmospheric attenuation (Annex 2)
