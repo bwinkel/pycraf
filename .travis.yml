@@ -1,7 +1,7 @@
 # We set the language to c because python isn't supported on the MacOS X nodes
 # on Travis. However, the language ends up being irrelevant anyway, since we
 # install Python ourselves using conda.
-language: c
+language: none
 
 os:
     - linux
@@ -87,10 +87,11 @@ matrix:
         - os: osx
           osx_image: xcode8.3
           env:
-            - CC='gcc-6'
-            - CXX='g++-6'
-            - CPP='g++-6'
-            - LD='gcc-6'
+            - CC='gcc-7'
+            - CXX='g++-7'
+            - CPP='g++-7'
+            - LD='gcc-7'
+          # compiler: gcc
 
         # We have to make the MacOS release based on rather old numpy version
         # otherwise users will keep getting "incompatible API" errors
@@ -99,12 +100,13 @@ matrix:
         - os: osx
           osx_image: xcode8.3
           env:
-            - CC='gcc-6'
-            - CXX='g++-6'
-            - CPP='g++-6'
-            - LD='gcc-6'
+            - CC='gcc-7'
+            - CXX='g++-7'
+            - CPP='g++-7'
+            - LD='gcc-7'
             - DO_MAC_DIST=YES
             - NUMPY_VERSION=1.11
+          # compiler: gcc
 
         # Do a coverage test.
         - os: linux
@@ -146,7 +148,12 @@ matrix:
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gcc6; brew link --overwrite gcc@6; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gcc; brew link --overwrite gcc; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then gcc --version; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then gcc-7 --version; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then gfortran --version; fi
+  # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo "LD_LIBRARY_PATH" $LD_LIBRARY_PATH ; fi
+  # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo "DYLD_LIBRARY_PATH" $DYLD_LIBRARY_PATH ; fi
 
 install:
 
@@ -163,7 +170,7 @@ install:
     # in how to install a package, in which case you can have additional
     # commands in the install: section below.
 
-    - git clone git://github.com/astropy/ci-helpers.git
+    - git clone --depth 1 git://github.com/astropy/ci-helpers.git
     - source ci-helpers/travis/setup_conda.sh
 
     # As described above, using ci-helpers, you should be able to set up an
