@@ -93,7 +93,9 @@ def ra769_limits(mode='continuum', scale='dB', integ_time=2000. * apu.s):
 
     qtab = QTable(meta={'name': 'RA.769 {} limits'.format(mode)})
     freq = csv_tab['freq0'] * apu.MHz
-    bandwidth = csv_tab['Delta_f'] * apu.MHz
+    bandwidth = csv_tab['Delta_f'] * (
+        apu.kHz if mode == 'spectroscopy' else apu.MHz
+        )
 
     qtab['frequency'] = freq
     if mode != 'vlbi':

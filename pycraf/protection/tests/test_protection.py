@@ -118,10 +118,12 @@ CONT_LIMS_DB_VALUES = [
     5006.0, -202.854805488, -171.25369654, -227.972715025, 29.0050103227,
     ]
 SPEC_LIMS_VALUES = [
-    0.7071067812, 3.03742736e-21, 2.186381732e-15, 4225.3020266, 12.522083029,
+    22.36067977, 9.6051867e-23, 6.91394471e-17, 133615.75496,
+    2.226776016,
     ]
 SPEC_LIMS_DB_VALUES = [
-    0.707106781187, -205.174940994, -146.6027401, -223.7414224, 21.9535315816,
+    22.36067977, -220.17494187, -161.60274098, -208.7414233,
+    6.953530701,
     ]
 
 VLBI_LIMS_VALUES = [
@@ -146,31 +148,31 @@ COL_NAMES = [
     ]
 
 COL_UNITS = [
-    apu.MHz,
-    apu.MHz,
-    apu.K,
-    apu.K,
-    apu.mK,
-    apu.W / apu.Hz,
-    apu.W,
-    apu.W / apu.m ** 2,
-    apu.Jy,
-    apu.uV / apu.m,
-    apu.uV / apu.m,
+    [apu.MHz],
+    [apu.kHz, apu.MHz],
+    [apu.K],
+    [apu.K],
+    [apu.mK],
+    [apu.W / apu.Hz],
+    [apu.W],
+    [apu.W / apu.m ** 2],
+    [apu.Jy],
+    [apu.uV / apu.m],
+    [apu.uV / apu.m],
     ]
 
 COL_UNITS_DB = [
-    apu.MHz,
-    apu.MHz,
-    apu.K,
-    apu.K,
-    apu.mK,
-    cnv.dB_W_Hz,
-    cnv.dB_W,
-    cnv.dB_W_m2,
-    cnv.dB_W_m2_Hz,
-    cnv.dB_uV_m,
-    cnv.dB_uV_m,
+    [apu.MHz],
+    [apu.kHz, apu.MHz],
+    [apu.K],
+    [apu.K],
+    [apu.mK],
+    [cnv.dB_W_Hz],
+    [cnv.dB_W],
+    [cnv.dB_W_m2],
+    [cnv.dB_W_m2_Hz],
+    [cnv.dB_uV_m],
+    [cnv.dB_uV_m],
     ]
 
 VLBI_COL_IDXS = [0, 2, 3, 8]
@@ -249,16 +251,16 @@ def test_ra769_limits():
         assert_allclose(vlbi_lims[row][col], VLBI_LIMS_VALUES[idx], **TOL_KWARGS)
         assert_allclose(vlbi_lims_dB[row][col], VLBI_LIMS_DB_VALUES[idx])
 
-    for colname, colunit in zip(COL_NAMES, COL_UNITS):
-        assert cont_lims.columns[colname].unit == colunit
-        assert spec_lims.columns[colname].unit == colunit
+    for colname, colunits in zip(COL_NAMES, COL_UNITS):
+        assert cont_lims.columns[colname].unit in colunits
+        assert spec_lims.columns[colname].unit in colunits
 
-    for colname, colunit in zip(COL_NAMES, COL_UNITS_DB):
-        assert cont_lims_dB.columns[colname].unit == colunit
-        assert spec_lims_dB.columns[colname].unit == colunit
+    for colname, colunits in zip(COL_NAMES, COL_UNITS_DB):
+        assert cont_lims_dB.columns[colname].unit in colunits
+        assert spec_lims_dB.columns[colname].unit in colunits
 
     for colidx in VLBI_COL_IDXS:
         colname = COL_NAMES[colidx]
-        colunit, colunit_db = COL_UNITS[colidx], COL_UNITS_DB[colidx]
-        assert vlbi_lims.columns[colname].unit == colunit
-        assert vlbi_lims_dB.columns[colname].unit == colunit_db
+        colunits, colunits_db = COL_UNITS[colidx], COL_UNITS_DB[colidx]
+        assert vlbi_lims.columns[colname].unit in colunits
+        assert vlbi_lims_dB.columns[colname].unit in colunits_db
