@@ -189,14 +189,14 @@ tiles from <a class="reference external" href="http://viewfinderpanoramas.org/">
 The default method uses bi-linear interpolation (<code class="xref py py-obj docutils literal"><span class="pre">interp='linear'</span></code>). One
 can also have nearest-neighbor (<code class="xref py py-obj docutils literal"><span class="pre">interp='nearest'</span></code>) or spline
 (<code class="xref py py-obj docutils literal"><span class="pre">interp='spline'</span></code>) interpolation. The two former internally use
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html#scipy.interpolate.RegularGridInterpolator" title="(in SciPy v0.19.1)"><code class="xref py py-obj docutils literal"><span class="pre">RegularGridInterpolator</span></code></a>, the latter employs
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v0.19.1)"><code class="xref py py-obj docutils literal"><span class="pre">RectBivariateSpline</span></code></a> that also allows custom
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html#scipy.interpolate.RegularGridInterpolator" title="(in SciPy v1.0.0)"><code class="xref py py-obj docutils literal"><span class="pre">RegularGridInterpolator</span></code></a>, the latter employs
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.0.0)"><code class="xref py py-obj docutils literal"><span class="pre">RectBivariateSpline</span></code></a> that also allows custom
 spline degrees (<code class="xref py py-obj docutils literal"><span class="pre">kx</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">ky</span></code>) and smoothing factor (<code class="xref py py-obj docutils literal"><span class="pre">s</span></code>).
 To change these use:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">interp</span><span class="o">=</span><span class="s1">&#39;spline&#39;</span><span class="p">,</span> <span class="n">spline_opts</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>  
 </pre></div>
 </div>
-<p>We refer to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v0.19.1)"><code class="xref py py-obj docutils literal"><span class="pre">RectBivariateSpline</span></code></a> description for
+<p>We refer to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.0.0)"><code class="xref py py-obj docutils literal"><span class="pre">RectBivariateSpline</span></code></a> description for
 further information.</p>
 </div>
 </div>
@@ -243,8 +243,8 @@ further information.</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4. &nbsp;
-    Last built 17 Oct 2017. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5. &nbsp;
+    Last built 02 Nov 2017. <br/>
   </p>
 </footer>
   </body>

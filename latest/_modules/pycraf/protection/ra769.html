@@ -165,7 +165,9 @@
 
     <span class="n">qtab</span> <span class="o">=</span> <span class="n">QTable</span><span class="p">(</span><span class="n">meta</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;RA.769 </span><span class="si">{}</span><span class="s1"> limits&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">)})</span>
     <span class="n">freq</span> <span class="o">=</span> <span class="n">csv_tab</span><span class="p">[</span><span class="s1">&#39;freq0&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">MHz</span>
-    <span class="n">bandwidth</span> <span class="o">=</span> <span class="n">csv_tab</span><span class="p">[</span><span class="s1">&#39;Delta_f&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">MHz</span>
+    <span class="n">bandwidth</span> <span class="o">=</span> <span class="n">csv_tab</span><span class="p">[</span><span class="s1">&#39;Delta_f&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span>
+        <span class="n">apu</span><span class="o">.</span><span class="n">kHz</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;spectroscopy&#39;</span> <span class="k">else</span> <span class="n">apu</span><span class="o">.</span><span class="n">MHz</span>
+        <span class="p">)</span>
 
     <span class="n">qtab</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq</span>
     <span class="k">if</span> <span class="n">mode</span> <span class="o">!=</span> <span class="s1">&#39;vlbi&#39;</span><span class="p">:</span>
@@ -271,8 +273,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4. &nbsp;
-    Last built 17 Oct 2017. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5. &nbsp;
+    Last built 02 Nov 2017. <br/>
   </p>
 </footer>
   </body>
