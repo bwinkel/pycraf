@@ -86,7 +86,7 @@
 <h1>opacity_from_atten<a class="headerlink" href="#opacity-from-atten" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.atm.opacity_from_atten">
-<code class="descclassname">pycraf.atm.</code><code class="descname">opacity_from_atten</code><span class="sig-paren">(</span><em>atten</em>, <em>elev</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#opacity_from_atten"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L59" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.opacity_from_atten" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.atm.</code><code class="descname">opacity_from_atten</code><span class="sig-paren">(</span><em>atten</em>, <em>elev=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#opacity_from_atten"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L186" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.opacity_from_atten" title="Permalink to this definition">¶</a></dt>
 <dd><p>Atmospheric opacity derived from attenuation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -96,10 +96,12 @@
 <blockquote>
 <div><p>Atmospheric attenuation [dB or dimless]</p>
 </div></blockquote>
-<p><strong>elev</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>elev</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
 <blockquote>
 <div><p>Elevation [deg]
-This is used to calculate the so-called Airmass, AM = 1 / sin(elev)</p>
+If not None, this is used to correct for the Airmass
+(via <a class="reference internal" href="pycraf.atm.airmass_from_elevation.html#pycraf.atm.airmass_from_elevation" title="pycraf.atm.airmass_from_elevation"><code class="xref py py-obj docutils literal"><span class="pre">airmass_from_elevation</span></code></a>; AM = 1 / sin(elev)),
+which means that the zenith opacity is inferred.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -139,7 +141,7 @@ This is used to calculate the so-called Airmass, AM = 1 / sin(elev)</p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5. &nbsp;
-    Last built 02 Nov 2017. <br/>
+    Last built 07 Nov 2017. <br/>
   </p>
 </footer>
   </body>

@@ -26,7 +26,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="atten_slant_annex1" href="pycraf.atm.atten_slant_annex1.html" />
-    <link rel="prev" title="Atmospheric models (pycraf.atm)" href="../atm/index.html" />
+    <link rel="prev" title="airmass_from_elevation" href="pycraf.atm.airmass_from_elevation.html" />
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 <script type="text/javascript" src="../_static/copybutton.js"></script>
 
@@ -61,7 +61,7 @@
 	</a>
       </li>
       <li class="right">
-	<a href="../atm/index.html" title="Atmospheric models (pycraf.atm)">
+	<a href="pycraf.atm.airmass_from_elevation.html" title="airmass_from_elevation">
 	  &laquo; previous
 	</a>
 	 |
@@ -86,7 +86,7 @@
 <h1>atten_from_opacity<a class="headerlink" href="#atten-from-opacity" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.atm.atten_from_opacity">
-<code class="descclassname">pycraf.atm.</code><code class="descname">atten_from_opacity</code><span class="sig-paren">(</span><em>tau</em>, <em>elev</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#atten_from_opacity"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L86" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.atten_from_opacity" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.atm.</code><code class="descname">atten_from_opacity</code><span class="sig-paren">(</span><em>tau</em>, <em>elev=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#atten_from_opacity"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L219" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.atten_from_opacity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Atmospheric attenuation derived from opacity.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -96,10 +96,12 @@
 <blockquote>
 <div><p>Atmospheric opacity [dimless aka neper]</p>
 </div></blockquote>
-<p><strong>elev</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>elev</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
 <blockquote>
-<div><p>Elevation [deg]</p>
-<p>This is used to calculate the so-called Airmass, AM = 1 / sin(elev)</p>
+<div><p>Elevation [deg]
+If not None, this is used to correct for the Airmass
+(via <a class="reference internal" href="pycraf.atm.airmass_from_elevation.html#pycraf.atm.airmass_from_elevation" title="pycraf.atm.airmass_from_elevation"><code class="xref py py-obj docutils literal"><span class="pre">airmass_from_elevation</span></code></a>; AM = 1 / sin(elev)),
+which means that the input opacity is treated as zenith opacity.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -139,7 +141,7 @@
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5. &nbsp;
-    Last built 02 Nov 2017. <br/>
+    Last built 07 Nov 2017. <br/>
   </p>
 </footer>
   </body>

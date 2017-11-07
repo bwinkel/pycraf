@@ -56,7 +56,7 @@ axes[0].legend(
     )
 axes[0].set_ylabel('Total attenuation [dB]')
 axes[1].set_ylabel('Total gain')
-axes[2].set_ylabel('Opacity')
+axes[2].set_ylabel('Zenith opacity')
 axes[3].set_ylabel('Tebb [K]')
 axes[0].set_ylim((2e-2, 9e2))
 axes[1].set_ylim((0, 1))

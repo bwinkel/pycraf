@@ -25,7 +25,7 @@
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="atten_from_opacity" href="../api/pycraf.atm.atten_from_opacity.html" />
+    <link rel="next" title="airmass_from_elevation" href="../api/pycraf.atm.airmass_from_elevation.html" />
     <link rel="prev" title="ptx_from_prx" href="../api/pycraf.conversions.ptx_from_prx.html" />
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 <script type="text/javascript" src="../_static/copybutton.js"></script>
@@ -56,7 +56,7 @@
     <h3>Navigation</h3>
     <ul>
       <li class="right">
-	<a href="../api/pycraf.atm.atten_from_opacity.html" title="atten_from_opacity">
+	<a href="../api/pycraf.atm.airmass_from_elevation.html" title="airmass_from_elevation">
 	  next &raquo;
 	</a>
       </li>
@@ -316,7 +316,7 @@ with Annex-1 formulas:</p>
     <span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Total attenuation [dB]&#39;</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Total gain&#39;</span><span class="p">)</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Opacity&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Zenith opacity&#39;</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Tebb [K]&#39;</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="mf">2e-2</span><span class="p">,</span> <span class="mf">9e2</span><span class="p">))</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -403,23 +403,29 @@ which has a modified algorithm for Annex 2. We will implement this soon.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.atten_from_opacity.html#pycraf.atm.atten_from_opacity" title="pycraf.atm.atten_from_opacity"><code class="xref py py-obj docutils literal"><span class="pre">atten_from_opacity</span></code></a>(tau,&nbsp;elev)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.airmass_from_elevation.html#pycraf.atm.airmass_from_elevation" title="pycraf.atm.airmass_from_elevation"><code class="xref py py-obj docutils literal"><span class="pre">airmass_from_elevation</span></code></a>(elev)</td>
+<td>Airmass derived from elevation using extrapolation by Maddalena &amp; Johnson.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.atten_from_opacity.html#pycraf.atm.atten_from_opacity" title="pycraf.atm.atten_from_opacity"><code class="xref py py-obj docutils literal"><span class="pre">atten_from_opacity</span></code></a>(tau[,&nbsp;elev])</td>
 <td>Atmospheric attenuation derived from opacity.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.atten_slant_annex1.html#pycraf.atm.atten_slant_annex1" title="pycraf.atm.atten_slant_annex1"><code class="xref py py-obj docutils literal"><span class="pre">atten_slant_annex1</span></code></a>(freq_grid,&nbsp;elevation,&nbsp;…)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.atten_slant_annex1.html#pycraf.atm.atten_slant_annex1" title="pycraf.atm.atten_slant_annex1"><code class="xref py py-obj docutils literal"><span class="pre">atten_slant_annex1</span></code></a>(freq_grid,&nbsp;elevation,&nbsp;…)</td>
 <td>Path attenuation for a slant path through full atmosphere according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a> Eq (17-20).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.atten_slant_annex2.html#pycraf.atm.atten_slant_annex2" title="pycraf.atm.atten_slant_annex2"><code class="xref py py-obj docutils literal"><span class="pre">atten_slant_annex2</span></code></a>(atten_dry,&nbsp;atten_wet,&nbsp;…)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.atten_slant_annex2.html#pycraf.atm.atten_slant_annex2" title="pycraf.atm.atten_slant_annex2"><code class="xref py py-obj docutils literal"><span class="pre">atten_slant_annex2</span></code></a>(atten_dry,&nbsp;atten_wet,&nbsp;…)</td>
 <td>Simple path attenuation for slant path through full atmosphere according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Eq (28).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.atten_specific_annex1.html#pycraf.atm.atten_specific_annex1" title="pycraf.atm.atten_specific_annex1"><code class="xref py py-obj docutils literal"><span class="pre">atten_specific_annex1</span></code></a>(freq_grid,&nbsp;press_dry,&nbsp;…)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.atten_specific_annex1.html#pycraf.atm.atten_specific_annex1" title="pycraf.atm.atten_specific_annex1"><code class="xref py py-obj docutils literal"><span class="pre">atten_specific_annex1</span></code></a>(freq_grid,&nbsp;press_dry,&nbsp;…)</td>
 <td>Specific (one layer) atmospheric attenuation according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Annex 1.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.atten_specific_annex2.html#pycraf.atm.atten_specific_annex2" title="pycraf.atm.atten_specific_annex2"><code class="xref py py-obj docutils literal"><span class="pre">atten_specific_annex2</span></code></a>(freq_grid,&nbsp;press,&nbsp;…)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.atten_specific_annex2.html#pycraf.atm.atten_specific_annex2" title="pycraf.atm.atten_specific_annex2"><code class="xref py py-obj docutils literal"><span class="pre">atten_specific_annex2</span></code></a>(freq_grid,&nbsp;press,&nbsp;…)</td>
 <td>Specific (one layer) atmospheric attenuation based on a simplified algorithm according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Annex 2.1.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.atten_terrestrial.html#pycraf.atm.atten_terrestrial" title="pycraf.atm.atten_terrestrial"><code class="xref py py-obj docutils literal"><span class="pre">atten_terrestrial</span></code></a>(specific_atten,&nbsp;path_length)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.atten_terrestrial.html#pycraf.atm.atten_terrestrial" title="pycraf.atm.atten_terrestrial"><code class="xref py py-obj docutils literal"><span class="pre">atten_terrestrial</span></code></a>(specific_atten,&nbsp;path_length)</td>
 <td>Total path attenuation for a path close to the ground (i.e., one layer), according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Annex 1 + 2.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.elevation_from_airmass.html#pycraf.atm.elevation_from_airmass" title="pycraf.atm.elevation_from_airmass"><code class="xref py py-obj docutils literal"><span class="pre">elevation_from_airmass</span></code></a>(airmass)</td>
+<td>Airmass derived from elevation using extrapolation by Maddalena &amp; Johnson.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.equivalent_height_dry.html#pycraf.atm.equivalent_height_dry" title="pycraf.atm.equivalent_height_dry"><code class="xref py py-obj docutils literal"><span class="pre">equivalent_height_dry</span></code></a>(freq_grid,&nbsp;press)</td>
 <td>Equivalent height for dry air according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Annex 2.2.</td>
@@ -430,7 +436,7 @@ which has a modified algorithm for Annex 2. We will implement this soon.</p>
 <tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.humidity_from_pressure_water.html#pycraf.atm.humidity_from_pressure_water" title="pycraf.atm.humidity_from_pressure_water"><code class="xref py py-obj docutils literal"><span class="pre">humidity_from_pressure_water</span></code></a>(temp,&nbsp;press,&nbsp;…)</td>
 <td>Relative humidity according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.453-12-201609-I/en">ITU-R P.453-12</a>.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.opacity_from_atten.html#pycraf.atm.opacity_from_atten" title="pycraf.atm.opacity_from_atten"><code class="xref py py-obj docutils literal"><span class="pre">opacity_from_atten</span></code></a>(atten,&nbsp;elev)</td>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.atm.opacity_from_atten.html#pycraf.atm.opacity_from_atten" title="pycraf.atm.opacity_from_atten"><code class="xref py py-obj docutils literal"><span class="pre">opacity_from_atten</span></code></a>(atten[,&nbsp;elev])</td>
 <td>Atmospheric opacity derived from attenuation.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.atm.pressure_water_from_humidity.html#pycraf.atm.pressure_water_from_humidity" title="pycraf.atm.pressure_water_from_humidity"><code class="xref py py-obj docutils literal"><span class="pre">pressure_water_from_humidity</span></code></a>(temp,&nbsp;press,&nbsp;…)</td>
@@ -515,7 +521,7 @@ which has a modified algorithm for Annex 2. We will implement this soon.</p>
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5. &nbsp;
-    Last built 02 Nov 2017. <br/>
+    Last built 07 Nov 2017. <br/>
   </p>
 </footer>
   </body>

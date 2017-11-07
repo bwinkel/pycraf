@@ -97,6 +97,7 @@
     <span class="s1">&#39;profile_highlat_summer&#39;</span><span class="p">,</span> <span class="s1">&#39;profile_highlat_winter&#39;</span><span class="p">,</span>
     <span class="s1">&#39;resonances_oxygen&#39;</span><span class="p">,</span> <span class="s1">&#39;resonances_water&#39;</span><span class="p">,</span>
     <span class="c1"># &#39;atten_linear_from_atten_log&#39;, &#39;atten_log_from_atten_linear&#39;,</span>
+    <span class="s1">&#39;elevation_from_airmass&#39;</span><span class="p">,</span> <span class="s1">&#39;airmass_from_elevation&#39;</span><span class="p">,</span>
     <span class="s1">&#39;opacity_from_atten&#39;</span><span class="p">,</span> <span class="s1">&#39;atten_from_opacity&#39;</span><span class="p">,</span>
     <span class="s1">&#39;atten_specific_annex1&#39;</span><span class="p">,</span>
     <span class="s1">&#39;atten_terrestrial&#39;</span><span class="p">,</span> <span class="s1">&#39;atten_slant_annex1&#39;</span><span class="p">,</span>
@@ -128,11 +129,137 @@
     <span class="p">)</span>
 
 
-<div class="viewcode-block" id="opacity_from_atten"><a class="viewcode-back" href="../../../api/pycraf.atm.opacity_from_atten.html#pycraf.atm.opacity_from_atten">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">atten</span><span class="o">=</span><span class="p">(</span><span class="mf">1.000000000001</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span> <span class="n">elev</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+<span class="k">def</span> <span class="nf">_airmass_from_elevation</span><span class="p">(</span><span class="n">elev</span><span class="p">):</span>
+
+    <span class="n">elev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">elev</span><span class="p">)</span>
+    <span class="n">elev_shape</span> <span class="o">=</span> <span class="n">elev</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">elev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">elev</span><span class="p">)</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">elev</span> <span class="o">&lt;</span> <span class="mi">32</span>
+    <span class="n">elev_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">elev</span><span class="p">)</span>
+
+    <span class="n">airmass</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">elev</span><span class="p">)</span>
+    <span class="n">airmass</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">elev_rad</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">])</span>
+    <span class="n">airmass</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.02344</span> <span class="o">+</span> <span class="mf">1.0140</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span>
+        <span class="n">elev</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">+</span> <span class="mf">5.18</span> <span class="o">/</span> <span class="p">(</span><span class="n">elev</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">+</span> <span class="mf">3.35</span><span class="p">)</span>
+        <span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">airmass</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">elev_shape</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="airmass_from_elevation"><a class="viewcode-back" href="../../../api/pycraf.atm.airmass_from_elevation.html#pycraf.atm.airmass_from_elevation">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">elev</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">opacity_from_atten</span><span class="p">(</span><span class="n">atten</span><span class="p">,</span> <span class="n">elev</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">airmass_from_elevation</span><span class="p">(</span><span class="n">elev</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Airmass derived from elevation using extrapolation by Maddalena &amp; Johnson.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    elev : `~astropy.units.Quantity`</span>
+<span class="sd">        Elevation [deg]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    airmass : `~astropy.units.Quantity`</span>
+<span class="sd">        Airmass [dimless]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    For low elevations, the well-known 1/sin-law breaks down. Maddalena &amp;</span>
+<span class="sd">    Johnson (2006) propose the following extrapolation for El &lt; 32 deg:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \\textrm{AM} = \\begin{cases}</span>
+<span class="sd">            -0.02344 + \\frac{1.0140}{</span>
+<span class="sd">                \\sin\\left(\\mathrm{El} + \\frac{5.18}{\\mathrm{El} + 3.35}\\right)}\\qquad\\mathrm{for~}\\mathrm{El}&lt;32\\\\</span>
+<span class="sd">            \\frac{1}{\\sin\\mathrm{El}}\\qquad\\mathrm{for~}\\mathrm{El}\\geq32</span>
+<span class="sd">            \\end{cases}</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_airmass_from_elevation</span><span class="p">(</span><span class="n">elev</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_elevation_from_airmass</span><span class="p">(</span><span class="n">airmass</span><span class="p">):</span>
+
+    <span class="n">airmass</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">airmass</span><span class="p">)</span>
+    <span class="n">airmass_shape</span> <span class="o">=</span> <span class="n">airmass</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">airmass</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">airmass</span><span class="p">)</span>
+
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">airmass</span> <span class="o">&lt;=</span> <span class="mf">1.887079914799858</span>  <span class="c1"># via airmass_from_elevation(32)</span>
+
+    <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span>
+        <span class="mf">1.0140</span> <span class="o">/</span> <span class="p">(</span><span class="n">airmass</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.02344</span><span class="p">)</span>
+        <span class="p">))</span>
+
+    <span class="n">elev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">airmass</span><span class="p">)</span>
+    <span class="n">elev</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mf">0.5</span> <span class="o">*</span> <span class="n">B</span> <span class="o">+</span>
+        <span class="mf">0.025</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">400.0</span> <span class="o">*</span> <span class="n">B</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">2680.0</span> <span class="o">*</span> <span class="n">B</span> <span class="o">-</span> <span class="mf">3799.0</span><span class="p">)</span> <span class="o">-</span>
+        <span class="mf">1.675</span>
+        <span class="p">)</span>
+    <span class="n">elev</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">airmass</span><span class="p">[</span><span class="n">mask</span><span class="p">]))</span>
+
+    <span class="k">return</span> <span class="n">elev</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">airmass_shape</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="elevation_from_airmass"><a class="viewcode-back" href="../../../api/pycraf.atm.elevation_from_airmass.html#pycraf.atm.elevation_from_airmass">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">airmass</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">deg</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">elevation_from_airmass</span><span class="p">(</span><span class="n">airmass</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Airmass derived from elevation using extrapolation by Maddalena &amp; Johnson.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    airmass : `~astropy.units.Quantity`</span>
+<span class="sd">        Airmass [dimless]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    elev : `~astropy.units.Quantity`</span>
+<span class="sd">        Elevation [deg]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    For low elevations, the well-known 1/sin-law breaks down. Maddalena &amp;</span>
+<span class="sd">    Johnson (2006) propose the following extrapolation for El (in degrees):</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \\textrm{AM} = \\begin{cases}</span>
+<span class="sd">            -0.02344 + \\frac{1.0140}{</span>
+<span class="sd">                \\sin\\left(\\mathrm{El} + \\frac{5.18}{\\mathrm{El} + 3.35}\\right)}\\qquad\\mathrm{for~}\\mathrm{El}&lt;32\\\\</span>
+<span class="sd">            \\frac{1}{\\sin\\mathrm{El}}\\qquad\\mathrm{for~}\\mathrm{El}\\geq32</span>
+<span class="sd">            \\end{cases}</span>
+
+<span class="sd">    which was simply inverted:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \\mathrm{El} = \\begin{cases}</span>
+<span class="sd">            \\frac{B}{2} +</span>
+<span class="sd">                \\frac{1}{40}\\sqrt{400 B^2 + 2680 B - 3799} - 1.675\\qquad\\mathrm{for~}\\mathrm{AM}\\leq1.88708 \\\\</span>
+<span class="sd">            \\sin^{-1}\\frac{1}{\\mathrm{AM}}\\qquad\\mathrm{for~}\\mathrm{AM}&gt;1.88708</span>
+<span class="sd">            \\end{cases}</span>
+
+<span class="sd">    where</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        B \\equiv \\sin^{-1}\\left(\\frac{1.0140}{\\mathrm{AM} + 0.02344}\\right)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_elevation_from_airmass</span><span class="p">(</span><span class="n">airmass</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="opacity_from_atten"><a class="viewcode-back" href="../../../api/pycraf.atm.opacity_from_atten.html#pycraf.atm.opacity_from_atten">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">atten</span><span class="o">=</span><span class="p">(</span><span class="mf">1.000000000001</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span> <span class="n">elev</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">opacity_from_atten</span><span class="p">(</span><span class="n">atten</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Atmospheric opacity derived from attenuation.</span>
 
@@ -140,9 +267,11 @@
 <span class="sd">    ----------</span>
 <span class="sd">    atten : `~astropy.units.Quantity`</span>
 <span class="sd">        Atmospheric attenuation [dB or dimless]</span>
-<span class="sd">    elev : `~astropy.units.Quantity`</span>
+<span class="sd">    elev : `~astropy.units.Quantity`, optional</span>
 <span class="sd">        Elevation [deg]</span>
-<span class="sd">        This is used to calculate the so-called Airmass, AM = 1 / sin(elev)</span>
+<span class="sd">        If not None, this is used to correct for the Airmass</span>
+<span class="sd">        (via `~pycraf.atm.airmass_from_elevation`; AM = 1 / sin(elev)),</span>
+<span class="sd">        which means that the zenith opacity is inferred.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -150,16 +279,20 @@
 <span class="sd">        Atmospheric opacity [dimless aka neper]</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">AM_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">elev</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">elev</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 
-    <span class="k">return</span> <span class="n">AM_inv</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">atten</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">atten</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">atten</span><span class="p">)</span> <span class="o">/</span> <span class="n">_airmass_from_elevation</span><span class="p">(</span><span class="n">elev</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="atten_from_opacity"><a class="viewcode-back" href="../../../api/pycraf.atm.atten_from_opacity.html#pycraf.atm.atten_from_opacity">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">tau</span><span class="o">=</span><span class="p">(</span><span class="mf">0.000000000001</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span> <span class="n">elev</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
-    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
+    <span class="n">tau</span><span class="o">=</span><span class="p">(</span><span class="mf">0.000000000001</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span> <span class="n">elev</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">atten_from_opacity</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">elev</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">atten_from_opacity</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Atmospheric attenuation derived from opacity.</span>
 
@@ -167,10 +300,11 @@
 <span class="sd">    ----------</span>
 <span class="sd">    tau : `~astropy.units.Quantity`</span>
 <span class="sd">        Atmospheric opacity [dimless aka neper]</span>
-<span class="sd">    elev : `~astropy.units.Quantity`</span>
+<span class="sd">    elev : `~astropy.units.Quantity`, optional</span>
 <span class="sd">        Elevation [deg]</span>
-
-<span class="sd">        This is used to calculate the so-called Airmass, AM = 1 / sin(elev)</span>
+<span class="sd">        If not None, this is used to correct for the Airmass</span>
+<span class="sd">        (via `~pycraf.atm.airmass_from_elevation`; AM = 1 / sin(elev)),</span>
+<span class="sd">        which means that the input opacity is treated as zenith opacity.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -178,9 +312,13 @@
 <span class="sd">        Atmospheric attenuation [dB or dimless]</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">AM</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">elev</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">elev</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 
-    <span class="k">return</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tau</span> <span class="o">*</span> <span class="n">AM</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tau</span><span class="p">))</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="k">return</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tau</span> <span class="o">*</span> <span class="n">_airmass_from_elevation</span><span class="p">(</span><span class="n">elev</span><span class="p">)))</span></div>
 
 
 <div class="viewcode-block" id="refractive_index"><a class="viewcode-back" href="../../../api/pycraf.atm.refractive_index.html#pycraf.atm.refractive_index">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
@@ -1919,7 +2057,7 @@
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5. &nbsp;
-    Last built 02 Nov 2017. <br/>
+    Last built 07 Nov 2017. <br/>
   </p>
 </footer>
   </body>
