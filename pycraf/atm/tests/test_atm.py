@@ -80,11 +80,65 @@ class TestConversions:
 
         pass
 
+    def test_elevation_from_airmass(self):
+
+        args_list = [
+            (1, None, cnv.dimless),
+            ]
+        check_astro_quantities(atm.elevation_from_airmass, args_list)
+
+        elevation = np.array([0.1, 1, 10, 50, 89.9]) * apu.deg
+        airmass = Quantity([
+            36.25962353, 26.50201093, 5.60010213, 1.30540729, 1.00000152
+            ], cnv.dimless)
+
+        assert_quantity_allclose(
+            atm.elevation_from_airmass(airmass),
+            elevation,
+            rtol=1.e-5
+            )
+
+    def test_airmass_from_elevation(self):
+
+        args_list = [
+            (0, 90, apu.deg),
+            ]
+        check_astro_quantities(atm.airmass_from_elevation, args_list)
+
+        elevation = np.array([0.1, 1, 10, 50, 89.9]) * apu.deg
+        airmass = Quantity([
+            36.25962353, 26.50201093, 5.60010213, 1.30540729, 1.00000152
+            ], cnv.dimless)
+
+        assert_quantity_allclose(
+            atm.airmass_from_elevation(elevation),
+            airmass
+            )
+
     def test_opacity_from_atten(self):
 
         args_list = [
             (1.000000000001, None, cnv.dimless),
-            (-90, 90, apu.deg),
+            ]
+        check_astro_quantities(atm.opacity_from_atten, args_list)
+
+        # atten_dB = Quantity([0.1, 1, 10, 50, 100], cnv.dB)  # astropy.bug
+        atten_dB = np.array([0.1, 1, 10, 50, 100]) * cnv.dB
+        opacity = Quantity([
+            2.30258509e-02, 2.30258509e-01, 2.30258509e+00, 1.15129255e+01,
+            2.30258509e+01
+            ], cnv.dimless)
+
+        assert_quantity_allclose(
+            atm.opacity_from_atten(atten_dB.to(cnv.dimless)),
+            opacity
+            )
+
+    def test_opacity_from_atten_zenith(self):
+
+        args_list = [
+            (1.000000000001, None, cnv.dimless),
+            (0, 90, apu.deg),
             ]
         check_astro_quantities(atm.opacity_from_atten, args_list)
 
@@ -96,11 +150,6 @@ class TestConversions:
             ], cnv.dimless)
 
         assert_quantity_allclose(
-            atm.opacity_from_atten(atten_dB, elev),
-            opacity
-            )
-
-        assert_quantity_allclose(
             atm.opacity_from_atten(atten_dB.to(cnv.dimless), elev),
             opacity
             )
@@ -109,7 +158,27 @@ class TestConversions:
 
         args_list = [
             (0.000000000001, None, cnv.dimless),
-            (-90, 90, apu.deg),
+            (0, 90, apu.deg),
+            ]
+        check_astro_quantities(atm.atten_from_opacity, args_list)
+
+        # atten_dB = Quantity([0.1, 1, 10, 50, 100], cnv.dB)  # astropy.bug
+        atten_dB = np.array([0.1, 1, 10, 50, 100]) * cnv.dB
+        opacity = Quantity([
+            2.30258509e-02, 2.30258509e-01, 2.30258509e+00, 1.15129255e+01,
+            2.30258509e+01
+            ], cnv.dimless)
+
+        assert_quantity_allclose(
+            atm.atten_from_opacity(opacity),
+            atten_dB
+            )
+
+    def test_atten_from_opacity_zenith(self):
+
+        args_list = [
+            (0.000000000001, None, cnv.dimless),
+            (0, 90, apu.deg),
             ]
         check_astro_quantities(atm.atten_from_opacity, args_list)
 

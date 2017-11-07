@@ -1,6 +1,15 @@
 0.25.5.dev (unreleased)
 =======================
 
+pycraf.atm
+^^^^^^^^^^^^^^^
+- Add two new functions `atm.elevation_from_airmass` and `
+  atm.airmass_from_elevation`, which use a better formula for small
+  elevations (compared to the 1/sin(El) behavior). Furthermore,
+  the elevation parameter in `atm.opacity_from_atten` and
+  `atm.atten_from_opacity` has been made optional. If given, the
+  airmass is corrected for (i.e., one works with zenith opacities).
+
 API Changes
 -----------
 - The functions `pathprof.atten_path_fast` and `pathprof.atten_map_fast`

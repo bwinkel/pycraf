@@ -25,6 +25,7 @@ __all__ = [
     'profile_highlat_summer', 'profile_highlat_winter',
     'resonances_oxygen', 'resonances_water',
     # 'atten_linear_from_atten_log', 'atten_log_from_atten_linear',
+    'elevation_from_airmass', 'airmass_from_elevation',
     'opacity_from_atten', 'atten_from_opacity',
     'atten_specific_annex1',
     'atten_terrestrial', 'atten_slant_annex1',
@@ -56,11 +57,137 @@ resonances_water = np.genfromtxt(
     )
 
 
+def _airmass_from_elevation(elev):
+
+    elev = np.array(elev)
+    elev_shape = elev.shape
+    elev = np.atleast_1d(elev)
+    mask = elev < 32
+    elev_rad = np.radians(elev)
+
+    airmass = np.empty_like(elev)
+    airmass[~mask] = 1 / np.sin(elev_rad[~mask])
+    airmass[mask] = -0.02344 + 1.0140 / np.sin(np.radians(
+        elev[mask] + 5.18 / (elev[mask] + 3.35)
+        ))
+
+    return airmass.reshape(elev_shape)
+
+
 @utils.ranged_quantity_input(
-    atten=(1.000000000001, None, cnv.dimless), elev=(-90, 90, apu.deg),
+    elev=(0, 90, apu.deg),
     strip_input_units=True, output_unit=cnv.dimless
     )
-def opacity_from_atten(atten, elev):
+def airmass_from_elevation(elev):
+    '''
+    Airmass derived from elevation using extrapolation by Maddalena & Johnson.
+
+    Parameters
+    ----------
+    elev : `~astropy.units.Quantity`
+        Elevation [deg]
+
+    Returns
+    -------
+    airmass : `~astropy.units.Quantity`
+        Airmass [dimless]
+
+    Notes
+    -----
+    For low elevations, the well-known 1/sin-law breaks down. Maddalena &
+    Johnson (2006) propose the following extrapolation for El < 32 deg:
+
+    .. math::
+
+        \\textrm{AM} = \\begin{cases}
+            -0.02344 + \\frac{1.0140}{
+                \\sin\\left(\\mathrm{El} + \\frac{5.18}{\\mathrm{El} + 3.35}\\right)}\\qquad\\mathrm{for~}\\mathrm{El}<32\\\\
+            \\frac{1}{\\sin\\mathrm{El}}\\qquad\\mathrm{for~}\\mathrm{El}\\geq32
+            \\end{cases}
+    '''
+
+    return _airmass_from_elevation(elev)
+
+
+def _elevation_from_airmass(airmass):
+
+    airmass = np.array(airmass)
+    airmass_shape = airmass.shape
+    airmass = np.atleast_1d(airmass)
+
+    mask = airmass <= 1.887079914799858  # via airmass_from_elevation(32)
+
+    B = np.degrees(np.arcsin(
+        1.0140 / (airmass[~mask] + 0.02344)
+        ))
+
+    elev = np.empty_like(airmass)
+    elev[~mask] = (
+        0.5 * B +
+        0.025 * np.sqrt(400.0 * B ** 2 + 2680.0 * B - 3799.0) -
+        1.675
+        )
+    elev[mask] = np.degrees(np.arcsin(1 / airmass[mask]))
+
+    return elev.reshape(airmass_shape)
+
+
+@utils.ranged_quantity_input(
+    airmass=(1, None, cnv.dimless),
+    strip_input_units=True, output_unit=apu.deg
+    )
+def elevation_from_airmass(airmass):
+    '''
+    Airmass derived from elevation using extrapolation by Maddalena & Johnson.
+
+    Parameters
+    ----------
+    airmass : `~astropy.units.Quantity`
+        Airmass [dimless]
+
+    Returns
+    -------
+    elev : `~astropy.units.Quantity`
+        Elevation [deg]
+
+    Notes
+    -----
+    For low elevations, the well-known 1/sin-law breaks down. Maddalena &
+    Johnson (2006) propose the following extrapolation for El (in degrees):
+
+    .. math::
+
+        \\textrm{AM} = \\begin{cases}
+            -0.02344 + \\frac{1.0140}{
+                \\sin\\left(\\mathrm{El} + \\frac{5.18}{\\mathrm{El} + 3.35}\\right)}\\qquad\\mathrm{for~}\\mathrm{El}<32\\\\
+            \\frac{1}{\\sin\\mathrm{El}}\\qquad\\mathrm{for~}\\mathrm{El}\\geq32
+            \\end{cases}
+
+    which was simply inverted:
+
+    .. math::
+
+        \\mathrm{El} = \\begin{cases}
+            \\frac{B}{2} +
+                \\frac{1}{40}\\sqrt{400 B^2 + 2680 B - 3799} - 1.675\\qquad\\mathrm{for~}\\mathrm{AM}\\leq1.88708 \\\\
+            \\sin^{-1}\\frac{1}{\\mathrm{AM}}\\qquad\\mathrm{for~}\\mathrm{AM}>1.88708
+            \\end{cases}
+
+    where
+
+    .. math::
+
+        B \\equiv \\sin^{-1}\\left(\\frac{1.0140}{\\mathrm{AM} + 0.02344}\\right)
+    '''
+
+    return _elevation_from_airmass(airmass)
+
+
+@utils.ranged_quantity_input(
+    atten=(1.000000000001, None, cnv.dimless), elev=(0, 90, apu.deg),
+    strip_input_units=True, allow_none=True, output_unit=cnv.dimless
+    )
+def opacity_from_atten(atten, elev=None):
     '''
     Atmospheric opacity derived from attenuation.
 
@@ -68,9 +195,11 @@ def opacity_from_atten(atten, elev):
     ----------
     atten : `~astropy.units.Quantity`
         Atmospheric attenuation [dB or dimless]
-    elev : `~astropy.units.Quantity`
+    elev : `~astropy.units.Quantity`, optional
         Elevation [deg]
-        This is used to calculate the so-called Airmass, AM = 1 / sin(elev)
+        If not None, this is used to correct for the Airmass
+        (via `~pycraf.atm.airmass_from_elevation`; AM = 1 / sin(elev)),
+        which means that the zenith opacity is inferred.
 
     Returns
     -------
@@ -78,16 +207,20 @@ def opacity_from_atten(atten, elev):
         Atmospheric opacity [dimless aka neper]
     '''
 
-    AM_inv = np.sin(np.radians(elev))
+    if elev is None:
 
-    return AM_inv * np.log(atten)
+        return np.log(atten)
+
+    else:
+
+        return np.log(atten) / _airmass_from_elevation(elev)
 
 
 @utils.ranged_quantity_input(
-    tau=(0.000000000001, None, cnv.dimless), elev=(-90, 90, apu.deg),
-    strip_input_units=True, output_unit=cnv.dB
+    tau=(0.000000000001, None, cnv.dimless), elev=(0, 90, apu.deg),
+    strip_input_units=True, allow_none=True, output_unit=cnv.dB
     )
-def atten_from_opacity(tau, elev):
+def atten_from_opacity(tau, elev=None):
     '''
     Atmospheric attenuation derived from opacity.
 
@@ -95,10 +228,11 @@ def atten_from_opacity(tau, elev):
     ----------
     tau : `~astropy.units.Quantity`
         Atmospheric opacity [dimless aka neper]
-    elev : `~astropy.units.Quantity`
+    elev : `~astropy.units.Quantity`, optional
         Elevation [deg]
-
-        This is used to calculate the so-called Airmass, AM = 1 / sin(elev)
+        If not None, this is used to correct for the Airmass
+        (via `~pycraf.atm.airmass_from_elevation`; AM = 1 / sin(elev)),
+        which means that the input opacity is treated as zenith opacity.
 
     Returns
     -------
@@ -106,9 +240,13 @@ def atten_from_opacity(tau, elev):
         Atmospheric attenuation [dB or dimless]
     '''
 
-    AM = 1. / np.sin(np.radians(elev))
+    if elev is None:
 
-    return 10 * np.log10(np.exp(tau * AM))
+        return 10 * np.log10(np.exp(tau))
+
+    else:
+
+        return 10 * np.log10(np.exp(tau * _airmass_from_elevation(elev)))
 
 
 @utils.ranged_quantity_input(
