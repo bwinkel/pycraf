@@ -28,6 +28,10 @@ Bugfixes
 - The solution to last exercise in the conversions tutorial notebook was
   wrong. (Thanks to A. Jessner for spotting this.)
 
+Other
+-----
+- Added some notebooks with exercises and solutions.
+
 0.25.4 (2017-09-21)
 ====================
 
