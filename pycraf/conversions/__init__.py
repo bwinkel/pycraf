@@ -12,7 +12,7 @@ The following Decibel units are available:
       Unit             Alias         Definition
 ================ ============== ======================================
 |dimless|        dimless        |u|.dimensionless_unscaled
-|dB|,|dBi|,|dBc| dB, dBi, dBc   |u|.dB(dimless)
+|dB_ic|          dB, dBi, dBc   |u|.dB(dimless)
 |dBW|            dB_W           |u|.dB(|u|.W)
 |dBW_Hz|         dB_W_Hz        |u|.dB(|u|.W / |u|.Hz)
 |dBW_m2|         dB_W_m2        |u|.dB(|u|.W / |u|.m ** 2)
@@ -28,9 +28,7 @@ u = `astropy.units <http://docs.astropy.org/en/stable/units/index.html>`_
 
 .. |u| replace:: u
 .. |dimless| replace:: :math:`1`
-.. |dB| replace:: :math:`\mathrm{dB}`
-.. |dBi| replace:: :math:`\mathrm{dBi}`
-.. |dBc| replace:: :math:`\mathrm{dBc}`
+.. |dB_ic| replace:: :math:`\mathrm{dB},~\mathrm{dBi},~\mathrm{dBc}`
 .. |dBW| replace:: :math:`\mathrm{dB}[\mathrm{W}]`
 .. |dBW_Hz| replace:: :math:`\mathrm{dB}[\mathrm{W} / \mathrm{Hz}]`
 .. |dBW_m2| replace:: :math:`\mathrm{dB}[\mathrm{W} / \mathrm{m}^2]`

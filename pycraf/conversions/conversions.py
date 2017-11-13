@@ -29,14 +29,17 @@ UNITS = [
 
 __all__ = [
     'eff_from_geom_area', 'geom_from_eff_area',
-    'eta_a_from_areas',
+    'eta_a_from_areas', 'iso_eff_area',
     'gain_from_eff_area', 'eff_area_from_gain',
+    'gamma_from_eff_area', 'eff_area_from_gamma',
     'antfactor_from_gain', 'gain_from_antfactor',
     'powerflux_from_efield', 'efield_from_powerflux',
     'ptx_from_efield', 'efield_from_ptx',
     'powerflux_from_ptx', 'ptx_from_powerflux',
     'prx_from_powerflux', 'powerflux_from_prx',
     'prx_from_ptx', 'ptx_from_prx',
+    't_a_from_prx_nu', 'prx_nu_from_t_a',
+    't_a_from_powerflux_nu', 'powerflux_nu_from_t_a',
     'free_space_loss',
     'Erx_unit', 'R0', 'efield_equivalency',
     ] + UNITS
@@ -103,7 +106,35 @@ Erx_unit = (
     ).to(apu.uV / apu.m)
 C_VALUE = con.c.to(apu.m / apu.s).value
 R0_VALUE = R0.to(apu.Ohm).value
+KB_VALUE = con.k_B.to(apu.J / apu.K).value
 ERX_VALUE = Erx_unit.to(apu.V / apu.m).value
+
+
+@utils.ranged_quantity_input(
+    freq=(0, None, apu.Hz),
+    strip_input_units=True, output_unit=apu.m ** 2
+    )
+def iso_eff_area(freq):
+    '''
+    Effective antenna area of the ideal (loss-less) isotropic antenna.
+
+    Parameters
+    ----------
+    freq : `~astropy.units.Quantity`
+        Frequency [Hz]
+
+    Returns
+    -------
+    eff_area : `~astropy.units.Quantity`
+        Effective antenna area, A_eff [m**2]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
+    '''
+
+    return (C_VALUE / freq) ** 2 / 4 / np.pi
 
 
 @utils.ranged_quantity_input(
@@ -209,6 +240,60 @@ def eta_a_from_areas(geom_area, eff_area):
     '''
 
     return eff_area / geom_area * 100.
+
+
+@utils.ranged_quantity_input(
+    eff_area=(0, None, apu.m ** 2),
+    strip_input_units=True, output_unit=apu.K / apu.Jy
+    )
+def gamma_from_eff_area(eff_area):
+    '''
+    Antenna sensitivity ("Kelvins-per-Jansky") from effective antenna area.
+
+    Parameters
+    ----------
+    eff_area : `~astropy.units.Quantity`
+        Effective antenna area, A_eff [m**2]
+
+    Returns
+    -------
+    Gamma : `~astropy.units.Quantity`
+        Antenna sensitivity [K / Jy]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
+    '''
+
+    return eff_area / 2 / KB_VALUE * 1.e-26
+
+
+@utils.ranged_quantity_input(
+    gamma=(0, None, apu.K / apu.Jy),
+    strip_input_units=True, output_unit=apu.m ** 2
+    )
+def eff_area_from_gamma(gamma):
+    '''
+    Effective antenna area from antenna sensitivity ("Kelvins-per-Jansky").
+
+    Parameters
+    ----------
+    Gamma : `~astropy.units.Quantity`
+        Antenna sensitivity [K / Jy]
+
+    Returns
+    -------
+    eff_area : `~astropy.units.Quantity`
+        Effective antenna area, A_eff [m**2]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
+    '''
+
+    return gamma * 2 * KB_VALUE * 1.e26
 
 
 @utils.ranged_quantity_input(
@@ -604,6 +689,134 @@ def prx_from_powerflux(powerflux, freq, grx):
     return powerflux * grx * (
         C_VALUE ** 2 / 4. / np.pi / freq ** 2
         )
+
+
+@utils.ranged_quantity_input(
+    prx_nu=(1.e-30, None, apu.W / apu.Hz),
+    strip_input_units=True, output_unit=apu.K
+    )
+def t_a_from_prx_nu(prx_nu):
+    '''
+    Antenna temperature from received spectral power.
+
+    The received spectral power is the power per unit frequency, i.e.,
+    `prx_nu = prx / bandwidth`.
+
+    Parameters
+    ----------
+    prx_nu : `~astropy.units.Quantity`
+        Received spectral power [W/Hz]
+
+    Returns
+    -------
+    T_A : `~astropy.units.Quantity`
+        Antenna temperature [K]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
+    '''
+
+    return prx_nu / 2 / KB_VALUE
+
+
+@utils.ranged_quantity_input(
+    T_A=(1.e-30, None, apu.K),
+    strip_input_units=True, output_unit=apu.W / apu.Hz
+    )
+def prx_nu_from_t_a(T_A):
+    '''
+    Received spectral power from antenna temperature.
+
+    The received spectral power is the power per unit frequency, i.e.,
+    `prx_nu = prx / bandwidth`.
+
+    Parameters
+    ----------
+    T_a : `~astropy.units.Quantity`
+        Antenna temperature [K]
+
+    Returns
+    -------
+    prx_nu : `~astropy.units.Quantity`
+        Received spectral power [W/Hz]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
+    '''
+
+    return T_A * 2 * KB_VALUE
+
+
+@utils.ranged_quantity_input(
+    powerflux_nu=(1.e-30, None, apu.Jy),
+    eff_area=(0, None, apu.m ** 2),
+    strip_input_units=True, output_unit=apu.K
+    )
+def t_a_from_powerflux_nu(powerflux_nu, eff_area):
+    '''
+    Antenna temperature from spectral power flux density, given
+    effective antenna area.
+
+    The spectral power flux density is the power flux density per
+    unit frequency, i.e., `powerflux_nu = powerflux / bandwidth`.
+
+    Parameters
+    ----------
+    powerflux_nu : `~astropy.units.Quantity`
+        Spectral power flux density [W/m**2/Hz, dB_W_m2_Hz, Jy]
+    eff_area : `~astropy.units.Quantity`
+        Effective antenna area, A_eff [m**2]
+
+    Returns
+    -------
+    T_A : `~astropy.units.Quantity`
+        Antenna temperature [K]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
+    '''
+
+    return 1e-26 * powerflux_nu * eff_area / 2 / KB_VALUE
+
+
+@utils.ranged_quantity_input(
+    T_A=(1.e-30, None, apu.K),
+    eff_area=(0, None, apu.m ** 2),
+    strip_input_units=True, output_unit=apu.Jy
+    )
+def powerflux_nu_from_t_a(T_A, eff_area):
+    '''
+    Spectral power flux density from antenna temperature, given
+    effective antenna area.
+
+    The spectral power flux density is the power flux density per
+    unit frequency, i.e., `powerflux_nu = powerflux / bandwidth`.
+
+    Parameters
+    ----------
+    T_A : `~astropy.units.Quantity`
+        Antenna temperature [K]
+    eff_area : `~astropy.units.Quantity`
+        Effective antenna area, A_eff [m**2]
+
+    Returns
+    -------
+    powerflux_nu : `~astropy.units.Quantity`
+        Spectral power flux density [W/m**2/Hz, dB_W_m2_Hz, Jy]
+
+    Notes
+    -----
+    Because all parameters/returned values are Astropy Quantities (see
+    `~astropy.units.Quantity`), unit conversion is automatically performed.
+    '''
+
+    return 1e26 * T_A / eff_area * 2 * KB_VALUE
 
 
 def _free_space_loss(d, f):

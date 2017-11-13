@@ -1,6 +1,11 @@
 0.25.5.dev (unreleased)
 =======================
 
+pycraf.conversions
+^^^^^^^^^^^^^^^^^^
+- Add further utility routines to `pycraf.conversions` module, to compute
+  antenna temperatures and sensitivities.
+
 pycraf.atm
 ^^^^^^^^^^^^^^^
 - Add two new functions `atm.elevation_from_airmass` and `
@@ -17,6 +22,11 @@ API Changes
   in the future (without API breaking). Three new parameters are returned
   for now: the type of path (Line-of-sight or Trans-horizon) and the
   distance of the horizon w.r.t. Tx/Rx.
+
+Bugfixes
+--------
+- The solution to last exercise in the conversions tutorial notebook was
+  wrong. (Thanks to A. Jessner for spotting this.)
 
 0.25.4 (2017-09-21)
 ====================

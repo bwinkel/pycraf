@@ -92,6 +92,21 @@ class TestConversions:
             cnv.Erx_unit.unit, apu.uV / apu.m
             )
 
+    def test_iso_eff_area(self):
+
+        args_list = [
+            (0, None, apu.Hz),
+            ]
+        check_astro_quantities(cnv.iso_eff_area, args_list)
+
+        freq = 1.42 * apu.GHz
+        A_iso = 0.0035469483 * apu.m ** 2
+
+        assert_quantity_allclose(
+            cnv.iso_eff_area(freq),
+            A_iso
+            )
+
     def test_eff_from_geom_area(self):
 
         args_list = [
@@ -146,6 +161,30 @@ class TestConversions:
         assert_quantity_allclose(
             cnv.eta_a_from_areas(Ageom, Aeff),
             50 * apu.percent
+            )
+
+    def test_gamma_from_eff_area(self):
+
+        args_list = [
+            (0, None, apu.m ** 2),
+            ]
+        check_astro_quantities(cnv.gamma_from_eff_area, args_list)
+
+        assert_quantity_allclose(
+            cnv.gamma_from_eff_area(4000. * apu.m ** 2),
+            1.4485946068301296 * apu.K / apu.Jy
+            )
+
+    def test_eff_area_from_gamma(self):
+
+        args_list = [
+            (0, None, apu.K / apu.Jy),
+            ]
+        check_astro_quantities(cnv.eff_area_from_gamma, args_list)
+
+        assert_quantity_allclose(
+            cnv.eff_area_from_gamma(1.4485946068301296 * apu.K / apu.Jy),
+            4000. * apu.m ** 2
             )
 
     def test_gain_from_eff_area(self):
@@ -379,6 +418,58 @@ class TestConversions:
                 1E-16 * apu.W / apu.m ** 2, 1 * apu.Hz, 20 * cnv.dBi
                 ),
             71.52066466270222 * apu.W
+            )
+
+    def test_t_a_from_prx_nu(self):
+
+        args_list = [
+            (1.e-30, None, apu.W / apu.Hz),
+            ]
+        check_astro_quantities(cnv.t_a_from_prx_nu, args_list)
+
+        assert_quantity_allclose(
+            cnv.t_a_from_prx_nu(2.76129704e-21 * apu.W / apu.Hz),
+            100 * apu.K
+            )
+
+    def test_prx_nu_from_t_a(self):
+
+        args_list = [
+            (1.e-30, None, apu.K),
+            ]
+        check_astro_quantities(cnv.prx_nu_from_t_a, args_list)
+
+        assert_quantity_allclose(
+            cnv.prx_nu_from_t_a(100 * apu.K),
+            2.76129704e-21 * apu.W / apu.Hz
+            )
+
+    def test_t_a_from_powerflux_nu(self):
+
+        args_list = [
+            (1.e-30, None, apu.Jy),
+            (0, None, apu.m ** 2),
+            ]
+        check_astro_quantities(cnv.t_a_from_powerflux_nu, args_list)
+
+        assert_quantity_allclose(
+            cnv.t_a_from_powerflux_nu(1 * apu.Jy, 4000 * apu.m ** 2),
+            1.4485946068301296 * apu.K
+            )
+
+    def test_powerflux_nu_from_t_a(self):
+
+        args_list = [
+            (1.e-30, None, apu.K),
+            (0, None, apu.m ** 2),
+            ]
+        check_astro_quantities(cnv.powerflux_nu_from_t_a, args_list)
+
+        assert_quantity_allclose(
+            cnv.powerflux_nu_from_t_a(
+                1.4485946068301296 * apu.K, 4000 * apu.m ** 2
+                ),
+            1 * apu.Jy
             )
 
     def test_free_space_loss(self):
