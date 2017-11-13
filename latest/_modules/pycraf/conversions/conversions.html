@@ -101,14 +101,17 @@
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;eff_from_geom_area&#39;</span><span class="p">,</span> <span class="s1">&#39;geom_from_eff_area&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;eta_a_from_areas&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;eta_a_from_areas&#39;</span><span class="p">,</span> <span class="s1">&#39;iso_eff_area&#39;</span><span class="p">,</span>
     <span class="s1">&#39;gain_from_eff_area&#39;</span><span class="p">,</span> <span class="s1">&#39;eff_area_from_gain&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;gamma_from_eff_area&#39;</span><span class="p">,</span> <span class="s1">&#39;eff_area_from_gamma&#39;</span><span class="p">,</span>
     <span class="s1">&#39;antfactor_from_gain&#39;</span><span class="p">,</span> <span class="s1">&#39;gain_from_antfactor&#39;</span><span class="p">,</span>
     <span class="s1">&#39;powerflux_from_efield&#39;</span><span class="p">,</span> <span class="s1">&#39;efield_from_powerflux&#39;</span><span class="p">,</span>
     <span class="s1">&#39;ptx_from_efield&#39;</span><span class="p">,</span> <span class="s1">&#39;efield_from_ptx&#39;</span><span class="p">,</span>
     <span class="s1">&#39;powerflux_from_ptx&#39;</span><span class="p">,</span> <span class="s1">&#39;ptx_from_powerflux&#39;</span><span class="p">,</span>
     <span class="s1">&#39;prx_from_powerflux&#39;</span><span class="p">,</span> <span class="s1">&#39;powerflux_from_prx&#39;</span><span class="p">,</span>
     <span class="s1">&#39;prx_from_ptx&#39;</span><span class="p">,</span> <span class="s1">&#39;ptx_from_prx&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;t_a_from_prx_nu&#39;</span><span class="p">,</span> <span class="s1">&#39;prx_nu_from_t_a&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;t_a_from_powerflux_nu&#39;</span><span class="p">,</span> <span class="s1">&#39;powerflux_nu_from_t_a&#39;</span><span class="p">,</span>
     <span class="s1">&#39;free_space_loss&#39;</span><span class="p">,</span>
     <span class="s1">&#39;Erx_unit&#39;</span><span class="p">,</span> <span class="s1">&#39;R0&#39;</span><span class="p">,</span> <span class="s1">&#39;efield_equivalency&#39;</span><span class="p">,</span>
     <span class="p">]</span> <span class="o">+</span> <span class="n">UNITS</span>
@@ -175,7 +178,35 @@
     <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">uV</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
 <span class="n">C_VALUE</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 <span class="n">R0_VALUE</span> <span class="o">=</span> <span class="n">R0</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">Ohm</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+<span class="n">KB_VALUE</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">k_B</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">J</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 <span class="n">ERX_VALUE</span> <span class="o">=</span> <span class="n">Erx_unit</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">V</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+
+
+<div class="viewcode-block" id="iso_eff_area"><a class="viewcode-back" href="../../../api/pycraf.conversions.iso_eff_area.html#pycraf.conversions.iso_eff_area">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">iso_eff_area</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Effective antenna area of the ideal (loss-less) isotropic antenna.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    freq : `~astropy.units.Quantity`</span>
+<span class="sd">        Frequency [Hz]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    eff_area : `~astropy.units.Quantity`</span>
+<span class="sd">        Effective antenna area, A_eff [m**2]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Because all parameters/returned values are Astropy Quantities (see</span>
+<span class="sd">    `~astropy.units.Quantity`), unit conversion is automatically performed.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">C_VALUE</span> <span class="o">/</span> <span class="n">freq</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">4</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span></div>
 
 
 <div class="viewcode-block" id="eff_from_geom_area"><a class="viewcode-back" href="../../../api/pycraf.conversions.eff_from_geom_area.html#pycraf.conversions.eff_from_geom_area">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
@@ -281,6 +312,60 @@
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">return</span> <span class="n">eff_area</span> <span class="o">/</span> <span class="n">geom_area</span> <span class="o">*</span> <span class="mf">100.</span></div>
+
+
+<div class="viewcode-block" id="gamma_from_eff_area"><a class="viewcode-back" href="../../../api/pycraf.conversions.gamma_from_eff_area.html#pycraf.conversions.gamma_from_eff_area">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">eff_area</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">K</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">Jy</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">gamma_from_eff_area</span><span class="p">(</span><span class="n">eff_area</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Antenna sensitivity (&quot;Kelvins-per-Jansky&quot;) from effective antenna area.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eff_area : `~astropy.units.Quantity`</span>
+<span class="sd">        Effective antenna area, A_eff [m**2]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Gamma : `~astropy.units.Quantity`</span>
+<span class="sd">        Antenna sensitivity [K / Jy]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Because all parameters/returned values are Astropy Quantities (see</span>
+<span class="sd">    `~astropy.units.Quantity`), unit conversion is automatically performed.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">eff_area</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">KB_VALUE</span> <span class="o">*</span> <span class="mf">1.e-26</span></div>
+
+
+<div class="viewcode-block" id="eff_area_from_gamma"><a class="viewcode-back" href="../../../api/pycraf.conversions.eff_area_from_gamma.html#pycraf.conversions.eff_area_from_gamma">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">gamma</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">Jy</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">eff_area_from_gamma</span><span class="p">(</span><span class="n">gamma</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Effective antenna area from antenna sensitivity (&quot;Kelvins-per-Jansky&quot;).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Gamma : `~astropy.units.Quantity`</span>
+<span class="sd">        Antenna sensitivity [K / Jy]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    eff_area : `~astropy.units.Quantity`</span>
+<span class="sd">        Effective antenna area, A_eff [m**2]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Because all parameters/returned values are Astropy Quantities (see</span>
+<span class="sd">    `~astropy.units.Quantity`), unit conversion is automatically performed.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">gamma</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">KB_VALUE</span> <span class="o">*</span> <span class="mf">1.e26</span></div>
 
 
 <div class="viewcode-block" id="gain_from_eff_area"><a class="viewcode-back" href="../../../api/pycraf.conversions.gain_from_eff_area.html#pycraf.conversions.gain_from_eff_area">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
@@ -678,6 +763,134 @@
         <span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="t_a_from_prx_nu"><a class="viewcode-back" href="../../../api/pycraf.conversions.t_a_from_prx_nu.html#pycraf.conversions.t_a_from_prx_nu">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">prx_nu</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">K</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">t_a_from_prx_nu</span><span class="p">(</span><span class="n">prx_nu</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Antenna temperature from received spectral power.</span>
+
+<span class="sd">    The received spectral power is the power per unit frequency, i.e.,</span>
+<span class="sd">    `prx_nu = prx / bandwidth`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    prx_nu : `~astropy.units.Quantity`</span>
+<span class="sd">        Received spectral power [W/Hz]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    T_A : `~astropy.units.Quantity`</span>
+<span class="sd">        Antenna temperature [K]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Because all parameters/returned values are Astropy Quantities (see</span>
+<span class="sd">    `~astropy.units.Quantity`), unit conversion is automatically performed.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">prx_nu</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">KB_VALUE</span></div>
+
+
+<div class="viewcode-block" id="prx_nu_from_t_a"><a class="viewcode-back" href="../../../api/pycraf.conversions.prx_nu_from_t_a.html#pycraf.conversions.prx_nu_from_t_a">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">T_A</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">W</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">prx_nu_from_t_a</span><span class="p">(</span><span class="n">T_A</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Received spectral power from antenna temperature.</span>
+
+<span class="sd">    The received spectral power is the power per unit frequency, i.e.,</span>
+<span class="sd">    `prx_nu = prx / bandwidth`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    T_a : `~astropy.units.Quantity`</span>
+<span class="sd">        Antenna temperature [K]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    prx_nu : `~astropy.units.Quantity`</span>
+<span class="sd">        Received spectral power [W/Hz]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Because all parameters/returned values are Astropy Quantities (see</span>
+<span class="sd">    `~astropy.units.Quantity`), unit conversion is automatically performed.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">T_A</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">KB_VALUE</span></div>
+
+
+<div class="viewcode-block" id="t_a_from_powerflux_nu"><a class="viewcode-back" href="../../../api/pycraf.conversions.t_a_from_powerflux_nu.html#pycraf.conversions.t_a_from_powerflux_nu">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">powerflux_nu</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">Jy</span><span class="p">),</span>
+    <span class="n">eff_area</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">K</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">t_a_from_powerflux_nu</span><span class="p">(</span><span class="n">powerflux_nu</span><span class="p">,</span> <span class="n">eff_area</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Antenna temperature from spectral power flux density, given</span>
+<span class="sd">    effective antenna area.</span>
+
+<span class="sd">    The spectral power flux density is the power flux density per</span>
+<span class="sd">    unit frequency, i.e., `powerflux_nu = powerflux / bandwidth`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    powerflux_nu : `~astropy.units.Quantity`</span>
+<span class="sd">        Spectral power flux density [W/m**2/Hz, dB_W_m2_Hz, Jy]</span>
+<span class="sd">    eff_area : `~astropy.units.Quantity`</span>
+<span class="sd">        Effective antenna area, A_eff [m**2]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    T_A : `~astropy.units.Quantity`</span>
+<span class="sd">        Antenna temperature [K]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Because all parameters/returned values are Astropy Quantities (see</span>
+<span class="sd">    `~astropy.units.Quantity`), unit conversion is automatically performed.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="mf">1e-26</span> <span class="o">*</span> <span class="n">powerflux_nu</span> <span class="o">*</span> <span class="n">eff_area</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">KB_VALUE</span></div>
+
+
+<div class="viewcode-block" id="powerflux_nu_from_t_a"><a class="viewcode-back" href="../../../api/pycraf.conversions.powerflux_nu_from_t_a.html#pycraf.conversions.powerflux_nu_from_t_a">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">T_A</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
+    <span class="n">eff_area</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">Jy</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">powerflux_nu_from_t_a</span><span class="p">(</span><span class="n">T_A</span><span class="p">,</span> <span class="n">eff_area</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Spectral power flux density from antenna temperature, given</span>
+<span class="sd">    effective antenna area.</span>
+
+<span class="sd">    The spectral power flux density is the power flux density per</span>
+<span class="sd">    unit frequency, i.e., `powerflux_nu = powerflux / bandwidth`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    T_A : `~astropy.units.Quantity`</span>
+<span class="sd">        Antenna temperature [K]</span>
+<span class="sd">    eff_area : `~astropy.units.Quantity`</span>
+<span class="sd">        Effective antenna area, A_eff [m**2]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    powerflux_nu : `~astropy.units.Quantity`</span>
+<span class="sd">        Spectral power flux density [W/m**2/Hz, dB_W_m2_Hz, Jy]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Because all parameters/returned values are Astropy Quantities (see</span>
+<span class="sd">    `~astropy.units.Quantity`), unit conversion is automatically performed.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="mf">1e26</span> <span class="o">*</span> <span class="n">T_A</span> <span class="o">/</span> <span class="n">eff_area</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">KB_VALUE</span></div>
+
+
 <span class="k">def</span> <span class="nf">_free_space_loss</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
 
     <span class="k">return</span> <span class="p">(</span><span class="n">C_VALUE</span> <span class="o">/</span> <span class="mf">4.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">f</span> <span class="o">/</span> <span class="n">d</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
@@ -812,7 +1025,7 @@
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5. &nbsp;
-    Last built 07 Nov 2017. <br/>
+    Last built 13 Nov 2017. <br/>
   </p>
 </footer>
   </body>

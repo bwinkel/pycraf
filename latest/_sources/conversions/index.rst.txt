@@ -42,25 +42,27 @@ Using the `~pycraf.conversions` package is really simple::
 Because all function parameters and return values are Astropy Quantities
 (see `~astropy.units.Quantity`), unit conversion is automatically performed::
 
-    >> cnv.eff_from_geom_area(10 * u.m ** 2, 50 * u.percent)  # doctest: +FLOAT_CMP
+    >>> cnv.eff_from_geom_area(10 * u.m ** 2, 50 * u.percent)  # doctest: +FLOAT_CMP
     <Quantity 5.0 m2>
 
-    >> cnv.eff_from_geom_area(10 * u.m ** 2, 0.5 * cnv.dimless)  # doctest: +FLOAT_CMP
+    >>> cnv.eff_from_geom_area(10 * u.m ** 2, 0.5 * cnv.dimless)  # doctest: +FLOAT_CMP
     <Quantity 5.0 m2>
 
-    >> cnv.eff_from_geom_area(1 * u.km ** 2, 10 * u.percent)  # doctest: +FLOAT_CMP
+    >>> cnv.eff_from_geom_area(1 * u.km ** 2, 10 * u.percent)  # doctest: +FLOAT_CMP
     <Quantity 100000.0 m2>
 
 
 .. warning::
 
-    It is not possible to omit the unit, even if a quantity is dimensionless
+    It is not possible to omit the unit, even if a quantity is dimensionless!
 
-pycraf would raise an exception if one tried::
+    pycraf would raise an exception if one tried::
 
-    >> cnv.eff_from_geom_area(10 * u.m ** 2, 0.5)
-    TypeError: Argument 'eta_a' to function 'eff_from_geom_area' has no
-    'unit' attribute. You may want to pass in an astropy Quantity instead.
+        >>> cnv.eff_from_geom_area(10 * u.m ** 2, 0.5)  # doctest: +IGNORE_EXCEPTION_DETAIL
+        Traceback (most recent call last):
+          ...
+        TypeError: Argument 'eta_a' to function 'eff_from_geom_area' has no
+        'unit' attribute. You may want to pass in an astropy Quantity instead.
 
 
 .. note::
@@ -89,8 +91,8 @@ Python these are defined with the help of the `~astropy.units` package, e.g.::
     The :math:`\mathrm{dB}[\mu\mathrm{V}^2 / \mathrm{m}^2]` unit is a bit
     special. Engineers will usually call this symbol
     :math:`\mathrm{dB}[\mu\mathrm{V} / \mathrm{m}]`, but strictly speaking
-    the power of the electrical field is referred to, which means that
-    the amplitude of the E-field has to be squared.
+    it is the power of the electrical field which is referred to,
+    which means that the amplitude of the E-field has to be squared.
 
     In fact, if one would omit the squaring from the definition, the unit
     would not work in the equations, because the `~astropy.units` framework
@@ -153,8 +155,10 @@ The following quantities are of interest in compatibility studies:
 - Frequency of radiation: :math:`f`
 - Wavelength of radiation: :math:`\lambda = \frac{c}{f}`
 - Geometric antenna area: :math:`A_\mathrm{geom}`
-- Effective antenna area: :math:`A_\mathrm{eff} = \eta_\mathrm{A} A_\mathrm{geom}`
+- Effective antenna area: :math:`A_\mathrm{eff} = \eta_\mathrm{A} A_\mathrm{geom}`; isotropic loss-less antenna: :math:`A_\mathrm{eff} = \frac{\lambda^2}{4\pi}`
 - Antenna efficiency: :math:`\eta_\mathrm{A}`
+- Antenna temperature: :math:`T_\mathrm{A}=\Gamma S_\nu`
+- Antenna sensitivity: :math:`\Gamma=\frac{A_\mathrm{eff}}{2k_\mathrm{B}}`
 - Transmitter/receiver gain, :math:`G_\mathrm{tx}`, :math:`G_\mathrm{rx}`: :math:`A_\mathrm{eff} = G\frac{\lambda^2}{4\pi}`
 - Pointing flux: :math:`\vec S = \vec E \times \vec H`
 - Power flux density: :math:`S\equiv\vert \vec S \vert = \sqrt{\frac{\varepsilon_0}{\mu_0}} \vert \vec E \vert^2 = \frac{E^2}{R_0}`
@@ -162,6 +166,8 @@ The following quantities are of interest in compatibility studies:
 - Spectral power flux density, :math:`S_\nu`, with: :math:`S=\int \mathrm{d}\nu\,S_\nu`
 - Transmitted power, :math:`P_\mathrm{tx}`, with :math:`S = G_\mathrm{tx}\frac{P_\mathrm{tx}}{4\pi d^2}`
 - Received power, :math:`P_\mathrm{rx} = S\cdot A_\mathrm{eff}^\mathrm{rx} = S\cdot G_\mathrm{rx}\frac{\lambda^2}{4\pi} = G_\mathrm{tx}\frac{P_\mathrm{tx}}{4\pi d^2} \cdot G_\mathrm{rx}\frac{\lambda^2}{4\pi} = G_\mathrm{tx} G_\mathrm{rx} P_\mathrm{tx} L_\mathrm{fs}`
+- Received spectral power, :math:`P_\mathrm{rx,\nu} = \frac{P_\mathrm{rx}}{\Delta\nu}=2 k_\mathrm{B}T_\mathrm{A}`
+- Signal bandwidth, :math:`\Delta \nu`
 - Free-space loss: :math:`L_\mathrm{fs} = \frac{c^2}{16\pi^2}\frac{1}{d^2f^2} = \frac{\lambda^2}{16\pi^2 d^2}`
 
 A few examples::

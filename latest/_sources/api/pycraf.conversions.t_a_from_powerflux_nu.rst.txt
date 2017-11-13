@@ -1,0 +1,6 @@
+t_a_from_powerflux_nu
+=====================
+
+.. currentmodule:: pycraf.conversions
+
+.. autofunction:: t_a_from_powerflux_nu
