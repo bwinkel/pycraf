@@ -335,8 +335,8 @@ def multiply_matrices(*matrices):
     ----------
     matrices : list of `~numpy.array`
         List of (stacks of) rotation matrices. The order of the
-        multiplication is 'R = R1.R2.R3', if '*matrices = (R1, R2, R3)'.
-        (This means, that 'R3' is applied first.)
+        multiplication is `R = R1.R2.R3`, if `*matrices = (R1, R2, R3)`.
+        (This means, that `R3` is applied first.)
 
     Returns
     -------
