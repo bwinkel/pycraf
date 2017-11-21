@@ -87,11 +87,29 @@ matrix:
         - os: osx
           osx_image: xcode8.3
           env:
-            - CC='gcc-7'
-            - CXX='g++-7'
-            - CPP='g++-7'
-            - LD='gcc-7'
+            - CC='/usr/local/opt/llvm/bin/clang'
+            - LDFLAGS='-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib'
+            - CPPFLAGS='-I/usr/local/opt/llvm/include'
+            - COMPILER='llvm'
           # compiler: gcc
+
+        # Try MacOS X
+        - os: osx
+          osx_image: xcode7.2
+          env:
+            - COMPILER='conda'
+          # compiler: gcc
+
+        # Try MacOS X
+        # produces ImportError: dlopen(/private/.../pycraf/pathprof/cyprop.cpython-36m-darwin.so, 2): Symbol not found: _GOMP_parallel
+        # - os: osx
+        #   osx_image: xcode8.3
+        #   env:
+        #     - CC='gcc-7'
+        #     - CXX='g++-7'
+        #     - CPP='g++-7'
+        #     - LD='gcc-7'
+        #     - COMPILER='gcc'
 
         # We have to make the MacOS release based on rather old numpy version
         # otherwise users will keep getting "incompatible API" errors
@@ -100,13 +118,17 @@ matrix:
         - os: osx
           osx_image: xcode8.3
           env:
-            - CC='gcc-7'
-            - CXX='g++-7'
-            - CPP='g++-7'
-            - LD='gcc-7'
+            # - CC='gcc-7'
+            # - CXX='g++-7'
+            # - CPP='g++-7'
+            # - LD='gcc-7'
+            # - COMPILER='gcc'
             - DO_MAC_DIST=YES
             - NUMPY_VERSION=1.11
-          # compiler: gcc
+            - CC='/usr/local/opt/llvm/bin/clang'
+            - LDFLAGS='-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib'
+            - CPPFLAGS='-I/usr/local/opt/llvm/include'
+            - COMPILER='llvm'
 
         # Do a coverage test.
         - os: linux
@@ -148,12 +170,10 @@ matrix:
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gcc; brew link --overwrite gcc; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then gcc --version; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then gcc-7 --version; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then gfortran --version; fi
-  # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo "LD_LIBRARY_PATH" $LD_LIBRARY_PATH ; fi
-  # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo "DYLD_LIBRARY_PATH" $DYLD_LIBRARY_PATH ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "gcc" ]]; then brew install gcc; brew link --overwrite gcc; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "gcc" ]]; then gcc --version; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "gcc" ]]; then gcc-7 --version; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "llvm" ]]; then brew install llvm; fi
 
 install:
 
@@ -172,6 +192,8 @@ install:
 
     - git clone --depth 1 git://github.com/astropy/ci-helpers.git
     - source ci-helpers/travis/setup_conda.sh
+
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "conda" ]]; then conda install -c conda-forge openmp; fi
 
     # As described above, using ci-helpers, you should be able to set up an
     # environment with dependencies installed using conda and pip, but in some
