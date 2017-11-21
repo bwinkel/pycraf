@@ -116,9 +116,8 @@ requirement for the <a class="reference internal" href="satellite/index.html#mod
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">You may need a C compiler (<code class="docutils literal"><span class="pre">gcc</span></code>) to be installed for the installation
-to succeed. Since <code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code> needs OpenMP, <code class="docutils literal"><span class="pre">clang</span></code> is currently not
-supported.</p>
+<p class="last">You may need a C compiler (<code class="docutils literal"><span class="pre">gcc</span></code>) with OpenMP support to be installed
+for the installation to succeed.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -138,8 +137,9 @@ about how to do this in the <a class="reference external" href="http://www.pip-i
 <p class="last">Do <strong>not</strong> install pycraf or other third-party packages using <code class="docutils literal"><span class="pre">sudo</span></code>
 unless you are fully aware of the risks.</p>
 </div>
+</div>
 <div class="section" id="installation-from-source">
-<span id="source-install"></span><h4>Installation from source<a class="headerlink" href="#installation-from-source" title="Permalink to this headline">¶</a></h4>
+<span id="source-install"></span><h3>Installation from source<a class="headerlink" href="#installation-from-source" title="Permalink to this headline">¶</a></h3>
 <p>There are two options, if you want to build pycraf from sources. Either, you
 install the tar-ball (<code class="xref py py-obj docutils literal"><span class="pre">*.tar.gz</span></code> file) from <a class="reference external" href="https://pypi.python.org/pypi/pycraf">PyPI</a> and extract it to the directory of
 your choice, or, if you always want to stay up-to-date, clone the git
@@ -154,9 +154,17 @@ repository:</p>
 <p>Again, consider the <code class="docutils literal"><span class="pre">--user</span></code> option or even better use a python distribution
 such as <a class="reference external" href="https://www.continuum.io/downloads">Anaconda</a> to avoid messing up
 the system-wide Python installation.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If you use <code class="xref py py-obj docutils literal"><span class="pre">Anaconda</span></code> and want to install the <code class="xref py py-obj docutils literal"><span class="pre">sgp4</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">pyproj</span></code>
+packages, you’ll have to use a different channel</p>
+<div class="last highlight-bash"><div class="highlight"><pre><span></span>conda install -c conda-forge sgp4 pyproj
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="installation-on-windows">
-<span id="windows-install"></span><h4>Installation on Windows<a class="headerlink" href="#installation-on-windows" title="Permalink to this headline">¶</a></h4>
+<span id="windows-install"></span><h3>Installation on Windows<a class="headerlink" href="#installation-on-windows" title="Permalink to this headline">¶</a></h3>
 <p>Note that for Windows machines we provide a binary wheel (Python 3.5+ only).
 However, the <a class="reference external" href="https://pypi.python.org/pypi/pyproj">pyproj</a> package is a
 dependency and unfortunately, the official
@@ -184,37 +192,61 @@ mandatory. The easiest way to obtain it, is by installing the
 </div>
 </div>
 <div class="section" id="installation-on-macos">
-<span id="macos-install"></span><h4>Installation on MacOS<a class="headerlink" href="#installation-on-macos" title="Permalink to this headline">¶</a></h4>
-<p>Even though we also provide a binary wheel for MacOS, it seems you’ll still
-have to install a C-compiler, in particular <em>gcc-6</em>. The clang compiler
-seems not to support OpenMP in a way that is needed by pycraf:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>brew install gcc6
-brew link --overwrite gcc@6
+<span id="macos-install"></span><h3>Installation on MacOS<a class="headerlink" href="#installation-on-macos" title="Permalink to this headline">¶</a></h3>
+<p>Installation on MacOS can be a bit tricky, because the standard C compiler
+does not support OpenMP. We provide wheels on PyPI, such that you can</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>pip install pycraf
 </pre></div>
 </div>
-<p>Then proceed as usual with</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="c1"># if on Anaconda, install pyproj the easy way:</span>
-conda install -c conda-forge pyproj
+<p>however, you need to have the LLVM C compiler (see below), otherwise you’ll
+likely get an error message that a library (such as “libgomp”) is not
+found, when you import pycraf in Python.</p>
+<p>Also, if you want to install from source, you must have a C compiler. There
+are basically two options, using LLVM or the gcc suite.</p>
+<div class="section" id="llvm">
+<h4>LLVM<a class="headerlink" href="#llvm" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>brew update
+brew install llvm
 
-<span class="c1"># then</span>
-pip install pycraf
+<span class="nb">export</span> <span class="nv">CC</span><span class="o">=</span><span class="s2">&quot;/usr/local/opt/llvm/bin/clang&quot;</span>
+<span class="nb">export</span> <span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">&quot;-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib&quot;</span>
+<span class="nb">export</span> <span class="nv">CPPFLAGS</span><span class="o">=</span><span class="s2">&quot;-I/usr/local/opt/llvm/include&quot;</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Currently, we only provide MacOS wheels for <em>gcc-6</em> (version 6.4).
-It seems that if you have a different version of <em>gcc-6</em> on your machine
-importing pycraf will fail with some <code class="docutils literal"><span class="pre">libgomp</span></code> error, which is probably
-due to binary inconsistencies between the various <em>gcc</em> versions.
-Please, consider updating to the 6.4-version of <em>gcc</em>, or install from
-source with your own <em>gcc</em> compiler.</p>
+<p>Then follow the instructions in <a class="reference internal" href="#source-install"><span class="std std-ref">Installation from source</span></a>.</p>
+</div>
+<div class="section" id="gcc">
+<h4>gcc<a class="headerlink" href="#gcc" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>brew install gcc6  <span class="c1"># or gcc7</span>
+brew link --overwrite gcc@6  <span class="c1"># or gcc@7</span>
+</pre></div>
+</div>
+<p>Then follow the instructions in <a class="reference internal" href="#source-install"><span class="std std-ref">Installation from source</span></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The MacOS wheel, which we provide on PyPI (for pip installation)
+was built using LLVM. So it may happen that you run into binary
+incompatibilities if you use a different compiler suite on your computer.
+In such cases it may be necessary to build pycraf from source using
+your own compiler. Sometimes even different compiler versions
+(e.g. gcc 6.3 instead of gcc 6.4) can lead to problems.
+Please write a ticket, if you run into trouble.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Again, if you’re on Anaconda, things get (often) much simpler:</p>
+<blockquote class="last">
+<div><div class="highlight-bash"><div class="highlight"><pre><span></span>conda install -c conda-forge openmp
+</pre></div>
+</div>
+</div></blockquote>
 </div>
 </div>
 </div>
 <div class="section" id="testing-an-installed-pycraf">
 <span id="testing-installed-pycraf"></span><h3>Testing an installed pycraf<a class="headerlink" href="#testing-an-installed-pycraf" title="Permalink to this headline">¶</a></h3>
-<p>The easiest way to test your installed version of pycraf is running
-correctly is to use the <a class="reference internal" href="api/pycraf.test.html#pycraf.test" title="pycraf.test"><code class="xref py py-obj docutils literal"><span class="pre">test()</span></code></a> function:</p>
+<p>The easiest way to test if your installed version of pycraf is running
+correctly, is to use the <a class="reference internal" href="api/pycraf.test.html#pycraf.test" title="pycraf.test"><code class="xref py py-obj docutils literal"><span class="pre">test()</span></code></a> function:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pycraf</span>
 <span class="n">pycraf</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
 </pre></div>
@@ -275,10 +307,12 @@ generation. Please see <a class="reference internal" href="pathprof/working_with
 <li><a class="reference internal" href="#">Installation</a><ul>
 <li><a class="reference internal" href="#requirements">Requirements</a></li>
 <li><a class="reference internal" href="#installing-pycraf">Installing pycraf</a><ul>
-<li><a class="reference internal" href="#using-pip">Using pip</a><ul>
+<li><a class="reference internal" href="#using-pip">Using pip</a></li>
 <li><a class="reference internal" href="#installation-from-source">Installation from source</a></li>
 <li><a class="reference internal" href="#installation-on-windows">Installation on Windows</a></li>
-<li><a class="reference internal" href="#installation-on-macos">Installation on MacOS</a></li>
+<li><a class="reference internal" href="#installation-on-macos">Installation on MacOS</a><ul>
+<li><a class="reference internal" href="#llvm">LLVM</a></li>
+<li><a class="reference internal" href="#gcc">gcc</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#testing-an-installed-pycraf">Testing an installed pycraf</a></li>

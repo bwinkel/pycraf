@@ -49,9 +49,8 @@ To install pycraf with `pip <http://www.pip-installer.org/en/latest/>`__, simply
 
 .. note::
 
-    You may need a C compiler (``gcc``) to be installed for the installation
-    to succeed. Since `pycraf` needs OpenMP, ``clang`` is currently not
-    supported.
+    You may need a C compiler (``gcc``) with OpenMP support to be installed
+    for the installation to succeed.
 
 .. note::
 
@@ -78,7 +77,7 @@ To install pycraf with `pip <http://www.pip-installer.org/en/latest/>`__, simply
 .. _source_install:
 
 Installation from source
-~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------
 
 There are two options, if you want to build pycraf from sources. Either, you
 install the tar-ball (`*.tar.gz` file) from `PyPI
@@ -100,11 +99,20 @@ Again, consider the ``--user`` option or even better use a python distribution
 such as `Anaconda <https://www.continuum.io/downloads>`_ to avoid messing up
 the system-wide Python installation.
 
+.. note::
+
+    If you use `Anaconda` and want to install the `sgp4` and `pyproj`
+    packages, you'll have to use a different channel
+
+    .. code-block:: bash
+
+        conda install -c conda-forge sgp4 pyproj
+
 
 .. _windows_install:
 
 Installation on Windows
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 Note that for Windows machines we provide a binary wheel (Python 3.5+ only).
 However, the `pyproj <https://pypi.python.org/pypi/pyproj>`_ package is a
@@ -141,43 +149,72 @@ If you're using `Anaconda <https://www.continuum.io/downloads>`__
 .. _macos_install:
 
 Installation on MacOS
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
-Even though we also provide a binary wheel for MacOS, it seems you'll still
-have to install a C-compiler, in particular *gcc-6*. The clang compiler
-seems not to support OpenMP in a way that is needed by pycraf:
-
-.. code-block:: bash
-
-    brew install gcc6
-    brew link --overwrite gcc@6
-
-Then proceed as usual with
+Installation on MacOS can be a bit tricky, because the standard C compiler
+does not support OpenMP. We provide wheels on PyPI, such that you can
 
 .. code-block:: bash
 
-    # if on Anaconda, install pyproj the easy way:
-    conda install -c conda-forge pyproj
-
-    # then
     pip install pycraf
 
-.. warning::
+however, you need to have the LLVM C compiler (see below), otherwise you'll
+likely get an error message that a library (such as "libgomp") is not
+found, when you import pycraf in Python.
 
-    Currently, we only provide MacOS wheels for *gcc-6* (version 6.4).
-    It seems that if you have a different version of *gcc-6* on your machine
-    importing pycraf will fail with some ``libgomp`` error, which is probably
-    due to binary inconsistencies between the various *gcc* versions.
-    Please, consider updating to the 6.4-version of *gcc*, or install from
-    source with your own *gcc* compiler.
+Also, if you want to install from source, you must have a C compiler. There
+are basically two options, using LLVM or the gcc suite.
+
+LLVM
+~~~~
+
+.. code-block:: bash
+
+    brew update
+    brew install llvm
+
+    export CC="/usr/local/opt/llvm/bin/clang"
+    export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+    export CPPFLAGS="-I/usr/local/opt/llvm/include"
+
+Then follow the instructions in :ref:`source_install`.
+
+gcc
+~~~
+
+.. code-block:: bash
+
+    brew install gcc6  # or gcc7
+    brew link --overwrite gcc@6  # or gcc@7
+
+Then follow the instructions in :ref:`source_install`.
+
+.. note::
+
+    The MacOS wheel, which we provide on PyPI (for pip installation)
+    was built using LLVM. So it may happen that you run into binary
+    incompatibilities if you use a different compiler suite on your computer.
+    In such cases it may be necessary to build pycraf from source using
+    your own compiler. Sometimes even different compiler versions
+    (e.g. gcc 6.3 instead of gcc 6.4) can lead to problems.
+    Please write a ticket, if you run into trouble.
+
+.. note::
+
+    Again, if you're on Anaconda, things get (often) much simpler:
+
+     .. code-block:: bash
+
+        conda install -c conda-forge openmp
+
 
 .. _testing_installed_pycraf:
 
 Testing an installed pycraf
 ----------------------------
 
-The easiest way to test your installed version of pycraf is running
-correctly is to use the `~pycraf.test()` function::
+The easiest way to test if your installed version of pycraf is running
+correctly, is to use the `~pycraf.test()` function::
 
     import pycraf
     pycraf.test()
