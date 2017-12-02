@@ -111,13 +111,14 @@ def ras_pattern(
 
     if do_bessel:
 
+        # why not the spherical bessel function of first kind (spherical_jn)?
         from scipy.special import j1
 
         phi_0 = 69.88 / d_wlen
         x_pi = np.radians(np.pi / 2. * d_wlen * phi)
 
         # case 1:
-        mask = (0 <= phi) & (phi < phi_0)
+        mask = (1.e-32 < phi) & (phi < phi_0)
         tmp_x = x_pi[mask]
         gain[mask] = gmax[mask] + 20 * np.log10(j1(2 * tmp_x) / tmp_x)
 
