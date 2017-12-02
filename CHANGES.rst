@@ -1,10 +1,10 @@
-0.25.5.dev (unreleased)
+0.25.5 (2017-12-02)
 =======================
 
 pycraf.conversions
 ^^^^^^^^^^^^^^^^^^
 - Add further utility routines to `pycraf.conversions` module, to compute
-  antenna temperatures and sensitivities.
+  antenna temperatures and sensitivities. [#8419]
 
 pycraf.atm
 ^^^^^^^^^^^^^^^
@@ -13,7 +13,7 @@ pycraf.atm
   elevations (compared to the 1/sin(El) behavior). Furthermore,
   the elevation parameter in `atm.opacity_from_atten` and
   `atm.atten_from_opacity` has been made optional. If given, the
-  airmass is corrected for (i.e., one works with zenith opacities).
+  airmass is corrected for (i.e., one works with zenith opacities). [#61e0]
 
 API Changes
 -----------
@@ -27,10 +27,12 @@ Bugfixes
 --------
 - The solution to last exercise in the conversions tutorial notebook was
   wrong. (Thanks to A. Jessner for spotting this.)
+- The `phi = 0`-singularity if using `do_bessel=True` in `antenna.ras_pattern`
+  was not properly handled. [#5acf]
 
 Other
 -----
-- Added some notebooks with exercises and solutions.
+- Added some notebooks with exercises and solutions, as well as tutorial 03e.
 
 0.25.4 (2017-09-21)
 ====================
