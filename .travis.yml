@@ -94,14 +94,15 @@ matrix:
           # compiler: gcc
 
         # Try MacOS X
-        - os: osx
-          osx_image: xcode8.3
-          env:
-            - LDFLAGS='-L/Users/travis/miniconda/lib -Wl,-rpath,/Users/travis/miniconda/lib'
-            - CPPFLAGS='-I/Users/travis/miniconda/include'
-            - DYLD_LIBRARY_PATH='-I/Users/travis/miniconda/lib'
-            - COMPILER='conda'
-          # compiler: gcc
+        # produces: clang: error: unsupported option '-fopenmp'
+        # - os: osx
+        #   osx_image: xcode8.3
+        #   env:
+        #     - LDFLAGS='-L/Users/travis/miniconda/lib -Wl,-rpath,/Users/travis/miniconda/lib'
+        #     - CPPFLAGS='-I/Users/travis/miniconda/include'
+        #     - DYLD_LIBRARY_PATH='-I/Users/travis/miniconda/lib'
+        #     - COMPILER='conda'
+        #   # compiler: gcc
 
         # Try MacOS X
         # produces ImportError: dlopen(/private/.../pycraf/pathprof/cyprop.cpython-36m-darwin.so, 2): Symbol not found: _GOMP_parallel
