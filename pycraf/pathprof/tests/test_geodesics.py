@@ -96,37 +96,37 @@ class TestGeodesics:
         gglib = np.load(gglib_inverse_name)
 
         assert_quantity_allclose(
-            distance.to_value(apu.m),
+            distance.to(apu.m).value,
             gglib['distance'],
             # atol=1.e-10, rtol=1.e-4
             )
 
         assert_quantity_allclose(
-            distance_lowprec.to_value(apu.m),
+            distance_lowprec.to(apu.m).value,
             gglib['distance'],
             atol=1.,
             )
 
         assert_quantity_allclose(
-            bearing1.to_value(apu.deg),
+            bearing1.to(apu.deg).value,
             gglib['bearing1'],
             # atol=1.e-10, rtol=1.e-4
             )
 
         assert_quantity_allclose(
-            bearing1_lowprec.to_value(apu.deg),
+            bearing1_lowprec.to(apu.deg).value,
             gglib['bearing1'],
             atol=1.e-6,
             )
 
         assert_quantity_allclose(
-            bearing2.to_value(apu.deg),
+            bearing2.to(apu.deg).value,
             gglib['bearing2'],
             # atol=1.e-10, rtol=1.e-4
             )
 
         assert_quantity_allclose(
-            bearing2_lowprec.to_value(apu.deg),
+            bearing2_lowprec.to(apu.deg).value,
             gglib['bearing2'],
             atol=1.e-6,
             )
@@ -194,37 +194,37 @@ class TestGeodesics:
         gglib = np.load(gglib_direct_name)
 
         assert_quantity_allclose(
-            lon2.to_value(apu.deg),
+            lon2.to(apu.deg).value,
             gglib['lon2'],
             # atol=1.e-10, rtol=1.e-4
             )
 
         assert_quantity_allclose(
-            lon2_lowprec.to_value(apu.deg),
+            lon2_lowprec.to(apu.deg).value,
             gglib['lon2'],
             atol=1.e-6,
             )
 
         assert_quantity_allclose(
-            lat2.to_value(apu.deg),
+            lat2.to(apu.deg).value,
             gglib['lat2'],
             # atol=1.e-10, rtol=1.e-4
             )
 
         assert_quantity_allclose(
-            lat2_lowprec.to_value(apu.deg),
+            lat2_lowprec.to(apu.deg).value,
             gglib['lat2'],
             atol=1.e-6,
             )
 
         assert_quantity_allclose(
-            bearing2.to_value(apu.deg),
+            bearing2.to(apu.deg).value,
             gglib['bearing2'],
             # atol=1.e-10, rtol=1.e-4
             )
 
         assert_quantity_allclose(
-            bearing2_lowprec.to_value(apu.deg),
+            bearing2_lowprec.to(apu.deg).value,
             gglib['bearing2'],
             atol=1.e-6,
             )
@@ -252,7 +252,7 @@ class TestGeodesics:
             )
 
         assert_quantity_allclose(
-            area.to_value(apu.km ** 2),
+            area.to(apu.km ** 2).value,
             np.array([
                 1.23918686e+04, 7.83488948e+03, -7.83488948e+03,
                 5.09490053e+08, 7.75889348e+06
@@ -268,7 +268,7 @@ class TestGeodesics:
             )
 
         assert_quantity_allclose(
-            area.to_value(apu.km ** 2),
+            area.to(apu.km ** 2).value,
             np.array([
                 [7896050.19052842, 7896050.19052842, 7896050.19052842,
                  7896050.19052842, 7896050.19052842],

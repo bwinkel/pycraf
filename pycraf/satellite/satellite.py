@@ -137,7 +137,7 @@ class SatelliteObserver(object):
         '''
 
         obs_lat_rad = self._obs_location.lat.rad
-        obs_alt_km = self._obs_location.height.to_value(apu.km)
+        obs_alt_km = self._obs_location.height.to(apu.km).value
 
         C = 1. / np.sqrt(
             1 + EARTH_FLATTENING_CONSTANT * (EARTH_FLATTENING_CONSTANT - 2) *
