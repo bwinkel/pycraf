@@ -183,13 +183,14 @@
 
     <span class="k">if</span> <span class="n">do_bessel</span><span class="p">:</span>
 
+        <span class="c1"># why not the spherical bessel function of first kind (spherical_jn)?</span>
         <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="k">import</span> <span class="n">j1</span>
 
         <span class="n">phi_0</span> <span class="o">=</span> <span class="mf">69.88</span> <span class="o">/</span> <span class="n">d_wlen</span>
         <span class="n">x_pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">d_wlen</span> <span class="o">*</span> <span class="n">phi</span><span class="p">)</span>
 
         <span class="c1"># case 1:</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="n">phi_0</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.e-32</span> <span class="o">&lt;</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="n">phi_0</span><span class="p">)</span>
         <span class="n">tmp_x</span> <span class="o">=</span> <span class="n">x_pi</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
         <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">gmax</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">j1</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">tmp_x</span><span class="p">)</span> <span class="o">/</span> <span class="n">tmp_x</span><span class="p">)</span>
 
@@ -225,7 +226,7 @@
   <p>
     &copy; Copyright 2017, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5. &nbsp;
-    Last built 28 Nov 2017. <br/>
+    Last built 02 Dec 2017. <br/>
   </p>
 </footer>
   </body>
