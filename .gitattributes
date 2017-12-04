@@ -1,0 +1,5 @@
+* linguist-vendored
+*.py linguist-vendored=false
+*.pyx linguist-vendored=false
+*.pxd linguist-vendored=false
+*.rst linguist-vendored=false
