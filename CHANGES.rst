@@ -1,6 +1,13 @@
 0.25.6 (unreleased)
 =======================
-- No changes yet.
+
+Bugfixes
+--------
+- Fixing a serious bug in the B03 tutorial notebook (reflections at wind
+  turbines). Previously, we accounted twice for the distance when calculating
+  the reflected power. As a result, the total received power at the
+  RT is now much larger (though still smaller over direct path).
+
 
 0.25.5 (2017-12-02)
 =======================
