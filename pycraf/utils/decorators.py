@@ -93,7 +93,7 @@ class RangedQuantityInput(object):
             ... def func(a):
             ...     return a ** 2
 
-            >>> func(0.5 * u.m)
+            >>> func(0.5 * u.m)  # doctest: +FLOAT_CMP
             <Quantity 0.25 m2>
 
             >>> func(2 * u.m)
@@ -109,7 +109,7 @@ class RangedQuantityInput(object):
             ... def func(a):
             ...     return a ** 2
 
-            >>> func(2 * u.m)
+            >>> func(2 * u.m)  # doctest: +FLOAT_CMP
             <Quantity 4.0 m2>
 
         Often one wants to add units support to third-party functions,
@@ -136,7 +136,7 @@ class RangedQuantityInput(object):
             >>> #    a=(0, 1, u.m), strip_input_units=True
             >>> #    )(_func)
 
-            >>> func(0.5 * u.m)
+            >>> func(0.5 * u.m)  # doctest: +FLOAT_CMP
             0.25
 
         However, by doing this there are still no units for the output.
@@ -150,7 +150,7 @@ class RangedQuantityInput(object):
             ... def func(a):
             ...     return _func(a)
 
-            >>> func(0.5 * u.m)
+            >>> func(0.5 * u.m)  # doctest: +FLOAT_CMP
             <Quantity 0.25 m2>
 
         If you have several return values (tuple), just provide a tuple
@@ -162,7 +162,7 @@ class RangedQuantityInput(object):
             ... def func(a=0.5 * u.m):
             ...     return a ** 2
 
-            >>> func()
+            >>> func()  # doctest: +FLOAT_CMP
             <Quantity 0.25 m2>
 
         However, sometimes one wants to use `None` as default, which will
@@ -186,7 +186,7 @@ class RangedQuantityInput(object):
             ...         a = 0.5
             ...     return a ** 2
 
-            >>> func()
+            >>> func()  # doctest: +FLOAT_CMP
             0.25
 
         and of course, the unit check still works,  if a something other
