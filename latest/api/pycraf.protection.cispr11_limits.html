@@ -86,14 +86,14 @@
 <h1>cispr11_limits<a class="headerlink" href="#cispr11-limits" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.protection.cispr11_limits">
-<code class="descclassname">pycraf.protection.</code><code class="descname">cispr11_limits</code><span class="sig-paren">(</span><em>freq</em>, <em>detector_type='RMS'</em>, <em>detector_dist=&lt;Quantity 30.0 m&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/protection/cispr.html#cispr11_limits"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/protection/cispr.py#L53" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.protection.cispr11_limits" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.protection.</code><code class="descname">cispr11_limits</code><span class="sig-paren">(</span><em>freq</em>, <em>detector_type='RMS'</em>, <em>detector_dist=&lt;Quantity 30. m&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/protection/cispr.html#cispr11_limits"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/protection/cispr.py#L53" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.protection.cispr11_limits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Industrial-device limits for given frequency and distance from device
 according to <a class="reference external" href="http://rfemcdevelopment.eu/index.php/en/emc-emi-standards/en-55011-2009">CISPR-11 (EN 55011)</a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>freq</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>freq</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Frequency or frequency vector [Hz]</p>
 </div></blockquote>
@@ -101,18 +101,18 @@ according to <a class="reference external" href="http://rfemcdevelopment.eu/inde
 <blockquote>
 <div><p>Detector type: ‘QP’ (quasi-peak), ‘RMS’ (default: ‘RMS)</p>
 </div></blockquote>
-<p><strong>detector_dist</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
+<p><strong>detector_dist</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
 <blockquote>
 <div><p>Distance between source and detector [m], (default: 30 m)</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>efield_limit</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>efield_limit</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Electric-field limit permitted by CISPR-11 at given distance.
 [dB(uV^2 / m^2)]</p>
 </div></blockquote>
-<p><strong>meas_bw</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>meas_bw</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote class="last">
 <div><p>Measure bandwidth (of detector) [kHz]</p>
 </div></blockquote>
@@ -146,9 +146,9 @@ according to <a class="reference external" href="http://rfemcdevelopment.eu/inde
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5. &nbsp;
-    Last built 04 Dec 2017. <br/>
+    &copy; Copyright 2018, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.7. &nbsp;
+    Last built 06 Feb 2018. <br/>
   </p>
 </footer>
   </body>

@@ -165,7 +165,7 @@
 <span class="sd">            ... def func(a):</span>
 <span class="sd">            ...     return a ** 2</span>
 
-<span class="sd">            &gt;&gt;&gt; func(0.5 * u.m)</span>
+<span class="sd">            &gt;&gt;&gt; func(0.5 * u.m)  # doctest: +FLOAT_CMP</span>
 <span class="sd">            &lt;Quantity 0.25 m2&gt;</span>
 
 <span class="sd">            &gt;&gt;&gt; func(2 * u.m)</span>
@@ -181,7 +181,7 @@
 <span class="sd">            ... def func(a):</span>
 <span class="sd">            ...     return a ** 2</span>
 
-<span class="sd">            &gt;&gt;&gt; func(2 * u.m)</span>
+<span class="sd">            &gt;&gt;&gt; func(2 * u.m)  # doctest: +FLOAT_CMP</span>
 <span class="sd">            &lt;Quantity 4.0 m2&gt;</span>
 
 <span class="sd">        Often one wants to add units support to third-party functions,</span>
@@ -208,7 +208,7 @@
 <span class="sd">            &gt;&gt;&gt; #    a=(0, 1, u.m), strip_input_units=True</span>
 <span class="sd">            &gt;&gt;&gt; #    )(_func)</span>
 
-<span class="sd">            &gt;&gt;&gt; func(0.5 * u.m)</span>
+<span class="sd">            &gt;&gt;&gt; func(0.5 * u.m)  # doctest: +FLOAT_CMP</span>
 <span class="sd">            0.25</span>
 
 <span class="sd">        However, by doing this there are still no units for the output.</span>
@@ -222,7 +222,7 @@
 <span class="sd">            ... def func(a):</span>
 <span class="sd">            ...     return _func(a)</span>
 
-<span class="sd">            &gt;&gt;&gt; func(0.5 * u.m)</span>
+<span class="sd">            &gt;&gt;&gt; func(0.5 * u.m)  # doctest: +FLOAT_CMP</span>
 <span class="sd">            &lt;Quantity 0.25 m2&gt;</span>
 
 <span class="sd">        If you have several return values (tuple), just provide a tuple</span>
@@ -234,7 +234,7 @@
 <span class="sd">            ... def func(a=0.5 * u.m):</span>
 <span class="sd">            ...     return a ** 2</span>
 
-<span class="sd">            &gt;&gt;&gt; func()</span>
+<span class="sd">            &gt;&gt;&gt; func()  # doctest: +FLOAT_CMP</span>
 <span class="sd">            &lt;Quantity 0.25 m2&gt;</span>
 
 <span class="sd">        However, sometimes one wants to use `None` as default, which will</span>
@@ -258,7 +258,7 @@
 <span class="sd">            ...         a = 0.5</span>
 <span class="sd">            ...     return a ** 2</span>
 
-<span class="sd">            &gt;&gt;&gt; func()</span>
+<span class="sd">            &gt;&gt;&gt; func()  # doctest: +FLOAT_CMP</span>
 <span class="sd">            0.25</span>
 
 <span class="sd">        and of course, the unit check still works,  if a something other</span>
@@ -449,9 +449,9 @@
   <p class="pull-right"> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5. &nbsp;
-    Last built 04 Dec 2017. <br/>
+    &copy; Copyright 2018, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.7. &nbsp;
+    Last built 06 Feb 2018. <br/>
   </p>
 </footer>
   </body>

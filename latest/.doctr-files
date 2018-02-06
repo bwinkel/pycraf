@@ -205,6 +205,7 @@ latest/_sources/api/pycraf.pathprof.srtm_height_profile.rst.txt
 latest/_sources/api/pycraf.pathprof.terrain_cmap_factory.rst.txt
 latest/_sources/api/pycraf.protection.cispr11_limits.rst.txt
 latest/_sources/api/pycraf.protection.cispr22_limits.rst.txt
+latest/_sources/api/pycraf.protection.ra769_calculate_entry.rst.txt
 latest/_sources/api/pycraf.protection.ra769_limits.rst.txt
 latest/_sources/api/pycraf.satellite.SatelliteObserver.rst.txt
 latest/_sources/api/pycraf.satellite.get_sat.rst.txt
@@ -242,7 +243,7 @@ latest/_static/doctools.js
 latest/_static/down-pressed.png
 latest/_static/down.png
 latest/_static/file.png
-latest/_static/jquery-3.1.0.js
+latest/_static/jquery-3.2.1.js
 latest/_static/jquery.js
 latest/_static/minus.png
 latest/_static/plus.png
@@ -390,6 +391,7 @@ latest/api/pycraf.pathprof.srtm_height_profile.html
 latest/api/pycraf.pathprof.terrain_cmap_factory.html
 latest/api/pycraf.protection.cispr11_limits.html
 latest/api/pycraf.protection.cispr22_limits.html
+latest/api/pycraf.protection.ra769_calculate_entry.html
 latest/api/pycraf.protection.ra769_limits.html
 latest/api/pycraf.satellite.SatelliteObserver.html
 latest/api/pycraf.satellite.get_sat.html

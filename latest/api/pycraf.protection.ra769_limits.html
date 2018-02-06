@@ -26,7 +26,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Geographical frames (pycraf.geospatial)" href="../geospatial/index.html" />
-    <link rel="prev" title="cispr22_limits" href="pycraf.protection.cispr22_limits.html" />
+    <link rel="prev" title="ra769_calculate_entry" href="pycraf.protection.ra769_calculate_entry.html" />
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 <script type="text/javascript" src="../_static/copybutton.js"></script>
 
@@ -61,7 +61,7 @@
 	</a>
       </li>
       <li class="right">
-	<a href="pycraf.protection.cispr22_limits.html" title="cispr22_limits">
+	<a href="pycraf.protection.ra769_calculate_entry.html" title="ra769_calculate_entry">
 	  &laquo; previous
 	</a>
 	 |
@@ -86,8 +86,8 @@
 <h1>ra769_limits<a class="headerlink" href="#ra769-limits" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.protection.ra769_limits">
-<code class="descclassname">pycraf.protection.</code><code class="descname">ra769_limits</code><span class="sig-paren">(</span><em>mode='continuum'</em>, <em>scale='dB'</em>, <em>integ_time=&lt;Quantity 2000.0 s&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/protection/ra769.html#ra769_limits"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/protection/ra769.py#L22" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.protection.ra769_limits" title="Permalink to this definition">¶</a></dt>
-<dd><p>Limits for spectral line and continuum observations according to
+<code class="descclassname">pycraf.protection.</code><code class="descname">ra769_limits</code><span class="sig-paren">(</span><em>mode='continuum'</em>, <em>scale='dB'</em>, <em>integ_time=&lt;Quantity 2000. s&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/protection/ra769.html#ra769_limits"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/protection/ra769.py#L163" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.protection.ra769_limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Limits for spectral line, continuum, and VLBI observations according to
 <a class="reference external" href="https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en">ITU-R Rec RA.769</a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -102,7 +102,7 @@
 <blockquote>
 <div><p>Default scale to use: ‘linear’, ‘dB’ (default: ‘linear’)</p>
 </div></blockquote>
-<p><strong>integ_time</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
+<p><strong>integ_time</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
 <blockquote>
 <div><p>Integration time [s] (default: 2000)</p>
 <p>Note, if <code class="xref py py-obj docutils literal"><span class="pre">mode='vlbi'</span></code> integration time is irrelevant, because the
@@ -110,7 +110,7 @@ limits are based on 1% of the receiver noise plus antenna temperature.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ra769_limits</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.table.Table.html#astropy.table.Table" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Table</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ra769_limits</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.table.Table.html#astropy.table.Table" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Table</span></code></a></p>
 <blockquote class="last">
 <div><p>A table with the following columns:</p>
 <ul class="simple">
@@ -142,7 +142,7 @@ limits are based on 1% of the receiver noise plus antenna temperature.</p>
 </table>
 <p class="rubric">Notes</p>
 <p>Because all columns are Astropy Quantities (see
-<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>), one can easily convert between linear and
+<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>), one can easily convert between linear and
 log-scale at a later stage. the <code class="xref py py-obj docutils literal"><span class="pre">scale</span></code> parameter just defines the
 scale to use initially.</p>
 </dd></dl>
@@ -171,9 +171,9 @@ scale to use initially.</p>
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5. &nbsp;
-    Last built 04 Dec 2017. <br/>
+    &copy; Copyright 2018, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.7. &nbsp;
+    Last built 06 Feb 2018. <br/>
   </p>
 </footer>
   </body>

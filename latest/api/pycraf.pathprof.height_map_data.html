@@ -86,7 +86,7 @@
 <h1>height_map_data<a class="headerlink" href="#height-map-data" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.pathprof.height_map_data">
-<code class="descclassname">pycraf.pathprof.</code><code class="descname">height_map_data</code><span class="sig-paren">(</span><em>lon_t</em>, <em>lat_t</em>, <em>map_size_lon</em>, <em>map_size_lat</em>, <em>map_resolution=&lt;Quantity 3.0 arcsec&gt;</em>, <em>do_cos_delta=True</em>, <em>zone_t=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em>zone_r=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em>d_tm=None</em>, <em>d_lm=None</em>, <em>d_ct=None</em>, <em>d_cr=None</em>, <em>omega_percent=&lt;Quantity 0.0 %&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#height_map_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L590" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.height_map_data" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.pathprof.</code><code class="descname">height_map_data</code><span class="sig-paren">(</span><em>lon_t</em>, <em>lat_t</em>, <em>map_size_lon</em>, <em>map_size_lat</em>, <em>map_resolution=&lt;Quantity 3. arcsec&gt;</em>, <em>do_cos_delta=True</em>, <em>zone_t=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em>zone_r=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em>d_tm=None</em>, <em>d_lm=None</em>, <em>d_ct=None</em>, <em>d_cr=None</em>, <em>omega_percent=&lt;Quantity 0. %&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#height_map_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L590" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.height_map_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate height profiles and auxillary maps needed for
 <a class="reference internal" href="pycraf.pathprof.atten_map_fast.html#pycraf.pathprof.atten_map_fast" title="pycraf.pathprof.atten_map_fast"><code class="xref py py-obj docutils literal"><span class="pre">atten_map_fast</span></code></a>.</p>
 <p>This can be used to cache height-profile data. Since it is independent
@@ -114,15 +114,15 @@ in <a class="reference internal" href="pycraf.pathprof.atten_map_fast.html#pycra
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lon_t, lat_t</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lon_t, lat_t</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Geographic longitude/latitude of transmitter [deg]</p>
 </div></blockquote>
-<p><strong>map_size_lon, map_size_lat</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>map_size_lon, map_size_lat</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Map size in longitude/latitude[deg]</p>
 </div></blockquote>
-<p><strong>map_resolution</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
+<p><strong>map_resolution</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
 <blockquote>
 <div><p>Pixel resolution of map [deg] (default: 3 arcsec)</p>
 </div></blockquote>
@@ -136,24 +136,24 @@ square-like map. (default: True)</p>
 <div><p>Clutter type for transmitter/receiver terminal.
 (default: CLUTTER.UNKNOWN)</p>
 </div></blockquote>
-<p><strong>d_tm</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
+<p><strong>d_tm</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
 <blockquote>
 <div><p>longest continuous land (inland + coastal) section of the
 great-circle path [km]
 (default: distance between Tx and Rx)</p>
 </div></blockquote>
-<p><strong>d_lm</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
+<p><strong>d_lm</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
 <blockquote>
 <div><p>longest continuous inland section of the great-circle path [km]
 (default: distance between Tx and Rx)</p>
 </div></blockquote>
-<p><strong>d_ct, d_cr</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
+<p><strong>d_ct, d_cr</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
 <blockquote>
 <div><p>Distance over land from transmitter/receiver antenna to the coast
 along great circle interference path [km]
 (default: 50000 km)</p>
 </div></blockquote>
-<p><strong>omega_percent</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
+<p><strong>omega_percent</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
 <blockquote>
 <div><p>Fraction of the path over water [%] (see Table 3)
 (default: 0%)</p>
@@ -179,59 +179,59 @@ is mx * my):</p>
 <li><p class="first">“do_cos_delta” : int</p>
 <p>Whether cos-delta correction was applied for map size creation.</p>
 </li>
-<li><p class="first">“xcoords”, “ycoords” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 1D (float; (mx, ); (my, ))</p>
+<li><p class="first">“xcoords”, “ycoords” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 1D (float; (mx, ); (my, ))</p>
 <p>Longitude and latitude coordinates of first row and first column
 in the map</p>
 </li>
-<li><p class="first">“lon_mid_map”, “lat_mid_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
+<li><p class="first">“lon_mid_map”, “lat_mid_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>Longitude and latitude path center coordinates for each pixel
 w.r.t. map center.</p>
 <p>This is returned for information, only. It is not
 needed by <code class="xref py py-obj docutils literal"><span class="pre">atten_map_fast</span></code>!</p>
 </li>
-<li><p class="first">“dist_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
+<li><p class="first">“dist_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>Distances to map center for each pixel.</p>
 </li>
-<li><p class="first">“d_ct_map”, “d_cr_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
+<li><p class="first">“d_ct_map”, “d_cr_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>The <code class="xref py py-obj docutils literal"><span class="pre">d_ct</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">d_cr</span></code> values for each pixel in the map.</p>
 </li>
-<li><p class="first">“d_lm_map”, “d_tm_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
+<li><p class="first">“d_lm_map”, “d_tm_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>The <code class="xref py py-obj docutils literal"><span class="pre">d_lm</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">d_tm</span></code> values for each pixel in the map.</p>
 </li>
-<li><p class="first">“omega_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
+<li><p class="first">“omega_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>The <code class="xref py py-obj docutils literal"><span class="pre">omega</span></code> values for each pixel in the map.</p>
 </li>
-<li><p class="first">“zone_t_map”, “zone_r_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (CLUTTER enum; (mx, my))</p>
+<li><p class="first">“zone_t_map”, “zone_r_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (CLUTTER enum; (mx, my))</p>
 <p>The clutter zone types <code class="xref py py-obj docutils literal"><span class="pre">zone_t</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">zone_r</span></code> for each pixel in the
 map.</p>
 </li>
-<li><p class="first">“bearing_map”, “back_bearing_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
+<li><p class="first">“bearing_map”, “back_bearing_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>The <code class="xref py py-obj docutils literal"><span class="pre">bearing</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">backbearing</span></code> values for each pixel in the map.</p>
 <p>This is returned for information, only. It is not
 needed by <code class="xref py py-obj docutils literal"><span class="pre">atten_map_fast</span></code>!</p>
 </li>
-<li><p class="first">“N0_map”, “delta_N_map”, “beta0_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
+<li><p class="first">“N0_map”, “delta_N_map”, “beta0_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>The <code class="xref py py-obj docutils literal"><span class="pre">N0</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">delta_N</span></code>, and <code class="xref py py-obj docutils literal"><span class="pre">beta0</span></code> values for each pixel in the map.</p>
 </li>
-<li><p class="first">“path_idx_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (int; (mx, my))</p>
+<li><p class="first">“path_idx_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (int; (mx, my))</p>
 <p>Path IDs for each pixel in the map. With this index, one can query
 the associated height profile from <code class="xref py py-obj docutils literal"><span class="pre">height_profs</span></code>.</p>
 </li>
-<li><p class="first">“pix_dist_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
+<li><p class="first">“pix_dist_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>Angular distance of the closest path to each of the map pixels.</p>
 </li>
-<li><p class="first">“dist_end_idx_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (int; (mx, my))</p>
+<li><p class="first">“dist_end_idx_map” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (int; (mx, my))</p>
 <p>Index of the last element in the dist/height profiles to be used
 when querying the profiles from <code class="xref py py-obj docutils literal"><span class="pre">dist_prof</span></code> and
 <code class="xref py py-obj docutils literal"><span class="pre">height_profs</span></code>.</p>
 </li>
-<li><p class="first">“dist_prof” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 1D (float, (mh, ))</p>
+<li><p class="first">“dist_prof” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 1D (float, (mh, ))</p>
 <p>Distance values for each of the paths stored in <code class="xref py py-obj docutils literal"><span class="pre">height_profs</span></code>.</p>
 </li>
-<li><p class="first">“height_profs” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float, (me, mh))</p>
+<li><p class="first">“height_profs” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 2D (float, (me, mh))</p>
 <p>Height profiles to each of the pixels on the map edge, zero padded.</p>
 </li>
-<li><p class="first">“zheight_prof” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 1D (float, (mh, ))</p>
+<li><p class="first">“zheight_prof” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal"><span class="pre">ndarray</span></code></a> 1D (float, (mh, ))</p>
 <p>Zero-valued array of the same length as <code class="xref py py-obj docutils literal"><span class="pre">height_profs</span></code> for
 convenience.</p>
 </li>
@@ -282,9 +282,9 @@ For details see <a class="reference internal" href="../pathprof/working_with_srt
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5. &nbsp;
-    Last built 04 Dec 2017. <br/>
+    &copy; Copyright 2018, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.7. &nbsp;
+    Last built 06 Feb 2018. <br/>
   </p>
 </footer>
   </body>

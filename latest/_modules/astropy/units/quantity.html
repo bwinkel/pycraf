@@ -95,7 +95,7 @@
 <span class="kn">from</span> <span class="nn">.core</span> <span class="k">import</span> <span class="p">(</span><span class="n">Unit</span><span class="p">,</span> <span class="n">dimensionless_unscaled</span><span class="p">,</span> <span class="n">get_current_unit_registry</span><span class="p">,</span>
                    <span class="n">UnitBase</span><span class="p">,</span> <span class="n">UnitsError</span><span class="p">,</span> <span class="n">UnitTypeError</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.format.latex</span> <span class="k">import</span> <span class="n">Latex</span>
-<span class="kn">from</span> <span class="nn">..utils.compat</span> <span class="k">import</span> <span class="n">NUMPY_LT_1_13</span>
+<span class="kn">from</span> <span class="nn">..utils.compat</span> <span class="k">import</span> <span class="n">NUMPY_LT_1_13</span><span class="p">,</span> <span class="n">NUMPY_LT_1_14</span>
 <span class="kn">from</span> <span class="nn">..utils.compat.misc</span> <span class="k">import</span> <span class="n">override__dir__</span>
 <span class="kn">from</span> <span class="nn">..utils.compat.numpy</span> <span class="k">import</span> <span class="n">matmul</span>
 <span class="kn">from</span> <span class="nn">..utils.misc</span> <span class="k">import</span> <span class="n">isiterable</span><span class="p">,</span> <span class="n">InheritDocstrings</span>
@@ -1319,7 +1319,8 @@
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">prefixstr</span> <span class="o">=</span> <span class="s1">&#39;&lt;&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span>
-        <span class="n">arrstr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array2string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">),</span> <span class="n">separator</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
+        <span class="n">sep</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span> <span class="k">if</span> <span class="n">NUMPY_LT_1_14</span> <span class="k">else</span> <span class="s1">&#39;, &#39;</span>
+        <span class="n">arrstr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array2string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">),</span> <span class="n">separator</span><span class="o">=</span><span class="n">sep</span><span class="p">,</span>
                                  <span class="n">prefix</span><span class="o">=</span><span class="n">prefixstr</span><span class="p">)</span>
         <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{0}{1}{2:s}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prefixstr</span><span class="p">,</span> <span class="n">arrstr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unitstr</span><span class="p">)</span>
 
@@ -1344,8 +1345,10 @@
         <span class="n">pops</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">get_printoptions</span><span class="p">()</span>
 
         <span class="n">format_spec</span> <span class="o">=</span> <span class="s1">&#39;.</span><span class="si">{}</span><span class="s1">g&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pops</span><span class="p">[</span><span class="s1">&#39;precision&#39;</span><span class="p">])</span>
+
         <span class="k">def</span> <span class="nf">float_formatter</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">Latex</span><span class="o">.</span><span class="n">format_exponential_notation</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">format_spec</span><span class="o">=</span><span class="n">format_spec</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">Latex</span><span class="o">.</span><span class="n">format_exponential_notation</span><span class="p">(</span><span class="n">value</span><span class="p">,</span>
+                                                     <span class="n">format_spec</span><span class="o">=</span><span class="n">format_spec</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">formatter</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;float_kind&#39;</span><span class="p">:</span> <span class="n">float_formatter</span><span class="p">}</span>
@@ -1354,10 +1357,17 @@
                                     <span class="n">formatter</span><span class="o">=</span><span class="n">formatter</span><span class="p">)</span>
 
             <span class="c1"># the view is needed for the scalar case - value might be float</span>
-            <span class="n">latex_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array2string</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">),</span>
-                <span class="n">style</span><span class="o">=</span><span class="p">(</span><span class="n">float_formatter</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;f&#39;</span> <span class="k">else</span> <span class="nb">repr</span><span class="p">),</span>
-                <span class="n">max_line_width</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="s1">&#39;,~&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">NUMPY_LT_1_14</span><span class="p">:</span>   <span class="c1"># style deprecated in 1.14</span>
+                <span class="n">latex_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array2string</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">),</span>
+                    <span class="n">style</span><span class="o">=</span><span class="p">(</span><span class="n">float_formatter</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;f&#39;</span>
+                           <span class="k">else</span> <span class="nb">repr</span><span class="p">),</span>
+                    <span class="n">max_line_width</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="s1">&#39;,~&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">latex_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array2string</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">),</span>
+                    <span class="n">max_line_width</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="s1">&#39;,~&#39;</span><span class="p">)</span>
+
             <span class="n">latex_value</span> <span class="o">=</span> <span class="n">latex_value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;...&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;\dots&#39;</span><span class="p">)</span>
         <span class="k">finally</span><span class="p">:</span>
             <span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="o">**</span><span class="n">pops</span><span class="p">)</span>
@@ -1465,10 +1475,16 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">_value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">to_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="c1"># We&#39;re not a Quantity, so let&#39;s try a more general conversion.</span>
+            <span class="c1"># Plain arrays will be converted to dimensionless in the process,</span>
+            <span class="c1"># but anything with a unit attribute will use that.</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">_value</span> <span class="o">=</span> <span class="n">dimensionless_unscaled</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                <span class="n">_value</span> <span class="o">=</span> <span class="n">Quantity</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">to_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">UnitsError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">can_have_arbitrary_unit</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+                <span class="c1"># last chance: if this was not something with a unit</span>
+                <span class="c1"># and is all 0, inf, or nan, we treat it as arbitrary unit.</span>
+                <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;unit&#39;</span><span class="p">)</span> <span class="ow">and</span>
+                        <span class="n">can_have_arbitrary_unit</span><span class="p">(</span><span class="n">value</span><span class="p">)):</span>
                     <span class="n">_value</span> <span class="o">=</span> <span class="n">value</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="n">exc</span>
@@ -1791,9 +1807,9 @@
   <p class="pull-right"> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5. &nbsp;
-    Last built 04 Dec 2017. <br/>
+    &copy; Copyright 2018, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.7. &nbsp;
+    Last built 06 Feb 2018. <br/>
   </p>
 </footer>
   </body>
