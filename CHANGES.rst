@@ -1,6 +1,12 @@
 0.25.6 (unreleased)
 =======================
 
+pycraf.conversions
+^^^^^^^^^^^^^^^^^^
+- Add a function `protection.ra769_calculate_entry` that allows to calculate
+  RA.769 thresholds for non-standard values (e.g., to query limits for
+  RAS bands that are not included in the RA.769 tables).
+
 Bugfixes
 --------
 - Fixing a serious bug in the B03 tutorial notebook (reflections at wind
