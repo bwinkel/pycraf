@@ -10,4 +10,4 @@
 
 
 def get_package_data():
-    return {'pycraf.pathprof.tests': ['*/*.*']}
+    return {'pycraf.pathprof.tests': ['*/*.*', '*.zip']}

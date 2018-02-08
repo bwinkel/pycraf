@@ -10,6 +10,7 @@ import os
 import pytest
 from functools import partial
 import numpy as np
+from zipfile import ZipFile
 from numpy.testing import assert_equal, assert_allclose
 from astropy.tests.helper import assert_quantity_allclose, remote_data
 from astropy import units as apu
@@ -50,6 +51,9 @@ class TestPropagation:
     def setup(self):
 
         # TODO: add further test cases
+
+        self.cases_zip_name = get_pkg_data_filename('cases.zip')
+        self.fastmap_zip_name = get_pkg_data_filename('fastmap.zip')
 
         self.lon_t, self.lat_t = 6.5 * apu.deg, 50.5 * apu.deg
         self.lon_r, self.lat_r = 6.6 * apu.deg, 50.75 * apu.deg
@@ -109,10 +113,12 @@ class TestPropagation:
             # Warning: if uncommenting, the test cases will be overwritten
             # do this only, if you need to update the json files
             # (make sure, that results are correct!)
-            # pprop_name = self.pprop_template.format(
-            #     freq, h_tg, h_rg, time_percent, version
-            #     )
-            # json.dump(pprop._pp, open(pprop_name, 'w'))
+            # with ZipFile(self.cases_zip_name) as myzip:
+            #     pprop_name = self.pprop_template.format(
+            #         freq, h_tg, h_rg, time_percent, version
+            #         )
+            #     with myzip.open(pprop_name, 'w') as f:
+            #         json.dump(pprop._pp, f)
 
             los_loss = pathprof.loss_freespace(pprop)
             trop_loss = pathprof.loss_troposcatter(
@@ -150,10 +156,12 @@ class TestPropagation:
             # Warning: if uncommenting, the test cases will be overwritten
             # do this only, if you need to update the json files
             # (make sure, that results are correct!)
-            # loss_name = self.loss_template.format(
-            #     freq, h_tg, h_rg, time_percent, version, G_t, G_r
-            #     )
-            # json.dump(losses, open(loss_name, 'w'))
+            # with ZipFile(self.cases_zip_name) as myzip:
+            #     loss_name = self.loss_template.format(
+            #         freq, h_tg, h_rg, time_percent, version, G_t, G_r
+            #         )
+            #     with myzip.open(loss_name, 'w') as f:
+            #         json.dump(losses, open(f, 'w'))
 
     def teardown(self):
 
@@ -174,12 +182,12 @@ class TestPropagation:
                 version=version,
                 )
 
-            pprop_name = get_pkg_data_filename(
-                self.pprop_template.format(
+            with ZipFile(self.cases_zip_name) as myzip:
+                pprop_name = self.pprop_template.format(
                     freq, h_tg, h_rg, time_percent, version
-                    ))
-            with open(pprop_name, 'r') as f:
-                pprop_true = json.load(f)
+                    )
+                with myzip.open(pprop_name, 'r') as f:
+                    pprop_true = json.load(f)
 
             for k in pprop._pp:
                 assert_quantity_allclose(pprop._pp[k], pprop_true[k])
@@ -195,12 +203,12 @@ class TestPropagation:
             losses['E_sp'] = los_loss[1].to(cnv.dB).value
             losses['E_sbeta'] = los_loss[2].to(cnv.dB).value
 
-            loss_name = get_pkg_data_filename(
-                self.loss_template.format(
+            with ZipFile(self.cases_zip_name) as myzip:
+                loss_name = self.loss_template.format(
                     freq, h_tg, h_rg, time_percent, version, G_t, G_r
-                    ))
-            with open(loss_name, 'r') as f:
-                loss_true = json.load(f)
+                    )
+                with myzip.open(loss_name, 'r') as f:
+                    loss_true = json.load(f)
 
             for k in losses:
                 assert_quantity_allclose(losses[k], loss_true[k])
@@ -216,12 +224,12 @@ class TestPropagation:
             losses = {}
             losses['L_bs'] = tropo_loss.to(cnv.dB).value
 
-            loss_name = get_pkg_data_filename(
-                self.loss_template.format(
+            with ZipFile(self.cases_zip_name) as myzip:
+                loss_name = self.loss_template.format(
                     freq, h_tg, h_rg, time_percent, version, G_t, G_r
-                ))
-            with open(loss_name, 'r') as f:
-                loss_true = json.load(f)
+                    )
+                with myzip.open(loss_name, 'r') as f:
+                    loss_true = json.load(f)
 
             for k in losses:
                 assert_quantity_allclose(losses[k], loss_true[k])
@@ -235,12 +243,12 @@ class TestPropagation:
             losses = {}
             losses['L_ba'] = duct_loss.to(cnv.dB).value
 
-            loss_name = get_pkg_data_filename(
-                self.loss_template.format(
+            with ZipFile(self.cases_zip_name) as myzip:
+                loss_name = self.loss_template.format(
                     freq, h_tg, h_rg, time_percent, version, G_t, G_r
-                ))
-            with open(loss_name, 'r') as f:
-                loss_true = json.load(f)
+                    )
+                with myzip.open(loss_name, 'r') as f:
+                    loss_true = json.load(f)
 
             for k in losses:
                 assert_quantity_allclose(losses[k], loss_true[k])
@@ -258,12 +266,12 @@ class TestPropagation:
             losses['L_bd'] = diff_loss[3].to(cnv.dB).value
             losses['L_min_b0p'] = diff_loss[4].to(cnv.dB).value
 
-            loss_name = get_pkg_data_filename(
-                self.loss_template.format(
+            with ZipFile(self.cases_zip_name) as myzip:
+                loss_name = self.loss_template.format(
                     freq, h_tg, h_rg, time_percent, version, G_t, G_r
-                ))
-            with open(loss_name, 'r') as f:
-                loss_true = json.load(f)
+                    )
+                with myzip.open(loss_name, 'r') as f:
+                    loss_true = json.load(f)
 
             for k in losses:
                 assert_quantity_allclose(losses[k], loss_true[k])
@@ -285,12 +293,12 @@ class TestPropagation:
             losses['L_b_corr_t'] = tot_loss[5].to(cnv.dB).value
             losses['L_t'] = tot_loss[6].to(cnv.dB).value
 
-            loss_name = get_pkg_data_filename(
-                self.loss_template.format(
+            with ZipFile(self.cases_zip_name) as myzip:
+                loss_name = self.loss_template.format(
                     freq, h_tg, h_rg, time_percent, version, G_t, G_r
-                ))
-            with open(loss_name, 'r') as f:
-                loss_true = json.load(f)
+                    )
+                with myzip.open(loss_name, 'r') as f:
+                    loss_true = json.load(f)
 
             for k in losses:
                 assert_quantity_allclose(losses[k], loss_true[k])
@@ -327,8 +335,14 @@ class TestPropagation:
                 )
 
         # also test versus true results
-        tfile = get_pkg_data_filename('fastmap/hprof.hdf5')
-        hprof_data_cache_true = h5py.File(tfile, 'r')
+
+        # fileobjects in ZipFile don't support seek; need to write to tmpdir
+        zipdir = tmpdir_factory.mktemp('zip')
+        tfile = 'fastmap/hprof.hdf5'
+        with ZipFile(self.fastmap_zip_name) as myzip:
+            myzip.extract(tfile, zipdir)
+
+        hprof_data_cache_true = h5py.File(str(zipdir.join(tfile)), 'r')
 
         for k in hprof_data_cache:
             # Note conversion to some ndarray type necessary, as h5py
@@ -351,9 +365,12 @@ class TestPropagation:
 
         import h5py
 
-        tfile = get_pkg_data_filename('fastmap/hprof.hdf5')
-        hprof_data_cache = h5py.File(tfile, 'r')
-        # tdir = tmpdir_factory.mktemp('fastmap')
+        zipdir = tmpdir_factory.mktemp('zip')
+        tfile = 'fastmap/hprof.hdf5'
+        with ZipFile(self.fastmap_zip_name) as myzip:
+            myzip.extract(tfile, zipdir)
+
+        hprof_data_cache = h5py.File(str(zipdir.join(tfile)), 'r')
 
         for case in self.fast_cases:
 
@@ -377,7 +394,6 @@ class TestPropagation:
             fname = self.fastmap_template.format(
                 freq, h_tg, h_rg, time_percent, version, 'hdf5'
                 )
-            tfile = get_pkg_data_filename(fname)  # comment out if not exists
 
             # Warning: if uncommenting, the test cases will be overwritten
             # do this only, if you need to update the h5py files
@@ -388,8 +404,11 @@ class TestPropagation:
             #     for k, v in results.items():
             #         h5f[k] = v
 
-            print(tfile)
-            h5f = h5py.File(tfile, 'r')
+            with ZipFile(self.fastmap_zip_name) as myzip:
+                myzip.extract(fname, zipdir)
+
+            print(str(zipdir.join(fname)))
+            h5f = h5py.File(str(zipdir.join(fname)), 'r')
 
             # Note conversion to some ndarray type necessary, as h5py
             # returns <HDF5 dataset> types
@@ -431,8 +450,14 @@ class TestPropagation:
                 )
 
         # also test versus true results
-        tfile = get_pkg_data_filename('fastmap/hprof.npz')
-        hprof_data_cache_true = np.load(tfile)
+
+        # fileobjects in ZipFile don't support seek; need to write to tmpdir
+        zipdir = tmpdir_factory.mktemp('zip')
+        tfile = 'fastmap/hprof.npz'
+        with ZipFile(self.fastmap_zip_name) as myzip:
+            myzip.extract(tfile, zipdir)
+
+        hprof_data_cache_true = np.load(str(zipdir.join(tfile)))
 
         for k in hprof_data_cache:
             q1 = np.squeeze(hprof_data_cache[k])
@@ -456,9 +481,12 @@ class TestPropagation:
 
     def test_fast_atten_map_npz(self, tmpdir_factory):
 
-        tfile = get_pkg_data_filename('fastmap/hprof.npz')
-        hprof_data_cache = np.load(tfile)
-        # tdir = tmpdir_factory.mktemp('fastmap')
+        zipdir = tmpdir_factory.mktemp('zip')
+        tfile = 'fastmap/hprof.npz'
+        with ZipFile(self.fastmap_zip_name) as myzip:
+            myzip.extract(tfile, zipdir)
+
+        hprof_data_cache = np.load(str(zipdir.join(tfile)))
 
         for case in self.fast_cases:
 
@@ -483,7 +511,6 @@ class TestPropagation:
             fname = self.fastmap_template.format(
                 freq, h_tg, h_rg, time_percent, version, 'npz'
                 )
-            tfile = get_pkg_data_filename(fname)  # comment out if not exists
 
             # Warning: if uncommenting, the test cases will be overwritten
             # do this only, if you need to update the npz files
@@ -491,8 +518,11 @@ class TestPropagation:
             # tfile = str(tdir.join(fname.replace('fastmap/', '')))
             # np.savez(tfile, **results)
 
-            print(tfile)
-            true_dat = np.load(tfile)
+            with ZipFile(self.fastmap_zip_name) as myzip:
+                myzip.extract(fname, zipdir)
+
+            print(str(zipdir.join(fname)))
+            true_dat = np.load(str(zipdir.join(fname)))
 
             # Note conversion to some ndarray type necessary, as h5py
             # returns <HDF5 dataset> types
