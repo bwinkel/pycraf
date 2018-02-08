@@ -94,21 +94,21 @@ according to
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frequency</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frequency</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Center frequency [Hz]</p>
 </div></blockquote>
-<p><strong>bandwidth</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>bandwidth</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Assumed bandwidth [Hz]</p>
 <p>Note, if <code class="xref py py-obj docutils literal"><span class="pre">mode='vlbi'</span></code> the bandwidth is irrelevant, since only the
 spectral power flux density is calculated.</p>
 </div></blockquote>
-<p><strong>T_A</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>T_A</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Minimum antenna noise temperature [K]</p>
 </div></blockquote>
-<p><strong>T_rx</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>T_rx</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Receiver noise temperature [K]</p>
 </div></blockquote>
@@ -121,7 +121,7 @@ spectral power flux density is calculated.</p>
 <blockquote>
 <div><p>Default scale to use: ‘linear’, ‘dB’ (default: ‘linear’)</p>
 </div></blockquote>
-<p><strong>integ_time</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
+<p><strong>integ_time</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
 <blockquote>
 <div><p>Integration time [s] (default: 2000)</p>
 <p>Note, if <code class="xref py py-obj docutils literal"><span class="pre">mode='vlbi'</span></code> integration time is irrelevant, because the
@@ -129,35 +129,35 @@ limits are based on 1% of the receiver noise plus antenna temperature.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>T_rms</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>T_rms</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>System noise after integration [K]</p>
 </div></blockquote>
-<p><strong>P_rms_nu</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>P_rms_nu</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>System noise power spectral density [W/Hz, dB(W/Hz)]</p>
 </div></blockquote>
-<p><strong>Plim</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>Plim</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Power limit [W, dB(W)]</p>
 </div></blockquote>
-<p><strong>Plim_nu</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>Plim_nu</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Spectral power limit [W/Hz, dB(W/Hz)]</p>
 </div></blockquote>
-<p><strong>Slim</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>Slim</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Power flux density (pfd) limit [W/m^2, dB(W/m^2)]</p>
 </div></blockquote>
-<p><strong>Slim_nu</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>Slim_nu</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Spectral power flux density limit [Jy, dB(W/m^2/Hz)]</p>
 </div></blockquote>
-<p><strong>Efield</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>Efield</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>Electrical field strength limit [uV/m, db(uV^2/m^2)]</p>
 </div></blockquote>
-<p><strong>Efield_norm</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
+<p><strong>Efield_norm</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
 <blockquote>
 <div><p>As <code class="xref py py-obj docutils literal"><span class="pre">Efield</span></code> but normalized to 1 MHz bandwidth [uV/m, db(uV^2/m^2)]</p>
 </div></blockquote>
@@ -168,7 +168,7 @@ limits are based on 1% of the receiver noise plus antenna temperature.</p>
 </table>
 <p class="rubric">Notes</p>
 <p>Because all columns are Astropy Quantities (see
-<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.3)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>), one can easily convert between linear and
+<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>), one can easily convert between linear and
 log-scale at a later stage. the <code class="xref py py-obj docutils literal"><span class="pre">scale</span></code> parameter just defines the
 scale to use initially.</p>
 </dd></dl>
@@ -199,7 +199,7 @@ scale to use initially.</p>
   <p>
     &copy; Copyright 2018, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.7. &nbsp;
-    Last built 06 Feb 2018. <br/>
+    Last built 08 Feb 2018. <br/>
   </p>
 </footer>
   </body>
