@@ -15,8 +15,8 @@ pycraf
     :target: https://www.github.com/bwinkel/pycraf/blob/master/COPYING
     :alt: License
 
-.. image:: https://zenodo.org/badge/doi/10.5281/zenodo.8475.svg
-    :target: https://doi.org/10.5281/zenodo.8475
+.. image:: https://zenodo.org/badge/doi/10.5281/zenodo.1244192.svg
+    :target: https://doi.org/10.5281/zenodo.1244192
     :alt: Zenodo DOI
 
 The pycraf Python package provides functions and procedures for
