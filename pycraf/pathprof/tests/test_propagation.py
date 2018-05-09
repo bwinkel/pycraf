@@ -187,7 +187,7 @@ class TestPropagation:
                     freq, h_tg, h_rg, time_percent, version
                     )
                 with myzip.open(pprop_name, 'r') as f:
-                    pprop_true = json.load(f)
+                    pprop_true = json.loads(f.read().decode('utf-8'))
 
             for k in pprop._pp:
                 assert_quantity_allclose(pprop._pp[k], pprop_true[k])
@@ -208,7 +208,7 @@ class TestPropagation:
                     freq, h_tg, h_rg, time_percent, version, G_t, G_r
                     )
                 with myzip.open(loss_name, 'r') as f:
-                    loss_true = json.load(f)
+                    loss_true = json.loads(f.read().decode('utf-8'))
 
             for k in losses:
                 assert_quantity_allclose(losses[k], loss_true[k])
@@ -229,7 +229,7 @@ class TestPropagation:
                     freq, h_tg, h_rg, time_percent, version, G_t, G_r
                     )
                 with myzip.open(loss_name, 'r') as f:
-                    loss_true = json.load(f)
+                    loss_true = json.loads(f.read().decode('utf-8'))
 
             for k in losses:
                 assert_quantity_allclose(losses[k], loss_true[k])
@@ -248,7 +248,7 @@ class TestPropagation:
                     freq, h_tg, h_rg, time_percent, version, G_t, G_r
                     )
                 with myzip.open(loss_name, 'r') as f:
-                    loss_true = json.load(f)
+                    loss_true = json.loads(f.read().decode('utf-8'))
 
             for k in losses:
                 assert_quantity_allclose(losses[k], loss_true[k])
@@ -271,7 +271,7 @@ class TestPropagation:
                     freq, h_tg, h_rg, time_percent, version, G_t, G_r
                     )
                 with myzip.open(loss_name, 'r') as f:
-                    loss_true = json.load(f)
+                    loss_true = json.loads(f.read().decode('utf-8'))
 
             for k in losses:
                 assert_quantity_allclose(losses[k], loss_true[k])
@@ -298,7 +298,7 @@ class TestPropagation:
                     freq, h_tg, h_rg, time_percent, version, G_t, G_r
                     )
                 with myzip.open(loss_name, 'r') as f:
-                    loss_true = json.load(f)
+                    loss_true = json.loads(f.read().decode('utf-8'))
 
             for k in losses:
                 assert_quantity_allclose(losses[k], loss_true[k])
