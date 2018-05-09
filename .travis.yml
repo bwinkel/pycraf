@@ -47,7 +47,7 @@ env:
         # For this package-template, we include examples of Cython modules,
         # so Cython is required for testing. If your package does not include
         # Cython code, you can set CONDA_DEPENDENCIES=''
-        - CONDA_DEPENDENCIES='pip wheel numpy scipy astropy pytest cython h5py matplotlib pyproj sgp4'
+        - CONDA_DEPENDENCIES='pip wheel numpy scipy astropy pytest cython h5py matplotlib pyproj sgp4 sphinx-astropy'
 
         # List other runtime dependencies for the package that are available as
         # pip packages here.
@@ -146,6 +146,8 @@ matrix:
         # successful, only
         - os: linux
           env:
+            - NUMPY_VERSION=1.14.3
+            - ASTROPY_VERSION=3.0.2
             - SETUP_CMD='build_docs'
             - UPLOAD_DOCS=YES
 

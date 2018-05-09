@@ -39,13 +39,17 @@ except ImportError:
             sys.path.insert(1, a_h_path)
 
 # Load all of the global Astropy configuration
-from astropy_helpers.sphinx.conf import *
+try:
+    from sphinx_astropy.conf import *
+except ImportError:
+    print('ERROR: the documentation requires the sphinx-astropy package to be installed')
+    sys.exit(1)
 
 # import astropy
 
 # Use the astropy style when building docs
-from astropy import visualization
-plot_rcparams = visualization.astropy_mpl_docs_style
+# from astropy import visualization
+# plot_rcparams = visualization.astropy_mpl_docs_style  # deprecated?
 plot_apply_rcparams = True
 plot_html_show_source_link = False
 plot_formats = ['png', 'svg', 'pdf']
