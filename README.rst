@@ -15,6 +15,10 @@ pycraf
     :target: https://www.github.com/bwinkel/pycraf/blob/master/COPYING
     :alt: License
 
+.. image:: https://zenodo.org/badge/doi/10.5281/zenodo.8475.svg
+    :target: https://doi.org/10.5281/zenodo.8475
+    :alt: Zenodo DOI
+
 The pycraf Python package provides functions and procedures for
 various tasks in spectrum-management compatibility studies. A typical example
 would be to calculate the interference levels at a radio telescope produced
