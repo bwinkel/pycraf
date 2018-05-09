@@ -1,4 +1,4 @@
-0.25.6 (unreleased)
+0.25.6 (2018-05-09)
 =======================
 
 pycraf.conversions
@@ -6,6 +6,10 @@ pycraf.conversions
 - Add a function `protection.ra769_calculate_entry` that allows to calculate
   RA.769 thresholds for non-standard values (e.g., to query limits for
   RAS bands that are not included in the RA.769 tables).
+
+Other
+-----
+- Update to newest version (v3.0) of Astropy helpers.
 
 Bugfixes
 --------
