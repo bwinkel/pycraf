@@ -340,7 +340,7 @@ class TestPropagation:
         zipdir = tmpdir_factory.mktemp('zip')
         tfile = 'fastmap/hprof.hdf5'
         with ZipFile(self.fastmap_zip_name) as myzip:
-            myzip.extract(tfile, zipdir)
+            myzip.extract(tfile, str(zipdir))
 
         hprof_data_cache_true = h5py.File(str(zipdir.join(tfile)), 'r')
 
@@ -368,7 +368,7 @@ class TestPropagation:
         zipdir = tmpdir_factory.mktemp('zip')
         tfile = 'fastmap/hprof.hdf5'
         with ZipFile(self.fastmap_zip_name) as myzip:
-            myzip.extract(tfile, zipdir)
+            myzip.extract(tfile, str(zipdir))
 
         hprof_data_cache = h5py.File(str(zipdir.join(tfile)), 'r')
 
@@ -405,7 +405,7 @@ class TestPropagation:
             #         h5f[k] = v
 
             with ZipFile(self.fastmap_zip_name) as myzip:
-                myzip.extract(fname, zipdir)
+                myzip.extract(fname, str(zipdir))
 
             print(str(zipdir.join(fname)))
             h5f = h5py.File(str(zipdir.join(fname)), 'r')
@@ -455,7 +455,7 @@ class TestPropagation:
         zipdir = tmpdir_factory.mktemp('zip')
         tfile = 'fastmap/hprof.npz'
         with ZipFile(self.fastmap_zip_name) as myzip:
-            myzip.extract(tfile, zipdir)
+            myzip.extract(tfile, str(zipdir))
 
         hprof_data_cache_true = np.load(str(zipdir.join(tfile)))
 
@@ -484,7 +484,7 @@ class TestPropagation:
         zipdir = tmpdir_factory.mktemp('zip')
         tfile = 'fastmap/hprof.npz'
         with ZipFile(self.fastmap_zip_name) as myzip:
-            myzip.extract(tfile, zipdir)
+            myzip.extract(tfile, str(zipdir))
 
         hprof_data_cache = np.load(str(zipdir.join(tfile)))
 
@@ -519,7 +519,7 @@ class TestPropagation:
             # np.savez(tfile, **results)
 
             with ZipFile(self.fastmap_zip_name) as myzip:
-                myzip.extract(fname, zipdir)
+                myzip.extract(fname, str(zipdir))
 
             print(str(zipdir.join(fname)))
             true_dat = np.load(str(zipdir.join(fname)))
