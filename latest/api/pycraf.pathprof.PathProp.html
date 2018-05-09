@@ -4,23 +4,17 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>PathProp &#8212; pycraf v0.25.6.dev50</title>
+    <title>PathProp &#8212; pycraf v0.25.7dev50</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.25.6.dev50',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -30,8 +24,7 @@
 <script type="text/javascript" src="../_static/copybutton.js"></script>
 
 
-  </head>
-  <body>
+  </head><body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
@@ -60,10 +53,10 @@
 	</a>
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.6.dev50</a>
+	<a href="../index.html">pycraf v0.25.7dev50</a>
 	 &#187;
       </li>
-      <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="docutils literal"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
+      <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
       
        
     </ul>
@@ -80,114 +73,98 @@
 <dl class="class">
 <dt id="pycraf.pathprof.PathProp">
 <em class="property">class </em><code class="descclassname">pycraf.pathprof.</code><code class="descname">PathProp</code><span class="sig-paren">(</span><em>freq</em>, <em>temperature</em>, <em>pressure</em>, <em>lon_t</em>, <em>lat_t</em>, <em>lon_r</em>, <em>lat_r</em>, <em>h_tg</em>, <em>h_rg</em>, <em>hprof_step</em>, <em>timepercent</em>, <em>omega=&lt;Quantity 0. %&gt;</em>, <em>d_tm=None</em>, <em>d_lm=None</em>, <em>d_ct=None</em>, <em>d_cr=None</em>, <em>zone_t=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em>zone_r=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em>polarization=0</em>, <em>version=16</em>, <em>delta_N=None</em>, <em>N0=None</em>, <em>hprof_dists=None</em>, <em>hprof_heights=None</em>, <em>hprof_bearing=None</em>, <em>hprof_backbearing=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#PathProp"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L36" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.PathProp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pycraf.pathprof.cyprop._PathProp</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pycraf.pathprof.cyprop._PathProp</span></code></p>
 <p>Container class that holds all path profile properties.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>freq</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Frequency of radiation [GHz]</p>
-</div></blockquote>
-<p><strong>temperature</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Ambient temperature at path midpoint [K]</p>
-</div></blockquote>
-<p><strong>pressure</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Ambient pressure at path midpoint  [hPa]</p>
-</div></blockquote>
-<p><strong>lon_t, lat_t</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Geographic longitude/latitude of transmitter [deg]</p>
-</div></blockquote>
-<p><strong>lon_r, lat_r</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Geographic longitude/latitude of receiver [deg]</p>
-</div></blockquote>
-<p><strong>h_tg, h_rg</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Transmitter/receiver height over ground [m]</p>
-</div></blockquote>
-<p><strong>hprof_step</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Distance resolution of height profile along path [m]</p>
-</div></blockquote>
-<p><strong>timepercent</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Time percentage [%] (maximal 50%)</p>
-</div></blockquote>
-<p><strong>omega</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
-<blockquote>
-<div><p>Fraction of the path over water [%] (see Table 3)
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>freq</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dd><p class="first last">Frequency of radiation [GHz]</p>
+</dd>
+<dt><strong>temperature</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dd><p class="first last">Ambient temperature at path midpoint [K]</p>
+</dd>
+<dt><strong>pressure</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dd><p class="first last">Ambient pressure at path midpoint  [hPa]</p>
+</dd>
+<dt><strong>lon_t, lat_t</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dd><p class="first last">Geographic longitude/latitude of transmitter [deg]</p>
+</dd>
+<dt><strong>lon_r, lat_r</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dd><p class="first last">Geographic longitude/latitude of receiver [deg]</p>
+</dd>
+<dt><strong>h_tg, h_rg</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dd><p class="first last">Transmitter/receiver height over ground [m]</p>
+</dd>
+<dt><strong>hprof_step</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dd><p class="first last">Distance resolution of height profile along path [m]</p>
+</dd>
+<dt><strong>timepercent</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dd><p class="first last">Time percentage [%] (maximal 50%)</p>
+</dd>
+<dt><strong>omega</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt>
+<dd><p class="first last">Fraction of the path over water [%] (see Table 3)
 (default: 0%)</p>
-</div></blockquote>
-<p><strong>d_tm</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
-<blockquote>
-<div><p>longest continuous land (inland + coastal) section of the
+</dd>
+<dt><strong>d_tm</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt>
+<dd><p class="first last">longest continuous land (inland + coastal) section of the
 great-circle path [km]
 (default: distance between Tx and Rx)</p>
-</div></blockquote>
-<p><strong>d_lm</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
-<blockquote>
-<div><p>longest continuous inland section of the great-circle path [km]
+</dd>
+<dt><strong>d_lm</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt>
+<dd><p class="first last">longest continuous inland section of the great-circle path [km]
 (default: distance between Tx and Rx)</p>
-</div></blockquote>
-<p><strong>d_ct, d_cr</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
-<blockquote>
-<div><p>Distance over land from transmitter/receiver antenna to the coast
+</dd>
+<dt><strong>d_ct, d_cr</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt>
+<dd><p class="first last">Distance over land from transmitter/receiver antenna to the coast
 along great circle interference path [km]
 (default: 50000 km)</p>
-</div></blockquote>
-<p><strong>zone_t, zone_r</strong> : CLUTTER enum, optional</p>
-<blockquote>
-<div><p>Clutter type for transmitter/receiver terminal.
+</dd>
+<dt><strong>zone_t, zone_r</strong> <span class="classifier-delimiter">:</span> <span class="classifier">CLUTTER enum, optional</span></dt>
+<dd><p class="first last">Clutter type for transmitter/receiver terminal.
 (default: CLUTTER.UNKNOWN)</p>
-</div></blockquote>
-<p><strong>polarization</strong> : int, optional</p>
-<blockquote>
-<div><p>Polarization (default: 0)
+</dd>
+<dt><strong>polarization</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
+<dd><p class="first last">Polarization (default: 0)
 Allowed values are: 0 - horizontal, 1 - vertical</p>
-</div></blockquote>
-<p><strong>version</strong> : int, optional</p>
-<blockquote>
-<div><p>ITU-R Rec. P.452 version. Allowed values are: 14, 16</p>
-</div></blockquote>
-<p><strong>delta_N</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
-<blockquote>
-<div><p>Average radio-refractive index lapse-rate through the lowest 1 km of
+</dd>
+<dt><strong>version</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
+<dd><p class="first last">ITU-R Rec. P.452 version. Allowed values are: 14, 16</p>
+</dd>
+<dt><strong>delta_N</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt>
+<dd><p class="first last">Average radio-refractive index lapse-rate through the lowest 1 km of
 the atmosphere [N-units/km = 1/km]
-(default: query <a class="reference internal" href="pycraf.pathprof.deltaN_N0_from_map.html#pycraf.pathprof.deltaN_N0_from_map" title="pycraf.pathprof.deltaN_N0_from_map"><code class="xref py py-obj docutils literal"><span class="pre">deltaN_N0_from_map</span></code></a>)</p>
-</div></blockquote>
-<p><strong>N_0</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
-<blockquote>
-<div><p>Sea-level surface refractivity [N-units = dimless]
-(default: query <a class="reference internal" href="pycraf.pathprof.deltaN_N0_from_map.html#pycraf.pathprof.deltaN_N0_from_map" title="pycraf.pathprof.deltaN_N0_from_map"><code class="xref py py-obj docutils literal"><span class="pre">deltaN_N0_from_map</span></code></a>)</p>
-</div></blockquote>
-<p><strong>hprof_dists</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
-<blockquote>
-<div><p>Distance vector associated with the height profile <code class="xref py py-obj docutils literal"><span class="pre">hprof_heights</span></code>.
-(default: query <a class="reference internal" href="pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal"><span class="pre">srtm_height_profile</span></code></a>)</p>
-</div></blockquote>
-<p><strong>hprof_heights</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
-<blockquote>
-<div><p>Terrain heights profile for the distances in <code class="xref py py-obj docutils literal"><span class="pre">hprof_dists</span></code>.
-(default: query <a class="reference internal" href="pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal"><span class="pre">srtm_height_profile</span></code></a>)</p>
-</div></blockquote>
-<p><strong>hprof_bearing</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
-<blockquote>
-<div><p>Start bearing of the height profile path.
-(default: query <a class="reference internal" href="pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal"><span class="pre">srtm_height_profile</span></code></a>)</p>
-</div></blockquote>
-<p><strong>hprof_backbearing</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
-<blockquote>
-<div><p>Back-bearing of the height profile path.
-(default: query <a class="reference internal" href="pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal"><span class="pre">srtm_height_profile</span></code></a>)</p>
-</div></blockquote>
+(default: query <a class="reference internal" href="pycraf.pathprof.deltaN_N0_from_map.html#pycraf.pathprof.deltaN_N0_from_map" title="pycraf.pathprof.deltaN_N0_from_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deltaN_N0_from_map</span></code></a>)</p>
+</dd>
+<dt><strong>N_0</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt>
+<dd><p class="first last">Sea-level surface refractivity [N-units = dimless]
+(default: query <a class="reference internal" href="pycraf.pathprof.deltaN_N0_from_map.html#pycraf.pathprof.deltaN_N0_from_map" title="pycraf.pathprof.deltaN_N0_from_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deltaN_N0_from_map</span></code></a>)</p>
+</dd>
+<dt><strong>hprof_dists</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt>
+<dd><p class="first last">Distance vector associated with the height profile <code class="xref py py-obj docutils literal notranslate"><span class="pre">hprof_heights</span></code>.
+(default: query <a class="reference internal" href="pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_profile</span></code></a>)</p>
+</dd>
+<dt><strong>hprof_heights</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt>
+<dd><p class="first last">Terrain heights profile for the distances in <code class="xref py py-obj docutils literal notranslate"><span class="pre">hprof_dists</span></code>.
+(default: query <a class="reference internal" href="pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_profile</span></code></a>)</p>
+</dd>
+<dt><strong>hprof_bearing</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt>
+<dd><p class="first last">Start bearing of the height profile path.
+(default: query <a class="reference internal" href="pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_profile</span></code></a>)</p>
+</dd>
+<dt><strong>hprof_backbearing</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt>
+<dd><p class="first last">Back-bearing of the height profile path.
+(default: query <a class="reference internal" href="pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_profile</span></code></a>)</p>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>pprop</strong> : PathProp instance</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>pprop</strong> <span class="classifier-delimiter">:</span> <span class="classifier">PathProp instance</span></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -198,34 +175,34 @@ the atmosphere [N-units/km = 1/km]
 version 14 and 15. The former used a Deygout method, the new one
 is based on a Bullington calculation with correction terms.</p>
 </li>
-<li><p class="first">Set <code class="xref py py-obj docutils literal"><span class="pre">d_ct</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">d_cr</span></code> to zero for a terminal on ship or on a sea
+<li><p class="first">Set <code class="xref py py-obj docutils literal notranslate"><span class="pre">d_ct</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">d_cr</span></code> to zero for a terminal on ship or on a sea
 platform; only relevant if less than 5 km.</p>
 </li>
-<li><p class="first">Per default, the values for <code class="xref py py-obj docutils literal"><span class="pre">delta_N</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">N_0</span></code> are queried from
+<li><p class="first">Per default, the values for <code class="xref py py-obj docutils literal notranslate"><span class="pre">delta_N</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">N_0</span></code> are queried from
 a radiometeorological map provided with <a class="reference external" href="https://www.itu.int/rec/R-REC-P.452-16-201507-I/en">ITU-R Rec. P.452</a>
-using the function <a class="reference internal" href="pycraf.pathprof.deltaN_N0_from_map.html#pycraf.pathprof.deltaN_N0_from_map" title="pycraf.pathprof.deltaN_N0_from_map"><code class="xref py py-obj docutils literal"><span class="pre">deltaN_N0_from_map</span></code></a>. If
+using the function <a class="reference internal" href="pycraf.pathprof.deltaN_N0_from_map.html#pycraf.pathprof.deltaN_N0_from_map" title="pycraf.pathprof.deltaN_N0_from_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deltaN_N0_from_map</span></code></a>. If
 you want to use your own values, you have to provide both,
-<code class="xref py py-obj docutils literal"><span class="pre">delta_N</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">N_0</span></code>.</p>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">delta_N</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">N_0</span></code>.</p>
 </li>
 <li><p class="first">Per default, the height-profile data are queried from
 <a class="reference external" href="https://www2.jpl.nasa.gov/srtm/">SRTM data</a> using the
-<a class="reference internal" href="pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal"><span class="pre">srtm_height_profile</span></code></a> function. If
+<a class="reference internal" href="pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_profile</span></code></a> function. If
 you want to use your own values, you have to provide all four
-parameters: <code class="xref py py-obj docutils literal"><span class="pre">hprof_dists</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">hprof_heights</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">bearing</span></code>, and
-<code class="xref py py-obj docutils literal"><span class="pre">back_bearing</span></code>.</p>
+parameters: <code class="xref py py-obj docutils literal notranslate"><span class="pre">hprof_dists</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">hprof_heights</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">bearing</span></code>, and
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">back_bearing</span></code>.</p>
 <p>If you <em>don’t do</em> the automatic query from SRTM data, make sure
-that the first element in <code class="xref py py-obj docutils literal"><span class="pre">hprof_dists</span></code> is zero (transmitter
+that the first element in <code class="xref py py-obj docutils literal notranslate"><span class="pre">hprof_dists</span></code> is zero (transmitter
 location) and the last element is the distance between Tx and Rx.
-Also, the given <code class="xref py py-obj docutils literal"><span class="pre">lon_t</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">lat_t</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">lon_r</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">lat_r</span></code> values
+Also, the given <code class="xref py py-obj docutils literal notranslate"><span class="pre">lon_t</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">lat_t</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">lon_r</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">lat_r</span></code> values
 should be consistent with the height profile. The bearings can
 be set to zero, if you don’t need to calculate boresight angles.</p>
-<p><a class="reference external" href="https://www2.jpl.nasa.gov/srtm/">SRTM</a> data tiles (<code class="xref py py-obj docutils literal"><span class="pre">*.hgt</span></code>) need
-to be accessible by <code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code>.  It is assumed that these are either
+<p><a class="reference external" href="https://www2.jpl.nasa.gov/srtm/">SRTM</a> data tiles (<code class="xref py py-obj docutils literal notranslate"><span class="pre">*.hgt</span></code>) need
+to be accessible by <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf</span></code>.  It is assumed that these are either
 present in the current working directory or in the path defined by the
-<code class="xref py py-obj docutils literal"><span class="pre">SRTMDATA</span></code> environment variable (sub-directories are also parsed).
-Alternatively, use the <a class="reference internal" href="pycraf.pathprof.SrtmConf.html#pycraf.pathprof.SrtmConf" title="pycraf.pathprof.SrtmConf"><code class="xref py py-obj docutils literal"><span class="pre">SrtmConf</span></code></a> manager to
-change the directory, where <code class="xref py py-obj docutils literal"><span class="pre">pycraf</span></code> looks for SRTM data, during
-run-time. The <a class="reference internal" href="pycraf.pathprof.SrtmConf.html#pycraf.pathprof.SrtmConf" title="pycraf.pathprof.SrtmConf"><code class="xref py py-obj docutils literal"><span class="pre">SrtmConf</span></code></a> manager also offers
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">SRTMDATA</span></code> environment variable (sub-directories are also parsed).
+Alternatively, use the <a class="reference internal" href="pycraf.pathprof.SrtmConf.html#pycraf.pathprof.SrtmConf" title="pycraf.pathprof.SrtmConf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SrtmConf</span></code></a> manager to
+change the directory, where <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf</span></code> looks for SRTM data, during
+run-time. The <a class="reference internal" href="pycraf.pathprof.SrtmConf.html#pycraf.pathprof.SrtmConf" title="pycraf.pathprof.SrtmConf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SrtmConf</span></code></a> manager also offers
 additional features such as automatic downloading of missing
 tiles or applying different interpolation methods (e.g., splines).
 For details see <a class="reference internal" href="../pathprof/working_with_srtm.html#working-with-srtm"><span class="std std-ref">Working with SRTM data</span></a>.</p>
@@ -258,8 +235,8 @@ For details see <a class="reference internal" href="../pathprof/working_with_srt
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2018, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.7. &nbsp;
-    Last built 08 Feb 2018. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.4. &nbsp;
+    Last built 09 May 2018. <br/>
   </p>
 </footer>
   </body>

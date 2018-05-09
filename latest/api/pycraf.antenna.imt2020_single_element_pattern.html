@@ -4,23 +4,17 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>imt2020_single_element_pattern &#8212; pycraf v0.25.6.dev50</title>
+    <title>imt2020_single_element_pattern &#8212; pycraf v0.25.7dev50</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.25.6.dev50',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -31,8 +25,7 @@
 <script type="text/javascript" src="../_static/copybutton.js"></script>
 
 
-  </head>
-  <body>
+  </head><body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
@@ -67,10 +60,10 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.6.dev50</a>
+	<a href="../index.html">pycraf v0.25.7dev50</a>
 	 &#187;
       </li>
-      <li><a href="../antenna/index.html" accesskey="U">Antenna patterns (<code class="docutils literal"><span class="pre">pycraf.antenna</span></code>)</a> &#187;</li>
+      <li><a href="../antenna/index.html" accesskey="U">Antenna patterns (<code class="docutils literal notranslate"><span class="pre">pycraf.antenna</span></code>)</a> &#187;</li>
       
       <li>imt2020_single_element_pattern</li> 
     </ul>
@@ -92,40 +85,36 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>azim</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Azimuth [deg]</p>
-</div></blockquote>
-<p><strong>elev</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Elevation [deg]</p>
-</div></blockquote>
-<p><strong>G_Emax</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Single element maximum gain [dBi]</p>
-</div></blockquote>
-<p><strong>A_m</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Front-to-back ratio (horizontal) [dimless]</p>
-</div></blockquote>
-<p><strong>SLA_nu</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Front-to-back ratio (vertical) [dimless]</p>
-</div></blockquote>
-<p><strong>phi_3db</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Horizontal 3dB beam width of single element [deg]</p>
-</div></blockquote>
-<p><strong>theta_3db</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Vertical 3dB beam width of single element [deg]</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>azim</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dd><p class="first last">Azimuth [deg]</p>
+</dd>
+<dt><strong>elev</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dd><p class="first last">Elevation [deg]</p>
+</dd>
+<dt><strong>G_Emax</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dd><p class="first last">Single element maximum gain [dBi]</p>
+</dd>
+<dt><strong>A_m</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dd><p class="first last">Front-to-back ratio (horizontal) [dimless]</p>
+</dd>
+<dt><strong>SLA_nu</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dd><p class="first last">Front-to-back ratio (vertical) [dimless]</p>
+</dd>
+<dt><strong>phi_3db</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dd><p class="first last">Horizontal 3dB beam width of single element [deg]</p>
+</dd>
+<dt><strong>theta_3db</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dd><p class="first last">Vertical 3dB beam width of single element [deg]</p>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>A_E</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.4)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote class="last">
-<div><p>Single antenna element’s pattern [dBi]</p>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>A_E</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dd><p class="first last">Single antenna element’s pattern [dBi]</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -159,8 +148,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2018, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.7. &nbsp;
-    Last built 08 Feb 2018. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.4. &nbsp;
+    Last built 09 May 2018. <br/>
   </p>
 </footer>
   </body>
