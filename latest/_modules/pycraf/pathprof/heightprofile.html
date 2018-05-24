@@ -119,9 +119,10 @@
     <span class="c1"># print(time.time() - t)</span>
     <span class="c1"># t = time.time()</span>
 
-    <span class="k">if</span> <span class="n">step</span> <span class="o">&gt;</span> <span class="n">srtm</span><span class="o">.</span><span class="n">HGT_RES</span> <span class="o">/</span> <span class="mf">1.5</span><span class="p">:</span>
+    <span class="n">hgt_res</span> <span class="o">=</span> <span class="n">srtm</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">hgt_res</span>
+    <span class="k">if</span> <span class="n">step</span> <span class="o">&gt;</span> <span class="n">hgt_res</span> <span class="o">/</span> <span class="mf">1.5</span><span class="p">:</span>
         <span class="n">hdistances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
-            <span class="mf">0.</span><span class="p">,</span> <span class="n">distance</span> <span class="o">+</span> <span class="n">srtm</span><span class="o">.</span><span class="n">HGT_RES</span> <span class="o">/</span> <span class="mf">3.</span><span class="p">,</span> <span class="n">srtm</span><span class="o">.</span><span class="n">HGT_RES</span> <span class="o">/</span> <span class="mf">3.</span>
+            <span class="mf">0.</span><span class="p">,</span> <span class="n">distance</span> <span class="o">+</span> <span class="n">hgt_res</span> <span class="o">/</span> <span class="mf">3.</span><span class="p">,</span> <span class="n">hgt_res</span> <span class="o">/</span> <span class="mf">3.</span>
             <span class="p">)</span>
         <span class="n">hlons</span><span class="p">,</span> <span class="n">hlats</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cygeodesics</span><span class="o">.</span><span class="n">direct_cython</span><span class="p">(</span>
             <span class="n">lon_t_rad</span><span class="p">,</span> <span class="n">lat_t_rad</span><span class="p">,</span> <span class="n">bearing_1_rad</span><span class="p">,</span> <span class="n">hdistances</span>
@@ -320,7 +321,7 @@
   <p>
     &copy; Copyright 2018, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.4. &nbsp;
-    Last built 23 May 2018. <br/>
+    Last built 24 May 2018. <br/>
   </p>
 </footer>
   </body>

@@ -187,7 +187,7 @@
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;This class is a singleton.  Do not instantiate.&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="MultiState.set"><a class="viewcode-back" href="../../../api/pycraf.utils.MultiState.html#pycraf.utils.MultiState.set">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">_do_validate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the current science state value.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -219,7 +219,8 @@
                 <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;&lt;MultiState </span><span class="si">{0}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
 
         <span class="n">ctx</span> <span class="o">=</span> <span class="n">_Context</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_attributes</span><span class="p">)</span>
-        <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_do_validate</span><span class="p">:</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">cls</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
 
@@ -263,7 +264,7 @@
   <p>
     &copy; Copyright 2018, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.4. &nbsp;
-    Last built 23 May 2018. <br/>
+    Last built 24 May 2018. <br/>
   </p>
 </footer>
   </body>

@@ -108,8 +108,6 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SrtmConf&#39;</span><span class="p">,</span> <span class="s1">&#39;srtm_height_data&#39;</span><span class="p">]</span>
 
 
-<span class="n">HGT_RES</span> <span class="o">=</span> <span class="mf">90.</span>  <span class="c1"># m; equivalent to 3 arcsec resolution</span>
-
 <span class="n">_NASA_JSON_NAME</span> <span class="o">=</span> <span class="n">get_pkg_data_filename</span><span class="p">(</span><span class="s1">&#39;data/nasa.json&#39;</span><span class="p">)</span>
 <span class="n">_VIEWPANO_NAME</span> <span class="o">=</span> <span class="n">get_pkg_data_filename</span><span class="p">(</span><span class="s1">&#39;data/viewpano.npy&#39;</span><span class="p">)</span>
 
@@ -119,7 +117,12 @@
 <span class="n">VIEWPANO_TILES</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">_VIEWPANO_NAME</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">TileNotAvailable</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">TileNotAvailableError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">TilesSizeError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 
     <span class="k">pass</span>
 
@@ -136,6 +139,9 @@
 
 <span class="sd">        from pycraf.pathprof import SrtmConf</span>
 <span class="sd">        SrtmConf.set(srtm_dir=&#39;/path/to/srtmdir&#39;)</span>
+
+<span class="sd">    This will also check, if all &#39;.hgt&#39; files have the same size. If not</span>
+<span class="sd">    an error is raised.</span>
 
 <span class="sd">    Alternatively, if only a temporary change of the config is desired,</span>
 <span class="sd">    one can use `SrtmConf` as a context manager::</span>
@@ -179,6 +185,9 @@
 <span class="sd">    We refer to `~scipy.interpolate.RectBivariateSpline` description for</span>
 <span class="sd">    further information.</span>
 
+<span class="sd">    Two read-only attributes are present, `tile_size` (pixels) and</span>
+<span class="sd">    `hgt_res` (m), which are automatically inferred from the tile data.</span>
+
 <span class="sd">    URLS:</span>
 
 <span class="sd">    - `nasa_v2.1 &lt;https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/&gt;`__</span>
@@ -186,14 +195,18 @@
 <span class="sd">    - `viewpano &lt;http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm&gt;`__</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">_attributes</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;srtm_dir&#39;</span><span class="p">,</span> <span class="s1">&#39;download&#39;</span><span class="p">,</span> <span class="s1">&#39;server&#39;</span><span class="p">,</span> <span class="s1">&#39;interp&#39;</span><span class="p">,</span> <span class="s1">&#39;spline_opts&#39;</span><span class="p">)</span>
+    <span class="n">_attributes</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s1">&#39;srtm_dir&#39;</span><span class="p">,</span> <span class="s1">&#39;download&#39;</span><span class="p">,</span> <span class="s1">&#39;server&#39;</span><span class="p">,</span> <span class="s1">&#39;interp&#39;</span><span class="p">,</span> <span class="s1">&#39;spline_opts&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;tile_size&#39;</span><span class="p">,</span> <span class="s1">&#39;hgt_res&#39;</span>
+        <span class="p">)</span>
 
-    <span class="c1"># default values</span>
     <span class="n">srtm_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SRTMDATA&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
     <span class="n">download</span> <span class="o">=</span> <span class="s1">&#39;never&#39;</span>
     <span class="n">server</span> <span class="o">=</span> <span class="s1">&#39;nasa_v2.1&#39;</span>
     <span class="n">interp</span> <span class="o">=</span> <span class="s1">&#39;linear&#39;</span>
     <span class="n">spline_opts</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">tile_size</span> <span class="o">=</span> <span class="mi">1201</span>
+    <span class="n">hgt_res</span> <span class="o">=</span> <span class="mf">90.</span>  <span class="c1"># m; basic SRTM resolution (refers to 3 arcsec resolution)</span>
 
 <div class="viewcode-block" id="SrtmConf.validate"><a class="viewcode-back" href="../../../api/pycraf.pathprof.SrtmConf.html#pycraf.pathprof.SrtmConf.validate">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -256,6 +269,12 @@
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                         <span class="s1">&#39;&quot;spline_opts&quot; s-value must be a float.&#39;</span>
                         <span class="p">)</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;tile_size&#39;</span><span class="p">,</span> <span class="s1">&#39;hgt_res&#39;</span><span class="p">]:</span>
+
+                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+                    <span class="s1">&#39;Setting the </span><span class="si">{}</span><span class="s1"> manually not allowed! &#39;</span>
+                    <span class="s1">&#39;(This is automatically inferred from data.)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                    <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">kwargs</span></div></div>
 
@@ -284,7 +303,7 @@
             <span class="k">if</span> <span class="n">tile_name</span> <span class="ow">in</span> <span class="n">tiles</span><span class="p">:</span>
                 <span class="k">break</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">TileNotAvailable</span><span class="p">(</span>
+            <span class="k">raise</span> <span class="n">TileNotAvailableError</span><span class="p">(</span>
                 <span class="s1">&#39;No tile found for (</span><span class="si">{}</span><span class="s1">d, </span><span class="si">{}</span><span class="s1">d) in list of available &#39;</span>
                 <span class="s1">&#39;tiles.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">ilon</span><span class="p">,</span> <span class="n">ilat</span>
@@ -298,7 +317,7 @@
         <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tiles</span> <span class="o">==</span> <span class="n">tile_name</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tiles</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">TileNotAvailable</span><span class="p">(</span>
+            <span class="k">raise</span> <span class="n">TileNotAvailableError</span><span class="p">(</span>
                 <span class="s1">&#39;No tile found for (</span><span class="si">{}</span><span class="s1">d, </span><span class="si">{}</span><span class="s1">d) in list of available &#39;</span>
                 <span class="s1">&#39;tiles.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">ilon</span><span class="p">,</span> <span class="n">ilat</span>
@@ -307,6 +326,27 @@
         <span class="k">return</span> <span class="n">VIEWPANO_TILES</span><span class="p">[</span><span class="s1">&#39;zipfile&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># should not happen</span>
+
+
+<span class="k">def</span> <span class="nf">_check_consistent_tile_sizes</span><span class="p">(</span><span class="n">srtm_dir</span><span class="p">):</span>
+
+    <span class="n">all_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">srtm_dir</span><span class="p">,</span> <span class="s1">&#39;**&#39;</span><span class="p">,</span> <span class="s1">&#39;*.hgt&#39;</span><span class="p">),</span>
+        <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+    <span class="n">file_sizes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="o">.</span><span class="n">st_size</span> <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">all_files</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">file_sizes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="s1">&#39;No .hgt tiles found in given srtm path.&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">file_sizes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TilesSizeError</span><span class="p">(</span>
+            <span class="s1">&#39;Inconsistent tile sizes found in given srtm path. &#39;</span>
+            <span class="s1">&#39;All tiles must be the same size!&#39;</span>
+            <span class="p">)</span>
+
+    <span class="n">tile_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">file_sizes</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tile_size</span>
 
 
 <span class="k">def</span> <span class="nf">_download</span><span class="p">(</span><span class="n">ilon</span><span class="p">,</span> <span class="n">ilat</span><span class="p">):</span>
@@ -431,19 +471,25 @@
 <span class="k">def</span> <span class="nf">get_tile_data</span><span class="p">(</span><span class="n">ilon</span><span class="p">,</span> <span class="n">ilat</span><span class="p">):</span>
     <span class="c1"># angles in deg</span>
 
-    <span class="n">tile_size</span> <span class="o">=</span> <span class="mi">1201</span>  <span class="c1"># this is the default (in case of empty data)</span>
-
     <span class="k">try</span><span class="p">:</span>
         <span class="n">hgt_file</span> <span class="o">=</span> <span class="n">get_hgt_file</span><span class="p">(</span><span class="n">ilon</span><span class="p">,</span> <span class="n">ilat</span><span class="p">)</span>
+        <span class="c1"># need to run check after get_hgt_file, because download could happen</span>
+        <span class="n">_check_consistent_tile_sizes</span><span class="p">(</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">srtm_dir</span><span class="p">)</span>
         <span class="n">tile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="n">hgt_file</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;&gt;i2&#39;</span><span class="p">)</span>
         <span class="n">tile_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">hgt_res</span> <span class="o">=</span> <span class="mf">90.</span> <span class="o">*</span> <span class="mi">1201</span> <span class="o">/</span> <span class="n">tile_size</span>
+        <span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">tile_size</span><span class="o">=</span><span class="n">tile_size</span><span class="p">,</span> <span class="n">_do_validate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">hgt_res</span><span class="o">=</span><span class="n">hgt_res</span><span class="p">,</span> <span class="n">_do_validate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">tile_size</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="n">bad_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">tile</span> <span class="o">==</span> <span class="mi">32768</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">tile</span> <span class="o">==</span> <span class="o">-</span><span class="mi">32768</span><span class="p">)</span>
         <span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
         <span class="n">tile</span><span class="p">[</span><span class="n">bad_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
-    <span class="k">except</span> <span class="n">TileNotAvailable</span><span class="p">:</span>
+    <span class="k">except</span> <span class="n">TileNotAvailableError</span><span class="p">:</span>
+        <span class="c1"># always use very small tile size for zero tiles</span>
+        <span class="c1"># (just enough to make spline interpolation work)</span>
+        <span class="n">tile_size</span> <span class="o">=</span> <span class="mi">5</span>
         <span class="n">tile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">tile_size</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
     <span class="n">dx</span> <span class="o">=</span> <span class="n">dy</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="n">tile_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
@@ -562,7 +608,7 @@
   <p>
     &copy; Copyright 2018, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.4. &nbsp;
-    Last built 23 May 2018. <br/>
+    Last built 24 May 2018. <br/>
   </p>
 </footer>
   </body>
