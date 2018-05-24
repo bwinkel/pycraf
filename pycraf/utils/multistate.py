@@ -122,7 +122,7 @@ class MultiState(object, metaclass=_MultiMeta):
         raise RuntimeError('This class is a singleton.  Do not instantiate.')
 
     @classmethod
-    def set(cls, **kwargs):
+    def set(cls, *, _do_validate=True, **kwargs):
         """
         Set the current science state value.
         """
@@ -154,7 +154,8 @@ class MultiState(object, metaclass=_MultiMeta):
                 return ('<MultiState {0}>'.format(self._parent.__name__))
 
         ctx = _Context(cls, cls._attributes)
-        kwargs = cls.validate(**kwargs)
+        if _do_validate:
+            kwargs = cls.validate(**kwargs)
         for k, v in kwargs.items():
             cls.__class__.__class__.__setattr__(cls, k, v)
 

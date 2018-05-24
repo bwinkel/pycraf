@@ -43,8 +43,6 @@ from .. import utils
 __all__ = ['SrtmConf', 'srtm_height_data']
 
 
-HGT_RES = 90.  # m; equivalent to 3 arcsec resolution
-
 _NASA_JSON_NAME = get_pkg_data_filename('data/nasa.json')
 _VIEWPANO_NAME = get_pkg_data_filename('data/viewpano.npy')
 
@@ -54,7 +52,12 @@ with open(_NASA_JSON_NAME, 'r') as f:
 VIEWPANO_TILES = np.load(_VIEWPANO_NAME)
 
 
-class TileNotAvailable(Exception):
+class TileNotAvailableError(Exception):
+
+    pass
+
+
+class TilesSizeError(Exception):
 
     pass
 
@@ -71,6 +74,9 @@ class SrtmConf(utils.MultiState):
 
         from pycraf.pathprof import SrtmConf
         SrtmConf.set(srtm_dir='/path/to/srtmdir')
+
+    This will also check, if all '.hgt' files have the same size. If not
+    an error is raised.
 
     Alternatively, if only a temporary change of the config is desired,
     one can use `SrtmConf` as a context manager::
@@ -114,6 +120,9 @@ class SrtmConf(utils.MultiState):
     We refer to `~scipy.interpolate.RectBivariateSpline` description for
     further information.
 
+    Two read-only attributes are present, `tile_size` (pixels) and
+    `hgt_res` (m), which are automatically inferred from the tile data.
+
     URLS:
 
     - `nasa_v2.1 <https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/>`__
@@ -121,14 +130,18 @@ class SrtmConf(utils.MultiState):
     - `viewpano <http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm>`__
     '''
 
-    _attributes = ('srtm_dir', 'download', 'server', 'interp', 'spline_opts')
+    _attributes = (
+        'srtm_dir', 'download', 'server', 'interp', 'spline_opts',
+        'tile_size', 'hgt_res'
+        )
 
-    # default values
     srtm_dir = os.environ.get('SRTMDATA', '.')
     download = 'never'
     server = 'nasa_v2.1'
     interp = 'linear'
     spline_opts = (3, 0)
+    tile_size = 1201
+    hgt_res = 90.  # m; basic SRTM resolution (refers to 3 arcsec resolution)
 
     @classmethod
     def validate(cls, **kwargs):
@@ -191,6 +204,12 @@ class SrtmConf(utils.MultiState):
                     raise ValueError(
                         '"spline_opts" s-value must be a float.'
                         )
+            if k in ['tile_size', 'hgt_res']:
+
+                raise KeyError(
+                    'Setting the {} manually not allowed! '
+                    '(This is automatically inferred from data.)'.format(k)
+                    )
 
         return kwargs
 
@@ -219,7 +238,7 @@ def _check_availability(ilon, ilat):
             if tile_name in tiles:
                 break
         else:
-            raise TileNotAvailable(
+            raise TileNotAvailableError(
                 'No tile found for ({}d, {}d) in list of available '
                 'tiles.'.format(
                     ilon, ilat
@@ -233,7 +252,7 @@ def _check_availability(ilon, ilat):
         idx = np.where(tiles == tile_name)
 
         if len(tiles[idx]) == 0:
-            raise TileNotAvailable(
+            raise TileNotAvailableError(
                 'No tile found for ({}d, {}d) in list of available '
                 'tiles.'.format(
                     ilon, ilat
@@ -242,6 +261,27 @@ def _check_availability(ilon, ilat):
         return VIEWPANO_TILES['zipfile'][idx][0]
 
     return None  # should not happen
+
+
+def _check_consistent_tile_sizes(srtm_dir):
+
+    all_files = glob.glob(
+        os.path.join(srtm_dir, '**', '*.hgt'),
+        recursive=True
+        )
+    file_sizes = set(os.stat(fname).st_size for fname in all_files)
+
+    if len(file_sizes) == 0:
+        raise OSError('No .hgt tiles found in given srtm path.')
+    elif len(file_sizes) > 1:
+        raise TilesSizeError(
+            'Inconsistent tile sizes found in given srtm path. '
+            'All tiles must be the same size!'
+            )
+
+    tile_size = int(np.sqrt(file_sizes.pop() / 2) + 0.5)
+
+    return tile_size
 
 
 def _download(ilon, ilat):
@@ -366,23 +406,30 @@ def get_hgt_file(ilon, ilat):
 def get_tile_data(ilon, ilat):
     # angles in deg
 
-    tile_size = 1201
-    dx = dy = 1. / (tile_size - 1)
-    x, y = np.ogrid[0:tile_size, 0:tile_size]
-    lons, lats = x * dx + ilon, y * dy + ilat
-
     try:
         hgt_file = get_hgt_file(ilon, ilat)
+        # need to run check after get_hgt_file, because download could happen
+        _check_consistent_tile_sizes(SrtmConf.srtm_dir)
         tile = np.fromfile(hgt_file, dtype='>i2')
+        tile_size = int(np.sqrt(tile.size) + 0.5)
+        hgt_res = 90. * 1200 / (tile_size - 1)
+        SrtmConf.set(tile_size=tile_size, _do_validate=False)
+        SrtmConf.set(hgt_res=hgt_res, _do_validate=False)
         tile = tile.reshape((tile_size, tile_size))[::-1]
 
         bad_mask = (tile == 32768) | (tile == -32768)
         tile = tile.astype(np.float32)
         tile[bad_mask] = np.nan
 
-    except TileNotAvailable:
+    except TileNotAvailableError:
+        # always use very small tile size for zero tiles
+        # (just enough to make spline interpolation work)
+        tile_size = 5
         tile = np.zeros((tile_size, tile_size), dtype=np.float32)
 
+    dx = dy = 1. / (tile_size - 1)
+    x, y = np.ogrid[0:tile_size, 0:tile_size]
+    lons, lats = x * dx + ilon, y * dy + ilat
     return lons, lats, tile
 
 

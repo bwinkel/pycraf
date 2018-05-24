@@ -54,9 +54,10 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
     # print(time.time() - t)
     # t = time.time()
 
-    if step > srtm.HGT_RES / 1.5:
+    hgt_res = srtm.SrtmConf.hgt_res
+    if step > hgt_res / 1.5:
         hdistances = np.arange(
-            0., distance + srtm.HGT_RES / 3., srtm.HGT_RES / 3.
+            0., distance + hgt_res / 3., hgt_res / 3.
             )
         hlons, hlats, _ = cygeodesics.direct_cython(
             lon_t_rad, lat_t_rad, bearing_1_rad, hdistances

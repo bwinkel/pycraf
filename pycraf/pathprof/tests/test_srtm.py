@@ -190,7 +190,7 @@ def test_check_availability_nasa():
     for ilon, ilat, name in nasa_cases:
 
         if name is None:
-            with pytest.raises(srtm.TileNotAvailable):
+            with pytest.raises(srtm.TileNotAvailableError):
                 srtm._check_availability(ilon, ilat)
         else:
             assert srtm._check_availability(ilon, ilat) == name
@@ -228,7 +228,7 @@ def test_check_availability_pano():
         for ilon, ilat, name in pano_cases:
 
             if name is None:
-                with pytest.raises(srtm.TileNotAvailable):
+                with pytest.raises(srtm.TileNotAvailableError):
                     srtm._check_availability(ilon, ilat)
             else:
                 assert srtm._check_availability(ilon, ilat) == name
@@ -286,6 +286,10 @@ def test_get_hgt_diskpath(srtm_temp_dir):
 
         with pytest.raises(IOError):
             srtm._get_hgt_diskpath('foo.hgt')
+
+        # cleaning up
+        os.remove(os.path.join(srtm_temp_dir, 'd1', 'foo.hgt'))
+        os.remove(os.path.join(srtm_temp_dir, 'd2', 'foo.hgt'))
 
 
 @remote_data(source='any')
@@ -378,13 +382,13 @@ def test_get_tile_zero(srtm_temp_dir):
         ilon, ilat = 28, 35
         lons, lats, tile = srtm.get_tile_data(ilon, ilat)
 
-        assert_allclose(lons[::250, 0], np.array([
-            28., 28.20833333, 28.41666667, 28.625, 28.83333333
+        assert_allclose(lons[:, 0], np.array([
+            28., 28.25, 28.5, 28.75, 29.
             ]))
-        assert_allclose(lats[0, ::250], np.array([
-            35., 35.20833333, 35.41666667, 35.625, 35.83333333
+        assert_allclose(lats[0, :], np.array([
+            35., 35.25, 35.5, 35.75, 36.
             ]))
-        assert_allclose(tile[::250, ::250], np.zeros((5, 5), dtype=np.float32))
+        assert_allclose(tile, np.zeros((5, 5), dtype=np.float32))
 
 
 @remote_data(source='any')
