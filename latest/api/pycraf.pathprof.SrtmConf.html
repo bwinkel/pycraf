@@ -177,7 +177,10 @@ further information.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pycraf.pathprof.SrtmConf.validate" title="pycraf.pathprof.SrtmConf.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pycraf.pathprof.SrtmConf.hook" title="pycraf.pathprof.SrtmConf.hook"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hook</span></code></a>(**kwargs)</td>
+<td>A hook which is called everytime when attributes are about to change.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pycraf.pathprof.SrtmConf.validate" title="pycraf.pathprof.SrtmConf.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a>(**kwargs)</td>
 <td>This checks, if the provided inputs for <a class="reference internal" href="#pycraf.pathprof.SrtmConf.download" title="pycraf.pathprof.SrtmConf.download"><code class="xref py py-obj docutils literal notranslate"><span class="pre">download</span></code></a> and <a class="reference internal" href="#pycraf.pathprof.SrtmConf.server" title="pycraf.pathprof.SrtmConf.server"><code class="xref py py-obj docutils literal notranslate"><span class="pre">server</span></code></a> are allowed.</td>
 </tr>
 </tbody>
@@ -220,6 +223,44 @@ further information.</p>
 
 <p class="rubric">Methods Documentation</p>
 <dl class="classmethod">
+<dt id="pycraf.pathprof.SrtmConf.hook">
+<em class="property">classmethod </em><code class="descname">hook</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#SrtmConf.hook"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/srtm.py#L216" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.SrtmConf.hook" title="Permalink to this definition">¶</a></dt>
+<dd><p>A hook which is called everytime when attributes are about to change.</p>
+<p>You should override this method if you want to enable pre-processing
+or monitoring of your attributes. For example, one could use this
+to react to attribute changes:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf.utils</span> <span class="k">import</span> <span class="n">MultiState</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyState</span><span class="p">(</span><span class="n">MultiState</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">_attributes</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">foo</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="n">bar</span> <span class="o">=</span> <span class="s2">&quot;guido&quot;</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="nd">@classmethod</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">hook</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="s1">&#39;bar&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;bar&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">bar</span><span class="p">:</span>
+<span class="gp">... </span>                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> about to change: </span><span class="si">{}</span><span class="s1"> --&gt; </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+<span class="gp">... </span>                    <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;bar&#39;</span><span class="p">],</span> <span class="bp">cls</span><span class="o">.</span><span class="n">bar</span>
+<span class="gp">... </span>                    <span class="p">))</span>
+<span class="gp">... </span>                <span class="c1"># do stuff ...</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">MyState</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s2">&quot;david&quot;</span><span class="p">)</span>
+<span class="go">bar about to change: david --&gt; guido</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">MyState</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s2">&quot;david&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">MyState</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s2">&quot;guido&quot;</span><span class="p">)</span>
+<span class="go">bar about to change: guido --&gt; david</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">MyState</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s2">&quot;david&quot;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="go">bar about to change: david --&gt; guido</span>
+<span class="go">bar about to change: guido --&gt; david</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="classmethod">
 <dt id="pycraf.pathprof.SrtmConf.validate">
 <em class="property">classmethod </em><code class="descname">validate</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#SrtmConf.validate"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/srtm.py#L146" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.SrtmConf.validate" title="Permalink to this definition">¶</a></dt>
 <dd><p>This checks, if the provided inputs for <a class="reference internal" href="#pycraf.pathprof.SrtmConf.download" title="pycraf.pathprof.SrtmConf.download"><code class="xref py py-obj docutils literal notranslate"><span class="pre">download</span></code></a> and <a class="reference internal" href="#pycraf.pathprof.SrtmConf.server" title="pycraf.pathprof.SrtmConf.server"><code class="xref py py-obj docutils literal notranslate"><span class="pre">server</span></code></a> are
@@ -260,7 +301,7 @@ allowed. Possible values are:</p>
   <p>
     &copy; Copyright 2018, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.4. &nbsp;
-    Last built 24 May 2018. <br/>
+    Last built 25 May 2018. <br/>
   </p>
 </footer>
   </body>

@@ -10,10 +10,12 @@ MultiState
 
    .. autosummary::
 
+      ~MultiState.hook
       ~MultiState.set
       ~MultiState.validate
 
    .. rubric:: Methods Documentation
 
+   .. automethod:: hook
    .. automethod:: set
    .. automethod:: validate

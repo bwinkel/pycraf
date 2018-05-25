@@ -160,15 +160,56 @@ internal objects:</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pycraf.utils.MultiState.set" title="pycraf.utils.MultiState.set"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set</span></code></a>(*[,&nbsp;_do_validate])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pycraf.utils.MultiState.hook" title="pycraf.utils.MultiState.hook"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hook</span></code></a>(**kwargs)</td>
+<td>A hook which is called everytime when attributes are about to change.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pycraf.utils.MultiState.set" title="pycraf.utils.MultiState.set"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set</span></code></a>(*[,&nbsp;_do_validate])</td>
 <td>Set the current science state value.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pycraf.utils.MultiState.validate" title="pycraf.utils.MultiState.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pycraf.utils.MultiState.validate" title="pycraf.utils.MultiState.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a>(**kwargs)</td>
 <td>Validate the keyword arguments and return the (converted) kwargs dictionary.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods Documentation</p>
+<dl class="classmethod">
+<dt id="pycraf.utils.MultiState.hook">
+<em class="property">classmethod </em><code class="descname">hook</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState.hook"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/utils/multistate.py#L186" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.utils.MultiState.hook" title="Permalink to this definition">¶</a></dt>
+<dd><p>A hook which is called everytime when attributes are about to change.</p>
+<p>You should override this method if you want to enable pre-processing
+or monitoring of your attributes. For example, one could use this
+to react to attribute changes:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf.utils</span> <span class="k">import</span> <span class="n">MultiState</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyState</span><span class="p">(</span><span class="n">MultiState</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">_attributes</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">foo</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="n">bar</span> <span class="o">=</span> <span class="s2">&quot;guido&quot;</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="nd">@classmethod</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">hook</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="s1">&#39;bar&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;bar&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">bar</span><span class="p">:</span>
+<span class="gp">... </span>                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> about to change: </span><span class="si">{}</span><span class="s1"> --&gt; </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+<span class="gp">... </span>                    <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;bar&#39;</span><span class="p">],</span> <span class="bp">cls</span><span class="o">.</span><span class="n">bar</span>
+<span class="gp">... </span>                    <span class="p">))</span>
+<span class="gp">... </span>                <span class="c1"># do stuff ...</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">MyState</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s2">&quot;david&quot;</span><span class="p">)</span>
+<span class="go">bar about to change: david --&gt; guido</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">MyState</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s2">&quot;david&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">MyState</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s2">&quot;guido&quot;</span><span class="p">)</span>
+<span class="go">bar about to change: guido --&gt; david</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">MyState</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s2">&quot;david&quot;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="go">bar about to change: david --&gt; guido</span>
+<span class="go">bar about to change: guido --&gt; david</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="classmethod">
 <dt id="pycraf.utils.MultiState.set">
 <em class="property">classmethod </em><code class="descname">set</code><span class="sig-paren">(</span><em>*</em>, <em>_do_validate=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState.set"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/utils/multistate.py#L124" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.utils.MultiState.set" title="Permalink to this definition">¶</a></dt>
@@ -177,7 +218,7 @@ internal objects:</p>
 
 <dl class="classmethod">
 <dt id="pycraf.utils.MultiState.validate">
-<em class="property">classmethod </em><code class="descname">validate</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState.validate"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/utils/multistate.py#L164" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.utils.MultiState.validate" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">validate</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState.validate"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/utils/multistate.py#L166" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.utils.MultiState.validate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validate the keyword arguments and return the (converted) kwargs
 dictionary.</p>
 <p>You should override this method if you want to enable validation
@@ -219,7 +260,7 @@ take care of by the <a class="reference internal" href="#pycraf.utils.MultiState
   <p>
     &copy; Copyright 2018, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.4. &nbsp;
-    Last built 24 May 2018. <br/>
+    Last built 25 May 2018. <br/>
   </p>
 </footer>
   </body>

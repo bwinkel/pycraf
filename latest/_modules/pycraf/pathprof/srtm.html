@@ -276,7 +276,15 @@
                     <span class="s1">&#39;(This is automatically inferred from data.)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
                     <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">kwargs</span></div></div>
+        <span class="k">return</span> <span class="n">kwargs</span></div>
+
+<div class="viewcode-block" id="SrtmConf.hook"><a class="viewcode-back" href="../../../api/pycraf.pathprof.SrtmConf.html#pycraf.pathprof.SrtmConf.hook">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">hook</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="s1">&#39;srtm_dir&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="c1"># check if srtm_dir changed and clear cache</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;srtm_dir&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">srtm_dir</span><span class="p">:</span>
+                <span class="n">get_tile_interpolator</span><span class="o">.</span><span class="n">cache_clear</span><span class="p">()</span></div></div>
 
 
 <span class="k">def</span> <span class="nf">_hgt_filename</span><span class="p">(</span><span class="n">ilon</span><span class="p">,</span> <span class="n">ilat</span><span class="p">):</span>
@@ -608,7 +616,7 @@
   <p>
     &copy; Copyright 2018, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.4. &nbsp;
-    Last built 24 May 2018. <br/>
+    Last built 25 May 2018. <br/>
   </p>
 </footer>
   </body>

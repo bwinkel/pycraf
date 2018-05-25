@@ -22,6 +22,7 @@ SrtmConf
 
    .. autosummary::
 
+      ~SrtmConf.hook
       ~SrtmConf.validate
 
    .. rubric:: Attributes Documentation
@@ -36,4 +37,5 @@ SrtmConf
 
    .. rubric:: Methods Documentation
 
+   .. automethod:: hook
    .. automethod:: validate
