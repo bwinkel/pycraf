@@ -213,6 +213,14 @@ class SrtmConf(utils.MultiState):
 
         return kwargs
 
+    @classmethod
+    def hook(cls, **kwargs):
+
+        if 'srtm_dir' in kwargs:
+            # check if srtm_dir changed and clear cache
+            if kwargs['srtm_dir'] != cls.srtm_dir:
+                get_tile_interpolator.cache_clear()
+
 
 def _hgt_filename(ilon, ilat):
     # construct proper hgt-file name

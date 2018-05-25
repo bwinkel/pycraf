@@ -145,6 +145,7 @@ class MultiState(object, metaclass=_MultiMeta):
                 pass
 
             def __exit__(self, type, value, tb):
+                cls.hook(**self._values)
                 for k, v in self._values.items():
                     self._parent.__class__.__class__.__setattr__(
                         self._parent, k, v
@@ -156,6 +157,7 @@ class MultiState(object, metaclass=_MultiMeta):
         ctx = _Context(cls, cls._attributes)
         if _do_validate:
             kwargs = cls.validate(**kwargs)
+        cls.hook(**kwargs)
         for k, v in kwargs.items():
             cls.__class__.__class__.__setattr__(cls, k, v)
 
@@ -180,3 +182,43 @@ class MultiState(object, metaclass=_MultiMeta):
         '''
 
         return kwargs
+
+    @classmethod
+    def hook(cls, **kwargs):
+        '''
+        A hook which is called everytime when attributes are about to change.
+
+        You should override this method if you want to enable pre-processing
+        or monitoring of your attributes. For example, one could use this
+        to react to attribute changes::
+
+            >>> from pycraf.utils import MultiState
+
+            >>> class MyState(MultiState):
+            ...
+            ...     _attributes = ('foo', 'bar')
+            ...     foo = 1
+            ...     bar = "guido"
+            ...
+            ...     @classmethod
+            ...     def hook(cls, **kwargs):
+            ...         if 'bar' in kwargs:
+            ...             if kwargs['bar'] != cls.bar:
+            ...                 print('{} about to change: {} --> {}'.format(
+            ...                     'bar', kwargs['bar'], cls.bar
+            ...                     ))
+            ...                 # do stuff ...
+
+            >>> _ = MyState.set(bar="david")
+            bar about to change: david --> guido
+            >>> _ = MyState.set(bar="david")
+            >>> _ = MyState.set(bar="guido")
+            bar about to change: guido --> david
+
+            >>> with MyState.set(bar="david"):
+            ...     pass
+            bar about to change: david --> guido
+            bar about to change: guido --> david
+        '''
+
+        pass
