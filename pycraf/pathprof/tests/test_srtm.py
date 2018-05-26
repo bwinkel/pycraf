@@ -333,22 +333,29 @@ def test_get_hgt_file_download_missing(srtm_temp_dir):
 @remote_data(source='any')
 def test_get_hgt_file_download_always(srtm_temp_dir):
 
-    # store last mtime for comparison
+    # note, previously, we checked the file's mtime to do this check
+    # however, on macos, the mtime is often the same (perhaps because
+    # of bad granularity?)
+    ilon, ilat = 12, 50
+    dat1 = b'W\x04'  # == 1111 as short (struct type: 'h')
     with srtm.SrtmConf.set(srtm_dir=srtm_temp_dir):
 
-        ilon, ilat = 12, 50
         tile_path = srtm.get_hgt_file(ilon, ilat)
-        mtime1 = os.path.getmtime(tile_path)
+        # manually modify the first datum:
+        with open(tile_path, 'r+b') as f:
+            f.write(dat1)
 
-    print(srtm.SrtmConf.srtm_dir)
+        _, _, tile1 = srtm.get_tile_data(ilon, ilat)
+
     with srtm.SrtmConf.set(srtm_dir=srtm_temp_dir, download='always'):
 
         ilon, ilat = 12, 50
         tile_path = srtm.get_hgt_file(ilon, ilat)
-        mtime2 = os.path.getmtime(tile_path)
+        with open(tile_path, 'rb') as f:
+            dat2 = f.read(2)
 
-    print(mtime1, mtime2)
-    assert mtime1 != mtime2
+    print(dat1, dat2)
+    assert dat1 != dat2
 
 
 @remote_data(source='any')
