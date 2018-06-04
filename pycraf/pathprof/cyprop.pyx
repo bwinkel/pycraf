@@ -2046,6 +2046,11 @@ def height_map_data_cython(
 
           Distance values for each of the paths stored in `height_profs`.
 
+        - "bearing_prof" : `~numpy.ndarray` 1D (float, (me, ))
+
+          Bearings for each of the paths stored in `height_profs`
+          (w.r.t. map center).
+
         - "height_profs" : `~numpy.ndarray` 2D (float, (me, mh))
 
           Height profiles to each of the pixels on the map edge, zero padded.
@@ -2059,6 +2064,10 @@ def height_map_data_cython(
     -----
     - Path attenuation is completely symmetric, i.e., it doesn't matter if
       the transmitter or the receiver is situated in the map center.
+    - If you need to calculate the full lon/lat coordinates of the (hi-res)
+      samples in "height_profs", you can use the bearings ("bearing_prof")
+      and distances ("dist_prof") and the `~pycraf.pathprof.geoid_direct`
+      function to do this.
     '''
 
     cdef:
@@ -2146,6 +2155,9 @@ def height_map_data_cython(
     refx, refy = xcoords[0], ycoords[0]
     cdef dict dist_dict = {}, height_dict = {}
 
+    bearing_prof = np.zeros((len(edge_coords), ), dtype=np.float64)
+    cdef double[::1] bearing_prof_v = bearing_prof
+
     for eidx, (x, y) in enumerate(edge_coords):
 
         res = heightprofile._srtm_height_profile(
@@ -2159,6 +2171,7 @@ def height_map_data_cython(
             ) = res
         dist_dict[eidx] = dists
         height_dict[eidx] = heights
+        bearing_prof_v[eidx] = bearing
 
         for didx, (lon_r, lat_r) in enumerate(zip(lons, lats)):
 
@@ -2284,6 +2297,7 @@ def height_map_data_cython(
     hprof_data['omega_map'] = omega_map
 
     hprof_data['dist_prof'] = dist_prof
+    hprof_data['bearing_prof'] = bearing_prof
     hprof_data['height_profs'] = height_profs
     hprof_data['zheight_prof'] = zheight_prof
 
