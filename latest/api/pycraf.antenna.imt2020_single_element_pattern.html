@@ -79,7 +79,7 @@
 <h1>imt2020_single_element_pattern<a class="headerlink" href="#imt2020-single-element-pattern" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.antenna.imt2020_single_element_pattern">
-<code class="descclassname">pycraf.antenna.</code><code class="descname">imt2020_single_element_pattern</code><span class="sig-paren">(</span><em>azim</em>, <em>elev</em>, <em>G_Emax</em>, <em>A_m</em>, <em>SLA_nu</em>, <em>phi_3db</em>, <em>theta_3db</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/antenna/imt.html#imt2020_single_element_pattern"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/antenna/imt.py#L80" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.antenna.imt2020_single_element_pattern" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.antenna.</code><code class="descname">imt2020_single_element_pattern</code><span class="sig-paren">(</span><em>azim</em>, <em>elev</em>, <em>G_Emax</em>, <em>A_m</em>, <em>SLA_nu</em>, <em>phi_3db</em>, <em>theta_3db</em>, <em>k=12.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/antenna/imt.html#imt2020_single_element_pattern"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/antenna/imt.py#L88" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.antenna.imt2020_single_element_pattern" title="Permalink to this definition">¶</a></dt>
 <dd><p>Single antenna element’s pattern according to <a class="reference external" href="https://www.itu.int/md/R15-TG5.1-C-0036">IMT.MODEL</a> document.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -106,6 +106,10 @@
 </dd>
 <dt><strong>theta_3db</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
 <dd><p class="first last">Vertical 3dB beam width of single element [deg]</p>
+</dd>
+<dt><strong>k</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span></dt>
+<dd><p class="first last">Multiplication factor, can be used to get better match to
+measured antenna patters (default: 12). See <a href="#id1"><span class="problematic" id="id2">`</span></a>WP5D-C-0936</p>
 </dd>
 </dl>
 </td>
@@ -149,7 +153,7 @@
   <p>
     &copy; Copyright 2018, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.5. &nbsp;
-    Last built 04 Jun 2018. <br/>
+    Last built 21 Jun 2018. <br/>
   </p>
 </footer>
   </body>
