@@ -181,7 +181,7 @@ def _imt2020_composite_pattern(
 
         return np.exp(
             1j * 2 * np.pi * (
-                n * _dV_sin_theta_i +
+                n * _dV_sin_theta_i -
                 m * _dH_cos_theta_i_sin_phi_i
                 )
             ) / np.sqrt(N_H * N_V)
