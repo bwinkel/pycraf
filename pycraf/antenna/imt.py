@@ -16,7 +16,7 @@ __all__ = [
     ]
 
 
-def _A_EH(phi, A_m, phi_3db):
+def _A_EH(phi, A_m, phi_3db, k=12.):
     '''
     Antenna element's horizontal pattern according to `IMT.MODEL
     <https://www.itu.int/md/R15-TG5.1-C-0036>`_ document.
@@ -29,6 +29,10 @@ def _A_EH(phi, A_m, phi_3db):
         Front-to-back ratio (horizontal) [dimless]
     phi_3db : np.ndarray, float
         Horizontal 3-dB beam width of single element [deg]
+    k : float, optional
+        Multiplication factor, can be used to get better match to
+        measured antenna patters (default: 12). See `WP5D-C-0936
+    <https://www.itu.int/md/R15-WP5D-C-0936/en>`_ document.
 
     Returns
     -------
@@ -36,10 +40,10 @@ def _A_EH(phi, A_m, phi_3db):
         Antenna element's horizontal radiation pattern [dBi]
     '''
 
-    return -np.minimum(12 * (phi / phi_3db) ** 2, A_m)
+    return -np.minimum(k * (phi / phi_3db) ** 2, A_m)
 
 
-def _A_EV(theta, SLA_nu, theta_3db):
+def _A_EV(theta, SLA_nu, theta_3db, k=12.):
     '''
     Antenna element's vertical pattern according to `IMT.MODEL
     <https://www.itu.int/md/R15-TG5.1-C-0036>`_ document.
@@ -52,6 +56,9 @@ def _A_EV(theta, SLA_nu, theta_3db):
         Front-to-back ratio (vertical) [dimless]
     theta_3db : np.ndarray, float
         Vertical 3-dB beam width of single element [deg]
+    k : float, optional
+        Multiplication factor, can be used to get better match to
+        measured antenna patters (default: 12). See `WP5D-C-0936
 
     Returns
     -------
@@ -59,20 +66,21 @@ def _A_EV(theta, SLA_nu, theta_3db):
         Antenna element's vertical radiation pattern [dBi]
     '''
 
-    return -np.minimum(12 * ((theta - 90.) / theta_3db) ** 2, SLA_nu)
+    return -np.minimum(k * ((theta - 90.) / theta_3db) ** 2, SLA_nu)
 
 
 def _imt2020_single_element_pattern(
         azim, elev,
         G_Emax,
         A_m, SLA_nu,
-        phi_3db, theta_3db
+        phi_3db, theta_3db,
+        k=12.,
         ):
 
     phi = azim
     theta = 90. - elev
     return G_Emax - np.minimum(
-        -_A_EH(phi, A_m, phi_3db) - _A_EV(theta, SLA_nu, theta_3db),
+        -_A_EH(phi, A_m, phi_3db, k=k) - _A_EV(theta, SLA_nu, theta_3db, k=k),
         A_m
         )
 
@@ -91,7 +99,8 @@ def imt2020_single_element_pattern(
         azim, elev,
         G_Emax,
         A_m, SLA_nu,
-        phi_3db, theta_3db
+        phi_3db, theta_3db,
+        k=12.,
         ):
     '''
     Single antenna element's pattern according to `IMT.MODEL
@@ -113,6 +122,9 @@ def imt2020_single_element_pattern(
         Horizontal 3dB beam width of single element [deg]
     theta_3db : `~astropy.units.Quantity`
         Vertical 3dB beam width of single element [deg]
+    k : float, optional
+        Multiplication factor, can be used to get better match to
+        measured antenna patters (default: 12). See `WP5D-C-0936
 
     Returns
     -------
@@ -128,7 +140,8 @@ def imt2020_single_element_pattern(
         azim, elev,
         G_Emax,
         A_m, SLA_nu,
-        phi_3db, theta_3db
+        phi_3db, theta_3db,
+        k=k,
         )
 
 
@@ -141,6 +154,7 @@ def _imt2020_composite_pattern(
         d_H, d_V,
         N_H, N_V,
         rho,
+        k=12.
         ):
 
     phi = azim
@@ -152,7 +166,8 @@ def _imt2020_composite_pattern(
         azim, elev,
         G_Emax,
         A_m, SLA_nu,
-        phi_3db, theta_3db
+        phi_3db, theta_3db,
+        k=k,
         )
 
     # pre-compute some quantities for speed-up
@@ -223,6 +238,7 @@ def imt2020_composite_pattern(
         d_H, d_V,
         N_H, N_V,
         rho=1 * cnv.dimless,
+        k=12.,
         ):
     '''
     Composite (array) antenna pattern according to `IMT.MODEL
@@ -247,6 +263,9 @@ def imt2020_composite_pattern(
         Horizontal/Vertical number of single antenna elements
     rho : `~astropy.units.Quantity`, optional
         Correlation level (see 3GPP TR 37.840, 5.4.4.1.4, default: 1) [dimless]
+    k : float, optional
+        Multiplication factor, can be used to get better match to
+        measured antenna patters (default: 12). See `WP5D-C-0936
 
     Returns
     -------
@@ -256,6 +275,15 @@ def imt2020_composite_pattern(
     Notes
     -----
     Further information can be found in 3GPP TR 37.840 Section 5.4.4.
+
+    According to document `WP5D-C-0936
+    <https://www.itu.int/md/R15-WP5D-C-0936/en>`_ the AAS pattern can
+    still be subject to quite effective beamforming in the spurious
+    domain. For such cases, one can simply change the `d_H` and `d_V`
+    to fit to the out-of-band frequency, i.e., `d_oob = f_oob / f * d`.
+    For example, if `f = 26 GHz`, `f_oob = 23.8 GHz`, and `d = 0.5` then
+    `d_oob = 0.46`. However, to match measurements, also a different
+    `k`-factor should be used, i.e., 8 instead of 12.
     '''
 
     return _imt2020_composite_pattern(
@@ -267,6 +295,7 @@ def imt2020_composite_pattern(
         d_H, d_V,
         N_H, N_V,
         rho,
+        k=k,
         )
 
 
