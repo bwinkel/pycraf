@@ -595,7 +595,7 @@ def transform_factory(sys_in, sys_out, code_in='epsg', code_out='epsg'):
         ...     geospatial.EPSG.WGS84, 31467
         ...     )
         >>> wgs84_to_etrs89(6 * u.deg, 50 * u.deg)  # doctest: +FLOAT_CMP
-        (<Quantity 3285004.0360039757 m>, <Quantity 5544720.4017482875 m>)
+        (<Quantity 3285005.65767981 m>, <Quantity 5544721.32224115 m>)
 
     If an *ESRI* system is desired, either use the integer code and
     set `code_[in,out] = 'esri'`, or use the ESRI enum::
