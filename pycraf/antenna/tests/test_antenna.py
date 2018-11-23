@@ -308,6 +308,7 @@ def test_imt2020_composite_pattern_oob():
             ] * cnv.dB
         )
 
+
 def test_imt2020_composite_pattern_broadcast():
 
     azims = np.linspace(-50, 50, 3) * apu.deg
@@ -357,6 +358,101 @@ def test_imt2020_composite_pattern_broadcast():
               [-49.57172209, -78.5662747]]]
             ] * cnv.dB,
         atol=1.e-4 * cnv.dB, rtol=1.e-6
+        )
+
+
+def test_imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz():
+
+    _gfunc = imt.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz
+    args_list = [
+        (-180, 180, apu.deg),
+        (-90, 90, apu.deg),
+        (None, None, cnv.dB),
+        (0, None, apu.deg),
+        (0, None, apu.deg),
+        (0, None, cnv.dimless),
+        (0, None, cnv.dimless),
+        (0, None, cnv.dimless),
+        (-90, 90, apu.deg),
+        (-90, 90, apu.deg),
+        ]
+    check_astro_quantities(_gfunc, args_list)
+
+    azims = np.arange(-180, 180, 0.5)[50:-50:150] * apu.deg
+    elevs = np.arange(-90, 90, 0.5)[30:-30:70] * apu.deg
+
+    G0 = 18. * cnv.dB
+    phi_3db = 65. * apu.deg
+    # theta_3db can be inferred in the following way:
+    theta_3db = 31000 / G0.to(cnv.dimless) / phi_3db.value * apu.deg
+    k_p, k_h, k_v = (0.7, 0.7, 0.3) * cnv.dimless
+    tilt_m, tilt_e = (0, 0) * apu.deg
+
+    bs_gain = _gfunc(
+        0 * apu.deg, 0 * apu.deg,
+        G0, phi_3db, theta_3db,
+        k_p, k_h, k_v,
+        tilt_m=tilt_m, tilt_e=tilt_e,
+        )
+
+    assert_quantity_allclose(bs_gain, G0)
+
+    bs_gains = _gfunc(
+        azims[np.newaxis], elevs[:, np.newaxis],
+        G0, phi_3db, theta_3db,
+        k_p, k_h, k_v,
+        tilt_m=tilt_m, tilt_e=tilt_e,
+        )
+
+    assert_quantity_allclose(
+        bs_gains,
+        [
+            [-6.45692316, -3.90234884, -0.58659194, -3.29935692, -6.45692316],
+            [-6.45692316, -3.04567901, 1.38200832, -2.24047532, -6.45692316],
+            [-6.45692316, 1.87668674, 12.69344956, 3.84378529, -6.45692316],
+            [-6.45692316, -2.6577429, 2.27347326, -1.76096923, -6.45692316],
+            [-6.45692316, -3.70733057, -0.1384461, -3.05830576, -6.45692316]
+            ] * cnv.dB
+        )
+
+    tilt_m, tilt_e = (40, 0) * apu.deg
+
+    bs_gains = _gfunc(
+        azims[np.newaxis], elevs[:, np.newaxis],
+        G0, phi_3db, theta_3db,
+        k_p, k_h, k_v,
+        tilt_m=tilt_m, tilt_e=tilt_e,
+        )
+
+    assert_quantity_allclose(
+        bs_gains,
+        [
+            [-0.16502266, 0.62075256, 1.81786011, 0.83655421, -0.17431214],
+            [-5.82861701, -0.21702966, 17.955959, 0.77617614, -4.97296229],
+            [-6.45692316, 3.77560389, 1.80402464, 0.28287166, -6.45692316],
+            [-6.45692316, -4.88864499, -0.44864244, -4.34394808, -6.45692316],
+            [-6.45692316, -6.45692316, -6.45692316, -6.45692316, -6.45692316]
+            ] * cnv.dB
+        )
+
+    tilt_m, tilt_e = (0, 40) * apu.deg
+
+    bs_gains = _gfunc(
+        azims[np.newaxis], elevs[:, np.newaxis],
+        G0, phi_3db, theta_3db,
+        k_p, k_h, k_v,
+        tilt_m=tilt_m, tilt_e=tilt_e,
+        )
+
+    assert_quantity_allclose(
+        bs_gains,
+        [
+            [-6.45692316, -3.66473951, -0.04057318, -3.00566133, -6.45692316],
+            [-6.45692316, 4.15502284, 17.92899408, 6.65990894, -6.45692316],
+            [-6.45692316, -2.45771699, 2.7331265, -1.5137284, -6.45692316],
+            [-6.45692316, -3.30718867, 0.78106736, -2.56371277, -6.45692316],
+            [-6.45692316, -3.85975778, -0.48871902, -3.24671249, -6.45692316]
+            ] * cnv.dB
         )
 
 
