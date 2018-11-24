@@ -219,14 +219,16 @@ script:
    # have to remove the c-files, generated during build with
    # git reset --hard HEAD;
    - set -e
+   # for some strange reason, the new package versions (astropy?) create
+   # the _build/html in docs/docs and not in docs/
    - 'if [[ $UPLOAD_DOCS ]]; then
         $MAIN_CMD test --remote-data=any;
         conda install doctr;
         git reset --hard HEAD;
         if [[ $TRAVIS_TAG ]]; then
-          doctr deploy . --no-require-master --sync;
+          doctr deploy . --no-require-master --sync --built-docs docs/docs/_build/html ;
         else
-          doctr deploy --no-require-master --sync --built-docs docs/_build/html "latest";
+          doctr deploy --no-require-master --sync --built-docs docs/docs/_build/html "latest";
         fi
      fi'
 
