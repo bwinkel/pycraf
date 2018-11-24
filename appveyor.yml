@@ -19,7 +19,7 @@ environment:
       # For this package-template, we include examples of Cython modules,
       # so Cython is required for testing. If your package does not include
       # Cython code, you can set CONDA_DEPENDENCIES=''
-      CONDA_DEPENDENCIES: "pip wheel numpy scipy astropy pytest cython h5py matplotlib pyproj sgp4"
+      CONDA_DEPENDENCIES: "pip wheel numpy scipy astropy pytest cython h5py matplotlib pyproj sgp4 twine"
 
       # Conda packages for affiliated packages are hosted in channel
       # "astropy" while builds for astropy LTS with recent numpy versions
@@ -88,4 +88,4 @@ on_success:
 #  See Appveyor's documentation for more details. Or you can simply
 #  access your wheels from the Appveyor "artifacts" tab for your build.
 #  APPVEYOR_REPO_TAG is true only if commit is a tag
-- ps: "If ($env:APPVEYOR_REPO_TAG -eq \"true\" -And $env:DO_RELEASE -eq \"yes\") {\n  conda install twine\n   python -m twine upload (resolve-path dist\\*.whl)\n  }"
+- ps: "If ($env:APPVEYOR_REPO_TAG -eq \"true\" -And $env:DO_RELEASE -eq \"yes\") {\n   python -m twine upload (resolve-path dist\\*.whl)\n  }"
