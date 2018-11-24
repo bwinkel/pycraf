@@ -9,12 +9,13 @@
     <title>multiply_matrices &#8212; pycraf v0.25.7dev50</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -86,7 +87,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>matrices</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt>
+<dt><strong>matrices</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list of <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt>
 <dd><p class="first last">List of (stacks of) rotation matrices. The order of the
 multiplication is <code class="xref py py-obj docutils literal notranslate"><span class="pre">R</span> <span class="pre">=</span> <span class="pre">R1.R2.R3</span></code>, if <code class="xref py py-obj docutils literal notranslate"><span class="pre">*matrices</span> <span class="pre">=</span> <span class="pre">(R1,</span> <span class="pre">R2,</span> <span class="pre">R3)</span></code>.
 (This means, that <code class="xref py py-obj docutils literal notranslate"><span class="pre">R3</span></code> is applied first.)</p>
@@ -95,7 +96,7 @@ multiplication is <code class="xref py py-obj docutils literal notranslate"><spa
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>R</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt>
+<dt><strong>R</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt>
 <dd><p class="first last">Resulting rotation matrix [no units!]</p>
 </dd>
 </dl>
@@ -134,8 +135,8 @@ internally).</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2018, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.5. &nbsp;
-    Last built 25 Jun 2018. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.2. &nbsp;
+    Last built 24 Nov 2018. <br/>
   </p>
 </footer>
   </body>

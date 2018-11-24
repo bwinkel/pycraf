@@ -9,12 +9,13 @@
     <title>Antenna patterns (pycraf.antenna) &#8212; pycraf v0.25.7dev50</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -84,6 +85,63 @@ studies they are usually sufficient.</p>
 </div>
 <div class="section" id="using-pycraf-antenna">
 <h2>Using <a class="reference internal" href="#module-pycraf.antenna" title="pycraf.antenna"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.antenna</span></code></a><a class="headerlink" href="#using-pycraf-antenna" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="antenna-patterns-for-fixed-and-mobile-service-itu-r-rec-f-1336">
+<h3>Antenna patterns for fixed and mobile service (ITU-R Rec. F.1336)<a class="headerlink" href="#antenna-patterns-for-fixed-and-mobile-service-itu-r-rec-f-1336" title="Permalink to this headline">¶</a></h3>
+<p>For fixed link and mobile communications (IMT), several antenna patterns are
+provided in <a class="reference external" href="https://www.itu.int/rec/R-REC-F.1336-4-201402-I/en">ITU-R Rec F.1336-4</a>.</p>
+<p>Below, you can find a typical use case:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+<span class="kn">import</span> <span class="nn">pycraf.conversions</span> <span class="kn">as</span> <span class="nn">cnv</span>
+<span class="kn">from</span> <span class="nn">pycraf.antenna</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">azims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mf">180.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<span class="n">elevs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mf">90.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+
+<span class="n">G0</span> <span class="o">=</span> <span class="mf">18.</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
+<span class="n">phi_3db</span> <span class="o">=</span> <span class="mf">65.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<span class="c1"># theta_3db can be inferred in the following way:</span>
+<span class="n">theta_3db</span> <span class="o">=</span> <span class="mi">31000</span> <span class="o">/</span> <span class="n">G0</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">)</span> <span class="o">/</span> <span class="n">phi_3db</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<span class="n">k_p</span><span class="p">,</span> <span class="n">k_h</span><span class="p">,</span> <span class="n">k_v</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span>
+<span class="n">tilt_m</span><span class="p">,</span> <span class="n">tilt_e</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+
+<span class="n">bs_gains</span> <span class="o">=</span> <span class="n">imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz</span><span class="p">(</span>
+    <span class="n">azims</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">elevs</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+    <span class="n">G0</span><span class="p">,</span> <span class="n">phi_3db</span><span class="p">,</span> <span class="n">theta_3db</span><span class="p">,</span>
+    <span class="n">k_p</span><span class="p">,</span> <span class="n">k_h</span><span class="p">,</span> <span class="n">k_v</span><span class="p">,</span>
+    <span class="n">tilt_m</span><span class="o">=</span><span class="n">tilt_m</span><span class="p">,</span> <span class="n">tilt_e</span><span class="o">=</span><span class="n">tilt_e</span><span class="p">,</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">((</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">))</span>
+<span class="n">cax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">((</span><span class="mf">0.85</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">))</span>
+
+<span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
+    <span class="n">bs_gains</span><span class="p">,</span>
+    <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">azims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">azims</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">elevs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">elevs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
+    <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cax</span><span class="p">)</span>
+<span class="n">cax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Gain [dB]&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Azimuth [deg]&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Elevation [deg]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../antenna/index-1.png">png</a>, <a class="reference external" href="../antenna/index-1.svg">svg</a>, <a class="reference external" href="../antenna/index-1.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/index-1.png" src="../_images/index-1.png" />
+</div>
+<p>Feel free to play with the mechanical (<code class="xref py py-obj docutils literal notranslate"><span class="pre">tilt_m</span></code>) and electrical (<code class="xref py py-obj docutils literal notranslate"><span class="pre">tilt_e</span></code>)
+tilt angles.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">At the moment only the sectoral peak-side lobe pattern for the frequency
+range between 400 MHz and 6 GHz is provided. This is the one, which can
+be used for IMT-advanced (LTE) basestations. Other patterns will follow.</p>
+</div>
+</div>
 <div class="section" id="wrc-agenda-item-1-13-imt2020">
 <h3>WRC Agenda Item 1.13, IMT2020<a class="headerlink" href="#wrc-agenda-item-1-13-imt2020" title="Permalink to this headline">¶</a></h3>
 <p>For AI 1.13 ITU Study Group 3 (SG3) proposes to use a special newly developed
@@ -101,8 +159,8 @@ be useful for generic compatibility studies in the spurious/out-of-band domain
 <span class="kn">import</span> <span class="nn">pycraf.conversions</span> <span class="kn">as</span> <span class="nn">cnv</span>
 <span class="kn">from</span> <span class="nn">pycraf.antenna</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">azims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
-<span class="n">elevs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<span class="n">azims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mf">180.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<span class="n">elevs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mf">90.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
 
 <span class="c1"># BS (outdoor) according to IMT.PARAMETER table 10 (multipage!)</span>
 <span class="n">G_Emax</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
@@ -134,9 +192,9 @@ be useful for generic compatibility studies in the spurious/out-of-band domain
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../antenna/index-1_00_00.png">png</a>, <a class="reference external" href="../antenna/index-1_00_00.svg">svg</a>, <a class="reference external" href="../antenna/index-1_00_00.pdf">pdf</a>)</p>
+<p>(<a class="reference external" href="../antenna/index-2_00_00.png">png</a>, <a class="reference external" href="../antenna/index-2_00_00.svg">svg</a>, <a class="reference external" href="../antenna/index-2_00_00.pdf">pdf</a>)</p>
 <div class="figure">
-<img alt="../_images/index-1_00_00.png" src="../_images/index-1_00_00.png" />
+<img alt="../_images/index-2_00_00.png" src="../_images/index-2_00_00.png" />
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d_H</span><span class="p">,</span> <span class="n">d_V</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span>
 <span class="n">N_H</span><span class="p">,</span> <span class="n">N_V</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span>
@@ -181,9 +239,9 @@ be useful for generic compatibility studies in the spurious/out-of-band domain
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../antenna/index-1_01_00.png">png</a>, <a class="reference external" href="../antenna/index-1_01_00.svg">svg</a>, <a class="reference external" href="../antenna/index-1_01_00.pdf">pdf</a>)</p>
+<p>(<a class="reference external" href="../antenna/index-2_01_00.png">png</a>, <a class="reference external" href="../antenna/index-2_01_00.svg">svg</a>, <a class="reference external" href="../antenna/index-2_01_00.pdf">pdf</a>)</p>
 <div class="figure">
-<img alt="../_images/index-1_01_00.png" src="../_images/index-1_01_00.png" />
+<img alt="../_images/index-2_01_00.png" src="../_images/index-2_01_00.png" />
 </div>
 </div>
 <div class="section" id="ras-telescope-pattern">
@@ -210,9 +268,9 @@ As an example, we plot the pattern:</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../antenna/index-2_00_00.png">png</a>, <a class="reference external" href="../antenna/index-2_00_00.svg">svg</a>, <a class="reference external" href="../antenna/index-2_00_00.pdf">pdf</a>)</p>
+<p>(<a class="reference external" href="../antenna/index-3_00_00.png">png</a>, <a class="reference external" href="../antenna/index-3_00_00.svg">svg</a>, <a class="reference external" href="../antenna/index-3_00_00.pdf">pdf</a>)</p>
 <div class="figure">
-<img alt="../_images/index-2_00_00.png" src="../_images/index-2_00_00.png" />
+<img alt="../_images/index-3_00_00.png" src="../_images/index-3_00_00.png" />
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># zoom-in with Bessel correction</span>
 <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.8</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
@@ -224,9 +282,9 @@ As an example, we plot the pattern:</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../antenna/index-2_01_00.png">png</a>, <a class="reference external" href="../antenna/index-2_01_00.svg">svg</a>, <a class="reference external" href="../antenna/index-2_01_00.pdf">pdf</a>)</p>
+<p>(<a class="reference external" href="../antenna/index-3_01_00.png">png</a>, <a class="reference external" href="../antenna/index-3_01_00.svg">svg</a>, <a class="reference external" href="../antenna/index-3_01_00.pdf">pdf</a>)</p>
 <div class="figure">
-<img alt="../_images/index-2_01_00.png" src="../_images/index-2_01_00.png" />
+<img alt="../_images/index-3_01_00.png" src="../_images/index-3_01_00.png" />
 </div>
 </div>
 <div class="section" id="fixed-links-pattern">
@@ -251,9 +309,9 @@ As an example, we plot the pattern:</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../antenna/index-3.png">png</a>, <a class="reference external" href="../antenna/index-3.svg">svg</a>, <a class="reference external" href="../antenna/index-3.pdf">pdf</a>)</p>
+<p>(<a class="reference external" href="../antenna/index-4.png">png</a>, <a class="reference external" href="../antenna/index-4.svg">svg</a>, <a class="reference external" href="../antenna/index-4.pdf">pdf</a>)</p>
 <div class="figure">
-<img alt="../_images/index-3.png" src="../_images/index-3.png" />
+<img alt="../_images/index-4.png" src="../_images/index-4.png" />
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -311,7 +369,10 @@ IMT.MODEL document (<a class="reference external" href="https://www.itu.int/md/R
 <tr class="row-even"><td><a class="reference internal" href="../api/pycraf.antenna.imt2020_single_element_pattern.html#pycraf.antenna.imt2020_single_element_pattern" title="pycraf.antenna.imt2020_single_element_pattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imt2020_single_element_pattern</span></code></a>(azim,&nbsp;elev,&nbsp;…)</td>
 <td>Single antenna element’s pattern according to <a class="reference external" href="https://www.itu.int/md/R15-TG5.1-C-0036">IMT.MODEL</a> document.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.antenna.ras_pattern.html#pycraf.antenna.ras_pattern" title="pycraf.antenna.ras_pattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ras_pattern</span></code></a>(phi,&nbsp;diameter,&nbsp;wavelength[,&nbsp;…])</td>
+<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz.html#pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz" title="pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz</span></code></a>(…)</td>
+<td>IMT advanced (LTE) antenna pattern (sectoral, peak side-lobe) for the frequency range 400 MHz to 6 GHz according to <a class="reference external" href="https://www.itu.int/rec/R-REC-F.1336-4-201402-I/en">ITU-R Rec F.1336-4</a> Section 3.1.1.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.antenna.ras_pattern.html#pycraf.antenna.ras_pattern" title="pycraf.antenna.ras_pattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ras_pattern</span></code></a>(phi,&nbsp;diameter,&nbsp;wavelength[,&nbsp;…])</td>
 <td>Antenna gain as a function of angular distance after <a class="reference external" href="https://www.itu.int/rec/R-REC-RA.1631-0-200305-I/en">ITU-R Rec RA.1631</a>.</td>
 </tr>
 </tbody>
@@ -331,6 +392,7 @@ IMT.MODEL document (<a class="reference external" href="https://www.itu.int/md/R
 <li><a class="reference internal" href="#">Antenna patterns (<code class="docutils literal notranslate"><span class="pre">pycraf.antenna</span></code>)</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#using-pycraf-antenna">Using <code class="docutils literal notranslate"><span class="pre">pycraf.antenna</span></code></a><ul>
+<li><a class="reference internal" href="#antenna-patterns-for-fixed-and-mobile-service-itu-r-rec-f-1336">Antenna patterns for fixed and mobile service (ITU-R Rec. F.1336)</a></li>
 <li><a class="reference internal" href="#wrc-agenda-item-1-13-imt2020">WRC Agenda Item 1.13, IMT2020</a></li>
 <li><a class="reference internal" href="#ras-telescope-pattern">RAS telescope pattern</a></li>
 <li><a class="reference internal" href="#fixed-links-pattern">Fixed-links pattern</a></li>
@@ -361,8 +423,8 @@ IMT.MODEL document (<a class="reference external" href="https://www.itu.int/md/R
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2018, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.5. &nbsp;
-    Last built 25 Jun 2018. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.2. &nbsp;
+    Last built 24 Nov 2018. <br/>
   </p>
 </footer>
   </body>

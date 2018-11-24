@@ -16,6 +16,63 @@ studies they are usually sufficient.
 Using `pycraf.antenna`
 =========================
 
+Antenna patterns for fixed and mobile service (ITU-R Rec. F.1336)
+-----------------------------------------------------------------
+For fixed link and mobile communications (IMT), several antenna patterns are
+provided in `ITU-R Rec F.1336-4 <https://www.itu.int/rec/R-REC-F.1336-4-201402-I/en>`_.
+
+Below, you can find a typical use case:
+
+.. plot::
+    :include-source:
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from astropy import units as u
+    import pycraf.conversions as cnv
+    from pycraf.antenna import *
+
+    azims = np.arange(-180, 180.1, 0.5) * u.deg
+    elevs = np.arange(-90, 90.1, 0.5) * u.deg
+
+    G0 = 18. * cnv.dB
+    phi_3db = 65. * u.deg
+    # theta_3db can be inferred in the following way:
+    theta_3db = 31000 / G0.to(cnv.dimless) / phi_3db.value * u.deg
+    k_p, k_h, k_v = (0.7, 0.7, 0.3) * cnv.dimless
+    tilt_m, tilt_e = (0, 0) * u.deg
+
+    bs_gains = imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz(
+        azims[np.newaxis], elevs[:, np.newaxis],
+        G0, phi_3db, theta_3db,
+        k_p, k_h, k_v,
+        tilt_m=tilt_m, tilt_e=tilt_e,
+        ).to(cnv.dB).value
+
+    fig = plt.figure(figsize=(12, 6))
+    ax = fig.add_axes((0.15, 0.1, 0.7, 0.7))
+    cax = fig.add_axes((0.85, 0.1, 0.02, 0.7))
+
+    im = ax.imshow(
+        bs_gains,
+        extent=(azims[0].value, azims[-1].value, elevs[0].value, elevs[-1].value),
+        origin='lower', cmap='viridis',
+        )
+    plt.colorbar(im, cax=cax)
+    cax.set_ylabel('Gain [dB]')
+    ax.set_xlabel('Azimuth [deg]')
+    ax.set_ylabel('Elevation [deg]')
+    plt.show()
+
+Feel free to play with the mechanical (`tilt_m`) and electrical (`tilt_e`)
+tilt angles.
+
+.. note::
+
+    At the moment only the sectoral peak-side lobe pattern for the frequency
+    range between 400 MHz and 6 GHz is provided. This is the one, which can
+    be used for IMT-advanced (LTE) basestations. Other patterns will follow.
+
 WRC Agenda Item 1.13, IMT2020
 -----------------------------
 
@@ -39,8 +96,8 @@ Both are easy to use. For example, plotting the patterns for base stations
     import pycraf.conversions as cnv
     from pycraf.antenna import *
 
-    azims = np.arange(-180, 180, 0.5) * u.deg
-    elevs = np.arange(-90, 90, 0.5) * u.deg
+    azims = np.arange(-180, 180.1, 0.5) * u.deg
+    elevs = np.arange(-90, 90.1, 0.5) * u.deg
 
     # BS (outdoor) according to IMT.PARAMETER table 10 (multipage!)
     G_Emax = 5 * cnv.dB
