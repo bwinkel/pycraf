@@ -1,6 +1,25 @@
-0.25.7 (unreleased)
+0.25.7 (2018-11-24)
 =======================
-No changes yet
+
+pycraf.antenna
+^^^^^^^^^^^^^^
+- Add k-factor to single element IMT2020 pattern in `pycraf.antenna`
+  module. [#ef1c]
+- Add antenna pattern function for IMT advance (LTE) basestation (sectorized,
+  peak-side lobe, see ITU-R Rec. F.1336) to `pycraf.antenna` module. [#a4e1]
+
+pycraf.srtm
+^^^^^^^^^^^
+- Various smaller improvements and bugfixes to SRTM querying.
+  [#dcc5, #1950, #0c55]
+
+Bugfixes
+--------
+- The `pycraf.geospatial` Gauss-Kruger test function revealed a problem with
+  inconsistent results between new proj4 version (5.2.0) and older versions.
+  At the moment, it is not clear, what's going on. The test cases have marked
+  "xfail" for now. [#24e9]
+- A sign was wrong in `pycraf.antenna` IMT2020 composite pattern. [#4164]
 
 0.25.6 (2018-05-09)
 =======================
