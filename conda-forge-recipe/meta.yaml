@@ -13,27 +13,35 @@ source:
 
 build:
   number: 1
+  skip: True # [py27]
 
 requirements:
   build:
+    - python  # [win]
+    - vc 14   # [win and py35]
+    - vc 14   # [win and py36]
     - {{ compiler('cxx') }}
   host:
+    - openmp 4.0.*  # [osx]
     - python
     - pip
     - setuptools
-    - astropy
-    - cython
-    - numpy
-    - scipy
+    - astropy >=2.1
+    - cython >=0.27
+    - numpy >=1.11
+    - scipy >=1.0
     - pytest
 
   run:
     - python
-    - astropy
+    - vc 14   # [win and py35]
+    - vc 14   # [win and py36]
+    - openmp 4.0.*  # [osx]
+    - astropy >=2.1
     - {{ pin_compatible('numpy') }}
-    - scipy
+    - scipy >=1.0
     - h5py
-    - matplotlib
+    - matplotlib >=2.0
     - pyproj
     # - sgp4
     - pytest
