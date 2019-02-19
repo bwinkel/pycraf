@@ -15,7 +15,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -89,27 +90,27 @@ Eq (17-20).</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>freq_grid</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dt><strong>freq_grid</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
 <dd><p class="first last">Frequencies at which to calculate line-width shapes [GHz]</p>
 </dd>
-<dt><strong>elev</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt>
+<dt><strong>elev</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt>
 <dd><p class="first last">(Apparent) elevation of source as seen from observer [deg]</p>
 </dd>
-<dt><strong>obs_alt</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt>
+<dt><strong>obs_alt</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt>
 <dd><p class="first last">Height of observer above sea-level [m]</p>
 </dd>
 <dt><strong>profile_func</strong> <span class="classifier-delimiter">:</span> <span class="classifier">func</span></dt>
 <dd><p class="first last">A height profile function having the same signature as
 <a class="reference internal" href="pycraf.atm.profile_standard.html#pycraf.atm.profile_standard" title="pycraf.atm.profile_standard"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_standard</span></code></a></p>
 </dd>
-<dt><strong>t_bg</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar, optional</span></dt>
+<dt><strong>t_bg</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar, optional</span></dt>
 <dd><p class="first">Background temperature, i.e. temperature just after the outermost
 layer (default: 2.73 K)</p>
 <p class="last">This is needed for accurate <code class="xref py py-obj docutils literal notranslate"><span class="pre">t_ebb</span></code> calculation, usually this is the
 temperature of the CMB (if Earth-Space path), but at lower
 frequencies, Galactic foreground contribution might play a role.</p>
 </dd>
-<dt><strong>max_path_length</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt>
+<dt><strong>max_path_length</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt>
 <dd><p class="first last">Maximal length of path before stopping iteration [km]
 (default: 1000 km; useful for terrestrial paths)</p>
 </dd>
@@ -117,14 +118,14 @@ frequencies, Galactic foreground contribution might play a role.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>total_atten</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dt><strong>total_atten</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
 <dd><p class="first last">Total attenuation along path [dB]</p>
 </dd>
-<dt><strong>Refraction</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dt><strong>Refraction</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
 <dd><p class="first last">Offset with respect to a hypothetical straight path, i.e., the
 correction between real and apparent source elevation [deg]</p>
 </dd>
-<dt><strong>t_ebb (K)</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.0.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
+<dt><strong>t_ebb (K)</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
 <dd><p class="first last">Equivalent black body temperature of the atmosphere (accounting
 for any outside contribution, e.g., from CMB) [K]</p>
 </dd>
@@ -165,9 +166,9 @@ dummy values for the rest.</p>
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2018, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.2. &nbsp;
-    Last built 24 Nov 2018. <br/>
+    &copy; Copyright 2019, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4. &nbsp;
+    Last built 19 Feb 2019. <br/>
   </p>
 </footer>
   </body>

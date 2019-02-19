@@ -15,7 +15,8 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/sidebar.js"></script>
     <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -333,7 +334,9 @@
             <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">integ_time</span><span class="o">=</span><span class="n">integ_time</span><span class="p">,</span>
             <span class="p">)</span>
 
-    <span class="c1"># table formatting doesn&#39;t seem to work for QTable, so we convert</span>
+    <span class="c1"># table formatting doesn&#39;t seem to work for QTable, so we temporarily</span>
+    <span class="c1"># convert to Table; interestingly, if we cast back to QTable afterwards</span>
+    <span class="c1"># the format specifier is still valid (gets converted to QuantityInfo...)</span>
     <span class="n">tab</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">qtab</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;bandwidth&#39;</span><span class="p">,</span> <span class="s1">&#39;T_A&#39;</span><span class="p">,</span> <span class="s1">&#39;T_rx&#39;</span><span class="p">]:</span>
@@ -358,7 +361,7 @@
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">pass</span>
 
-    <span class="k">return</span> <span class="n">tab</span></div>
+    <span class="k">return</span> <span class="n">QTable</span><span class="p">(</span><span class="n">tab</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -376,9 +379,9 @@
   <p class="pull-right"> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2018, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.2. &nbsp;
-    Last built 24 Nov 2018. <br/>
+    &copy; Copyright 2019, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4. &nbsp;
+    Last built 19 Feb 2019. <br/>
   </p>
 </footer>
   </body>

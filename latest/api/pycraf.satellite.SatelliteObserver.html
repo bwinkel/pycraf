@@ -15,7 +15,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -88,10 +89,10 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>obs_location</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.coordinates.EarthLocation.html#astropy.coordinates.EarthLocation" title="(in Astropy v3.0.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EarthLocation</span></code></a> or tuple</span></dt>
+<dt><strong>obs_location</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.coordinates.EarthLocation.html#astropy.coordinates.EarthLocation" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EarthLocation</span></code></a> or tuple</span></dt>
 <dd><p class="first">Location of observer.</p>
 <p class="last">This must be in a form that can be casted to
-<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.coordinates.EarthLocation.html#astropy.coordinates.EarthLocation" title="(in Astropy v3.0.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EarthLocation</span></code></a>.</p>
+<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.coordinates.EarthLocation.html#astropy.coordinates.EarthLocation" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EarthLocation</span></code></a>.</p>
 </dd>
 </dl>
 </td>
@@ -136,17 +137,17 @@
 <dt><strong>satellite_or_tle</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sgp4.io.Satellite</span></code> instance or TLE 3-line string</span></dt>
 <dd><p class="first last">Satellite object or TLE</p>
 </dd>
-<dt><strong>obstime</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.time.Time.html#astropy.time.Time" title="(in Astropy v3.0.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Time</span></code></a></span></dt>
+<dt><strong>obstime</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.time.Time.html#astropy.time.Time" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Time</span></code></a></span></dt>
 <dd><p class="first last">Time of observation</p>
 </dd>
 </dl>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>az, el</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> or float</span></dt>
+<dt><strong>az, el</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> or float</span></dt>
 <dd><p class="first last">Azimuth/elevation of satellite w.r.t. observer [deg]</p>
 </dd>
-<dt><strong>dist</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> or float</span></dt>
+<dt><strong>dist</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> or float</span></dt>
 <dd><p class="first last">Distance to satellite [km]</p>
 </dd>
 </dl>
@@ -189,9 +190,9 @@
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2018, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.2. &nbsp;
-    Last built 24 Nov 2018. <br/>
+    &copy; Copyright 2019, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4. &nbsp;
+    Last built 19 Feb 2019. <br/>
   </p>
 </footer>
   </body>

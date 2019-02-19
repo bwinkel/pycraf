@@ -15,7 +15,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -94,9 +95,9 @@ to physical values (see examples, below).</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>histvals</strong> <span class="classifier-delimiter">:</span> <span class="classifier">N-D <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt>
+<dt><strong>histvals</strong> <span class="classifier-delimiter">:</span> <span class="classifier">N-D <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt>
 <dd><p class="first last">Discrete density distribution. (This is the histogram array, which
-one would get out of <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.histogram.html#numpy.histogram" title="(in NumPy v1.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">histogram</span></code></a> functions.)</p>
+one would get out of <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.histogram.html#numpy.histogram" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">histogram</span></code></a> functions.)</p>
 </dd>
 </dl>
 </td>
@@ -118,8 +119,8 @@ The resulting samples will always be just be able to work
 out the bin, but no continuous quantity can be reconstructed.
 For many use cases this is probably fine, but in others one
 might be better of by using Kernel Density Estimation.
-There is a function for this in <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/stats.html#module-scipy.stats" title="(in SciPy v1.1.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stats</span></code></a>
-(<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gaussian_kde.html#scipy.stats.gaussian_kde" title="(in SciPy v1.1.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_kde</span></code></a>), which even allows works with
+There is a function for this in <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/stats.html#module-scipy.stats" title="(in SciPy v1.2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stats</span></code></a>
+(<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gaussian_kde.html#scipy.stats.gaussian_kde" title="(in SciPy v1.2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_kde</span></code></a>), which even allows works with
 multi-variate data and allows one to sample from the KDE PDF
 (see also the examples). Unfortunately, one cannot work with
 weighted data.</p>
@@ -252,7 +253,7 @@ be the better tool:</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>Indices</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple of <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt>
+<dt><strong>Indices</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple of <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt>
 <dd><p class="first last">The indices of the drawn samples with respect to the
 discrete density array (aka histogram object). See
 <a class="reference internal" href="#pycraf.mc.HistogramSampler" title="pycraf.mc.HistogramSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HistogramSampler</span></code></a> for examples of use.</p>
@@ -290,9 +291,9 @@ discrete density array (aka histogram object). See
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2018, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.2. &nbsp;
-    Last built 24 Nov 2018. <br/>
+    &copy; Copyright 2019, Benjamin Winkel.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4. &nbsp;
+    Last built 19 Feb 2019. <br/>
   </p>
 </footer>
   </body>
