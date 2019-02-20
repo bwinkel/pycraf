@@ -13,8 +13,10 @@ latest/_images/index-3_00_00.png
 latest/_images/index-3_01_00.png
 latest/_images/index-4.png
 latest/_images/index-4_01_00.png
+latest/_images/inheritance-00ea64733e67a150b9824abf03173267d2fe9ec8.svg
 latest/_modules/astropy/units/quantity.html
 latest/_modules/index.html
+latest/_modules/pycraf.html
 latest/_modules/pycraf/_astropy_init.html
 latest/_modules/pycraf/antenna/fixedlink.html
 latest/_modules/pycraf/antenna/imt.html
@@ -36,6 +38,7 @@ latest/_modules/pycraf/utils/decorators.html
 latest/_modules/pycraf/utils/multistate.html
 latest/_modules/pycraf/utils/testing.html
 latest/_sources/antenna/index.rst.txt
+latest/_sources/api/pycraf.UnsupportedPythonError.rst.txt
 latest/_sources/api/pycraf.antenna.fl_G_max_from_hpbw.rst.txt
 latest/_sources/api/pycraf.antenna.fl_G_max_from_size.rst.txt
 latest/_sources/api/pycraf.antenna.fl_hpbw_from_size.rst.txt
@@ -234,6 +237,7 @@ latest/antenna/index-4.png
 latest/antenna/index-4.py
 latest/antenna/index-4.svg
 latest/antenna/index.html
+latest/api/pycraf.UnsupportedPythonError.html
 latest/api/pycraf.antenna.fl_G_max_from_hpbw.html
 latest/api/pycraf.antenna.fl_G_max_from_size.html
 latest/api/pycraf.antenna.fl_hpbw_from_size.html

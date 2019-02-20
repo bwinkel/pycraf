@@ -1,0 +1,6 @@
+UnsupportedPythonError
+======================
+
+.. currentmodule:: pycraf
+
+.. autoexception:: UnsupportedPythonError

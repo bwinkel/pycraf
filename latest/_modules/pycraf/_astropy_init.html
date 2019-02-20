@@ -52,7 +52,8 @@
 	<a href="../../index.html">pycraf v0.25.8dev50</a>
 	 &#187;
       </li>
-      <li><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+      <li><a href="../index.html" >Module code</a> &#187;</li>
+      <li><a href="../pycraf.html" accesskey="U">pycraf</a> &#187;</li>
       
        
     </ul>
@@ -67,7 +68,7 @@
   <h1>Source code for pycraf._astropy_init</h1><div class="highlight"><pre>
 <span></span><span class="c1"># Licensed under a 3-clause BSD style license - see LICENSE.rst</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;__version__&#39;</span><span class="p">,</span> <span class="s1">&#39;__githash__&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;__version__&#39;</span><span class="p">,</span> <span class="s1">&#39;__githash__&#39;</span><span class="p">]</span>
 
 <span class="c1"># this indicates whether or not we are in the package&#39;s setup.py</span>
 <span class="k">try</span><span class="p">:</span>
@@ -90,95 +91,6 @@
     <span class="n">__githash__</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
 
-<span class="c1"># set up the test command</span>
-<span class="k">def</span> <span class="nf">_get_test_runner</span><span class="p">():</span>
-    <span class="kn">import</span> <span class="nn">os</span>
-    <span class="kn">from</span> <span class="nn">astropy.tests.helper</span> <span class="k">import</span> <span class="n">TestRunner</span>
-    <span class="k">return</span> <span class="n">TestRunner</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
-
-
-<div class="viewcode-block" id="test"><a class="viewcode-back" href="../../api/pycraf.test.html#pycraf.test">[docs]</a><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">package</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">test_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plugins</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-         <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pastebin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">remote_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pep8</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-         <span class="n">pdb</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">coverage</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">open_files</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Run the tests using `py.test &lt;http://pytest.org/latest&gt;`__. A proper set</span>
-<span class="sd">    of arguments is constructed and passed to `pytest.main`_.</span>
-
-<span class="sd">    .. _py.test: http://pytest.org/latest/</span>
-<span class="sd">    .. _pytest.main: http://pytest.org/latest/builtin.html#pytest.main</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    package : str, optional</span>
-<span class="sd">        The name of a specific package to test, e.g. &#39;io.fits&#39; or &#39;utils&#39;.</span>
-<span class="sd">        If nothing is specified all default tests are run.</span>
-
-<span class="sd">    test_path : str, optional</span>
-<span class="sd">        Specify location to test by path. May be a single file or</span>
-<span class="sd">        directory. Must be specified absolutely or relative to the</span>
-<span class="sd">        calling directory.</span>
-
-<span class="sd">    args : str, optional</span>
-<span class="sd">        Additional arguments to be passed to pytest.main_ in the ``args``</span>
-<span class="sd">        keyword argument.</span>
-
-<span class="sd">    plugins : list, optional</span>
-<span class="sd">        Plugins to be passed to pytest.main_ in the ``plugins`` keyword</span>
-<span class="sd">        argument.</span>
-
-<span class="sd">    verbose : bool, optional</span>
-<span class="sd">        Convenience option to turn on verbose output from py.test_. Passing</span>
-<span class="sd">        True is the same as specifying ``&#39;-v&#39;`` in ``args``.</span>
-
-<span class="sd">    pastebin : {&#39;failed&#39;,&#39;all&#39;,None}, optional</span>
-<span class="sd">        Convenience option for turning on py.test_ pastebin output. Set to</span>
-<span class="sd">        ``&#39;failed&#39;`` to upload info for failed tests, or ``&#39;all&#39;`` to upload</span>
-<span class="sd">        info for all tests.</span>
-
-<span class="sd">    remote_data : bool, optional</span>
-<span class="sd">        Controls whether to run tests marked with @remote_data. These</span>
-<span class="sd">        tests use online data and are not run by default. Set to True to</span>
-<span class="sd">        run these tests.</span>
-
-<span class="sd">    pep8 : bool, optional</span>
-<span class="sd">        Turn on PEP8 checking via the `pytest-pep8 plugin</span>
-<span class="sd">        &lt;http://pypi.python.org/pypi/pytest-pep8&gt;`_ and disable normal</span>
-<span class="sd">        tests. Same as specifying ``&#39;--pep8 -k pep8&#39;`` in ``args``.</span>
-
-<span class="sd">    pdb : bool, optional</span>
-<span class="sd">        Turn on PDB post-mortem analysis for failing tests. Same as</span>
-<span class="sd">        specifying ``&#39;--pdb&#39;`` in ``args``.</span>
-
-<span class="sd">    coverage : bool, optional</span>
-<span class="sd">        Generate a test coverage report.  The result will be placed in</span>
-<span class="sd">        the directory htmlcov.</span>
-
-<span class="sd">    open_files : bool, optional</span>
-<span class="sd">        Fail when any tests leave files open.  Off by default, because</span>
-<span class="sd">        this adds extra run time to the test suite.  Requires the</span>
-<span class="sd">        `psutil &lt;https://pypi.python.org/pypi/psutil&gt;`_ package.</span>
-
-<span class="sd">    parallel : int, optional</span>
-<span class="sd">        When provided, run the tests in parallel on the specified</span>
-<span class="sd">        number of CPUs.  If parallel is negative, it will use the all</span>
-<span class="sd">        the cores on the machine.  Requires the</span>
-<span class="sd">        `pytest-xdist &lt;https://pypi.python.org/pypi/pytest-xdist&gt;`_ plugin</span>
-<span class="sd">        installed. Only available when using Astropy 0.3 or later.</span>
-
-<span class="sd">    kwargs</span>
-<span class="sd">        Any additional keywords passed into this function will be passed</span>
-<span class="sd">        on to the astropy test runner.  This allows use of test-related</span>
-<span class="sd">        functionality implemented in later versions of astropy without</span>
-<span class="sd">        explicitly updating the package template.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">test_runner</span> <span class="o">=</span> <span class="n">_get_test_runner</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">test_runner</span><span class="o">.</span><span class="n">run_tests</span><span class="p">(</span>
-        <span class="n">package</span><span class="o">=</span><span class="n">package</span><span class="p">,</span> <span class="n">test_path</span><span class="o">=</span><span class="n">test_path</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
-        <span class="n">plugins</span><span class="o">=</span><span class="n">plugins</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">pastebin</span><span class="o">=</span><span class="n">pastebin</span><span class="p">,</span>
-        <span class="n">remote_data</span><span class="o">=</span><span class="n">remote_data</span><span class="p">,</span> <span class="n">pep8</span><span class="o">=</span><span class="n">pep8</span><span class="p">,</span> <span class="n">pdb</span><span class="o">=</span><span class="n">pdb</span><span class="p">,</span>
-        <span class="n">coverage</span><span class="o">=</span><span class="n">coverage</span><span class="p">,</span> <span class="n">open_files</span><span class="o">=</span><span class="n">open_files</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
 <span class="k">if</span> <span class="ow">not</span> <span class="n">_ASTROPY_SETUP_</span><span class="p">:</span>  <span class="c1"># noqa</span>
     <span class="kn">import</span> <span class="nn">os</span>
     <span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
@@ -186,6 +98,12 @@
         <span class="n">update_default_config</span><span class="p">,</span>
         <span class="n">ConfigurationDefaultMissingError</span><span class="p">,</span>
         <span class="n">ConfigurationDefaultMissingWarning</span><span class="p">)</span>
+
+    <span class="c1"># Create the test function for self test</span>
+    <span class="kn">from</span> <span class="nn">astropy.tests.runner</span> <span class="k">import</span> <span class="n">TestRunner</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">TestRunner</span><span class="o">.</span><span class="n">make_test_runner_in</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">__test__</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">__all__</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">]</span>
 
     <span class="c1"># add these here so we only need to cleanup the namespace at the end</span>
     <span class="n">config_dir</span> <span class="o">=</span> <span class="kc">None</span>
@@ -227,7 +145,7 @@
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4. &nbsp;
-    Last built 19 Feb 2019. <br/>
+    Last built 20 Feb 2019. <br/>
   </p>
 </footer>
   </body>
