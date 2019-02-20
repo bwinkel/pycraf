@@ -94,13 +94,13 @@ are provided.</p>
 <div class="section" id="ra-769">
 <h3>RA.769<a class="headerlink" href="#ra-769" title="Permalink to this headline">¶</a></h3>
 <p>The function <a class="reference internal" href="../api/pycraf.protection.ra769_limits.html#pycraf.protection.ra769_limits" title="pycraf.protection.ra769_limits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ra769_limits</span></code></a> returns a
-<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.table.Table.html#astropy.table.Table" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Table</span></code></a> object that resembles (Table 1 to 3) from
+<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.table.QTable.html#astropy.table.QTable" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QTable</span></code></a> object that resembles (Table 1 to 3) from
 <a class="reference external" href="https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en">ITU-R Rec. RA.769</a>:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">protection</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">protection</span><span class="o">.</span><span class="n">ra769_limits</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;continuum&#39;</span><span class="p">)</span>
-<span class="go">&lt;Table length=21&gt;</span>
+<span class="go">&lt;QTable length=21&gt;</span>
 <span class="go">frequency bandwidth   T_A   ...     Slim_nu        Efield    Efield_norm</span>
 <span class="go">   MHz       MHz       K    ... dB(W / (Hz m2)) dB(uV2 / m2) dB(uV2 / m2)</span>
 <span class="go"> float64   float64  float64 ...     float64       float64      float64</span>
@@ -122,7 +122,7 @@ are provided.</p>
 </div>
 <p>For VLBI the returned table object looks a bit different:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">protection</span><span class="o">.</span><span class="n">ra769_limits</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;vlbi&#39;</span><span class="p">)</span>
-<span class="go">&lt;Table length=21&gt;</span>
+<span class="go">&lt;QTable length=21&gt;</span>
 <span class="go">frequency   T_A     T_rx      Slim_nu</span>
 <span class="go">   MHz       K       K    dB(W / (Hz m2))</span>
 <span class="go"> float64  float64 float64     float64</span>
@@ -152,7 +152,7 @@ integration time:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">itime</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">15</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">min</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">h</span><span class="p">]:</span>
 <span class="gp">... </span>    <span class="n">tab</span> <span class="o">=</span> <span class="n">protection</span><span class="o">.</span><span class="n">ra769_limits</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;continuum&#39;</span><span class="p">,</span> <span class="n">integ_time</span><span class="o">=</span><span class="n">itime</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="c1"># print values of footnote (1) of tables 1 and 2 in RA.769</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.1f}</span><span class="s1"> dB&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tab</span><span class="p">[</span><span class="mi">7</span><span class="p">][</span><span class="s1">&#39;Plim&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">plim_2000s</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tab</span><span class="p">[</span><span class="mi">7</span><span class="p">][</span><span class="s1">&#39;Plim&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">plim_2000s</span><span class="p">))</span>
 <span class="go">1.7 dB</span>
 <span class="go">-1.3 dB</span>
 <span class="go">-2.8 dB</span>

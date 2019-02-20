@@ -335,7 +335,9 @@
             <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">integ_time</span><span class="o">=</span><span class="n">integ_time</span><span class="p">,</span>
             <span class="p">)</span>
 
-    <span class="c1"># table formatting doesn&#39;t seem to work for QTable, so we convert</span>
+    <span class="c1"># table formatting doesn&#39;t seem to work for QTable, so we temporarily</span>
+    <span class="c1"># convert to Table; interestingly, if we cast back to QTable afterwards</span>
+    <span class="c1"># the format specifier is still valid (gets converted to QuantityInfo...)</span>
     <span class="n">tab</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">qtab</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;bandwidth&#39;</span><span class="p">,</span> <span class="s1">&#39;T_A&#39;</span><span class="p">,</span> <span class="s1">&#39;T_rx&#39;</span><span class="p">]:</span>
@@ -360,7 +362,7 @@
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">pass</span>
 
-    <span class="k">return</span> <span class="n">tab</span></div>
+    <span class="k">return</span> <span class="n">QTable</span><span class="p">(</span><span class="n">tab</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
