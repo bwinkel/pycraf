@@ -230,8 +230,16 @@ def test_ra769_limits():
             (15, 'Slim_nu'),
             (20, 'Efield'),
             ]):
-        assert_allclose(cont_lims[row][col], CONT_LIMS_VALUES[idx], **TOL_KWARGS)
-        assert_allclose(cont_lims_dB[row][col], CONT_LIMS_DB_VALUES[idx])
+        colidx = COL_NAMES.index(col)
+        assert_quantity_allclose(
+            cont_lims[row][col],
+            CONT_LIMS_VALUES[idx] * COL_UNITS[colidx][-1],
+            rtol=1.e-6
+            )
+        assert_quantity_allclose(
+            cont_lims_dB[row][col],
+            CONT_LIMS_DB_VALUES[idx] * COL_UNITS_DB[colidx][-1]
+            )
 
     for idx, (row, col) in enumerate([
             (0, 'T_rms'),
@@ -240,16 +248,32 @@ def test_ra769_limits():
             (9, 'Slim_nu'),
             (12, 'Efield'),
             ]):
-        assert_allclose(spec_lims[row][col], SPEC_LIMS_VALUES[idx], **TOL_KWARGS)
-        assert_allclose(spec_lims_dB[row][col], SPEC_LIMS_DB_VALUES[idx])
+        colidx = COL_NAMES.index(col)
+        assert_quantity_allclose(
+            spec_lims[row][col],
+            SPEC_LIMS_VALUES[idx] * COL_UNITS[colidx][0],
+            rtol=1.e-6
+            )
+        assert_quantity_allclose(
+            spec_lims_dB[row][col],
+            SPEC_LIMS_DB_VALUES[idx] * COL_UNITS_DB[colidx][0]
+            )
 
     for idx, (row, col) in enumerate([
             (5, 'Slim_nu'),
             (10, 'Slim_nu'),
             (15, 'Slim_nu'),
             ]):
-        assert_allclose(vlbi_lims[row][col], VLBI_LIMS_VALUES[idx], **TOL_KWARGS)
-        assert_allclose(vlbi_lims_dB[row][col], VLBI_LIMS_DB_VALUES[idx])
+        colidx = COL_NAMES.index(col)
+        assert_quantity_allclose(
+            vlbi_lims[row][col],
+            VLBI_LIMS_VALUES[idx] * COL_UNITS[colidx][0],
+            rtol=1.e-6
+            )
+        assert_quantity_allclose(
+            vlbi_lims_dB[row][col],
+            VLBI_LIMS_DB_VALUES[idx] * COL_UNITS_DB[colidx][0]
+            )
 
     for colname, colunits in zip(COL_NAMES, COL_UNITS):
         assert cont_lims.columns[colname].unit in colunits
