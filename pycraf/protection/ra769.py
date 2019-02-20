@@ -267,7 +267,9 @@ def ra769_limits(mode='continuum', scale='dB', integ_time=2000. * apu.s):
             mode=mode, scale=scale, integ_time=integ_time,
             )
 
-    # table formatting doesn't seem to work for QTable, so we convert
+    # table formatting doesn't seem to work for QTable, so we temporarily
+    # convert to Table; interestingly, if we cast back to QTable afterwards
+    # the format specifier is still valid (gets converted to QuantityInfo...)
     tab = Table(qtab)
 
     for col in ['frequency', 'bandwidth', 'T_A', 'T_rx']:
@@ -292,4 +294,4 @@ def ra769_limits(mode='continuum', scale='dB', integ_time=2000. * apu.s):
         except KeyError:
             pass
 
-    return tab
+    return QTable(tab)

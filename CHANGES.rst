@@ -1,6 +1,14 @@
 0.25.8 (unreleased)
 =======================
 
+Bugfixes
+--------
+- `pycraf.protection.ra769_limits` now returns an `astropy.table.QTable`
+  instead of a `astropy.table.Table`. This ensures that in all
+  circumstances one retrieves proper `astropy.units.Quantity` objects from
+  the table. Previously, logarithmic units would not fully support this
+  (although this was a just bug in `astropy`, which is now fixed). [#8]
+
 0.25.7 (2018-11-24)
 =======================
 
