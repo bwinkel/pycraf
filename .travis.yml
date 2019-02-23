@@ -31,9 +31,8 @@ env:
         # The following versions are the 'default' for tests, unless
         # overridden underneath. They are defined here in order to save having
         # to repeat them for all configurations.
-        - PYTHON_VERSION=3.6
+        - PYTHON_VERSION=3.7
         - NUMPY_VERSION=stable  # doesn't work at the moment
-        # - NUMPY_VERSION=1.14
         - ASTROPY_VERSION=stable
         - MAIN_CMD='python setup.py'
         - SETUP_CMD='test --remote-data=any'
@@ -82,58 +81,49 @@ matrix:
 
     include:
 
-        # Standard linux; also used for sdist'ing
-        - os: linux
-          env: DO_DIST=YES
-
-        # Try MacOS X
-        - os: osx
-          osx_image: xcode8.3
-          env:
-            - CC='/usr/local/opt/llvm/bin/clang'
-            - LDFLAGS='-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib'
-            - CPPFLAGS='-I/usr/local/opt/llvm/include'
-            - COMPILER='llvm'
-          # compiler: gcc
-
-        # Try MacOS X
-        # produces: clang: error: unsupported option '-fopenmp'
-        # - os: osx
-        #   osx_image: xcode8.3
-        #   env:
-        #     - LDFLAGS='-L/Users/travis/miniconda/lib -Wl,-rpath,/Users/travis/miniconda/lib'
-        #     - CPPFLAGS='-I/Users/travis/miniconda/include'
-        #     - DYLD_LIBRARY_PATH='-I/Users/travis/miniconda/lib'
-        #     - COMPILER='conda'
-        #   # compiler: gcc
-
-        # Try MacOS X
-        # produces ImportError: dlopen(/private/.../pycraf/pathprof/cyprop.cpython-36m-darwin.so, 2): Symbol not found: _GOMP_parallel
-        # - os: osx
-        #   osx_image: xcode8.3
-        #   env:
-        #     - CC='gcc-7'
-        #     - CXX='g++-7'
-        #     - CPP='g++-7'
-        #     - LD='gcc-7'
-        #     - COMPILER='gcc'
-
-        # We have to make the MacOS release based on rather old numpy version
+        # We have to make the releases based on rather old numpy version
         # otherwise users will keep getting "incompatible API" errors
         # (For more information on ABI problems with numpy see:
         # https://stackoverflow.com/questions/17709641/valueerror-numpy-dtype-has-the-wrong-size-try-recompiling/18369312)
+        # for Windows we'll use 1.11, for Linux/MacOS 1.11 is also used
+        # (because with 1.9 - the conda-forge recommendation - the setup.py
+        # script tries to download 1.16 for some reason...)
+
+        # Standard linux; also used for sdist'ing
+        - os: linux
+          env:
+            - DO_DIST=YES
+            - NUMPY_VERSION=1.11
+            # - ASTROPY_VERSION=stable
+            - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
+
+        # MacOS X - conda-clang
         - os: osx
           osx_image: xcode8.3
           env:
-            # - CC='gcc-7'
-            # - CXX='g++-7'
-            # - CPP='g++-7'
-            # - LD='gcc-7'
-            # - COMPILER='gcc'
             - DO_MAC_DIST=YES
             - NUMPY_VERSION=1.11
+            - COMPILER='conda-clang'
+            - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
+
+        # MacOS X - conda-gcc
+        - os: osx
+          osx_image: xcode8.3
+          env:
+            - COMPILER='conda-gcc'
+
+        # MacOS X - gcc
+        - os: osx
+          osx_image: xcode8.3
+          env:
+            - COMPILER='gcc'
+
+        # MacOS X - LLVM
+        - os: osx
+          osx_image: xcode8.3
+          env:
             - CC='/usr/local/opt/llvm/bin/clang'
-            - LDFLAGS='-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib'
+            - LDFLAGS='-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib -lgomp'
             - CPPFLAGS='-I/usr/local/opt/llvm/include'
             - COMPILER='llvm'
 
@@ -149,8 +139,9 @@ matrix:
         # successful, only
         - os: linux
           env:
-            - NUMPY_VERSION=1.14.3
-            - ASTROPY_VERSION=3.0.2
+            - PYTHON_VERSION=3.6
+            - NUMPY_VERSION=1.11
+            - ASTROPY_VERSION=2.0.11
             - SETUP_CMD='build_docs'
             - UPLOAD_DOCS=YES
 
@@ -159,30 +150,34 @@ matrix:
           env: ASTROPY_VERSION=development
                EVENT_TYPE='pull_request push cron'
 
-        # Try all python versions and Numpy versions. Since we can assume that
-        # the Numpy developers have taken care of testing Numpy with different
-        # versions of Python, we can vary Python and Numpy versions at the same
-        # time.
-
-        # - os: linux
-        #   env: PYTHON_VERSION=3.5 NUMPY_VERSION=1.11
+        # Try py35 for compatibility
+        - os: linux
+          env:
+            - PYTHON_VERSION=3.5
+            - NUMPY_VERSION=1.11
+            - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
 
         # Do a PEP8 test with pycodestyle
         - os: linux
           env: MAIN_CMD='pycodestyle pycraf --count' SETUP_CMD=''
 
     allow_failures:
+
         # Do a PEP8 test with pycodestyle
         # (allow to fail unless your code completely compliant)
         - os: linux
           env: MAIN_CMD='pycodestyle pycraf --count' SETUP_CMD=''
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "gcc" ]]; then brew install gcc; brew link --overwrite gcc; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "gcc" ]]; then gcc --version; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "gcc" ]]; then gcc-7 --version; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "llvm" ]]; then brew install llvm; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "clang" ]]; then brew update; brew install libomp; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "llvm" ]]; then brew update; brew install llvm; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "gcc" ]]; then brew update; brew install gcc; brew link --overwrite gcc; fi
+  - 'if [[ $TRAVIS_OS_NAME == "osx" && $COMPILER == "gcc" ]]; then
+       gcc --version;
+       gcc-6 --version && export CC="gcc-6" && export LD="gcc-6" && export LDFLAGS="-Wl,-rpath,/usr/local/opt/gcc/lib/gcc/6/" || true;
+       gcc-7 --version && export CC="gcc-7" && export LD="gcc-7" && export LDFLAGS="-Wl,-rpath,/usr/local/opt/gcc/lib/gcc/7/" || true;
+       gcc-8 --version && export CC="gcc-8" && export LD="gcc-8" && export LDFLAGS="-Wl,-rpath,/usr/local/opt/gcc/lib/gcc/8/" || true;
+     fi'
 
 install:
 
@@ -202,7 +197,8 @@ install:
     - git clone --depth 1 git://github.com/astropy/ci-helpers.git
     - source ci-helpers/travis/setup_conda.sh
 
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "conda" ]]; then conda install -c conda-forge openmp; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "conda-clang" ]]; then conda install -c conda-forge clang_osx-64 llvm-openmp openmp; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "conda-gcc" ]]; then conda install -c conda-forge gcc; gcc --version || true; fi
 
     # As described above, using ci-helpers, you should be able to set up an
     # environment with dependencies installed using conda and pip, but in some

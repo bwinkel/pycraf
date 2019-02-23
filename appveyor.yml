@@ -37,6 +37,7 @@ environment:
       # otherwise users will keep getting "incompatible API" errors
       # (For more information on ABI problems with numpy see:
       # https://stackoverflow.com/questions/17709641/valueerror-numpy-dtype-has-the-wrong-size-try-recompiling/18369312)
+      # for Windows we'll use 1.11, for Linux/MacOS 1.9 is used
 
       - PYTHON_VERSION: "3.5"
         ASTROPY_VERSION: "stable"
@@ -52,7 +53,16 @@ environment:
         NUMPY_VERSION: "stable"
 
       - PYTHON_VERSION: "3.6"
-        ASTROPY_VERSION: "=1.3.3"
+        ASTROPY_VERSION: "=2.0.11"
+        NUMPY_VERSION: "1.11"
+        DO_RELEASE: "yes"
+
+      - PYTHON_VERSION: "3.7"
+        ASTROPY_VERSION: "stable"
+        NUMPY_VERSION: "stable"
+
+      - PYTHON_VERSION: "3.7"
+        ASTROPY_VERSION: "=2.0.11"
         NUMPY_VERSION: "1.11"
         DO_RELEASE: "yes"
 

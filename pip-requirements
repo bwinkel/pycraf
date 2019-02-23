@@ -1,7 +1,7 @@
 setuptools
 numpy >= 1.11
 scipy >= 0.15
-astropy >= 2.1
+astropy >= 2.0.11
 cython >= 0.23
 pytest >= 2.6
 pyproj >= 1.9

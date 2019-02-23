@@ -26,35 +26,27 @@ def get_extensions():
         }
 
     if platform.system().lower() == 'windows':
+
         comp_args = {
-            'extra_compile_args': ['/openmp'],
-            'include_dirs': ['numpy'],
-            }
-    elif 'darwin' in platform.system().lower():
-        # os.environ['CC'] = 'gcc-6'
-        # os.environ['LD'] = 'gcc-6'
-        comp_args = {
-            'extra_compile_args': [
-                '-fopenmp', '-O3', '-mmacosx-version-min=10.7'
-                ],
-            'extra_link_args': ['-fopenmp', '-lgomp'],
-            'libraries': ['m'],
+            'extra_compile_args': ['/fopenmp'],
             'include_dirs': ['numpy'],
             }
 
+    elif 'darwin' in platform.system().lower():
+
+        comp_args['extra_compile_args'].append('-mmacosx-version-min=10.7')
+        comp_args['extra_link_args'].append('-lgomp')
+
     ext_module_pathprof_cyprop = Extension(
         name='pycraf.pathprof.cyprop',
-        # ['pycraf/pathprof/cyprop.pyx'],
         sources=[os.path.join(PYXDIR, 'cyprop.pyx')],
         **comp_args
         )
 
     ext_module_pathprof_geodesics = Extension(
         name='pycraf.pathprof.cygeodesics',
-        # ['pycraf/pathprof/geodesics.pyx'],
         sources=[os.path.join(PYXDIR, 'cygeodesics.pyx')],
         **comp_args
         )
 
-    print('get_extensions', ext_module_pathprof_cyprop)
     return [ext_module_pathprof_cyprop, ext_module_pathprof_geodesics]
