@@ -80,7 +80,7 @@
 <h1>test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.test">
-<code class="descclassname">pycraf.</code><code class="descname">test</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/_astropy_init.py#L821" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.test" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.</code><code class="descname">test</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/_astropy_init.py#L879" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run the tests for the package.</p>
 <p>This method builds arguments for and then calls <code class="docutils literal notranslate"><span class="pre">pytest.main</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -104,9 +104,9 @@ keyword argument.</p>
 this adds extra run time to the test suite.  Requires the
 <code class="docutils literal notranslate"><span class="pre">psutil</span></code> package.</p>
 </dd>
-<dt><strong>parallel</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
+<dt><strong>parallel</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int or ‘auto’, optional</span></dt>
 <dd><p class="first last">When provided, run the tests in parallel on the specified
-number of CPUs.  If parallel is negative, it will use the all
+number of CPUs.  If parallel is <code class="docutils literal notranslate"><span class="pre">'auto'</span></code>, it will use the all
 the cores on the machine.  Requires the <code class="docutils literal notranslate"><span class="pre">pytest-xdist</span></code> plugin.</p>
 </dd>
 <dt><strong>pastebin</strong> <span class="classifier-delimiter">:</span> <span class="classifier">(‘failed’, ‘all’, None), optional</span></dt>
@@ -127,7 +127,7 @@ tests. Same as specifying <code class="docutils literal notranslate"><span class
 argument.</p>
 </dd>
 <dt><strong>remote_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{‘none’, ‘astropy’, ‘any’}, optional</span></dt>
-<dd><p class="first last">Controls whether to run tests marked with &#64;pytest.mark.remote_data. This can be
+<dd><p class="first last">Controls whether to run tests marked with &#64;remote_data. This can be
 set to run no tests with remote data (<code class="docutils literal notranslate"><span class="pre">none</span></code>), only ones that use
 data from <a class="reference external" href="http://data.astropy.org">http://data.astropy.org</a> (<code class="docutils literal notranslate"><span class="pre">astropy</span></code>), or all tests that
 use remote data (<code class="docutils literal notranslate"><span class="pre">any</span></code>). The default is <code class="docutils literal notranslate"><span class="pre">none</span></code>.</p>
