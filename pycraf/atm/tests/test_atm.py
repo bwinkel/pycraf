@@ -70,277 +70,382 @@ PROFILE_HIGHLAT_WINTER = (
     )
 
 
-class TestConversions:
+def test_elevation_from_airmass():
 
-    def setup(self):
+    args_list = [
+        (1, None, cnv.dimless),
+        ]
+    check_astro_quantities(atm.elevation_from_airmass, args_list)
 
-        pass
+    elevation = np.array([0.1, 1, 10, 50, 89.9]) * apu.deg
+    airmass = Quantity([
+        36.25962353, 26.50201093, 5.60010213, 1.30540729, 1.00000152
+        ], cnv.dimless)
 
-    def teardown(self):
+    assert_quantity_allclose(
+        atm.elevation_from_airmass(airmass),
+        elevation,
+        rtol=1.e-5
+        )
 
-        pass
 
-    def test_elevation_from_airmass(self):
+def test_airmass_from_elevation():
 
-        args_list = [
-            (1, None, cnv.dimless),
-            ]
-        check_astro_quantities(atm.elevation_from_airmass, args_list)
+    args_list = [
+        (0, 90, apu.deg),
+        ]
+    check_astro_quantities(atm.airmass_from_elevation, args_list)
 
-        elevation = np.array([0.1, 1, 10, 50, 89.9]) * apu.deg
-        airmass = Quantity([
-            36.25962353, 26.50201093, 5.60010213, 1.30540729, 1.00000152
+    elevation = np.array([0.1, 1, 10, 50, 89.9]) * apu.deg
+    airmass = Quantity([
+        36.25962353, 26.50201093, 5.60010213, 1.30540729, 1.00000152
+        ], cnv.dimless)
+
+    assert_quantity_allclose(
+        atm.airmass_from_elevation(elevation),
+        airmass
+        )
+
+
+def test_opacity_from_atten():
+
+    args_list = [
+        (1.000000000001, None, cnv.dimless),
+        ]
+    check_astro_quantities(atm.opacity_from_atten, args_list)
+
+    # atten_dB = Quantity([0.1, 1, 10, 50, 100], cnv.dB)  # astropy.bug
+    atten_dB = np.array([0.1, 1, 10, 50, 100]) * cnv.dB
+    opacity = Quantity([
+        2.30258509e-02, 2.30258509e-01, 2.30258509e+00, 1.15129255e+01,
+        2.30258509e+01
+        ], cnv.dimless)
+
+    assert_quantity_allclose(
+        atm.opacity_from_atten(atten_dB.to(cnv.dimless)),
+        opacity
+        )
+
+
+def test_opacity_from_atten_zenith():
+
+    args_list = [
+        (1.000000000001, None, cnv.dimless),
+        (0, 90, apu.deg),
+        ]
+    check_astro_quantities(atm.opacity_from_atten, args_list)
+
+    elev = 50 * apu.deg
+    # atten_dB = Quantity([0.1, 1, 10, 50, 100], cnv.dB)  # astropy.bug
+    atten_dB = np.array([0.1, 1, 10, 50, 100]) * cnv.dB
+    opacity = Quantity([
+        1.76388252e-02, 0.17638825, 1.76388252, 8.81941258, 17.63882515
+        ], cnv.dimless)
+
+    assert_quantity_allclose(
+        atm.opacity_from_atten(atten_dB.to(cnv.dimless), elev),
+        opacity
+        )
+
+
+def test_atten_from_opacity():
+
+    args_list = [
+        (0.000000000001, None, cnv.dimless),
+        (0, 90, apu.deg),
+        ]
+    check_astro_quantities(atm.atten_from_opacity, args_list)
+
+    # atten_dB = Quantity([0.1, 1, 10, 50, 100], cnv.dB)  # astropy.bug
+    atten_dB = np.array([0.1, 1, 10, 50, 100]) * cnv.dB
+    opacity = Quantity([
+        2.30258509e-02, 2.30258509e-01, 2.30258509e+00, 1.15129255e+01,
+        2.30258509e+01
+        ], cnv.dimless)
+
+    assert_quantity_allclose(
+        atm.atten_from_opacity(opacity),
+        atten_dB
+        )
+
+
+def test_atten_from_opacity_zenith():
+
+    args_list = [
+        (0.000000000001, None, cnv.dimless),
+        (0, 90, apu.deg),
+        ]
+    check_astro_quantities(atm.atten_from_opacity, args_list)
+
+    elev = 50 * apu.deg
+    # atten_dB = Quantity([0.1, 1, 10, 50, 100], cnv.dB)  # astropy.bug
+    atten_dB = np.array([0.1, 1, 10, 50, 100]) * cnv.dB
+    opacity = Quantity([
+        1.76388252e-02, 0.17638825, 1.76388252, 8.81941258, 17.63882515
+        ], cnv.dimless)
+
+    assert_quantity_allclose(
+        atm.atten_from_opacity(opacity, elev),
+        atten_dB
+        )
+
+
+def test_refractive_index():
+
+    args_list = [
+        (1.e-30, None, apu.K),
+        (1.e-30, None, apu.hPa),
+        (1.e-30, None, apu.hPa),
+        ]
+    check_astro_quantities(atm.refractive_index, args_list)
+
+    temp = Quantity([100, 200, 300], apu.K)
+    press = Quantity([900, 1000, 1100], apu.hPa)
+    press_w = Quantity([200, 500, 1000], apu.hPa)
+
+    refr_index = Quantity(
+        [1.0081872, 1.0050615, 1.00443253], cnv.dimless
+        )
+
+    assert_quantity_allclose(
+        atm.refractive_index(temp, press, press_w),
+        refr_index
+        )
+    assert_quantity_allclose(
+        atm.refractive_index(
+            temp.to(apu.mK), press.to(apu.Pa), press_w.to(apu.Pa)
+            ),
+        refr_index
+        )
+
+
+def test_saturation_water_pressure():
+
+    args_list = [
+        (1.e-30, None, apu.K),
+        (1.e-30, None, apu.hPa),
+        ]
+    check_astro_quantities(atm.saturation_water_pressure, args_list)
+
+    temp = Quantity([100, 200, 300], apu.K)
+    press = Quantity([900, 1000, 1100], apu.hPa)
+
+    press_w = Quantity(
+        [2.57439748e-17, 3.23857740e-03, 3.55188758e+01], apu.hPa
+        )
+
+    assert_quantity_allclose(
+        atm.saturation_water_pressure(temp, press),
+        press_w
+        )
+    assert_quantity_allclose(
+        atm.saturation_water_pressure(
+            temp.to(apu.mK), press.to(apu.Pa)
+            ),
+        press_w
+        )
+
+
+def test_pressure_water_from_humidity():
+
+    args_list = [
+        (1.e-30, None, apu.K),
+        (1.e-30, None, apu.hPa),
+        (0, 100, apu.percent),
+        ]
+    check_astro_quantities(atm.pressure_water_from_humidity, args_list)
+
+    temp = Quantity([280., 290., 295.], apu.K)
+    press = Quantity([990., 980., 985.], apu.hPa)
+    humid = Quantity(
+        [97.625776, 34.827369, 2.59509], apu.percent
+        )
+    press_w = Quantity(
+        [9.71865696, 6.71113205, 0.68276301], apu.hPa
+        )
+
+    assert_quantity_allclose(
+        atm.pressure_water_from_humidity(temp, press, humid),
+        press_w
+        )
+
+
+def test_humidity_from_pressure_water():
+
+    args_list = [
+        (1.e-30, None, apu.K),
+        (1.e-30, None, apu.hPa),
+        (1.e-30, None, apu.hPa),
+        ]
+    check_astro_quantities(atm.humidity_from_pressure_water, args_list)
+
+    temp = Quantity([280., 290., 295.], apu.K)
+    press = Quantity([990., 980., 985.], apu.hPa)
+    humid = Quantity(
+        [97.625776, 34.827369, 2.59509], apu.percent
+        )
+    press_w = Quantity(
+        [9.71865696, 6.71113205, 0.68276301], apu.hPa
+        )
+
+    assert_quantity_allclose(
+        atm.humidity_from_pressure_water(temp, press, press_w),
+        humid
+        )
+
+
+def test_pressure_water_from_rho_water():
+
+    args_list = [
+        (1.e-30, None, apu.K),
+        (1.e-30, None, apu.g / apu.m ** 3),
+        ]
+    check_astro_quantities(atm.pressure_water_from_rho_water, args_list)
+
+    temp = Quantity([280., 290., 295.], apu.K)
+    rho_w = Quantity([7.5, 5., 0.5], apu.g / apu.m ** 3)
+    press_w = Quantity(
+        [9.6908168, 6.69127826, 0.68066451], apu.hPa
+        )
+
+    assert_quantity_allclose(
+        atm.pressure_water_from_rho_water(temp, rho_w),
+        press_w
+        )
+
+
+def test_rho_water_from_pressure_water():
+
+    args_list = [
+        (1.e-30, None, apu.K),
+        (1.e-30, None, apu.hPa),
+        ]
+    check_astro_quantities(atm.rho_water_from_pressure_water, args_list)
+
+    temp = Quantity([280., 290., 295.], apu.K)
+    rho_w = Quantity([7.5, 5., 0.5], apu.g / apu.m ** 3)
+    press_w = Quantity(
+        [9.6908168, 6.69127826, 0.68066451], apu.hPa
+        )
+
+    assert_quantity_allclose(
+        atm.rho_water_from_pressure_water(temp, press_w),
+        rho_w
+        )
+
+
+def test_profile_standard():
+
+    args_list = [
+        (0, 84.99999999, apu.km),
+        ]
+    check_astro_quantities(atm.profile_standard, args_list)
+
+    # also testing multi-dim arrays:
+    heights = Quantity([[1, 10], [3, 20], [30, 50]], apu.km)
+    (
+        temperatures,
+        pressures,
+        rho_water,
+        pressures_water,
+        ref_indices,
+        humidities_water,
+        humidities_ice,
+        ) = atm.profile_standard(heights)
+
+    assert_quantity_allclose(
+        temperatures,
+        Quantity([
+            [281.65, 223.15],
+            [268.65, 216.65],
+            [226.65, 270.65],
+            ], apu.K)
+        )
+    assert_quantity_allclose(
+        pressures,
+        Quantity([
+            [8.98746319e+02, 2.64364701e+02],
+            [7.01086918e+02, 5.47497974e+01],
+            [1.17189629e+01, 7.59478828e-01]
+            ], apu.hPa)
+        )
+    assert_quantity_allclose(
+        rho_water,
+        Quantity([
+            [4.54897995e+00, 5.05346025e-02],
+            [1.67347620e+00, 3.40499473e-04],
+            [2.24089942e-05, 1.21617633e-06]
+            ], apu.g / apu.m ** 3)
+        )
+    assert_quantity_allclose(
+        pressures_water,
+        Quantity([
+            [5.91241441e+00, 5.20387473e-02],
+            [2.07466258e+00, 3.40420909e-04],
+            [2.34379258e-05, 1.51895766e-06]
+            ], apu.hPa)
+        )
+    assert_quantity_allclose(
+        ref_indices,
+        Quantity([
+            [1.00027544, 1.00009232],
+            [1.00021324, 1.00001961],
+            [1.00000401, 1.00000022]
             ], cnv.dimless)
+        )
+    assert_quantity_allclose(
+        humidities_water,
+        Quantity([
+            [5.30812596e+01, 8.12224381e+01],
+            [4.72174462e+01, 1.14582635e+00],
+            [2.47241153e-02, 2.98350282e-05]
+            ], apu.percent)
+        )
+    assert_quantity_allclose(
+        humidities_ice,
+        Quantity([
+            [4.89102920e+01, 1.31884489e+02],
+            [4.93347383e+01, 1.97403148e+00],
+            [3.88650989e-02, 3.05857185e-05]
+            ], apu.percent)
+        )
 
-        assert_quantity_allclose(
-            atm.elevation_from_airmass(airmass),
-            elevation,
-            rtol=1.e-5
-            )
 
-    def test_airmass_from_elevation(self):
+def test_special_profiles():
 
-        args_list = [
-            (0, 90, apu.deg),
-            ]
-        check_astro_quantities(atm.airmass_from_elevation, args_list)
+    for _profile_name in [
+            'profile_lowlat',
+            'profile_midlat_summer', 'profile_midlat_winter',
+            'profile_highlat_summer', 'profile_highlat_winter'
+            ]:
 
-        elevation = np.array([0.1, 1, 10, 50, 89.9]) * apu.deg
-        airmass = Quantity([
-            36.25962353, 26.50201093, 5.60010213, 1.30540729, 1.00000152
-            ], cnv.dimless)
+        _prof_func = getattr(atm, _profile_name)
+        heights = Quantity(HEIGHTS_PROFILE, apu.km)
+        consts = globals()[_profile_name.upper()]
 
-        assert_quantity_allclose(
-            atm.airmass_from_elevation(elevation),
-            airmass
-            )
+        print(_profile_name, consts)
+        (
+            c_temperatures,
+            c_pressures,
+            c_rho_water,
+            c_pressures_water,
+            c_ref_indices,
+            c_humidities_water,
+            c_humidities_ice,
+            ) = consts
 
-    def test_opacity_from_atten(self):
+        with pytest.raises(TypeError):
+            _prof_func(50)
 
-        args_list = [
-            (1.000000000001, None, cnv.dimless),
-            ]
-        check_astro_quantities(atm.opacity_from_atten, args_list)
+        with pytest.raises(apu.UnitsError):
+            _prof_func(50 * apu.Hz)
 
-        # atten_dB = Quantity([0.1, 1, 10, 50, 100], cnv.dB)  # astropy.bug
-        atten_dB = np.array([0.1, 1, 10, 50, 100]) * cnv.dB
-        opacity = Quantity([
-            2.30258509e-02, 2.30258509e-01, 2.30258509e+00, 1.15129255e+01,
-            2.30258509e+01
-            ], cnv.dimless)
+        with pytest.raises(AssertionError):
+            _prof_func(-1 * apu.km)
 
-        assert_quantity_allclose(
-            atm.opacity_from_atten(atten_dB.to(cnv.dimless)),
-            opacity
-            )
+        with pytest.raises(AssertionError):
+            _prof_func(101 * apu.km)
 
-    def test_opacity_from_atten_zenith(self):
-
-        args_list = [
-            (1.000000000001, None, cnv.dimless),
-            (0, 90, apu.deg),
-            ]
-        check_astro_quantities(atm.opacity_from_atten, args_list)
-
-        elev = 50 * apu.deg
-        # atten_dB = Quantity([0.1, 1, 10, 50, 100], cnv.dB)  # astropy.bug
-        atten_dB = np.array([0.1, 1, 10, 50, 100]) * cnv.dB
-        opacity = Quantity([
-            1.76388252e-02, 0.17638825, 1.76388252, 8.81941258, 17.63882515
-            ], cnv.dimless)
-
-        assert_quantity_allclose(
-            atm.opacity_from_atten(atten_dB.to(cnv.dimless), elev),
-            opacity
-            )
-
-    def test_atten_from_opacity(self):
-
-        args_list = [
-            (0.000000000001, None, cnv.dimless),
-            (0, 90, apu.deg),
-            ]
-        check_astro_quantities(atm.atten_from_opacity, args_list)
-
-        # atten_dB = Quantity([0.1, 1, 10, 50, 100], cnv.dB)  # astropy.bug
-        atten_dB = np.array([0.1, 1, 10, 50, 100]) * cnv.dB
-        opacity = Quantity([
-            2.30258509e-02, 2.30258509e-01, 2.30258509e+00, 1.15129255e+01,
-            2.30258509e+01
-            ], cnv.dimless)
-
-        assert_quantity_allclose(
-            atm.atten_from_opacity(opacity),
-            atten_dB
-            )
-
-    def test_atten_from_opacity_zenith(self):
-
-        args_list = [
-            (0.000000000001, None, cnv.dimless),
-            (0, 90, apu.deg),
-            ]
-        check_astro_quantities(atm.atten_from_opacity, args_list)
-
-        elev = 50 * apu.deg
-        # atten_dB = Quantity([0.1, 1, 10, 50, 100], cnv.dB)  # astropy.bug
-        atten_dB = np.array([0.1, 1, 10, 50, 100]) * cnv.dB
-        opacity = Quantity([
-            1.76388252e-02, 0.17638825, 1.76388252, 8.81941258, 17.63882515
-            ], cnv.dimless)
-
-        assert_quantity_allclose(
-            atm.atten_from_opacity(opacity, elev),
-            atten_dB
-            )
-
-    def test_refractive_index(self):
-
-        args_list = [
-            (1.e-30, None, apu.K),
-            (1.e-30, None, apu.hPa),
-            (1.e-30, None, apu.hPa),
-            ]
-        check_astro_quantities(atm.refractive_index, args_list)
-
-        temp = Quantity([100, 200, 300], apu.K)
-        press = Quantity([900, 1000, 1100], apu.hPa)
-        press_w = Quantity([200, 500, 1000], apu.hPa)
-
-        refr_index = Quantity(
-            [1.0081872, 1.0050615, 1.00443253], cnv.dimless
-            )
-
-        assert_quantity_allclose(
-            atm.refractive_index(temp, press, press_w),
-            refr_index
-            )
-        assert_quantity_allclose(
-            atm.refractive_index(
-                temp.to(apu.mK), press.to(apu.Pa), press_w.to(apu.Pa)
-                ),
-            refr_index
-            )
-
-    def test_saturation_water_pressure(self):
-
-        args_list = [
-            (1.e-30, None, apu.K),
-            (1.e-30, None, apu.hPa),
-            ]
-        check_astro_quantities(atm.saturation_water_pressure, args_list)
-
-        temp = Quantity([100, 200, 300], apu.K)
-        press = Quantity([900, 1000, 1100], apu.hPa)
-
-        press_w = Quantity(
-            [2.57439748e-17, 3.23857740e-03, 3.55188758e+01], apu.hPa
-            )
-
-        assert_quantity_allclose(
-            atm.saturation_water_pressure(temp, press),
-            press_w
-            )
-        assert_quantity_allclose(
-            atm.saturation_water_pressure(
-                temp.to(apu.mK), press.to(apu.Pa)
-                ),
-            press_w
-            )
-
-    def test_pressure_water_from_humidity(self):
-
-        args_list = [
-            (1.e-30, None, apu.K),
-            (1.e-30, None, apu.hPa),
-            (0, 100, apu.percent),
-            ]
-        check_astro_quantities(atm.pressure_water_from_humidity, args_list)
-
-        temp = Quantity([280., 290., 295.], apu.K)
-        press = Quantity([990., 980., 985.], apu.hPa)
-        humid = Quantity(
-            [97.625776, 34.827369, 2.59509], apu.percent
-            )
-        press_w = Quantity(
-            [9.71865696, 6.71113205, 0.68276301], apu.hPa
-            )
-
-        assert_quantity_allclose(
-            atm.pressure_water_from_humidity(temp, press, humid),
-            press_w
-            )
-
-    def test_humidity_from_pressure_water(self):
-
-        args_list = [
-            (1.e-30, None, apu.K),
-            (1.e-30, None, apu.hPa),
-            (1.e-30, None, apu.hPa),
-            ]
-        check_astro_quantities(atm.humidity_from_pressure_water, args_list)
-
-        temp = Quantity([280., 290., 295.], apu.K)
-        press = Quantity([990., 980., 985.], apu.hPa)
-        humid = Quantity(
-            [97.625776, 34.827369, 2.59509], apu.percent
-            )
-        press_w = Quantity(
-            [9.71865696, 6.71113205, 0.68276301], apu.hPa
-            )
-
-        assert_quantity_allclose(
-            atm.humidity_from_pressure_water(temp, press, press_w),
-            humid
-            )
-
-    def test_pressure_water_from_rho_water(self):
-
-        args_list = [
-            (1.e-30, None, apu.K),
-            (1.e-30, None, apu.g / apu.m ** 3),
-            ]
-        check_astro_quantities(atm.pressure_water_from_rho_water, args_list)
-
-        temp = Quantity([280., 290., 295.], apu.K)
-        rho_w = Quantity([7.5, 5., 0.5], apu.g / apu.m ** 3)
-        press_w = Quantity(
-            [9.6908168, 6.69127826, 0.68066451], apu.hPa
-            )
-
-        assert_quantity_allclose(
-            atm.pressure_water_from_rho_water(temp, rho_w),
-            press_w
-            )
-
-    def test_rho_water_from_pressure_water(self):
-
-        args_list = [
-            (1.e-30, None, apu.K),
-            (1.e-30, None, apu.hPa),
-            ]
-        check_astro_quantities(atm.rho_water_from_pressure_water, args_list)
-
-        temp = Quantity([280., 290., 295.], apu.K)
-        rho_w = Quantity([7.5, 5., 0.5], apu.g / apu.m ** 3)
-        press_w = Quantity(
-            [9.6908168, 6.69127826, 0.68066451], apu.hPa
-            )
-
-        assert_quantity_allclose(
-            atm.rho_water_from_pressure_water(temp, press_w),
-            rho_w
-            )
-
-    def test_profile_standard(self):
-
-        args_list = [
-            (0, 84.99999999, apu.km),
-            ]
-        check_astro_quantities(atm.profile_standard, args_list)
-
-        # also testing multi-dim arrays:
-        heights = Quantity([[1, 10], [3, 20], [30, 50]], apu.km)
         (
             temperatures,
             pressures,
@@ -349,379 +454,360 @@ class TestConversions:
             ref_indices,
             humidities_water,
             humidities_ice,
-            ) = atm.profile_standard(heights)
+            ) = _prof_func(heights)
 
         assert_quantity_allclose(
             temperatures,
-            Quantity([
-                [281.65, 223.15],
-                [268.65, 216.65],
-                [226.65, 270.65],
-                ], apu.K)
+            Quantity(c_temperatures, apu.K)
             )
         assert_quantity_allclose(
             pressures,
-            Quantity([
-                [8.98746319e+02, 2.64364701e+02],
-                [7.01086918e+02, 5.47497974e+01],
-                [1.17189629e+01, 7.59478828e-01]
-                ], apu.hPa)
+            Quantity(c_pressures, apu.hPa)
             )
         assert_quantity_allclose(
             rho_water,
-            Quantity([
-                [4.54897995e+00, 5.05346025e-02],
-                [1.67347620e+00, 3.40499473e-04],
-                [2.24089942e-05, 1.21617633e-06]
-                ], apu.g / apu.m ** 3)
+            Quantity(c_rho_water, apu.g / apu.m ** 3)
             )
         assert_quantity_allclose(
             pressures_water,
-            Quantity([
-                [5.91241441e+00, 5.20387473e-02],
-                [2.07466258e+00, 3.40420909e-04],
-                [2.34379258e-05, 1.51895766e-06]
-                ], apu.hPa)
+            Quantity(c_pressures_water, apu.hPa)
             )
         assert_quantity_allclose(
             ref_indices,
-            Quantity([
-                [1.00027544, 1.00009232],
-                [1.00021324, 1.00001961],
-                [1.00000401, 1.00000022]
-                ], cnv.dimless)
+            Quantity(c_ref_indices, cnv.dimless)
             )
         assert_quantity_allclose(
             humidities_water,
-            Quantity([
-                [5.30812596e+01, 8.12224381e+01],
-                [4.72174462e+01, 1.14582635e+00],
-                [2.47241153e-02, 2.98350282e-05]
-                ], apu.percent)
+            Quantity(c_humidities_water, apu.percent)
             )
         assert_quantity_allclose(
             humidities_ice,
-            Quantity([
-                [4.89102920e+01, 1.31884489e+02],
-                [4.93347383e+01, 1.97403148e+00],
-                [3.88650989e-02, 3.05857185e-05]
-                ], apu.percent)
+            Quantity(c_humidities_ice, apu.percent)
             )
 
-    def test_special_profiles(self):
 
-        for _profile_name in [
-                'profile_lowlat',
-                'profile_midlat_summer', 'profile_midlat_winter',
-                'profile_highlat_summer', 'profile_highlat_winter'
-                ]:
+def test_atten_specific_annex1():
 
-            _prof_func = getattr(atm, _profile_name)
-            heights = Quantity(HEIGHTS_PROFILE, apu.km)
-            consts = globals()[_profile_name.upper()]
+    args_list = [
+        (1.e-30, None, apu.GHz),
+        (1.e-30, None, apu.hPa),
+        (1.e-30, None, apu.hPa),
+        (1.e-30, None, apu.K),
+        ]
+    check_astro_quantities(atm.atten_specific_annex1, args_list)
 
-            print(_profile_name, consts)
-            (
-                c_temperatures,
-                c_pressures,
-                c_rho_water,
-                c_pressures_water,
-                c_ref_indices,
-                c_humidities_water,
-                c_humidities_ice,
-                ) = consts
+    # test for scalar quantities
+    with pytest.raises(TypeError):
+        atm.atten_specific_annex1(
+            1 * apu.GHz,
+            Quantity([1000, 1000], apu.hPa),
+            10 * apu.hPa, 300 * apu.K
+            )
 
-            with pytest.raises(TypeError):
-                _prof_func(50)
-
-            with pytest.raises(apu.UnitsError):
-                _prof_func(50 * apu.Hz)
-
-            with pytest.raises(AssertionError):
-                _prof_func(-1 * apu.km)
-
-            with pytest.raises(AssertionError):
-                _prof_func(101 * apu.km)
-
-            (
-                temperatures,
-                pressures,
-                rho_water,
-                pressures_water,
-                ref_indices,
-                humidities_water,
-                humidities_ice,
-                ) = _prof_func(heights)
-
-            assert_quantity_allclose(
-                temperatures,
-                Quantity(c_temperatures, apu.K)
-                )
-            assert_quantity_allclose(
-                pressures,
-                Quantity(c_pressures, apu.hPa)
-                )
-            assert_quantity_allclose(
-                rho_water,
-                Quantity(c_rho_water, apu.g / apu.m ** 3)
-                )
-            assert_quantity_allclose(
-                pressures_water,
-                Quantity(c_pressures_water, apu.hPa)
-                )
-            assert_quantity_allclose(
-                ref_indices,
-                Quantity(c_ref_indices, cnv.dimless)
-                )
-            assert_quantity_allclose(
-                humidities_water,
-                Quantity(c_humidities_water, apu.percent)
-                )
-            assert_quantity_allclose(
-                humidities_ice,
-                Quantity(c_humidities_ice, apu.percent)
-                )
-
-    def test_atten_specific_annex1(self):
-
-        args_list = [
-            (1.e-30, None, apu.GHz),
-            (1.e-30, None, apu.hPa),
-            (1.e-30, None, apu.hPa),
-            (1.e-30, None, apu.K),
-            ]
-        check_astro_quantities(atm.atten_specific_annex1, args_list)
-
-        # test for scalar quantities
-        with pytest.raises(TypeError):
-            atm.atten_specific_annex1(
-                1 * apu.GHz,
-                Quantity([1000, 1000], apu.hPa),
-                10 * apu.hPa, 300 * apu.K
-                )
-
-        with pytest.raises(TypeError):
-            atm.atten_specific_annex1(
-                1 * apu.GHz, 1000 * apu.hPa,
-                Quantity([10, 10], apu.hPa),
-                300 * apu.K
-                )
-
-        with pytest.raises(TypeError):
-            atm.atten_specific_annex1(
-                1 * apu.GHz, 1000 * apu.hPa, 10 * apu.hPa,
-                Quantity([300, 300], apu.K)
-                )
-        atten_dry, atten_wet = atm.atten_specific_annex1(
-            np.logspace(1, 2, 5) * apu.GHz,
-            980 * apu.hPa,
-            10 * apu.hPa,
+    with pytest.raises(TypeError):
+        atm.atten_specific_annex1(
+            1 * apu.GHz, 1000 * apu.hPa,
+            Quantity([10, 10], apu.hPa),
             300 * apu.K
             )
 
-        assert_quantity_allclose(
-            atten_dry,
+    with pytest.raises(TypeError):
+        atm.atten_specific_annex1(
+            1 * apu.GHz, 1000 * apu.hPa, 10 * apu.hPa,
+            Quantity([300, 300], apu.K)
+            )
+    atten_dry, atten_wet = atm.atten_specific_annex1(
+        np.logspace(1, 2, 5) * apu.GHz,
+        980 * apu.hPa,
+        10 * apu.hPa,
+        300 * apu.K
+        )
+
+    assert_quantity_allclose(
+        atten_dry,
+        Quantity([
+            6.8734000906e-03, 8.9691079865e-03, 2.0108798019e-02,
+            7.0886935962e+00, 2.6981301299e-02
+            ], cnv.dB / apu.km)
+        )
+
+    assert_quantity_allclose(
+        atten_wet,
+        Quantity([
+            0.0057314491, 0.0425094528, 0.0665904646, 0.1297056177,
+            0.3999561273
+            ], cnv.dB / apu.km)
+        )
+
+
+def test_atten_terrestrial():
+
+    args_list = [
+        (1.e-30, None, cnv.dB / apu.km),
+        (1.e-30, None, apu.km),
+        ]
+    check_astro_quantities(atm.atten_terrestrial, args_list)
+
+    assert_quantity_allclose(
+        atm.atten_terrestrial(
             Quantity([
-                6.8734000906e-03, 8.9691079865e-03, 2.0108798019e-02,
-                7.0886935962e+00, 2.6981301299e-02
-                ], cnv.dB / apu.km)
+                0.0057314491, 0.0425094528, 0.0665904646, 0.1297056177
+                ], cnv.dB / apu.km),
+            Quantity(10, apu.km),
+            ),
+        np.array([
+            0.057314491, 0.425094528, 0.665904646, 1.297056177
+            ]) * cnv.dB
+        )
+
+
+def test_atten_slant_annex1():
+
+    # from functools import partial
+    # _func = partial(
+    #     atm.atten_slant_annex1,
+    #     profile_func=atm.profile_standard
+    #     )
+
+    # args_list = [
+    #     (1.e-30, None, apu.GHz),
+    #     (-90, 90, apu.deg),
+    #     (1.e-30, None, apu.m),
+    #     (1.e-30, None, apu.K),
+    #     (1.e-30, None, apu.km),
+    #     ]
+    # check_astro_quantities(_func, args_list)
+
+    atten, refract, tebb = atm.atten_slant_annex1(
+        np.logspace(1, 2, 5) * apu.GHz, 30 * apu.deg, 400 * apu.m,
+        atm.profile_standard,
+        )
+
+    print(atten, refract, tebb)
+    assert_quantity_allclose(
+        atten,
+        np.array([
+            9.27097319e-02, 2.29467024e-01, 4.21597763e-01, 1.50750757e+02,
+            1.54674979e+00,
+            ]) * cnv.dB
+        )
+
+    assert_quantity_allclose(
+        refract, Quantity(-0.029601598012672804, apu.deg)
+        )
+
+    assert_quantity_allclose(
+        tebb,
+        Quantity([
+            8.20460766, 16.38056714, 27.15973251, 283.65722585, 83.53791604,
+            ], apu.K)
+        )
+
+
+def test_prepare_path():
+
+    path_params, refraction = atm.atm._prepare_path(
+        90, 0, atm.profile_standard,
+        max_path_length=1000.
+        )
+    (
+        press_n, press_w_n, temp_n,
+        a_n, r_n, alpha_n, delta_n, beta_n, h_n
+        ) = np.array(path_params).T
+    # sum over a_n (path lengths per layer) must be smaller than atm params
+    # max height
+    # print(np.sum(a_n), a_n.shape, refraction)
+    assert_quantity_allclose(np.sum(a_n), 79.814165)
+    assert_quantity_allclose(len(a_n), 899)
+    assert_quantity_allclose(refraction, 0.0, atol=1.e-6)
+
+    path_params, refraction = atm.atm._prepare_path(
+        -90, 1000, atm.profile_standard,
+        max_path_length=1000.
+        )
+    print(path_params[0], path_params[-1])
+    (
+        press_n, press_w_n, temp_n,
+        a_n, r_n, alpha_n, delta_n, beta_n, h_n
+        ) = np.array(path_params).T
+    # sum over a_n (path lengths per layer) must be smaller than atm params
+    # max height
+    # print(np.sum(a_n), a_n.shape, refraction)
+    assert_quantity_allclose(np.sum(a_n), 79.814165)
+    assert_quantity_allclose(len(a_n), 899)
+    assert_quantity_allclose(refraction, 0.0, atol=1.e-6)
+
+    # path_params, refraction = atm.atm._prepare_path(
+    #     90, 0, atm.profile_standard,
+    #     max_path_length=5.
+    #     )
+    # # print(np.radians(refraction) * 50e3)
+    # # for t in path_params:
+    # #     print(' '.join('{:.4f}'.format(p) for p in t[3:]))
+    # # print(np.array(path_params).T.shape)
+    # (
+    #     press_n, press_w_n, temp_n,
+    #     a_n, r_n, alpha_n, delta_n, beta_n, h_n
+    #     ) = np.array(path_params).T
+    # print(a_n[0], a_n[1], a_n[-1])
+    # # print(a_n, h_n)
+    # assert_quantity_allclose(np.sum(a_n), 5)
+    # assert_quantity_allclose(len(a_n), 899)
+    # assert_quantity_allclose(refraction, 0.0, atol=1.e-6)
+
+
+
+    # sum over a_n (path lengths per layer) should be max_path_length
+    # assert_quantity_allclose(np.sum(a_n), 15.)
+
+    # we should be getting the same result, if we shift by 100 m
+
+# def test_atten_slant_annex1_zenith():
+
+#     # start with a station at zero height
+#     atten, refract, tebb = atm.atten_slant_annex1(
+#         22 * apu.GHz, 90 * apu.deg, 0 * apu.m, atm.profile_standard,
+#         max_path_length=15000. * apu.m
+#         )
+#     print(atten, refract, tebb)
+#     assert_quantity_allclose(atten, np.array([0.49436526]) * cnv.dB)
+#     assert_quantity_allclose(
+#         refract, Quantity(0, apu.deg), atol=1.e-5 * apu.deg
+#         )
+#     assert_quantity_allclose(tebb, Quantity([31.62787792], apu.K))
+
+#     # we should be getting the same result, if have the opposite direction
+
+
+
+def test_atten_specific_annex2():
+
+    args_list = [
+        (1.e-30, None, apu.GHz),
+        (1.e-30, None, apu.hPa),
+        (1.e-30, None, apu.g / apu.m ** 3),
+        (1.e-30, None, apu.K),
+        ]
+    check_astro_quantities(atm.atten_specific_annex2, args_list)
+
+    # test for scalar quantities
+    with pytest.raises(TypeError):
+        atm.atten_specific_annex2(
+            1 * apu.GHz,
+            Quantity([1000, 1000], apu.hPa),
+            10 * apu.g / apu.m ** 3, 300 * apu.K
             )
 
-        assert_quantity_allclose(
-            atten_wet,
-            Quantity([
-                0.0057314491, 0.0425094528, 0.0665904646, 0.1297056177,
-                0.3999561273
-                ], cnv.dB / apu.km)
-            )
-
-    def test_atten_terrestrial(self):
-
-        args_list = [
-            (1.e-30, None, cnv.dB / apu.km),
-            (1.e-30, None, apu.km),
-            ]
-        check_astro_quantities(atm.atten_terrestrial, args_list)
-
-        assert_quantity_allclose(
-            atm.atten_terrestrial(
-                Quantity([
-                    0.0057314491, 0.0425094528, 0.0665904646, 0.1297056177
-                    ], cnv.dB / apu.km),
-                Quantity(10, apu.km),
-                ),
-            np.array([
-                0.057314491, 0.425094528, 0.665904646, 1.297056177
-                ]) * cnv.dB
-            )
-
-    def test_atten_slant_annex1(self):
-
-        # from functools import partial
-        # _func = partial(
-        #     atm.atten_slant_annex1,
-        #     profile_func=atm.profile_standard
-        #     )
-
-        # args_list = [
-        #     (1.e-30, None, apu.GHz),
-        #     (-90, 90, apu.deg),
-        #     (1.e-30, None, apu.m),
-        #     (1.e-30, None, apu.K),
-        #     (1.e-30, None, apu.km),
-        #     ]
-        # check_astro_quantities(_func, args_list)
-
-        atten, refract, tebb = atm.atten_slant_annex1(
-            np.logspace(1, 2, 5) * apu.GHz, 30 * apu.deg, 400 * apu.m,
-            atm.profile_standard,
-            )
-
-        assert_quantity_allclose(
-            atten,
-            np.array([
-                9.17888952e-02, 2.27186797e-01, 4.17408787e-01,
-                1.49256587e+02, 1.53137568e+00
-                ]) * cnv.dB
-            )
-
-        assert_quantity_allclose(
-            refract, Quantity(-0.0296029844612025, apu.deg)
-            )
-
-        assert_quantity_allclose(
-            tebb,
-            Quantity([
-                8.15077217, 16.24830323, 26.92802459, 283.63773569,
-                82.86419308
-                ], apu.K)
-            )
-
-    def test_atten_specific_annex2(self):
-
-        args_list = [
-            (1.e-30, None, apu.GHz),
-            (1.e-30, None, apu.hPa),
-            (1.e-30, None, apu.g / apu.m ** 3),
-            (1.e-30, None, apu.K),
-            ]
-        check_astro_quantities(atm.atten_specific_annex2, args_list)
-
-        # test for scalar quantities
-        with pytest.raises(TypeError):
-            atm.atten_specific_annex2(
-                1 * apu.GHz,
-                Quantity([1000, 1000], apu.hPa),
-                10 * apu.g / apu.m ** 3, 300 * apu.K
-                )
-
-        with pytest.raises(TypeError):
-            atm.atten_specific_annex2(
-                1 * apu.GHz, 1000 * apu.hPa,
-                Quantity([10, 10], apu.g / apu.m ** 3),
-                300 * apu.K
-                )
-
-        with pytest.raises(TypeError):
-            atm.atten_specific_annex2(
-                1 * apu.GHz, 1000 * apu.hPa, 10 * apu.g / apu.m ** 3,
-                Quantity([300, 300], apu.K)
-                )
-        atten_dry, atten_wet = atm.atten_specific_annex2(
-            np.logspace(1, 2, 5) * apu.GHz,
-            980 * apu.hPa,
-            10 * apu.g / apu.m ** 3,
+    with pytest.raises(TypeError):
+        atm.atten_specific_annex2(
+            1 * apu.GHz, 1000 * apu.hPa,
+            Quantity([10, 10], apu.g / apu.m ** 3),
             300 * apu.K
             )
 
-        assert_quantity_allclose(
-            atten_dry,
-            Quantity([
-                0.006643591, 0.008556794, 0.0200009175, 6.5824558517,
-                0.0215553521
-                ], cnv.dB / apu.km)
+    with pytest.raises(TypeError):
+        atm.atten_specific_annex2(
+            1 * apu.GHz, 1000 * apu.hPa, 10 * apu.g / apu.m ** 3,
+            Quantity([300, 300], apu.K)
             )
+    atten_dry, atten_wet = atm.atten_specific_annex2(
+        np.logspace(1, 2, 5) * apu.GHz,
+        980 * apu.hPa,
+        10 * apu.g / apu.m ** 3,
+        300 * apu.K
+        )
 
-        assert_quantity_allclose(
-            atten_wet,
-            Quantity([
-                0.0082768112, 0.0599180804, 0.096043373, 0.1902800424,
-                0.5888230557
-                ], cnv.dB / apu.km)
-            )
-
-    def test_equivalent_height_dry(self):
-
-        args_list = [
-            (1.e-30, None, apu.GHz),
-            (1.e-30, None, apu.hPa),
-            ]
-        check_astro_quantities(atm.equivalent_height_dry, args_list)
-
-        height = atm.equivalent_height_dry(
-            np.logspace(1, 2, 5) * apu.GHz,
-            980 * apu.hPa,
-            )
-        print(height)
-
-        assert_quantity_allclose(
-            height,
-            Quantity([
-                5.17174463, 5.15765153, 5.12390758, 10.2730745, 5.38128124
-                ], apu.km)
-            )
-
-    def test_equivalent_height_wet(self):
-
-        args_list = [
-            (1.e-30, None, apu.GHz),
-            (1.e-30, None, apu.hPa),
-            ]
-        check_astro_quantities(atm.equivalent_height_wet, args_list)
-
-        height = atm.equivalent_height_wet(
-            np.logspace(1, 2, 5) * apu.GHz,
-            980 * apu.hPa,
-            )
-        print(height)
-
-        assert_quantity_allclose(
-            height,
-            Quantity([
-                1.67507787, 1.7615659, 1.68523706, 1.66232892, 1.66121491
-                ], apu.km)
-            )
-
-    def test_atten_slant_annex2(self):
-
-        args_list = [
-            (1.e-30, None, cnv.dB / apu.km),
-            (1.e-30, None, cnv.dB / apu.km),
-            (1.e-30, None, apu.km),
-            (1.e-30, None, apu.km),
-            (-90, 90, apu.deg),
-            ]
-        check_astro_quantities(atm.atten_slant_annex2, args_list)
-
-        atten_dry = Quantity([
+    assert_quantity_allclose(
+        atten_dry,
+        Quantity([
             0.006643591, 0.008556794, 0.0200009175, 6.5824558517,
             0.0215553521
             ], cnv.dB / apu.km)
+        )
 
-        atten_wet = Quantity([
+    assert_quantity_allclose(
+        atten_wet,
+        Quantity([
             0.0082768112, 0.0599180804, 0.096043373, 0.1902800424,
             0.5888230557
             ], cnv.dB / apu.km)
+        )
 
-        atten_tot = atm.atten_slant_annex2(
-            atten_dry, atten_wet,
-            10 * apu.km, 1 * apu.km, 30 * apu.deg
-            )
 
-        assert_quantity_allclose(
-            atten_tot,
-            np.array([
-                0.1494254424, 0.2909720408, 0.592105096,
-                132.0296771188, 1.6087531534
-                ]) * cnv.dB
-            )
+def test_equivalent_height_dry():
+
+    args_list = [
+        (1.e-30, None, apu.GHz),
+        (1.e-30, None, apu.hPa),
+        ]
+    check_astro_quantities(atm.equivalent_height_dry, args_list)
+
+    height = atm.equivalent_height_dry(
+        np.logspace(1, 2, 5) * apu.GHz,
+        980 * apu.hPa,
+        )
+    print(height)
+
+    assert_quantity_allclose(
+        height,
+        Quantity([
+            5.17174463, 5.15765153, 5.12390758, 10.2730745, 5.38128124
+            ], apu.km)
+        )
+
+
+def test_equivalent_height_wet():
+
+    args_list = [
+        (1.e-30, None, apu.GHz),
+        (1.e-30, None, apu.hPa),
+        ]
+    check_astro_quantities(atm.equivalent_height_wet, args_list)
+
+    height = atm.equivalent_height_wet(
+        np.logspace(1, 2, 5) * apu.GHz,
+        980 * apu.hPa,
+        )
+    print(height)
+
+    assert_quantity_allclose(
+        height,
+        Quantity([
+            1.67507787, 1.7615659, 1.68523706, 1.66232892, 1.66121491
+            ], apu.km)
+        )
+
+
+def test_atten_slant_annex2():
+
+    args_list = [
+        (1.e-30, None, cnv.dB / apu.km),
+        (1.e-30, None, cnv.dB / apu.km),
+        (1.e-30, None, apu.km),
+        (1.e-30, None, apu.km),
+        (-90, 90, apu.deg),
+        ]
+    check_astro_quantities(atm.atten_slant_annex2, args_list)
+
+    atten_dry = Quantity([
+        0.006643591, 0.008556794, 0.0200009175, 6.5824558517,
+        0.0215553521
+        ], cnv.dB / apu.km)
+
+    atten_wet = Quantity([
+        0.0082768112, 0.0599180804, 0.096043373, 0.1902800424,
+        0.5888230557
+        ], cnv.dB / apu.km)
+
+    atten_tot = atm.atten_slant_annex2(
+        atten_dry, atten_wet,
+        10 * apu.km, 1 * apu.km, 30 * apu.deg
+        )
+
+    assert_quantity_allclose(
+        atten_tot,
+        np.array([
+            0.1494254424, 0.2909720408, 0.592105096,
+            132.0296771188, 1.6087531534
+            ]) * cnv.dB
+        )
