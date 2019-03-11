@@ -587,25 +587,46 @@ def test_atten_slant_annex1():
     assert_quantity_allclose(
         atten,
         np.array([
-            9.27097319e-02, 2.29467024e-01, 4.21597763e-01, 1.50750757e+02,
-            1.54674979e+00,
+            9.27260558e-02, 2.29527421e-01, 4.21702842e-01, 1.50760412e+02,
+            1.54726314e+00,
             ]) * cnv.dB
         )
 
     assert_quantity_allclose(
-        refract, Quantity(-0.029601598012672804, apu.deg)
+        refract, Quantity(-0.029604292761519, apu.deg)
         )
 
     assert_quantity_allclose(
         tebb,
         Quantity([
-            8.20460766, 16.38056714, 27.15973251, 283.65722585, 83.53791604,
+            8.20565032, 16.38431073, 27.16598488, 283.6614543, 83.56179424,
             ], apu.K)
         )
 
 
+PATH_CASES = [
+    # elev, obs_alt, max_plen, actual_plen, a_n, delta_n, h_n, refraction
+    (90, 0, 1000, 79.814165, 0.7942632, 0.0, 79.814165, -0.0),
+    (90, 10, 1000, 79.804165, 0.7942632, 0.0, 79.814165, -0.0),
+    (90, 100, 10, 10, 0.0372818, 0.0, 10.1, -0.0),
+    (-90, 10100, 10, 10, 0.0008338, 0.0, 0.1, -0.0),
+    (45, 3000, 50, 50.0, 0.5229484, 0.00551708, 38.44697228, -0.01212932),
+    (45, 3000, 5, 5.0, 0.0836280, 0.00055439, 6.53637734, -0.00417689),
+    (-45, 3000, 50, 4.24344158, 0.00014147, 0.00047096, 0.0, -0.00598681),
+    (-45, 3000, 5, 4.24344158, 0.00014147, 0.00047096, 0.0, -0.00598681),
+    (-45, 3000, 2, 2.0, 0.00544495, 0.00022192, 1.58591571, -0.00239993),
+    (0.01, 3000, 50, 50.0, 1.05142843, 0.00784422, 3.18673299, -0.06322018),
+    (0.1, 3000, 50, 50.0, 1.82262719, 0.00784412, 3.25905139, -0.06912378),
+    (-0.01, 3000, 50, 50.0, 3.63099920, 0.00784424, 3.17134151, -0.05677150),
+    (-0.1, 3000, 50, 50.0, 3.34827014, 0.00784431, 3.10291331, -0.03900922),
+    (-0.319 - 0.039, 3103, 50, 50.0, 2.04400349, 0.00573838, 2.92954404,
+     -0.11180068),
+    ]
+
+
 def test_prepare_path():
 
+    # first test some basic properties
     path_params, refraction = atm.atm._prepare_path(
         90, 0, atm.profile_standard,
         max_path_length=1000.
@@ -616,68 +637,26 @@ def test_prepare_path():
         ) = np.array(path_params).T
     # sum over a_n (path lengths per layer) must be smaller than atm params
     # max height
-    # print(np.sum(a_n), a_n.shape, refraction)
     assert_quantity_allclose(np.sum(a_n), 79.814165)
-    assert_quantity_allclose(len(a_n), 899)
+    assert_quantity_allclose(len(a_n), 900)
+
+    # why is this not exactly zero?
     assert_quantity_allclose(refraction, 0.0, atol=1.e-6)
 
-    path_params, refraction = atm.atm._prepare_path(
-        -90, 1000, atm.profile_standard,
-        max_path_length=1000.
-        )
-    print(path_params[0], path_params[-1])
-    (
-        press_n, press_w_n, temp_n,
-        a_n, r_n, alpha_n, delta_n, beta_n, h_n
-        ) = np.array(path_params).T
-    # sum over a_n (path lengths per layer) must be smaller than atm params
-    # max height
-    # print(np.sum(a_n), a_n.shape, refraction)
-    assert_quantity_allclose(np.sum(a_n), 79.814165)
-    assert_quantity_allclose(len(a_n), 899)
-    assert_quantity_allclose(refraction, 0.0, atol=1.e-6)
-
-    # path_params, refraction = atm.atm._prepare_path(
-    #     90, 0, atm.profile_standard,
-    #     max_path_length=5.
-    #     )
-    # # print(np.radians(refraction) * 50e3)
-    # # for t in path_params:
-    # #     print(' '.join('{:.4f}'.format(p) for p in t[3:]))
-    # # print(np.array(path_params).T.shape)
-    # (
-    #     press_n, press_w_n, temp_n,
-    #     a_n, r_n, alpha_n, delta_n, beta_n, h_n
-    #     ) = np.array(path_params).T
-    # print(a_n[0], a_n[1], a_n[-1])
-    # # print(a_n, h_n)
-    # assert_quantity_allclose(np.sum(a_n), 5)
-    # assert_quantity_allclose(len(a_n), 899)
-    # assert_quantity_allclose(refraction, 0.0, atol=1.e-6)
-
-
-
-    # sum over a_n (path lengths per layer) should be max_path_length
-    # assert_quantity_allclose(np.sum(a_n), 15.)
-
-    # we should be getting the same result, if we shift by 100 m
-
-# def test_atten_slant_annex1_zenith():
-
-#     # start with a station at zero height
-#     atten, refract, tebb = atm.atten_slant_annex1(
-#         22 * apu.GHz, 90 * apu.deg, 0 * apu.m, atm.profile_standard,
-#         max_path_length=15000. * apu.m
-#         )
-#     print(atten, refract, tebb)
-#     assert_quantity_allclose(atten, np.array([0.49436526]) * cnv.dB)
-#     assert_quantity_allclose(
-#         refract, Quantity(0, apu.deg), atol=1.e-5 * apu.deg
-#         )
-#     assert_quantity_allclose(tebb, Quantity([31.62787792], apu.K))
-
-#     # we should be getting the same result, if have the opposite direction
-
+    for p in PATH_CASES:
+        elev, obsalt, max_plen = p[:3]
+        desired_p = p[3:]
+        path_params, refraction = atm.atm._prepare_path(
+            elev, obsalt, atm.profile_standard,
+            max_path_length=max_plen
+            )
+        pp = np.array(path_params)
+        actual_p = (
+            np.sum(pp[:, 3]), pp[-1, 3], pp[-1, 6], pp[-1, 8], refraction
+            )
+        print(actual_p)
+        print(90 - np.degrees(pp[-1, 5]), 90 - np.degrees(pp[-1, 7]))
+        assert_quantity_allclose(actual_p, desired_p, atol=1.e-6)
 
 
 def test_atten_specific_annex2():

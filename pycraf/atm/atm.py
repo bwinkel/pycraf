@@ -1455,14 +1455,18 @@ def _prepare_path(elev, obs_alt, profile_func, max_path_length=1000.):
     # deltas = 0.0001 * np.exp(np.arange(922) / 100.)
     # atm profiles only up to 80 km...
     deltas = 0.0001 * np.exp(np.arange(900) / 100.)
-    heights = np.cumsum(np.hstack([0., deltas]))
-    if obs_alt > 1.e-3:
-        obs_idx = np.searchsorted(heights, obs_alt / 1000.)
-        heights = np.hstack([
-            heights[:obs_idx],
-            obs_alt / 1000.,
-            heights[obs_idx:]
-            ])
+    heights = np.hstack([0., np.cumsum(deltas)])
+
+    # the algorithm below will fail, if observer is *on* the smallest height
+    obs_alt = max([1.e-6, obs_alt])
+
+    # add observer height (radius) to the layer heights, for higher accuracy
+    obs_idx = np.searchsorted(heights, obs_alt / 1000.)
+    heights = np.hstack([
+        heights[:obs_idx],
+        obs_alt / 1000.,
+        heights[obs_idx:]
+        ])
     deltas = np.diff(heights)
     heights = heights[:-1]
 
@@ -1472,7 +1476,7 @@ def _prepare_path(elev, obs_alt, profile_func, max_path_length=1000.):
     # radius calculation
     # TODO: do we need to account for non-spherical Earth?
     # probably not - some tests suggest that the relative error is < 1e-6
-    earth_radius = 6371.  # + obs_alt / 1000.
+    earth_radius = 6371.
     radii = earth_radius + heights  # distance Earth-center to layers
 
     (
@@ -1525,16 +1529,28 @@ def _prepare_path(elev, obs_alt, profile_func, max_path_length=1000.):
         ))
 
     # TODO: this is certainly a case for cython
-    # counter = 0
     break_imminent = False
-    if elev >= 0:
 
-        beta_n = beta_0 = np.radians(90. - elev)  # initial value
+    # account for both cases
+    beta_n = beta_0 = np.radians(90. - elev)  # initial value
+    alpha_n = alpha_0 = np.radians(90. - elev)  # initial value
 
-        for i in range(start_i, len(heights) - 1):
+    i = start_i
+    while i > 0 and i < len(heights) - 1:
 
-            r_n = radii[i]
-            d_n = deltas[i]
+        r_n = radii[i]
+        d_n = deltas[i]
+
+        k = np.tan(np.pi / 2 - beta_n - delta_n)
+        t0 = -r_n * k / 2 / (k ** 2 + 1)
+        t1 = (
+            k ** 2 * r_n ** 2 /
+            4 / (k ** 2 + 1) ** 2
+            )
+        t2 = (r_n ** 2 - (r_n - d_n) ** 2) / (k ** 2 + 1)
+        cond = (t1 >= t2) and (t0 + np.sqrt(t1 - t2) > 0)
+
+        if not cond:  # aka "elev >= 0"
 
             a_n = -r_n * np.cos(beta_n) + np.sqrt(
                 r_n ** 2 * np.cos(beta_n) ** 2 + d_n * (d_n + 2 * r_n)
@@ -1555,95 +1571,98 @@ def _prepare_path(elev, obs_alt, profile_func, max_path_length=1000.):
                 2. / a_n / (r_n + d_n)
                 ))
             delta_n += beta_n - alpha_n
+            if delta_n < 0:
+                delta_n = alpha_n = 0.
             beta_n = np.arcsin(
                 fix_arg(ref_index[i] / ref_index[i + 1] * np.sin(alpha_n))
                 )
 
-            # if counter < 2:
-            #     print(counter, a_n, alpha_n, delta_n, beta_n)
-
-            # counter += 1
+            r_i = r_n + d_n
+            h_i = r_n + d_n - earth_radius
             press_n = 0.5 * (pressure[i] + pressure[i + 1])
             press_w_n = 0.5 * (pressure_water[i] + pressure_water[i + 1])
             temp_n = 0.5 * (temperature[i] + temperature[i + 1])
 
-            path_params.append((
-                press_n, press_w_n, temp_n,
-                a_n, r_n + d_n, alpha_n, delta_n, beta_n,
-                r_n + d_n - earth_radius
-                ))
+            # update refraction every time
+            refraction = - np.degrees(beta_n + delta_n - beta_0)
 
-            if break_imminent:
-                break
+            i += 1
 
-        # print(counter, a_n, alpha_n, delta_n, beta_n)
-        refraction = - np.degrees(beta_n + delta_n - beta_0)
+        else:
 
-    else:
-
-        alpha_n = alpha_0 = np.radians(90. - elev)  # initial value
-
-        for i in range(start_i, 0, -1):
-
-            # r_n = radii[i - 1]
-            # d_n = deltas[i - 1]
+            # r_n = radii[i - 1]  # really r_n-1
+            # d_n = deltas[i - 1]  # really d_n-1
 
             # a_n = (r_n + d_n) * np.cos(np.pi - alpha_n) - np.sqrt(
             #     (r_n + d_n) ** 2 * np.cos(np.pi - alpha_n) ** 2 -
             #     d_n * (d_n + 2 * r_n)
             #     )
 
-            # is the following equivalent??? it'd have the advantage that
-            # we could infer d_n from a shortened a_n in the break condition
-            r_n = radii[i]  # == r_n-1 + d_n-1
+            # the following is equivalent! it has the advantage that
+            # we can infer d_n from a shortened a_n in the break condition
+            # r_n = radii[i]  # == r_n-1 + d_n-1 --> replace all r_n in
+            # original formula with r_n - d_n
             d_n = deltas[i - 1]
 
-            a_n = r_n * np.cos(np.pi - alpha_n) - np.sqrt(
+            _tmp = (
                 r_n ** 2 * np.cos(np.pi - alpha_n) ** 2 -
                 d_n * (-d_n + 2 * r_n)
                 )
+            if _tmp < 0:
+                _tmp = 0.
+            a_n = r_n * np.cos(np.pi - alpha_n) - np.sqrt(_tmp)
 
             path_length += a_n
             if path_length >= max_path_length:
-                # print(a_n, r_n, d_n)
                 a_n -= path_length - max_path_length
                 d_n = r_n - np.sqrt(
                     r_n ** 2 + a_n ** 2 -
                     2 * a_n * r_n * np.cos(np.pi - alpha_n)
                     )
-                # print(a_n, r_n, d_n)
                 break_imminent = True
 
             # beta_n = np.pi - np.arccos(fix_arg(
             #     (d_n * (d_n + 2 * r_n) - a_n ** 2) / 2. / r_n / a_n
             #     ))
-            beta_n = np.pi - np.arccos(fix_arg(
-                (d_n * (-d_n + 2 * r_n) - a_n ** 2) / 2. / (r_n - d_n) / a_n
-                ))
+
+            # there is a precision problem (due to the squares in
+            # beta_n formula); if a_n - d_n is too small, we'll get a
+            # beta_n that is significantly different from pi
+            if np.abs(a_n - d_n) < 1.e-12:
+                a_n = d_n
+                beta_n = np.pi
+            else:
+                beta_n = np.pi - np.arccos(fix_arg(
+                    (d_n * (-d_n + 2 * r_n) - a_n ** 2) /
+                    2. / (r_n - d_n) / a_n
+                    ))
+
             delta_n += alpha_n - beta_n
+            if delta_n < 0.:
+                delta_n = 0.
+                beta_n = np.pi
+
             alpha_n = np.pi - np.arcsin(
                 fix_arg(ref_index[i] / ref_index[i - 1] * np.sin(beta_n))
                 )
 
-            # if counter < 2 or counter in [405, 406]:
-            #     print(counter, a_n, alpha_n, delta_n, beta_n)
+            r_i = r_n - d_n
+            h_i = r_n - d_n - earth_radius
+            press_n = 0.5 * (pressure[i] + pressure[i - 1])
+            press_w_n = 0.5 * (pressure_water[i] + pressure_water[i - 1])
+            temp_n = 0.5 * (temperature[i] + temperature[i - 1])
 
-            # counter += 1
-            press_n = 0.5 * (pressure[i] + pressure[i + 1])
-            press_w_n = 0.5 * (pressure_water[i] + pressure_water[i + 1])
-            temp_n = 0.5 * (temperature[i] + temperature[i + 1])
+            refraction = - np.degrees(alpha_n + delta_n - alpha_0)  # TODO
 
-            path_params.append((
-                press_n, press_w_n, temp_n,
-                a_n, r_n - d_n, alpha_n, delta_n, beta_n,
-                r_n - d_n - earth_radius
-                ))
+            i -= 1
 
-            if break_imminent:
-                break
+        path_params.append((
+            press_n, press_w_n, temp_n, a_n, r_i,
+            alpha_n, delta_n, beta_n, h_i
+            ))
 
-        # print(counter, a_n, alpha_n, delta_n, beta_n)
-        refraction = - np.degrees(alpha_n + delta_n - alpha_0)  # TODO
+        if break_imminent:
+            break
 
     return path_params, refraction
 
