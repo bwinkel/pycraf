@@ -14,6 +14,7 @@ from astropy import units as apu
 from astropy.utils.data import get_pkg_data_filename
 from .. import conversions as cnv
 from .. import utils
+from .atm_helper import path_helper_cython
 
 
 __all__ = [
@@ -1579,9 +1580,9 @@ def _prepare_path(elev, obs_alt, profile_func, max_path_length=1000.):
 
             r_i = r_n + d_n
             h_i = r_n + d_n - earth_radius
-            press_n = 0.5 * (pressure[i] + pressure[i + 1])
-            press_w_n = 0.5 * (pressure_water[i] + pressure_water[i + 1])
-            temp_n = 0.5 * (temperature[i] + temperature[i + 1])
+            press_n = pressure[i]
+            press_w_n = pressure_water[i]
+            temp_n = temperature[i]
 
             # update refraction every time
             refraction = - np.degrees(beta_n + delta_n - beta_0)
@@ -1628,7 +1629,7 @@ def _prepare_path(elev, obs_alt, profile_func, max_path_length=1000.):
             # there is a precision problem (due to the squares in
             # beta_n formula); if a_n - d_n is too small, we'll get a
             # beta_n that is significantly different from pi
-            if np.abs(a_n - d_n) < 1.e-12:
+            if np.abs(a_n - d_n) < 1.e-8:
                 a_n = d_n
                 beta_n = np.pi
             else:
@@ -1648,9 +1649,9 @@ def _prepare_path(elev, obs_alt, profile_func, max_path_length=1000.):
 
             r_i = r_n - d_n
             h_i = r_n - d_n - earth_radius
-            press_n = 0.5 * (pressure[i] + pressure[i - 1])
-            press_w_n = 0.5 * (pressure_water[i] + pressure_water[i - 1])
-            temp_n = 0.5 * (temperature[i] + temperature[i - 1])
+            press_n = pressure[i - 1]
+            press_w_n = pressure_water[i - 1]
+            temp_n = temperature[i - 1]
 
             refraction = - np.degrees(alpha_n + delta_n - alpha_0)  # TODO
 
@@ -1665,6 +1666,64 @@ def _prepare_path(elev, obs_alt, profile_func, max_path_length=1000.):
             break
 
     return path_params, refraction
+
+
+def _prepare_path2(elev, obs_alt, profile_func, max_path_length=1000.):
+
+    deltas = 0.0001 * np.exp(np.arange(900) / 100.)
+    heights = np.hstack([0., np.cumsum(deltas)])
+
+    # the algorithm below will fail, if observer is *on* the smallest height
+    obs_alt = max([1.e-9, obs_alt / 1000.])
+
+    # add observer height (radius) to the layer heights, for higher accuracy
+    # obs_idx = np.searchsorted(heights, obs_alt)
+    # heights = np.hstack([
+    #     heights[:obs_idx],
+    #     obs_alt,
+    #     heights[obs_idx:]
+    #     ])
+    # deltas = np.diff(heights)
+    # heights = heights[:-1]
+
+    earth_radius = 6371.
+    radii = earth_radius + heights  # distance Earth-center to layers
+
+    (
+        temperature,
+        pressure,
+        _,
+        pressure_water,
+        ref_index,
+        _,
+        _
+        ) = profile_func(apu.Quantity(heights, apu.km))
+    # handle units
+    temperature = temperature.to(apu.K).value
+    pressure = pressure.to(apu.hPa).value
+    pressure_water = pressure_water.to(apu.hPa).value
+    ref_index = ref_index.to(cnv.dimless).value
+
+    start_i = np.searchsorted(heights, obs_alt)
+    max_i = len(heights) - 1
+
+    path_params, refraction, is_space_path = path_helper_cython(
+        start_i,
+        max_i,
+        elev,  # deg
+        obs_alt,  # km
+        max_path_length,  # km
+        radii,
+        deltas,
+        ref_index,
+        )
+
+    return path_params, refraction, is_space_path, (
+        temperature[path_params.layer_idx],
+        pressure[path_params.layer_idx],
+        pressure_water[path_params.layer_idx],
+        ref_index[path_params.layer_idx],
+        )
 
 
 @utils.ranged_quantity_input(
@@ -1745,24 +1804,48 @@ def atten_slant_annex1(
     total_atten_db = np.zeros(freq_grid.shape, dtype=np.float64)
     tebb = np.ones(freq_grid.shape, dtype=np.float64) * _t_bg
 
-    path_params, refraction = _prepare_path(
+    # path_params, refraction = _prepare_path(
+    #     _elev, _alt, profile_func, max_path_length=_max_plen
+    #     )
+
+    # # do backward raytracing (to allow tebb calculation)
+
+    # for press_n, press_w_n, temp_n, a_n, _, _, _, _, _ in path_params[::-1]:
+
+    #     atten_dry, atten_wet = _atten_specific_annex1(
+    #         _freq, press_n, press_w_n, temp_n
+    #     )
+    #     gamma_n = atten_dry + atten_wet
+    #     total_atten_db += gamma_n * a_n
+
+    #     # need to calculate (linear) atten per layer for tebb
+    #     gamma_n_lin = 10 ** (-gamma_n * a_n / 10.)
+    #     tebb *= gamma_n_lin
+    #     tebb += (1. - gamma_n_lin) * temp_n
+
+    path_params, refraction, is_space_path, weather = _prepare_path2(
         _elev, _alt, profile_func, max_path_length=_max_plen
         )
+    temp, press, press_w, refractive_index = weather
 
-    # do backward raytracing (to allow tebb calculation)
+    # do backward raytracing (to allow tebb calculation); this makes only
+    # sense if we have a path that goes to space!
 
-    for press_n, press_w_n, temp_n, a_n, _, _, _, _, _ in path_params[::-1]:
+    for idx, a_n in list(enumerate(path_params.a_n))[::-1]:
 
         atten_dry, atten_wet = _atten_specific_annex1(
-            _freq, press_n, press_w_n, temp_n
-        )
+            _freq, press[idx], press_w[idx], temp[idx]
+            )
         gamma_n = atten_dry + atten_wet
         total_atten_db += gamma_n * a_n
 
         # need to calculate (linear) atten per layer for tebb
         gamma_n_lin = 10 ** (-gamma_n * a_n / 10.)
         tebb *= gamma_n_lin
-        tebb += (1. - gamma_n_lin) * temp_n
+        tebb += (1. - gamma_n_lin) * temp[idx]
+
+    if not is_space_path:
+        tebb[...] = np.nan
 
     return total_atten_db, refraction, tebb
 

@@ -561,7 +561,7 @@ def test_atten_terrestrial():
         )
 
 
-def test_atten_slant_annex1():
+def test_atten_slant_annex1_space():
 
     # from functools import partial
     # _func = partial(
@@ -587,19 +587,47 @@ def test_atten_slant_annex1():
     assert_quantity_allclose(
         atten,
         np.array([
-            9.27260558e-02, 2.29527421e-01, 4.21702842e-01, 1.50760412e+02,
-            1.54726314e+00,
+            9.32427390e-02, 2.30870829e-01, 4.24152294e-01, 1.51542218e+02,
+            1.55666239e+00
             ]) * cnv.dB
         )
 
     assert_quantity_allclose(
-        refract, Quantity(-0.029604292761519, apu.deg)
+        refract, Quantity(-0.029619279445, apu.deg)
         )
 
     assert_quantity_allclose(
         tebb,
         Quantity([
-            8.20565032, 16.38431073, 27.16598488, 283.6614543, 83.56179424,
+            8.23614491, 16.46300313, 27.30283635, 283.6847787, 83.97722842,
+            ], apu.K)
+        )
+
+
+def test_atten_slant_annex1_terrestrial():
+
+    atten, refract, tebb = atm.atten_slant_annex1(
+        np.logspace(1, 2, 5) * apu.GHz, 5 * apu.deg, 10 * apu.m,
+        atm.profile_standard, max_path_length=10 * apu.km
+        )
+
+    print(atten, refract, tebb)
+    assert_quantity_allclose(
+        atten,
+        np.array([
+            0.12761612, 0.47031675, 0.81873412, 76.40472314, 3.9923821,
+            ]) * cnv.dB
+        )
+
+    assert_quantity_allclose(
+        refract, Quantity(-0.02458735918, apu.deg)
+        )
+
+    # Tebb only reasonable for paths into space!
+    assert_quantity_allclose(
+        tebb,
+        Quantity([
+            np.nan, np.nan, np.nan, np.nan, np.nan,
             ], apu.K)
         )
 
@@ -621,6 +649,26 @@ PATH_CASES = [
     (-0.1, 3000, 50, 50.0, 3.34827014, 0.00784431, 3.10291331, -0.03900922),
     (-0.319 - 0.039, 3103, 50, 50.0, 2.04400349, 0.00573838, 2.92954404,
      -0.11180068),
+    ]
+
+
+PATH_CASES2 = [
+    # elev, obs_alt, max_plen, actual_plen, a_n, delta_n, h_n, refraction
+    (90, 0, 1000, 80.616410, 0.80224569, 0.0, 80.616410, -0.0),
+    (90, 10, 1000, 80.606410, 0.80224569, 0.0, 80.616410, -0.0),
+    (90, 100, 10, 10., 0.03728178, 0.0, 10.1, -0.0),
+    (-90, 10100, 10, 10., 0.00083376, 0.0, 0.1, -0.0),
+    (45, 3000, 50, 50., 0.52294023, 0.00551708, 38.4469664, -0.0121389),
+    (45, 3000, 5, 5., 0.08362718, 0.000554395, 6.5363768, -0.004186512),
+    (-45, 3000, 50, 4.24343896, 0.00014147, 0.0004709389, 0.0, -0.00602225),
+    (-45, 3000, 5, 4.24343896, 0.00014147, 0.0004709389, 0.0, -0.00602225),
+    (-45, 3000, 2, 2., 0.005446176, 0.000221917, 1.58591483, -0.002435369),
+    (0.01, 3000, 50, 50., 0.741531251, 0.00784422, 3.184543457, -0.06748039),
+    (0.1, 3000, 50, 50., 1.5685714, 0.0078441257, 3.256869969, -0.072623292),
+    (-0.01, 3000, 50, 50., 3.33976156, 0.007844238, 3.16927811, -0.061012597),
+    (-0.1, 3000, 50, 50., 3.189776099, 0.0078443087, 3.10192692, -0.04244031),
+    (-0.319 - 0.039, 3103, 50, 50., 47.03554881, 0.007844311, 2.9866931,
+     -0.035372799),
     ]
 
 
@@ -656,6 +704,39 @@ def test_prepare_path():
             )
         print(actual_p)
         print(90 - np.degrees(pp[-1, 5]), 90 - np.degrees(pp[-1, 7]))
+        assert_quantity_allclose(actual_p, desired_p, atol=1.e-6)
+
+
+def test_prepare_path2():
+
+    # first test some basic properties
+    path_params, refraction, is_space_path, weather = atm.atm._prepare_path2(
+        90, 0, atm.profile_standard,
+        max_path_length=1000.
+        )
+
+    # sum over a_n (path lengths per layer) must be smaller than atm params
+    # max height
+    print(np.sum(path_params.a_n))
+    assert_quantity_allclose(np.sum(path_params.a_n), 80.616410251)
+    assert_quantity_allclose(len(path_params.a_n), 901)
+
+    # why is this not exactly zero?
+    assert_quantity_allclose(refraction, 0.0, atol=1.e-6)
+
+    for p in PATH_CASES2:
+        elev, obsalt, max_plen = p[:3]
+        desired_p = p[3:]
+        pp, refraction, is_space_path, weather = atm.atm._prepare_path2(
+            elev, obsalt, atm.profile_standard,
+            max_path_length=max_plen
+            )
+        temp, press, press_w, refractive_index = weather
+        # elev, obs_alt, max_plen, actual_plen, a_n, delta_n, h_n, refraction
+        actual_p = (
+            np.sum(pp.a_n), pp.a_n[-1], pp.delta_n[-1], pp.h_i[-1], refraction
+            )
+        print(actual_p)
         assert_quantity_allclose(actual_p, desired_p, atol=1.e-6)
 
 
