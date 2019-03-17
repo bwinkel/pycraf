@@ -440,11 +440,17 @@ def test_special_profiles():
         with pytest.raises(apu.UnitsError):
             _prof_func(50 * apu.Hz)
 
-        with pytest.raises(AssertionError):
+        with pytest.raises(ValueError):
             _prof_func(-1 * apu.km)
 
-        with pytest.raises(AssertionError):
+        with pytest.raises(ValueError):
+            _prof_func([-1, 10] * apu.km)
+
+        with pytest.raises(ValueError):
             _prof_func(101 * apu.km)
+
+        with pytest.raises(ValueError):
+            _prof_func([10, 101] * apu.km)
 
         (
             temperatures,

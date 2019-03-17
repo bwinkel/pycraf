@@ -6,7 +6,7 @@ from __future__ import (
     )
 
 import os
-from functools import partial
+from functools import partial, lru_cache
 import numbers
 import collections
 import numpy as np
@@ -184,6 +184,17 @@ def elevation_from_airmass(airmass):
     return _elevation_from_airmass(airmass)
 
 
+def _opacity_from_atten(atten, elev=None):
+
+    if elev is None:
+
+        return np.log(atten)
+
+    else:
+
+        return np.log(atten) / _airmass_from_elevation(elev)
+
+
 @utils.ranged_quantity_input(
     atten=(1.000000000001, None, cnv.dimless), elev=(0, 90, apu.deg),
     strip_input_units=True, allow_none=True, output_unit=cnv.dimless
@@ -208,13 +219,18 @@ def opacity_from_atten(atten, elev=None):
         Atmospheric opacity [dimless aka neper]
     '''
 
+    return _opacity_from_atten(atten, elev=elev)
+
+
+def _atten_from_opacity(tau, elev=None):
+
     if elev is None:
 
-        return np.log(atten)
+        return 10 * np.log10(np.exp(tau))
 
     else:
 
-        return np.log(atten) / _airmass_from_elevation(elev)
+        return 10 * np.log10(np.exp(tau * _airmass_from_elevation(elev)))
 
 
 @utils.ranged_quantity_input(
@@ -241,13 +257,17 @@ def atten_from_opacity(tau, elev=None):
         Atmospheric attenuation [dB or dimless]
     '''
 
-    if elev is None:
+    return _atten_from_opacity(tau, elev=elev)
 
-        return 10 * np.log10(np.exp(tau))
 
-    else:
+def _refractive_index(temp, press, press_w):
 
-        return 10 * np.log10(np.exp(tau * _airmass_from_elevation(elev)))
+    return (
+        1 + 1e-6 / temp * (
+            77.6 * press - 5.6 * press_w +
+            3.75e5 * press_w / temp
+            )
+        )
 
 
 @utils.ranged_quantity_input(
@@ -276,12 +296,29 @@ def refractive_index(temp, press, press_w):
         Refractive index [dimless]
     '''
 
-    return (
-        1 + 1e-6 / temp * (
-            77.6 * press - 5.6 * press_w +
-            3.75e5 * press_w / temp
-            )
+    return _refractive_index(temp, press, press_w)
+
+
+def _saturation_water_pressure(temp, press, wet_type):
+    # temp_C is temperature in Celcius
+    temp_C = temp - 273.15
+
+    assert wet_type in ['water', 'ice']
+
+    EF = (
+        1. + 1.e-4 * (7.2 + press * (0.0320 + 5.9e-6 * temp_C ** 2))
+        if wet_type == 'water' else
+        1. + 1.e-4 * (2.2 + press * (0.0382 + 6.4e-6 * temp_C ** 2))
         )
+
+    a, b, c, d = (
+        (6.1121, 18.678, 257.14, 234.5)
+        if wet_type == 'water' else
+        (6.1115, 23.036, 279.82, 333.7)
+        )
+    e_s = EF * a * np.exp((b - temp_C / d) * temp_C / (c + temp_C))
+
+    return e_s
 
 
 @utils.ranged_quantity_input(
@@ -314,26 +351,17 @@ def saturation_water_pressure(temp, press, wet_type='water'):
         )
 
 
-def _saturation_water_pressure(temp, press, wet_type):
-    # temp_C is temperature in Celcius
-    temp_C = temp - 273.15
+def _pressure_water_from_humidity(
+        temp, press, humidity, wet_type='water'
+        ):
 
-    assert wet_type in ['water', 'ice']
-
-    EF = (
-        1. + 1.e-4 * (7.2 + press * (0.0320 + 5.9e-6 * temp_C ** 2))
-        if wet_type == 'water' else
-        1. + 1.e-4 * (2.2 + press * (0.0382 + 6.4e-6 * temp_C ** 2))
+    e_s = _saturation_water_pressure(
+        temp, press, wet_type=wet_type
         )
 
-    a, b, c, d = (
-        (6.1121, 18.678, 257.14, 234.5)
-        if wet_type == 'water' else
-        (6.1115, 23.036, 279.82, 333.7)
-        )
-    e_s = EF * a * np.exp((b - temp_C / d) * temp_C / (c + temp_C))
+    press_w = humidity / 100. * e_s
 
-    return e_s
+    return press_w
 
 
 @utils.ranged_quantity_input(
@@ -366,13 +394,22 @@ def pressure_water_from_humidity(
         Water vapor partial pressure [hPa]
     '''
 
+    return _pressure_water_from_humidity(
+        temp, press, humidity, wet_type=wet_type
+        )
+
+
+def _humidity_from_pressure_water(
+        temp, press, press_w, wet_type='water'
+        ):
+
     e_s = _saturation_water_pressure(
         temp, press, wet_type=wet_type
         )
 
-    press_w = humidity / 100. * e_s
+    humidity = 100. * press_w / e_s
 
-    return press_w
+    return humidity
 
 
 @utils.ranged_quantity_input(
@@ -407,13 +444,16 @@ def humidity_from_pressure_water(
         Relative humidity [%]
     '''
 
-    e_s = _saturation_water_pressure(
-        temp, press, wet_type=wet_type
+    return _humidity_from_pressure_water(
+        temp, press, press_w, wet_type=wet_type
         )
 
-    humidity = 100. * press_w / e_s
 
-    return humidity
+def _pressure_water_from_rho_water(temp, rho_w):
+
+    press_w = rho_w * temp / 216.7
+
+    return press_w
 
 
 @utils.ranged_quantity_input(
@@ -439,9 +479,14 @@ def pressure_water_from_rho_water(temp, rho_w):
         Water vapor partial pressure [hPa]
     '''
 
-    press_w = rho_w * temp / 216.7
+    return _pressure_water_from_rho_water(temp, rho_w)
 
-    return press_w
+
+def _rho_water_from_pressure_water(temp, press_w):
+
+    rho_w = press_w * 216.7 / temp
+
+    return rho_w
 
 
 @utils.ranged_quantity_input(
@@ -467,47 +512,10 @@ def rho_water_from_pressure_water(temp, press_w):
         Water vapor density [g / m**3]
     '''
 
-    rho_w = press_w * 216.7 / temp
-
-    return rho_w
+    return _rho_water_from_pressure_water(temp, press_w)
 
 
-@utils.ranged_quantity_input(
-    height=(0, 84.99999999, apu.km),
-    strip_input_units=True, output_unit=None
-    )
-def profile_standard(height):
-    '''
-    Standard height profiles according to `ITU-R P.835-5
-    <https://www.itu.int/rec/R-REC-P.835-5-201202-I/en>`_, Annex 1.
-
-    Parameters
-    ----------
-    height : `~astropy.units.Quantity`
-        Height above ground [km]
-
-    Returns
-    -------
-    temp : `~astropy.units.Quantity`
-        Temperature [K]
-    press : `~astropy.units.Quantity`
-        Total pressure [hPa]
-    rho_w : `~astropy.units.Quantity`
-        Water vapor density [g / m**3]
-    press_w : `~astropy.units.Quantity`
-        Water vapor partial pressure [hPa]
-    n_index : `~astropy.units.Quantity`
-        Refractive index [dimless]
-    humidity_water : `~astropy.units.Quantity`
-        Relative humidity if water vapor was in form of liquid water [%]
-    humidity_ice : `~astropy.units.Quantity`
-        Relative humidity if water vapor was in form of ice [%]
-
-    Notes
-    -----
-    For convenience, derived quantities like water density/pressure
-    and refraction indices are also returned.
-    '''
+def _profile_standard(height):
 
     # height = np.asarray(height)  # this is not sufficient for masking :-(
     height = np.atleast_1d(height)
@@ -579,55 +587,45 @@ def profile_standard(height):
     pressures_water[mask] = pressures[mask] * 2.e-6
     rho_water[mask] = pressures_water[mask] / temperatures[mask] * 216.7
 
-    temperatures = apu.Quantity(temperatures.reshape(height.shape), apu.K)
-    pressures = apu.Quantity(pressures.reshape(height.shape), apu.hPa)
-    pressures_water = apu.Quantity(
-        pressures_water.reshape(height.shape), apu.hPa
-        )
-    rho_water = apu.Quantity(
-        rho_water.reshape(height.shape), apu.g / apu.m ** 3
-        )
-
-    ref_indices = refractive_index(temperatures, pressures, pressures_water)
-    humidities_water = humidity_from_pressure_water(
+    ref_indices = _refractive_index(temperatures, pressures, pressures_water)
+    humidities_water = _humidity_from_pressure_water(
         temperatures, pressures, pressures_water, wet_type='water'
         )
-    humidities_ice = humidity_from_pressure_water(
+    humidities_ice = _humidity_from_pressure_water(
         temperatures, pressures, pressures_water, wet_type='ice'
         )
 
     result = (
-        temperatures.squeeze(),
-        pressures.squeeze(),
-        rho_water.squeeze(),
-        pressures_water.squeeze(),
-        ref_indices.squeeze(),
-        humidities_water.squeeze(),
-        humidities_ice.squeeze(),
+        temperatures.reshape(height.shape).squeeze(),
+        pressures.reshape(height.shape).squeeze(),
+        rho_water.reshape(height.shape).squeeze(),
+        pressures_water.reshape(height.shape).squeeze(),
+        ref_indices.reshape(height.shape).squeeze(),
+        humidities_water.reshape(height.shape).squeeze(),
+        humidities_ice.reshape(height.shape).squeeze(),
         )
 
     # return tuple(v.reshape(height.shape) for v in result)
     return result
 
 
-@apu.quantity_input(height=apu.km)
-def _profile_helper(
-        height,
-        temp_heights, temp_funcs,
-        press_heights, press_funcs,
-        rho_heights, rho_funcs,
-        ):
+@utils.ranged_quantity_input(
+    height=(0, 84.99999999, apu.km),
+    strip_input_units=True,
+    output_unit=(
+        apu.K, apu.hPa, apu.g / apu.m ** 3, apu.hPa,
+        cnv.dimless, apu.percent, apu.percent
+        ),
+    )
+def profile_standard(height):
     '''
-    Helper function for specialized profiles.
+    Standard height profiles according to `ITU-R P.835-5
+    <https://www.itu.int/rec/R-REC-P.835-5-201202-I/en>`_, Annex 1.
 
     Parameters
     ----------
     height : `~astropy.units.Quantity`
         Height above ground [km]
-    {temp,press,rho}_heights : list of floats
-        Height steps for which piece-wise functions are defined
-    {temp,press,rho}_funcs - list of functions
-        Functions that return the desired quantity for a given height interval
 
     Returns
     -------
@@ -645,17 +643,60 @@ def _profile_helper(
         Relative humidity if water vapor was in form of liquid water [%]
     humidity_ice : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of ice [%]
+
+    Notes
+    -----
+    For convenience, derived quantities like water density/pressure
+    and refraction indices are also returned.
+    '''
+
+    return _profile_standard(height)
+
+
+def _profile_helper(
+        height,
+        temp_heights, temp_funcs,
+        press_heights, press_funcs,
+        rho_heights, rho_funcs,
+        ):
+    '''
+    Helper function for specialized profiles.
+
+    Parameters
+    ----------
+    height :`~numpy.ndarray` of `~numpy.float`
+        Height above ground [km]
+    {temp,press,rho}_heights : list of floats
+        Height steps for which piece-wise functions are defined
+    {temp,press,rho}_funcs - list of functions
+        Functions that return the desired quantity for a given height interval
+
+    Returns
+    -------
+    temp : `~numpy.ndarray` of `~numpy.float`
+        Temperature [K]
+    press : `~numpy.ndarray` of `~numpy.float`
+        Total pressure [hPa]
+    rho_w : `~numpy.ndarray` of `~numpy.float`
+        Water vapor density [g / m**3]
+    press_w : `~numpy.ndarray` of `~numpy.float`
+        Water vapor partial pressure [hPa]
+    n_index : `~numpy.ndarray` of `~numpy.float`
+        Refractive index [dimless]
+    humidity_water : `~numpy.ndarray` of `~numpy.float`
+        Relative humidity if water vapor was in form of liquid water [%]
+    humidity_ice : `~numpy.ndarray` of `~numpy.float`
+        Relative humidity if water vapor was in form of ice [%]
     '''
 
     height = np.atleast_1d(height)
-    _height = height.to(apu.km).value
 
-    assert np.all(_height < temp_heights[-1]), (
-        'profile only defined below {} km height!'.format(temp_heights[-1])
-        )
-    assert np.all(_height >= temp_heights[0]), (
-        'profile only defined above {} km height!'.format(temp_heights[0])
-        )
+    # assert np.all(height < temp_heights[-1]), (
+    #     'profile only defined below {} km height!'.format(temp_heights[-1])
+    #     )
+    # assert np.all(height >= temp_heights[0]), (
+    #     'profile only defined above {} km height!'.format(temp_heights[0])
+    #     )
 
     temperature = np.empty(height.shape, dtype=np.float64)
     pressure = np.empty(height.shape, dtype=np.float64)
@@ -669,20 +710,20 @@ def _profile_helper(
     # calculate temperature profile
     for i in range(len(temp_heights) - 1):
         hmin, hmax = temp_heights[i], temp_heights[i + 1]
-        mask = (_height >= hmin) & (_height < hmax)
-        temperature[mask] = (temp_funcs[i])(_height[mask])
+        mask = (height >= hmin) & (height < hmax)
+        temperature[mask] = (temp_funcs[i])(height[mask])
 
     # calculate pressure profile
     for i in range(len(press_heights) - 1):
         hmin, hmax = press_heights[i], press_heights[i + 1]
-        mask = (_height >= hmin) & (_height < hmax)
-        pressure[mask] = (press_funcs[i])(Pstarts[i], _height[mask])
+        mask = (height >= hmin) & (height < hmax)
+        pressure[mask] = (press_funcs[i])(Pstarts[i], height[mask])
 
     # calculate rho profile
     for i in range(len(rho_heights) - 1):
         hmin, hmax = rho_heights[i], rho_heights[i + 1]
-        mask = (_height >= hmin) & (_height < hmax)
-        rho_water[mask] = (rho_funcs[i])(_height[mask])
+        mask = (height >= hmin) & (height < hmax)
+        rho_water[mask] = (rho_funcs[i])(height[mask])
 
     # calculate pressure_water profile
     pressure_water = rho_water * temperature / 216.7
@@ -690,34 +731,33 @@ def _profile_helper(
     pressure_water[mask] = pressure[mask] * 2.e-6
     rho_water[mask] = pressure_water[mask] / temperature[mask] * 216.7
 
-    temperature = apu.Quantity(temperature.reshape(height.shape), apu.K)
-    pressure = apu.Quantity(pressure.reshape(height.shape), apu.hPa)
-    pressure_water = apu.Quantity(
-        pressure_water.reshape(height.shape), apu.hPa
-        )
-    rho_water = apu.Quantity(
-        rho_water.reshape(height.shape), apu.g / apu.m ** 3
-        )
-
-    ref_index = refractive_index(temperature, pressure, pressure_water)
-    humidity_water = humidity_from_pressure_water(
+    ref_index = _refractive_index(temperature, pressure, pressure_water)
+    humidity_water = _humidity_from_pressure_water(
         temperature, pressure, pressure_water, wet_type='water'
         )
-    humidity_ice = humidity_from_pressure_water(
+    humidity_ice = _humidity_from_pressure_water(
         temperature, pressure, pressure_water, wet_type='ice'
         )
 
     return (
-        temperature.squeeze(),
-        pressure.squeeze(),
-        rho_water.squeeze(),
-        pressure_water.squeeze(),
-        ref_index.squeeze(),
-        humidity_water.squeeze(),
-        humidity_ice.squeeze(),
+        temperature.reshape(height.shape).squeeze(),
+        pressure.reshape(height.shape).squeeze(),
+        rho_water.reshape(height.shape).squeeze(),
+        pressure_water.reshape(height.shape).squeeze(),
+        ref_index.reshape(height.shape).squeeze(),
+        humidity_water.reshape(height.shape).squeeze(),
+        humidity_ice.reshape(height.shape).squeeze(),
         )
 
 
+@utils.ranged_quantity_input(
+    height=(0, 99.99999999, apu.km),
+    strip_input_units=True,
+    output_unit=(
+        apu.K, apu.hPa, apu.g / apu.m ** 3, apu.hPa,
+        cnv.dimless, apu.percent, apu.percent
+        ),
+    )
 def profile_lowlat(height):
     '''
     Low latitude height profiles according to `ITU-R P.835-5
@@ -783,6 +823,14 @@ def profile_lowlat(height):
         )
 
 
+@utils.ranged_quantity_input(
+    height=(0, 99.99999999, apu.km),
+    strip_input_units=True,
+    output_unit=(
+        apu.K, apu.hPa, apu.g / apu.m ** 3, apu.hPa,
+        cnv.dimless, apu.percent, apu.percent
+        ),
+    )
 def profile_midlat_summer(height):
     '''
     Mid latitude summer height profiles according to `ITU-R P.835-5
@@ -846,6 +894,14 @@ def profile_midlat_summer(height):
         )
 
 
+@utils.ranged_quantity_input(
+    height=(0, 99.99999999, apu.km),
+    strip_input_units=True,
+    output_unit=(
+        apu.K, apu.hPa, apu.g / apu.m ** 3, apu.hPa,
+        cnv.dimless, apu.percent, apu.percent
+        ),
+    )
 def profile_midlat_winter(height):
     '''
     Mid latitude winter height profiles according to `ITU-R P.835-5
@@ -909,6 +965,14 @@ def profile_midlat_winter(height):
         )
 
 
+@utils.ranged_quantity_input(
+    height=(0, 99.99999999, apu.km),
+    strip_input_units=True,
+    output_unit=(
+        apu.K, apu.hPa, apu.g / apu.m ** 3, apu.hPa,
+        cnv.dimless, apu.percent, apu.percent
+        ),
+    )
 def profile_highlat_summer(height):
     '''
     High latitude summer height profiles according to `ITU-R P.835-5
@@ -972,6 +1036,14 @@ def profile_highlat_summer(height):
         )
 
 
+@utils.ranged_quantity_input(
+    height=(0, 99.99999999, apu.km),
+    strip_input_units=True,
+    output_unit=(
+        apu.K, apu.hPa, apu.g / apu.m ** 3, apu.hPa,
+        cnv.dimless, apu.percent, apu.percent
+        ),
+    )
 def profile_highlat_winter(height):
     '''
     High latitude winter height profiles according to `ITU-R P.835-5
@@ -1668,26 +1740,14 @@ def _prepare_path(elev, obs_alt, profile_func, max_path_length=1000.):
     return path_params, refraction
 
 
-def _prepare_path2(elev, obs_alt, profile_func, max_path_length=1000.):
+@lru_cache(maxsize=8)
+def _get_atm_prof(profile_func):
+    '''
+    Helper function to cache atm height profiles for _prepare_path.
+    '''
 
     deltas = 0.0001 * np.exp(np.arange(900) / 100.)
     heights = np.hstack([0., np.cumsum(deltas)])
-
-    # the algorithm below will fail, if observer is *on* the smallest height
-    obs_alt = max([1.e-9, obs_alt / 1000.])
-
-    # add observer height (radius) to the layer heights, for higher accuracy
-    # obs_idx = np.searchsorted(heights, obs_alt)
-    # heights = np.hstack([
-    #     heights[:obs_idx],
-    #     obs_alt,
-    #     heights[obs_idx:]
-    #     ])
-    # deltas = np.diff(heights)
-    # heights = heights[:-1]
-
-    earth_radius = 6371.
-    radii = earth_radius + heights  # distance Earth-center to layers
 
     (
         temperature,
@@ -1698,11 +1758,26 @@ def _prepare_path2(elev, obs_alt, profile_func, max_path_length=1000.):
         _,
         _
         ) = profile_func(apu.Quantity(heights, apu.km))
+
+    earth_radius = 6371.
+    radii = earth_radius + heights  # distance Earth-center to layers
+
     # handle units
-    temperature = temperature.to(apu.K).value
-    pressure = pressure.to(apu.hPa).value
-    pressure_water = pressure_water.to(apu.hPa).value
+    temp = temperature.to(apu.K).value
+    press = pressure.to(apu.hPa).value
+    press_w = pressure_water.to(apu.hPa).value
     ref_index = ref_index.to(cnv.dimless).value
+
+    return radii, heights, deltas, temp, press, press_w, ref_index
+
+
+def _prepare_path2(elev, obs_alt, profile_func, max_path_length=1000.):
+
+    ret = _get_atm_prof(profile_func)
+    radii, heights, deltas, temp, press, press_w, ref_index = ret
+
+    # the algorithm below will fail, if observer is *on* the smallest height
+    obs_alt = max([1.e-9, obs_alt / 1000.])
 
     start_i = np.searchsorted(heights, obs_alt)
     max_i = len(heights) - 1
@@ -1719,9 +1794,9 @@ def _prepare_path2(elev, obs_alt, profile_func, max_path_length=1000.):
         )
 
     return path_params, refraction, is_space_path, (
-        temperature[path_params.layer_idx],
-        pressure[path_params.layer_idx],
-        pressure_water[path_params.layer_idx],
+        temp[path_params.layer_idx],
+        press[path_params.layer_idx],
+        press_w[path_params.layer_idx],
         ref_index[path_params.layer_idx],
         )
 
