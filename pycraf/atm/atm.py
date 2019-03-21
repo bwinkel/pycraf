@@ -29,13 +29,15 @@ __all__ = [
     'elevation_from_airmass', 'airmass_from_elevation',
     'opacity_from_atten', 'atten_from_opacity',
     'atten_specific_annex1',
-    'atten_terrestrial', 'atten_slant_annex1',
+    'atten_terrestrial', 'atm_layers', 'atten_slant_annex1',
     'atten_specific_annex2',
     'atten_slant_annex2',
     'equivalent_height_dry', 'equivalent_height_wet',
     # '_prepare_path'
     ]
 
+
+EARTH_RADIUS = 6371.
 
 fname_oxygen = get_pkg_data_filename(
     '../itudata/p.676-10/R-REC-P.676-10-201309_table1.csv'
@@ -1477,14 +1479,44 @@ def atten_terrestrial(specific_atten, path_length):
     return specific_atten * path_length
 
 
-@lru_cache(maxsize=8)
-def _get_atm_prof(profile_func):
+@utils.ranged_quantity_input(
+    freq_grid=(1.e-30, 1000, apu.GHz),
+    heights=(0, 80, apu.km),
+    strip_input_units=True, allow_none=True, output_unit=None
+    )
+def atm_layers(freq_grid, profile_func, heights=None):
     '''
-    Helper function to cache atm height profiles for _prepare_path.
+    Calculate physical parameters for atmospheric layers to be used with
+    `~pycraf.atm.atten_slant_annex1`.
+
+    This can be used to cache layer-profile data. Since it is only dependent
+    on frequency, one can re-use it to save computing time when doing batch
+    jobs (e.g., atmospheric dampening for each pixel in a map).
+
+    Parameters
+    ----------
+    freq_grid : `~astropy.units.Quantity`
+        Frequencies at which to calculate line-width shapes [GHz]
+    profile_func : func
+        A height profile function having the same signature as
+        `~pycraf.atm.profile_standard`
+
+    Returns
+    -------
     '''
 
-    deltas = 0.0001 * np.exp(np.arange(900) / 100.)
-    heights = np.hstack([0., np.cumsum(deltas)])
+    freq_grid = np.atleast_1d(freq_grid)
+    if freq_grid.ndim != 1:
+        raise ValueError("'freq_grid' must be a 1D array or scalar")
+
+    if heights is None:
+        deltas = 0.0001 * np.exp(np.arange(900) / 100.)
+        heights = np.hstack([0., np.cumsum(deltas)])
+    else:
+        heights = np.asarray(heights)
+        if heights.ndim != 1:
+            raise ValueError("'heights' must be a 1D array")
+
     layer_mids = np.hstack([
         0.,
         0.5 * (heights[1:] + heights[:-1])
@@ -1500,30 +1532,42 @@ def _get_atm_prof(profile_func):
         _
         ) = profile_func(apu.Quantity(layer_mids, apu.km))
 
-    earth_radius = 6371.
-    radii = earth_radius + heights  # distance Earth-center to layers
+    adict = {}
+    adict['freq_grid'] = freq_grid
+    adict['heights'] = heights
+    adict['radii'] = EARTH_RADIUS + heights  # distance Earth-center to layers
 
     # handle units
-    temp = temperature.to(apu.K).value
-    press = pressure.to(apu.hPa).value
-    press_w = pressure_water.to(apu.hPa).value
+    adict['temp'] = temp = temperature.to(apu.K).value
+    adict['press'] = press = pressure.to(apu.hPa).value
+    adict['press_w'] = press_w = pressure_water.to(apu.hPa).value
     ref_index = ref_index.to(cnv.dimless).value
     # need to append a value (1.0) to ref_index, aka outer space
-    ref_index = np.hstack([ref_index, 1.])
+    adict['ref_index'] = np.hstack([ref_index, 1.])
 
-    return radii, heights, temp, press, press_w, ref_index
+    atten_dry_db = np.zeros((heights.size, freq_grid.size), dtype=np.float64)
+    atten_wet_db = np.zeros((heights.size, freq_grid.size), dtype=np.float64)
+
+    for idx in range(len(heights)):
+        atten_dry_db[idx], atten_wet_db[idx] = _atten_specific_annex1(
+            freq_grid, press[idx], press_w[idx], temp[idx]
+            )
+
+    adict['atten_dry_db'] = atten_dry_db
+    adict['atten_wet_db'] = atten_wet_db
+    adict['atten_db'] = atten_dry_db + atten_wet_db
+
+    return adict
 
 
 def _prepare_path(
-        elev, obs_alt, profile_func,
+        elev, obs_alt,
+        radii, heights, ref_index,
         max_path_length=1000., max_arc_length=180.
         ):
 
-    ret = _get_atm_prof(profile_func)
-    radii, heights, temp, press, press_w, ref_index = ret
-
     # the algorithm below will fail, if observer is *on* the smallest height
-    obs_alt = max([1.e-9, obs_alt / 1000.])
+    obs_alt = max([1.e-9, obs_alt])
 
     start_i = np.searchsorted(heights, obs_alt)
     max_i = len(heights) - 1
@@ -1539,24 +1583,17 @@ def _prepare_path(
         ref_index,
         )
 
-    return path_params, refraction, is_space_path, (
-        temp[path_params.layer_idx],
-        press[path_params.layer_idx],
-        press_w[path_params.layer_idx],
-        ref_index[path_params.layer_idx],
-        )
+    return path_params, refraction, is_space_path
 
 
 def _path_endpoint(
-        elev, obs_alt, profile_func,
+        elev, obs_alt,
+        radii, heights, ref_index,
         max_path_length=1000., max_arc_length=180.
         ):
 
-    ret = _get_atm_prof(profile_func)
-    radii, heights, temp, press, press_w, ref_index = ret
-
     # the algorithm below will fail, if observer is *on* the smallest height
-    obs_alt = max([1.e-9, obs_alt / 1000.])
+    obs_alt = max([1.e-9, obs_alt])
 
     start_i = np.searchsorted(heights, obs_alt)
     max_i = len(heights) - 1
@@ -1582,16 +1619,15 @@ def _path_endpoint(
 
 
 @utils.ranged_quantity_input(
-    freq_grid=(1.e-30, 1000, apu.GHz),
     elevation=(-90, 90, apu.deg),
-    obs_alt=(0, None, apu.m),
+    obs_alt=(0, None, apu.km),
     t_bg=(1.e-30, None, apu.K),
     max_arc_length=(1.e-30, 180., apu.deg),
     max_path_length=(1.e-30, None, apu.km),
     strip_input_units=True, output_unit=(cnv.dB, apu.deg, apu.K)
     )
 def atten_slant_annex1(
-        freq_grid, elevation, obs_alt, profile_func,
+        elevation, obs_alt, atm_layers_dict, do_tebb=True,
         t_bg=2.73 * apu.K,
         max_arc_length=180. * apu.deg,
         max_path_length=1000. * apu.km,
@@ -1603,15 +1639,14 @@ def atten_slant_annex1(
 
     Parameters
     ----------
-    freq_grid : `~astropy.units.Quantity`
-        Frequencies at which to calculate line-width shapes [GHz]
-    elev : `~astropy.units.Quantity`, scalar
+    elevation : `~astropy.units.Quantity`, scalar
         (Apparent) elevation of source as seen from observer [deg]
     obs_alt : `~astropy.units.Quantity`, scalar
-        Height of observer above sea-level [m]
-    profile_func : func
-        A height profile function having the same signature as
-        `~pycraf.atm.profile_standard`
+        Height of observer above sea-level [km]
+    atm_layers_dict : dict
+        TODO
+    do_tebb : boolean
+        TODO
     t_bg : `~astropy.units.Quantity`, scalar, optional
         Background temperature, i.e. temperature just after the outermost
         layer (default: 2.73 K)
@@ -1622,6 +1657,9 @@ def atten_slant_annex1(
     max_path_length : `~astropy.units.Quantity`, scalar
         Maximal length of path before stopping iteration [km]
         (default: 1000 km; useful for terrestrial paths)
+    max_arc_length : `~astropy.units.Quantity`, scalar
+        Maximal arc of path before stopping iteration [deg]
+        (default: 180 deg; useful for terrestrial paths)
 
     Returns
     -------
@@ -1636,11 +1674,6 @@ def atten_slant_annex1(
 
     Notes
     -----
-    Although the `profile_func` must have the same signature as
-    `~pycraf.atm.profile_standard`, which is one of the standardized
-    atmospheric height profiles, only temperature, total pressure and
-    water vapor pressure are needed here, i.e., `profile_func` may return
-    dummy values for the rest.
     '''
 
     if not isinstance(elevation, numbers.Real):
@@ -1651,42 +1684,42 @@ def atten_slant_annex1(
         raise TypeError('t_bg must be a scalar float')
     if not isinstance(max_path_length, numbers.Real):
         raise TypeError('max_path_length must be a scalar float')
+    if not isinstance(max_arc_length, numbers.Real):
+        raise TypeError('max_arc_length must be a scalar float')
 
-    freq_grid = np.atleast_1d(freq_grid)
-    _freq = freq_grid
-    _elev = elevation
-    _alt = obs_alt
-    _t_bg = t_bg
-    _max_plen = max_path_length
-    _max_alen = max_arc_length
+    adict = atm_layers_dict
 
-    total_atten_db = np.zeros(freq_grid.shape, dtype=np.float64)
-    tebb = np.ones(freq_grid.shape, dtype=np.float64) * _t_bg
+    tebb = np.ones(adict['freq_grid'].shape, dtype=np.float64) * t_bg
 
-    path_params, refraction, is_space_path, weather = _prepare_path(
-        _elev, _alt, profile_func,
-        max_path_length=_max_plen, max_arc_length=_max_alen,
+    path_params, refraction, is_space_path = _prepare_path(
+        elevation, obs_alt,
+        adict['radii'], adict['heights'], adict['ref_index'],
+        max_path_length=max_path_length, max_arc_length=max_arc_length,
         )
-    temp, press, press_w, refractive_index = weather
 
     # do backward raytracing (to allow tebb calculation); this makes only
     # sense if we have a path that goes to space!
 
-    for idx, a_n in list(enumerate(path_params.a_n))[::-1]:
+    atten_db = adict['atten_db']
+    temp = adict['temp']
+    total_atten_db = np.sum(
+        atten_db[path_params.layer_idx] *
+        path_params.a_n[:, np.newaxis],
+        axis=0,
+        )
 
-        # unfortunately, atten_specific_annex1 needs floats for weather params
-        atten_dry, atten_wet = _atten_specific_annex1(
-            _freq, press[idx], press_w[idx], temp[idx]
-            )
-        gamma_n = atten_dry + atten_wet
-        total_atten_db += gamma_n * a_n
+    # TODO: do the following in cython?
+    if is_space_path and do_tebb:
+        for idx, lidx in list(enumerate(path_params.layer_idx))[::-1]:
 
-        # need to calculate (linear) atten per layer for tebb
-        gamma_n_lin = 10 ** (-gamma_n * a_n / 10.)
-        tebb *= gamma_n_lin
-        tebb += (1. - gamma_n_lin) * temp[idx]
+            # need to calculate (linear) atten per layer for tebb
+            atten_tot_lin = 10 ** (
+                -atten_db[lidx] * path_params.a_n[idx] / 10.
+                )
+            tebb *= atten_tot_lin
+            tebb += (1. - atten_tot_lin) * temp[lidx]
 
-    if not is_space_path:
+    else:
         tebb[...] = np.nan
 
     return total_atten_db, refraction, tebb

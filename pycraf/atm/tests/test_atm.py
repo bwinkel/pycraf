@@ -567,11 +567,16 @@ def test_atten_terrestrial():
         )
 
 
+# def test_atm_layers():
+# TODO
+
 def test_atten_slant_annex1_space():
 
+    freq_grid = np.logspace(1, 2, 5) * apu.GHz
+    atm_layers_cache = atm.atm_layers(freq_grid, atm.profile_standard)
+
     atten, refract, tebb = atm.atten_slant_annex1(
-        np.logspace(1, 2, 5) * apu.GHz, 30 * apu.deg, 400 * apu.m,
-        atm.profile_standard,
+        30 * apu.deg, 400 * apu.m, atm_layers_cache
         )
 
     print(atten, refract, tebb)
@@ -597,9 +602,12 @@ def test_atten_slant_annex1_space():
 
 def test_atten_slant_annex1_nonspace():
 
+    freq_grid = np.logspace(1, 2, 5) * apu.GHz
+    atm_layers_cache = atm.atm_layers(freq_grid, atm.profile_standard)
+
     atten, refract, tebb = atm.atten_slant_annex1(
-        np.logspace(1, 2, 5) * apu.GHz, 5 * apu.deg, 10 * apu.m,
-        atm.profile_standard, max_path_length=10 * apu.km
+        5 * apu.deg, 10 * apu.m, atm_layers_cache,
+        max_path_length=10 * apu.km
         )
 
     print(atten, refract, tebb)
@@ -664,9 +672,15 @@ def test_prepare_path_pathlength():
     Test max_path_len functionality.
     '''
 
+    freq_grid = [1] * apu.GHz  # frequency not important here
+    atm_layers_cache = atm.atm_layers(freq_grid, atm.profile_standard)
+    radii = atm_layers_cache['radii']
+    heights = atm_layers_cache['heights']
+    ref_index = atm_layers_cache['ref_index']
+
     # first test some basic properties
-    path_params, refraction, is_space_path, weather = atm.atm._prepare_path(
-        90, 0, atm.profile_standard,
+    path_params, refraction, is_space_path = atm.atm._prepare_path(
+        90, 0, radii, heights, ref_index,
         max_path_length=1000.
         )
 
@@ -679,13 +693,13 @@ def test_prepare_path_pathlength():
     assert_quantity_allclose(refraction, 0.0, atol=1.e-6)
 
     for p in PATH_CASES_A:
-        elev, obsalt, max_plen = p[:3]
+        elev, obsalt_m, max_plen = p[:3]
         desired_p = p[3:]
-        pp, refraction, is_space_path, weather = atm.atm._prepare_path(
-            elev, obsalt, atm.profile_standard,
+        pp, refraction, is_space_path = atm.atm._prepare_path(
+            elev, obsalt_m / 1000., radii, heights, ref_index,
             max_path_length=max_plen
             )
-        temp, press, press_w, refractive_index = weather
+
         # elev, obs_alt, max_plen, actual_plen, a_n, delta_n, h_n, refraction
         actual_p = (
             np.sum(pp.a_n), pp.a_n[-1], pp.delta_n[-1], pp.h_n[-1], refraction
@@ -699,14 +713,20 @@ def test_prepare_path_arclength():
     Test max_arc_len functionality.
     '''
 
+    freq_grid = [1] * apu.GHz  # frequency not important here
+    atm_layers_cache = atm.atm_layers(freq_grid, atm.profile_standard)
+    radii = atm_layers_cache['radii']
+    heights = atm_layers_cache['heights']
+    ref_index = atm_layers_cache['ref_index']
+
     for p in PATH_CASES_B:
-        elev, obsalt, max_alen = p[:3]
+        elev, obsalt_m, max_alen = p[:3]
         desired_p = p[3:]
-        pp, refraction, is_space_path, weather = atm.atm._prepare_path(
-            elev, obsalt, atm.profile_standard,
+        pp, refraction, is_space_path = atm.atm._prepare_path(
+            elev, obsalt_m / 1000., radii, heights, ref_index,
             max_arc_length=max_alen
             )
-        temp, press, press_w, refractive_index = weather
+
         # elev, obs_alt, max_arc_len, a_n, delta_n, h_n, refraction
         actual_p = (pp.a_n[-1], pp.delta_n[-1], pp.h_n[-1], refraction)
         print('{:.8f}, {:.8f}, {:.8f}, {:.8f}'.format(*actual_p))
