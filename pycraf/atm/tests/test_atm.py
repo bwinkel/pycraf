@@ -569,21 +569,6 @@ def test_atten_terrestrial():
 
 def test_atten_slant_annex1_space():
 
-    # from functools import partial
-    # _func = partial(
-    #     atm.atten_slant_annex1,
-    #     profile_func=atm.profile_standard
-    #     )
-
-    # args_list = [
-    #     (1.e-30, None, apu.GHz),
-    #     (-90, 90, apu.deg),
-    #     (1.e-30, None, apu.m),
-    #     (1.e-30, None, apu.K),
-    #     (1.e-30, None, apu.km),
-    #     ]
-    # check_astro_quantities(_func, args_list)
-
     atten, refract, tebb = atm.atten_slant_annex1(
         np.logspace(1, 2, 5) * apu.GHz, 30 * apu.deg, 400 * apu.m,
         atm.profile_standard,
@@ -593,24 +578,24 @@ def test_atten_slant_annex1_space():
     assert_quantity_allclose(
         atten,
         np.array([
-            9.32427390e-02, 2.30870829e-01, 4.24152294e-01, 1.51542218e+02,
-            1.55666239e+00
+            9.37609998e-02, 2.32219409e-01, 4.26610561e-01, 1.52328473e+02,
+            1.56610150e+00
             ]) * cnv.dB
         )
 
     assert_quantity_allclose(
-        refract, Quantity(-0.029619279445, apu.deg)
+        refract, Quantity(-0.02961141, apu.deg)
         )
 
     assert_quantity_allclose(
         tebb,
         Quantity([
-            8.23614491, 16.46300313, 27.30283635, 283.6847787, 83.97722842,
+            8.26672753, 16.54196232, 27.44008871, 283.70789951, 84.3934569
             ], apu.K)
         )
 
 
-def test_atten_slant_annex1_terrestrial():
+def test_atten_slant_annex1_nonspace():
 
     atten, refract, tebb = atm.atten_slant_annex1(
         np.logspace(1, 2, 5) * apu.GHz, 5 * apu.deg, 10 * apu.m,
@@ -621,12 +606,12 @@ def test_atten_slant_annex1_terrestrial():
     assert_quantity_allclose(
         atten,
         np.array([
-            0.12761612, 0.47031675, 0.81873412, 76.40472314, 3.9923821,
+            0.12771283, 0.47079867, 0.81958408, 76.41959749, 3.99730538,
             ]) * cnv.dB
         )
 
     assert_quantity_allclose(
-        refract, Quantity(-0.02458735918, apu.deg)
+        refract, Quantity(-0.024698246, apu.deg)
         )
 
     # Tebb only reasonable for paths into space!
@@ -638,85 +623,49 @@ def test_atten_slant_annex1_terrestrial():
         )
 
 
-PATH_CASES = [
+PATH_CASES_A = [
     # elev, obs_alt, max_plen, actual_plen, a_n, delta_n, h_n, refraction
-    (90, 0, 1000, 79.814165, 0.7942632, 0.0, 79.814165, -0.0),
-    (90, 10, 1000, 79.804165, 0.7942632, 0.0, 79.814165, -0.0),
-    (90, 100, 10, 10, 0.0372818, 0.0, 10.1, -0.0),
-    (-90, 10100, 10, 10, 0.0008338, 0.0, 0.1, -0.0),
-    (45, 3000, 50, 50.0, 0.5229484, 0.00551708, 38.44697228, -0.01212932),
-    (45, 3000, 5, 5.0, 0.0836280, 0.00055439, 6.53637734, -0.00417689),
-    (-45, 3000, 50, 4.24344158, 0.00014147, 0.00047096, 0.0, -0.00598681),
-    (-45, 3000, 5, 4.24344158, 0.00014147, 0.00047096, 0.0, -0.00598681),
-    (-45, 3000, 2, 2.0, 0.00544495, 0.00022192, 1.58591571, -0.00239993),
-    (0.01, 3000, 50, 50.0, 1.05142843, 0.00784422, 3.18673299, -0.06322018),
-    (0.1, 3000, 50, 50.0, 1.82262719, 0.00784412, 3.25905139, -0.06912378),
-    (-0.01, 3000, 50, 50.0, 3.63099920, 0.00784424, 3.17134151, -0.05677150),
-    (-0.1, 3000, 50, 50.0, 3.34827014, 0.00784431, 3.10291331, -0.03900922),
-    (-0.319 - 0.039, 3103, 50, 50.0, 2.04400349, 0.00573838, 2.92954404,
-     -0.11180068),
+    (90, 0, 1000, 80.61641025, 0.80224569, 0., 80.61641025, -0.),
+    (90, 10, 1000, 80.60641025, 0.80224569, 0., 80.61641025, -0.),
+    (90, 100, 10, 10., 0.03728178, 0., 10.1, -0.),
+    (-90, 10100, 10, 10., 0.00083376, 0., 0.1, -0.),
+    (45, 3000, 50, 50., 0.52294406, 0.00551708, 38.44696924, -0.01211820),
+    (45, 3000, 5, 5., 0.08362677, 0.00055439, 6.53637646, -0.00419494),
+    (-45, 3000, 50, 4.24343962, 0.00014147, 0.00047095, 0., -0.00600012),
+    (-45, 3000, 5, 4.24343962, 0.00014147, 0.00047095, 0., -0.00600012),
+    (-45, 3000, 2, 2., 0.00544606, 0.00022192, 1.58591492, -0.00242806),
+    (0.01, 3000, 50, 50., 0.74177076, 0.00784422, 3.18454423, -0.06756602),
+    (0.1, 3000, 50, 50., 1.56698888, 0.00784413, 3.25685427, -0.07273994),
+    (-0.01, 3000, 50, 50., 3.34069529, 0.00784424, 3.16928104, -0.06108040),
+    (-0.1, 3000, 50, 50., 2.33309911, 0.00784434, 3.06440499, -0.10285535),
+    (-0.319 - 0.039, 3103, 50, 50., 13.80612560, 0.00784432, 2.95401998,
+     -0.11288822),
     ]
 
 
-PATH_CASES2 = [
-    # elev, obs_alt, max_plen, actual_plen, a_n, delta_n, h_n, refraction
-    (90, 0, 1000, 80.616410, 0.80224569, 0.0, 80.616410, -0.0),
-    (90, 10, 1000, 80.606410, 0.80224569, 0.0, 80.616410, -0.0),
-    (90, 100, 10, 10., 0.03728178, 0.0, 10.1, -0.0),
-    (-90, 10100, 10, 10., 0.00083376, 0.0, 0.1, -0.0),
-    (45, 3000, 50, 50., 0.52294023, 0.00551708, 38.4469664, -0.0121389),
-    (45, 3000, 5, 5., 0.08362718, 0.000554395, 6.5363768, -0.004186512),
-    (-45, 3000, 50, 4.24343896, 0.00014147, 0.0004709389, 0.0, -0.00602225),
-    (-45, 3000, 5, 4.24343896, 0.00014147, 0.0004709389, 0.0, -0.00602225),
-    (-45, 3000, 2, 2., 0.005446176, 0.000221917, 1.58591483, -0.002435369),
-    (0.01, 3000, 50, 50., 0.741531251, 0.00784422, 3.184543457, -0.06748039),
-    (0.1, 3000, 50, 50., 1.5685714, 0.0078441257, 3.256869969, -0.072623292),
-    (-0.01, 3000, 50, 50., 3.33976156, 0.007844238, 3.16927811, -0.061012597),
-    (-0.1, 3000, 50, 50., 3.189776099, 0.0078443087, 3.10192692, -0.04244031),
-    (-0.319 - 0.039, 3103, 50, 50., 47.03554881, 0.007844311, 2.9866931,
-     -0.035372799),
+# the following is very close to the above cases (~milliarcsecs), not sure
+# where the (small) difference is coming from...; perhaps numerical issues?
+PATH_CASES_B = [
+    # elev, obs_alt, max_delta, a_n, delta_n, h_n, refraction
+    (45, 3000, 0.316105, 0.52287891, 0.00551707, 38.44692292, -0.01211820),
+    (45, 3000, 0.0317645, 0.08363155, 0.00055440, 6.53637984, -0.00419493),
+    (-45, 3000, 0.0317645, 0.00014147, 0.00047095, 0.00000000, -0.00600012),
+    (-45, 3000, 0.0269828, 0.00003832, 0.00047094, 0.00007292, 0.00568725),
+    (-45, 3000, 0.0127149, 0.00544490, 0.00022192, 1.58591574, -0.00242803),
+    (0.01, 3000, 0.4494407, 0.74176822, 0.00784422, 3.18454421, -0.06756602),
+    (0.1, 3000, 0.4494353, 1.56698882, 0.00784413, 3.25685427, -0.07273994),
+    (-0.01, 3000, 0.4494417, 3.34068989, 0.00784424, 3.16928101, -0.06108040),
+    (-0.1, 3000, 0.44944578, 2.33289360, 0.00784431, 3.06440407, -0.10285542),
     ]
 
 
-def test_prepare_path():
+def test_prepare_path_pathlength():
+    '''
+    Test max_path_len functionality.
+    '''
 
     # first test some basic properties
-    path_params, refraction = atm.atm._prepare_path(
-        90, 0, atm.profile_standard,
-        max_path_length=1000.
-        )
-    (
-        press_n, press_w_n, temp_n,
-        a_n, r_n, alpha_n, delta_n, beta_n, h_n
-        ) = np.array(path_params).T
-    # sum over a_n (path lengths per layer) must be smaller than atm params
-    # max height
-    assert_quantity_allclose(np.sum(a_n), 79.814165)
-    assert_quantity_allclose(len(a_n), 900)
-
-    # why is this not exactly zero?
-    assert_quantity_allclose(refraction, 0.0, atol=1.e-6)
-
-    for p in PATH_CASES:
-        elev, obsalt, max_plen = p[:3]
-        desired_p = p[3:]
-        path_params, refraction = atm.atm._prepare_path(
-            elev, obsalt, atm.profile_standard,
-            max_path_length=max_plen
-            )
-        pp = np.array(path_params)
-        actual_p = (
-            np.sum(pp[:, 3]), pp[-1, 3], pp[-1, 6], pp[-1, 8], refraction
-            )
-        print(actual_p)
-        print(90 - np.degrees(pp[-1, 5]), 90 - np.degrees(pp[-1, 7]))
-        assert_quantity_allclose(actual_p, desired_p, atol=1.e-6)
-
-
-def test_prepare_path2():
-
-    # first test some basic properties
-    path_params, refraction, is_space_path, weather = atm.atm._prepare_path2(
+    path_params, refraction, is_space_path, weather = atm.atm._prepare_path(
         90, 0, atm.profile_standard,
         max_path_length=1000.
         )
@@ -727,22 +676,40 @@ def test_prepare_path2():
     assert_quantity_allclose(np.sum(path_params.a_n), 80.616410251)
     assert_quantity_allclose(len(path_params.a_n), 901)
 
-    # why is this not exactly zero?
     assert_quantity_allclose(refraction, 0.0, atol=1.e-6)
 
-    for p in PATH_CASES2:
+    for p in PATH_CASES_A:
         elev, obsalt, max_plen = p[:3]
         desired_p = p[3:]
-        pp, refraction, is_space_path, weather = atm.atm._prepare_path2(
+        pp, refraction, is_space_path, weather = atm.atm._prepare_path(
             elev, obsalt, atm.profile_standard,
             max_path_length=max_plen
             )
         temp, press, press_w, refractive_index = weather
         # elev, obs_alt, max_plen, actual_plen, a_n, delta_n, h_n, refraction
         actual_p = (
-            np.sum(pp.a_n), pp.a_n[-1], pp.delta_n[-1], pp.h_i[-1], refraction
+            np.sum(pp.a_n), pp.a_n[-1], pp.delta_n[-1], pp.h_n[-1], refraction
             )
-        print(actual_p)
+        print('{:.8f}, {:.8f}, {:.8f}, {:.8f}, {:.8f}'.format(*actual_p))
+        assert_quantity_allclose(actual_p, desired_p, atol=1.e-6)
+
+
+def test_prepare_path_arclength():
+    '''
+    Test max_arc_len functionality.
+    '''
+
+    for p in PATH_CASES_B:
+        elev, obsalt, max_alen = p[:3]
+        desired_p = p[3:]
+        pp, refraction, is_space_path, weather = atm.atm._prepare_path(
+            elev, obsalt, atm.profile_standard,
+            max_arc_length=max_alen
+            )
+        temp, press, press_w, refractive_index = weather
+        # elev, obs_alt, max_arc_len, a_n, delta_n, h_n, refraction
+        actual_p = (pp.a_n[-1], pp.delta_n[-1], pp.h_n[-1], refraction)
+        print('{:.8f}, {:.8f}, {:.8f}, {:.8f}'.format(*actual_p))
         assert_quantity_allclose(actual_p, desired_p, atol=1.e-6)
 
 

@@ -14,7 +14,7 @@ from astropy import units as apu
 from astropy.utils.data import get_pkg_data_filename
 from .. import conversions as cnv
 from .. import utils
-from .atm_helper import path_helper_cython
+from .atm_helper import path_helper_cython, path_endpoint_cython
 
 
 __all__ = [
@@ -1477,269 +1477,6 @@ def atten_terrestrial(specific_atten, path_length):
     return specific_atten * path_length
 
 
-def _prepare_path(elev, obs_alt, profile_func, max_path_length=1000.):
-    '''
-    Helper function to construct the path parameters; see `ITU-R P.676-10
-    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Annex 1.
-
-    Parameters
-    ----------
-    elev : float
-        (Apparent) elevation of source as seen from observer [deg]
-    obs_alt : float
-        Height of observer above sea-level [m]
-    profile_func : func
-        A height profile function having the same signature as
-        `~pycraf.atm.profile_standard`
-    max_path_length : float, optional
-        Maximal length of path before stopping iteration [km]
-        (default: 1000 km; useful for terrestrial paths)
-
-    Returns
-    -------
-    layer_params : list
-        List of tuples with the following quantities for each height layer `n`:
-
-        0) press_n - Total pressure [hPa]
-        1) press_w_n - Water vapor partial pressure [hPa]
-        2) temp_n - Temperature [K]
-        3) a_n - Path length [km]
-        4) r_n - Radius (i.e., distance to Earth center) [km]
-        5) alpha_n - exit angle [rad]
-        6) delta_n - angle between current normal vector and first normal
-           vector (aka projected angular distance to starting point) [rad]
-        7) beta_n - entry angle [rad]
-        8) h_n - height above sea-level [km]
-
-    Refraction : float
-        Offset with respect to a hypothetical straight path, i.e., the
-        correction between real and apparent source elevation [deg]
-
-    Notes
-    -----
-    Although the `profile_func` must have the same signature as
-    `~pycraf.atm.profile_standard`, which is one of the standardized
-    atmospheric height profiles, only temperature, total pressure and
-    water vapor pressure are needed here, i.e., `profile_func` may return
-    dummy values for the rest.
-    '''
-
-    # construct height layers
-    # deltas = 0.0001 * np.exp(np.arange(922) / 100.)
-    # atm profiles only up to 80 km...
-    deltas = 0.0001 * np.exp(np.arange(900) / 100.)
-    heights = np.hstack([0., np.cumsum(deltas)])
-
-    # the algorithm below will fail, if observer is *on* the smallest height
-    obs_alt = max([1.e-6, obs_alt])
-
-    # add observer height (radius) to the layer heights, for higher accuracy
-    obs_idx = np.searchsorted(heights, obs_alt / 1000.)
-    heights = np.hstack([
-        heights[:obs_idx],
-        obs_alt / 1000.,
-        heights[obs_idx:]
-        ])
-    deltas = np.diff(heights)
-    heights = heights[:-1]
-
-    # print(heights)
-    # heights = np.cumsum(deltas)
-
-    # radius calculation
-    # TODO: do we need to account for non-spherical Earth?
-    # probably not - some tests suggest that the relative error is < 1e-6
-    earth_radius = 6371.
-    radii = earth_radius + heights  # distance Earth-center to layers
-
-    (
-        temperature,
-        pressure,
-        rho_water,
-        pressure_water,
-        ref_index,
-        humidity_water,
-        humidity_ice
-        ) = profile_func(apu.Quantity(heights, apu.km))
-    # handle units
-    temperature = temperature.to(apu.K).value
-    pressure = pressure.to(apu.hPa).value
-    rho_water = rho_water.to(apu.g / apu.m ** 3).value
-    pressure_water = pressure_water.to(apu.hPa).value
-    ref_index = ref_index.to(cnv.dimless).value
-    humidity_water = humidity_water.to(apu.percent).value
-    humidity_ice = humidity_ice.to(apu.percent).value
-
-    def fix_arg(arg):
-        '''
-        Ensure argument is in [-1., +1.] for arcsin, arccos functions.
-        '''
-
-        if arg < -1.:
-            return -1.
-        elif arg > 1.:
-            return 1.
-        else:
-            return arg
-
-    # calculate layer path lengths (Equation 17 to 19)
-    # all angles in rad
-
-    # angle of the normal vector (r_n) at current layer w.r.t. zenith (r_1):
-    delta_n = 0
-    path_length = 0
-
-    # find start layer index that is associated with observers altitude
-    start_i = np.searchsorted(heights, obs_alt / 1000.)
-
-    # we will store a_n, gamma_n, and temperature for each layer, to allow
-    # Tebb calculation
-    path_params = []
-    path_params.append((
-        pressure[start_i], pressure_water[start_i], temperature[start_i],
-        0., earth_radius + obs_alt / 1000., np.nan, 0.,
-        np.radians(90. - elev), obs_alt / 1000.,
-        ))
-
-    # TODO: this is certainly a case for cython
-    break_imminent = False
-
-    # account for both cases
-    beta_n = beta_0 = np.radians(90. - elev)  # initial value
-    alpha_n = alpha_0 = np.radians(90. - elev)  # initial value
-
-    i = start_i
-    while i > 0 and i < len(heights) - 1:
-
-        r_n = radii[i]
-        d_n = deltas[i]
-
-        k = np.tan(np.pi / 2 - beta_n - delta_n)
-        t0 = -r_n * k / 2 / (k ** 2 + 1)
-        t1 = (
-            k ** 2 * r_n ** 2 /
-            4 / (k ** 2 + 1) ** 2
-            )
-        t2 = (r_n ** 2 - (r_n - d_n) ** 2) / (k ** 2 + 1)
-        cond = (t1 >= t2) and (t0 + np.sqrt(t1 - t2) > 0)
-
-        if not cond:  # aka "elev >= 0"
-
-            a_n = -r_n * np.cos(beta_n) + np.sqrt(
-                r_n ** 2 * np.cos(beta_n) ** 2 + d_n * (d_n + 2 * r_n)
-                )
-
-            path_length += a_n
-            if path_length >= max_path_length:
-                # make sure that path_length is exactly max_path_length
-                a_n -= path_length - max_path_length
-                d_n = -r_n + np.sqrt(
-                    r_n ** 2 + a_n ** 2 +
-                    2 * a_n * r_n * np.cos(beta_n)
-                    )
-                break_imminent = True
-
-            alpha_n = np.pi - np.arccos(fix_arg(
-                (-a_n ** 2 - 2 * r_n * d_n - d_n ** 2) /
-                2. / a_n / (r_n + d_n)
-                ))
-            delta_n += beta_n - alpha_n
-            if delta_n < 0:
-                delta_n = alpha_n = 0.
-            beta_n = np.arcsin(
-                fix_arg(ref_index[i] / ref_index[i + 1] * np.sin(alpha_n))
-                )
-
-            r_i = r_n + d_n
-            h_i = r_n + d_n - earth_radius
-            press_n = pressure[i]
-            press_w_n = pressure_water[i]
-            temp_n = temperature[i]
-
-            # update refraction every time
-            refraction = - np.degrees(beta_n + delta_n - beta_0)
-
-            i += 1
-
-        else:
-
-            # r_n = radii[i - 1]  # really r_n-1
-            # d_n = deltas[i - 1]  # really d_n-1
-
-            # a_n = (r_n + d_n) * np.cos(np.pi - alpha_n) - np.sqrt(
-            #     (r_n + d_n) ** 2 * np.cos(np.pi - alpha_n) ** 2 -
-            #     d_n * (d_n + 2 * r_n)
-            #     )
-
-            # the following is equivalent! it has the advantage that
-            # we can infer d_n from a shortened a_n in the break condition
-            # r_n = radii[i]  # == r_n-1 + d_n-1 --> replace all r_n in
-            # original formula with r_n - d_n
-            d_n = deltas[i - 1]
-
-            _tmp = (
-                r_n ** 2 * np.cos(np.pi - alpha_n) ** 2 -
-                d_n * (-d_n + 2 * r_n)
-                )
-            if _tmp < 0:
-                _tmp = 0.
-            a_n = r_n * np.cos(np.pi - alpha_n) - np.sqrt(_tmp)
-
-            path_length += a_n
-            if path_length >= max_path_length:
-                a_n -= path_length - max_path_length
-                d_n = r_n - np.sqrt(
-                    r_n ** 2 + a_n ** 2 -
-                    2 * a_n * r_n * np.cos(np.pi - alpha_n)
-                    )
-                break_imminent = True
-
-            # beta_n = np.pi - np.arccos(fix_arg(
-            #     (d_n * (d_n + 2 * r_n) - a_n ** 2) / 2. / r_n / a_n
-            #     ))
-
-            # there is a precision problem (due to the squares in
-            # beta_n formula); if a_n - d_n is too small, we'll get a
-            # beta_n that is significantly different from pi
-            if np.abs(a_n - d_n) < 1.e-8:
-                a_n = d_n
-                beta_n = np.pi
-            else:
-                beta_n = np.pi - np.arccos(fix_arg(
-                    (d_n * (-d_n + 2 * r_n) - a_n ** 2) /
-                    2. / (r_n - d_n) / a_n
-                    ))
-
-            delta_n += alpha_n - beta_n
-            if delta_n < 0.:
-                delta_n = 0.
-                beta_n = np.pi
-
-            alpha_n = np.pi - np.arcsin(
-                fix_arg(ref_index[i] / ref_index[i - 1] * np.sin(beta_n))
-                )
-
-            r_i = r_n - d_n
-            h_i = r_n - d_n - earth_radius
-            press_n = pressure[i - 1]
-            press_w_n = pressure_water[i - 1]
-            temp_n = temperature[i - 1]
-
-            refraction = - np.degrees(alpha_n + delta_n - alpha_0)  # TODO
-
-            i -= 1
-
-        path_params.append((
-            press_n, press_w_n, temp_n, a_n, r_i,
-            alpha_n, delta_n, beta_n, h_i
-            ))
-
-        if break_imminent:
-            break
-
-    return path_params, refraction
-
-
 @lru_cache(maxsize=8)
 def _get_atm_prof(profile_func):
     '''
@@ -1748,6 +1485,10 @@ def _get_atm_prof(profile_func):
 
     deltas = 0.0001 * np.exp(np.arange(900) / 100.)
     heights = np.hstack([0., np.cumsum(deltas)])
+    layer_mids = np.hstack([
+        0.,
+        0.5 * (heights[1:] + heights[:-1])
+        ])
 
     (
         temperature,
@@ -1757,7 +1498,7 @@ def _get_atm_prof(profile_func):
         ref_index,
         _,
         _
-        ) = profile_func(apu.Quantity(heights, apu.km))
+        ) = profile_func(apu.Quantity(layer_mids, apu.km))
 
     earth_radius = 6371.
     radii = earth_radius + heights  # distance Earth-center to layers
@@ -1767,14 +1508,19 @@ def _get_atm_prof(profile_func):
     press = pressure.to(apu.hPa).value
     press_w = pressure_water.to(apu.hPa).value
     ref_index = ref_index.to(cnv.dimless).value
+    # need to append a value (1.0) to ref_index, aka outer space
+    ref_index = np.hstack([ref_index, 1.])
 
-    return radii, heights, deltas, temp, press, press_w, ref_index
+    return radii, heights, temp, press, press_w, ref_index
 
 
-def _prepare_path2(elev, obs_alt, profile_func, max_path_length=1000.):
+def _prepare_path(
+        elev, obs_alt, profile_func,
+        max_path_length=1000., max_arc_length=180.
+        ):
 
     ret = _get_atm_prof(profile_func)
-    radii, heights, deltas, temp, press, press_w, ref_index = ret
+    radii, heights, temp, press, press_w, ref_index = ret
 
     # the algorithm below will fail, if observer is *on* the smallest height
     obs_alt = max([1.e-9, obs_alt / 1000.])
@@ -1788,8 +1534,8 @@ def _prepare_path2(elev, obs_alt, profile_func, max_path_length=1000.):
         elev,  # deg
         obs_alt,  # km
         max_path_length,  # km
+        max_arc_length,  # deg
         radii,
-        deltas,
         ref_index,
         )
 
@@ -1801,17 +1547,54 @@ def _prepare_path2(elev, obs_alt, profile_func, max_path_length=1000.):
         )
 
 
+def _path_endpoint(
+        elev, obs_alt, profile_func,
+        max_path_length=1000., max_arc_length=180.
+        ):
+
+    ret = _get_atm_prof(profile_func)
+    radii, heights, temp, press, press_w, ref_index = ret
+
+    # the algorithm below will fail, if observer is *on* the smallest height
+    obs_alt = max([1.e-9, obs_alt / 1000.])
+
+    start_i = np.searchsorted(heights, obs_alt)
+    max_i = len(heights) - 1
+
+    ret = path_endpoint_cython(
+        start_i,
+        max_i,
+        elev,  # deg
+        obs_alt,  # km
+        max_path_length,  # km
+        max_arc_length,  # deg
+        radii,
+        ref_index,
+        )
+
+    # (
+    #     a_n, r_n, h_n, x_n, y_n, alpha_n, beta_n, delta_n, layer_idx,
+    #     refraction,
+    #     is_space_path,
+    #     ) = ret
+
+    return ret
+
+
 @utils.ranged_quantity_input(
     freq_grid=(1.e-30, 1000, apu.GHz),
     elevation=(-90, 90, apu.deg),
     obs_alt=(0, None, apu.m),
     t_bg=(1.e-30, None, apu.K),
+    max_arc_length=(1.e-30, 180., apu.deg),
     max_path_length=(1.e-30, None, apu.km),
     strip_input_units=True, output_unit=(cnv.dB, apu.deg, apu.K)
     )
 def atten_slant_annex1(
         freq_grid, elevation, obs_alt, profile_func,
-        t_bg=2.73 * apu.K, max_path_length=1000. * apu.km
+        t_bg=2.73 * apu.K,
+        max_arc_length=180. * apu.deg,
+        max_path_length=1000. * apu.km,
         ):
     '''
     Path attenuation for a slant path through full atmosphere according to
@@ -1875,31 +1658,14 @@ def atten_slant_annex1(
     _alt = obs_alt
     _t_bg = t_bg
     _max_plen = max_path_length
+    _max_alen = max_arc_length
 
     total_atten_db = np.zeros(freq_grid.shape, dtype=np.float64)
     tebb = np.ones(freq_grid.shape, dtype=np.float64) * _t_bg
 
-    # path_params, refraction = _prepare_path(
-    #     _elev, _alt, profile_func, max_path_length=_max_plen
-    #     )
-
-    # # do backward raytracing (to allow tebb calculation)
-
-    # for press_n, press_w_n, temp_n, a_n, _, _, _, _, _ in path_params[::-1]:
-
-    #     atten_dry, atten_wet = _atten_specific_annex1(
-    #         _freq, press_n, press_w_n, temp_n
-    #     )
-    #     gamma_n = atten_dry + atten_wet
-    #     total_atten_db += gamma_n * a_n
-
-    #     # need to calculate (linear) atten per layer for tebb
-    #     gamma_n_lin = 10 ** (-gamma_n * a_n / 10.)
-    #     tebb *= gamma_n_lin
-    #     tebb += (1. - gamma_n_lin) * temp_n
-
-    path_params, refraction, is_space_path, weather = _prepare_path2(
-        _elev, _alt, profile_func, max_path_length=_max_plen
+    path_params, refraction, is_space_path, weather = _prepare_path(
+        _elev, _alt, profile_func,
+        max_path_length=_max_plen, max_arc_length=_max_alen,
         )
     temp, press, press_w, refractive_index = weather
 
@@ -1908,6 +1674,7 @@ def atten_slant_annex1(
 
     for idx, a_n in list(enumerate(path_params.a_n))[::-1]:
 
+        # unfortunately, atten_specific_annex1 needs floats for weather params
         atten_dry, atten_wet = _atten_specific_annex1(
             _freq, press[idx], press_w[idx], temp[idx]
             )
