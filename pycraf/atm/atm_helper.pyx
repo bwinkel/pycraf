@@ -19,7 +19,7 @@ import numpy as np
 
 np.import_array()
 
-__all__ = ['path_helper_cython', 'path_endpoint_cython', 'EARTH_RADIUS']
+__all__ = ['path_helper_cython', 'path_endpoint_cython']
 
 
 cdef double DEG2RAD = M_PI / 180.

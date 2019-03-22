@@ -18,6 +18,7 @@ from .atm_helper import path_helper_cython, path_endpoint_cython
 
 
 __all__ = [
+    'EARTH_RADIUS',
     'refractive_index', 'saturation_water_pressure',
     'pressure_water_from_humidity', 'humidity_from_pressure_water',
     'pressure_water_from_rho_water', 'rho_water_from_pressure_water',
@@ -1616,6 +1617,55 @@ def _path_endpoint(
     #     ) = ret
 
     return ret
+
+
+def _find_elevation(
+        elev_init, obs_alt, target_alt, arc_length,
+        radii, heights, ref_index, niter=200, interval=50, stepsize=2.
+        ):
+
+    from scipy.optimize import basinhopping
+
+    def func(x):
+        elev = x[0]
+        ret = _path_endpoint(
+            elev, obs_alt, radii, heights, ref_index,
+            max_arc_length=arc_length,
+            )
+        h_n = ret[2]
+        return h_n
+
+    def opt_func(x):
+        return abs(func(x) - target_alt)
+
+    # need to avoid h_n == 0 and elevations below or above -90 or 90
+    class MyBounds(object):
+
+        def __init__(self, xmax=[90.], xmin=[-90]):
+            self.xmax = np.array(xmax)
+            self.xmin = np.array(xmin)
+
+        def __call__(self, **kwargs):
+            x = kwargs["x_new"]
+            tmax = bool(np.all(x <= self.xmax))
+            tmin = bool(np.all(x >= self.xmin))
+            hmin = bool(np.all(func(x_i) > 0 for x_i in x))
+            return tmax and tmin and hmin
+
+    x0 = np.array([elev_init])
+    minimizer_kwargs = {'method': 'BFGS'}
+    mybounds = MyBounds()
+    res = basinhopping(
+        opt_func, x0,
+        T=0.05, minimizer_kwargs=minimizer_kwargs,
+        accept_test=mybounds,
+        niter=niter, interval=interval, stepsize=stepsize,
+        )
+
+    elev_final = res['x'][0]
+    h_final = func(res['x'])
+
+    return elev_final, h_final
 
 
 @utils.ranged_quantity_input(
