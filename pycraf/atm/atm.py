@@ -1612,6 +1612,7 @@ def _path_endpoint(
 
     # (
     #     a_n, r_n, h_n, x_n, y_n, alpha_n, beta_n, delta_n, layer_idx,
+    #     path_length,  # arc_length,
     #     refraction,
     #     is_space_path,
     #     ) = ret
@@ -1645,51 +1646,17 @@ def _find_elevation(
             abs(h_n - target_alt) +
             # make sure, arc length is compatible with condition
             abs(np.degrees(arc_len) - arc_length) +
-            # add a penalty term:
-            # path length must be > projected earth surface length
-            # (
-            #     0.
-            #     if a_tot > (EARTH_RADIUS * arc_len) else
-            #     abs(a_tot - (EARTH_RADIUS * arc_len))
-            #     )
+            # bound elevation to interval [-90, +90]
             (0 if elev >= -90 else -90 - elev) +
             (0 if elev <= 90 else elev - 90)
             )
-        # print(h_n, arc_len, a_tot, abs(h_n - target_alt), abs(np.degrees(arc_len) - arc_length), mmin)
         return mmin
-
-    # need to avoid h_n == 0 and elevations below or above -90 or 90
-    class MyBounds(object):
-
-        def __init__(self, xmax=90., xmin=-90):
-            self.xmax = xmax
-            self.xmin = xmin
-
-        def __call__(self, **kwargs):
-            x = kwargs["x_new"][0]
-            h_n, arc_len, a_tot = func(kwargs["x_new"])
-            tmax = x <= self.xmax
-            tmin = x >= self.xmin
-            hmin = h_n >= 0
-            # pmin = a_tot > EARTH_RADIUS * arc_len
-            # print(x, tmax, tmin, hmin, pmin)
-            # x = kwargs["x_new"]
-            # print(x)
-            # h_n, arc_len, a_tot = np.array([func(x_i) for x_i in x]).T
-            # tmax = bool(np.all(x <= self.xmax))
-            # tmin = bool(np.all(x >= self.xmin))
-            # hmin = bool(np.all(h_n >= 0))
-            # pmin = bool(np.all(a_tot > (EARTH_RADIUS * arc_len)))
-            # print(x, tmax, tmin, hmin, pmin)
-            return tmax and tmin and hmin  # and pmin
 
     x0 = np.array([elev_init])
     minimizer_kwargs = {'method': 'BFGS'}
-    mybounds = MyBounds()
     res = basinhopping(
         opt_func, x0,
         T=0.05, minimizer_kwargs=minimizer_kwargs,
-        accept_test=mybounds,
         niter=niter, interval=interval, stepsize=stepsize,
         )
 
