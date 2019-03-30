@@ -1633,24 +1633,55 @@ def _find_elevation(
             max_arc_length=arc_length,
             )
         h_n = ret[2]
-        return h_n
+        arc_len = ret[7]
+        a_tot = ret[9]
+        return h_n, arc_len, a_tot
 
     def opt_func(x):
-        return abs(func(x) - target_alt)
+        elev = x[0]
+        h_n, arc_len, a_tot = func(x)
+        mmin = (
+            # primary optimization aim
+            abs(h_n - target_alt) +
+            # make sure, arc length is compatible with condition
+            abs(np.degrees(arc_len) - arc_length) +
+            # add a penalty term:
+            # path length must be > projected earth surface length
+            # (
+            #     0.
+            #     if a_tot > (EARTH_RADIUS * arc_len) else
+            #     abs(a_tot - (EARTH_RADIUS * arc_len))
+            #     )
+            (0 if elev >= -90 else -90 - elev) +
+            (0 if elev <= 90 else elev - 90)
+            )
+        # print(h_n, arc_len, a_tot, abs(h_n - target_alt), abs(np.degrees(arc_len) - arc_length), mmin)
+        return mmin
 
     # need to avoid h_n == 0 and elevations below or above -90 or 90
     class MyBounds(object):
 
-        def __init__(self, xmax=[90.], xmin=[-90]):
-            self.xmax = np.array(xmax)
-            self.xmin = np.array(xmin)
+        def __init__(self, xmax=90., xmin=-90):
+            self.xmax = xmax
+            self.xmin = xmin
 
         def __call__(self, **kwargs):
-            x = kwargs["x_new"]
-            tmax = bool(np.all(x <= self.xmax))
-            tmin = bool(np.all(x >= self.xmin))
-            hmin = bool(np.all(func(x_i) > 0 for x_i in x))
-            return tmax and tmin and hmin
+            x = kwargs["x_new"][0]
+            h_n, arc_len, a_tot = func(kwargs["x_new"])
+            tmax = x <= self.xmax
+            tmin = x >= self.xmin
+            hmin = h_n >= 0
+            # pmin = a_tot > EARTH_RADIUS * arc_len
+            # print(x, tmax, tmin, hmin, pmin)
+            # x = kwargs["x_new"]
+            # print(x)
+            # h_n, arc_len, a_tot = np.array([func(x_i) for x_i in x]).T
+            # tmax = bool(np.all(x <= self.xmax))
+            # tmin = bool(np.all(x >= self.xmin))
+            # hmin = bool(np.all(h_n >= 0))
+            # pmin = bool(np.all(a_tot > (EARTH_RADIUS * arc_len)))
+            # print(x, tmax, tmin, hmin, pmin)
+            return tmax and tmin and hmin  # and pmin
 
     x0 = np.array([elev_init])
     minimizer_kwargs = {'method': 'BFGS'}
@@ -1663,7 +1694,7 @@ def _find_elevation(
         )
 
     elev_final = res['x'][0]
-    h_final = func(res['x'])
+    h_final = func(res['x'])[0]
 
     return elev_final, h_final
 
