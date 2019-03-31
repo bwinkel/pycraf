@@ -1612,7 +1612,7 @@ def _path_endpoint(
 
     # (
     #     a_n, r_n, h_n, x_n, y_n, alpha_n, beta_n, delta_n, layer_idx,
-    #     path_length,  # arc_length,
+    #     path_length, nsteps,
     #     refraction,
     #     is_space_path,
     #     ) = ret

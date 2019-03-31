@@ -352,7 +352,7 @@ def path_helper_cython(
 
 cpdef (
     double, double, double, double, double, double, double, double, int,
-    double, bint
+    double, int, double, bint
     ) path_endpoint_cython(
         int start_i,
         int max_i,
@@ -368,7 +368,7 @@ cpdef (
     '''
 
     cdef:
-        int i, di, this_i
+        int i, di, this_i, nsteps = 0
         bint is_space_path = 0  # path goes into space? (i.e. above max layer)
         bint first_iter = 1
 
@@ -408,8 +408,9 @@ cpdef (
                 max_delta_n_rad, max_path_length,
                 )
 
-        # print(counter, i, di, x_n, y_n, delta_n, a_n, alpha_n, beta_n)
+        # print(nsteps, i, di, x_n, y_n, delta_n, a_n, alpha_n, beta_n)
 
+        nsteps += 1
         path_length += a_n
         r_n = sqrt(x_n ** 2 + y_n ** 2)
         h_n = r_n - EARTH_RADIUS
@@ -427,6 +428,7 @@ cpdef (
 
     return (
         a_n, r_n, h_n, x_n, y_n, alpha_n, beta_n, delta_n, this_i,
+        path_length, nsteps,
         refraction,
         is_space_path,
         )
