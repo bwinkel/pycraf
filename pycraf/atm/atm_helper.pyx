@@ -79,9 +79,9 @@ cdef (double, double, double) crossing_point(
     delta_1 = atan2(x1, y1)
     delta_2 = atan2(x2, y2)
 
-    if delta_1 > delta_n + 1.e-9:
+    if delta_1 > delta_n + 1.e-14:
         return x1, y1, delta_1
-    elif delta_2 > delta_n + 1.e-9:
+    elif delta_2 > delta_n + 1.e-14:
         return x2, y2, delta_2
     else:
         return NAN, NAN, M_PI
@@ -114,7 +114,7 @@ cdef (int, double, double, double, double, double, double) propagate_path(
         double m, n, t
         int delta_i  # -1, 0, +1, -1000 (break)
 
-    if beta_n < 1.e-12:
+    if beta_n < 1.e-6:  # 0.2"
         delta_i = 1
         if first_iter:
             delta_i = 0
@@ -127,7 +127,7 @@ cdef (int, double, double, double, double, double, double) propagate_path(
         #     print('r_n', r_n, r_n_below, r_n_above)
         #     print('x, y, delta', x, y, delta_n_new)
 
-    elif M_PI - beta_n < 1.e-12:
+    elif M_PI - beta_n < 1.e-6:
         delta_i = -1
         x = sin(delta_n) * r_n_below
         y = cos(delta_n) * r_n_below
