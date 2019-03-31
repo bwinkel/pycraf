@@ -1621,11 +1621,32 @@ def _path_endpoint(
 
 
 def _find_elevation(
-        elev_init, obs_alt, target_alt, arc_length,
-        radii, heights, ref_index, niter=200, interval=50, stepsize=2.
+        obs_alt, target_alt, arc_length,
+        radii, heights, ref_index, niter=50, interval=10, stepsize=0.05
         ):
 
     from scipy.optimize import basinhopping
+
+    # estimate elev_init (from path geometry neglecting refraction)
+    # why is the formular from cyprop.pyx not working???
+    # _dist = np.radians(arc_length) * EARTH_RADIUS
+    # elev_init = np.degrees(
+    #     (target_alt - obs_alt) / _dist - _dist / 2. / EARTH_RADIUS
+    #     )
+    # print('new elev_init', elev_init)
+    if arc_length < 1.e-6:
+        if obs_alt <= target_alt:
+            elev_init = 90.
+        else:
+            elev_init = -90.
+    else:
+        a_e = EARTH_RADIUS
+        arc_rad = np.radians(arc_length)
+        elev_init = np.degrees(np.arctan2(
+            np.cos(arc_rad) * (a_e + target_alt) - (a_e + obs_alt),
+            np.sin(arc_rad) * (a_e + target_alt),
+            ))
+    # print('new elev_init', elev_init)
 
     def func(x):
         elev = x[0]
@@ -1639,18 +1660,21 @@ def _find_elevation(
         return h_n, arc_len, a_tot
 
     def opt_func(x):
+
         elev = x[0]
-        h_n, arc_len, a_tot = func(x)
-        mmin = (
-            # primary optimization aim
-            abs(h_n - target_alt) +
-            # make sure, arc length is compatible with condition
-            abs(np.degrees(arc_len) - arc_length) +
-            # bound elevation to interval [-90, +90]
-            (0 if elev >= -90 else -90 - elev) +
-            (0 if elev <= 90 else elev - 90)
-            )
-        return mmin
+        if elev > 90:
+            return abs(heights[-1] - target_alt) + arc_length + elev - 90
+        elif elev < -90:
+            return abs(target_alt) + arc_length - elev - 90
+        else:
+            h_n, arc_len, a_tot = func(x)
+            mmin = (
+                # primary optimization aim
+                abs(h_n - target_alt) +
+                # make sure, arc length is compatible with condition
+                abs(np.degrees(arc_len) - arc_length)
+                )
+            return mmin
 
     x0 = np.array([elev_init])
     minimizer_kwargs = {'method': 'BFGS'}
@@ -1660,6 +1684,7 @@ def _find_elevation(
         niter=niter, interval=interval, stepsize=stepsize,
         )
 
+    # print(res)
     elev_final = res['x'][0]
     h_final = func(res['x'])[0]
 
