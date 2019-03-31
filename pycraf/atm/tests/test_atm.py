@@ -669,6 +669,17 @@ PATH_CASES_B = [
     ]
 
 
+PATH_CASES_C = [
+    # obs_alt, target_alt, arc_len
+    (100, 100, 0.1, -0.03860530, 100),
+    (6007, 23884, 0.17555, 42.33517067, 23884),
+    (6430, 9523, 0.11345, 13.70828048, 9522.99999974),
+    (50, 0, 0.05, -0.53275731, 0.00000003),
+    (50, 0, 0.0001, -77.46204240, -0.00000000),
+    (50, 0, 0.000001, -89.87258021, -0.00000000),
+    ]
+
+
 def test_prepare_path_pathlength():
     '''
     Test max_path_len functionality.
@@ -732,6 +743,32 @@ def test_prepare_path_arclength():
         # elev, obs_alt, max_arc_len, a_n, delta_n, h_n, refraction
         actual_p = (pp.a_n[-1], pp.delta_n[-1], pp.h_n[-1], refraction)
         print('{:.8f}, {:.8f}, {:.8f}, {:.8f}'.format(*actual_p))
+        assert_quantity_allclose(actual_p, desired_p, atol=1.e-6)
+
+
+def test_find_elevation():
+    '''
+    Test max_arc_len functionality.
+    '''
+
+    freq_grid = [1] * apu.GHz  # frequency not important here
+    atm_layers_cache = atm.atm_layers(freq_grid, atm.profile_standard)
+    radii = atm_layers_cache['radii']
+    heights = atm_layers_cache['heights']
+    ref_index = atm_layers_cache['ref_index']
+
+    for p in PATH_CASES_C:
+        obs_alt, target_alt, arc_len = p[:3]
+        desired_p = p[3:]
+        elev_opt, h_opt = atm.atm._find_elevation(
+            obs_alt * 1e-3, target_alt * 1e-3, arc_len,
+            radii, heights, ref_index,
+            niter=50, interval=10, stepsize=0.05
+            )
+
+        # elev, obs_alt, max_arc_len, a_n, delta_n, h_n, refraction
+        actual_p = (elev_opt, h_opt * 1e3)
+        print('{:.8f}, {:.8f}'.format(*actual_p))
         assert_quantity_allclose(actual_p, desired_p, atol=1.e-6)
 
 
