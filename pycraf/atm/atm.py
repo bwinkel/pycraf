@@ -30,7 +30,9 @@ __all__ = [
     'elevation_from_airmass', 'airmass_from_elevation',
     'opacity_from_atten', 'atten_from_opacity',
     'atten_specific_annex1',
-    'atten_terrestrial', 'atm_layers', 'atten_slant_annex1',
+    'atten_terrestrial', 'atm_layers',
+    'prepare_path', 'path_endpoint', 'find_elevation',
+    'atten_slant_annex1',
     'atten_specific_annex2',
     'atten_slant_annex2',
     'equivalent_height_dry', 'equivalent_height_wet',
@@ -59,6 +61,19 @@ resonances_oxygen = np.genfromtxt(
 resonances_water = np.genfromtxt(
     fname_water, dtype=water_dtype, delimiter=';'
     )
+
+
+PathEndpoint = collections.namedtuple(
+    'PathEndpoint',
+    [
+        'a_n', 'r_n', 'h_n', 'x_n', 'y_n', 'alpha_n', 'delta_n', 'layer_idx',
+        'path_length', 'nsteps', 'refraction', 'is_space_path',
+        ]
+    )
+path_endpoint_units = [
+    apu.km, apu.km, apu.km, apu.km, apu.km, apu.rad, apu.rad, None,
+    apu.km, None, apu.deg, None
+    ]
 
 
 def _airmass_from_elevation(elev):
@@ -1573,7 +1588,8 @@ def atm_layers(freq_grid, profile_func, heights=None):
 def _prepare_path(
         elev, obs_alt,
         atm_layers_cache,
-        max_path_length=1000., max_arc_length=180.
+        max_arc_length=180.,
+        max_path_length=1000.,
         ):
 
     radii = atm_layers_cache['radii']
@@ -1602,10 +1618,33 @@ def _prepare_path(
     return path_params, refraction, is_space_path
 
 
+@utils.ranged_quantity_input(
+    elevation=(-90, 90, apu.deg),
+    obs_alt=(0, None, apu.km),
+    max_arc_length=(1.e-30, 180., apu.deg),
+    max_path_length=(1.e-30, None, apu.km),
+    strip_input_units=True, output_unit=(None, apu.deg, None),
+    )
+def prepare_path(
+        elevation, obs_alt,
+        atm_layers_cache,
+        max_arc_length=180. * apu.deg,
+        max_path_length=1000. * apu.km,
+        ):
+
+    return _prepare_path(
+        elevation, obs_alt,
+        atm_layers_cache,
+        max_arc_length=max_arc_length,
+        max_path_length=max_path_length,
+        )
+
+
 def _path_endpoint(
         elev, obs_alt,
         atm_layers_cache,
-        max_path_length=1000., max_arc_length=180.
+        max_arc_length=180.,
+        max_path_length=1000.,
         ):
 
     radii = atm_layers_cache['radii']
@@ -1619,7 +1658,7 @@ def _path_endpoint(
 
     start_i = np.searchsorted(heights, obs_alt)
 
-    ret = path_endpoint_cython(
+    ret = PathEndpoint(*path_endpoint_cython(
         start_i,
         space_i,
         max_i,
@@ -1629,7 +1668,7 @@ def _path_endpoint(
         max_arc_length,  # deg
         radii,
         ref_index,
-        )
+        ))
 
     # (
     #     a_n, r_n, h_n, x_n, y_n, alpha_n, delta_n, layer_idx,
@@ -1639,6 +1678,33 @@ def _path_endpoint(
     #     ) = ret
 
     return ret
+
+
+@utils.ranged_quantity_input(
+    elevation=(-90, 90, apu.deg),
+    obs_alt=(0, None, apu.km),
+    max_arc_length=(1.e-30, 180., apu.deg),
+    max_path_length=(1.e-30, None, apu.km),
+    strip_input_units=True, output_unit=None,
+    )
+def path_endpoint(
+        elevation, obs_alt,
+        atm_layers_cache,
+        max_arc_length=180. * apu.deg,
+        max_path_length=1000. * apu.km,
+        ):
+
+    ret = _path_endpoint(
+        elevation, obs_alt,
+        atm_layers_cache,
+        max_arc_length=max_arc_length,
+        max_path_length=max_path_length,
+        )
+    qtup = tuple(
+        (q * u if u else q)
+        for (q, u) in zip(ret, path_endpoint_units)
+        )
+    return PathEndpoint(*qtup)
 
 
 def _find_elevation(
@@ -1720,7 +1786,10 @@ def _find_elevation(
             # primary optimization aim
             abs(h_n - target_alt) +
             # make sure, arc length is compatible with condition
-            abs(np.degrees(arc_len) - arc_length)
+            abs(np.degrees(arc_len) - arc_length) +
+            # help to avoid elevations outside range
+            (0 if elev < 90 else elev - 90) +
+            (0 if elev > -90 else -90 - elev)
             )
         return mmin
 
@@ -1738,6 +1807,27 @@ def _find_elevation(
     h_final, arc_len_final = func(res['x'])[0:2]
 
     return elev_final, h_final
+
+
+@utils.ranged_quantity_input(
+    obs_alt=(0, None, apu.km),
+    target_alt=(0, None, apu.km),
+    arc_length=(1.e-30, 180., apu.deg),
+    strip_input_units=True, output_unit=(apu.deg, apu.km)
+    )
+def find_elevation(
+        obs_alt, target_alt, arc_length,
+        atm_layers_cache,
+        niter=50, interval=10, stepsize=0.05,
+        seed=None,
+        ):
+
+    return _find_elevation(
+        obs_alt, target_alt, arc_length,
+        atm_layers_cache,
+        niter=niter, interval=interval, stepsize=stepsize,
+        seed=seed,
+        )
 
 
 @utils.ranged_quantity_input(

@@ -692,28 +692,29 @@ def test_prepare_path_pathlength():
     assert atm_layers_cache['space_i'] == 900
 
     # first test some basic properties
-    path_params, refraction, is_space_path = atm.atm._prepare_path(
-        90, 0, atm_layers_cache,
-        max_path_length=1000.
+    path_params, refraction, is_space_path = atm.atm.prepare_path(
+        90 * apu.deg, 0 * apu.m, atm_layers_cache,
+        max_path_length=1000. * apu.km
         )
 
     # sum over a_n (path lengths per layer) must be smaller than atm params
     # max height
     print(np.sum(path_params.a_n))
     assert_quantity_allclose(np.sum(path_params.a_n), 1000.)
-    assert_quantity_allclose(refraction, 0.0, atol=1.e-6)
+    assert_quantity_allclose(refraction.to(apu.deg).value, 0.0, atol=1.e-6)
 
     for p in PATH_CASES_A:
         elev, obsalt_m, max_plen = p[:3]
         desired_p = p[3:]
-        pp, refraction, is_space_path = atm.atm._prepare_path(
-            elev, obsalt_m / 1000., atm_layers_cache,
-            max_path_length=max_plen
+        pp, refraction, is_space_path = atm.prepare_path(
+            elev * apu.deg, obsalt_m * apu.m, atm_layers_cache,
+            max_path_length=max_plen * apu.km
             )
 
         # elev, obs_alt, max_plen, actual_plen, a_n, delta_n, h_n, refraction
         actual_p = (
-            np.sum(pp.a_n), pp.a_n[-1], pp.delta_n[-1], pp.h_n[-1], refraction
+            np.sum(pp.a_n), pp.a_n[-1], pp.delta_n[-1], pp.h_n[-1],
+            refraction.to(apu.deg).value
             )
         print('{:.8f}, {:.8f}, {:.8f}, {:.8f}, {:.8f}'.format(*actual_p))
         assert_quantity_allclose(actual_p, desired_p, atol=1.e-6)
@@ -730,13 +731,70 @@ def test_prepare_path_arclength():
     for p in PATH_CASES_B:
         elev, obsalt_m, max_alen = p[:3]
         desired_p = p[3:]
-        pp, refraction, is_space_path = atm.atm._prepare_path(
-            elev, obsalt_m / 1000., atm_layers_cache,
-            max_arc_length=max_alen
+        pp, refraction, is_space_path = atm.prepare_path(
+            elev * apu.deg, obsalt_m * apu.m, atm_layers_cache,
+            max_arc_length=max_alen * apu.deg
             )
 
         # elev, obs_alt, max_arc_len, a_n, delta_n, h_n, refraction
-        actual_p = (pp.a_n[-1], pp.delta_n[-1], pp.h_n[-1], refraction)
+        actual_p = (
+            pp.a_n[-1], pp.delta_n[-1], pp.h_n[-1],
+            refraction.to(apu.deg).value
+            )
+        print('{:.8f}, {:.8f}, {:.8f}, {:.8f}'.format(*actual_p))
+        assert_quantity_allclose(actual_p, desired_p, atol=1.e-6)
+
+
+def test_path_endpoint_pathlength():
+    '''
+    Test max_path_len functionality.
+    '''
+
+    freq_grid = [1] * apu.GHz  # frequency not important here
+    atm_layers_cache = atm.atm_layers(freq_grid, atm.profile_standard)
+
+    for p in PATH_CASES_A:
+        elev, obsalt_m, max_plen = p[:3]
+        desired_p = p[3:]
+        pp = atm.path_endpoint(
+            elev * apu.deg, obsalt_m * apu.m, atm_layers_cache,
+            max_path_length=max_plen * apu.km
+            )
+
+        actual_p = (
+            pp.path_length.to(apu.km).value,
+            pp.a_n.to(apu.km).value,
+            pp.delta_n.to(apu.rad).value,
+            pp.h_n.to(apu.km).value,
+            pp.refraction.to(apu.deg).value
+            )
+        print('{:.8f}, {:.8f}, {:.8f}, {:.8f}, {:.8f}'.format(*actual_p))
+        assert_quantity_allclose(actual_p, desired_p, atol=1.e-6)
+
+
+def test_path_endpoint_arclength():
+    '''
+    Test max_arc_len functionality.
+    '''
+
+    freq_grid = [1] * apu.GHz  # frequency not important here
+    atm_layers_cache = atm.atm_layers(freq_grid, atm.profile_standard)
+
+    for p in PATH_CASES_B:
+        elev, obsalt_m, max_alen = p[:3]
+        desired_p = p[3:]
+        pp = atm.path_endpoint(
+            elev * apu.deg, obsalt_m * apu.m, atm_layers_cache,
+            max_arc_length=max_alen * apu.deg
+            )
+
+        # elev, obs_alt, max_arc_len, a_n, delta_n, h_n, refraction
+        actual_p = (
+            pp.a_n.to(apu.km).value,
+            pp.delta_n.to(apu.rad).value,
+            pp.h_n.to(apu.km).value,
+            pp.refraction.to(apu.deg).value
+            )
         print('{:.8f}, {:.8f}, {:.8f}, {:.8f}'.format(*actual_p))
         assert_quantity_allclose(actual_p, desired_p, atol=1.e-6)
 
@@ -752,15 +810,15 @@ def test_find_elevation():
     for p in PATH_CASES_C:
         obs_alt, target_alt, arc_len = p[:3]
         desired_p = p[3:]
-        elev_opt, h_opt = atm.atm._find_elevation(
-            obs_alt * 1e-3, target_alt * 1e-3, arc_len,
+        elev_opt, h_opt = atm.find_elevation(
+            obs_alt * apu.m, target_alt * apu.m, arc_len * apu.deg,
             atm_layers_cache,
             niter=50, interval=10, stepsize=0.05,
             seed=0,
             )
 
         # elev, obs_alt, max_arc_len, a_n, delta_n, h_n, refraction
-        actual_p = (elev_opt, h_opt * 1e3)
+        actual_p = (elev_opt.to(apu.deg).value, h_opt.to(apu.m).value)
         print('{:.8f}, {:.8f}'.format(*actual_p))
         assert_quantity_allclose(actual_p, desired_p, atol=1.e-6)
 
