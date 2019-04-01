@@ -31,12 +31,12 @@ __all__ = [
     'opacity_from_atten', 'atten_from_opacity',
     'atten_specific_annex1',
     'atten_terrestrial', 'atm_layers',
-    'prepare_path', 'path_endpoint', 'find_elevation',
+    'raytrace_path', 'path_endpoint', 'find_elevation',
     'atten_slant_annex1',
     'atten_specific_annex2',
     'atten_slant_annex2',
     'equivalent_height_dry', 'equivalent_height_wet',
-    # '_prepare_path'
+    # '_raytrace_path'
     ]
 
 
@@ -1585,7 +1585,7 @@ def atm_layers(freq_grid, profile_func, heights=None):
     return adict
 
 
-def _prepare_path(
+def _raytrace_path(
         elev, obs_alt,
         atm_layers_cache,
         max_arc_length=180.,
@@ -1625,14 +1625,14 @@ def _prepare_path(
     max_path_length=(1.e-30, None, apu.km),
     strip_input_units=True, output_unit=(None, apu.deg, None),
     )
-def prepare_path(
+def raytrace_path(
         elevation, obs_alt,
         atm_layers_cache,
         max_arc_length=180. * apu.deg,
         max_path_length=1000. * apu.km,
         ):
 
-    return _prepare_path(
+    return _raytrace_path(
         elevation, obs_alt,
         atm_layers_cache,
         max_arc_length=max_arc_length,
@@ -1903,7 +1903,7 @@ def atten_slant_annex1(
 
     tebb = np.ones(adict['freq_grid'].shape, dtype=np.float64) * t_bg
 
-    path_params, refraction, is_space_path = _prepare_path(
+    path_params, refraction, is_space_path = _raytrace_path(
         elevation, obs_alt,
         adict,
         max_path_length=max_path_length, max_arc_length=max_arc_length,

@@ -682,7 +682,7 @@ PATH_CASES_C = [
     ]
 
 
-def test_prepare_path_pathlength():
+def test_raytrace_path_pathlength():
     '''
     Test max_path_len functionality.
     '''
@@ -692,7 +692,7 @@ def test_prepare_path_pathlength():
     assert atm_layers_cache['space_i'] == 900
 
     # first test some basic properties
-    path_params, refraction, is_space_path = atm.atm.prepare_path(
+    path_params, refraction, is_space_path = atm.atm.raytrace_path(
         90 * apu.deg, 0 * apu.m, atm_layers_cache,
         max_path_length=1000. * apu.km
         )
@@ -706,7 +706,7 @@ def test_prepare_path_pathlength():
     for p in PATH_CASES_A:
         elev, obsalt_m, max_plen = p[:3]
         desired_p = p[3:]
-        pp, refraction, is_space_path = atm.prepare_path(
+        pp, refraction, is_space_path = atm.raytrace_path(
             elev * apu.deg, obsalt_m * apu.m, atm_layers_cache,
             max_path_length=max_plen * apu.km
             )
@@ -720,7 +720,7 @@ def test_prepare_path_pathlength():
         assert_quantity_allclose(actual_p, desired_p, atol=1.e-6)
 
 
-def test_prepare_path_arclength():
+def test_raytrace_path_arclength():
     '''
     Test max_arc_len functionality.
     '''
@@ -731,7 +731,7 @@ def test_prepare_path_arclength():
     for p in PATH_CASES_B:
         elev, obsalt_m, max_alen = p[:3]
         desired_p = p[3:]
-        pp, refraction, is_space_path = atm.prepare_path(
+        pp, refraction, is_space_path = atm.raytrace_path(
             elev * apu.deg, obsalt_m * apu.m, atm_layers_cache,
             max_arc_length=max_alen * apu.deg
             )
