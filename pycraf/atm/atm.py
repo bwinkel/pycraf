@@ -63,6 +63,19 @@ resonances_water = np.genfromtxt(
     )
 
 
+AtmHeightProfile = collections.namedtuple(
+    'AtmHeightProfile',
+    [
+        'temperature', 'pressure', 'rho_water', 'pressure_water',
+        'ref_index', 'humidity_water', 'humidity_ice',
+        ]
+    )
+atm_height_profile_units = [
+    apu.K, apu.hPa, apu.g / apu.m ** 3, apu.hPa,
+    cnv.dimless, apu.percent, apu.percent
+    ]
+
+
 PathEndpoint = collections.namedtuple(
     'PathEndpoint',
     [
@@ -613,7 +626,7 @@ def _profile_standard(height):
         temperatures, pressures, pressures_water, wet_type='ice'
         )
 
-    result = (
+    result = AtmHeightProfile(
         temperatures.reshape(height.shape).squeeze(),
         pressures.reshape(height.shape).squeeze(),
         rho_water.reshape(height.shape).squeeze(),
@@ -630,10 +643,7 @@ def _profile_standard(height):
 @utils.ranged_quantity_input(
     height=(0, 84.99999999, apu.km),
     strip_input_units=True,
-    output_unit=(
-        apu.K, apu.hPa, apu.g / apu.m ** 3, apu.hPa,
-        cnv.dimless, apu.percent, apu.percent
-        ),
+    output_unit=None,
     )
 def profile_standard(height):
     '''
@@ -668,7 +678,9 @@ def profile_standard(height):
     and refraction indices are also returned.
     '''
 
-    return _profile_standard(height)
+    ret = _profile_standard(height)
+    qret = tuple(q * u for q, u in zip(ret, atm_height_profile_units))
+    return AtmHeightProfile(*qret)
 
 
 def _profile_helper(
@@ -757,7 +769,7 @@ def _profile_helper(
         temperature, pressure, pressure_water, wet_type='ice'
         )
 
-    return (
+    return AtmHeightProfile(
         temperature.reshape(height.shape).squeeze(),
         pressure.reshape(height.shape).squeeze(),
         rho_water.reshape(height.shape).squeeze(),
@@ -771,10 +783,7 @@ def _profile_helper(
 @utils.ranged_quantity_input(
     height=(0, 99.99999999, apu.km),
     strip_input_units=True,
-    output_unit=(
-        apu.K, apu.hPa, apu.g / apu.m ** 3, apu.hPa,
-        cnv.dimless, apu.percent, apu.percent
-        ),
+    output_unit=None,
     )
 def profile_lowlat(height):
     '''
@@ -833,21 +842,20 @@ def profile_lowlat(height):
         lambda h: 0.,
         ]
 
-    return _profile_helper(
+    ret = _profile_helper(
         height,
         temp_heights, temp_funcs,
         press_heights, press_funcs,
         rho_heights, rho_funcs,
         )
+    qret = tuple(q * u for q, u in zip(ret, atm_height_profile_units))
+    return AtmHeightProfile(*qret)
 
 
 @utils.ranged_quantity_input(
     height=(0, 99.99999999, apu.km),
     strip_input_units=True,
-    output_unit=(
-        apu.K, apu.hPa, apu.g / apu.m ** 3, apu.hPa,
-        cnv.dimless, apu.percent, apu.percent
-        ),
+    output_unit=None,
     )
 def profile_midlat_summer(height):
     '''
@@ -904,21 +912,20 @@ def profile_midlat_summer(height):
         lambda h: 0.,
         ]
 
-    return _profile_helper(
+    ret = _profile_helper(
         height,
         temp_heights, temp_funcs,
         press_heights, press_funcs,
         rho_heights, rho_funcs,
         )
+    qret = tuple(q * u for q, u in zip(ret, atm_height_profile_units))
+    return AtmHeightProfile(*qret)
 
 
 @utils.ranged_quantity_input(
     height=(0, 99.99999999, apu.km),
     strip_input_units=True,
-    output_unit=(
-        apu.K, apu.hPa, apu.g / apu.m ** 3, apu.hPa,
-        cnv.dimless, apu.percent, apu.percent
-        ),
+    output_unit=None,
     )
 def profile_midlat_winter(height):
     '''
@@ -975,21 +982,20 @@ def profile_midlat_winter(height):
         lambda h: 0.,
         ]
 
-    return _profile_helper(
+    ret = _profile_helper(
         height,
         temp_heights, temp_funcs,
         press_heights, press_funcs,
         rho_heights, rho_funcs,
         )
+    qret = tuple(q * u for q, u in zip(ret, atm_height_profile_units))
+    return AtmHeightProfile(*qret)
 
 
 @utils.ranged_quantity_input(
     height=(0, 99.99999999, apu.km),
     strip_input_units=True,
-    output_unit=(
-        apu.K, apu.hPa, apu.g / apu.m ** 3, apu.hPa,
-        cnv.dimless, apu.percent, apu.percent
-        ),
+    output_unit=None,
     )
 def profile_highlat_summer(height):
     '''
@@ -1046,21 +1052,20 @@ def profile_highlat_summer(height):
         lambda h: 0.,
         ]
 
-    return _profile_helper(
+    ret = _profile_helper(
         height,
         temp_heights, temp_funcs,
         press_heights, press_funcs,
         rho_heights, rho_funcs,
         )
+    qret = tuple(q * u for q, u in zip(ret, atm_height_profile_units))
+    return AtmHeightProfile(*qret)
 
 
 @utils.ranged_quantity_input(
     height=(0, 99.99999999, apu.km),
     strip_input_units=True,
-    output_unit=(
-        apu.K, apu.hPa, apu.g / apu.m ** 3, apu.hPa,
-        cnv.dimless, apu.percent, apu.percent
-        ),
+    output_unit=None,
     )
 def profile_highlat_winter(height):
     '''
@@ -1116,12 +1121,14 @@ def profile_highlat_winter(height):
         lambda h: 0.,
         ]
 
-    return _profile_helper(
+    ret = _profile_helper(
         height,
         temp_heights, temp_funcs,
         press_heights, press_funcs,
         rho_heights, rho_funcs,
         )
+    qret = tuple(q * u for q, u in zip(ret, atm_height_profile_units))
+    return AtmHeightProfile(*qret)
 
 
 def _S_oxygen(press_dry, temp):
@@ -1537,21 +1544,13 @@ def atm_layers(freq_grid, profile_func, heights=None):
         0.,
         0.5 * (heights[1:] + heights[:-1])
         ])
-    (
-        temperature,
-        pressure,
-        _,
-        pressure_water,
-        ref_index,
-        _,
-        _
-        ) = profile_func(apu.Quantity(layer_mids, apu.km))
+    atm_hprof = profile_func(apu.Quantity(layer_mids, apu.km))
 
     # Note, in contrast to P.676 we add outer-space layers
     # (scaled for LEO, moon, solar-sys and deep-space "heights")
     # to allow correct path determination, e.g. for satellites;
     # of course, these don't add attenuation (and have refractivity One)
-    ref_index = ref_index.to(cnv.dimless).value
+    ref_index = atm_hprof.ref_index.to(cnv.dimless).value
     space_i = len(heights) - 1
     heights = np.hstack([heights, [2e3, 4e5, 6e9, 3e15, 3e19, 3e22, 3e25]])
     ref_index = np.hstack([ref_index, [1, 1, 1, 1, 1, 1, 1]])
@@ -1564,9 +1563,9 @@ def atm_layers(freq_grid, profile_func, heights=None):
     adict['radii'] = EARTH_RADIUS + heights  # distance Earth-center to layers
 
     # handle units
-    adict['temp'] = temp = temperature.to(apu.K).value
-    adict['press'] = press = pressure.to(apu.hPa).value
-    adict['press_w'] = press_w = pressure_water.to(apu.hPa).value
+    adict['temp'] = temp = atm_hprof.temperature.to(apu.K).value
+    adict['press'] = press = atm_hprof.pressure.to(apu.hPa).value
+    adict['press_w'] = press_w = atm_hprof.pressure_water.to(apu.hPa).value
     # need to append a value (1.0) to ref_index, aka outer space
     adict['ref_index'] = np.hstack([ref_index, 1.])
 

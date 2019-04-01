@@ -343,18 +343,10 @@ def test_profile_standard():
 
     # also testing multi-dim arrays:
     heights = Quantity([[1, 10], [3, 20], [30, 50]], apu.km)
-    (
-        temperatures,
-        pressures,
-        rho_water,
-        pressures_water,
-        ref_indices,
-        humidities_water,
-        humidities_ice,
-        ) = atm.profile_standard(heights)
+    atm_hprof = atm.profile_standard(heights)
 
     assert_quantity_allclose(
-        temperatures,
+        atm_hprof.temperature,
         Quantity([
             [281.65, 223.15],
             [268.65, 216.65],
@@ -362,7 +354,7 @@ def test_profile_standard():
             ], apu.K)
         )
     assert_quantity_allclose(
-        pressures,
+        atm_hprof.pressure,
         Quantity([
             [8.98746319e+02, 2.64364701e+02],
             [7.01086918e+02, 5.47497974e+01],
@@ -370,7 +362,7 @@ def test_profile_standard():
             ], apu.hPa)
         )
     assert_quantity_allclose(
-        rho_water,
+        atm_hprof.rho_water,
         Quantity([
             [4.54897995e+00, 5.05346025e-02],
             [1.67347620e+00, 3.40499473e-04],
@@ -378,7 +370,7 @@ def test_profile_standard():
             ], apu.g / apu.m ** 3)
         )
     assert_quantity_allclose(
-        pressures_water,
+        atm_hprof.pressure_water,
         Quantity([
             [5.91241441e+00, 5.20387473e-02],
             [2.07466258e+00, 3.40420909e-04],
@@ -386,7 +378,7 @@ def test_profile_standard():
             ], apu.hPa)
         )
     assert_quantity_allclose(
-        ref_indices,
+        atm_hprof.ref_index,
         Quantity([
             [1.00027544, 1.00009232],
             [1.00021324, 1.00001961],
@@ -394,7 +386,7 @@ def test_profile_standard():
             ], cnv.dimless)
         )
     assert_quantity_allclose(
-        humidities_water,
+        atm_hprof.humidity_water,
         Quantity([
             [5.30812596e+01, 8.12224381e+01],
             [4.72174462e+01, 1.14582635e+00],
@@ -402,7 +394,7 @@ def test_profile_standard():
             ], apu.percent)
         )
     assert_quantity_allclose(
-        humidities_ice,
+        atm_hprof.humidity_ice,
         Quantity([
             [4.89102920e+01, 1.31884489e+02],
             [4.93347383e+01, 1.97403148e+00],
@@ -452,42 +444,34 @@ def test_special_profiles():
         with pytest.raises(ValueError):
             _prof_func([10, 101] * apu.km)
 
-        (
-            temperatures,
-            pressures,
-            rho_water,
-            pressures_water,
-            ref_indices,
-            humidities_water,
-            humidities_ice,
-            ) = _prof_func(heights)
+        atm_hprof = _prof_func(heights)
 
         assert_quantity_allclose(
-            temperatures,
+            atm_hprof.temperature,
             Quantity(c_temperatures, apu.K)
             )
         assert_quantity_allclose(
-            pressures,
+            atm_hprof.pressure,
             Quantity(c_pressures, apu.hPa)
             )
         assert_quantity_allclose(
-            rho_water,
+            atm_hprof.rho_water,
             Quantity(c_rho_water, apu.g / apu.m ** 3)
             )
         assert_quantity_allclose(
-            pressures_water,
+            atm_hprof.pressure_water,
             Quantity(c_pressures_water, apu.hPa)
             )
         assert_quantity_allclose(
-            ref_indices,
+            atm_hprof.ref_index,
             Quantity(c_ref_indices, cnv.dimless)
             )
         assert_quantity_allclose(
-            humidities_water,
+            atm_hprof.humidity_water,
             Quantity(c_humidities_water, apu.percent)
             )
         assert_quantity_allclose(
-            humidities_ice,
+            atm_hprof.humidity_ice,
             Quantity(c_humidities_ice, apu.percent)
             )
 
