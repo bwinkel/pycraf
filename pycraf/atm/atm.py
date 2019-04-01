@@ -1522,7 +1522,6 @@ def atm_layers(freq_grid, profile_func, heights=None):
         0.,
         0.5 * (heights[1:] + heights[:-1])
         ])
-
     (
         temperature,
         pressure,
@@ -1533,7 +1532,18 @@ def atm_layers(freq_grid, profile_func, heights=None):
         _
         ) = profile_func(apu.Quantity(layer_mids, apu.km))
 
+    # Note, in contrast to P.676 we add outer-space layers
+    # (scaled for LEO, moon, solar-sys and deep-space "heights")
+    # to allow correct path determination, e.g. for satellites;
+    # of course, these don't add attenuation (and have refractivity One)
+    ref_index = ref_index.to(cnv.dimless).value
+    space_i = len(heights) - 1
+    heights = np.hstack([heights, [2e3, 4e5, 6e9, 3e15, 3e19, 3e22, 3e25]])
+    ref_index = np.hstack([ref_index, [1, 1, 1, 1, 1, 1, 1]])
+
     adict = {}
+    adict['space_i'] = space_i  # indicate, where space-path begins
+    adict['max_i'] = len(heights) - 1
     adict['freq_grid'] = freq_grid
     adict['heights'] = heights
     adict['radii'] = EARTH_RADIUS + heights  # distance Earth-center to layers
@@ -1542,14 +1552,13 @@ def atm_layers(freq_grid, profile_func, heights=None):
     adict['temp'] = temp = temperature.to(apu.K).value
     adict['press'] = press = pressure.to(apu.hPa).value
     adict['press_w'] = press_w = pressure_water.to(apu.hPa).value
-    ref_index = ref_index.to(cnv.dimless).value
     # need to append a value (1.0) to ref_index, aka outer space
     adict['ref_index'] = np.hstack([ref_index, 1.])
 
     atten_dry_db = np.zeros((heights.size, freq_grid.size), dtype=np.float64)
     atten_wet_db = np.zeros((heights.size, freq_grid.size), dtype=np.float64)
 
-    for idx in range(len(heights)):
+    for idx in range(space_i + 1):
         atten_dry_db[idx], atten_wet_db[idx] = _atten_specific_annex1(
             freq_grid, press[idx], press_w[idx], temp[idx]
             )
@@ -1563,18 +1572,24 @@ def atm_layers(freq_grid, profile_func, heights=None):
 
 def _prepare_path(
         elev, obs_alt,
-        radii, heights, ref_index,
+        atm_layers_cache,
         max_path_length=1000., max_arc_length=180.
         ):
+
+    radii = atm_layers_cache['radii']
+    heights = atm_layers_cache['heights']
+    ref_index = atm_layers_cache['ref_index']
+    space_i = atm_layers_cache['space_i']
+    max_i = atm_layers_cache['max_i']
 
     # the algorithm below will fail, if observer is *on* the smallest height
     obs_alt = max([1.e-9, obs_alt])
 
     start_i = np.searchsorted(heights, obs_alt)
-    max_i = len(heights) - 1
 
     path_params, refraction, is_space_path = path_helper_cython(
         start_i,
+        space_i,
         max_i,
         elev,  # deg
         obs_alt,  # km
@@ -1589,18 +1604,24 @@ def _prepare_path(
 
 def _path_endpoint(
         elev, obs_alt,
-        radii, heights, ref_index,
+        atm_layers_cache,
         max_path_length=1000., max_arc_length=180.
         ):
+
+    radii = atm_layers_cache['radii']
+    heights = atm_layers_cache['heights']
+    ref_index = atm_layers_cache['ref_index']
+    space_i = atm_layers_cache['space_i']
+    max_i = atm_layers_cache['max_i']
 
     # the algorithm below will fail, if observer is *on* the smallest height
     obs_alt = max([1.e-9, obs_alt])
 
     start_i = np.searchsorted(heights, obs_alt)
-    max_i = len(heights) - 1
 
     ret = path_endpoint_cython(
         start_i,
+        space_i,
         max_i,
         elev,  # deg
         obs_alt,  # km
@@ -1611,7 +1632,7 @@ def _path_endpoint(
         )
 
     # (
-    #     a_n, r_n, h_n, x_n, y_n, alpha_n, beta_n, delta_n, layer_idx,
+    #     a_n, r_n, h_n, x_n, y_n, alpha_n, delta_n, layer_idx,
     #     path_length, nsteps,
     #     refraction,
     #     is_space_path,
@@ -1622,8 +1643,16 @@ def _path_endpoint(
 
 def _find_elevation(
         obs_alt, target_alt, arc_length,
-        radii, heights, ref_index, niter=50, interval=10, stepsize=0.05
+        atm_layers_cache,
+        niter=50, interval=10, stepsize=0.05,
+        seed=None,
         ):
+
+    radii = atm_layers_cache['radii']
+    heights = atm_layers_cache['heights']
+    ref_index = atm_layers_cache['ref_index']
+    space_i = atm_layers_cache['space_i']
+    max_i = atm_layers_cache['max_i']
 
     from scipy.optimize import basinhopping
 
@@ -1637,44 +1666,63 @@ def _find_elevation(
     if arc_length < 1.e-6:
         if obs_alt <= target_alt:
             elev_init = 90.
+            max_path_length = target_alt - obs_alt
         else:
             elev_init = -90.
+            max_path_length = obs_alt - target_alt
     else:
         a_e = EARTH_RADIUS
         arc_rad = np.radians(arc_length)
-        elev_init = np.degrees(np.arctan2(
-            np.cos(arc_rad) * (a_e + target_alt) - (a_e + obs_alt),
+        x1, y1 = 0., a_e + obs_alt
+        x2, y2 = (
             np.sin(arc_rad) * (a_e + target_alt),
-            ))
+            np.cos(arc_rad) * (a_e + target_alt),
+            )
+        max_path_length = 2 * np.sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2)
+        elev_init = np.degrees(np.arctan2(y2 - y1, x2 - x1))
     # print('new elev_init', elev_init)
+    # print('max_path_length', max_path_length)
+
+    # use path_endpoint_cython directly to gain ~10% speed
+    obs_alt = max([1.e-9, obs_alt])
+    start_i = np.searchsorted(heights, obs_alt)
 
     def func(x):
+
         elev = x[0]
-        ret = _path_endpoint(
-            elev, obs_alt, radii, heights, ref_index,
-            max_arc_length=arc_length,
+        ret = path_endpoint_cython(
+            start_i,
+            space_i,
+            max_i,
+            elev,  # deg
+            obs_alt,  # km
+            max_path_length,  # km
+            arc_length,  # deg
+            radii,
+            ref_index,
             )
         h_n = ret[2]
-        arc_len = ret[7]
-        a_tot = ret[9]
+        arc_len = ret[6]
+        a_tot = ret[8]
+
         return h_n, arc_len, a_tot
 
     def opt_func(x):
 
         elev = x[0]
         if elev > 90:
-            return abs(heights[-1] - target_alt) + arc_length + elev - 90
+            x[0] = 90
         elif elev < -90:
-            return abs(target_alt) + arc_length - elev - 90
-        else:
-            h_n, arc_len, a_tot = func(x)
-            mmin = (
-                # primary optimization aim
-                abs(h_n - target_alt) +
-                # make sure, arc length is compatible with condition
-                abs(np.degrees(arc_len) - arc_length)
-                )
-            return mmin
+            x[0] = -90
+
+        h_n, arc_len, a_tot = func(x)
+        mmin = (
+            # primary optimization aim
+            abs(h_n - target_alt) +
+            # make sure, arc length is compatible with condition
+            abs(np.degrees(arc_len) - arc_length)
+            )
+        return mmin
 
     x0 = np.array([elev_init])
     minimizer_kwargs = {'method': 'BFGS'}
@@ -1682,11 +1730,12 @@ def _find_elevation(
         opt_func, x0,
         T=0.05, minimizer_kwargs=minimizer_kwargs,
         niter=niter, interval=interval, stepsize=stepsize,
+        seed=seed,
         )
 
     # print(res)
     elev_final = res['x'][0]
-    h_final = func(res['x'])[0]
+    h_final, arc_len_final = func(res['x'])[0:2]
 
     return elev_final, h_final
 
@@ -1766,7 +1815,7 @@ def atten_slant_annex1(
 
     path_params, refraction, is_space_path = _prepare_path(
         elevation, obs_alt,
-        adict['radii'], adict['heights'], adict['ref_index'],
+        adict,
         max_path_length=max_path_length, max_arc_length=max_arc_length,
         )
 

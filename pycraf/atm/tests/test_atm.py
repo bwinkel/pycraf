@@ -583,8 +583,8 @@ def test_atten_slant_annex1_space():
     assert_quantity_allclose(
         atten,
         np.array([
-            9.37609998e-02, 2.32219409e-01, 4.26610561e-01, 1.52328473e+02,
-            1.56610150e+00
+            9.37610166e-02, 2.32219470e-01, 4.26610918e-01, 1.52352598e+02,
+            1.56610333e+00
             ]) * cnv.dB
         )
 
@@ -595,7 +595,7 @@ def test_atten_slant_annex1_space():
     assert_quantity_allclose(
         tebb,
         Quantity([
-            8.26672753, 16.54196232, 27.44008871, 283.70789951, 84.3934569
+            8.26672826, 16.54196489, 27.44010313, 283.70789951, 84.39351355
             ], apu.K)
         )
 
@@ -633,8 +633,8 @@ def test_atten_slant_annex1_nonspace():
 
 PATH_CASES_A = [
     # elev, obs_alt, max_plen, actual_plen, a_n, delta_n, h_n, refraction
-    (90, 0, 1000, 80.61641025, 0.80224569, 0., 80.61641025, -0.),
-    (90, 10, 1000, 80.60641025, 0.80224569, 0., 80.61641025, -0.),
+    (90, 0, 1000, 1000, 919.38358975, 0., 1000, -0.),
+    (90, 10, 1000, 1000, 919.39358975, 0., 1000.01, -0.),
     (90, 100, 10, 10., 0.03728178, 0., 10.1, -0.),
     (89.99991, 100, 10, 10., 0.03728178, 0., 10.1, -0.00000008),
     (-90, 10100, 10, 10., 0.00083376, 0., 0.1, -0.),
@@ -677,6 +677,8 @@ PATH_CASES_C = [
     (50, 0, 0.05, -0.53275731, 0.00000003),
     (50, 0, 0.0001, -77.46204240, -0.00000000),
     (50, 0, 0.000001, -89.87258021, -0.00000000),
+    (55e3, 2011.2917e3, 12.1746931, 45., 2011.2917e3),  # space path
+    (70e3, 500066.13e3, 1.97456867, 88., 500066.1006e3),  # outer space path
     ]
 
 
@@ -687,29 +689,25 @@ def test_prepare_path_pathlength():
 
     freq_grid = [1] * apu.GHz  # frequency not important here
     atm_layers_cache = atm.atm_layers(freq_grid, atm.profile_standard)
-    radii = atm_layers_cache['radii']
-    heights = atm_layers_cache['heights']
-    ref_index = atm_layers_cache['ref_index']
+    assert atm_layers_cache['space_i'] == 900
 
     # first test some basic properties
     path_params, refraction, is_space_path = atm.atm._prepare_path(
-        90, 0, radii, heights, ref_index,
+        90, 0, atm_layers_cache,
         max_path_length=1000.
         )
 
     # sum over a_n (path lengths per layer) must be smaller than atm params
     # max height
     print(np.sum(path_params.a_n))
-    assert_quantity_allclose(np.sum(path_params.a_n), 80.616410251)
-    assert_quantity_allclose(len(path_params.a_n), 901)
-
+    assert_quantity_allclose(np.sum(path_params.a_n), 1000.)
     assert_quantity_allclose(refraction, 0.0, atol=1.e-6)
 
     for p in PATH_CASES_A:
         elev, obsalt_m, max_plen = p[:3]
         desired_p = p[3:]
         pp, refraction, is_space_path = atm.atm._prepare_path(
-            elev, obsalt_m / 1000., radii, heights, ref_index,
+            elev, obsalt_m / 1000., atm_layers_cache,
             max_path_length=max_plen
             )
 
@@ -728,15 +726,12 @@ def test_prepare_path_arclength():
 
     freq_grid = [1] * apu.GHz  # frequency not important here
     atm_layers_cache = atm.atm_layers(freq_grid, atm.profile_standard)
-    radii = atm_layers_cache['radii']
-    heights = atm_layers_cache['heights']
-    ref_index = atm_layers_cache['ref_index']
 
     for p in PATH_CASES_B:
         elev, obsalt_m, max_alen = p[:3]
         desired_p = p[3:]
         pp, refraction, is_space_path = atm.atm._prepare_path(
-            elev, obsalt_m / 1000., radii, heights, ref_index,
+            elev, obsalt_m / 1000., atm_layers_cache,
             max_arc_length=max_alen
             )
 
@@ -753,17 +748,15 @@ def test_find_elevation():
 
     freq_grid = [1] * apu.GHz  # frequency not important here
     atm_layers_cache = atm.atm_layers(freq_grid, atm.profile_standard)
-    radii = atm_layers_cache['radii']
-    heights = atm_layers_cache['heights']
-    ref_index = atm_layers_cache['ref_index']
 
     for p in PATH_CASES_C:
         obs_alt, target_alt, arc_len = p[:3]
         desired_p = p[3:]
         elev_opt, h_opt = atm.atm._find_elevation(
             obs_alt * 1e-3, target_alt * 1e-3, arc_len,
-            radii, heights, ref_index,
-            niter=50, interval=10, stepsize=0.05
+            atm_layers_cache,
+            niter=50, interval=10, stepsize=0.05,
+            seed=0,
             )
 
         # elev, obs_alt, max_arc_len, a_n, delta_n, h_n, refraction

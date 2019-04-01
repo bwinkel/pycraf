@@ -1,7 +1,7 @@
 #!python
 # -*- coding: utf-8 -*-
 # cython: language_level=3
-# cython: cdivision=True, boundscheck=True, wraparound=False
+# cython: cdivision=True, boundscheck=False, wraparound=False
 # cython: embedsignature=True
 
 from __future__ import absolute_import
@@ -221,6 +221,7 @@ cdef (int, double, double, double, double, double, double) propagate_path(
 
 def path_helper_cython(
         int start_i,
+        int space_i,
         int max_i,
         double elev,  # deg
         double obs_alt,  # km
@@ -321,10 +322,11 @@ def path_helper_cython(
         else:
             i += di
 
-        if i == max_i:
+        if i == space_i:
             is_space_path = 1
 
     refraction = -RAD2DEG * (beta_n + delta_n - beta_0)
+    _beta_n[counter - 1] = NAN
 
     return (
         np.core.records.fromarrays(
@@ -351,10 +353,11 @@ def path_helper_cython(
 
 
 cpdef (
-    double, double, double, double, double, double, double, double, int,
+    double, double, double, double, double, double, double, int,
     double, int, double, bint
     ) path_endpoint_cython(
         int start_i,
+        int space_i,
         int max_i,
         double elev,  # deg
         double obs_alt,  # km
@@ -421,14 +424,40 @@ cpdef (
         else:
             i += di
 
-        if i == max_i:
+        if i == space_i:
             is_space_path = 1
 
     refraction = -RAD2DEG * (beta_n + delta_n - beta_0)
 
     return (
-        a_n, r_n, h_n, x_n, y_n, alpha_n, beta_n, delta_n, this_i,
+        a_n, r_n, h_n, x_n, y_n, alpha_n, delta_n, this_i,
         path_length, nsteps,
         refraction,
         is_space_path,
         )
+
+
+# cpdef (double, double, double) find_elevation_target_func(
+#         double[::1] x,
+
+#         ):
+
+#     cdef (
+#         double, double, double, double, double, double, double, double, int,
+#         double, int, double, bint
+#         ) ret = _path_endpoint(
+#         x[0], obs_alt, radii, heights, ref_index,
+#         max_arc_length=arc_length,
+#         )
+#     h_n = ret[2]
+#     arc_len = ret[7]
+#     a_tot = ret[9]
+#     return (h_n, arc_len, a_tot)
+
+
+# cpdef double find_elevation_opt_func(double[::1] x):
+
+#     pass
+
+
+
