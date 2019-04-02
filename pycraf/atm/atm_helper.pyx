@@ -37,6 +37,8 @@ ALPHA_N = np.zeros((MAX_COUNT, ), dtype=np.float64)
 BETA_N = np.zeros((MAX_COUNT, ), dtype=np.float64)
 DELTA_N = np.zeros((MAX_COUNT, ), dtype=np.float64)
 LAYER_IDX = np.zeros((MAX_COUNT, ), dtype=np.int32)
+LAYER_EDGE_LEFT_IDX = np.zeros((MAX_COUNT, ), dtype=np.int32)
+LAYER_EDGE_RIGHT_IDX = np.zeros((MAX_COUNT, ), dtype=np.int32)
 
 
 cdef (double, double, double) crossing_point(
@@ -87,7 +89,9 @@ cdef (double, double, double) crossing_point(
         return NAN, NAN, M_PI
 
 
-cdef (int, double, double, double, double, double, double) propagate_path(
+cdef (
+    int, double, double, double, double, double, double, bint
+    ) propagate_path(
         double r_n, double r_n_below, double r_n_above,
         double ref_n_m2, double ref_n_m1, double ref_n_p1, double ref_n_p2,
         double beta_n, double delta_n, double path_length,
@@ -112,7 +116,8 @@ cdef (int, double, double, double, double, double, double) propagate_path(
         double ref_in, ref_out
         double a_n
         double m, n, t
-        int delta_i  # -1, 0, +1, -1000 (break)
+        int delta_i  # -1, 0, +1
+        bint do_break = 0
 
     if beta_n < 1.e-6:  # 0.2"
         delta_i = 1
@@ -178,7 +183,7 @@ cdef (int, double, double, double, double, double, double) propagate_path(
         x = n / (t - m)
         y = t * x
         delta_n_new = atan2(x, y)
-        delta_i = -1000
+        do_break = 1
 
     # calculate a_n
     a_n = sqrt((x_old - x) ** 2 + (y_old - y) ** 2)
@@ -188,7 +193,7 @@ cdef (int, double, double, double, double, double, double) propagate_path(
         y = y_old + a_n_s / a_n * (y - y_old)
         delta_n_new = atan2(x, y)
         a_n = a_n_s
-        delta_i = -1000
+        do_break = 1
 
     # calculate alpha_n
     v1_norm = sqrt(x ** 2 + y ** 2)
@@ -216,7 +221,7 @@ cdef (int, double, double, double, double, double, double) propagate_path(
     #     print('alpha_n*, beta_n*', 90 - RAD2DEG * alpha_n, 90 - RAD2DEG * beta_n)
     #     print('ref_in, ref_out', ref_in, ref_out)
 
-    return delta_i, x, y, delta_n_new, a_n, alpha_n, beta_n
+    return delta_i, x, y, delta_n_new, a_n, alpha_n, beta_n, do_break
 
 
 def path_helper_cython(
@@ -241,6 +246,7 @@ def path_helper_cython(
         int i, di, counter = 0
         bint is_space_path = 0  # path goes into space? (i.e. above max layer)
         bint first_iter = 1
+        bint do_break = 0
 
         double path_length = 0
         double delta_n = 0
@@ -260,25 +266,37 @@ def path_helper_cython(
         double[::1] _alpha_n = ALPHA_N
         double[::1] _delta_n = DELTA_N
         double[::1] _beta_n = BETA_N
-        int[::1] _idx = LAYER_IDX
+        int[::1] _layer_idx = LAYER_IDX
+        int[::1] _layer_edge_left_idx = LAYER_EDGE_LEFT_IDX
+        int[::1] _layer_edge_right_idx = LAYER_EDGE_RIGHT_IDX
 
+    # the first point is not related to anything, but it is still
+    # useful to have it here (e.g., if one wants to plot the full path)
+    # it must be neglected from attenuation/Tebb calculations
     _a_n[counter] = 0.
     _r_n[counter] = r_n
     _h_n[counter] = obs_alt
     _x_n[counter] = x_n = 0.
     _y_n[counter] = y_n = r_n
-    _alpha_n[counter] = alpha_n
-    _beta_n[counter] = beta_n
-    _delta_n[counter] = delta_n
-    _idx[counter] = start_i
+    _alpha_n[counter] = NAN
+    _beta_n[counter] = NAN
+    _delta_n[counter] = 0.
+    _layer_idx[counter] = -1000
+    _layer_edge_left_idx[counter] = -1000
+    _layer_edge_right_idx[counter] = -1000
     counter += 1
 
     i = start_i
     while i > 0 and i < max_i:
 
+        # beta_n is the path angle on the left
+        _beta_n[counter] = beta_n
+
         if first_iter:
 
-            di, x_n, y_n, delta_n, a_n, alpha_n, beta_n = propagate_path(
+            (
+                di, x_n, y_n, delta_n, a_n, alpha_n, beta_n, do_break
+                ) = propagate_path(
                 r_n, radii[i - 1], radii[i],
                 ref_index[i - 1], ref_index[i],
                 ref_index[i], ref_index[i + 1],
@@ -286,11 +304,15 @@ def path_helper_cython(
                 x_n, y_n, first_iter,
                 max_delta_n_rad, max_path_length,
                 )
+            _layer_edge_left_idx[counter] = -1000
+            _layer_idx[counter] = i
             first_iter = 0
 
         else:
 
-            di, x_n, y_n, delta_n, a_n, alpha_n, beta_n = propagate_path(
+            (
+                di, x_n, y_n, delta_n, a_n, alpha_n, beta_n, do_break
+                ) = propagate_path(
                 radii[i], radii[i - 1], radii[i + 1],
                 ref_index[i - 1], ref_index[i],
                 ref_index[i + 1], ref_index[i + 2],
@@ -298,6 +320,21 @@ def path_helper_cython(
                 x_n, y_n, first_iter,
                 max_delta_n_rad, max_path_length,
                 )
+            _layer_edge_left_idx[counter] = i
+            # to determine the correct atm layer index, we need to
+            # account for the type of propagation (up, down, same)
+            # (mind that layer n is directly above layer_edge n)
+            if di == 1:
+                # up
+                _layer_idx[counter] = i + 1
+            elif di == 0:
+                # same
+                _layer_idx[counter] = i
+            elif di == -1:
+                # down
+                _layer_idx[counter] = i
+            else:
+                raise RuntimeError('Something went wrong with raytracing')
 
         # print(counter, i, di, x_n, y_n, delta_n, a_n, alpha_n, beta_n)
 
@@ -306,18 +343,22 @@ def path_helper_cython(
         h_n = r_n - EARTH_RADIUS
 
         _a_n[counter] = a_n
+        # the following four numbers are the coordinates of the right
+        # crossing point, as the left point is already in the list!
         _r_n[counter] = r_n
         _h_n[counter] = h_n
         _x_n[counter] = x_n
         _y_n[counter] = y_n
+        # alpha_n is the angle on the right edge
         _alpha_n[counter] = alpha_n
-        _beta_n[counter] = beta_n
+        # _beta_n[counter] = beta_n
+        # delta_n is the arc length of the sector
         _delta_n[counter] = delta_n
-        _idx[counter] = i
+        _layer_edge_right_idx[counter] = i + di
 
         counter += 1
 
-        if di == -1000:
+        if do_break:
             break
         else:
             i += di
@@ -326,7 +367,7 @@ def path_helper_cython(
             is_space_path = 1
 
     refraction = -RAD2DEG * (beta_n + delta_n - beta_0)
-    _beta_n[counter - 1] = NAN
+    # _beta_n[counter - 1] = NAN
 
     return (
         np.core.records.fromarrays(
@@ -340,12 +381,14 @@ def path_helper_cython(
                 BETA_N[:counter],
                 DELTA_N[:counter],
                 LAYER_IDX[:counter],
+                LAYER_EDGE_LEFT_IDX[:counter],
+                LAYER_EDGE_RIGHT_IDX[:counter],
                 ],
             names=(
                 'a_n, r_n, h_n, x_n, y_n, alpha_n, beta_n, delta_n, '
-                'layer_idx'
+                'layer_idx, layer_edge_left_idx, layer_edge_right_idx'
                 ),
-            formats='f8, f8, f8, f8, f8, f8, f8, f8, i4',
+            formats='f8, f8, f8, f8, f8, f8, f8, f8, i4, i4, i4',
             ),
         refraction,
         is_space_path,
@@ -374,6 +417,7 @@ cpdef (
         int i, di, this_i, nsteps = 0
         bint is_space_path = 0  # path goes into space? (i.e. above max layer)
         bint first_iter = 1
+        bint do_break = 0
 
         double path_length = 0
         double delta_n = 0
@@ -390,7 +434,9 @@ cpdef (
 
         if first_iter:
 
-            di, x_n, y_n, delta_n, a_n, alpha_n, beta_n = propagate_path(
+            (
+                di, x_n, y_n, delta_n, a_n, alpha_n, beta_n, do_break
+                ) = propagate_path(
                 r_n, radii[i - 1], radii[i],
                 ref_index[i - 1], ref_index[i],
                 ref_index[i], ref_index[i + 1],
@@ -402,7 +448,9 @@ cpdef (
 
         else:
 
-            di, x_n, y_n, delta_n, a_n, alpha_n, beta_n = propagate_path(
+            (
+                di, x_n, y_n, delta_n, a_n, alpha_n, beta_n, do_break
+                ) = propagate_path(
                 radii[i], radii[i - 1], radii[i + 1],
                 ref_index[i - 1], ref_index[i],
                 ref_index[i + 1], ref_index[i + 2],
@@ -419,7 +467,7 @@ cpdef (
         h_n = r_n - EARTH_RADIUS
         this_i = i
 
-        if di == -1000:
+        if do_break:
             break
         else:
             i += di
@@ -435,29 +483,3 @@ cpdef (
         refraction,
         is_space_path,
         )
-
-
-# cpdef (double, double, double) find_elevation_target_func(
-#         double[::1] x,
-
-#         ):
-
-#     cdef (
-#         double, double, double, double, double, double, double, double, int,
-#         double, int, double, bint
-#         ) ret = _path_endpoint(
-#         x[0], obs_alt, radii, heights, ref_index,
-#         max_arc_length=arc_length,
-#         )
-#     h_n = ret[2]
-#     arc_len = ret[7]
-#     a_tot = ret[9]
-#     return (h_n, arc_len, a_tot)
-
-
-# cpdef double find_elevation_opt_func(double[::1] x):
-
-#     pass
-
-
-

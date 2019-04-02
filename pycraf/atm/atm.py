@@ -1540,9 +1540,15 @@ def atm_layers(freq_grid, profile_func, heights=None):
         if heights.ndim != 1:
             raise ValueError("'heights' must be a 1D array")
 
+    # note that the heights are the layer edges, while the layer_mids
+    # are the mid-heights of the layers themselve; the latter define
+    # also the atmospheric parameters; for technical reasons, we
+    # need to insert a dummy layer (below earth surface having same
+    # refractive index as the first real layer, to have no refraction)
+    # this dummy layer, should be neglected from attenuation calculations!
     layer_mids = np.hstack([
-        0.,
-        0.5 * (heights[1:] + heights[:-1])
+        0.5 * (heights[1] + heights[0]),
+        0.5 * (heights[1:] + heights[:-1]),
         ])
     atm_hprof = profile_func(apu.Quantity(layer_mids, apu.km))
 
@@ -1551,9 +1557,11 @@ def atm_layers(freq_grid, profile_func, heights=None):
     # to allow correct path determination, e.g. for satellites;
     # of course, these don't add attenuation (and have refractivity One)
     ref_index = atm_hprof.ref_index.to(cnv.dimless).value
+    # space_i is the index of the last layer edge! (not the last layer)
     space_i = len(heights) - 1
     heights = np.hstack([heights, [2e3, 4e5, 6e9, 3e15, 3e19, 3e22, 3e25]])
-    ref_index = np.hstack([ref_index, [1, 1, 1, 1, 1, 1, 1]])
+    # need one more for refractive index
+    ref_index = np.hstack([ref_index, [1, 1, 1, 1, 1, 1, 1, 1]])
 
     adict = {}
     adict['space_i'] = space_i  # indicate, where space-path begins
@@ -1566,13 +1574,12 @@ def atm_layers(freq_grid, profile_func, heights=None):
     adict['temp'] = temp = atm_hprof.temperature.to(apu.K).value
     adict['press'] = press = atm_hprof.pressure.to(apu.hPa).value
     adict['press_w'] = press_w = atm_hprof.pressure_water.to(apu.hPa).value
-    # need to append a value (1.0) to ref_index, aka outer space
-    adict['ref_index'] = np.hstack([ref_index, 1.])
+    adict['ref_index'] = ref_index
 
     atten_dry_db = np.zeros((heights.size, freq_grid.size), dtype=np.float64)
     atten_wet_db = np.zeros((heights.size, freq_grid.size), dtype=np.float64)
 
-    for idx in range(space_i + 1):
+    for idx in range(1, space_i):
         atten_dry_db[idx], atten_wet_db[idx] = _atten_specific_annex1(
             freq_grid, press[idx], press_w[idx], temp[idx]
             )
@@ -1597,10 +1604,13 @@ def _raytrace_path(
     space_i = atm_layers_cache['space_i']
     max_i = atm_layers_cache['max_i']
 
-    # the algorithm below will fail, if observer is *on* the smallest height
+    # the algorithm below will fail, if observer is *on* the smallest height..
     obs_alt = max([1.e-9, obs_alt])
-
     start_i = np.searchsorted(heights, obs_alt)
+    # ..or on any layer height
+    if heights[start_i] == obs_alt:
+        start_i += 1
+        obs_alt += 1e-9
 
     path_params, refraction, is_space_path = path_helper_cython(
         start_i,
@@ -1652,10 +1662,13 @@ def _path_endpoint(
     space_i = atm_layers_cache['space_i']
     max_i = atm_layers_cache['max_i']
 
-    # the algorithm below will fail, if observer is *on* the smallest height
+    # the algorithm below will fail, if observer is *on* the smallest height..
     obs_alt = max([1.e-9, obs_alt])
-
     start_i = np.searchsorted(heights, obs_alt)
+    # ..or on any layer height
+    if heights[start_i] == obs_alt:
+        start_i += 1
+        obs_alt += 1e-9
 
     ret = PathEndpoint(*path_endpoint_cython(
         start_i,
@@ -1910,19 +1923,21 @@ def atten_slant_annex1(
 
     # do backward raytracing (to allow tebb calculation); this makes only
     # sense if we have a path that goes to space!
-
+    # need to skip first entry in path record, as it is just the starting
+    # point
     atten_db = adict['atten_db']
     temp = adict['temp']
     total_atten_db = np.sum(
-        atten_db[path_params.layer_idx] *
-        path_params.a_n[:, np.newaxis],
+        atten_db[path_params.layer_idx[1:]] *
+        path_params.a_n[1:, np.newaxis],
         axis=0,
         )
 
     # TODO: do the following in cython?
     if is_space_path and do_tebb:
-        for idx, lidx in list(enumerate(path_params.layer_idx))[::-1]:
-
+        for idx, lidx in list(enumerate(path_params.layer_idx))[:0:-1]:
+            if lidx >= adict['space_i']:
+                continue
             # need to calculate (linear) atten per layer for tebb
             atten_tot_lin = 10 ** (
                 -atten_db[lidx] * path_params.a_n[idx] / 10.
@@ -2223,7 +2238,7 @@ def equivalent_height_wet(freq_grid, press):
     atten_wet=(1.e-30, None, cnv.dB / apu.km),
     h_dry=(1.e-30, None, apu.km),
     h_wet=(1.e-30, None, apu.km),
-    elev=(-90, 90, apu.deg),
+    elev=(5, 90, apu.deg),
     strip_input_units=True, output_unit=cnv.dB
     )
 def atten_slant_annex2(atten_dry, atten_wet, h_dry, h_wet, elev):
