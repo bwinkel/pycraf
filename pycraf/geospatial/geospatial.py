@@ -86,25 +86,50 @@ class ESRI(Enum):
     # EQC = 54002  # World Equidistant Cylindrical
 
     #: `World Mercator (WGS84) <http://spatialreference.org/ref/esri/54004/>`__
-    MERCATOR = 54004
+    # MERCATOR = 54004
+    MERCATOR = (
+        '+proj=merc +lat_ts=0 +lon_0=0 +k=1.000000 +x_0=0 +y_0=0 '
+        '+ellps=WGS84 +datum=WGS84 +units=m no_defs'
+        )
 
     #: `World Sinusoidal (WGS84) <http://spatialreference.org/ref/esri/54008/>`__
-    SINUSOIDAL = 54008
+    # SINUSOIDAL = 54008
+    SINUSOIDAL = (
+        '+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 '
+        '+units=m no_defs'
+        )
 
     #: `World Mollweide (WGS84) <http://spatialreference.org/ref/esri/54009/>`__
-    MOLLWEIDE = 54009
+    # MOLLWEIDE = 54009
+    MOLLWEIDE = (
+        '+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 '
+        '+units=m no_defs'
+        )
 
     #: `World Gall Stereographic (WGS84) <http://spatialreference.org/ref/esri/54016/>`__
-    GALL = 54016
+    # GALL = 54016
+    GALL = (
+        '+proj=gall +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 '
+        '+units=m no_defs'
+        )
 
     #: `World Bonne (WGS84) <http://spatialreference.org/ref/esri/54024/>`__
-    BONNE = 54024
+    # BONNE = 54024
+    BONNE = '+ellps=WGS84 +datum=WGS84 +units=m no_defs'
 
     #: `World Stereographic (WGS84) <http://spatialreference.org/ref/esri/54026/>`__
-    STEREO = 54026
+    # STEREO = 54026
+    STEREO = (
+        '+proj=stere +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 '
+        '+datum=WGS84 +units=m no_defs'
+        )
 
     #: `World Robinson (WGS84) <http://spatialreference.org/ref/esri/54030/>`__
-    ROBINSON = 54030
+    # ROBINSON = 54030
+    ROBINSON = (
+        '+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 '
+        '+units=m no_defs'
+        )
 
 
 UTM_ZONE_RE = re.compile('^(?P<zone>[1-9]|[1-5][0-9]|60)(?P<ns>[nsNS])$')
@@ -222,8 +247,8 @@ def _create_transform(sys1, sys2, code_in='epsg', code_out='epsg'):
         transformation. If a string, this is directly fed into the
         `~pyproj.Proj` class. If an integer, it is treated as an
         *EPSG* or *ESRI* code and the `~pyproj.Proj` class is
-        instantiated with `"+init=epsg:{code}"` or
-        `"+init=esri:{code}"`, depending on the `code_[in,out]` value.
+        instantiated with `"epsg:{code}"` or
+        `"esri:{code}"`, depending on the `code_[in,out]` value.
         For convenience, a couple of common systems are defined in the
         `~pycraf.geospatial.EPSG` and `~pycraf.geospatial.ESRI` Enums
         (which just hold the associated *EPSG* or *ESRI* code for each
@@ -237,10 +262,15 @@ def _create_transform(sys1, sys2, code_in='epsg', code_out='epsg'):
     transform_func : Function
         Transform function created from binding `~pyproj.transform`
         with the two desired projections.
+
+    Notes
+    -----
+    Note, that ESRI codes are not supported anymore in `pyproj>=2.0`,
+    but you can still use the `proj4` string instantiation of course.
     '''
 
     try:
-        from pyproj import Proj, transform
+        import pyproj
     except ImportError:
         raise ImportError(
             'The "pyproj" package is necessary to use this function.'
@@ -260,20 +290,54 @@ def _create_transform(sys1, sys2, code_in='epsg', code_out='epsg'):
                 "`code` type for sys{} must be 'epsg' or 'esri'; "
                 "got {}".format(i + 1, code[i])
                 )
+        if code[i] == 'esri' and pyproj.__version__ >= '2':
+            raise ValueError(
+                'ESRI codes not supported anymore with pyproj >= 2.0'
+                )
 
+        prefix = '+init=' if pyproj.__version__ < '2.0' else ''
         if isinstance(sys[i], int):
-            sys[i] = '+init={}:{:04d}'.format(code[i], sys[i])
+            sys[i] = '{}{}:{:04d}'.format(prefix, code[i], sys[i])
 
         elif isinstance(sys[i], EPSG):
-            sys[i] = '+init=epsg:{:04d}'.format(sys[i].value)
+            sys[i] = '{}epsg:{:04d}'.format(prefix, sys[i].value)
 
         elif isinstance(sys[i], ESRI):
-            sys[i] = '+init=esri:{:04d}'.format(sys[i].value)
+            sys[i] = '{:s}'.format(sys[i].value)
 
-    proj1 = Proj(sys[0])
-    proj2 = Proj(sys[1])
+    # pyproj is extremely buggy; need to come back to this soon
 
-    return partial(transform, proj1, proj2)
+    if pyproj.__version__ >= '2.0':
+
+        try:
+            proj1 = pyproj.Proj(init=sys[0], preserve_units=False)
+        except pyproj.exceptions.CRSError:
+            proj1 = pyproj.Proj(sys[0], preserve_units=False)
+        try:
+            proj2 = pyproj.Proj(init=sys[1], preserve_units=False)
+        except pyproj.exceptions.CRSError:
+            proj2 = pyproj.Proj(sys[1], preserve_units=False)
+
+        in_islatlon = proj1.crs.is_geographic
+        out_islatlon = proj2.crs.is_geographic
+        needs_3d = proj1.crs.is_geocentric or proj2.crs.is_geocentric
+
+    else:
+        proj1 = pyproj.Proj(
+            sys[0].replace('no_defs', ''), preserve_units=False
+            )
+        proj2 = pyproj.Proj(
+            sys[1].replace('no_defs', ''), preserve_units=False
+            )
+        in_islatlon = proj1.is_latlong()
+        out_islatlon = proj2.is_latlong()
+        needs_3d = proj1.is_geocent() or proj2.is_geocent()
+
+    return partial(
+        pyproj.transform, proj1, proj2
+        # pyproj.Proj(proj1.definition_string()),  # this shouldn't be necessary
+        # pyproj.Proj(proj2.definition_string()),  # but pyproj>=2 needs it atm
+        ), in_islatlon, out_islatlon, needs_3d
 
 
 @utils.ranged_quantity_input(
@@ -308,7 +372,7 @@ def utm_to_wgs84(ulon, ulat, utm_zone):
 
     epsg = epsg_from_utm_zone(utm_zone)
 
-    return _create_transform(epsg, EPSG.WGS84)(ulon, ulat)
+    return _create_transform(epsg, EPSG.WGS84)[0](ulon, ulat)
 
 
 @utils.ranged_quantity_input(
@@ -343,7 +407,7 @@ def wgs84_to_utm(glon, glat, utm_zone):
 
     epsg = epsg_from_utm_zone(utm_zone)
 
-    return _create_transform(EPSG.WGS84, epsg)(glon, glat)
+    return _create_transform(EPSG.WGS84, epsg)[0](glon, glat)
 
 
 # This is for Western Germany (Effelsberg)
@@ -375,7 +439,7 @@ def etrs89_to_wgs84(elon, elat):
 
     '''
 
-    return _create_transform(EPSG.ETRS89, EPSG.WGS84)(elon, elat)
+    return _create_transform(EPSG.ETRS89, EPSG.WGS84)[0](elon, elat)
 
 
 @utils.ranged_quantity_input(
@@ -401,7 +465,7 @@ def wgs84_to_etrs89(glon, glat):
         ETRS89 longitude and latitude [m]
     '''
 
-    return _create_transform(EPSG.WGS84, EPSG.ETRS89)(glon, glat)
+    return _create_transform(EPSG.WGS84, EPSG.ETRS89)[0](glon, glat)
 
 
 @utils.ranged_quantity_input(
@@ -431,7 +495,7 @@ def wgs84_to_itrf2005(glon, glat, height):
         ITRF2005 geocentric coordinates, (x, y, z) [m]
     '''
 
-    return _create_transform(EPSG.WGS84, EPSG.ITRF05)(glon, glat, height)
+    return _create_transform(EPSG.WGS84, EPSG.ITRF05)[0](glon, glat, height)
 
 
 @utils.ranged_quantity_input(
@@ -461,7 +525,7 @@ def itrf2005_to_wgs84(x, y, z):
         Height (amsl) [m]
     '''
 
-    return _create_transform(EPSG.ITRF05, EPSG.WGS84)(x, y, z)
+    return _create_transform(EPSG.ITRF05, EPSG.WGS84)[0](x, y, z)
 
 
 @utils.ranged_quantity_input(
@@ -491,7 +555,7 @@ def wgs84_to_itrf2008(glon, glat, height):
         ITRF2008 geocentric coordinates, (x, y, z) [m]
     '''
 
-    return _create_transform(EPSG.WGS84, EPSG.ITRF08)(glon, glat, height)
+    return _create_transform(EPSG.WGS84, EPSG.ITRF08)[0](glon, glat, height)
 
 
 @utils.ranged_quantity_input(
@@ -521,7 +585,7 @@ def itrf2008_to_wgs84(x, y, z):
         Height (amsl) [m]
     '''
 
-    return _create_transform(EPSG.ITRF08, EPSG.WGS84)(x, y, z)
+    return _create_transform(EPSG.ITRF08, EPSG.WGS84)[0](x, y, z)
 
 
 def transform_factory(sys_in, sys_out, code_in='epsg', code_out='epsg'):
@@ -567,8 +631,8 @@ def transform_factory(sys_in, sys_out, code_in='epsg', code_out='epsg'):
         transformation. If a string, this is directly fed into the
         `~pyproj.Proj` class. If an integer, it is treated as an
         *EPSG* or *ESRI* code and the `~pyproj.Proj` class is
-        instantiated with `"+init=epsg:{code}"` or
-        `"+init=esri:{code}"`, depending on the `code_[in,out]` value.
+        instantiated with `"epsg:{code}"` or
+        `"esri:{code}"`, depending on the `code_[in,out]` value.
         For convenience, a couple of common systems are defined in the
         `~pycraf.geospatial.EPSG` and `~pycraf.geospatial.ESRI` Enums
         (which just hold the associated *EPSG* or *ESRI* code for each
@@ -606,8 +670,8 @@ def transform_factory(sys_in, sys_out, code_in='epsg', code_out='epsg'):
         >>> # see http://spatialreference.org/ref/esri/54009/
         >>> wgs84_to_mollweide = geospatial.transform_factory(
         ...     geospatial.EPSG.WGS84, 54009, code_out='esri'
-        ...     )
-        >>> wgs84_to_mollweide(6 * u.deg, 50 * u.deg)  # doctest: +FLOAT_CMP
+        ...     )  # doctest: +SKIP
+        >>> wgs84_to_mollweide(6 * u.deg, 50 * u.deg)  # doctest: +SKIP
         (<Quantity 456379.9117263066 m>, <Quantity 5873471.95621065 m>)
 
         >>> mollweide_to_wgs84 = geospatial.transform_factory(
@@ -632,13 +696,11 @@ def transform_factory(sys_in, sys_out, code_in='epsg', code_out='epsg'):
 
     import inspect
 
-    _transform = _create_transform(
+    _transform, in_islatlon, out_islatlon, needs_3d = _create_transform(
         sys_in, sys_out, code_in=code_in, code_out=code_out
         )
 
-    needs_3d = any(arg.is_geocent() for arg in _transform.args)
-
-    if _transform.args[0].is_latlong():
+    if in_islatlon:
         deco_in_kwargs = dict(
             lon=(None, None, apu.deg),
             lat=(None, None, apu.deg),
@@ -657,7 +719,7 @@ def transform_factory(sys_in, sys_out, code_in='epsg', code_out='epsg'):
             deco_in_kwargs['z'] = (None, None, apu.m)
             doc_in = DOC_WORLD_3D.format('`sys_in`')
 
-    if _transform.args[1].is_latlong():
+    if out_islatlon:
         deco_out_tuple = (
             (apu.deg, apu.deg, apu.m) if needs_3d else (apu.deg, apu.deg)
             )

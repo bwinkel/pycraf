@@ -1,5 +1,12 @@
-0.25.9 (unreleased)
+1.0.0 (unreleased)
 =======================
+
+Bugfixes
+--------
+- `pycraf.geospatial` produced an error with newer version of `pyproj`.
+  Basically, the "+init=" part of the projection definition is now
+  deprecated. We removed this from the `pycraf.geospatial` module, but
+  as a consequence, `pyproj>=2.0` is now required. [#10]
 
 0.25.8 (2019-02-23)
 =======================

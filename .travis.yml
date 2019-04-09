@@ -48,7 +48,7 @@ env:
         # so Cython is required for testing. If your package does not include
         # Cython code, you can set CONDA_DEPENDENCIES=''
         # - CONDA_DEPENDENCIES='pip wheel numpy scipy pytest astropy cython h5py matplotlib pyproj sgp4 sphinx-astropy'
-        - CONDA_DEPENDENCIES='pip wheel scipy pytest cython h5py matplotlib pyproj sgp4 sphinx-astropy'
+        - CONDA_DEPENDENCIES='pip wheel scipy pytest cython h5py matplotlib pyproj<2 sgp4 sphinx-astropy'
 
         # List other runtime dependencies for the package that are available as
         # pip packages here.

@@ -188,14 +188,16 @@ class TestTransformations:
         with pytest.raises(ValueError):
             _create_transform(wgs84, etrs89, code_in='foo')
 
-        for args, kwargs in [
-                ((wgs84, etrs89), {}),
-                ((wgs84, 3035), {}),
-                ((wgs84, 54004), {'code_out': 'esri'}),
-                ((wgs84, etrs89_str), {}),
-                ]:
+        test_list = [
+            ((wgs84, etrs89), {}),
+            ((wgs84, 3035), {}),
+            ((wgs84, etrs89_str), {}),
+            ]
+        if pyproj.__version__ < '2.0':
+            test_list.append(((wgs84, 54004), {'code_out': 'esri'}))
+        for args, kwargs in test_list:
 
-            func = _create_transform(*args, **kwargs)
+            func = _create_transform(*args, **kwargs)[0]
             assert callable(func)
 
     @skip_pyproj
@@ -268,9 +270,9 @@ class TestTransformations:
                 dat['height'] * apu.m
                 )
 
-            assert_quantity_allclose(x, dat['x'] * apu.m)
-            assert_quantity_allclose(y, dat['y'] * apu.m)
-            assert_quantity_allclose(z, dat['z'] * apu.m)
+            assert_quantity_allclose(x, dat['x'] * apu.m, atol=1.e-3 * apu.m)
+            assert_quantity_allclose(y, dat['y'] * apu.m, atol=1.e-3 * apu.m)
+            assert_quantity_allclose(z, dat['z'] * apu.m, atol=1.e-3 * apu.m)
 
     @skip_pyproj
     def test_itrf_to_wgs84(self):
