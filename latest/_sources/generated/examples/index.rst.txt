@@ -1,5 +1,9 @@
 :orphan:
 
+
+
+.. _sphx_glr_generated_examples:
+
 .. _example-gallery:
 
 Example gallery

@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>rotaxis_from_rotmat &#8212; pycraf v0.25.9.dev52</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -65,7 +63,7 @@
 	<a href="../index.html">pycraf v0.25.9.dev52</a>
 	 &#187;
       </li>
-      <li><a href="../geometry/index.html" accesskey="U">Geometry helpers (<code class="docutils literal notranslate"><span class="pre">pycraf.geometry</span></code>)</a> &#187;</li>
+      <li><a href="../geometry/index.html" accesskey="U">Geometry helpers (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geometry</span></code>)</a> &#187;</li>
       
       <li>rotaxis_from_rotmat</li> 
     </ul>
@@ -83,29 +81,22 @@
 <dt id="pycraf.geometry.rotaxis_from_rotmat">
 <code class="descclassname">pycraf.geometry.</code><code class="descname">rotaxis_from_rotmat</code><span class="sig-paren">(</span><em>R</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geometry/geometry.html#rotaxis_from_rotmat"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/geometry/geometry.py#L439" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.geometry.rotaxis_from_rotmat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cartesian rotation axis and angle from rotation matrix.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>R</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt>
-<dd><p class="first last">Rotation matrix [no units!]</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>R</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt><dd><p>Rotation matrix [no units!]</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>rotax_{x,y,z}</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Cartesian components (x, y, z) of rotation axis [m]</p>
 </dd>
-<dt><strong>angle</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Rotation angle [deg]</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>rotax_{x,y,z}</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Cartesian components (x, y, z) of rotation axis [m]</p>
+</dd>
+<dt><strong>angle</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Rotation angle [deg]</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Notes</p>
 <p>Broadcasting is supported. The returned rotation axis vector is
 normalized (otherwise it’s magnitude would change the effective
@@ -137,8 +128,8 @@ rotation angle).</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4. &nbsp;
-    Last built 28 Feb 2019. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1. &nbsp;
+    Last built 09 Apr 2019. <br/>
   </p>
 </footer>
   </body>

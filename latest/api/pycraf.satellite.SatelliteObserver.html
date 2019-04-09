@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>SatelliteObserver &#8212; pycraf v0.25.9.dev52</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -65,7 +63,7 @@
 	<a href="../index.html">pycraf v0.25.9.dev52</a>
 	 &#187;
       </li>
-      <li><a href="../satellite/index.html" accesskey="U">Satellites (<code class="docutils literal notranslate"><span class="pre">pycraf.satellite</span></code>)</a> &#187;</li>
+      <li><a href="../satellite/index.html" accesskey="U">Satellites (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.satellite</span></code>)</a> &#187;</li>
       
       <li>SatelliteObserver</li> 
     </ul>
@@ -84,44 +82,34 @@
 <em class="property">class </em><code class="descclassname">pycraf.satellite.</code><code class="descname">SatelliteObserver</code><span class="sig-paren">(</span><em>obs_location</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/satellite/satellite.html#SatelliteObserver"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/satellite/satellite.py#L97" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.satellite.SatelliteObserver" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Calculate position of a satellite relative to an observer on Earth.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>obs_location</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.coordinates.EarthLocation.html#astropy.coordinates.EarthLocation" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EarthLocation</span></code></a> or tuple</span></dt>
-<dd><p class="first">Location of observer.</p>
-<p class="last">This must be in a form that can be casted to
-<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.coordinates.EarthLocation.html#astropy.coordinates.EarthLocation" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EarthLocation</span></code></a>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>obs_location</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.coordinates.EarthLocation.html#astropy.coordinates.EarthLocation" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EarthLocation</span></code></a> or tuple</span></dt><dd><p>Location of observer.</p>
+<p>This must be in a form that can be casted to
+<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.coordinates.EarthLocation.html#astropy.coordinates.EarthLocation" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EarthLocation</span></code></a>.</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>sat_obs</strong> <span class="classifier-delimiter">:</span> <span class="classifier">SatelliteObserver instance</span></dt>
-<dd></dd>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>sat_obs</strong><span class="classifier">SatelliteObserver instance</span></dt><dd></dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Methods Summary</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pycraf.satellite.SatelliteObserver.azel_from_sat" title="pycraf.satellite.SatelliteObserver.azel_from_sat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">azel_from_sat</span></code></a>(satellite_or_tle,&nbsp;obstime)</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pycraf.satellite.SatelliteObserver.azel_from_sat" title="pycraf.satellite.SatelliteObserver.azel_from_sat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">azel_from_sat</span></code></a>(satellite_or_tle, obstime)</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</p></td>
 </tr>
 </tbody>
 </table>
@@ -129,32 +117,24 @@
 <dl class="method">
 <dt id="pycraf.satellite.SatelliteObserver.azel_from_sat">
 <code class="descname">azel_from_sat</code><span class="sig-paren">(</span><em>satellite_or_tle</em>, <em>obstime</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/satellite/satellite.html#SatelliteObserver.azel_from_sat"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/satellite/satellite.py#L240" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.satellite.SatelliteObserver.azel_from_sat" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>satellite_or_tle</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sgp4.io.Satellite</span></code> instance or TLE 3-line string</span></dt>
-<dd><p class="first last">Satellite object or TLE</p>
+<dd><dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>satellite_or_tle</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sgp4.io.Satellite</span></code> instance or TLE 3-line string</span></dt><dd><p>Satellite object or TLE</p>
 </dd>
-<dt><strong>obstime</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.time.Time.html#astropy.time.Time" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Time</span></code></a></span></dt>
-<dd><p class="first last">Time of observation</p>
+<dt><strong>obstime</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.time.Time.html#astropy.time.Time" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Time</span></code></a></span></dt><dd><p>Time of observation</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>az, el</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> or float</span></dt>
-<dd><p class="first last">Azimuth/elevation of satellite w.r.t. observer [deg]</p>
 </dd>
-<dt><strong>dist</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> or float</span></dt>
-<dd><p class="first last">Distance to satellite [km]</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>az, el</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> or float</span></dt><dd><p>Azimuth/elevation of satellite w.r.t. observer [deg]</p>
+</dd>
+<dt><strong>dist</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> or float</span></dt><dd><p>Distance to satellite [km]</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Notes</p>
 <p>If satellite is provided as TLE string, it must be of the form:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ISS (ZARYA)
@@ -191,8 +171,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4. &nbsp;
-    Last built 28 Feb 2019. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1. &nbsp;
+    Last built 09 Apr 2019. <br/>
   </p>
 </footer>
   </body>

@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>elevation_from_airmass &#8212; pycraf v0.25.9.dev52</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -65,7 +63,7 @@
 	<a href="../index.html">pycraf v0.25.9.dev52</a>
 	 &#187;
       </li>
-      <li><a href="../atm/index.html" accesskey="U">Atmospheric models (<code class="docutils literal notranslate"><span class="pre">pycraf.atm</span></code>)</a> &#187;</li>
+      <li><a href="../atm/index.html" accesskey="U">Atmospheric models (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.atm</span></code>)</a> &#187;</li>
       
       <li>elevation_from_airmass</li> 
     </ul>
@@ -83,26 +81,20 @@
 <dt id="pycraf.atm.elevation_from_airmass">
 <code class="descclassname">pycraf.atm.</code><code class="descname">elevation_from_airmass</code><span class="sig-paren">(</span><em>airmass</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#elevation_from_airmass"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L135" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.elevation_from_airmass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Airmass derived from elevation using extrapolation by Maddalena &amp; Johnson.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>airmass</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Airmass [dimless]</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>airmass</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Airmass [dimless]</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>elev</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Elevation [deg]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>elev</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Elevation [deg]</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Notes</p>
 <p>For low elevations, the well-known 1/sin-law breaks down. Maddalena &amp;
 Johnson (2006) propose the following extrapolation for El (in degrees):</p>
@@ -149,8 +141,8 @@ Johnson (2006) propose the following extrapolation for El (in degrees):</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4. &nbsp;
-    Last built 28 Feb 2019. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1. &nbsp;
+    Last built 09 Apr 2019. <br/>
   </p>
 </footer>
   </body>

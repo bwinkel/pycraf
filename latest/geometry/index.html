@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Geometry helpers (pycraf.geometry) &#8212; pycraf v0.25.9.dev52</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -66,7 +64,7 @@
 	 &#187;
       </li>
       
-      <li>Geometry helpers (<code class="docutils literal notranslate"><span class="pre">pycraf.geometry</span></code>)</li> 
+      <li>Geometry helpers (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geometry</span></code>)</li> 
     </ul>
 </div>
   
@@ -104,8 +102,8 @@ functions <a class="reference internal" href="../api/pycraf.geometry.cart_to_sph
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">In contrast to the often-used mathematical convention, pycraf does not
+<p class="admonition-title">Note</p>
+<p>In contrast to the often-used mathematical convention, pycraf does not
 work with the zenith distances but height above the horizon (i.e.,
 elevation).</p>
 </div>
@@ -122,8 +120,8 @@ bearing of a point on the sphere w.r.t. another point:</p>
 </pre></div>
 </div>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">If you need angular distances/bearings on the Geoid with high accuracy
+<p class="admonition-title">Warning</p>
+<p>If you need angular distances/bearings on the Geoid with high accuracy
 use the Geodesics methods in the <a class="reference internal" href="../pathprof/index.html#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pathprof</span></code></a> subpackage.</p>
 </div>
 </div>
@@ -153,16 +151,16 @@ R_z = \begin{bmatrix}
 0 &amp; 0 &amp; 1
 \end{bmatrix}\end{split}\]</div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">One can also use other combinations of the basic rotation matrices (in
+<p class="admonition-title">Note</p>
+<p>One can also use other combinations of the basic rotation matrices (in
 total there are 24 different possibilities). Apart from the ‘xyz’ order,
 a common scheme is ‘zxz’, i.e.,
 <span class="math notranslate nohighlight">\(R=R_z(\alpha_3)R_x(\alpha_2)R_z(\alpha_1)\)</span>.
 The rotation angles are often called Euler angles.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The right-most matrix is applied first, but since rotation matrices are
+<p class="admonition-title">Note</p>
+<p>The right-most matrix is applied first, but since rotation matrices are
 associative one can just calculate the matrix multiplication (in any
 order) and apply the result to the target vector.</p>
 </div>
@@ -203,10 +201,10 @@ is not unique!</p>
 <div class="section" id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">Astropy Units and Quantities package</a>, which is used extensively in pycraf.</li>
-<li><a class="reference external" href="https://en.wikipedia.org/wiki/Spherical_coordinate_system">Spherical coordinates</a></li>
-<li><a class="reference external" href="https://en.wikipedia.org/wiki/Rotation_matrix">Rotation matrix</a></li>
-<li><a class="reference external" href="https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula">Rodrigues’ Rotation Formula</a></li>
+<li><p><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">Astropy Units and Quantities package</a>, which is used extensively in pycraf.</p></li>
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Spherical_coordinate_system">Spherical coordinates</a></p></li>
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Rotation_matrix">Rotation matrix</a></p></li>
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula">Rodrigues’ Rotation Formula</a></p></li>
 </ul>
 </div>
 <div class="section" id="reference-api">
@@ -216,44 +214,44 @@ is not unique!</p>
 <p>Contains convenience functions for geometrical calculations on the sphere.</p>
 <div class="section" id="functions">
 <h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h4>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.Rx.html#pycraf.geometry.Rx" title="pycraf.geometry.Rx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Rx</span></code></a>(angle)</td>
-<td>Construct rotation matrix about x-axis.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.geometry.Rx.html#pycraf.geometry.Rx" title="pycraf.geometry.Rx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Rx</span></code></a>(angle)</p></td>
+<td><p>Construct rotation matrix about x-axis.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.Ry.html#pycraf.geometry.Ry" title="pycraf.geometry.Ry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ry</span></code></a>(angle)</td>
-<td>Construct rotation matrix about y-axis.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.geometry.Ry.html#pycraf.geometry.Ry" title="pycraf.geometry.Ry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ry</span></code></a>(angle)</p></td>
+<td><p>Construct rotation matrix about y-axis.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.Rz.html#pycraf.geometry.Rz" title="pycraf.geometry.Rz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Rz</span></code></a>(angle)</td>
-<td>Construct rotation matrix about z-axis.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.geometry.Rz.html#pycraf.geometry.Rz" title="pycraf.geometry.Rz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Rz</span></code></a>(angle)</p></td>
+<td><p>Construct rotation matrix about z-axis.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.cart_to_sphere.html#pycraf.geometry.cart_to_sphere" title="pycraf.geometry.cart_to_sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cart_to_sphere</span></code></a>(x,&nbsp;y,&nbsp;z[,&nbsp;broadcast_arrays])</td>
-<td>Spherical coordinates from Cartesian representation.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.geometry.cart_to_sphere.html#pycraf.geometry.cart_to_sphere" title="pycraf.geometry.cart_to_sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cart_to_sphere</span></code></a>(x, y, z[, broadcast_arrays])</p></td>
+<td><p>Spherical coordinates from Cartesian representation.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.eulerangle_from_rotmat.html#pycraf.geometry.eulerangle_from_rotmat" title="pycraf.geometry.eulerangle_from_rotmat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eulerangle_from_rotmat</span></code></a>(R[,&nbsp;etype])</td>
-<td>Cartesian rotation axis and angle from rotation matrix.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.geometry.eulerangle_from_rotmat.html#pycraf.geometry.eulerangle_from_rotmat" title="pycraf.geometry.eulerangle_from_rotmat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eulerangle_from_rotmat</span></code></a>(R[, etype])</p></td>
+<td><p>Cartesian rotation axis and angle from rotation matrix.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.great_circle_bearing.html#pycraf.geometry.great_circle_bearing" title="pycraf.geometry.great_circle_bearing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">great_circle_bearing</span></code></a>(l1,&nbsp;b1,&nbsp;l2,&nbsp;b2)</td>
-<td>Great circle bearing between points (l1, b1) and (l2, b2).</td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.geometry.great_circle_bearing.html#pycraf.geometry.great_circle_bearing" title="pycraf.geometry.great_circle_bearing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">great_circle_bearing</span></code></a>(l1, b1, l2, b2)</p></td>
+<td><p>Great circle bearing between points (l1, b1) and (l2, b2).</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.multiply_matrices.html#pycraf.geometry.multiply_matrices" title="pycraf.geometry.multiply_matrices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">multiply_matrices</span></code></a>(*matrices)</td>
-<td>Matrix-multiply the matrices in the given list.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.geometry.multiply_matrices.html#pycraf.geometry.multiply_matrices" title="pycraf.geometry.multiply_matrices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">multiply_matrices</span></code></a>(*matrices)</p></td>
+<td><p>Matrix-multiply the matrices in the given list.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.rotaxis_from_rotmat.html#pycraf.geometry.rotaxis_from_rotmat" title="pycraf.geometry.rotaxis_from_rotmat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotaxis_from_rotmat</span></code></a>(R)</td>
-<td>Cartesian rotation axis and angle from rotation matrix.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.geometry.rotaxis_from_rotmat.html#pycraf.geometry.rotaxis_from_rotmat" title="pycraf.geometry.rotaxis_from_rotmat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotaxis_from_rotmat</span></code></a>(R)</p></td>
+<td><p>Cartesian rotation axis and angle from rotation matrix.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.rotmat_from_rotaxis.html#pycraf.geometry.rotmat_from_rotaxis" title="pycraf.geometry.rotmat_from_rotaxis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotmat_from_rotaxis</span></code></a>(rotax_x,&nbsp;rotax_y,&nbsp;…)</td>
-<td>Construct rotation matrix from cartesian rotation axis and angle.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.geometry.rotmat_from_rotaxis.html#pycraf.geometry.rotmat_from_rotaxis" title="pycraf.geometry.rotmat_from_rotaxis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotmat_from_rotaxis</span></code></a>(rotax_x, rotax_y, …)</p></td>
+<td><p>Construct rotation matrix from cartesian rotation axis and angle.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.geometry.sphere_to_cart.html#pycraf.geometry.sphere_to_cart" title="pycraf.geometry.sphere_to_cart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sphere_to_cart</span></code></a>(r,&nbsp;phi,&nbsp;theta[,&nbsp;broadcast_arrays])</td>
-<td>Spherical coordinates from Cartesian representation.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.geometry.sphere_to_cart.html#pycraf.geometry.sphere_to_cart" title="pycraf.geometry.sphere_to_cart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sphere_to_cart</span></code></a>(r, phi, theta[, broadcast_arrays])</p></td>
+<td><p>Spherical coordinates from Cartesian representation.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.geometry.true_angular_distance.html#pycraf.geometry.true_angular_distance" title="pycraf.geometry.true_angular_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">true_angular_distance</span></code></a>(l1,&nbsp;b1,&nbsp;l2,&nbsp;b2)</td>
-<td>True angular distance between points (l1, b1) and (l2, b2).</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.geometry.true_angular_distance.html#pycraf.geometry.true_angular_distance" title="pycraf.geometry.true_angular_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">true_angular_distance</span></code></a>(l1, b1, l2, b2)</p></td>
+<td><p>True angular distance between points (l1, b1) and (l2, b2).</p></td>
 </tr>
 </tbody>
 </table>
@@ -269,9 +267,9 @@ is not unique!</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
 <ul>
-<li><a class="reference internal" href="#">Geometry helpers (<code class="docutils literal notranslate"><span class="pre">pycraf.geometry</span></code>)</a><ul>
+<li><a class="reference internal" href="#">Geometry helpers (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geometry</span></code>)</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
-<li><a class="reference internal" href="#using-pycraf-geometry">Using <code class="docutils literal notranslate"><span class="pre">pycraf.geometry</span></code></a><ul>
+<li><a class="reference internal" href="#using-pycraf-geometry">Using <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geometry</span></code></a><ul>
 <li><a class="reference internal" href="#spherical-coordinates">Spherical coordinates</a></li>
 <li><a class="reference internal" href="#rotation-matrices">Rotation matrices</a></li>
 </ul>
@@ -301,8 +299,8 @@ is not unique!</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4. &nbsp;
-    Last built 28 Feb 2019. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1. &nbsp;
+    Last built 09 Apr 2019. <br/>
   </p>
 </footer>
   </body>

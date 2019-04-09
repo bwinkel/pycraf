@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>imt2020_single_element_pattern &#8212; pycraf v0.25.9.dev52</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -65,7 +63,7 @@
 	<a href="../index.html">pycraf v0.25.9.dev52</a>
 	 &#187;
       </li>
-      <li><a href="../antenna/index.html" accesskey="U">Antenna patterns (<code class="docutils literal notranslate"><span class="pre">pycraf.antenna</span></code>)</a> &#187;</li>
+      <li><a href="../antenna/index.html" accesskey="U">Antenna patterns (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.antenna</span></code>)</a> &#187;</li>
       
       <li>imt2020_single_element_pattern</li> 
     </ul>
@@ -83,48 +81,35 @@
 <dt id="pycraf.antenna.imt2020_single_element_pattern">
 <code class="descclassname">pycraf.antenna.</code><code class="descname">imt2020_single_element_pattern</code><span class="sig-paren">(</span><em>azim</em>, <em>elev</em>, <em>G_Emax</em>, <em>A_m</em>, <em>SLA_nu</em>, <em>phi_3db</em>, <em>theta_3db</em>, <em>k=12.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/antenna/imt.html#imt2020_single_element_pattern"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/antenna/imt.py#L89" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.antenna.imt2020_single_element_pattern" title="Permalink to this definition">¶</a></dt>
 <dd><p>Single antenna element’s pattern according to <a class="reference external" href="https://www.itu.int/md/R15-TG5.1-C-0036">IMT.MODEL</a> document.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>azim</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Azimuth [deg]</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>azim</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Azimuth [deg]</p>
 </dd>
-<dt><strong>elev</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Elevation [deg]</p>
+<dt><strong>elev</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Elevation [deg]</p>
 </dd>
-<dt><strong>G_Emax</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Single element maximum gain [dBi]</p>
+<dt><strong>G_Emax</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Single element maximum gain [dBi]</p>
 </dd>
-<dt><strong>A_m</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Front-to-back ratio (horizontal) [dimless]</p>
+<dt><strong>A_m</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Front-to-back ratio (horizontal) [dimless]</p>
 </dd>
-<dt><strong>SLA_nu</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Front-to-back ratio (vertical) [dimless]</p>
+<dt><strong>SLA_nu</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Front-to-back ratio (vertical) [dimless]</p>
 </dd>
-<dt><strong>phi_3db</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Horizontal 3dB beam width of single element [deg]</p>
+<dt><strong>phi_3db</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Horizontal 3dB beam width of single element [deg]</p>
 </dd>
-<dt><strong>theta_3db</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Vertical 3dB beam width of single element [deg]</p>
+<dt><strong>theta_3db</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Vertical 3dB beam width of single element [deg]</p>
 </dd>
-<dt><strong>k</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span></dt>
-<dd><p class="first last">Multiplication factor, can be used to get better match to
+<dt><strong>k</strong><span class="classifier">float, optional</span></dt><dd><p>Multiplication factor, can be used to get better match to
 measured antenna patters (default: 12). See <a href="#id1"><span class="problematic" id="id2">`</span></a>WP5D-C-0936</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>A_E</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Single antenna element’s pattern [dBi]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>A_E</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Single antenna element’s pattern [dBi]</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Notes</p>
 <p>Further information can be found in 3GPP TR 37.840 Section 5.4.4.</p>
 </dd></dl>
@@ -154,8 +139,8 @@ measured antenna patters (default: 12). See <a href="#id1"><span class="problema
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4. &nbsp;
-    Last built 28 Feb 2019. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1. &nbsp;
+    Last built 09 Apr 2019. <br/>
   </p>
 </footer>
   </body>

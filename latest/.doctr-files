@@ -179,7 +179,6 @@ latest/_sources/pathprof/working_with_srtm.rst.txt
 latest/_sources/protection/index.rst.txt
 latest/_sources/satellite/index.rst.txt
 latest/_sources/utils/index.rst.txt
-latest/_static/ajax-loader.gif
 latest/_static/astropy_linkout.svg
 latest/_static/astropy_linkout_20.png
 latest/_static/astropy_logo.ico
@@ -188,14 +187,9 @@ latest/_static/astropy_logo_32.png
 latest/_static/basic.css
 latest/_static/bootstrap-astropy.css
 latest/_static/broken_example.png
-latest/_static/comment-bright.png
-latest/_static/comment-close.png
-latest/_static/comment.png
 latest/_static/copybutton.js
 latest/_static/doctools.js
 latest/_static/documentation_options.js
-latest/_static/down-pressed.png
-latest/_static/down.png
 latest/_static/file.png
 latest/_static/gallery.css
 latest/_static/graphviz.css
@@ -211,9 +205,6 @@ latest/_static/searchtools.js
 latest/_static/sidebar.js
 latest/_static/underscore-1.3.1.js
 latest/_static/underscore.js
-latest/_static/up-pressed.png
-latest/_static/up.png
-latest/_static/websupport.js
 latest/antenna/index-1.pdf
 latest/antenna/index-1.png
 latest/antenna/index-1.py

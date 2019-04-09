@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>atten_map_fast &#8212; pycraf v0.25.9.dev52</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -65,7 +63,7 @@
 	<a href="../index.html">pycraf v0.25.9.dev52</a>
 	 &#187;
       </li>
-      <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
+      <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
       
       <li>atten_map_fast</li> 
     </ul>
@@ -83,77 +81,64 @@
 <dt id="pycraf.pathprof.atten_map_fast">
 <code class="descclassname">pycraf.pathprof.</code><code class="descname">atten_map_fast</code><span class="sig-paren">(</span><em>freq</em>, <em>temperature</em>, <em>pressure</em>, <em>h_tg</em>, <em>h_rg</em>, <em>timepercent</em>, <em>hprof_data</em>, <em>polarization=0</em>, <em>version=16</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#atten_map_fast"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L797" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.atten_map_fast" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate attenuation maps using a fast method.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>freq</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Frequency of radiation [GHz]</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>freq</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Frequency of radiation [GHz]</p>
 </dd>
-<dt><strong>temperature</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Temperature (K)</p>
+<dt><strong>temperature</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Temperature (K)</p>
 </dd>
-<dt><strong>pressure</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Pressure (hPa)</p>
+<dt><strong>pressure</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Pressure (hPa)</p>
 </dd>
-<dt><strong>h_tg, h_rg</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Transmitter/receiver heights over ground [m]</p>
+<dt><strong>h_tg, h_rg</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Transmitter/receiver heights over ground [m]</p>
 </dd>
-<dt><strong>timepercent</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Time percentage [%] (maximal 50%)</p>
+<dt><strong>timepercent</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Time percentage [%] (maximal 50%)</p>
 </dd>
-<dt><strong>hprof_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict, dict-like</span></dt>
-<dd><p class="first last">Dictionary with height profiles and auxillary maps
+<dt><strong>hprof_data</strong><span class="classifier">dict, dict-like</span></dt><dd><p>Dictionary with height profiles and auxillary maps
 of dimension <code class="xref py py-obj docutils literal notranslate"><span class="pre">(my,</span> <span class="pre">mx)</span></code> as calculated with
 <a class="reference internal" href="pycraf.pathprof.height_map_data.html#pycraf.pathprof.height_map_data" title="pycraf.pathprof.height_map_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">height_map_data</span></code></a>.</p>
 </dd>
-<dt><strong>polarization</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
-<dd><p class="first last">Polarization (default: 0)
+<dt><strong>polarization</strong><span class="classifier">int, optional</span></dt><dd><p>Polarization (default: 0)
 Allowed values are: 0 - horizontal, 1 - vertical</p>
 </dd>
-<dt><strong>version</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
-<dd><p class="first last">ITU-R Rec. P.452 version. Allowed values are: 14, 16</p>
+<dt><strong>version</strong><span class="classifier">int, optional</span></dt><dd><p>ITU-R Rec. P.452 version. Allowed values are: 14, 16</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>results</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first">Results of the path attenuation calculation. Each entry
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>results</strong><span class="classifier">dict</span></dt><dd><p>Results of the path attenuation calculation. Each entry
 in the dictionary is a 2D <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> containing
 the associated value for the map of dimension <code class="xref py py-obj docutils literal notranslate"><span class="pre">(my,</span> <span class="pre">mx)</span></code>.
 The following entries are contained:</p>
-<ul class="last simple">
-<li><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_bfsg</span></code> - Free-space loss [dB]</li>
-<li><dl class="first docutils">
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_bd</span></code> - Basic transmission loss associated with diffraction</dt>
-<dd>not exceeded for p% time [dB]; L_bd = L_b0p + L_dp</dd>
+<ul class="simple">
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_bfsg</span></code> - Free-space loss [dB]</p></li>
+<li><dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_bd</span></code> - Basic transmission loss associated with diffraction</dt><dd><p>not exceeded for p% time [dB]; L_bd = L_b0p + L_dp</p>
+</dd>
 </dl>
 </li>
-<li><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_bs</span></code> - Tropospheric scatter loss [dB]</li>
-<li><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_ba</span></code> - Ducting/layer reflection loss [dB]</li>
-<li><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_b</span></code> - Complete path propagation loss [dB]</li>
-<li><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_b_corr</span></code> - As L_b but with clutter correction [dB]</li>
-<li><code class="xref py py-obj docutils literal notranslate"><span class="pre">eps_pt</span></code> - Elevation angle of paths w.r.t. Tx [deg]</li>
-<li><code class="xref py py-obj docutils literal notranslate"><span class="pre">eps_pr</span></code> - Elevation angle of paths w.r.t. Rx [deg]</li>
-<li><code class="xref py py-obj docutils literal notranslate"><span class="pre">d_lt</span></code> - Distance to horizon w.r.t. Tx [km]</li>
-<li><code class="xref py py-obj docutils literal notranslate"><span class="pre">d_lr</span></code> - Distance to horizon w.r.t. Rx [km]</li>
-<li><code class="xref py py-obj docutils literal notranslate"><span class="pre">path_type</span></code> - Path type (0 - LoS, 1 - Trans-horizon)</li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_bs</span></code> - Tropospheric scatter loss [dB]</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_ba</span></code> - Ducting/layer reflection loss [dB]</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_b</span></code> - Complete path propagation loss [dB]</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_b_corr</span></code> - As L_b but with clutter correction [dB]</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">eps_pt</span></code> - Elevation angle of paths w.r.t. Tx [deg]</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">eps_pr</span></code> - Elevation angle of paths w.r.t. Rx [deg]</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">d_lt</span></code> - Distance to horizon w.r.t. Tx [km]</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">d_lr</span></code> - Distance to horizon w.r.t. Rx [km]</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">path_type</span></code> - Path type (0 - LoS, 1 - Trans-horizon)</p></li>
 </ul>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Notes</p>
 <ul class="simple">
-<li>The diffraction-loss algorithm was changed between ITU-R P.452
+<li><p>The diffraction-loss algorithm was changed between ITU-R P.452
 version 14 and 15. The former used a Deygout method, the new one
-is based on a Bullington calculation with correction terms.</li>
-<li>In future versions, more entries may be added to the results
-dictionary.</li>
+is based on a Bullington calculation with correction terms.</p></li>
+<li><p>In future versions, more entries may be added to the results
+dictionary.</p></li>
 </ul>
 </dd></dl>
 
@@ -182,8 +167,8 @@ dictionary.</li>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4. &nbsp;
-    Last built 28 Feb 2019. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1. &nbsp;
+    Last built 09 Apr 2019. <br/>
   </p>
 </footer>
   </body>

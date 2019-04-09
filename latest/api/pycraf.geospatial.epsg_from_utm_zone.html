@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>epsg_from_utm_zone &#8212; pycraf v0.25.9.dev52</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -65,7 +63,7 @@
 	<a href="../index.html">pycraf v0.25.9.dev52</a>
 	 &#187;
       </li>
-      <li><a href="../geospatial/index.html" accesskey="U">Geographical frames (<code class="docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code>)</a> &#187;</li>
+      <li><a href="../geospatial/index.html" accesskey="U">Geographical frames (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code>)</a> &#187;</li>
       
       <li>epsg_from_utm_zone</li> 
     </ul>
@@ -81,28 +79,22 @@
 <h1>epsg_from_utm_zone<a class="headerlink" href="#epsg-from-utm-zone" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.geospatial.epsg_from_utm_zone">
-<code class="descclassname">pycraf.geospatial.</code><code class="descname">epsg_from_utm_zone</code><span class="sig-paren">(</span><em>utm_zone</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#epsg_from_utm_zone"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/geospatial/geospatial.py#L178" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.geospatial.epsg_from_utm_zone" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.geospatial.</code><code class="descname">epsg_from_utm_zone</code><span class="sig-paren">(</span><em>utm_zone</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#epsg_from_utm_zone"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/geospatial/geospatial.py#L203" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.geospatial.epsg_from_utm_zone" title="Permalink to this definition">¶</a></dt>
 <dd><p>EPSG number for UTM zone code.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>utm_zone</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a>, str</span></dt>
-<dd><p class="first last">UTM zone code(s)</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>utm_zone</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a>, str</span></dt><dd><p>UTM zone code(s)</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>epsg</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">EPSG code for the UTM zone</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>epsg</strong><span class="classifier">int</span></dt><dd><p>EPSG code for the UTM zone</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Notes</p>
 <p>Unlike <a class="reference internal" href="pycraf.geospatial.utm_zone_from_gps.html#pycraf.geospatial.utm_zone_from_gps" title="pycraf.geospatial.utm_zone_from_gps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utm_zone_from_gps</span></code></a> this function does
 not support broadcasting. This is because the transform
@@ -135,8 +127,8 @@ with different projections (or EPSG codes).</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4. &nbsp;
-    Last built 28 Feb 2019. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1. &nbsp;
+    Last built 09 Apr 2019. <br/>
   </p>
 </footer>
   </body>

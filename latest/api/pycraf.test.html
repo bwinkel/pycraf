@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>test &#8212; pycraf v0.25.9.dev52</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -83,76 +81,58 @@
 <code class="descclassname">pycraf.</code><code class="descname">test</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/_astropy_init.py#L879" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run the tests for the package.</p>
 <p>This method builds arguments for and then calls <code class="docutils literal notranslate"><span class="pre">pytest.main</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>package</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
-<dd><p class="first last">The name of a specific package to test, e.g. ‘io.fits’ or ‘utils’.
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>package</strong><span class="classifier">str, optional</span></dt><dd><p>The name of a specific package to test, e.g. ‘io.fits’ or ‘utils’.
 If nothing is specified all default Astropy tests are run.</p>
 </dd>
-<dt><strong>args</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
-<dd><p class="first last">Additional arguments to be passed to <code class="docutils literal notranslate"><span class="pre">pytest.main</span></code> in the <code class="docutils literal notranslate"><span class="pre">args</span></code>
+<dt><strong>args</strong><span class="classifier">str, optional</span></dt><dd><p>Additional arguments to be passed to <code class="docutils literal notranslate"><span class="pre">pytest.main</span></code> in the <code class="docutils literal notranslate"><span class="pre">args</span></code>
 keyword argument.</p>
 </dd>
-<dt><strong>docs_path</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
-<dd><p class="first last">The path to the documentation .rst files.</p>
+<dt><strong>docs_path</strong><span class="classifier">str, optional</span></dt><dd><p>The path to the documentation .rst files.</p>
 </dd>
-<dt><strong>open_files</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
-<dd><p class="first last">Fail when any tests leave files open.  Off by default, because
+<dt><strong>open_files</strong><span class="classifier">bool, optional</span></dt><dd><p>Fail when any tests leave files open.  Off by default, because
 this adds extra run time to the test suite.  Requires the
 <code class="docutils literal notranslate"><span class="pre">psutil</span></code> package.</p>
 </dd>
-<dt><strong>parallel</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int or ‘auto’, optional</span></dt>
-<dd><p class="first last">When provided, run the tests in parallel on the specified
+<dt><strong>parallel</strong><span class="classifier">int or ‘auto’, optional</span></dt><dd><p>When provided, run the tests in parallel on the specified
 number of CPUs.  If parallel is <code class="docutils literal notranslate"><span class="pre">'auto'</span></code>, it will use the all
 the cores on the machine.  Requires the <code class="docutils literal notranslate"><span class="pre">pytest-xdist</span></code> plugin.</p>
 </dd>
-<dt><strong>pastebin</strong> <span class="classifier-delimiter">:</span> <span class="classifier">(‘failed’, ‘all’, None), optional</span></dt>
-<dd><p class="first last">Convenience option for turning on py.test pastebin output. Set to
+<dt><strong>pastebin</strong><span class="classifier">(‘failed’, ‘all’, None), optional</span></dt><dd><p>Convenience option for turning on py.test pastebin output. Set to
 ‘failed’ to upload info for failed tests, or ‘all’ to upload info
 for all tests.</p>
 </dd>
-<dt><strong>pdb</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
-<dd><p class="first last">Turn on PDB post-mortem analysis for failing tests. Same as
+<dt><strong>pdb</strong><span class="classifier">bool, optional</span></dt><dd><p>Turn on PDB post-mortem analysis for failing tests. Same as
 specifying <code class="docutils literal notranslate"><span class="pre">--pdb</span></code> in <code class="docutils literal notranslate"><span class="pre">args</span></code>.</p>
 </dd>
-<dt><strong>pep8</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
-<dd><p class="first last">Turn on PEP8 checking via the pytest-pep8 plugin and disable normal
+<dt><strong>pep8</strong><span class="classifier">bool, optional</span></dt><dd><p>Turn on PEP8 checking via the pytest-pep8 plugin and disable normal
 tests. Same as specifying <code class="docutils literal notranslate"><span class="pre">--pep8</span> <span class="pre">-k</span> <span class="pre">pep8</span></code> in <code class="docutils literal notranslate"><span class="pre">args</span></code>.</p>
 </dd>
-<dt><strong>plugins</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list, optional</span></dt>
-<dd><p class="first last">Plugins to be passed to <code class="docutils literal notranslate"><span class="pre">pytest.main</span></code> in the <code class="docutils literal notranslate"><span class="pre">plugins</span></code> keyword
+<dt><strong>plugins</strong><span class="classifier">list, optional</span></dt><dd><p>Plugins to be passed to <code class="docutils literal notranslate"><span class="pre">pytest.main</span></code> in the <code class="docutils literal notranslate"><span class="pre">plugins</span></code> keyword
 argument.</p>
 </dd>
-<dt><strong>remote_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{‘none’, ‘astropy’, ‘any’}, optional</span></dt>
-<dd><p class="first last">Controls whether to run tests marked with &#64;remote_data. This can be
+<dt><strong>remote_data</strong><span class="classifier">{‘none’, ‘astropy’, ‘any’}, optional</span></dt><dd><p>Controls whether to run tests marked with &#64;remote_data. This can be
 set to run no tests with remote data (<code class="docutils literal notranslate"><span class="pre">none</span></code>), only ones that use
 data from <a class="reference external" href="http://data.astropy.org">http://data.astropy.org</a> (<code class="docutils literal notranslate"><span class="pre">astropy</span></code>), or all tests that
 use remote data (<code class="docutils literal notranslate"><span class="pre">any</span></code>). The default is <code class="docutils literal notranslate"><span class="pre">none</span></code>.</p>
 </dd>
-<dt><strong>repeat</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>, optional</span></dt>
-<dd><p class="first last">If set, specifies how many times each test should be run. This is
+<dt><strong>repeat</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>, optional</span></dt><dd><p>If set, specifies how many times each test should be run. This is
 useful for diagnosing sporadic failures.</p>
 </dd>
-<dt><strong>skip_docs</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>, optional</span></dt>
-<dd><p class="first last">When <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, skips running the doctests in the .rst files.</p>
+<dt><strong>skip_docs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>, optional</span></dt><dd><p>When <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, skips running the doctests in the .rst files.</p>
 </dd>
-<dt><strong>test_path</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
-<dd><p class="first last">Specify location to test by path. May be a single file or
+<dt><strong>test_path</strong><span class="classifier">str, optional</span></dt><dd><p>Specify location to test by path. May be a single file or
 directory. Must be specified absolutely or relative to the
 calling directory.</p>
 </dd>
-<dt><strong>verbose</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
-<dd><p class="first last">Convenience option to turn on verbose output from py.test. Passing
+<dt><strong>verbose</strong><span class="classifier">bool, optional</span></dt><dd><p>Convenience option to turn on verbose output from py.test. Passing
 True is the same as specifying <code class="docutils literal notranslate"><span class="pre">-v</span></code> in <code class="docutils literal notranslate"><span class="pre">args</span></code>.</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -180,8 +160,8 @@ True is the same as specifying <code class="docutils literal notranslate"><span 
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4. &nbsp;
-    Last built 28 Feb 2019. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1. &nbsp;
+    Last built 09 Apr 2019. <br/>
   </p>
 </footer>
   </body>

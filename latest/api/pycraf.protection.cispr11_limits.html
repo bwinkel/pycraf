@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>cispr11_limits &#8212; pycraf v0.25.9.dev52</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -65,7 +63,7 @@
 	<a href="../index.html">pycraf v0.25.9.dev52</a>
 	 &#187;
       </li>
-      <li><a href="../protection/index.html" accesskey="U">Protection levels (<code class="docutils literal notranslate"><span class="pre">pycraf.protection</span></code>)</a> &#187;</li>
+      <li><a href="../protection/index.html" accesskey="U">Protection levels (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.protection</span></code>)</a> &#187;</li>
       
       <li>cispr11_limits</li> 
     </ul>
@@ -84,36 +82,27 @@
 <code class="descclassname">pycraf.protection.</code><code class="descname">cispr11_limits</code><span class="sig-paren">(</span><em>freq</em>, <em>detector_type='RMS'</em>, <em>detector_dist=&lt;Quantity 30.0 m&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/protection/cispr.html#cispr11_limits"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/protection/cispr.py#L53" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.protection.cispr11_limits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Industrial-device limits for given frequency and distance from device
 according to <a class="reference external" href="http://rfemcdevelopment.eu/index.php/en/emc-emi-standards/en-55011-2009">CISPR-11 (EN 55011)</a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>freq</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Frequency or frequency vector [Hz]</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>freq</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Frequency or frequency vector [Hz]</p>
 </dd>
-<dt><strong>detector_type</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
-<dd><p class="first last">Detector type: ‘QP’ (quasi-peak), ‘RMS’ (default: ‘RMS)</p>
+<dt><strong>detector_type</strong><span class="classifier">str, optional</span></dt><dd><p>Detector type: ‘QP’ (quasi-peak), ‘RMS’ (default: ‘RMS)</p>
 </dd>
-<dt><strong>detector_dist</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt>
-<dd><p class="first last">Distance between source and detector [m], (default: 30 m)</p>
+<dt><strong>detector_dist</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Distance between source and detector [m], (default: 30 m)</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>efield_limit</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Electric-field limit permitted by CISPR-11 at given distance.
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>efield_limit</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Electric-field limit permitted by CISPR-11 at given distance.
 [dB(uV^2 / m^2)]</p>
 </dd>
-<dt><strong>meas_bw</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt>
-<dd><p class="first last">Measure bandwidth (of detector) [kHz]</p>
+<dt><strong>meas_bw</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Measure bandwidth (of detector) [kHz]</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -141,8 +130,8 @@ according to <a class="reference external" href="http://rfemcdevelopment.eu/inde
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4. &nbsp;
-    Last built 28 Feb 2019. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1. &nbsp;
+    Last built 09 Apr 2019. <br/>
   </p>
 </footer>
   </body>

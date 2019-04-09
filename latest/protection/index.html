@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Protection levels (pycraf.protection) &#8212; pycraf v0.25.9.dev52</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -66,7 +64,7 @@
 	 &#187;
       </li>
       
-      <li>Protection levels (<code class="docutils literal notranslate"><span class="pre">pycraf.protection</span></code>)</li> 
+      <li>Protection levels (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.protection</span></code>)</li> 
     </ul>
 </div>
   
@@ -94,7 +92,7 @@ are provided.</p>
 <div class="section" id="ra-769">
 <h3>RA.769<a class="headerlink" href="#ra-769" title="Permalink to this headline">¶</a></h3>
 <p>The function <a class="reference internal" href="../api/pycraf.protection.ra769_limits.html#pycraf.protection.ra769_limits" title="pycraf.protection.ra769_limits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ra769_limits</span></code></a> returns a
-<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.table.QTable.html#astropy.table.QTable" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QTable</span></code></a> object that resembles (Table 1 to 3) from
+<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.table.QTable.html#astropy.table.QTable" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QTable</span></code></a> object that resembles (Table 1 to 3) from
 <a class="reference external" href="https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en">ITU-R Rec. RA.769</a>:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">protection</span>
@@ -180,10 +178,10 @@ detector types are available: Quasi-Peak (QP) and RMS.</p>
 <div class="section" id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">Astropy Units and Quantities package</a>, which is used extensively in pycraf.</li>
-<li><a class="reference external" href="https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en">ITU-R Rec. RA.769</a></li>
-<li><a class="reference external" href="http://rfemcdevelopment.eu/index.php/en/emc-emi-standards/en-55011-2009">CISPR-11 (EN 55011)</a></li>
-<li><a class="reference external" href="http://www.rfemcdevelopment.eu/en/en-55022-2010">CISPR-22 (EN 55022)</a></li>
+<li><p><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">Astropy Units and Quantities package</a>, which is used extensively in pycraf.</p></li>
+<li><p><a class="reference external" href="https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en">ITU-R Rec. RA.769</a></p></li>
+<li><p><a class="reference external" href="http://rfemcdevelopment.eu/index.php/en/emc-emi-standards/en-55011-2009">CISPR-11 (EN 55011)</a></p></li>
+<li><p><a class="reference external" href="http://www.rfemcdevelopment.eu/en/en-55022-2010">CISPR-22 (EN 55022)</a></p></li>
 </ul>
 </div>
 <div class="section" id="reference-api">
@@ -194,23 +192,26 @@ detector types are available: Quasi-Peak (QP) and RMS.</p>
 e.g. for the radio-astronomy service (RAS).</p>
 <div class="section" id="functions">
 <h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h4>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.protection.cispr11_limits.html#pycraf.protection.cispr11_limits" title="pycraf.protection.cispr11_limits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cispr11_limits</span></code></a>(freq[,&nbsp;detector_type,&nbsp;…])</td>
-<td>Industrial-device limits for given frequency and distance from device according to <a class="reference external" href="http://rfemcdevelopment.eu/index.php/en/emc-emi-standards/en-55011-2009">CISPR-11 (EN 55011)</a>.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.protection.cispr11_limits.html#pycraf.protection.cispr11_limits" title="pycraf.protection.cispr11_limits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cispr11_limits</span></code></a>(freq[, detector_type, …])</p></td>
+<td><p><p>Industrial-device limits for given frequency and distance from device according to <a class="reference external" href="http://rfemcdevelopment.eu/index.php/en/emc-emi-standards/en-55011-2009">CISPR-11 (EN 55011)</a>.</p>
+</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.protection.cispr22_limits.html#pycraf.protection.cispr22_limits" title="pycraf.protection.cispr22_limits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cispr22_limits</span></code></a>(freq[,&nbsp;detector_type,&nbsp;…])</td>
-<td>Industrial-device limits for given frequency and distance from device according to <a class="reference external" href="http://www.rfemcdevelopment.eu/en/en-55022-2010">CISPR-22 (EN 55022)</a>.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.protection.cispr22_limits.html#pycraf.protection.cispr22_limits" title="pycraf.protection.cispr22_limits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cispr22_limits</span></code></a>(freq[, detector_type, …])</p></td>
+<td><p><p>Industrial-device limits for given frequency and distance from device according to <a class="reference external" href="http://www.rfemcdevelopment.eu/en/en-55022-2010">CISPR-22 (EN 55022)</a>.</p>
+</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.protection.ra769_calculate_entry.html#pycraf.protection.ra769_calculate_entry" title="pycraf.protection.ra769_calculate_entry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ra769_calculate_entry</span></code></a>(frequency,&nbsp;bandwidth,&nbsp;…)</td>
-<td>Limits (single entry) for spectral line, continuum, and VLBI observations according to <a class="reference external" href="https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en">ITU-R Rec RA.769</a>.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.protection.ra769_calculate_entry.html#pycraf.protection.ra769_calculate_entry" title="pycraf.protection.ra769_calculate_entry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ra769_calculate_entry</span></code></a>(frequency, bandwidth, …)</p></td>
+<td><p>Limits (single entry) for spectral line, continuum, and VLBI observations according to <a class="reference external" href="https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en">ITU-R Rec RA.769</a>.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../api/pycraf.protection.ra769_limits.html#pycraf.protection.ra769_limits" title="pycraf.protection.ra769_limits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ra769_limits</span></code></a>([mode,&nbsp;scale,&nbsp;integ_time])</td>
-<td>Limits for spectral line, continuum, and VLBI observations according to <a class="reference external" href="https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en">ITU-R Rec RA.769</a>.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.protection.ra769_limits.html#pycraf.protection.ra769_limits" title="pycraf.protection.ra769_limits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ra769_limits</span></code></a>([mode, scale, integ_time])</p></td>
+<td><p><p>Limits for spectral line, continuum, and VLBI observations according to <a class="reference external" href="https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en">ITU-R Rec RA.769</a>.</p>
+</p></td>
 </tr>
 </tbody>
 </table>
@@ -226,9 +227,9 @@ e.g. for the radio-astronomy service (RAS).</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
 <ul>
-<li><a class="reference internal" href="#">Protection levels (<code class="docutils literal notranslate"><span class="pre">pycraf.protection</span></code>)</a><ul>
+<li><a class="reference internal" href="#">Protection levels (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.protection</span></code>)</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
-<li><a class="reference internal" href="#using-pycraf-protection">Using <code class="docutils literal notranslate"><span class="pre">pycraf.protection</span></code></a><ul>
+<li><a class="reference internal" href="#using-pycraf-protection">Using <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.protection</span></code></a><ul>
 <li><a class="reference internal" href="#ra-769">RA.769</a></li>
 <li><a class="reference internal" href="#cispr-limits">CISPR limits</a></li>
 </ul>
@@ -258,8 +259,8 @@ e.g. for the radio-astronomy service (RAS).</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4. &nbsp;
-    Last built 28 Feb 2019. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1. &nbsp;
+    Last built 09 Apr 2019. <br/>
   </p>
 </footer>
   </body>

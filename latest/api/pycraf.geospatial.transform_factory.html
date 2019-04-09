@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>transform_factory &#8212; pycraf v0.25.9.dev52</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -65,7 +63,7 @@
 	<a href="../index.html">pycraf v0.25.9.dev52</a>
 	 &#187;
       </li>
-      <li><a href="../geospatial/index.html" accesskey="U">Geographical frames (<code class="docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code>)</a> &#187;</li>
+      <li><a href="../geospatial/index.html" accesskey="U">Geographical frames (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code>)</a> &#187;</li>
       
       <li>transform_factory</li> 
     </ul>
@@ -81,7 +79,7 @@
 <h1>transform_factory<a class="headerlink" href="#transform-factory" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.geospatial.transform_factory">
-<code class="descclassname">pycraf.geospatial.</code><code class="descname">transform_factory</code><span class="sig-paren">(</span><em>sys_in</em>, <em>sys_out</em>, <em>code_in='epsg'</em>, <em>code_out='epsg'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#transform_factory"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/geospatial/geospatial.py#L527" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.geospatial.transform_factory" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.geospatial.</code><code class="descname">transform_factory</code><span class="sig-paren">(</span><em>sys_in</em>, <em>sys_out</em>, <em>code_in='epsg'</em>, <em>code_out='epsg'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#transform_factory"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/geospatial/geospatial.py#L591" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.geospatial.transform_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>A factory to produce conversion functions (decorated with
 <a class="reference internal" href="pycraf.utils.ranged_quantity_input.html#pycraf.utils.ranged_quantity_input" title="pycraf.utils.ranged_quantity_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ranged_quantity_input</span></code></a> for unit handling).</p>
 <p>The returned function will automatically have the correct
@@ -111,50 +109,43 @@ unit-checking.</p>
 a so-called <em>EPSG</em> code, e.g. <code class="xref py py-obj docutils literal notranslate"><span class="pre">WGS84=&quot;EPSG:4326&quot;</span></code>.
 The website <a class="reference external" href="http://spatialreference.org/">spatialreference.org</a> is very useful to find
 information on <em>EPSG</em> codes.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>sys_in, sys_out</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, int, EPSG, ESRI</span></dt>
-<dd><p class="first last">Input and output projection for the desired coordinate
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>sys_in, sys_out</strong><span class="classifier">str, int, EPSG, ESRI</span></dt><dd><p>Input and output projection for the desired coordinate
 transformation. If a string, this is directly fed into the
 <code class="xref py py-obj docutils literal notranslate"><span class="pre">Proj</span></code> class. If an integer, it is treated as an
 <em>EPSG</em> or <em>ESRI</em> code and the <code class="xref py py-obj docutils literal notranslate"><span class="pre">Proj</span></code> class is
-instantiated with <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;+init=epsg:{code}&quot;</span></code> or
-<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;+init=esri:{code}&quot;</span></code>, depending on the <code class="xref py py-obj docutils literal notranslate"><span class="pre">code_[in,out]</span></code> value.
+instantiated with <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;epsg:{code}&quot;</span></code> or
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;esri:{code}&quot;</span></code>, depending on the <code class="xref py py-obj docutils literal notranslate"><span class="pre">code_[in,out]</span></code> value.
 For convenience, a couple of common systems are defined in the
 <a class="reference internal" href="pycraf.geospatial.EPSG.html#pycraf.geospatial.EPSG" title="pycraf.geospatial.EPSG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EPSG</span></code></a> and <a class="reference internal" href="pycraf.geospatial.ESRI.html#pycraf.geospatial.ESRI" title="pycraf.geospatial.ESRI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ESRI</span></code></a> Enums
 (which just hold the associated <em>EPSG</em> or <em>ESRI</em> code for each
 name), e.g., <code class="xref py py-obj docutils literal notranslate"><span class="pre">EPSG.WGS84</span> <span class="pre">==</span> <span class="pre">4326</span></code>.</p>
 </dd>
-<dt><strong>code_in, code_out</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{‘epsg’, ‘esri’}</span></dt>
-<dd><p class="first last">Whether to interpret integer-valued <code class="xref py py-obj docutils literal notranslate"><span class="pre">sys_[in,out]</span></code> arguments
+<dt><strong>code_in, code_out</strong><span class="classifier">{‘epsg’, ‘esri’}</span></dt><dd><p>Whether to interpret integer-valued <code class="xref py py-obj docutils literal notranslate"><span class="pre">sys_[in,out]</span></code> arguments
 as <em>EPSG</em> or <em>ESRI</em> code. (default: ‘epsg’)</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>transform_func</strong> <span class="classifier-delimiter">:</span> <span class="classifier">Function</span></dt>
-<dd><p class="first last">Transform function with unit decorator
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>transform_func</strong><span class="classifier">Function</span></dt><dd><p>Transform function with unit decorator
 (<a class="reference internal" href="pycraf.utils.ranged_quantity_input.html#pycraf.utils.ranged_quantity_input" title="pycraf.utils.ranged_quantity_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ranged_quantity_input</span></code></a>).</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Notes</p>
 <ul class="simple">
-<li><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyproj</span></code> also allows to preserve the units (<code class="xref py py-obj docutils literal notranslate"><span class="pre">preserve_units=True</span></code>);
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyproj</span></code> also allows to preserve the units (<code class="xref py py-obj docutils literal notranslate"><span class="pre">preserve_units=True</span></code>);
 some EPSG systems use different distance units, such as ft.
 Per default, <code class="xref py py-obj docutils literal notranslate"><span class="pre">pyproj</span></code> will convert these to meters.
 The <a class="reference internal" href="pycraf.utils.ranged_quantity_input.html#pycraf.utils.ranged_quantity_input" title="pycraf.utils.ranged_quantity_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ranged_quantity_input</span></code></a> will automatically
 convert your inputs to the correct unit (i.e., ‘m’ for distances),
 but the outputs will always be in meters (or degrees).
-Use <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v3.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> functions to convert to something else
-such as ‘ft’ if desired.</li>
+Use <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> functions to convert to something else
+such as ‘ft’ if desired.</p></li>
 </ul>
 <p class="rubric">Examples</p>
 <p>To define a “Gauss-Kruger Zone 4 (Germany)” to GPS/WGS84 transform:</p>
@@ -177,7 +168,7 @@ set <code class="xref py py-obj docutils literal notranslate"><span class="pre">
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># see http://spatialreference.org/ref/esri/54009/</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wgs84_to_mollweide</span> <span class="o">=</span> <span class="n">geospatial</span><span class="o">.</span><span class="n">transform_factory</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">geospatial</span><span class="o">.</span><span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">,</span> <span class="mi">54009</span><span class="p">,</span> <span class="n">code_out</span><span class="o">=</span><span class="s1">&#39;esri&#39;</span>
-<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">... </span>    <span class="p">)</span>  
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wgs84_to_mollweide</span><span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mi">50</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">)</span>  
 <span class="go">(&lt;Quantity 456379.9117263066 m&gt;, &lt;Quantity 5873471.95621065 m&gt;)</span>
 
@@ -215,8 +206,8 @@ set <code class="xref py py-obj docutils literal notranslate"><span class="pre">
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4. &nbsp;
-    Last built 28 Feb 2019. <br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1. &nbsp;
+    Last built 09 Apr 2019. <br/>
   </p>
 </footer>
   </body>
