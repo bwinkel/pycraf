@@ -1133,8 +1133,8 @@ def profile_highlat_winter(height):
 
 def _S_oxygen(press_dry, temp):
     '''
-    Line strengths of all oxygen resonances according to `ITU-R P.676-10
-    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Eq (3).
+    Line strengths of all oxygen resonances according to `ITU-R P.676-11
+    <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_, Eq (3).
 
     Parameters
     ----------
@@ -1165,8 +1165,8 @@ def _S_oxygen(press_dry, temp):
 
 def _S_water(press_w, temp):
     '''
-    Line strengths of all water resonances according to `ITU-R P.676-10
-    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Eq (3).
+    Line strengths of all water resonances according to `ITU-R P.676-11
+    <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_, Eq (3).
 
     Parameters
     ----------
@@ -1197,8 +1197,8 @@ def _S_water(press_w, temp):
 
 def _Delta_f_oxygen(press_dry, press_w, temp):
     '''
-    Line widths for all oxygen resonances according to `ITU-R P.676-10
-    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Eq (6a/b).
+    Line widths for all oxygen resonances according to `ITU-R P.676-11
+    <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_, Eq (6a/b).
 
     Parameters
     ----------
@@ -1230,7 +1230,7 @@ def _Delta_f_oxygen(press_dry, press_w, temp):
 def _Delta_f_water(press_dry, press_w, temp):
     '''
     Line widths for all water resonances according to
-    `ITU-R P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_,
+    `ITU-R P.676-11 <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_,
     Eq (6a/b).
 
     Parameters
@@ -1270,7 +1270,7 @@ def _Delta_f_water(press_dry, press_w, temp):
 def _delta_oxygen(press_dry, press_w, temp):
     '''
     Shape correction for all oxygen resonances according to
-    `ITU-R P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_,
+    `ITU-R P.676-11 <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_,
     Eq (7).
 
     Parameters
@@ -1320,7 +1320,7 @@ def _delta_water():
 def _F(freq_grid, f_i, Delta_f, delta):
     '''
     Line-profiles for all resonances at the freq_grid positions according to
-    `ITU-R P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_,
+    `ITU-R P.676-11 <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_,
     Eq (5).
 
     Parameters
@@ -1363,7 +1363,7 @@ def _F(freq_grid, f_i, Delta_f, delta):
 def _N_D_prime2(freq_grid, press_dry, press_w, temp):
     '''
     Dry air continuum absorption (Debye spectrum) according to
-    `ITU-R P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_,
+    `ITU-R P.676-11 <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_,
     Eq (8/9).
 
     Parameters
@@ -1442,8 +1442,8 @@ def atten_specific_annex1(
         freq_grid, press_dry, press_w, temp
         ):
     '''
-    Specific (one layer) atmospheric attenuation according to `ITU-R P.676-10
-    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Annex 1.
+    Specific (one layer) atmospheric attenuation according to `ITU-R P.676-11
+    <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_, Annex 1.
 
     Parameters
     ----------
@@ -1483,8 +1483,8 @@ def atten_specific_annex1(
 def atten_terrestrial(specific_atten, path_length):
     '''
     Total path attenuation for a path close to the ground (i.e., one layer),
-    according to `ITU-R P.676-10
-    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Annex 1 + 2.
+    according to `ITU-R P.676-11
+    <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_, Annex 1 + 2.
 
     Parameters
     ----------
@@ -1858,7 +1858,7 @@ def atten_slant_annex1(
         ):
     '''
     Path attenuation for a slant path through full atmosphere according to
-    `ITU-R P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_
+    `ITU-R P.676-11 <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_
     Eq (17-20).
 
     Parameters
