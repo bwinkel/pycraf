@@ -19,23 +19,19 @@ PYXDIR = os.path.relpath(os.path.dirname(__file__))
 def get_extensions():
 
     comp_args = {
-        'extra_compile_args': ['-fopenmp', '-O3'],
-        'extra_link_args': ['-fopenmp'],
-        'libraries': ['m'],
+        'extra_compile_args': ['-O3'],
         'include_dirs': ['numpy'],
         }
 
     if platform.system().lower() == 'windows':
 
         comp_args = {
-            'extra_compile_args': ['/fopenmp'],
             'include_dirs': ['numpy'],
             }
 
     elif 'darwin' in platform.system().lower():
 
         comp_args['extra_compile_args'].append('-mmacosx-version-min=10.7')
-        comp_args['extra_link_args'].append('-lgomp')
 
     ext_module_pathprof_atm_helper = Extension(
         name='pycraf.atm.atm_helper',
