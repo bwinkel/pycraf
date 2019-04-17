@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="raytrace_path" href="pycraf.atm.raytrace_path.html" />
+    <link rel="next" title="refractive_index" href="pycraf.atm.refractive_index.html" />
     <link rel="prev" title="profile_midlat_winter" href="pycraf.atm.profile_midlat_winter.html" />
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 <script type="text/javascript" src="../_static/copybutton.js"></script>
@@ -49,7 +49,7 @@
     <h3>Navigation</h3>
     <ul>
       <li class="right">
-	<a href="pycraf.atm.raytrace_path.html" title="raytrace_path">
+	<a href="pycraf.atm.refractive_index.html" title="refractive_index">
 	  next &raquo;
 	</a>
       </li>
@@ -79,7 +79,7 @@
 <h1>profile_standard<a class="headerlink" href="#profile-standard" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.atm.profile_standard">
-<code class="descclassname">pycraf.atm.</code><code class="descname">profile_standard</code><span class="sig-paren">(</span><em>height</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#profile_standard"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L643" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.profile_standard" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.atm.</code><code class="descname">profile_standard</code><span class="sig-paren">(</span><em>height</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#profile_standard"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L474" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.profile_standard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Standard height profiles according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.835-5-201202-I/en">ITU-R P.835-5</a>, Annex 1.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -90,15 +90,15 @@
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>temperature</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Temperature [K]</p>
+<dt><strong>temp</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Temperature [K]</p>
 </dd>
-<dt><strong>pressure</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Total pressure [hPa]</p>
+<dt><strong>press</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Total pressure [hPa]</p>
 </dd>
-<dt><strong>rho_water</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Water vapor density [g / m**3]</p>
+<dt><strong>rho_w</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Water vapor density [g / m**3]</p>
 </dd>
-<dt><strong>pressure_water</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Water vapor partial pressure [hPa]</p>
+<dt><strong>press_w</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Water vapor partial pressure [hPa]</p>
 </dd>
-<dt><strong>ref_index</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Refractive index [dimless]</p>
+<dt><strong>n_index</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Refractive index [dimless]</p>
 </dd>
 <dt><strong>humidity_water</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Relative humidity if water vapor was in form of liquid water [%]</p>
 </dd>
@@ -110,29 +110,6 @@
 <p class="rubric">Notes</p>
 <p>For convenience, derived quantities like water density/pressure
 and refraction indices are also returned.</p>
-<p>The return value is actually a <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.namedtuple" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">namedtuple</span></code></a>, so it is
-possible to do the following:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">atm</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">heights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">aprof</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">profile_standard</span><span class="p">(</span><span class="n">heights</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">height</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">press</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">heights</span><span class="p">,</span> <span class="n">aprof</span><span class="o">.</span><span class="n">temperature</span><span class="p">,</span> <span class="n">aprof</span><span class="o">.</span><span class="n">pressure</span>
-<span class="gp">... </span>        <span class="p">):</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:2.0f}</span><span class="s1">: </span><span class="si">{:5.1f}</span><span class="s1"> </span><span class="si">{:6.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">))</span>
-<span class="go"> 0 km: 288.1 K 1013.2 hPa</span>
-<span class="go">10 km: 223.1 K  264.4 hPa</span>
-<span class="go">20 km: 216.6 K   54.7 hPa</span>
-<span class="go">30 km: 226.6 K   11.7 hPa</span>
-<span class="go">40 km: 251.0 K    2.8 hPa</span>
-<span class="go">50 km: 270.6 K    0.8 hPa</span>
-<span class="go">60 km: 245.4 K    0.2 hPa</span>
-<span class="go">70 km: 217.4 K    0.0 hPa</span>
-<span class="go">80 km: 196.6 K    0.0 hPa</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </div>

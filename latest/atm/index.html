@@ -87,7 +87,7 @@ of deep-space objects, as Earth’s atmosphere dampens the signal of interest.
 Especially, in astronomy one needs to correct for such attenuation effects to
 determine the original intensity of an object.</p>
 <p>The relevant
-<a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-11-201609-I/en">ITU-R Rec. P.676-11</a>
+<a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R Rec. P.676-10</a>
 contains two models. The Annex-1 model is more accurate and is valid for
 frequencies between 1 and 1000 GHz. It constructs the attenuation spectrum
 from the Debye continuum absorption and water and oxygen resonance lines. In
@@ -96,147 +96,148 @@ frequencies up to 350 GHz only. It doesn’t work with layers but assumes just
 a one-layer slab having an effective temperature, which would produce the
 same overall loss as the multi-layered model. Of course, this effective
 temperature has nothing to do with the true physical temperature (profile)
-of the atmosphere. Although the Annex-2 model is simpler and thus somewhat
-faster in principle, in most cases users of <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf</span></code> will want to use Annex-1
-functions. These are mostly implemented in <a class="reference external" href="https://cython.org/">Cython</a>
-and therefore reasonably fast.</p>
-<p>Both Annexes provide a framework to calculate the specific attenuation (dB /
-km) for an atmospheric slab. To compute the full path loss caused by the
-atmosphere over a longer path, one has to integrate over the distance. For
-ground-to-ground stations this is trivial (assuming the specific attenuation
-is constant - which would not be true, if one station is at a significantly
-different altitude). For slant paths, Annex 1 and 2 methods differ
-substanially. The former determines the specific attenuation for potentially
-hundreds of different layers and as such height profiles for temperature and
-pressures are necessary. These are provided in <a class="reference external" href="https://www.itu.int/rec/R-REC-P.835-5-201202-I/en">ITU-R Rec. P.835-5</a>. The <a class="reference internal" href="#module-pycraf.atm" title="pycraf.atm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atm</span></code></a> sub-
-package contains the “Standard profile” (<a class="reference internal" href="../api/pycraf.atm.profile_standard.html#pycraf.atm.profile_standard" title="pycraf.atm.profile_standard"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_standard</span></code></a>) and
-five more specialized profiles, associated with the geographic latitude and
-season (<a class="reference internal" href="../api/pycraf.atm.profile_highlat_summer.html#pycraf.atm.profile_highlat_summer" title="pycraf.atm.profile_highlat_summer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_highlat_summer</span></code></a>,
-<a class="reference internal" href="../api/pycraf.atm.profile_highlat_winter.html#pycraf.atm.profile_highlat_winter" title="pycraf.atm.profile_highlat_winter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_highlat_winter</span></code></a>, <a class="reference internal" href="../api/pycraf.atm.profile_midlat_summer.html#pycraf.atm.profile_midlat_summer" title="pycraf.atm.profile_midlat_summer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_midlat_summer</span></code></a>,
-<a class="reference internal" href="../api/pycraf.atm.profile_midlat_winter.html#pycraf.atm.profile_midlat_winter" title="pycraf.atm.profile_midlat_winter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_midlat_winter</span></code></a>, and <a class="reference internal" href="../api/pycraf.atm.profile_lowlat.html#pycraf.atm.profile_lowlat" title="pycraf.atm.profile_lowlat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_lowlat</span></code></a>).</p>
+of the atmosphere.</p>
+<p>Both Annexes provide a framework to calculate the specific attenuation
+(dB / km) for an atmospheric slab. To compute the full path loss caused by
+the atmosphere over a longer path, one has to integrate over the distance.
+For ground-to-ground stations this is trivial (assuming the specific
+attenuation is constant). For slant paths, Annex 1 and 2 differ
+significantly. The former determines the specific attenuation for hundreds of
+different layers and as such height profiles for temperature and pressures
+are necessary. These are provided in
+<a class="reference external" href="https://www.itu.int/rec/R-REC-P.835-5-201202-I/en">ITU-R Rec. P.835-5</a>.
+The <a class="reference internal" href="#module-pycraf.atm" title="pycraf.atm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atm</span></code></a> sub-package contains the “Standard profile”
+(<a class="reference internal" href="../api/pycraf.atm.profile_standard.html#pycraf.atm.profile_standard" title="pycraf.atm.profile_standard"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_standard</span></code></a>) and five more specialized profiles,
+associated with the geographic latitude and season
+(<a class="reference internal" href="../api/pycraf.atm.profile_highlat_summer.html#pycraf.atm.profile_highlat_summer" title="pycraf.atm.profile_highlat_summer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_highlat_summer</span></code></a>, <a class="reference internal" href="../api/pycraf.atm.profile_highlat_winter.html#pycraf.atm.profile_highlat_winter" title="pycraf.atm.profile_highlat_winter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_highlat_winter</span></code></a>,
+<a class="reference internal" href="../api/pycraf.atm.profile_midlat_summer.html#pycraf.atm.profile_midlat_summer" title="pycraf.atm.profile_midlat_summer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_midlat_summer</span></code></a>, <a class="reference internal" href="../api/pycraf.atm.profile_midlat_winter.html#pycraf.atm.profile_midlat_winter" title="pycraf.atm.profile_midlat_winter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_midlat_winter</span></code></a>, and
+<a class="reference internal" href="../api/pycraf.atm.profile_lowlat.html#pycraf.atm.profile_lowlat" title="pycraf.atm.profile_lowlat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_lowlat</span></code></a>).</p>
 </div>
 <div class="section" id="using-pycraf-atm">
 <h2>Using <a class="reference internal" href="#module-pycraf.atm" title="pycraf.atm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.atm</span></code></a><a class="headerlink" href="#using-pycraf-atm" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="height-profiles">
 <h3>Height profiles<a class="headerlink" href="#height-profiles" title="Permalink to this headline">¶</a></h3>
-<p>Let’s start by having a look at the atmospheric standard height profile:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">atm</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># define height grid</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">height_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># query profile_standard function</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">hprof</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">profile_standard</span><span class="p">(</span><span class="n">height_grid</span><span class="p">)</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Plot various quantities</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">_heights</span> <span class="o">=</span> <span class="n">height_grid</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">km</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hprof</span><span class="o">.</span><span class="n">temperature</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">K</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">_heights</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Temperature [K]&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="mi">160</span><span class="p">,</span> <span class="mi">300</span><span class="p">))</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hprof</span><span class="o">.</span><span class="n">pressure</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">hPa</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">_heights</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hprof</span><span class="o">.</span><span class="n">pressure_water</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">hPa</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">_heights</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Wet&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="o">*</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">(),</span>
-<span class="gp">... </span>    <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span>
-<span class="gp">... </span>    <span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Pressure [hPa]&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">semilogx</span><span class="p">()</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="mf">1.e-6</span><span class="p">,</span> <span class="mi">1100</span><span class="p">))</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hprof</span><span class="o">.</span><span class="n">rho_water</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">cm</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">_heights</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Water density [g / cm^3]&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">semilogx</span><span class="p">()</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hprof</span><span class="o">.</span><span class="n">ref_index</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">_heights</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Refractive index - 1&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">semilogx</span><span class="p">()</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hprof</span><span class="o">.</span><span class="n">humidity_water</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">percent</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">_heights</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Relative humidity, water [%]&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hprof</span><span class="o">.</span><span class="n">humidity_ice</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">percent</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">_heights</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Relative humidity, ice [%]&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">flat</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">86</span><span class="p">))</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">... </span>    <span class="k">if</span> <span class="n">idx</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-<span class="gp">... </span>        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Height [km]&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">... </span>    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="s1">&#39;Atmospheric standard profile after ITU R-P.835-5, Annex 1&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span>
-<span class="gp">... </span>    <span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
+<p>Let’s start with having a look at the atmospheric standard height profile:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+<span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">atm</span>
+<span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+
+<span class="c1"># define height grid</span>
+<span class="n">height_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span>
+
+<span class="c1"># query profile_standard function</span>
+<span class="p">(</span>
+    <span class="n">temperatures</span><span class="p">,</span>
+    <span class="n">pressures</span><span class="p">,</span>
+    <span class="n">rho_water</span><span class="p">,</span>
+    <span class="n">pressures_water</span><span class="p">,</span>
+    <span class="n">ref_indices</span><span class="p">,</span>
+    <span class="n">humidities_water</span><span class="p">,</span>
+    <span class="n">humidities_ice</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">profile_standard</span><span class="p">(</span><span class="n">height_grid</span><span class="p">)</span>
+
+<span class="c1"># Plot various quantities</span>
+<span class="n">_heights</span> <span class="o">=</span> <span class="n">height_grid</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">km</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+<span class="n">axes</span> <span class="o">=</span> <span class="p">[</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">)]</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">temperatures</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">K</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">_heights</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Temperature [K]&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="mi">160</span><span class="p">,</span> <span class="mi">300</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pressures</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span> <span class="n">_heights</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pressures_water</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span> <span class="n">_heights</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Wet&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
+    <span class="o">*</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">(),</span>
+    <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span>
+    <span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Pressure [hPa]&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">semilogx</span><span class="p">()</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="mf">1.e-6</span><span class="p">,</span> <span class="mi">1100</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rho_water</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">cm</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">_heights</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Water density [g / cm^3]&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">semilogx</span><span class="p">()</span>
+<span class="c1">#ax3.set_xlim((1.e-3, 1100))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ref_indices</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">_heights</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Refractive index - 1&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">semilogx</span><span class="p">()</span>
+<span class="c1">#ax3.set_xlim((1.e-3, 1100))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">humidities_water</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">percent</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">_heights</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Relative humidity, water [%]&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">humidities_ice</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">percent</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">_heights</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Relative humidity, ice [%]&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">axes</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">86</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">idx</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Height [km]&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span>
+    <span class="s1">&#39;Atmospheric standard profile after ITU R-P.835-5, Annex 1&#39;</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span>
+    <span class="p">)</span>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../atm/index-1.png">png</a>, <a class="reference external" href="../atm/index-1.svg">svg</a>, <a class="reference external" href="../atm/index-1.pdf">pdf</a>)</p>
 <div class="figure align-center">
 <img alt="../_images/index-11.png" src="../_images/index-11.png" />
 </div>
-<p>Here the function <a class="reference internal" href="../api/pycraf.atm.profile_standard.html#pycraf.atm.profile_standard" title="pycraf.atm.profile_standard"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_standard</span></code></a> returns a
-<a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.namedtuple" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">namedtuple</span></code></a> with the plotted quantities. This works in the same
-way for the other special height profiles, provided in pycraf. Likewise, the
-user could define their own profiles, which will seamlessly work with all
-other functions in this package, as long as they use a compatible function
-signature (including return type) and extend to at least 85 km height.</p>
 </div>
 <div class="section" id="specific-attenuation">
 <h3>Specific attenuation<a class="headerlink" href="#specific-attenuation" title="Permalink to this headline">¶</a></h3>
 <p>Given certain physical conditions such as temperature, pressure and water
-content, one can calculate the specific attenuation in the following manner.
-As the <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-11-201609-I/en">ITU-R Rec. P.676-11</a> methods work with the partial dry and wet air
-pressure, one usually has to derive these, e.g., from water content or
-humidity.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">_freqs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">freq_grid</span> <span class="o">=</span> <span class="n">_freqs</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">GHz</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># weather parameter at ground-level</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">total_pressure</span> <span class="o">=</span> <span class="mi">1013</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">hPa</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">290</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">K</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># water content is from the integral over the full height</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rho_water</span> <span class="o">=</span> <span class="mf">7.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># alternatively, one can use atm.pressure_water_from_humidity</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pressure_water</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">pressure_water_from_rho_water</span><span class="p">(</span><span class="n">temperature</span><span class="p">,</span> <span class="n">rho_water</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pressure_dry</span> <span class="o">=</span> <span class="n">total_pressure</span> <span class="o">-</span> <span class="n">pressure_water</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="s1">&#39;Oxygen pressure: </span><span class="si">{0.value:.2f}</span><span class="s1"> </span><span class="si">{0.unit}</span><span class="s1">, &#39;</span>
-<span class="gp">... </span>    <span class="s1">&#39;Water vapor partial pressure: </span><span class="si">{1.value:.2f}</span><span class="s1"> </span><span class="si">{1.unit}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">pressure_dry</span><span class="p">,</span> <span class="n">pressure_water</span>
-<span class="gp">... </span>    <span class="p">))</span>
-<span class="go">Oxygen pressure: 1002.96 hPa, Water vapor partial pressure: 10.04 hPa</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">atten_dry</span><span class="p">,</span> <span class="n">atten_wet</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">atten_specific_annex1</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">freq_grid</span><span class="p">,</span> <span class="n">pressure_dry</span><span class="p">,</span> <span class="n">pressure_water</span><span class="p">,</span> <span class="n">temperature</span>
-<span class="gp">... </span>    <span class="p">)</span>
-<span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">_freqs</span><span class="p">,</span> <span class="n">atten_dry</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Dry air&#39;</span>
-<span class="gp">... </span>    <span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">_freqs</span><span class="p">,</span> <span class="n">atten_wet</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Wet air&#39;</span>
-<span class="gp">... </span>    <span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">_freqs</span><span class="p">,</span> <span class="p">(</span><span class="n">atten_dry</span> <span class="o">+</span> <span class="n">atten_wet</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span>
-<span class="gp">... </span>    <span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">()</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency [GHz]&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Specific Attenuation [dB / km]&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">999</span><span class="p">))</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">((</span><span class="mf">5.e-3</span><span class="p">,</span> <span class="mf">0.9e5</span><span class="p">))</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="o">*</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">(),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="s1">&#39;Specific attenuation for standard conditions, &#39;</span>
-<span class="gp">... </span>    <span class="s1">&#39;according to ITU-R P.676 (10), annex 1&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span>
-<span class="gp">... </span>    <span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
+content, one can calculate the specific attenuation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+<span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">atm</span>
+<span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+
+<span class="n">_freqs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">freq_grid</span> <span class="o">=</span> <span class="n">_freqs</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">GHz</span>
+<span class="n">total_pressure</span> <span class="o">=</span> <span class="mi">1013</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">hPa</span>
+<span class="n">temperature</span> <span class="o">=</span> <span class="mi">290</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">K</span>
+<span class="n">rho_water</span> <span class="o">=</span> <span class="mf">7.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span>
+
+<span class="n">pressure_water</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">pressure_water_from_rho_water</span><span class="p">(</span><span class="n">temperature</span><span class="p">,</span> <span class="n">rho_water</span><span class="p">)</span>
+<span class="n">pressure_dry</span> <span class="o">=</span> <span class="n">total_pressure</span> <span class="o">-</span> <span class="n">pressure_water</span>
+
+<span class="k">print</span><span class="p">(</span>
+    <span class="s1">&#39;Oxygen pressure: {0.value:.2f} {0.unit}, &#39;</span>
+    <span class="s1">&#39;Water vapor partial pressure: {1.value:.2f} {1.unit}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">pressure_dry</span><span class="p">,</span> <span class="n">pressure_water</span>
+    <span class="p">))</span>
+
+<span class="n">atten_dry</span><span class="p">,</span> <span class="n">atten_wet</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">atten_specific_annex1</span><span class="p">(</span>
+    <span class="n">freq_grid</span><span class="p">,</span> <span class="n">pressure_dry</span><span class="p">,</span> <span class="n">pressure_water</span><span class="p">,</span> <span class="n">temperature</span>
+    <span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">_freqs</span><span class="p">,</span> <span class="n">atten_dry</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+    <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Dry air&#39;</span>
+    <span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">_freqs</span><span class="p">,</span> <span class="n">atten_wet</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+    <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Wet air&#39;</span>
+    <span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">_freqs</span><span class="p">,</span> <span class="p">(</span><span class="n">atten_dry</span> <span class="o">+</span> <span class="n">atten_wet</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+    <span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span>
+    <span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency [GHz]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Specific Attenuation [dB / km]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">999</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">((</span><span class="mf">5.e-3</span><span class="p">,</span> <span class="mf">0.9e5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="o">*</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">(),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span>
+    <span class="s1">&#39;Specific attenuation for standard conditions, &#39;</span>
+    <span class="s1">&#39;according to ITU-R P.676 (10), annex 1&#39;</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span>
+    <span class="p">)</span>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../atm/index-2.png">png</a>, <a class="reference external" href="../atm/index-2.svg">svg</a>, <a class="reference external" href="../atm/index-2.pdf">pdf</a>)</p>
@@ -249,110 +250,77 @@ humidity.</p>
 <p>With the specific attenuation, one can infer the total attenuation along
 a terrestrial or slant path. For the latter scenario, one of course needs
 to calculate the specific attenuation for each atmospheric layer if working
-with Annex-1 formulas. If many calculations are to be done with the same
-atmospheric profile, the calculation of the physical parameters, including
-the frequency-dependent specific attenuation, would consume a lot of
-computing time. Therefore, <a class="reference internal" href="#module-pycraf.atm" title="pycraf.atm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atm</span></code></a> Annex-1 functions use a dictionary
-to cache the height profiles. It has to be created once for a given
-atmospheric profile, by calling <a class="reference internal" href="../api/pycraf.atm.atm_layers.html#pycraf.atm.atm_layers" title="pycraf.atm.atm_layers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atm_layers</span></code></a>, and can then be used
-for all subsequent calculations, e.g., by the <a class="reference internal" href="../api/pycraf.atm.atten_slant_annex1.html#pycraf.atm.atten_slant_annex1" title="pycraf.atm.atten_slant_annex1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_slant_annex1</span></code></a>
-function, which will do ray-tracing through the atmosphere and determine
-the overall atmospheric attenuation along the path.</p>
-<div class="section" id="terrestrial-path">
-<h4>Terrestrial path<a class="headerlink" href="#terrestrial-path" title="Permalink to this headline">¶</a></h4>
-<p>For a terrestrial path, one only needs to multiply the specific attenuation,
-as inferred with <a class="reference internal" href="../api/pycraf.atm.atten_specific_annex1.html#pycraf.atm.atten_specific_annex1" title="pycraf.atm.atten_specific_annex1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_specific_annex1</span></code></a> and multiply with a
-distance:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">freqs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">GHz</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">total_pressure</span> <span class="o">=</span> <span class="mi">1013</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">hPa</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">270</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">K</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">humidity</span> <span class="o">=</span> <span class="mi">80</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pressure_water</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">pressure_water_from_humidity</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">temperature</span><span class="p">,</span> <span class="n">total_pressure</span><span class="p">,</span> <span class="n">humidity</span>
-<span class="gp">... </span>    <span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pressure_dry</span> <span class="o">=</span> <span class="n">total_pressure</span> <span class="o">-</span> <span class="n">pressure_water</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="s1">&#39;Oxygen pressure: </span><span class="si">{0.value:.2f}</span><span class="s1"> </span><span class="si">{0.unit}</span><span class="s1">, &#39;</span>
-<span class="gp">... </span>    <span class="s1">&#39;Water vapor partial pressure: </span><span class="si">{1.value:.2f}</span><span class="s1"> </span><span class="si">{1.unit}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">pressure_dry</span><span class="p">,</span> <span class="n">pressure_water</span>
-<span class="gp">... </span>    <span class="p">))</span>
-<span class="go">Oxygen pressure: 1009.11 hPa, Water vapor partial pressure: 3.89 hPa</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">attens_dry</span><span class="p">,</span> <span class="n">attens_wet</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">atten_specific_annex1</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">freqs</span><span class="p">,</span> <span class="n">pressure_dry</span><span class="p">,</span> <span class="n">pressure_water</span><span class="p">,</span> <span class="n">temperature</span>
-<span class="gp">... </span>    <span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">freq</span><span class="p">,</span> <span class="n">atten_dry</span><span class="p">,</span> <span class="n">atten_wet</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">freqs</span><span class="p">,</span> <span class="n">attens_dry</span><span class="p">,</span> <span class="n">attens_wet</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:2.0f}</span><span class="s1">: </span><span class="si">{:.3f}</span><span class="s1"> </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">atten_dry</span><span class="p">,</span> <span class="n">atten_wet</span><span class="p">))</span>
-<span class="go"> 1 GHz: 0.006 dB / km 0.000 dB / km</span>
-<span class="go">22 GHz: 0.016 dB / km 0.073 dB / km</span>
-<span class="go">30 GHz: 0.026 dB / km 0.034 dB / km</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">distance</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">attens_total</span> <span class="o">=</span> <span class="p">(</span><span class="n">attens_dry</span> <span class="o">+</span> <span class="n">attens_wet</span><span class="p">)</span> <span class="o">*</span> <span class="n">distance</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">freq</span><span class="p">,</span> <span class="n">atten_total</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">freqs</span><span class="p">,</span> <span class="n">attens_total</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:2.0f}</span><span class="s1">: </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">atten_total</span><span class="p">))</span>
-<span class="go"> 1 GHz: 0.063 dB</span>
-<span class="go">22 GHz: 0.887 dB</span>
-<span class="go">30 GHz: 0.598 dB</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="slant-path-through-layers-of-earth-s-atmosphere">
-<h4>Slant path through layers of Earth’s atmosphere<a class="headerlink" href="#slant-path-through-layers-of-earth-s-atmosphere" title="Permalink to this headline">¶</a></h4>
-<p>For the slant path through the atmosphere, the user doesn’t need to provide
-the physical conditions manually, but one has to use one of the atmospheric
-height models, the properties of which are then cached via the
-<a class="reference internal" href="../api/pycraf.atm.atm_layers.html#pycraf.atm.atm_layers" title="pycraf.atm.atm_layers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atm_layers</span></code></a> function.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obs_alt</span> <span class="o">=</span> <span class="mi">300</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">_freqs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">freq_grid</span> <span class="o">=</span> <span class="n">_freqs</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">GHz</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cases</span> <span class="o">=</span> <span class="p">[</span>
-<span class="gp">... </span>    <span class="c1"># elevation, profile, label, linestyle</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="mi">90</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">atm</span><span class="o">.</span><span class="n">profile_highlat_winter</span><span class="p">,</span> <span class="s1">&#39;Winter, Elevation: 90 deg&#39;</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="mi">90</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">atm</span><span class="o">.</span><span class="n">profile_highlat_summer</span><span class="p">,</span> <span class="s1">&#39;Summer, Elevation: 90 deg&#39;</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="mi">15</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">atm</span><span class="o">.</span><span class="n">profile_highlat_winter</span><span class="p">,</span> <span class="s1">&#39;Winter, Elevation: 15 deg&#39;</span><span class="p">,</span> <span class="s1">&#39;b--&#39;</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="mi">15</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">atm</span><span class="o">.</span><span class="n">profile_highlat_summer</span><span class="p">,</span> <span class="s1">&#39;Summer, Elevation: 15 deg&#39;</span><span class="p">,</span> <span class="s1">&#39;r--&#39;</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">]</span>
-<span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">elev</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">linestyle</span> <span class="ow">in</span> <span class="n">cases</span><span class="p">:</span>
-<span class="gp">...</span>
-<span class="gp">... </span>    <span class="n">atm_layers_cache</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">atm_layers</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">profile</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="n">total_atten</span><span class="p">,</span> <span class="n">refraction</span><span class="p">,</span> <span class="n">tebb</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">atten_slant_annex1</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">elev</span><span class="p">,</span> <span class="n">obs_alt</span><span class="p">,</span> <span class="n">atm_layers_cache</span><span class="p">,</span> <span class="n">t_bg</span><span class="o">=</span><span class="mf">2.73</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">K</span>
-<span class="gp">... </span>        <span class="p">)</span>
-<span class="gp">... </span>    <span class="n">opacity</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">opacity_from_atten</span><span class="p">(</span><span class="n">total_atten</span><span class="p">,</span> <span class="n">elev</span><span class="p">)</span>
-<span class="gp">...</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Refraction for </span><span class="si">{}</span><span class="s1">: </span><span class="si">{:.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">refraction</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">arcsec</span><span class="p">)))</span>
-<span class="gp">...</span>
-<span class="gp">... </span>    <span class="n">_</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_freqs</span><span class="p">,</span> <span class="n">total_atten</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">linestyle</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="n">_</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_freqs</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="n">total_atten</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">linestyle</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="n">_</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_freqs</span><span class="p">,</span> <span class="n">opacity</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">linestyle</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="n">_</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_freqs</span><span class="p">,</span> <span class="n">tebb</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">K</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">linestyle</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
-<span class="go">Refraction for Winter, Elevation: 90 deg: -0.0 arcsec</span>
-<span class="go">Refraction for Summer, Elevation: 90 deg: -0.0 arcsec</span>
-<span class="go">Refraction for Winter, Elevation: 15 deg: -228.6 arcsec</span>
-<span class="go">Refraction for Summer, Elevation: 15 deg: -237.9 arcsec</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">()</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">()</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="o">*</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">(),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Total attenuation [dB]&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Total gain&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Zenith opacity&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Tebb [K]&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="mf">2e-2</span><span class="p">,</span> <span class="mf">9e2</span><span class="p">))</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="mf">3e-3</span><span class="p">,</span> <span class="mf">9e1</span><span class="p">))</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">310</span><span class="p">))</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">flat</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">... </span>    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">99</span><span class="p">))</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">... </span>    <span class="k">if</span> <span class="n">idx</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-<span class="gp">... </span>        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency [GHz]&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">...</span>
+with Annex-1 formulas:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+<span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">atm</span>
+<span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+
+<span class="n">elevation</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<span class="n">obs_alt</span> <span class="o">=</span> <span class="mi">300</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
+<span class="n">_freqs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">freq_grid</span> <span class="o">=</span> <span class="n">_freqs</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">GHz</span>
+
+<span class="n">cases</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># elevation, profile, label, linestyle</span>
+    <span class="p">(</span><span class="mi">90</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">atm</span><span class="o">.</span><span class="n">profile_highlat_winter</span><span class="p">,</span> <span class="s1">&#39;Winter, Elevation: 90 deg&#39;</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">90</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">atm</span><span class="o">.</span><span class="n">profile_highlat_summer</span><span class="p">,</span> <span class="s1">&#39;Summer, Elevation: 90 deg&#39;</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">15</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">atm</span><span class="o">.</span><span class="n">profile_highlat_winter</span><span class="p">,</span> <span class="s1">&#39;Winter, Elevation: 15 deg&#39;</span><span class="p">,</span> <span class="s1">&#39;b--&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">15</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">atm</span><span class="o">.</span><span class="n">profile_highlat_summer</span><span class="p">,</span> <span class="s1">&#39;Summer, Elevation: 15 deg&#39;</span><span class="p">,</span> <span class="s1">&#39;r--&#39;</span><span class="p">),</span>
+    <span class="p">]</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+<span class="n">axes</span> <span class="o">=</span> <span class="p">[</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)]</span>
+<span class="k">for</span> <span class="n">elevation</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span><span class="n">linestyle</span> <span class="ow">in</span> <span class="n">cases</span><span class="p">:</span>
+
+    <span class="n">total_atten</span><span class="p">,</span> <span class="n">refraction</span><span class="p">,</span> <span class="n">tebb</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">atten_slant_annex1</span><span class="p">(</span>
+        <span class="n">freq_grid</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span> <span class="n">obs_alt</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">t_bg</span><span class="o">=</span><span class="mf">2.73</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">K</span>
+        <span class="p">)</span>
+    <span class="n">opacity</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">opacity_from_atten</span><span class="p">(</span><span class="n">total_atten</span><span class="p">,</span> <span class="n">elevation</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span>
+        <span class="s1">&#39;Refraction for {}: {:.1f} arcsec&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">label</span><span class="p">,</span> <span class="n">refraction</span> <span class="o">*</span> <span class="mi">3600</span>
+        <span class="p">))</span>
+
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">_freqs</span><span class="p">,</span> <span class="n">total_atten</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">linestyle</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span>
+        <span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">_freqs</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="n">total_atten</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">linestyle</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span>
+        <span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">_freqs</span><span class="p">,</span> <span class="n">opacity</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">linestyle</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span>
+        <span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">_freqs</span><span class="p">,</span> <span class="n">tebb</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">K</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">linestyle</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span>
+        <span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">()</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">()</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
+    <span class="o">*</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">(),</span>
+    <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span>
+    <span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Total attenuation [dB]&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Total gain&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Zenith opacity&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Tebb [K]&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="mf">2e-2</span><span class="p">,</span> <span class="mf">9e2</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="mf">3e-3</span><span class="p">,</span> <span class="mf">9e1</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">310</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">axes</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">99</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">idx</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency [GHz]&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../atm/index-3.png">png</a>, <a class="reference external" href="../atm/index-3.svg">svg</a>, <a class="reference external" href="../atm/index-3.pdf">pdf</a>)</p>
@@ -364,184 +332,11 @@ height models, the properties of which are then cached via the
 <p>Note, to convert between total attenuation, <span class="math notranslate nohighlight">\(\gamma\)</span>, and (zenith!)
 opacity, <span class="math notranslate nohighlight">\(\tau\)</span> (used in astronomy), use</p>
 <div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}\gamma [\mathrm{dB}] = 10\log_{10} \gamma\\\gamma = 10^{\gamma [\mathrm{dB}] / 10}\\\gamma = e^{-\tau\cdot \mathrm{AM}},~ \mathrm{AM}\approx\frac{1}{\sin\delta}\\\tau = -\frac{1}{\mathrm{AM}}\ln\gamma\end{aligned}\end{align} \]</div>
+\[ \begin{align}\begin{aligned}\gamma [\mathrm{dB}] = 10\log_{10} \gamma\\\gamma = 10^{\gamma [\mathrm{dB}] / 10}\\\gamma = e^{-\tau\cdot \mathrm{AM}},~ \mathrm{AM}=\frac{1}{\sin\delta}\\\tau = -\frac{1}{\mathrm{AM}}\ln\gamma\end{aligned}\end{align} \]</div>
 </div>
 <p>It is clear, the for very realistic results, one should work with an actual
 height profile valid for the day of observation, such as measured with a radio
 sonde for example.</p>
-</div>
-</div>
-<div class="section" id="ray-tracing-refraction-and-path-finding">
-<h3>Ray-tracing, refraction, and path-finding<a class="headerlink" href="#ray-tracing-refraction-and-path-finding" title="Permalink to this headline">¶</a></h3>
-<p>The function <a class="reference internal" href="../api/pycraf.atm.atten_slant_annex1.html#pycraf.atm.atten_slant_annex1" title="pycraf.atm.atten_slant_annex1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_slant_annex1</span></code></a>, which was demonstrated above,
-internally calls a helper routine <a class="reference internal" href="../api/pycraf.atm.raytrace_path.html#pycraf.atm.raytrace_path" title="pycraf.atm.raytrace_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raytrace_path</span></code></a> to work out
-the geometry of a path starting at a given altitude (above sea level) and
-with a certain elevation. As the refractive index of each atmospheric layer
-is slightly distinct, <a class="reference external" href="https://en.wikipedia.org/wiki/Snell%27s_law">Snell’s law</a> applies and bends the ray somewhat as it travels from layer
-to layer. The overall bending angle is called “refraction” and thus a
-source appears at a slightly different elevation angle for an observer.</p>
-<p>If you are interested in how such a path looks like, the following
-demonstrates how to plot it.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># first, we need to create the atmospheric layer cache</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">atm_layers_cache</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">atm_layers</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">GHz</span><span class="p">,</span> <span class="n">atm</span><span class="o">.</span><span class="n">profile_highlat_winter</span><span class="p">)</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># to plot the atmospheric layers, we need to access the layers_cache:</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a_e</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">EARTH_RADIUS</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">layer_angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">layer_radii</span> <span class="o">=</span> <span class="n">atm_layers_cache</span><span class="p">[</span><span class="s1">&#39;radii&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bottom</span><span class="p">,</span> <span class="n">top</span> <span class="o">=</span> <span class="n">layer_radii</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">900</span><span class="p">]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bottom</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">layer_angles</span><span class="p">),</span> <span class="n">bottom</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">layer_angles</span><span class="p">),</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">top</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">layer_angles</span><span class="p">),</span> <span class="n">top</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">layer_angles</span><span class="p">),</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># we only plot some layers</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">layer_radii</span><span class="p">[[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mi">850</span><span class="p">]]:</span>
-<span class="gp">... </span>    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">layer_angles</span><span class="p">),</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">layer_angles</span><span class="p">),</span> <span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># now create four different example paths (of different type)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">path_num</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span> <span class="n">obs_alt</span><span class="p">,</span> <span class="n">max_path_length</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-<span class="gp">... </span>        <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="p">[</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">25000</span><span class="p">,</span> <span class="mi">50000</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="p">[</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="p">):</span>
-<span class="gp">...</span>
-<span class="gp">... </span>    <span class="n">path_params</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">refraction</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">raytrace_path</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">elevation</span><span class="p">,</span> <span class="n">obs_alt</span><span class="p">,</span> <span class="n">atm_layers_cache</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="n">max_path_length</span><span class="o">=</span><span class="n">max_path_length</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="p">)</span>
-<span class="gp">...</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;total path length </span><span class="si">{:d}</span><span class="s1">: </span><span class="si">{:5.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">path_num</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">path_params</span><span class="o">.</span><span class="n">a_n</span><span class="p">)</span>
-<span class="gp">... </span>        <span class="p">))</span>
-<span class="gp">...</span>
-<span class="gp">... </span>    <span class="n">radii</span> <span class="o">=</span> <span class="n">path_params</span><span class="o">.</span><span class="n">r_n</span>
-<span class="gp">... </span>    <span class="n">angle</span> <span class="o">=</span> <span class="n">path_params</span><span class="o">.</span><span class="n">delta_n</span>
-<span class="gp">... </span>    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">radii</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">),</span> <span class="n">radii</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Path </span><span class="si">{:d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path_num</span><span class="p">))</span>
-<span class="go">total path length 1: 1000.0</span>
-<span class="go">total path length 2: 230.0</span>
-<span class="go">total path length 3: 300.0</span>
-<span class="go">total path length 4:  71.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="o">*</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">())</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">290</span><span class="p">))</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">((</span><span class="n">a_e</span> <span class="o">-</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6453</span><span class="p">))</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Path propagation through layered atmosphere&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Projected distance (km)&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Distance to Earth center (km)&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../atm/index-4.png">png</a>, <a class="reference external" href="../atm/index-4.svg">svg</a>, <a class="reference external" href="../atm/index-4.pdf">pdf</a>)</p>
-<div class="figure align-center">
-<img alt="../_images/index-41.png" src="../_images/index-41.png" />
-</div>
-<p>As you can see, <a class="reference internal" href="../api/pycraf.atm.raytrace_path.html#pycraf.atm.raytrace_path" title="pycraf.atm.raytrace_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raytrace_path</span></code></a> allows to specify a maximal path
-length (as well as a maximal separation angle, see API docs). This can be
-useful for terrestrial paths.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-11-201609-I/en">ITU-R Rec. P.676-11</a> only presents an algorithm for paths with an
-elevation angle larger than zero degrees. For <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf</span></code> the method
-was extended to work properly with negative elevation angles, as well.</p>
-</div>
-<p>A similar function exists, <a class="reference internal" href="../api/pycraf.atm.path_endpoint.html#pycraf.atm.path_endpoint" title="pycraf.atm.path_endpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">path_endpoint</span></code></a>, which only returns
-the parameters of the final point on the ray. For example, one could plot the
-refraction angle as a function of elevation:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">elevations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">obs_alt</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">refractions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-<span class="gp">... </span>    <span class="n">atm</span><span class="o">.</span><span class="n">path_endpoint</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">elev</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">obs_alt</span><span class="p">,</span> <span class="n">atm_layers_cache</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="p">)</span><span class="o">.</span><span class="n">refraction</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">arcsec</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
-<span class="gp">... </span>    <span class="k">for</span> <span class="n">elev</span> <span class="ow">in</span> <span class="n">elevations</span>
-<span class="gp">... </span>    <span class="p">])</span>
-<span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">elevations</span><span class="p">,</span> <span class="n">refractions</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Elevation (deg)&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Refraction (arcsec)&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../atm/index-5.png">png</a>, <a class="reference external" href="../atm/index-5.svg">svg</a>, <a class="reference external" href="../atm/index-5.pdf">pdf</a>)</p>
-<div class="figure align-center">
-<img alt="../_images/index-5.png" src="../_images/index-5.png" />
-</div>
-<p>The function path_endpoint is really useful, because it allows us to find the
-correct elevation angle to have the path hit a certain point (e.g., a
-receiver station).</p>
-<div class="section" id="caustics">
-<h4>Caustics<a class="headerlink" href="#caustics" title="Permalink to this headline">¶</a></h4>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Unfortunately, a model of atmospheric layers with discrete refractive
-indices leads to some unexpected effects. See the following.</p>
-</div>
-<p>Consider a situation, where multiple rays with slightly different elevation angles are computed:</p>
-<blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obs_alt</span> <span class="o">=</span> <span class="mf">0.1001</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e_a</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">EARTH_RADIUS</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">layer_angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">radii</span> <span class="o">=</span> <span class="n">atm_layers_cache</span><span class="p">[</span><span class="s1">&#39;radii&#39;</span><span class="p">]</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">radii</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">layer_angles</span><span class="p">),</span>
-<span class="gp">... </span>        <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">layer_angles</span><span class="p">)</span> <span class="o">-</span> <span class="n">e_a</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span>
-<span class="gp">... </span>        <span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">elev</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.04</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mi">21</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">path_params</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">raytrace_path</span><span class="p">(</span>
-<span class="gp">... </span>        <span class="n">elev</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">obs_alt</span><span class="p">,</span> <span class="n">atm_layers_cache</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="n">max_path_length</span><span class="o">=</span><span class="mi">20</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="p">)</span>
-<span class="gp">... </span>    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">path_params</span><span class="o">.</span><span class="n">x_n</span><span class="p">,</span> <span class="n">path_params</span><span class="o">.</span><span class="n">y_n</span> <span class="o">-</span> <span class="n">e_a</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">((</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">15.1</span><span class="p">))</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">((</span><span class="n">obs_alt</span><span class="o">.</span><span class="n">value</span> <span class="o">-</span> <span class="mf">0.012</span><span class="p">,</span> <span class="n">obs_alt</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="mf">0.001</span><span class="p">))</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Path propagation through layered atmosphere&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Projected distance (km)&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Height above ground (km)&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +IGNORE_OUTPUT</span>
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../atm/index-6.png">png</a>, <a class="reference external" href="../atm/index-6.svg">svg</a>, <a class="reference external" href="../atm/index-6.pdf">pdf</a>)</p>
-<div class="figure align-center">
-<img alt="../_images/index-6.png" src="../_images/index-6.png" />
-</div>
-</div></blockquote>
-<p>Depending on where exactly the paths hit the boundary of the next layer, a
-“split” of adjacent rays can occur. These “caustics” have drastic
-consequences: it is not possible to reach certain points in the atmosphere
-from a given starting point. This also makes it impossible to use
-non-stochastic optimization algorithms to find the optimal elevation angle to
-use for a transmitter-receiver link.</p>
-</div>
-<div class="section" id="finding-the-path-to-a-given-target">
-<h4>Finding the path to a given target<a class="headerlink" href="#finding-the-path-to-a-given-target" title="Permalink to this headline">¶</a></h4>
-<p>Pycraf comes with a utility function <a class="reference internal" href="../api/pycraf.atm.find_elevation.html#pycraf.atm.find_elevation" title="pycraf.atm.find_elevation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_elevation</span></code></a> that uses <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html">Basinhopping</a> to find a good (not necessarily best) solution in the non-continuous minimization function (caused by the caustics, see above). This, unfortunately, can be relatively slow depending on path length and properties. It works by specifying the start and end height (above sea level) of the path and the true geographical angular distance between the two (see also <a class="reference internal" href="../api/pycraf.geometry.true_angular_distance.html#pycraf.geometry.true_angular_distance" title="pycraf.geometry.true_angular_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">true_angular_distance</span></code></a> function):</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf.geometry</span> <span class="k">import</span> <span class="n">true_angular_distance</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lon_tx</span><span class="p">,</span> <span class="n">lat_tx</span><span class="p">,</span> <span class="n">h_tx</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mi">50</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mi">30</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lon_rx</span><span class="p">,</span> <span class="n">lat_rx</span><span class="p">,</span> <span class="n">h_rx</span> <span class="o">=</span> <span class="mf">6.03</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.04</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">arc_len</span> <span class="o">=</span> <span class="n">true_angular_distance</span><span class="p">(</span><span class="n">lon_tx</span><span class="p">,</span> <span class="n">lat_tx</span><span class="p">,</span> <span class="n">lon_rx</span><span class="p">,</span> <span class="n">lat_rx</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;arc length: </span><span class="si">{:.4f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arc_len</span><span class="p">))</span>
-<span class="go">arc length: 0.0444 deg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">elev_opt</span><span class="p">,</span> <span class="n">h_rx_opt</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">find_elevation</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">h_tx</span><span class="p">,</span> <span class="n">h_rx</span><span class="p">,</span> <span class="n">arc_len</span><span class="p">,</span> <span class="n">atm_layers_cache</span>
-<span class="gp">... </span>    <span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Solution: elev = </span><span class="si">{:.3f}</span><span class="s1"> h_rx: </span><span class="si">{:.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">elev_opt</span><span class="p">,</span> <span class="n">h_rx_opt</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="p">))</span>
-<span class="go">Solution: elev = -0.342 deg h_rx: 2.0 m</span>
-</pre></div>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A Jupyter tutorial notebook about the <a class="reference internal" href="#module-pycraf.atm" title="pycraf.atm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atm</span></code></a> package is
@@ -551,14 +346,13 @@ for the Annex-2 method.</p>
 </div>
 </div>
 </div>
-</div>
 <div class="section" id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">Astropy Units and Quantities package</a>, which is used extensively in pycraf.</p></li>
 <li><p><a class="reference external" href="https://www.itu.int/rec/R-REC-P.453-12-201609-I/en">ITU-R Rec. P.453-12</a></p></li>
 <li><p><a class="reference external" href="https://www.itu.int/rec/R-REC-P.835-5-201202-I/en">ITU-R Rec. P.835-5</a></p></li>
-<li><p><a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-11-201609-I/en">ITU-R Rec. P.676-11</a></p></li>
+<li><p><a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R Rec. P.676-10</a></p></li>
 </ul>
 </div>
 <div class="section" id="reference-api">
@@ -566,7 +360,7 @@ for the Annex-2 method.</p>
 <div class="section" id="module-pycraf.atm">
 <span id="pycraf-atm-package"></span><h3>pycraf.atm Package<a class="headerlink" href="#module-pycraf.atm" title="Permalink to this headline">¶</a></h3>
 <p>The atm subpackage provides an implementation of the atmospheric models of
-<a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-11-201609-I/en">ITU-R Rec. P.676-11</a>.
+<a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R Rec. P.676-10</a>.
 For this, various other algorithms from the following two ITU-R
 Recommendations are
 necessary:</p>
@@ -578,17 +372,15 @@ which contains the Standard and several special atmospheric profiles.</p></li>
 which is used to calculate the refractive index from temperature and
 water/total air pressure. Furthermore, P.453 has formulae to derive the
 saturation water pressure from temperature and total air pressure,
-as well as the water pressure from temperature, pressure and humidity,
-or alternatively from temperature and wator vapor density.</p></li>
+as well as the water pressure from temperature, pressure and humidity, or
+alternatively from temperature and wator vapor density.</p></li>
 </ul>
 </div></blockquote>
 <div class="section" id="notes">
 <h4>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h4>
-<p>The new version of P.676,
-<a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-11-201609-I/en">ITU-R Rec. P.676-11</a>, has updated the algorithms for Annex 2 (compare with <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-11-201609-I/en">https://www.itu.int/rec/R-REC-P.676-11-201609-I/en</a>&gt;). As the Annex 1 methods are more accurate (and
-sufficiently fast), users should use these for their work. <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf</span></code>
-continues to provide the Annex 2 solutions of the P.676-10 for historical
-reasons, but this should be considered as deprecated.</p>
+<p>A new version of ITU-R P.676 is available,
+<a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-11-201609-I/en">ITU-R Rec. P.676-11</a>,
+which has a modified algorithm for Annex 2. We will implement this soon.</p>
 </div>
 <div class="section" id="functions">
 <h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h4>
@@ -601,43 +393,38 @@ reasons, but this should be considered as deprecated.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.airmass_from_elevation.html#pycraf.atm.airmass_from_elevation" title="pycraf.atm.airmass_from_elevation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">airmass_from_elevation</span></code></a>(elev)</p></td>
 <td><p>Airmass derived from elevation using extrapolation by Maddalena &amp; Johnson.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.atm_layers.html#pycraf.atm.atm_layers" title="pycraf.atm.atm_layers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atm_layers</span></code></a>(freq_grid, profile_func[, heights])</p></td>
-<td><p>Calculate physical parameters for atmospheric layers to be used with <a class="reference internal" href="../api/pycraf.atm.atten_slant_annex1.html#pycraf.atm.atten_slant_annex1" title="pycraf.atm.atten_slant_annex1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_slant_annex1</span></code></a>.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_from_opacity.html#pycraf.atm.atten_from_opacity" title="pycraf.atm.atten_from_opacity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_from_opacity</span></code></a>(tau[, elev])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_from_opacity.html#pycraf.atm.atten_from_opacity" title="pycraf.atm.atten_from_opacity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_from_opacity</span></code></a>(tau[, elev])</p></td>
 <td><p>Atmospheric attenuation derived from opacity.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_slant_annex1.html#pycraf.atm.atten_slant_annex1" title="pycraf.atm.atten_slant_annex1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_slant_annex1</span></code></a>(elevation, obs_alt, …)</p></td>
-<td><p>Path attenuation for a slant path through full atmosphere according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-11-201609-I/en">ITU-R P.676-11</a> Eq (17-20).</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_slant_annex1.html#pycraf.atm.atten_slant_annex1" title="pycraf.atm.atten_slant_annex1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_slant_annex1</span></code></a>(freq_grid, elevation, …)</p></td>
+<td><p>Path attenuation for a slant path through full atmosphere according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a> Eq (17-20).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_slant_annex2.html#pycraf.atm.atten_slant_annex2" title="pycraf.atm.atten_slant_annex2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_slant_annex2</span></code></a>(atten_dry, atten_wet, …)</p></td>
-<td><p>Simple path attenuation for slant path through full atmosphere according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Eq (28).</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_specific_annex1.html#pycraf.atm.atten_specific_annex1" title="pycraf.atm.atten_specific_annex1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_specific_annex1</span></code></a>(freq_grid, press_dry, …)</p></td>
-<td><p><p>Specific (one layer) atmospheric attenuation according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-11-201609-I/en">ITU-R P.676-11</a>, Annex 1.</p>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_slant_annex2.html#pycraf.atm.atten_slant_annex2" title="pycraf.atm.atten_slant_annex2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_slant_annex2</span></code></a>(atten_dry, atten_wet, …)</p></td>
+<td><p><p>Simple path attenuation for slant path through full atmosphere according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Eq (28).</p>
 </p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_specific_annex2.html#pycraf.atm.atten_specific_annex2" title="pycraf.atm.atten_specific_annex2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_specific_annex2</span></code></a>(freq_grid, press, …)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_specific_annex1.html#pycraf.atm.atten_specific_annex1" title="pycraf.atm.atten_specific_annex1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_specific_annex1</span></code></a>(freq_grid, press_dry, …)</p></td>
+<td><p><p>Specific (one layer) atmospheric attenuation according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Annex 1.</p>
+</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_specific_annex2.html#pycraf.atm.atten_specific_annex2" title="pycraf.atm.atten_specific_annex2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_specific_annex2</span></code></a>(freq_grid, press, …)</p></td>
 <td><p><p>Specific (one layer) atmospheric attenuation based on a simplified algorithm according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Annex 2.1.</p>
 </p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_terrestrial.html#pycraf.atm.atten_terrestrial" title="pycraf.atm.atten_terrestrial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_terrestrial</span></code></a>(specific_atten, path_length)</p></td>
-<td><p><p>Total path attenuation for a path close to the ground (i.e., one layer), according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-11-201609-I/en">ITU-R P.676-11</a>, Annex 1 + 2.</p>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_terrestrial.html#pycraf.atm.atten_terrestrial" title="pycraf.atm.atten_terrestrial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_terrestrial</span></code></a>(specific_atten, path_length)</p></td>
+<td><p><p>Total path attenuation for a path close to the ground (i.e., one layer), according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Annex 1 + 2.</p>
 </p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.elevation_from_airmass.html#pycraf.atm.elevation_from_airmass" title="pycraf.atm.elevation_from_airmass"><code class="xref py py-obj docutils literal notranslate"><span class="pre">elevation_from_airmass</span></code></a>(airmass)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.elevation_from_airmass.html#pycraf.atm.elevation_from_airmass" title="pycraf.atm.elevation_from_airmass"><code class="xref py py-obj docutils literal notranslate"><span class="pre">elevation_from_airmass</span></code></a>(airmass)</p></td>
 <td><p>Airmass derived from elevation using extrapolation by Maddalena &amp; Johnson.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.equivalent_height_dry.html#pycraf.atm.equivalent_height_dry" title="pycraf.atm.equivalent_height_dry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">equivalent_height_dry</span></code></a>(freq_grid, press)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.equivalent_height_dry.html#pycraf.atm.equivalent_height_dry" title="pycraf.atm.equivalent_height_dry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">equivalent_height_dry</span></code></a>(freq_grid, press)</p></td>
 <td><p><p>Equivalent height for dry air according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Annex 2.2.</p>
 </p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.equivalent_height_wet.html#pycraf.atm.equivalent_height_wet" title="pycraf.atm.equivalent_height_wet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">equivalent_height_wet</span></code></a>(freq_grid, press)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.equivalent_height_wet.html#pycraf.atm.equivalent_height_wet" title="pycraf.atm.equivalent_height_wet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">equivalent_height_wet</span></code></a>(freq_grid, press)</p></td>
 <td><p><p>Equivalent height for wet air according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Annex 2.2.</p>
 </p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.find_elevation.html#pycraf.atm.find_elevation" title="pycraf.atm.find_elevation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_elevation</span></code></a>(obs_alt, target_alt, …[, …])</p></td>
-<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.humidity_from_pressure_water.html#pycraf.atm.humidity_from_pressure_water" title="pycraf.atm.humidity_from_pressure_water"><code class="xref py py-obj docutils literal notranslate"><span class="pre">humidity_from_pressure_water</span></code></a>(temp, press, …)</p></td>
 <td><p>Relative humidity according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.453-12-201609-I/en">ITU-R P.453-12</a>.</p></td>
@@ -645,42 +432,36 @@ reasons, but this should be considered as deprecated.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.opacity_from_atten.html#pycraf.atm.opacity_from_atten" title="pycraf.atm.opacity_from_atten"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opacity_from_atten</span></code></a>(atten[, elev])</p></td>
 <td><p>Atmospheric opacity derived from attenuation.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.path_endpoint.html#pycraf.atm.path_endpoint" title="pycraf.atm.path_endpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">path_endpoint</span></code></a>(elevation, obs_alt, …[, …])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.pressure_water_from_humidity.html#pycraf.atm.pressure_water_from_humidity" title="pycraf.atm.pressure_water_from_humidity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pressure_water_from_humidity</span></code></a>(temp, press, …)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.pressure_water_from_humidity.html#pycraf.atm.pressure_water_from_humidity" title="pycraf.atm.pressure_water_from_humidity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pressure_water_from_humidity</span></code></a>(temp, press, …)</p></td>
 <td><p><p>Water pressure according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.453-12-201609-I/en">ITU-R P.453-12</a>.</p>
 </p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.pressure_water_from_rho_water.html#pycraf.atm.pressure_water_from_rho_water" title="pycraf.atm.pressure_water_from_rho_water"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pressure_water_from_rho_water</span></code></a>(temp, rho_w)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.pressure_water_from_rho_water.html#pycraf.atm.pressure_water_from_rho_water" title="pycraf.atm.pressure_water_from_rho_water"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pressure_water_from_rho_water</span></code></a>(temp, rho_w)</p></td>
 <td><p><p>Water pressure according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.453-12-201609-I/en">ITU-R P.453-12</a>.</p>
 </p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.profile_highlat_summer.html#pycraf.atm.profile_highlat_summer" title="pycraf.atm.profile_highlat_summer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_highlat_summer</span></code></a>(height)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.profile_highlat_summer.html#pycraf.atm.profile_highlat_summer" title="pycraf.atm.profile_highlat_summer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_highlat_summer</span></code></a>(height)</p></td>
 <td><p>High latitude summer height profiles according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.835-5-201202-I/en">ITU-R P.835-5</a>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.profile_highlat_winter.html#pycraf.atm.profile_highlat_winter" title="pycraf.atm.profile_highlat_winter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_highlat_winter</span></code></a>(height)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.profile_highlat_winter.html#pycraf.atm.profile_highlat_winter" title="pycraf.atm.profile_highlat_winter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_highlat_winter</span></code></a>(height)</p></td>
 <td><p><p>High latitude winter height profiles according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.835-5-201202-I/en">ITU-R P.835-5</a>.</p>
 </p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.profile_lowlat.html#pycraf.atm.profile_lowlat" title="pycraf.atm.profile_lowlat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_lowlat</span></code></a>(height)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.profile_lowlat.html#pycraf.atm.profile_lowlat" title="pycraf.atm.profile_lowlat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_lowlat</span></code></a>(height)</p></td>
 <td><p><p>Low latitude height profiles according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.835-5-201202-I/en">ITU-R P.835-5</a>.</p>
 </p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.profile_midlat_summer.html#pycraf.atm.profile_midlat_summer" title="pycraf.atm.profile_midlat_summer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_midlat_summer</span></code></a>(height)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.profile_midlat_summer.html#pycraf.atm.profile_midlat_summer" title="pycraf.atm.profile_midlat_summer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_midlat_summer</span></code></a>(height)</p></td>
 <td><p><p>Mid latitude summer height profiles according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.835-5-201202-I/en">ITU-R P.835-5</a>.</p>
 </p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.profile_midlat_winter.html#pycraf.atm.profile_midlat_winter" title="pycraf.atm.profile_midlat_winter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_midlat_winter</span></code></a>(height)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.profile_midlat_winter.html#pycraf.atm.profile_midlat_winter" title="pycraf.atm.profile_midlat_winter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_midlat_winter</span></code></a>(height)</p></td>
 <td><p><p>Mid latitude winter height profiles according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.835-5-201202-I/en">ITU-R P.835-5</a>.</p>
 </p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.profile_standard.html#pycraf.atm.profile_standard" title="pycraf.atm.profile_standard"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_standard</span></code></a>(height)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.profile_standard.html#pycraf.atm.profile_standard" title="pycraf.atm.profile_standard"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_standard</span></code></a>(height)</p></td>
 <td><p><p>Standard height profiles according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.835-5-201202-I/en">ITU-R P.835-5</a>, Annex 1.</p>
 </p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.raytrace_path.html#pycraf.atm.raytrace_path" title="pycraf.atm.raytrace_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raytrace_path</span></code></a>(elevation, obs_alt, …[, …])</p></td>
-<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.refractive_index.html#pycraf.atm.refractive_index" title="pycraf.atm.refractive_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refractive_index</span></code></a>(temp, press, press_w)</p></td>
 <td><p><p>Refractive index according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.453-12-201609-I/en">ITU-R P.453-12</a>.</p>
@@ -713,16 +494,7 @@ reasons, but this should be considered as deprecated.</p>
 <li><a class="reference internal" href="#using-pycraf-atm">Using <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.atm</span></code></a><ul>
 <li><a class="reference internal" href="#height-profiles">Height profiles</a></li>
 <li><a class="reference internal" href="#specific-attenuation">Specific attenuation</a></li>
-<li><a class="reference internal" href="#total-attenuation">Total attenuation</a><ul>
-<li><a class="reference internal" href="#terrestrial-path">Terrestrial path</a></li>
-<li><a class="reference internal" href="#slant-path-through-layers-of-earth-s-atmosphere">Slant path through layers of Earth’s atmosphere</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#ray-tracing-refraction-and-path-finding">Ray-tracing, refraction, and path-finding</a><ul>
-<li><a class="reference internal" href="#caustics">Caustics</a></li>
-<li><a class="reference internal" href="#finding-the-path-to-a-given-target">Finding the path to a given target</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#total-attenuation">Total attenuation</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#see-also">See Also</a></li>

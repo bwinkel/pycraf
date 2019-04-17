@@ -12,10 +12,7 @@ latest/_images/index-31.png
 latest/_images/index-3_00_00.png
 latest/_images/index-3_01_00.png
 latest/_images/index-4.png
-latest/_images/index-41.png
 latest/_images/index-4_01_00.png
-latest/_images/index-5.png
-latest/_images/index-6.png
 latest/_images/inheritance-00ea64733e67a150b9824abf03173267d2fe9ec8.svg
 latest/_modules/astropy/units/quantity.html
 latest/_modules/index.html
@@ -51,7 +48,6 @@ latest/_sources/api/pycraf.antenna.imt2020_single_element_pattern.rst.txt
 latest/_sources/api/pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz.rst.txt
 latest/_sources/api/pycraf.antenna.ras_pattern.rst.txt
 latest/_sources/api/pycraf.atm.airmass_from_elevation.rst.txt
-latest/_sources/api/pycraf.atm.atm_layers.rst.txt
 latest/_sources/api/pycraf.atm.atten_from_opacity.rst.txt
 latest/_sources/api/pycraf.atm.atten_slant_annex1.rst.txt
 latest/_sources/api/pycraf.atm.atten_slant_annex2.rst.txt
@@ -61,10 +57,8 @@ latest/_sources/api/pycraf.atm.atten_terrestrial.rst.txt
 latest/_sources/api/pycraf.atm.elevation_from_airmass.rst.txt
 latest/_sources/api/pycraf.atm.equivalent_height_dry.rst.txt
 latest/_sources/api/pycraf.atm.equivalent_height_wet.rst.txt
-latest/_sources/api/pycraf.atm.find_elevation.rst.txt
 latest/_sources/api/pycraf.atm.humidity_from_pressure_water.rst.txt
 latest/_sources/api/pycraf.atm.opacity_from_atten.rst.txt
-latest/_sources/api/pycraf.atm.path_endpoint.rst.txt
 latest/_sources/api/pycraf.atm.pressure_water_from_humidity.rst.txt
 latest/_sources/api/pycraf.atm.pressure_water_from_rho_water.rst.txt
 latest/_sources/api/pycraf.atm.profile_highlat_summer.rst.txt
@@ -73,7 +67,6 @@ latest/_sources/api/pycraf.atm.profile_lowlat.rst.txt
 latest/_sources/api/pycraf.atm.profile_midlat_summer.rst.txt
 latest/_sources/api/pycraf.atm.profile_midlat_winter.rst.txt
 latest/_sources/api/pycraf.atm.profile_standard.rst.txt
-latest/_sources/api/pycraf.atm.raytrace_path.rst.txt
 latest/_sources/api/pycraf.atm.refractive_index.rst.txt
 latest/_sources/api/pycraf.atm.rho_water_from_pressure_water.rst.txt
 latest/_sources/api/pycraf.atm.saturation_water_pressure.rst.txt
@@ -245,7 +238,6 @@ latest/api/pycraf.antenna.imt2020_single_element_pattern.html
 latest/api/pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz.html
 latest/api/pycraf.antenna.ras_pattern.html
 latest/api/pycraf.atm.airmass_from_elevation.html
-latest/api/pycraf.atm.atm_layers.html
 latest/api/pycraf.atm.atten_from_opacity.html
 latest/api/pycraf.atm.atten_slant_annex1.html
 latest/api/pycraf.atm.atten_slant_annex2.html
@@ -255,10 +247,8 @@ latest/api/pycraf.atm.atten_terrestrial.html
 latest/api/pycraf.atm.elevation_from_airmass.html
 latest/api/pycraf.atm.equivalent_height_dry.html
 latest/api/pycraf.atm.equivalent_height_wet.html
-latest/api/pycraf.atm.find_elevation.html
 latest/api/pycraf.atm.humidity_from_pressure_water.html
 latest/api/pycraf.atm.opacity_from_atten.html
-latest/api/pycraf.atm.path_endpoint.html
 latest/api/pycraf.atm.pressure_water_from_humidity.html
 latest/api/pycraf.atm.pressure_water_from_rho_water.html
 latest/api/pycraf.atm.profile_highlat_summer.html
@@ -267,7 +257,6 @@ latest/api/pycraf.atm.profile_lowlat.html
 latest/api/pycraf.atm.profile_midlat_summer.html
 latest/api/pycraf.atm.profile_midlat_winter.html
 latest/api/pycraf.atm.profile_standard.html
-latest/api/pycraf.atm.raytrace_path.html
 latest/api/pycraf.atm.refractive_index.html
 latest/api/pycraf.atm.rho_water_from_pressure_water.html
 latest/api/pycraf.atm.saturation_water_pressure.html
@@ -377,18 +366,6 @@ latest/atm/index-3.pdf
 latest/atm/index-3.png
 latest/atm/index-3.py
 latest/atm/index-3.svg
-latest/atm/index-4.pdf
-latest/atm/index-4.png
-latest/atm/index-4.py
-latest/atm/index-4.svg
-latest/atm/index-5.pdf
-latest/atm/index-5.png
-latest/atm/index-5.py
-latest/atm/index-5.svg
-latest/atm/index-6.pdf
-latest/atm/index-6.png
-latest/atm/index-6.py
-latest/atm/index-6.svg
 latest/atm/index.html
 latest/conversions/index.html
 latest/generated/examples/index.html

@@ -1,6 +1,0 @@
-path_endpoint
-=============
-
-.. currentmodule:: pycraf.atm
-
-.. autofunction:: path_endpoint
