@@ -1,0 +1,6 @@
+raytrace_path
+=============
+
+.. currentmodule:: pycraf.atm
+
+.. autofunction:: raytrace_path
