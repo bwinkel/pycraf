@@ -81,39 +81,39 @@ Let's start by having a look at the atmospheric standard height profile:
     >>>
     >>> plt.close()
     >>> fig, axes = plt.subplots(2, 3, figsize=(12, 10))
-    >>> axes[0, 0].plot(hprof.temperature.to(u.K).value, _heights, 'k-')  # doctest: +SKIP
-    >>> axes[0, 0].set_xlabel('Temperature [K]')  # doctest: +SKIP
-    >>> axes[0, 0].set_xlim((160, 300))  # doctest: +SKIP
-    >>> axes[0, 1].plot(hprof.pressure.to(u.hPa).value, _heights, 'b-', label='Total')  # doctest: +SKIP
-    >>> axes[0, 1].plot(hprof.pressure_water.to(u.hPa).value, _heights, 'r-', label='Wet')  # doctest: +SKIP
+    >>> axes[0, 0].plot(hprof.temperature.to(u.K).value, _heights, 'k-')  # doctest: +IGNORE_OUTPUT
+    >>> axes[0, 0].set_xlabel('Temperature [K]')  # doctest: +IGNORE_OUTPUT
+    >>> axes[0, 0].set_xlim((160, 300))  # doctest: +IGNORE_OUTPUT
+    >>> axes[0, 1].plot(hprof.pressure.to(u.hPa).value, _heights, 'b-', label='Total')  # doctest: +IGNORE_OUTPUT
+    >>> axes[0, 1].plot(hprof.pressure_water.to(u.hPa).value, _heights, 'r-', label='Wet')  # doctest: +IGNORE_OUTPUT
     >>> axes[0, 1].legend(
     ...     *axes[0, 1].get_legend_handles_labels(),
     ...     loc='upper right', fontsize=10
-    ...     )  # doctest: +SKIP
-    >>> axes[0, 1].set_xlabel('Pressure [hPa]')  # doctest: +SKIP
-    >>> axes[0, 1].semilogx()  # doctest: +SKIP
-    >>> axes[0, 1].set_xlim((1.e-6, 1100))  # doctest: +SKIP
-    >>> axes[0, 2].plot(hprof.rho_water.to(u.g / u.cm ** 3).value, _heights, 'k-')  # doctest: +SKIP
-    >>> axes[0, 2].set_xlabel('Water density [g / cm^3]')  # doctest: +SKIP
-    >>> axes[0, 2].semilogx()  # doctest: +SKIP
-    >>> axes[1, 0].plot(hprof.ref_index.to(cnv.dimless).value - 1., _heights, 'k-')  # doctest: +SKIP
-    >>> axes[1, 0].set_xlabel('Refractive index - 1')  # doctest: +SKIP
-    >>> axes[1, 0].semilogx()  # doctest: +SKIP
-    >>> axes[1, 1].plot(hprof.humidity_water.to(u.percent).value, _heights, 'k-')  # doctest: +SKIP
-    >>> axes[1, 1].set_xlabel('Relative humidity, water [%]')  # doctest: +SKIP
-    >>> axes[1, 2].plot(hprof.humidity_ice.to(u.percent).value, _heights, 'k-')  # doctest: +SKIP
-    >>> axes[1, 2].set_xlabel('Relative humidity, ice [%]')  # doctest: +SKIP
+    ...     )  # doctest: +IGNORE_OUTPUT
+    >>> axes[0, 1].set_xlabel('Pressure [hPa]')  # doctest: +IGNORE_OUTPUT
+    >>> axes[0, 1].semilogx()  # doctest: +IGNORE_OUTPUT
+    >>> axes[0, 1].set_xlim((1.e-6, 1100))  # doctest: +IGNORE_OUTPUT
+    >>> axes[0, 2].plot(hprof.rho_water.to(u.g / u.cm ** 3).value, _heights, 'k-')  # doctest: +IGNORE_OUTPUT
+    >>> axes[0, 2].set_xlabel('Water density [g / cm^3]')  # doctest: +IGNORE_OUTPUT
+    >>> axes[0, 2].semilogx()  # doctest: +IGNORE_OUTPUT
+    >>> axes[1, 0].plot(hprof.ref_index.to(cnv.dimless).value - 1., _heights, 'k-')  # doctest: +IGNORE_OUTPUT
+    >>> axes[1, 0].set_xlabel('Refractive index - 1')  # doctest: +IGNORE_OUTPUT
+    >>> axes[1, 0].semilogx()  # doctest: +IGNORE_OUTPUT
+    >>> axes[1, 1].plot(hprof.humidity_water.to(u.percent).value, _heights, 'k-')  # doctest: +IGNORE_OUTPUT
+    >>> axes[1, 1].set_xlabel('Relative humidity, water [%]')  # doctest: +IGNORE_OUTPUT
+    >>> axes[1, 2].plot(hprof.humidity_ice.to(u.percent).value, _heights, 'k-')  # doctest: +IGNORE_OUTPUT
+    >>> axes[1, 2].set_xlabel('Relative humidity, ice [%]')  # doctest: +IGNORE_OUTPUT
     >>> for idx, ax in enumerate(axes.flat):
-    ...     ax.set_ylim((0, 86))  # doctest: +SKIP
+    ...     ax.set_ylim((0, 86))  # doctest: +IGNORE_OUTPUT
     ...     if idx % 3 == 0:
-    ...         ax.set_ylabel('Height [km]')  # doctest: +SKIP
-    ...     ax.grid()  # doctest: +SKIP
+    ...         ax.set_ylabel('Height [km]')  # doctest: +IGNORE_OUTPUT
+    ...     ax.grid()  # doctest: +IGNORE_OUTPUT
     ...
     >>> fig.suptitle(
     ...     'Atmospheric standard profile after ITU R-P.835-5, Annex 1',
     ...     fontsize=16
-    ...     )  # doctest: +SKIP
-    >>> plt.show()  # doctest: +SKIP
+    ...     )  # doctest: +IGNORE_OUTPUT
+
 
 Here the function `~pycraf.atm.profile_standard` returns a
 `~collections.namedtuple` with the plotted quantities. This works in the same
@@ -158,32 +158,32 @@ humidity.
     ...     )
     ...
     >>> plt.close()
-    >>> plt.figure(figsize=(12, 7))  # doctest: +SKIP
+    >>> plt.figure(figsize=(12, 7))  # doctest: +IGNORE_OUTPUT
     >>> plt.plot(
     ...     _freqs, atten_dry.to(cnv.dB / u.km).value,
     ...     'r-', label='Dry air'
-    ...     )  # doctest: +SKIP
+    ...     )  # doctest: +IGNORE_OUTPUT
     >>> plt.plot(
     ...     _freqs, atten_wet.to(cnv.dB / u.km).value,
     ...     'b-', label='Wet air'
-    ...     )  # doctest: +SKIP
+    ...     )  # doctest: +IGNORE_OUTPUT
     >>> plt.plot(
     ...     _freqs, (atten_dry + atten_wet).to(cnv.dB / u.km).value,
     ...     'k-', label='Total'
-    ...     )  # doctest: +SKIP
-    >>> plt.semilogy()  # doctest: +SKIP
-    >>> plt.xlabel('Frequency [GHz]')  # doctest: +SKIP
-    >>> plt.ylabel('Specific Attenuation [dB / km]')  # doctest: +SKIP
-    >>> plt.xlim((1, 999))  # doctest: +SKIP
-    >>> plt.ylim((5.e-3, 0.9e5))  # doctest: +SKIP
-    >>> plt.grid()  # doctest: +SKIP
-    >>> plt.legend(*plt.gca().get_legend_handles_labels(), loc='upper left')  # doctest: +SKIP
+    ...     )  # doctest: +IGNORE_OUTPUT
+    >>> plt.semilogy()  # doctest: +IGNORE_OUTPUT
+    >>> plt.xlabel('Frequency [GHz]')  # doctest: +IGNORE_OUTPUT
+    >>> plt.ylabel('Specific Attenuation [dB / km]')  # doctest: +IGNORE_OUTPUT
+    >>> plt.xlim((1, 999))  # doctest: +IGNORE_OUTPUT
+    >>> plt.ylim((5.e-3, 0.9e5))  # doctest: +IGNORE_OUTPUT
+    >>> plt.grid()  # doctest: +IGNORE_OUTPUT
+    >>> plt.legend(*plt.gca().get_legend_handles_labels(), loc='upper left')  # doctest: +IGNORE_OUTPUT
     >>> plt.title(
     ...     'Specific attenuation for standard conditions, '
     ...     'according to ITU-R P.676 (10), annex 1',
     ...     fontsize=16
-    ...     )  # doctest: +SKIP
-    >>> plt.show()  # doctest: +SKIP
+    ...     )  # doctest: +IGNORE_OUTPUT
+
 
 Total attenuation
 -----------------
@@ -199,6 +199,55 @@ atmospheric profile, by calling `~pycraf.atm.atm_layers`, and can then be used
 for all subsequent calculations, e.g., by the `~pycraf.atm.atten_slant_annex1`
 function, which will do ray-tracing through the atmosphere and determine
 the overall atmospheric attenuation along the path.
+
+
+Terrestrial path
+^^^^^^^^^^^^^^^^^
+
+For a terrestrial path, one only needs to multiply the specific attenuation,
+as inferred with `~pycraf.atm.atten_specific_annex1` and multiply with a
+distance::
+
+    >>> freqs = [1, 22, 30] * u.GHz
+    >>> total_pressure = 1013 * u.hPa
+    >>> temperature = 270 * u.K
+    >>> humidity = 80 * u.percent
+    >>>
+    >>> pressure_water = atm.pressure_water_from_humidity(
+    ...     temperature, total_pressure, humidity
+    ...     )
+    >>> pressure_dry = total_pressure - pressure_water
+    >>>
+    >>> print(
+    ...     'Oxygen pressure: {0.value:.2f} {0.unit}, '
+    ...     'Water vapor partial pressure: {1.value:.2f} {1.unit}'.format(
+    ...         pressure_dry, pressure_water
+    ...     ))
+    Oxygen pressure: 1009.11 hPa, Water vapor partial pressure: 3.89 hPa
+    >>> attens_dry, attens_wet = atm.atten_specific_annex1(
+    ...     freqs, pressure_dry, pressure_water, temperature
+    ...     )
+    >>> for freq, atten_dry, atten_wet in zip(freqs, attens_dry, attens_wet):
+    ...     print('{:2.0f}: {:.3f} {:.3f}'.format(freq, atten_dry, atten_wet))
+     1 GHz: 0.006 dB / km 0.000 dB / km
+    22 GHz: 0.016 dB / km 0.073 dB / km
+    30 GHz: 0.026 dB / km 0.034 dB / km
+    >>> distance = 10 * u.km
+    >>> attens_total = (attens_dry + attens_wet) * distance
+    >>> for freq, atten_total in zip(freqs, attens_total):
+    ...     print('{:2.0f}: {:.3f}'.format(freq, atten_total))
+     1 GHz: 0.063 dB
+    22 GHz: 0.887 dB
+    30 GHz: 0.598 dB
+
+
+
+Slant path through layers of Earth's atmosphere
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+For the slant path through the atmosphere, the user doesn't need to provide
+the physical conditions manually, but one has to use one of the atmospheric
+height models, the properties of which are then cached via the
+`~pycraf.atm.atm_layers` function.
 
 .. plot::
     :context:
@@ -236,25 +285,25 @@ the overall atmospheric attenuation along the path.
     Refraction for Summer, Elevation: 90 deg: -0.0 arcsec
     Refraction for Winter, Elevation: 15 deg: -228.6 arcsec
     Refraction for Summer, Elevation: 15 deg: -237.9 arcsec
-    >>> axes[0, 0].semilogy()  # doctest: +SKIP
-    >>> axes[1, 0].semilogy()  # doctest: +SKIP
-    >>> axes[0, 0].legend(*axes[0, 0].get_legend_handles_labels(), loc='upper left', fontsize=8)  # doctest: +SKIP
-    >>> axes[0, 0].set_ylabel('Total attenuation [dB]')  # doctest: +SKIP
-    >>> axes[0, 1].set_ylabel('Total gain')  # doctest: +SKIP
-    >>> axes[1, 0].set_ylabel('Zenith opacity')  # doctest: +SKIP
-    >>> axes[1, 1].set_ylabel('Tebb [K]')  # doctest: +SKIP
-    >>> axes[0, 0].set_ylim((2e-2, 9e2))  # doctest: +SKIP
-    >>> axes[0, 1].set_ylim((0, 1))  # doctest: +SKIP
-    >>> axes[1, 0].set_ylim((3e-3, 9e1))  # doctest: +SKIP
-    >>> axes[1, 1].set_ylim((0, 310))  # doctest: +SKIP
+    >>> axes[0, 0].semilogy()  # doctest: +IGNORE_OUTPUT
+    >>> axes[1, 0].semilogy()  # doctest: +IGNORE_OUTPUT
+    >>> axes[0, 0].legend(*axes[0, 0].get_legend_handles_labels(), loc='upper left', fontsize=8)  # doctest: +IGNORE_OUTPUT
+    >>> axes[0, 0].set_ylabel('Total attenuation [dB]')  # doctest: +IGNORE_OUTPUT
+    >>> axes[0, 1].set_ylabel('Total gain')  # doctest: +IGNORE_OUTPUT
+    >>> axes[1, 0].set_ylabel('Zenith opacity')  # doctest: +IGNORE_OUTPUT
+    >>> axes[1, 1].set_ylabel('Tebb [K]')  # doctest: +IGNORE_OUTPUT
+    >>> axes[0, 0].set_ylim((2e-2, 9e2))  # doctest: +IGNORE_OUTPUT
+    >>> axes[0, 1].set_ylim((0, 1))  # doctest: +IGNORE_OUTPUT
+    >>> axes[1, 0].set_ylim((3e-3, 9e1))  # doctest: +IGNORE_OUTPUT
+    >>> axes[1, 1].set_ylim((0, 310))  # doctest: +IGNORE_OUTPUT
     >>>
     >>> for idx, ax in enumerate(axes.flat):
-    ...     ax.grid()  # doctest: +SKIP
-    ...     ax.set_xlim((1, 99))  # doctest: +SKIP
+    ...     ax.grid()  # doctest: +IGNORE_OUTPUT
+    ...     ax.set_xlim((1, 99))  # doctest: +IGNORE_OUTPUT
     ...     if idx >= 2:
-    ...         ax.set_xlabel('Frequency [GHz]')  # doctest: +SKIP
+    ...         ax.set_xlabel('Frequency [GHz]')  # doctest: +IGNORE_OUTPUT
     ...
-    >>> plt.show()  # doctest: +SKIP
+
 
 .. note::
 
@@ -305,11 +354,11 @@ demonstrates how to plot it.
     >>> layer_angles = np.arange(0, 0.1, 1e-3)
     >>> layer_radii = atm_layers_cache['radii']
     >>> bottom, top = layer_radii[[0, 900]]
-    >>> plt.plot(bottom * np.sin(layer_angles), bottom * np.cos(layer_angles), 'k-')  # doctest: +SKIP
-    >>> plt.plot(top * np.sin(layer_angles), top * np.cos(layer_angles), 'k-')  # doctest: +SKIP
+    >>> plt.plot(bottom * np.sin(layer_angles), bottom * np.cos(layer_angles), 'k-')  # doctest: +IGNORE_OUTPUT
+    >>> plt.plot(top * np.sin(layer_angles), top * np.cos(layer_angles), 'k-')  # doctest: +IGNORE_OUTPUT
     >>> # we only plot some layers
     >>> for r in layer_radii[[200, 500, 600, 700, 800, 850]]:
-    ...     plt.plot(r * np.sin(layer_angles), r * np.cos(layer_angles), 'k--', alpha=0.5)  # doctest: +SKIP
+    ...     plt.plot(r * np.sin(layer_angles), r * np.cos(layer_angles), 'k--', alpha=0.5)  # doctest: +IGNORE_OUTPUT
     ...
     >>> # now create four different example paths (of different type)
     >>> for path_num, elevation, obs_alt, max_path_length in zip(
@@ -336,14 +385,14 @@ demonstrates how to plot it.
     total path length 2: 230.0
     total path length 3: 300.0
     total path length 4:  71.0
-    >>> plt.legend(*plt.gca().get_legend_handles_labels())  # doctest: +SKIP
-    >>> plt.xlim((0, 290))  # doctest: +SKIP
-    >>> plt.ylim((a_e - 5, 6453))  # doctest: +SKIP
-    >>> plt.title('Path propagation through layered atmosphere')  # doctest: +SKIP
-    >>> plt.xlabel('Projected distance (km)')  # doctest: +SKIP
-    >>> plt.ylabel('Distance to Earth center (km)')  # doctest: +SKIP
-    >>> plt.gca().set_aspect('equal')  # doctest: +SKIP
-    >>> plt.show()  # doctest: +SKIP
+    >>> plt.legend(*plt.gca().get_legend_handles_labels())  # doctest: +IGNORE_OUTPUT
+    >>> plt.xlim((0, 290))  # doctest: +IGNORE_OUTPUT
+    >>> plt.ylim((a_e - 5, 6453))  # doctest: +IGNORE_OUTPUT
+    >>> plt.title('Path propagation through layered atmosphere')  # doctest: +IGNORE_OUTPUT
+    >>> plt.xlabel('Projected distance (km)')  # doctest: +IGNORE_OUTPUT
+    >>> plt.ylabel('Distance to Earth center (km)')  # doctest: +IGNORE_OUTPUT
+    >>> plt.gca().set_aspect('equal')  # doctest: +IGNORE_OUTPUT
+
 
 As you can see, `~pycraf.atm.raytrace_path` allows to specify a maximal path
 length (as well as a maximal separation angle, see API docs). This can be
@@ -373,13 +422,13 @@ refraction angle as a function of elevation:
     ...     for elev in elevations
     ...     ])
     ...
-    >>> plt.close()  # doctest: +SKIP
-    >>> fig = plt.figure(figsize=(8, 4))  # doctest: +SKIP
-    >>> plt.plot(elevations, refractions, '-')  # doctest: +SKIP
-    >>> plt.xlabel('Elevation (deg)')  # doctest: +SKIP
-    >>> plt.ylabel('Refraction (arcsec)')  # doctest: +SKIP
-    >>> plt.grid()  # doctest: +SKIP
-    >>> plt.show()  # doctest: +SKIP
+    >>> plt.close()  # doctest: +IGNORE_OUTPUT
+    >>> fig = plt.figure(figsize=(8, 4))  # doctest: +IGNORE_OUTPUT
+    >>> plt.plot(elevations, refractions, '-')  # doctest: +IGNORE_OUTPUT
+    >>> plt.xlabel('Elevation (deg)')  # doctest: +IGNORE_OUTPUT
+    >>> plt.ylabel('Refraction (arcsec)')  # doctest: +IGNORE_OUTPUT
+    >>> plt.grid()  # doctest: +IGNORE_OUTPUT
+
 
 The function path_endpoint is really useful, because it allows us to find the
 correct elevation angle to have the path hit a certain point (e.g., a
@@ -412,21 +461,21 @@ Consider a situation, where multiple rays with slightly different elevation angl
     ...         r * np.sin(layer_angles),
     ...         r * np.cos(layer_angles) - e_a,
     ...         'k--', alpha=0.5
-    ...         )  # doctest: +SKIP
+    ...         )  # doctest: +IGNORE_OUTPUT
     ...
     >>> for elev in np.linspace(-0.04, -0.01, 21):
     ...     path_params, _, _ = atm.raytrace_path(
     ...         elev * u.deg, obs_alt, atm_layers_cache,
     ...         max_path_length=20 * u.km,
     ...         )
-    ...     plt.plot(path_params.x_n, path_params.y_n - e_a, '-')  # doctest: +SKIP
+    ...     plt.plot(path_params.x_n, path_params.y_n - e_a, '-')  # doctest: +IGNORE_OUTPUT
     ...
-    >>> plt.xlim((-0.1, 15.1))  # doctest: +SKIP
-    >>> plt.ylim((obs_alt.value - 0.012, obs_alt.value + 0.001))  # doctest: +SKIP
-    >>> plt.title('Path propagation through layered atmosphere')  # doctest: +SKIP
-    >>> plt.xlabel('Projected distance (km)')  # doctest: +SKIP
-    >>> plt.ylabel('Height above ground (km)')  # doctest: +SKIP
-    >>> plt.show()  # doctest: +SKIP
+    >>> plt.xlim((-0.1, 15.1))  # doctest: +IGNORE_OUTPUT
+    >>> plt.ylim((obs_alt.value - 0.012, obs_alt.value + 0.001))  # doctest: +IGNORE_OUTPUT
+    >>> plt.title('Path propagation through layered atmosphere')  # doctest: +IGNORE_OUTPUT
+    >>> plt.xlabel('Projected distance (km)')  # doctest: +IGNORE_OUTPUT
+    >>> plt.ylabel('Height above ground (km)')  # doctest: +IGNORE_OUTPUT
+
 
 Depending on where exactly the paths hit the boundary of the next layer, a
 "split" of adjacent rays can occur. These "caustics" have drastic
