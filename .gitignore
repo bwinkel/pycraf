@@ -21,6 +21,7 @@ MANIFEST
 docs/api
 docs/generated
 docs/_build
+docs/docs/_build
 
 # Eclipse editor project files
 .project
