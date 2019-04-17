@@ -79,21 +79,20 @@
 <h1>atten_slant_annex1<a class="headerlink" href="#atten-slant-annex1" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.atm.atten_slant_annex1">
-<code class="descclassname">pycraf.atm.</code><code class="descname">atten_slant_annex1</code><span class="sig-paren">(</span><em>freq_grid</em>, <em>elevation</em>, <em>obs_alt</em>, <em>profile_func</em>, <em>t_bg=&lt;Quantity 2.73 K&gt;</em>, <em>max_path_length=&lt;Quantity 1000.0 km&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#atten_slant_annex1"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L1545" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.atten_slant_annex1" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.atm.</code><code class="descname">atten_slant_annex1</code><span class="sig-paren">(</span><em>elevation</em>, <em>obs_alt</em>, <em>atm_layers_dict</em>, <em>do_tebb=True</em>, <em>t_bg=&lt;Quantity 2.73 K&gt;</em>, <em>max_arc_length=&lt;Quantity 180.0 deg&gt;</em>, <em>max_path_length=&lt;Quantity 1000.0 km&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#atten_slant_annex1"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L1845" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.atten_slant_annex1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Path attenuation for a slant path through full atmosphere according to
-<a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>
+<a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-11-201609-I/en">ITU-R P.676-11</a>
 Eq (17-20).</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>freq_grid</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Frequencies at which to calculate line-width shapes [GHz]</p>
+<dt><strong>elevation</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>(Apparent) elevation of source as seen from observer [deg]</p>
 </dd>
-<dt><strong>elev</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>(Apparent) elevation of source as seen from observer [deg]</p>
+<dt><strong>obs_alt</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Height of observer above sea-level [km]</p>
 </dd>
-<dt><strong>obs_alt</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Height of observer above sea-level [m]</p>
+<dt><strong>atm_layers_dict</strong><span class="classifier">dict</span></dt><dd><p>TODO</p>
 </dd>
-<dt><strong>profile_func</strong><span class="classifier">func</span></dt><dd><p>A height profile function having the same signature as
-<a class="reference internal" href="pycraf.atm.profile_standard.html#pycraf.atm.profile_standard" title="pycraf.atm.profile_standard"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_standard</span></code></a></p>
+<dt><strong>do_tebb</strong><span class="classifier">boolean</span></dt><dd><p>TODO</p>
 </dd>
 <dt><strong>t_bg</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar, optional</span></dt><dd><p>Background temperature, i.e. temperature just after the outermost
 layer (default: 2.73 K)</p>
@@ -103,6 +102,9 @@ frequencies, Galactic foreground contribution might play a role.</p>
 </dd>
 <dt><strong>max_path_length</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Maximal length of path before stopping iteration [km]
 (default: 1000 km; useful for terrestrial paths)</p>
+</dd>
+<dt><strong>max_arc_length</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Maximal arc of path before stopping iteration [deg]
+(default: 180 deg; useful for terrestrial paths)</p>
 </dd>
 </dl>
 </dd>
@@ -119,12 +121,6 @@ for any outside contribution, e.g., from CMB) [K]</p>
 </dl>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>Although the <code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_func</span></code> must have the same signature as
-<a class="reference internal" href="pycraf.atm.profile_standard.html#pycraf.atm.profile_standard" title="pycraf.atm.profile_standard"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_standard</span></code></a>, which is one of the standardized
-atmospheric height profiles, only temperature, total pressure and
-water vapor pressure are needed here, i.e., <code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_func</span></code> may return
-dummy values for the rest.</p>
 </dd></dl>
 
 </div>
@@ -153,7 +149,7 @@ dummy values for the rest.</p>
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1. &nbsp;
-    Last built 09 Apr 2019. <br/>
+    Last built 17 Apr 2019. <br/>
   </p>
 </footer>
   </body>

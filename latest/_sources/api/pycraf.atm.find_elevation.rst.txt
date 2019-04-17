@@ -1,0 +1,6 @@
+find_elevation
+==============
+
+.. currentmodule:: pycraf.atm
+
+.. autofunction:: find_elevation

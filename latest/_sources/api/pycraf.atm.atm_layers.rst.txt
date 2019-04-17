@@ -1,0 +1,6 @@
+atm_layers
+==========
+
+.. currentmodule:: pycraf.atm
+
+.. autofunction:: atm_layers
