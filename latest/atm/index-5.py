@@ -7,10 +7,9 @@ refractions = np.array([
     for elev in elevations
     ])
 # ...
-plt.close()  # doctest: +SKIP
-fig = plt.figure(figsize=(8, 4))  # doctest: +SKIP
-plt.plot(elevations, refractions, '-')  # doctest: +SKIP
-plt.xlabel('Elevation (deg)')  # doctest: +SKIP
-plt.ylabel('Refraction (arcsec)')  # doctest: +SKIP
-plt.grid()  # doctest: +SKIP
-plt.show()  # doctest: +SKIP
+plt.close()  # doctest: +IGNORE_OUTPUT
+fig = plt.figure(figsize=(8, 4))  # doctest: +IGNORE_OUTPUT
+plt.plot(elevations, refractions, '-')  # doctest: +IGNORE_OUTPUT
+plt.xlabel('Elevation (deg)')  # doctest: +IGNORE_OUTPUT
+plt.ylabel('Refraction (arcsec)')  # doctest: +IGNORE_OUTPUT
+plt.grid()  # doctest: +IGNORE_OUTPUT

@@ -79,7 +79,7 @@
 <h1>atm_layers<a class="headerlink" href="#atm-layers" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.atm.atm_layers">
-<code class="descclassname">pycraf.atm.</code><code class="descname">atm_layers</code><span class="sig-paren">(</span><em>freq_grid</em>, <em>profile_func</em>, <em>heights=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#atm_layers"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L1505" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.atm_layers" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.atm.</code><code class="descname">atm_layers</code><span class="sig-paren">(</span><em>freq_grid</em>, <em>profile_func</em>, <em>heights=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#atm_layers"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L1668" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.atm_layers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate physical parameters for atmospheric layers to be used with
 <a class="reference internal" href="pycraf.atm.atten_slant_annex1.html#pycraf.atm.atten_slant_annex1" title="pycraf.atm.atten_slant_annex1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_slant_annex1</span></code></a>.</p>
 <p>This can be used to cache layer-profile data. Since it is only dependent
@@ -88,14 +88,97 @@ jobs (e.g., atmospheric dampening for each pixel in a map).</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>freq_grid</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Frequencies at which to calculate line-width shapes [GHz]</p>
+<dt><strong>freq_grid</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Frequencies at which to calculate the layer properties [GHz]</p>
 </dd>
 <dt><strong>profile_func</strong><span class="classifier">func</span></dt><dd><p>A height profile function having the same signature as
 <a class="reference internal" href="pycraf.atm.profile_standard.html#pycraf.atm.profile_standard" title="pycraf.atm.profile_standard"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_standard</span></code></a></p>
 </dd>
+<dt><strong>heights</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a> [km], optional</span></dt><dd><p>Layer heights (above ground); see Notes [km]</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>atm_layers</strong><span class="classifier">dict</span></dt><dd><p>Pre-computed physical parameters for each atmopheric layer to be
+used by functions <a class="reference internal" href="pycraf.atm.raytrace_path.html#pycraf.atm.raytrace_path" title="pycraf.atm.raytrace_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raytrace_path</span></code></a>,
+<a class="reference internal" href="pycraf.atm.path_endpoint.html#pycraf.atm.path_endpoint" title="pycraf.atm.path_endpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">path_endpoint</span></code></a>, and <a class="reference internal" href="pycraf.atm.atten_slant_annex1.html#pycraf.atm.atten_slant_annex1" title="pycraf.atm.atten_slant_annex1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_slant_annex1</span></code></a>.
+It contains the following keys:</p>
+<ul>
+<li><p>“space_i” : int</p>
+<p>Layer (edge) index of the top atmospheric layer, before space
+begins. (See Notes.)</p>
+</li>
+<li><p>“max_i” : int</p>
+<p>Layer (edge) index of the outermost layer (can be in space).
+(See Notes.)</p>
+</li>
+<li><p>“freq_grid” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> (float)</p>
+<p>Frequencies at which to calculate the layer properties [GHz]</p>
+</li>
+<li><p>“heights” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> (float)</p>
+<p>Layer heights above ground (lower edges) [km]</p>
+</li>
+<li><p>“radii” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> (float)</p>
+<p>Layer distances to Earth center (lower edges) [km]</p>
+</li>
+<li><p>“temp” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> (float)</p>
+<p>Layer temperatures (at layer mid point) [K]</p>
+</li>
+<li><p>“press” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> (float)</p>
+<p>Layer pressure (at layer mid point) [hPa]</p>
+</li>
+<li><p>“press_w” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> (float)</p>
+<p>Layer water pressure (at layer mid point) [hPa]</p>
+</li>
+<li><p>“ref_index” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> (float)</p>
+<p>Layer refractive index (at layer mid point) [dimless]</p>
+</li>
+<li><p>“atten_dry_db” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> (float)</p>
+<p>Layer specific attenuation (dry; at layer mid point) [dB/km]</p>
+</li>
+<li><p>“atten_wet_db” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> (float)</p>
+<p>Layer specific attenuation (wet; at layer mid point) [dB/km]</p>
+</li>
+<li><p>“atten_db” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> (float)</p>
+<p>Layer specific attenuation (total; at layer mid point) [dB/km]</p>
+</li>
+</ul>
+</dd>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>One should usually stick to the default layer heights (as defined in
+<a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-11-201609-I/en">ITU-R Rec. P.676-11</a>)
+to ensure consistency with other software/results.</p>
+<p>The layer heights are actually the layer edges, while the physical
+quantities are calculated at the mid-points of the layers and only up
+to the maximal height of the atmospheric profile function, i.e.:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">atm</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">atm_layers_dict</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">atm_layers</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">GHz</span><span class="p">,</span> <span class="n">atm</span><span class="o">.</span><span class="n">profile_standard</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">atm_layers_dict</span><span class="p">[</span><span class="s1">&#39;heights&#39;</span><span class="p">])</span>
+<span class="go">908</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">atm_layers_dict</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">])</span>
+<span class="go">901</span>
+</pre></div>
+</div>
+<p>This is also stored in the <code class="xref py py-obj docutils literal notranslate"><span class="pre">space_i</span></code> variable:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">atm_layers_dict</span><span class="p">[</span><span class="s1">&#39;space_i&#39;</span><span class="p">]</span>
+<span class="go">900</span>
+</pre></div>
+</div>
+<p>while the index of the last layer edge is stored in <code class="xref py py-obj docutils literal notranslate"><span class="pre">max_i</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">atm_layers_dict</span><span class="p">[</span><span class="s1">&#39;max_i&#39;</span><span class="p">]</span>
+<span class="go">907</span>
+</pre></div>
+</div>
+<p>In contrast to P.676 we add outer-space layers (scaled for LEO, moon,
+solar-sys and deep-space “heights”) to allow correct path determination,
+e.g. for satellites. Of course, these don’t add attenuation (and have
+refractivity One).</p>
 </dd></dl>
 
 </div>
