@@ -657,15 +657,15 @@ def profile_standard(height):
 
     Returns
     -------
-    temp : `~astropy.units.Quantity`
+    temperature : `~astropy.units.Quantity`
         Temperature [K]
-    press : `~astropy.units.Quantity`
+    pressure : `~astropy.units.Quantity`
         Total pressure [hPa]
-    rho_w : `~astropy.units.Quantity`
+    rho_water : `~astropy.units.Quantity`
         Water vapor density [g / m**3]
-    press_w : `~astropy.units.Quantity`
+    pressure_water : `~astropy.units.Quantity`
         Water vapor partial pressure [hPa]
-    n_index : `~astropy.units.Quantity`
+    ref_index : `~astropy.units.Quantity`
         Refractive index [dimless]
     humidity_water : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of liquid water [%]
@@ -676,6 +676,29 @@ def profile_standard(height):
     -----
     For convenience, derived quantities like water density/pressure
     and refraction indices are also returned.
+
+    The return value is actually a `~collections.namedtuple`, so it is
+    possible to do the following::
+
+        >>> from astropy import units as u
+        >>> import numpy as np
+        >>> from pycraf import atm
+
+        >>> heights = np.linspace(0, 80, 9) * u.km
+        >>> aprof = atm.profile_standard(heights)
+        >>> for height, temp, press in zip(
+        ...         heights, aprof.temperature, aprof.pressure
+        ...         ):
+        ...     print('{:2.0f}: {:5.1f} {:6.1f}'.format(height, temp, press))
+         0 km: 288.1 K 1013.2 hPa
+        10 km: 223.1 K  264.4 hPa
+        20 km: 216.6 K   54.7 hPa
+        30 km: 226.6 K   11.7 hPa
+        40 km: 251.0 K    2.8 hPa
+        50 km: 270.6 K    0.8 hPa
+        60 km: 245.4 K    0.2 hPa
+        70 km: 217.4 K    0.0 hPa
+        80 km: 196.6 K    0.0 hPa
     '''
 
     ret = _profile_standard(height)
@@ -703,15 +726,15 @@ def _profile_helper(
 
     Returns
     -------
-    temp : `~numpy.ndarray` of `~numpy.float`
+    temperature : `~numpy.ndarray` of `~numpy.float`
         Temperature [K]
-    press : `~numpy.ndarray` of `~numpy.float`
+    pressure : `~numpy.ndarray` of `~numpy.float`
         Total pressure [hPa]
-    rho_w : `~numpy.ndarray` of `~numpy.float`
+    rho_water : `~numpy.ndarray` of `~numpy.float`
         Water vapor density [g / m**3]
-    press_w : `~numpy.ndarray` of `~numpy.float`
+    pressure_water : `~numpy.ndarray` of `~numpy.float`
         Water vapor partial pressure [hPa]
-    n_index : `~numpy.ndarray` of `~numpy.float`
+    ref_index : `~numpy.ndarray` of `~numpy.float`
         Refractive index [dimless]
     humidity_water : `~numpy.ndarray` of `~numpy.float`
         Relative humidity if water vapor was in form of liquid water [%]
@@ -799,20 +822,48 @@ def profile_lowlat(height):
 
     Returns
     -------
-    temp : `~astropy.units.Quantity`
+    temperature : `~astropy.units.Quantity`
         Temperature [K]
-    press : `~astropy.units.Quantity`
+    pressure : `~astropy.units.Quantity`
         Total pressure [hPa]
-    rho_w : `~astropy.units.Quantity`
+    rho_water : `~astropy.units.Quantity`
         Water vapor density [g / m**3]
-    press_w : `~astropy.units.Quantity`
+    pressure_water : `~astropy.units.Quantity`
         Water vapor partial pressure [hPa]
-    n_index : `~astropy.units.Quantity`
+    ref_index : `~astropy.units.Quantity`
         Refractive index [dimless]
     humidity_water : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of liquid water [%]
     humidity_ice : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of ice [%]
+
+    Notes
+    -----
+    For convenience, derived quantities like water density/pressure
+    and refraction indices are also returned.
+
+    The return value is actually a `~collections.namedtuple`, so it is
+    possible to do the following::
+
+        >>> from astropy import units as u
+        >>> import numpy as np
+        >>> from pycraf import atm
+
+        >>> heights = np.linspace(0, 80, 9) * u.km
+        >>> aprof = atm.profile_lowlat(heights)
+        >>> for height, temp, press in zip(
+        ...         heights, aprof.temperature, aprof.pressure
+        ...         ):
+        ...     print('{:2.0f}: {:5.1f} {:6.1f}'.format(height, temp, press))
+         0 km: 300.4 K 1012.0 hPa
+        10 km: 237.5 K  284.9 hPa
+        20 km: 201.6 K   65.5 hPa
+        30 km: 226.9 K   15.1 hPa
+        40 km: 252.3 K    3.5 hPa
+        50 km: 270.0 K    0.8 hPa
+        60 km: 245.4 K    0.2 hPa
+        70 km: 214.7 K    0.0 hPa
+        80 km: 184.0 K    0.0 hPa
     '''
 
     temp_heights = [0., 17., 47., 52., 80., 100.]
@@ -871,20 +922,48 @@ def profile_midlat_summer(height):
 
     Returns
     -------
-    temp : `~astropy.units.Quantity`
+    temperature : `~astropy.units.Quantity`
         Temperature [K]
-    press : `~astropy.units.Quantity`
+    pressure : `~astropy.units.Quantity`
         Total pressure [hPa]
-    rho_w : `~astropy.units.Quantity`
+    rho_water : `~astropy.units.Quantity`
         Water vapor density [g / m**3]
-    press_w : `~astropy.units.Quantity`
+    pressure_water : `~astropy.units.Quantity`
         Water vapor partial pressure [hPa]
-    n_index : `~astropy.units.Quantity`
+    ref_index : `~astropy.units.Quantity`
         Refractive index [dimless]
     humidity_water : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of liquid water [%]
     humidity_ice : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of ice [%]
+
+    Notes
+    -----
+    For convenience, derived quantities like water density/pressure
+    and refraction indices are also returned.
+
+    The return value is actually a `~collections.namedtuple`, so it is
+    possible to do the following::
+
+        >>> from astropy import units as u
+        >>> import numpy as np
+        >>> from pycraf import atm
+
+        >>> heights = np.linspace(0, 80, 9) * u.km
+        >>> aprof = atm.profile_midlat_summer(heights)
+        >>> for height, temp, press in zip(
+        ...         heights, aprof.temperature, aprof.pressure
+        ...         ):
+        ...     print('{:2.0f}: {:5.1f} {:6.1f}'.format(height, temp, press))
+         0 km: 295.0 K 1012.8 hPa
+        10 km: 235.7 K  283.7 hPa
+        20 km: 220.5 K   65.2 hPa
+        30 km: 239.1 K   15.0 hPa
+        40 km: 259.4 K    3.4 hPa
+        50 km: 275.0 K    0.8 hPa
+        60 km: 264.6 K    0.2 hPa
+        70 km: 239.5 K    0.0 hPa
+        80 km: 175.0 K    0.0 hPa
     '''
 
     temp_heights = [0., 13., 17., 47., 53., 80., 100.]
@@ -941,20 +1020,48 @@ def profile_midlat_winter(height):
 
     Returns
     -------
-    temp : `~astropy.units.Quantity`
+    temperature : `~astropy.units.Quantity`
         Temperature [K]
-    press : `~astropy.units.Quantity`
+    pressure : `~astropy.units.Quantity`
         Total pressure [hPa]
-    rho_w : `~astropy.units.Quantity`
+    rho_water : `~astropy.units.Quantity`
         Water vapor density [g / m**3]
-    press_w : `~astropy.units.Quantity`
+    pressure_water : `~astropy.units.Quantity`
         Water vapor partial pressure [hPa]
-    n_index : `~astropy.units.Quantity`
+    ref_index : `~astropy.units.Quantity`
         Refractive index [dimless]
     humidity_water : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of liquid water [%]
     humidity_ice : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of ice [%]
+
+    Notes
+    -----
+    For convenience, derived quantities like water density/pressure
+    and refraction indices are also returned.
+
+    The return value is actually a `~collections.namedtuple`, so it is
+    possible to do the following::
+
+        >>> from astropy import units as u
+        >>> import numpy as np
+        >>> from pycraf import atm
+
+        >>> heights = np.linspace(0, 80, 9) * u.km
+        >>> aprof = atm.profile_midlat_winter(heights)
+        >>> for height, temp, press in zip(
+        ...         heights, aprof.temperature, aprof.pressure
+        ...         ):
+        ...     print('{:2.0f}: {:5.1f} {:6.1f}'.format(height, temp, press))
+         0 km: 272.7 K 1018.9 hPa
+        10 km: 218.0 K  259.0 hPa
+        20 km: 218.0 K   59.5 hPa
+        30 km: 218.0 K   13.7 hPa
+        40 km: 241.5 K    3.1 hPa
+        50 km: 265.0 K    0.7 hPa
+        60 km: 250.7 K    0.2 hPa
+        70 km: 230.4 K    0.0 hPa
+        80 km: 210.0 K    0.0 hPa
     '''
 
     temp_heights = [0., 10., 33., 47., 53., 80., 100.]
@@ -1011,20 +1118,48 @@ def profile_highlat_summer(height):
 
     Returns
     -------
-    temp : `~astropy.units.Quantity`
+    temperature : `~astropy.units.Quantity`
         Temperature [K]
-    press : `~astropy.units.Quantity`
+    pressure : `~astropy.units.Quantity`
         Total pressure [hPa]
-    rho_w : `~astropy.units.Quantity`
+    rho_water : `~astropy.units.Quantity`
         Water vapor density [g / m**3]
-    press_w : `~astropy.units.Quantity`
+    pressure_water : `~astropy.units.Quantity`
         Water vapor partial pressure [hPa]
-    n_index : `~astropy.units.Quantity`
+    ref_index : `~astropy.units.Quantity`
         Refractive index [dimless]
     humidity_water : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of liquid water [%]
     humidity_ice : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of ice [%]
+
+    Notes
+    -----
+    For convenience, derived quantities like water density/pressure
+    and refraction indices are also returned.
+
+    The return value is actually a `~collections.namedtuple`, so it is
+    possible to do the following::
+
+        >>> from astropy import units as u
+        >>> import numpy as np
+        >>> from pycraf import atm
+
+        >>> heights = np.linspace(0, 80, 9) * u.km
+        >>> aprof = atm.profile_highlat_summer(heights)
+        >>> for height, temp, press in zip(
+        ...         heights, aprof.temperature, aprof.pressure
+        ...         ):
+        ...     print('{:2.0f}: {:5.1f} {:6.1f}'.format(height, temp, press))
+         0 km: 286.8 K 1008.0 hPa
+        10 km: 225.0 K  269.6 hPa
+        20 km: 225.0 K   62.0 hPa
+        30 km: 238.5 K   14.3 hPa
+        40 km: 259.2 K    3.3 hPa
+        50 km: 277.0 K    0.8 hPa
+        60 km: 248.5 K    0.2 hPa
+        70 km: 207.7 K    0.0 hPa
+        80 km: 171.0 K    0.0 hPa
     '''
 
     temp_heights = [0., 10., 23., 48., 53., 79., 100.]
@@ -1081,20 +1216,48 @@ def profile_highlat_winter(height):
 
     Returns
     -------
-    temp : `~astropy.units.Quantity`
+    temperature : `~astropy.units.Quantity`
         Temperature [K]
-    press : `~astropy.units.Quantity`
+    pressure : `~astropy.units.Quantity`
         Total pressure [hPa]
-    rho_w : `~astropy.units.Quantity`
+    rho_water : `~astropy.units.Quantity`
         Water vapor density [g / m**3]
-    press_w : `~astropy.units.Quantity`
+    pressure_water : `~astropy.units.Quantity`
         Water vapor partial pressure [hPa]
-    n_index : `~astropy.units.Quantity`
+    ref_index : `~astropy.units.Quantity`
         Refractive index [dimless]
     humidity_water : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of liquid water [%]
     humidity_ice : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of ice [%]
+
+    Notes
+    -----
+    For convenience, derived quantities like water density/pressure
+    and refraction indices are also returned.
+
+    The return value is actually a `~collections.namedtuple`, so it is
+    possible to do the following::
+
+        >>> from astropy import units as u
+        >>> import numpy as np
+        >>> from pycraf import atm
+
+        >>> heights = np.linspace(0, 80, 9) * u.km
+        >>> aprof = atm.profile_highlat_winter(heights)
+        >>> for height, temp, press in zip(
+        ...         heights, aprof.temperature, aprof.pressure
+        ...         ):
+        ...     print('{:2.0f}: {:5.1f} {:6.1f}'.format(height, temp, press))
+         0 km: 257.4 K 1010.9 hPa
+        10 km: 217.5 K  243.9 hPa
+        20 km: 217.5 K   56.1 hPa
+        30 km: 217.5 K   12.9 hPa
+        40 km: 238.8 K    3.0 hPa
+        50 km: 260.0 K    0.7 hPa
+        60 km: 250.0 K    0.2 hPa
+        70 km: 233.3 K    0.0 hPa
+        80 km: 216.7 K    0.0 hPa
     '''
 
     temp_heights = [0., 8.5, 30., 50., 54., 100.]
@@ -1519,13 +1682,105 @@ def atm_layers(freq_grid, profile_func, heights=None):
     Parameters
     ----------
     freq_grid : `~astropy.units.Quantity`
-        Frequencies at which to calculate line-width shapes [GHz]
+        Frequencies at which to calculate the layer properties [GHz]
     profile_func : func
         A height profile function having the same signature as
         `~pycraf.atm.profile_standard`
+    heights : `~astropy.units.Quantity` [km], optional
+        Layer heights (above ground); see Notes [km]
 
     Returns
     -------
+    atm_layers : dict
+        Pre-computed physical parameters for each atmopheric layer to be
+        used by functions `~pycraf.atm.raytrace_path`,
+        `~pycraf.atm.path_endpoint`, and `~pycraf.atm.atten_slant_annex1`.
+        It contains the following keys:
+
+        - "space_i" : int
+
+          Layer (edge) index of the top atmospheric layer, before space
+          begins. (See Notes.)
+
+        - "max_i" : int
+
+          Layer (edge) index of the outermost layer (can be in space).
+          (See Notes.)
+
+        - "freq_grid" : `~numpy.ndarray` (float)
+
+          Frequencies at which to calculate the layer properties [GHz]
+
+        - "heights" : `~numpy.ndarray` (float)
+
+          Layer heights above ground (lower edges) [km]
+
+        - "radii" : `~numpy.ndarray` (float)
+
+          Layer distances to Earth center (lower edges) [km]
+
+        - "temp" : `~numpy.ndarray` (float)
+
+          Layer temperatures (at layer mid point) [K]
+
+        - "press" : `~numpy.ndarray` (float)
+
+          Layer pressure (at layer mid point) [hPa]
+
+        - "press_w" : `~numpy.ndarray` (float)
+
+          Layer water pressure (at layer mid point) [hPa]
+
+        - "ref_index" : `~numpy.ndarray` (float)
+
+          Layer refractive index (at layer mid point) [dimless]
+
+        - "atten_dry_db" : `~numpy.ndarray` (float)
+
+          Layer specific attenuation (dry; at layer mid point) [dB/km]
+
+        - "atten_wet_db" : `~numpy.ndarray` (float)
+
+          Layer specific attenuation (wet; at layer mid point) [dB/km]
+
+        - "atten_db" : `~numpy.ndarray` (float)
+
+          Layer specific attenuation (total; at layer mid point) [dB/km]
+
+    Notes
+    -----
+    One should usually stick to the default layer heights (as defined in
+    `ITU-R Rec. P.676-11 <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_)
+    to ensure consistency with other software/results.
+
+    The layer heights are actually the layer edges, while the physical
+    quantities are calculated at the mid-points of the layers and only up
+    to the maximal height of the atmospheric profile function, i.e.::
+
+        >>> from astropy import units as u
+        >>> import numpy as np
+        >>> from pycraf import atm
+        >>>
+        >>> atm_layers_dict = atm.atm_layers(1 * u.GHz, atm.profile_standard)
+        >>> len(atm_layers_dict['heights'])
+        908
+        >>> len(atm_layers_dict['temp'])
+        901
+
+    This is also stored in the `space_i` variable::
+
+        >>> atm_layers_dict['space_i']
+        900
+
+    while the index of the last layer edge is stored in `max_i`:
+
+        >>> atm_layers_dict['max_i']
+        907
+
+    In contrast to P.676 we add outer-space layers (scaled for LEO, moon,
+    solar-sys and deep-space "heights") to allow correct path determination,
+    e.g. for satellites. Of course, these don't add attenuation (and have
+    refractivity One).
     '''
 
     freq_grid = np.atleast_1d(freq_grid)
@@ -1542,10 +1797,7 @@ def atm_layers(freq_grid, profile_func, heights=None):
 
     # note that the heights are the layer edges, while the layer_mids
     # are the mid-heights of the layers themselve; the latter define
-    # also the atmospheric parameters; for technical reasons, we
-    # need to insert a dummy layer (below earth surface having same
-    # refractive index as the first real layer, to have no refraction)
-    # this dummy layer, should be neglected from attenuation calculations!
+    # also the atmospheric parameters
     layer_mids = np.hstack([
         0.5 * (heights[1] + heights[0]),
         0.5 * (heights[1:] + heights[:-1]),
