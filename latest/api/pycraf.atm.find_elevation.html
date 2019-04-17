@@ -79,8 +79,42 @@
 <h1>find_elevation<a class="headerlink" href="#find-elevation" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.atm.find_elevation">
-<code class="descclassname">pycraf.atm.</code><code class="descname">find_elevation</code><span class="sig-paren">(</span><em>obs_alt</em>, <em>target_alt</em>, <em>arc_length</em>, <em>atm_layers_cache</em>, <em>niter=50</em>, <em>interval=10</em>, <em>stepsize=0.05</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#find_elevation"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L2076" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.find_elevation" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descclassname">pycraf.atm.</code><code class="descname">find_elevation</code><span class="sig-paren">(</span><em>obs_alt</em>, <em>target_alt</em>, <em>arc_length</em>, <em>atm_layers_cache</em>, <em>niter=50</em>, <em>interval=10</em>, <em>stepsize=0.05</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#find_elevation"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L2255" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.find_elevation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the optimal path elevation angle from an observer to reach target.</p>
+<p>Based on <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html#scipy.optimize.basinhopping" title="(in SciPy v1.2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">basinhopping</span></code></a>; see their manual for an
+explanation of the hyper-parameters (<code class="xref py py-obj docutils literal notranslate"><span class="pre">niter</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">interval</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">stepsize</span></code>, and
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">seed</span></code>).</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>obs_alt</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Height of observer above sea-level [km]</p>
+</dd>
+<dt><strong>obs_alt</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Height of target above sea-level [km]</p>
+</dd>
+<dt><strong>arc_length</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Arc-length (true angular distance) between observer and target [deg]</p>
+</dd>
+<dt><strong>atm_layers_cache</strong><span class="classifier">dict</span></dt><dd><p>Pre-computed physical parameters for each atmopheric layer as
+returned by the <a class="reference internal" href="pycraf.atm.atm_layers.html#pycraf.atm.atm_layers" title="pycraf.atm.atm_layers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atm_layers</span></code></a> function.</p>
+</dd>
+<dt><strong>niter</strong><span class="classifier">integer, optional</span></dt><dd><p>The number of basin hopping iterations (default: 50)</p>
+</dd>
+<dt><strong>interval</strong><span class="classifier">integer, optional</span></dt><dd><p>Interval for how often to update the stepsize (default: 10)</p>
+</dd>
+<dt><strong>stepsize</strong><span class="classifier">float, optional</span></dt><dd><p>Initial step size for use in the random displacement. (default: 0.05)</p>
+</dd>
+<dt><strong>seed</strong><span class="classifier">int or np.random.RandomState, optional</span></dt><dd><p>Seed to use for internal random number generation. (default: None)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Because of the approximation of Earth’s atmosphere with layers of discrete
+refractive indices, caustics are generated (see <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf</span></code> manual), i.e.,
+there are certains target points that cannot be reached, regardless of
+the elevation angle at the observer. This in turns means that there is
+only the possibility of using stochastic optimization algorithms to
+get an approximate solution to the problem.</p>
+</dd></dl>
 
 </div>
 

@@ -278,7 +278,7 @@ height models, the properties of which are then cached via the
     ...     print('Refraction for {}: {:.1f}'.format(label, refraction.to(u.arcsec)))
     ...
     ...     _ = axes[0, 0].plot(_freqs, total_atten.to(cnv.dB).value, linestyle, label=label)
-    ...     _ = axes[0, 1].plot(_freqs, (-total_atten).to(cnv.dimless).value, linestyle, label=label)
+    ...     _ = axes[0, 1].plot(_freqs, 1 / total_atten.to(cnv.dimless).value, linestyle, label=label)
     ...     _ = axes[1, 0].plot(_freqs, opacity.to(cnv.dimless).value, linestyle, label=label)
     ...     _ = axes[1, 1].plot(_freqs, tebb.to(u.K).value, linestyle, label=label)
     Refraction for Winter, Elevation: 90 deg: -0.0 arcsec

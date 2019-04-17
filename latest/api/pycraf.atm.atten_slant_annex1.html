@@ -79,7 +79,7 @@
 <h1>atten_slant_annex1<a class="headerlink" href="#atten-slant-annex1" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.atm.atten_slant_annex1">
-<code class="descclassname">pycraf.atm.</code><code class="descname">atten_slant_annex1</code><span class="sig-paren">(</span><em>elevation</em>, <em>obs_alt</em>, <em>atm_layers_dict</em>, <em>do_tebb=True</em>, <em>t_bg=&lt;Quantity 2.73 K&gt;</em>, <em>max_arc_length=&lt;Quantity 180.0 deg&gt;</em>, <em>max_path_length=&lt;Quantity 1000.0 km&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#atten_slant_annex1"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L2097" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.atten_slant_annex1" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.atm.</code><code class="descname">atten_slant_annex1</code><span class="sig-paren">(</span><em>elevation</em>, <em>obs_alt</em>, <em>atm_layers_dict</em>, <em>do_tebb=True</em>, <em>t_bg=&lt;Quantity 2.73 K&gt;</em>, <em>max_arc_length=&lt;Quantity 180.0 deg&gt;</em>, <em>max_path_length=&lt;Quantity 1000.0 km&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#atten_slant_annex1"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L2312" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.atten_slant_annex1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Path attenuation for a slant path through full atmosphere according to
 <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-11-201609-I/en">ITU-R P.676-11</a>
 Eq (17-20).</p>
@@ -90,9 +90,14 @@ Eq (17-20).</p>
 </dd>
 <dt><strong>obs_alt</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Height of observer above sea-level [km]</p>
 </dd>
-<dt><strong>atm_layers_dict</strong><span class="classifier">dict</span></dt><dd><p>TODO</p>
+<dt><strong>atm_layers_cache</strong><span class="classifier">dict</span></dt><dd><p>Pre-computed physical parameters for each atmopheric layer as
+returned by the <a class="reference internal" href="pycraf.atm.atm_layers.html#pycraf.atm.atm_layers" title="pycraf.atm.atm_layers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atm_layers</span></code></a> function.</p>
 </dd>
-<dt><strong>do_tebb</strong><span class="classifier">boolean</span></dt><dd><p>TODO</p>
+<dt><strong>do_tebb</strong><span class="classifier">boolean, optional</span></dt><dd><p>Whether to calculate the equivalent blackbody brightness temperature
+of the (full) Earth’s atmosphere. (default: True)</p>
+<p>If you’re only interested in path attenuation, you can switch this
+off for (somewhat) improved computing speed. Note, that the result
+will only be meaningful if the propagation path ends in space.</p>
 </dd>
 <dt><strong>t_bg</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar, optional</span></dt><dd><p>Background temperature, i.e. temperature just after the outermost
 layer (default: 2.73 K)</p>
@@ -100,11 +105,12 @@ layer (default: 2.73 K)</p>
 temperature of the CMB (if Earth-Space path), but at lower
 frequencies, Galactic foreground contribution might play a role.</p>
 </dd>
-<dt><strong>max_path_length</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Maximal length of path before stopping iteration [km]
-(default: 1000 km; useful for terrestrial paths)</p>
+<dt><strong>max_path_length</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Maximal length of path before stopping iteration [km]</p>
+<p>(default: 1000 km; useful for terrestrial paths)</p>
 </dd>
-<dt><strong>max_arc_length</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Maximal arc of path before stopping iteration [deg]
-(default: 180 deg; useful for terrestrial paths)</p>
+<dt><strong>max_arc_length</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Maximal arc-length (true angular distance between observer and source/
+target) of path before stopping iteration [deg]</p>
+<p>(default: 180 deg; useful for terrestrial paths)</p>
 </dd>
 </dl>
 </dd>
@@ -117,6 +123,7 @@ correction between real and apparent source elevation [deg]</p>
 </dd>
 <dt><strong>t_ebb (K)</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Equivalent black body temperature of the atmosphere (accounting
 for any outside contribution, e.g., from CMB) [K]</p>
+<p>Will be all-NaN if not a space path, or <code class="xref py py-obj docutils literal notranslate"><span class="pre">do_tebb</span> <span class="pre">==</span> <span class="pre">False</span></code>.</p>
 </dd>
 </dl>
 </dd>
