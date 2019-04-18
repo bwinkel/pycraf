@@ -34,8 +34,22 @@ def get_extensions():
 
     elif 'darwin' in platform.system().lower():
 
-        comp_args['extra_compile_args'].append('-mmacosx-version-min=10.7')
-        comp_args['extra_link_args'].append('-lgomp')
+        from subprocess import getoutput
+
+        extra_compile_args = ['-O3', '-mmacosx-version-min=10.7']
+
+        if ('clang' in getoutput('gcc -v')) and all(
+                'command not found' in getoutput('gcc-{:d} -v'.format(d))
+                for d in [6, 7, 8]
+                ):
+            extra_compile_args += ['-fopenmp=libomp', ]
+            comp_args['extra_link_args'].append('-fopenmp=libomp')
+        else:
+            extra_compile_args += ['-fopenmp', ]
+            comp_args['extra_link_args'].append('-fopenmp')
+
+        comp_args['extra_compile_args'] = extra_compile_args
+        # comp_args['extra_link_args'].append('-lgomp')
 
     ext_module_pathprof_cyprop = Extension(
         name='pycraf.pathprof.cyprop',

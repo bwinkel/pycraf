@@ -89,18 +89,58 @@ matrix:
         # (because with 1.9 - the conda-forge recommendation - the setup.py
         # script tries to download 1.16 for some reason...)
 
-        # Standard linux; also used for sdist'ing
+        # Standard linux, release
         - os: linux
           env:
+            - PYTHON_VERSION=3.7
             - DO_DIST=YES
             - NUMPY_VERSION=1.11
             # - ASTROPY_VERSION=stable
             - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
 
-        # MacOS X - conda-clang
+        # Standard linux, release
+        - os: linux
+          env:
+            - PYTHON_VERSION=3.6
+            - DO_DIST=YES
+            - NUMPY_VERSION=1.11
+            # - ASTROPY_VERSION=stable
+            - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
+
+        # Standard linux, release
+        - os: linux
+          env:
+            - PYTHON_VERSION=3.5
+            - DO_DIST=YES
+            - NUMPY_VERSION=1.11
+            # - ASTROPY_VERSION=stable
+            - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
+
+        # MacOS X - conda-clang, release
         - os: osx
           osx_image: xcode8.3
           env:
+            - PYTHON_VERSION=3.7
+            - DO_MAC_DIST=YES
+            - NUMPY_VERSION=1.11
+            - COMPILER='conda-clang'
+            - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
+
+        # MacOS X - conda-clang, release
+        - os: osx
+          osx_image: xcode8.3
+          env:
+            - PYTHON_VERSION=3.6
+            - DO_MAC_DIST=YES
+            - NUMPY_VERSION=1.11
+            - COMPILER='conda-clang'
+            - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
+
+        # MacOS X - conda-clang, release
+        - os: osx
+          osx_image: xcode8.3
+          env:
+            - PYTHON_VERSION=3.5
             - DO_MAC_DIST=YES
             - NUMPY_VERSION=1.11
             - COMPILER='conda-clang'
