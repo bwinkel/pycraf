@@ -20,6 +20,16 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
+      <widget class="QWidget" name="geometryTab">
+       <attribute name="title">
+        <string>Geometry</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_13">
+        <item row="0" column="0">
+         <layout class="QVBoxLayout" name="geometryVerticalLayout"/>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="pathprofileTab">
        <attribute name="title">
         <string>Path profile</string>
@@ -50,7 +60,7 @@
      <x>0</x>
      <y>0</y>
      <width>1098</width>
-     <height>19</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>
@@ -74,8 +84,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>242</width>
-          <height>518</height>
+          <width>239</width>
+          <height>646</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_5">
@@ -502,8 +512,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>242</width>
-          <height>146</height>
+          <width>239</width>
+          <height>140</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_7">
@@ -561,8 +571,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>242</width>
-          <height>171</height>
+          <width>239</width>
+          <height>181</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_12">
@@ -593,7 +603,7 @@
                 <number>3</number>
                </property>
                <property name="minimum">
-                <double>0.100000000000000</double>
+                <double>0.050000000000000</double>
                </property>
                <property name="maximum">
                 <double>5.000000000000000</double>
@@ -602,7 +612,7 @@
                 <double>0.100000000000000</double>
                </property>
                <property name="value">
-                <double>0.500000000000000</double>
+                <double>0.200000000000000</double>
                </property>
               </widget>
              </item>
@@ -615,7 +625,7 @@
                 <number>3</number>
                </property>
                <property name="minimum">
-                <double>0.100000000000000</double>
+                <double>0.050000000000000</double>
                </property>
                <property name="maximum">
                 <double>5.000000000000000</double>
@@ -624,7 +634,7 @@
                 <double>0.100000000000000</double>
                </property>
                <property name="value">
-                <double>0.500000000000000</double>
+                <double>0.200000000000000</double>
                </property>
               </widget>
              </item>

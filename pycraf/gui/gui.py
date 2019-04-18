@@ -28,34 +28,36 @@ CLUTTER_DESCRIPTIONS = [
 
 PATH_DISPLAY_OPTIONS = [
     # name in combobox, where to find ('hprof_data'/'results'), associated key
-    ('Geometry: Height', 'hprof_data', 'heights'),
-    ('Geometry: Rx longitude', 'hprof_data', 'lons'),
-    ('Geometry: Rx latitude', 'hprof_data', 'lats'),
-    ('Geometry: Back-bearing', 'hprof_data', 'backbearings'),
-    ('Geometry: Tx path horizon angle', 'results', 'eps_pt'),
-    ('Geometry: Rx path horizon angle', 'results', 'eps_pr'),
-    ('Geometry: Path type', 'results', 'path_type'),
-    ('Attenuation: LoS', 'results', 'L_bfsg'),
-    ('Attenuation: Diffraction', 'results', 'L_bd'),
-    ('Attenuation: Troposcatter', 'results', 'L_bs'),
-    ('Attenuation: Ducting/Anomalous', 'results', 'L_ba'),
-    ('Attenuation: Total', 'results', 'L_b'),
-    ('Attenuation: Total with clutter', 'results', 'L_b_corr'),
+    ('Geometry: Height', 'hprof_data', 'heights', 'm'),
+    ('Geometry: Rx longitude', 'hprof_data', 'lons', 'deg'),
+    ('Geometry: Rx latitude', 'hprof_data', 'lats', 'deg'),
+    ('Geometry: Back-bearing', 'hprof_data', 'backbearings', 'deg'),
+    ('Geometry: Tx path horizon angle', 'results', 'eps_pt', 'deg'),
+    ('Geometry: Rx path horizon angle', 'results', 'eps_pr', 'deg'),
+    ('Geometry: Path type', 'results', 'path_type', '0: LoS, 1: non-LoS'),
+    ('Attenuation: LoS loss', 'results', 'L_bfsg', 'dB'),
+    ('Attenuation: Diffraction loss', 'results', 'L_bd', 'dB'),
+    ('Attenuation: Troposcatter loss', 'results', 'L_bs', 'dB'),
+    ('Attenuation: Ducting/Anomalous loss', 'results', 'L_ba', 'dB'),
+    ('Attenuation: Total loss', 'results', 'L_b', 'dB'),
+    ('Attenuation: Total loss with clutter', 'results', 'L_b_corr', 'dB'),
     ]
 
 MAP_DISPLAY_OPTIONS = [
     # name in combobox, where to find ('hprof_data'/'results'), associated key
-    ('Geometry: Height', 'hprof_data', 'heights'),
-    ('Geometry: Back-bearing', 'hprof_data', 'backbearings'),
-    ('Geometry: Tx path horizon angle', 'results', 'eps_pt'),
-    ('Geometry: Rx path horizon angle', 'results', 'eps_pr'),
-    ('Geometry: Path type', 'results', 'path_type'),
-    ('Attenuation: LoS', 'results', 'L_bfsg'),
-    ('Attenuation: Diffraction', 'results', 'L_bd'),
-    ('Attenuation: Troposcatter', 'results', 'L_bs'),
-    ('Attenuation: Ducting/Anomalous', 'results', 'L_ba'),
-    ('Attenuation: Total', 'results', 'L_b'),
-    ('Attenuation: Total with clutter', 'results', 'L_b_corr'),
+    ('Geometry: Height', 'hprof_data', 'height_map', 'm'),
+    ('Geometry: Distance', 'hprof_data', 'dist_map', 'km'),
+    ('Geometry: Bearing', 'hprof_data', 'bearing_map', 'deg'),
+    ('Geometry: Back-bearing', 'hprof_data', 'back_bearing_map', 'deg'),
+    ('Geometry: Tx path horizon angle', 'results', 'eps_pt', 'deg'),
+    ('Geometry: Rx path horizon angle', 'results', 'eps_pr', 'deg'),
+    ('Geometry: Path type', 'results', 'path_type', '0: LoS, 1: non-LoS'),
+    ('Attenuation: LoS loss', 'results', 'L_bfsg', 'dB'),
+    ('Attenuation: Diffraction loss', 'results', 'L_bd', 'dB'),
+    ('Attenuation: Troposcatter loss', 'results', 'L_bs', 'dB'),
+    ('Attenuation: Ducting/Anomalous loss', 'results', 'L_ba', 'dB'),
+    ('Attenuation: Total loss', 'results', 'L_b', 'dB'),
+    ('Attenuation: Total loss with clutter', 'results', 'L_b_corr', 'dB'),
     ]
 
 
@@ -91,13 +93,13 @@ class PycrafGui(QtWidgets.QMainWindow):
         names = [t[0] for t in PATH_DISPLAY_OPTIONS]
         _cb = self.ui.pathprofPlotChooserComboBox
         _cb.addItems(names)
-        _cb.setCurrentIndex(_cb.findText('Attenuation: Total with clutter'))
+        _cb.setCurrentIndex(_cb.findText('Attenuation: Total loss with clutter'))
 
         # fill map result combo box
         names = [t[0] for t in MAP_DISPLAY_OPTIONS]
         _cb = self.ui.mapPlotChooserComboBox
         _cb.addItems(names)
-        _cb.setCurrentIndex(_cb.findText('Attenuation: Total with clutter'))
+        _cb.setCurrentIndex(_cb.findText('Attenuation: Total loss with clutter'))
 
         self.create_plotters()
         self.setup_signals()
@@ -271,12 +273,12 @@ class PycrafGui(QtWidgets.QMainWindow):
             print('nothing to plot yet')
             return
 
-        name, designation, dkey = PATH_DISPLAY_OPTIONS[display_index]
-        print('plotting', name, designation, dkey)
+        name, designation, dkey, unit = PATH_DISPLAY_OPTIONS[display_index]
+        print('plotting', name, designation, dkey, unit)
 
         dists = self.pathprof_hprof_data['distances'][5:]
         y1 = self.pathprof_hprof_data['heights'][5:]
-        y2 = self.pathprof_results['L_b_corr'][5:]
+        y2 = getattr(self, 'pathprof_{:s}'.format(designation))[dkey][5:]
 
         plot_area = self.pathprof_plot_area
         axes = plot_area.axes
@@ -296,7 +298,8 @@ class PycrafGui(QtWidgets.QMainWindow):
         ax2.plot(dists, y2, 'k-')
 
         ax1.set_ylabel('Heights [m]')
-        ax2.set_ylabel('Path attenuation [dB]')
+        # ax2.set_ylabel('Path attenuation [dB]')
+        ax2.set_ylabel('{:s} [{:s}]'.format(name.split(': ')[1], unit))
         # ax2.set_ylim((80, 270))
 
         plot_area.clear_history()
@@ -309,18 +312,24 @@ class PycrafGui(QtWidgets.QMainWindow):
             print('nothing to plot yet')
             return
 
-        name, designation, dkey = MAP_DISPLAY_OPTIONS[display_index]
-        print('plotting', name, designation, dkey)
+        name, designation, dkey, unit = MAP_DISPLAY_OPTIONS[display_index]
+        print('plotting', name, designation, dkey, unit)
 
         lons = self.map_hprof_data['xcoords']
         lats = self.map_hprof_data['ycoords']
-        z = self.map_results['L_b_corr']
+        # z = self.map_results['L_b_corr']
+        z = getattr(self, 'map_{:s}'.format(designation))[dkey][5:]
+        try:
+            z = z.value
+        except AttributeError:
+            pass
 
         plot_area = self.map_plot_area
         fig = plot_area.figure
         ax = plot_area.axes
         cax = plot_area.caxes
         ax.clear()
+        cax.clear()
 
         for sax in [ax.xaxis, ax.yaxis]:
             sax.set_major_formatter(ScalarFormatter(useOffset=False))
@@ -335,12 +344,12 @@ class PycrafGui(QtWidgets.QMainWindow):
         cim = ax.imshow(
             z,
             origin='lower', interpolation='nearest', cmap='inferno_r',
-            vmin=-5, vmax=175,
+            # vmin=-5, vmax=175,
             extent=(lons[0], lons[-1], lats[0], lats[-1]),
             )
         cbar = fig.colorbar(cim, cax=cax)
         ax.set_aspect(abs(lons[-1] - lons[0]) / abs(lats[-1] - lats[0]))
-        cbar.set_label(r'Path propagation loss')
+        cbar.set_label(r'{:s} [{:s}]'.format(name.split(': ')[1], unit))
 
         plot_area.clear_history()
         plot_area.canvas.draw()

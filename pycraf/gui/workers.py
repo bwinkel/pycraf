@@ -4,6 +4,7 @@
 
 from PyQt5 import QtCore
 from functools import lru_cache
+import numpy as np
 from astropy import units as u
 from pycraf import pathprof
 from pycraf import conversions as cnv
@@ -146,6 +147,12 @@ class MapWorker(QtCore.QObject):
             hprof_data,
             version=jdict['version'],
             polarization=jdict['polarization'],
+            )
+
+        # hprof_data contains only a high-res representation of height profs
+        lons, lats = hprof_data['xcoords'], hprof_data['ycoords']
+        hprof_data['height_map'] = pathprof.srtm_height_data(
+            lons[np.newaxis] * u.deg, lats[:, np.newaxis] * u.deg
             )
 
         self.result_ready.emit(hprof_data, results)

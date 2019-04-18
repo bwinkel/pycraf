@@ -249,8 +249,7 @@ class PlotWidget(QtWidgets.QWidget):
         return self._canvas.toolbar
 
     def clear_history(self):
-        self.mpl_toolbar._views.clear()
-        self.mpl_toolbar._positions.clear()
+        self.mpl_toolbar.update()
         self.mpl_toolbar.push_current()
 
     def store_figure_data(self):
