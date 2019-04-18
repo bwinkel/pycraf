@@ -1673,7 +1673,8 @@ def atten_terrestrial(specific_atten, path_length):
 def atm_layers(freq_grid, profile_func, heights=None):
     '''
     Calculate physical parameters for atmospheric layers to be used with
-    `~pycraf.atm.atten_slant_annex1`.
+    `~pycraf.atm.atten_slant_annex1` and other functions of the `~pycraf.atm`
+    sub-package.
 
     This can be used to cache layer-profile data. Since it is only dependent
     on frequency, one can re-use it to save computing time when doing batch
@@ -1691,7 +1692,7 @@ def atm_layers(freq_grid, profile_func, heights=None):
 
     Returns
     -------
-    atm_layers : dict
+    atm_layers_cache : dict
         Pre-computed physical parameters for each atmopheric layer to be
         used by functions `~pycraf.atm.raytrace_path`,
         `~pycraf.atm.path_endpoint`, and `~pycraf.atm.atten_slant_annex1`.
@@ -1761,20 +1762,20 @@ def atm_layers(freq_grid, profile_func, heights=None):
         >>> import numpy as np
         >>> from pycraf import atm
         >>>
-        >>> atm_layers_dict = atm.atm_layers(1 * u.GHz, atm.profile_standard)
-        >>> len(atm_layers_dict['heights'])
+        >>> atm_layers_cache = atm.atm_layers(1 * u.GHz, atm.profile_standard)
+        >>> len(atm_layers_cache['heights'])
         908
-        >>> len(atm_layers_dict['temp'])
+        >>> len(atm_layers_cache['temp'])
         901
 
     This is also stored in the `space_i` variable::
 
-        >>> atm_layers_dict['space_i']
+        >>> atm_layers_cache['space_i']
         900
 
     while the index of the last layer edge is stored in `max_i`:
 
-        >>> atm_layers_dict['max_i']
+        >>> atm_layers_cache['max_i']
         907
 
     In contrast to P.676 we add outer-space layers (scaled for LEO, moon,
@@ -1892,6 +1893,112 @@ def raytrace_path(
         max_arc_length=180. * apu.deg,
         max_path_length=1000. * apu.km,
         ):
+    '''
+    Calculate the propagation path geometry through atmosphere by ray-tracing.
+
+    For several tasks related to the `~pycraf.atm` sub-package, it is
+    necessary to determine the exact path geometry of a propagating ray
+    through Earth's atmosphere. One example would be the application of
+    the `~pycraf.atm.atten_slant_annex1` function to calculate the
+    total attenuation along a (slant) path, where the length of a ray
+    within each of the discrete layers of an atmospheric model must be
+    multiplied with the specific attenuation of the layers.
+
+    Parameters
+    ----------
+    elevation : `~astropy.units.Quantity`, scalar
+        (Apparent) elevation of source/target as seen from observer [deg]
+    obs_alt : `~astropy.units.Quantity`, scalar
+        Height of observer above sea-level [km]
+    atm_layers_cache : dict
+        Pre-computed physical parameters for each atmopheric layer as
+        returned by the `~pycraf.atm.atm_layers` function.
+    max_path_length : `~astropy.units.Quantity`, scalar
+        Maximal length of path before stopping the ray-tracing [km]
+
+        (default: 1000 km; useful for terrestrial paths)
+    max_arc_length : `~astropy.units.Quantity`, scalar
+        Maximal arc-length (true angular distance between observer and source/
+        target) of path before stopping ray-tracing [deg]
+
+        (default: 180 deg; useful for terrestrial paths)
+
+    Returns
+    -------
+    path_params : `~numpy.recarray`
+        Geometric parameters of each piece of the paths (i.e., per layer)
+        as determined by the ray-tracing algorithm.
+        It has the following fields:
+
+        - a_n : float
+
+          Length of path through the layer during iteration `n`. [km]
+
+        - r_n : float
+
+          Distance to Earth's center after iteration `n`. [km]
+
+        - h_n : float
+
+          Height above Earth's surface after iteration `n`. [km]
+
+        - x_n/y_n : float
+
+          Cartesian coordinates of path after iteration `n`. [km]
+
+          The reference is Earth's center. Starting point is
+          `(0, r_E + obs_alt)`.
+
+        - alpha_n : float
+
+          Exit angle of path after going through the layer (relative to
+          surface normal vector) after iteration `n`. [km]
+
+        - beta_n : float
+
+          Entry angle of path into the layer (relative to surface normal
+          vector) at beginning of iteration `n`. [km]
+
+        - delta_n : float
+
+          Angular distance of path position after iteration `n` w.r.t.
+          starting point. [deg]
+
+          The polar coordinates `(r_n, delta_n)` are directly associated with
+          the cartesian coordinates `(x_n, y_n)`.
+
+        - layer_idx : int
+
+          Index of the layer, through which the path went during each step.
+          This could be used to query the physical parameters from the
+          atm layers cache (see `~pycraf.atm.atm_layers`).
+
+        - layer_edge_left_idx : int
+
+          Index of the layer edge to the left (associated with the entry
+          point) of current step.
+
+        - layer_edge_right_idx : int
+
+          Index of the layer edge to the right (associated with the exit
+          point) of current step.
+
+    refraction : `~astropy.units.Quantity`, scalar
+        Refraction angle (i.e., the total "bending" angle of the ray) [deg]
+    is_space_path : bool
+        Whether the paths ends outside of Earth's atmosphere (in
+        terms of the atmospheric profile function used).
+
+    Notes
+    -----
+    Terrain heights are neglected by the `~pycraf.atm` sub-package. All
+    heights are w.r.t. the flat (spherical) Earth (with a radius of 6371 km).
+
+    The first row in the `path_params` array is the starting point of the path
+    and has valid entries only for the `r_n`, `h_n`, and `x_n`/`y_n`
+    parameters. There are `n+1` layer edges and `n` layers. The edge
+    indices start from zero, while the layer indices start from one.
+    '''
 
     return _raytrace_path(
         elevation, obs_alt,
@@ -1957,7 +2064,79 @@ def path_endpoint(
         max_arc_length=180. * apu.deg,
         max_path_length=1000. * apu.km,
         ):
+    '''
+    Calculate endpoint of propagation path through atmosphere by ray-tracing.
 
+    Like `~pycraf.atm.raytrace_path` this calculates the exact path geometry
+    of a propagating ray through Earth's atmosphere. The difference to
+    `~pycraf.atm.raytrace_path` is that only the final point is returned.
+    This is sufficient for some applications, e.g., when an elevation angle
+    needs to be determined with an optimization algorithm (see
+    `~pycraf.atm.find_elevation`).
+
+    Parameters
+    ----------
+    elevation : `~astropy.units.Quantity`, scalar
+        (Apparent) elevation of source/target as seen from observer [deg]
+    obs_alt : `~astropy.units.Quantity`, scalar
+        Height of observer above sea-level [km]
+    atm_layers_cache : dict
+        Pre-computed physical parameters for each atmopheric layer as
+        returned by the `~pycraf.atm.atm_layers` function.
+    max_path_length : `~astropy.units.Quantity`, scalar
+        Maximal length of path before stopping the ray-tracing [km]
+
+        (default: 1000 km; useful for terrestrial paths)
+    max_arc_length : `~astropy.units.Quantity`, scalar
+        Maximal arc-length (true angular distance between observer and source/
+        target) of path before stopping ray-tracing [deg]
+
+        (default: 180 deg; useful for terrestrial paths)
+
+    Returns
+    -------
+    a_n : `~astropy.units.Quantity`, scalar
+        Length of path through final layer of the ray-tracing. [km]
+
+        This is not too useful (perhaps for space-paths, where it gives
+        the fraction of the path that doesn't go through the atmosphere.)
+    r_n : `~astropy.units.Quantity`, scalar
+        Distance to Earth's center after complete ray-tracing. [km]
+    h_n : `~astropy.units.Quantity`, scalar
+        Height above Earth's surface after complete ray-tracing. [km]
+    x_n/y_n : `~astropy.units.Quantity`, scalar
+        Cartesian coordinates of path complete ray-tracing. [km]
+        The reference is Earth's center. Starting point is
+        `(0, r_E + obs_alt)`.
+    alpha_n : `~astropy.units.Quantity`, scalar
+        Exit angle of path after going through the layer (relative to
+        surface normal vector) after complete ray-tracing. [km]
+    delta_n : `~astropy.units.Quantity`, scalar
+        Angular distance of path position after complete ray-tracing w.r.t.
+        starting point. [deg]
+
+        The polar coordinates `(r_n, delta_n)` are directly associated with
+        the cartesian coordinates `(x_n, y_n)`.
+    layer_idx : int
+        Index of the layer, through which the path went during the last step.
+        This is probably only useful for debugging purposes.
+    path_length : `~astropy.units.Quantity`, scalar
+        Total path length of the propagation path. [km]
+    nsteps : int
+        Number of steps the algorithm performed.
+    refraction : `~astropy.units.Quantity`, scalar
+        Refraction angle (i.e., the total "bending" angle of the ray) [deg]
+    is_space_path : bool
+        Whether the paths ends outside of Earth's atmosphere (in
+        terms of the atmospheric profile function used).
+
+    Notes
+    -----
+    Terrain heights are neglected by the `~pycraf.atm` sub-package. All
+    heights are w.r.t. the flat (spherical) Earth (with a radius of 6371 km).
+
+    See also `~pycraf.atm.raytrace_path`.
+    '''
     ret = _path_endpoint(
         elevation, obs_alt,
         atm_layers_cache,
@@ -2085,6 +2264,42 @@ def find_elevation(
         niter=50, interval=10, stepsize=0.05,
         seed=None,
         ):
+    '''
+    Finds the optimal path elevation angle from an observer to reach target.
+
+    Based on `~scipy.optimize.basinhopping`; see their manual for an
+    explanation of the hyper-parameters (`niter`, `interval`, `stepsize`, and
+    `seed`).
+
+    Parameters
+    ----------
+    obs_alt : `~astropy.units.Quantity`, scalar
+        Height of observer above sea-level [km]
+    obs_alt : `~astropy.units.Quantity`, scalar
+        Height of target above sea-level [km]
+    arc_length : `~astropy.units.Quantity`, scalar
+        Arc-length (true angular distance) between observer and target [deg]
+    atm_layers_cache : dict
+        Pre-computed physical parameters for each atmopheric layer as
+        returned by the `~pycraf.atm.atm_layers` function.
+    niter : integer, optional
+        The number of basin hopping iterations (default: 50)
+    interval : integer, optional
+        Interval for how often to update the stepsize (default: 10)
+    stepsize : float, optional
+        Initial step size for use in the random displacement. (default: 0.05)
+    seed : int or np.random.RandomState, optional
+        Seed to use for internal random number generation. (default: None)
+
+    Notes
+    -----
+    Because of the approximation of Earth's atmosphere with layers of discrete
+    refractive indices, caustics are generated (see `~pycraf` manual), i.e.,
+    there are certains target points that cannot be reached, regardless of
+    the elevation angle at the observer. This in turns means that there is
+    only the possibility of using stochastic optimization algorithms to
+    get an approximate solution to the problem.
+    '''
 
     return _find_elevation(
         obs_alt, target_alt, arc_length,
@@ -2119,10 +2334,16 @@ def atten_slant_annex1(
         (Apparent) elevation of source as seen from observer [deg]
     obs_alt : `~astropy.units.Quantity`, scalar
         Height of observer above sea-level [km]
-    atm_layers_dict : dict
-        TODO
-    do_tebb : boolean
-        TODO
+    atm_layers_cache : dict
+        Pre-computed physical parameters for each atmopheric layer as
+        returned by the `~pycraf.atm.atm_layers` function.
+    do_tebb : boolean, optional
+        Whether to calculate the equivalent blackbody brightness temperature
+        of the (full) Earth's atmosphere. (default: True)
+
+        If you're only interested in path attenuation, you can switch this
+        off for (somewhat) improved computing speed. Note, that the result
+        will only be meaningful if the propagation path ends in space.
     t_bg : `~astropy.units.Quantity`, scalar, optional
         Background temperature, i.e. temperature just after the outermost
         layer (default: 2.73 K)
@@ -2132,9 +2353,12 @@ def atten_slant_annex1(
         frequencies, Galactic foreground contribution might play a role.
     max_path_length : `~astropy.units.Quantity`, scalar
         Maximal length of path before stopping iteration [km]
+
         (default: 1000 km; useful for terrestrial paths)
     max_arc_length : `~astropy.units.Quantity`, scalar
-        Maximal arc of path before stopping iteration [deg]
+        Maximal arc-length (true angular distance between observer and source/
+        target) of path before stopping iteration [deg]
+
         (default: 180 deg; useful for terrestrial paths)
 
     Returns
@@ -2148,8 +2372,7 @@ def atten_slant_annex1(
         Equivalent black body temperature of the atmosphere (accounting
         for any outside contribution, e.g., from CMB) [K]
 
-    Notes
-    -----
+        Will be all-NaN if not a space path, or `do_tebb == False`.
     '''
 
     if not isinstance(elevation, numbers.Real):
