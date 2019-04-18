@@ -6,7 +6,7 @@ from __future__ import (
     )
 
 import os
-from functools import partial
+from functools import partial, lru_cache
 import numbers
 import collections
 import numpy as np
@@ -14,9 +14,11 @@ from astropy import units as apu
 from astropy.utils.data import get_pkg_data_filename
 from .. import conversions as cnv
 from .. import utils
+from .atm_helper import path_helper_cython, path_endpoint_cython
 
 
 __all__ = [
+    'EARTH_RADIUS',
     'refractive_index', 'saturation_water_pressure',
     'pressure_water_from_humidity', 'humidity_from_pressure_water',
     'pressure_water_from_rho_water', 'rho_water_from_pressure_water',
@@ -28,13 +30,17 @@ __all__ = [
     'elevation_from_airmass', 'airmass_from_elevation',
     'opacity_from_atten', 'atten_from_opacity',
     'atten_specific_annex1',
-    'atten_terrestrial', 'atten_slant_annex1',
+    'atten_terrestrial', 'atm_layers',
+    'raytrace_path', 'path_endpoint', 'find_elevation',
+    'atten_slant_annex1',
     'atten_specific_annex2',
     'atten_slant_annex2',
     'equivalent_height_dry', 'equivalent_height_wet',
-    # '_prepare_path'
+    # '_raytrace_path'
     ]
 
+
+EARTH_RADIUS = 6371.
 
 fname_oxygen = get_pkg_data_filename(
     '../itudata/p.676-10/R-REC-P.676-10-201309_table1.csv'
@@ -55,6 +61,32 @@ resonances_oxygen = np.genfromtxt(
 resonances_water = np.genfromtxt(
     fname_water, dtype=water_dtype, delimiter=';'
     )
+
+
+AtmHeightProfile = collections.namedtuple(
+    'AtmHeightProfile',
+    [
+        'temperature', 'pressure', 'rho_water', 'pressure_water',
+        'ref_index', 'humidity_water', 'humidity_ice',
+        ]
+    )
+atm_height_profile_units = [
+    apu.K, apu.hPa, apu.g / apu.m ** 3, apu.hPa,
+    cnv.dimless, apu.percent, apu.percent
+    ]
+
+
+PathEndpoint = collections.namedtuple(
+    'PathEndpoint',
+    [
+        'a_n', 'r_n', 'h_n', 'x_n', 'y_n', 'alpha_n', 'delta_n', 'layer_idx',
+        'path_length', 'nsteps', 'refraction', 'is_space_path',
+        ]
+    )
+path_endpoint_units = [
+    apu.km, apu.km, apu.km, apu.km, apu.km, apu.rad, apu.rad, None,
+    apu.km, None, apu.deg, None
+    ]
 
 
 def _airmass_from_elevation(elev):
@@ -183,6 +215,17 @@ def elevation_from_airmass(airmass):
     return _elevation_from_airmass(airmass)
 
 
+def _opacity_from_atten(atten, elev=None):
+
+    if elev is None:
+
+        return np.log(atten)
+
+    else:
+
+        return np.log(atten) / _airmass_from_elevation(elev)
+
+
 @utils.ranged_quantity_input(
     atten=(1.000000000001, None, cnv.dimless), elev=(0, 90, apu.deg),
     strip_input_units=True, allow_none=True, output_unit=cnv.dimless
@@ -207,13 +250,18 @@ def opacity_from_atten(atten, elev=None):
         Atmospheric opacity [dimless aka neper]
     '''
 
+    return _opacity_from_atten(atten, elev=elev)
+
+
+def _atten_from_opacity(tau, elev=None):
+
     if elev is None:
 
-        return np.log(atten)
+        return 10 * np.log10(np.exp(tau))
 
     else:
 
-        return np.log(atten) / _airmass_from_elevation(elev)
+        return 10 * np.log10(np.exp(tau * _airmass_from_elevation(elev)))
 
 
 @utils.ranged_quantity_input(
@@ -240,13 +288,17 @@ def atten_from_opacity(tau, elev=None):
         Atmospheric attenuation [dB or dimless]
     '''
 
-    if elev is None:
+    return _atten_from_opacity(tau, elev=elev)
 
-        return 10 * np.log10(np.exp(tau))
 
-    else:
+def _refractive_index(temp, press, press_w):
 
-        return 10 * np.log10(np.exp(tau * _airmass_from_elevation(elev)))
+    return (
+        1 + 1e-6 / temp * (
+            77.6 * press - 5.6 * press_w +
+            3.75e5 * press_w / temp
+            )
+        )
 
 
 @utils.ranged_quantity_input(
@@ -275,12 +327,29 @@ def refractive_index(temp, press, press_w):
         Refractive index [dimless]
     '''
 
-    return (
-        1 + 1e-6 / temp * (
-            77.6 * press - 5.6 * press_w +
-            3.75e5 * press_w / temp
-            )
+    return _refractive_index(temp, press, press_w)
+
+
+def _saturation_water_pressure(temp, press, wet_type):
+    # temp_C is temperature in Celcius
+    temp_C = temp - 273.15
+
+    assert wet_type in ['water', 'ice']
+
+    EF = (
+        1. + 1.e-4 * (7.2 + press * (0.0320 + 5.9e-6 * temp_C ** 2))
+        if wet_type == 'water' else
+        1. + 1.e-4 * (2.2 + press * (0.0382 + 6.4e-6 * temp_C ** 2))
         )
+
+    a, b, c, d = (
+        (6.1121, 18.678, 257.14, 234.5)
+        if wet_type == 'water' else
+        (6.1115, 23.036, 279.82, 333.7)
+        )
+    e_s = EF * a * np.exp((b - temp_C / d) * temp_C / (c + temp_C))
+
+    return e_s
 
 
 @utils.ranged_quantity_input(
@@ -313,26 +382,17 @@ def saturation_water_pressure(temp, press, wet_type='water'):
         )
 
 
-def _saturation_water_pressure(temp, press, wet_type):
-    # temp_C is temperature in Celcius
-    temp_C = temp - 273.15
+def _pressure_water_from_humidity(
+        temp, press, humidity, wet_type='water'
+        ):
 
-    assert wet_type in ['water', 'ice']
-
-    EF = (
-        1. + 1.e-4 * (7.2 + press * (0.0320 + 5.9e-6 * temp_C ** 2))
-        if wet_type == 'water' else
-        1. + 1.e-4 * (2.2 + press * (0.0382 + 6.4e-6 * temp_C ** 2))
+    e_s = _saturation_water_pressure(
+        temp, press, wet_type=wet_type
         )
 
-    a, b, c, d = (
-        (6.1121, 18.678, 257.14, 234.5)
-        if wet_type == 'water' else
-        (6.1115, 23.036, 279.82, 333.7)
-        )
-    e_s = EF * a * np.exp((b - temp_C / d) * temp_C / (c + temp_C))
+    press_w = humidity / 100. * e_s
 
-    return e_s
+    return press_w
 
 
 @utils.ranged_quantity_input(
@@ -365,13 +425,22 @@ def pressure_water_from_humidity(
         Water vapor partial pressure [hPa]
     '''
 
+    return _pressure_water_from_humidity(
+        temp, press, humidity, wet_type=wet_type
+        )
+
+
+def _humidity_from_pressure_water(
+        temp, press, press_w, wet_type='water'
+        ):
+
     e_s = _saturation_water_pressure(
         temp, press, wet_type=wet_type
         )
 
-    press_w = humidity / 100. * e_s
+    humidity = 100. * press_w / e_s
 
-    return press_w
+    return humidity
 
 
 @utils.ranged_quantity_input(
@@ -406,13 +475,16 @@ def humidity_from_pressure_water(
         Relative humidity [%]
     '''
 
-    e_s = _saturation_water_pressure(
-        temp, press, wet_type=wet_type
+    return _humidity_from_pressure_water(
+        temp, press, press_w, wet_type=wet_type
         )
 
-    humidity = 100. * press_w / e_s
 
-    return humidity
+def _pressure_water_from_rho_water(temp, rho_w):
+
+    press_w = rho_w * temp / 216.7
+
+    return press_w
 
 
 @utils.ranged_quantity_input(
@@ -438,9 +510,14 @@ def pressure_water_from_rho_water(temp, rho_w):
         Water vapor partial pressure [hPa]
     '''
 
-    press_w = rho_w * temp / 216.7
+    return _pressure_water_from_rho_water(temp, rho_w)
 
-    return press_w
+
+def _rho_water_from_pressure_water(temp, press_w):
+
+    rho_w = press_w * 216.7 / temp
+
+    return rho_w
 
 
 @utils.ranged_quantity_input(
@@ -466,47 +543,10 @@ def rho_water_from_pressure_water(temp, press_w):
         Water vapor density [g / m**3]
     '''
 
-    rho_w = press_w * 216.7 / temp
-
-    return rho_w
+    return _rho_water_from_pressure_water(temp, press_w)
 
 
-@utils.ranged_quantity_input(
-    height=(0, 84.99999999, apu.km),
-    strip_input_units=True, output_unit=None
-    )
-def profile_standard(height):
-    '''
-    Standard height profiles according to `ITU-R P.835-5
-    <https://www.itu.int/rec/R-REC-P.835-5-201202-I/en>`_, Annex 1.
-
-    Parameters
-    ----------
-    height : `~astropy.units.Quantity`
-        Height above ground [km]
-
-    Returns
-    -------
-    temp : `~astropy.units.Quantity`
-        Temperature [K]
-    press : `~astropy.units.Quantity`
-        Total pressure [hPa]
-    rho_w : `~astropy.units.Quantity`
-        Water vapor density [g / m**3]
-    press_w : `~astropy.units.Quantity`
-        Water vapor partial pressure [hPa]
-    n_index : `~astropy.units.Quantity`
-        Refractive index [dimless]
-    humidity_water : `~astropy.units.Quantity`
-        Relative humidity if water vapor was in form of liquid water [%]
-    humidity_ice : `~astropy.units.Quantity`
-        Relative humidity if water vapor was in form of ice [%]
-
-    Notes
-    -----
-    For convenience, derived quantities like water density/pressure
-    and refraction indices are also returned.
-    '''
+def _profile_standard(height):
 
     # height = np.asarray(height)  # this is not sufficient for masking :-(
     height = np.atleast_1d(height)
@@ -578,38 +618,94 @@ def profile_standard(height):
     pressures_water[mask] = pressures[mask] * 2.e-6
     rho_water[mask] = pressures_water[mask] / temperatures[mask] * 216.7
 
-    temperatures = apu.Quantity(temperatures.reshape(height.shape), apu.K)
-    pressures = apu.Quantity(pressures.reshape(height.shape), apu.hPa)
-    pressures_water = apu.Quantity(
-        pressures_water.reshape(height.shape), apu.hPa
-        )
-    rho_water = apu.Quantity(
-        rho_water.reshape(height.shape), apu.g / apu.m ** 3
-        )
-
-    ref_indices = refractive_index(temperatures, pressures, pressures_water)
-    humidities_water = humidity_from_pressure_water(
+    ref_indices = _refractive_index(temperatures, pressures, pressures_water)
+    humidities_water = _humidity_from_pressure_water(
         temperatures, pressures, pressures_water, wet_type='water'
         )
-    humidities_ice = humidity_from_pressure_water(
+    humidities_ice = _humidity_from_pressure_water(
         temperatures, pressures, pressures_water, wet_type='ice'
         )
 
-    result = (
-        temperatures.squeeze(),
-        pressures.squeeze(),
-        rho_water.squeeze(),
-        pressures_water.squeeze(),
-        ref_indices.squeeze(),
-        humidities_water.squeeze(),
-        humidities_ice.squeeze(),
+    result = AtmHeightProfile(
+        temperatures.reshape(height.shape).squeeze(),
+        pressures.reshape(height.shape).squeeze(),
+        rho_water.reshape(height.shape).squeeze(),
+        pressures_water.reshape(height.shape).squeeze(),
+        ref_indices.reshape(height.shape).squeeze(),
+        humidities_water.reshape(height.shape).squeeze(),
+        humidities_ice.reshape(height.shape).squeeze(),
         )
 
     # return tuple(v.reshape(height.shape) for v in result)
     return result
 
 
-@apu.quantity_input(height=apu.km)
+@utils.ranged_quantity_input(
+    height=(0, 84.99999999, apu.km),
+    strip_input_units=True,
+    output_unit=None,
+    )
+def profile_standard(height):
+    '''
+    Standard height profiles according to `ITU-R P.835-5
+    <https://www.itu.int/rec/R-REC-P.835-5-201202-I/en>`_, Annex 1.
+
+    Parameters
+    ----------
+    height : `~astropy.units.Quantity`
+        Height above ground [km]
+
+    Returns
+    -------
+    temperature : `~astropy.units.Quantity`
+        Temperature [K]
+    pressure : `~astropy.units.Quantity`
+        Total pressure [hPa]
+    rho_water : `~astropy.units.Quantity`
+        Water vapor density [g / m**3]
+    pressure_water : `~astropy.units.Quantity`
+        Water vapor partial pressure [hPa]
+    ref_index : `~astropy.units.Quantity`
+        Refractive index [dimless]
+    humidity_water : `~astropy.units.Quantity`
+        Relative humidity if water vapor was in form of liquid water [%]
+    humidity_ice : `~astropy.units.Quantity`
+        Relative humidity if water vapor was in form of ice [%]
+
+    Notes
+    -----
+    For convenience, derived quantities like water density/pressure
+    and refraction indices are also returned.
+
+    The return value is actually a `~collections.namedtuple`, so it is
+    possible to do the following::
+
+        >>> from astropy import units as u
+        >>> import numpy as np
+        >>> from pycraf import atm
+
+        >>> heights = np.linspace(0, 80, 9) * u.km
+        >>> aprof = atm.profile_standard(heights)
+        >>> for height, temp, press in zip(
+        ...         heights, aprof.temperature, aprof.pressure
+        ...         ):
+        ...     print('{:2.0f}: {:5.1f} {:6.1f}'.format(height, temp, press))
+         0 km: 288.1 K 1013.2 hPa
+        10 km: 223.1 K  264.4 hPa
+        20 km: 216.6 K   54.7 hPa
+        30 km: 226.6 K   11.7 hPa
+        40 km: 251.0 K    2.8 hPa
+        50 km: 270.6 K    0.8 hPa
+        60 km: 245.4 K    0.2 hPa
+        70 km: 217.4 K    0.0 hPa
+        80 km: 196.6 K    0.0 hPa
+    '''
+
+    ret = _profile_standard(height)
+    qret = tuple(q * u for q, u in zip(ret, atm_height_profile_units))
+    return AtmHeightProfile(*qret)
+
+
 def _profile_helper(
         height,
         temp_heights, temp_funcs,
@@ -621,7 +717,7 @@ def _profile_helper(
 
     Parameters
     ----------
-    height : `~astropy.units.Quantity`
+    height :`~numpy.ndarray` of `~numpy.float`
         Height above ground [km]
     {temp,press,rho}_heights : list of floats
         Height steps for which piece-wise functions are defined
@@ -630,31 +726,30 @@ def _profile_helper(
 
     Returns
     -------
-    temp : `~astropy.units.Quantity`
+    temperature : `~numpy.ndarray` of `~numpy.float`
         Temperature [K]
-    press : `~astropy.units.Quantity`
+    pressure : `~numpy.ndarray` of `~numpy.float`
         Total pressure [hPa]
-    rho_w : `~astropy.units.Quantity`
+    rho_water : `~numpy.ndarray` of `~numpy.float`
         Water vapor density [g / m**3]
-    press_w : `~astropy.units.Quantity`
+    pressure_water : `~numpy.ndarray` of `~numpy.float`
         Water vapor partial pressure [hPa]
-    n_index : `~astropy.units.Quantity`
+    ref_index : `~numpy.ndarray` of `~numpy.float`
         Refractive index [dimless]
-    humidity_water : `~astropy.units.Quantity`
+    humidity_water : `~numpy.ndarray` of `~numpy.float`
         Relative humidity if water vapor was in form of liquid water [%]
-    humidity_ice : `~astropy.units.Quantity`
+    humidity_ice : `~numpy.ndarray` of `~numpy.float`
         Relative humidity if water vapor was in form of ice [%]
     '''
 
     height = np.atleast_1d(height)
-    _height = height.to(apu.km).value
 
-    assert np.all(_height < temp_heights[-1]), (
-        'profile only defined below {} km height!'.format(temp_heights[-1])
-        )
-    assert np.all(_height >= temp_heights[0]), (
-        'profile only defined above {} km height!'.format(temp_heights[0])
-        )
+    # assert np.all(height < temp_heights[-1]), (
+    #     'profile only defined below {} km height!'.format(temp_heights[-1])
+    #     )
+    # assert np.all(height >= temp_heights[0]), (
+    #     'profile only defined above {} km height!'.format(temp_heights[0])
+    #     )
 
     temperature = np.empty(height.shape, dtype=np.float64)
     pressure = np.empty(height.shape, dtype=np.float64)
@@ -668,20 +763,20 @@ def _profile_helper(
     # calculate temperature profile
     for i in range(len(temp_heights) - 1):
         hmin, hmax = temp_heights[i], temp_heights[i + 1]
-        mask = (_height >= hmin) & (_height < hmax)
-        temperature[mask] = (temp_funcs[i])(_height[mask])
+        mask = (height >= hmin) & (height < hmax)
+        temperature[mask] = (temp_funcs[i])(height[mask])
 
     # calculate pressure profile
     for i in range(len(press_heights) - 1):
         hmin, hmax = press_heights[i], press_heights[i + 1]
-        mask = (_height >= hmin) & (_height < hmax)
-        pressure[mask] = (press_funcs[i])(Pstarts[i], _height[mask])
+        mask = (height >= hmin) & (height < hmax)
+        pressure[mask] = (press_funcs[i])(Pstarts[i], height[mask])
 
     # calculate rho profile
     for i in range(len(rho_heights) - 1):
         hmin, hmax = rho_heights[i], rho_heights[i + 1]
-        mask = (_height >= hmin) & (_height < hmax)
-        rho_water[mask] = (rho_funcs[i])(_height[mask])
+        mask = (height >= hmin) & (height < hmax)
+        rho_water[mask] = (rho_funcs[i])(height[mask])
 
     # calculate pressure_water profile
     pressure_water = rho_water * temperature / 216.7
@@ -689,34 +784,30 @@ def _profile_helper(
     pressure_water[mask] = pressure[mask] * 2.e-6
     rho_water[mask] = pressure_water[mask] / temperature[mask] * 216.7
 
-    temperature = apu.Quantity(temperature.reshape(height.shape), apu.K)
-    pressure = apu.Quantity(pressure.reshape(height.shape), apu.hPa)
-    pressure_water = apu.Quantity(
-        pressure_water.reshape(height.shape), apu.hPa
-        )
-    rho_water = apu.Quantity(
-        rho_water.reshape(height.shape), apu.g / apu.m ** 3
-        )
-
-    ref_index = refractive_index(temperature, pressure, pressure_water)
-    humidity_water = humidity_from_pressure_water(
+    ref_index = _refractive_index(temperature, pressure, pressure_water)
+    humidity_water = _humidity_from_pressure_water(
         temperature, pressure, pressure_water, wet_type='water'
         )
-    humidity_ice = humidity_from_pressure_water(
+    humidity_ice = _humidity_from_pressure_water(
         temperature, pressure, pressure_water, wet_type='ice'
         )
 
-    return (
-        temperature.squeeze(),
-        pressure.squeeze(),
-        rho_water.squeeze(),
-        pressure_water.squeeze(),
-        ref_index.squeeze(),
-        humidity_water.squeeze(),
-        humidity_ice.squeeze(),
+    return AtmHeightProfile(
+        temperature.reshape(height.shape).squeeze(),
+        pressure.reshape(height.shape).squeeze(),
+        rho_water.reshape(height.shape).squeeze(),
+        pressure_water.reshape(height.shape).squeeze(),
+        ref_index.reshape(height.shape).squeeze(),
+        humidity_water.reshape(height.shape).squeeze(),
+        humidity_ice.reshape(height.shape).squeeze(),
         )
 
 
+@utils.ranged_quantity_input(
+    height=(0, 99.99999999, apu.km),
+    strip_input_units=True,
+    output_unit=None,
+    )
 def profile_lowlat(height):
     '''
     Low latitude height profiles according to `ITU-R P.835-5
@@ -731,20 +822,48 @@ def profile_lowlat(height):
 
     Returns
     -------
-    temp : `~astropy.units.Quantity`
+    temperature : `~astropy.units.Quantity`
         Temperature [K]
-    press : `~astropy.units.Quantity`
+    pressure : `~astropy.units.Quantity`
         Total pressure [hPa]
-    rho_w : `~astropy.units.Quantity`
+    rho_water : `~astropy.units.Quantity`
         Water vapor density [g / m**3]
-    press_w : `~astropy.units.Quantity`
+    pressure_water : `~astropy.units.Quantity`
         Water vapor partial pressure [hPa]
-    n_index : `~astropy.units.Quantity`
+    ref_index : `~astropy.units.Quantity`
         Refractive index [dimless]
     humidity_water : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of liquid water [%]
     humidity_ice : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of ice [%]
+
+    Notes
+    -----
+    For convenience, derived quantities like water density/pressure
+    and refraction indices are also returned.
+
+    The return value is actually a `~collections.namedtuple`, so it is
+    possible to do the following::
+
+        >>> from astropy import units as u
+        >>> import numpy as np
+        >>> from pycraf import atm
+
+        >>> heights = np.linspace(0, 80, 9) * u.km
+        >>> aprof = atm.profile_lowlat(heights)
+        >>> for height, temp, press in zip(
+        ...         heights, aprof.temperature, aprof.pressure
+        ...         ):
+        ...     print('{:2.0f}: {:5.1f} {:6.1f}'.format(height, temp, press))
+         0 km: 300.4 K 1012.0 hPa
+        10 km: 237.5 K  284.9 hPa
+        20 km: 201.6 K   65.5 hPa
+        30 km: 226.9 K   15.1 hPa
+        40 km: 252.3 K    3.5 hPa
+        50 km: 270.0 K    0.8 hPa
+        60 km: 245.4 K    0.2 hPa
+        70 km: 214.7 K    0.0 hPa
+        80 km: 184.0 K    0.0 hPa
     '''
 
     temp_heights = [0., 17., 47., 52., 80., 100.]
@@ -774,14 +893,21 @@ def profile_lowlat(height):
         lambda h: 0.,
         ]
 
-    return _profile_helper(
+    ret = _profile_helper(
         height,
         temp_heights, temp_funcs,
         press_heights, press_funcs,
         rho_heights, rho_funcs,
         )
+    qret = tuple(q * u for q, u in zip(ret, atm_height_profile_units))
+    return AtmHeightProfile(*qret)
 
 
+@utils.ranged_quantity_input(
+    height=(0, 99.99999999, apu.km),
+    strip_input_units=True,
+    output_unit=None,
+    )
 def profile_midlat_summer(height):
     '''
     Mid latitude summer height profiles according to `ITU-R P.835-5
@@ -796,20 +922,48 @@ def profile_midlat_summer(height):
 
     Returns
     -------
-    temp : `~astropy.units.Quantity`
+    temperature : `~astropy.units.Quantity`
         Temperature [K]
-    press : `~astropy.units.Quantity`
+    pressure : `~astropy.units.Quantity`
         Total pressure [hPa]
-    rho_w : `~astropy.units.Quantity`
+    rho_water : `~astropy.units.Quantity`
         Water vapor density [g / m**3]
-    press_w : `~astropy.units.Quantity`
+    pressure_water : `~astropy.units.Quantity`
         Water vapor partial pressure [hPa]
-    n_index : `~astropy.units.Quantity`
+    ref_index : `~astropy.units.Quantity`
         Refractive index [dimless]
     humidity_water : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of liquid water [%]
     humidity_ice : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of ice [%]
+
+    Notes
+    -----
+    For convenience, derived quantities like water density/pressure
+    and refraction indices are also returned.
+
+    The return value is actually a `~collections.namedtuple`, so it is
+    possible to do the following::
+
+        >>> from astropy import units as u
+        >>> import numpy as np
+        >>> from pycraf import atm
+
+        >>> heights = np.linspace(0, 80, 9) * u.km
+        >>> aprof = atm.profile_midlat_summer(heights)
+        >>> for height, temp, press in zip(
+        ...         heights, aprof.temperature, aprof.pressure
+        ...         ):
+        ...     print('{:2.0f}: {:5.1f} {:6.1f}'.format(height, temp, press))
+         0 km: 295.0 K 1012.8 hPa
+        10 km: 235.7 K  283.7 hPa
+        20 km: 220.5 K   65.2 hPa
+        30 km: 239.1 K   15.0 hPa
+        40 km: 259.4 K    3.4 hPa
+        50 km: 275.0 K    0.8 hPa
+        60 km: 264.6 K    0.2 hPa
+        70 km: 239.5 K    0.0 hPa
+        80 km: 175.0 K    0.0 hPa
     '''
 
     temp_heights = [0., 13., 17., 47., 53., 80., 100.]
@@ -837,14 +991,21 @@ def profile_midlat_summer(height):
         lambda h: 0.,
         ]
 
-    return _profile_helper(
+    ret = _profile_helper(
         height,
         temp_heights, temp_funcs,
         press_heights, press_funcs,
         rho_heights, rho_funcs,
         )
+    qret = tuple(q * u for q, u in zip(ret, atm_height_profile_units))
+    return AtmHeightProfile(*qret)
 
 
+@utils.ranged_quantity_input(
+    height=(0, 99.99999999, apu.km),
+    strip_input_units=True,
+    output_unit=None,
+    )
 def profile_midlat_winter(height):
     '''
     Mid latitude winter height profiles according to `ITU-R P.835-5
@@ -859,20 +1020,48 @@ def profile_midlat_winter(height):
 
     Returns
     -------
-    temp : `~astropy.units.Quantity`
+    temperature : `~astropy.units.Quantity`
         Temperature [K]
-    press : `~astropy.units.Quantity`
+    pressure : `~astropy.units.Quantity`
         Total pressure [hPa]
-    rho_w : `~astropy.units.Quantity`
+    rho_water : `~astropy.units.Quantity`
         Water vapor density [g / m**3]
-    press_w : `~astropy.units.Quantity`
+    pressure_water : `~astropy.units.Quantity`
         Water vapor partial pressure [hPa]
-    n_index : `~astropy.units.Quantity`
+    ref_index : `~astropy.units.Quantity`
         Refractive index [dimless]
     humidity_water : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of liquid water [%]
     humidity_ice : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of ice [%]
+
+    Notes
+    -----
+    For convenience, derived quantities like water density/pressure
+    and refraction indices are also returned.
+
+    The return value is actually a `~collections.namedtuple`, so it is
+    possible to do the following::
+
+        >>> from astropy import units as u
+        >>> import numpy as np
+        >>> from pycraf import atm
+
+        >>> heights = np.linspace(0, 80, 9) * u.km
+        >>> aprof = atm.profile_midlat_winter(heights)
+        >>> for height, temp, press in zip(
+        ...         heights, aprof.temperature, aprof.pressure
+        ...         ):
+        ...     print('{:2.0f}: {:5.1f} {:6.1f}'.format(height, temp, press))
+         0 km: 272.7 K 1018.9 hPa
+        10 km: 218.0 K  259.0 hPa
+        20 km: 218.0 K   59.5 hPa
+        30 km: 218.0 K   13.7 hPa
+        40 km: 241.5 K    3.1 hPa
+        50 km: 265.0 K    0.7 hPa
+        60 km: 250.7 K    0.2 hPa
+        70 km: 230.4 K    0.0 hPa
+        80 km: 210.0 K    0.0 hPa
     '''
 
     temp_heights = [0., 10., 33., 47., 53., 80., 100.]
@@ -900,14 +1089,21 @@ def profile_midlat_winter(height):
         lambda h: 0.,
         ]
 
-    return _profile_helper(
+    ret = _profile_helper(
         height,
         temp_heights, temp_funcs,
         press_heights, press_funcs,
         rho_heights, rho_funcs,
         )
+    qret = tuple(q * u for q, u in zip(ret, atm_height_profile_units))
+    return AtmHeightProfile(*qret)
 
 
+@utils.ranged_quantity_input(
+    height=(0, 99.99999999, apu.km),
+    strip_input_units=True,
+    output_unit=None,
+    )
 def profile_highlat_summer(height):
     '''
     High latitude summer height profiles according to `ITU-R P.835-5
@@ -922,20 +1118,48 @@ def profile_highlat_summer(height):
 
     Returns
     -------
-    temp : `~astropy.units.Quantity`
+    temperature : `~astropy.units.Quantity`
         Temperature [K]
-    press : `~astropy.units.Quantity`
+    pressure : `~astropy.units.Quantity`
         Total pressure [hPa]
-    rho_w : `~astropy.units.Quantity`
+    rho_water : `~astropy.units.Quantity`
         Water vapor density [g / m**3]
-    press_w : `~astropy.units.Quantity`
+    pressure_water : `~astropy.units.Quantity`
         Water vapor partial pressure [hPa]
-    n_index : `~astropy.units.Quantity`
+    ref_index : `~astropy.units.Quantity`
         Refractive index [dimless]
     humidity_water : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of liquid water [%]
     humidity_ice : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of ice [%]
+
+    Notes
+    -----
+    For convenience, derived quantities like water density/pressure
+    and refraction indices are also returned.
+
+    The return value is actually a `~collections.namedtuple`, so it is
+    possible to do the following::
+
+        >>> from astropy import units as u
+        >>> import numpy as np
+        >>> from pycraf import atm
+
+        >>> heights = np.linspace(0, 80, 9) * u.km
+        >>> aprof = atm.profile_highlat_summer(heights)
+        >>> for height, temp, press in zip(
+        ...         heights, aprof.temperature, aprof.pressure
+        ...         ):
+        ...     print('{:2.0f}: {:5.1f} {:6.1f}'.format(height, temp, press))
+         0 km: 286.8 K 1008.0 hPa
+        10 km: 225.0 K  269.6 hPa
+        20 km: 225.0 K   62.0 hPa
+        30 km: 238.5 K   14.3 hPa
+        40 km: 259.2 K    3.3 hPa
+        50 km: 277.0 K    0.8 hPa
+        60 km: 248.5 K    0.2 hPa
+        70 km: 207.7 K    0.0 hPa
+        80 km: 171.0 K    0.0 hPa
     '''
 
     temp_heights = [0., 10., 23., 48., 53., 79., 100.]
@@ -963,14 +1187,21 @@ def profile_highlat_summer(height):
         lambda h: 0.,
         ]
 
-    return _profile_helper(
+    ret = _profile_helper(
         height,
         temp_heights, temp_funcs,
         press_heights, press_funcs,
         rho_heights, rho_funcs,
         )
+    qret = tuple(q * u for q, u in zip(ret, atm_height_profile_units))
+    return AtmHeightProfile(*qret)
 
 
+@utils.ranged_quantity_input(
+    height=(0, 99.99999999, apu.km),
+    strip_input_units=True,
+    output_unit=None,
+    )
 def profile_highlat_winter(height):
     '''
     High latitude winter height profiles according to `ITU-R P.835-5
@@ -985,20 +1216,48 @@ def profile_highlat_winter(height):
 
     Returns
     -------
-    temp : `~astropy.units.Quantity`
+    temperature : `~astropy.units.Quantity`
         Temperature [K]
-    press : `~astropy.units.Quantity`
+    pressure : `~astropy.units.Quantity`
         Total pressure [hPa]
-    rho_w : `~astropy.units.Quantity`
+    rho_water : `~astropy.units.Quantity`
         Water vapor density [g / m**3]
-    press_w : `~astropy.units.Quantity`
+    pressure_water : `~astropy.units.Quantity`
         Water vapor partial pressure [hPa]
-    n_index : `~astropy.units.Quantity`
+    ref_index : `~astropy.units.Quantity`
         Refractive index [dimless]
     humidity_water : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of liquid water [%]
     humidity_ice : `~astropy.units.Quantity`
         Relative humidity if water vapor was in form of ice [%]
+
+    Notes
+    -----
+    For convenience, derived quantities like water density/pressure
+    and refraction indices are also returned.
+
+    The return value is actually a `~collections.namedtuple`, so it is
+    possible to do the following::
+
+        >>> from astropy import units as u
+        >>> import numpy as np
+        >>> from pycraf import atm
+
+        >>> heights = np.linspace(0, 80, 9) * u.km
+        >>> aprof = atm.profile_highlat_winter(heights)
+        >>> for height, temp, press in zip(
+        ...         heights, aprof.temperature, aprof.pressure
+        ...         ):
+        ...     print('{:2.0f}: {:5.1f} {:6.1f}'.format(height, temp, press))
+         0 km: 257.4 K 1010.9 hPa
+        10 km: 217.5 K  243.9 hPa
+        20 km: 217.5 K   56.1 hPa
+        30 km: 217.5 K   12.9 hPa
+        40 km: 238.8 K    3.0 hPa
+        50 km: 260.0 K    0.7 hPa
+        60 km: 250.0 K    0.2 hPa
+        70 km: 233.3 K    0.0 hPa
+        80 km: 216.7 K    0.0 hPa
     '''
 
     temp_heights = [0., 8.5, 30., 50., 54., 100.]
@@ -1025,18 +1284,20 @@ def profile_highlat_winter(height):
         lambda h: 0.,
         ]
 
-    return _profile_helper(
+    ret = _profile_helper(
         height,
         temp_heights, temp_funcs,
         press_heights, press_funcs,
         rho_heights, rho_funcs,
         )
+    qret = tuple(q * u for q, u in zip(ret, atm_height_profile_units))
+    return AtmHeightProfile(*qret)
 
 
 def _S_oxygen(press_dry, temp):
     '''
-    Line strengths of all oxygen resonances according to `ITU-R P.676-10
-    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Eq (3).
+    Line strengths of all oxygen resonances according to `ITU-R P.676-11
+    <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_, Eq (3).
 
     Parameters
     ----------
@@ -1067,8 +1328,8 @@ def _S_oxygen(press_dry, temp):
 
 def _S_water(press_w, temp):
     '''
-    Line strengths of all water resonances according to `ITU-R P.676-10
-    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Eq (3).
+    Line strengths of all water resonances according to `ITU-R P.676-11
+    <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_, Eq (3).
 
     Parameters
     ----------
@@ -1099,8 +1360,8 @@ def _S_water(press_w, temp):
 
 def _Delta_f_oxygen(press_dry, press_w, temp):
     '''
-    Line widths for all oxygen resonances according to `ITU-R P.676-10
-    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Eq (6a/b).
+    Line widths for all oxygen resonances according to `ITU-R P.676-11
+    <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_, Eq (6a/b).
 
     Parameters
     ----------
@@ -1132,7 +1393,7 @@ def _Delta_f_oxygen(press_dry, press_w, temp):
 def _Delta_f_water(press_dry, press_w, temp):
     '''
     Line widths for all water resonances according to
-    `ITU-R P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_,
+    `ITU-R P.676-11 <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_,
     Eq (6a/b).
 
     Parameters
@@ -1172,7 +1433,7 @@ def _Delta_f_water(press_dry, press_w, temp):
 def _delta_oxygen(press_dry, press_w, temp):
     '''
     Shape correction for all oxygen resonances according to
-    `ITU-R P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_,
+    `ITU-R P.676-11 <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_,
     Eq (7).
 
     Parameters
@@ -1222,7 +1483,7 @@ def _delta_water():
 def _F(freq_grid, f_i, Delta_f, delta):
     '''
     Line-profiles for all resonances at the freq_grid positions according to
-    `ITU-R P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_,
+    `ITU-R P.676-11 <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_,
     Eq (5).
 
     Parameters
@@ -1265,7 +1526,7 @@ def _F(freq_grid, f_i, Delta_f, delta):
 def _N_D_prime2(freq_grid, press_dry, press_w, temp):
     '''
     Dry air continuum absorption (Debye spectrum) according to
-    `ITU-R P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_,
+    `ITU-R P.676-11 <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_,
     Eq (8/9).
 
     Parameters
@@ -1344,8 +1605,8 @@ def atten_specific_annex1(
         freq_grid, press_dry, press_w, temp
         ):
     '''
-    Specific (one layer) atmospheric attenuation according to `ITU-R P.676-10
-    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Annex 1.
+    Specific (one layer) atmospheric attenuation according to `ITU-R P.676-11
+    <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_, Annex 1.
 
     Parameters
     ----------
@@ -1385,8 +1646,8 @@ def atten_specific_annex1(
 def atten_terrestrial(specific_atten, path_length):
     '''
     Total path attenuation for a path close to the ground (i.e., one layer),
-    according to `ITU-R P.676-10
-    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Annex 1 + 2.
+    according to `ITU-R P.676-11
+    <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_, Annex 1 + 2.
 
     Parameters
     ----------
@@ -1404,172 +1665,685 @@ def atten_terrestrial(specific_atten, path_length):
     return specific_atten * path_length
 
 
-def _prepare_path(elev, obs_alt, profile_func, max_path_length=1000.):
-    '''
-    Helper function to construct the path parameters; see `ITU-R P.676-10
-    <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, Annex 1.
-
-    Parameters
-    ----------
-    elev : float
-        (Apparent) elevation of source as seen from observer [deg]
-    obs_alt : float
-        Height of observer above sea-level [m]
-    profile_func : func
-        A height profile function having the same signature as
-        `~pycraf.atm.profile_standard`
-    max_path_length : float, optional
-        Maximal length of path before stopping iteration [km]
-        (default: 1000 km; useful for terrestrial paths)
-
-    Returns
-    -------
-    layer_params : list
-        List of tuples with the following quantities for each height layer `n`:
-
-        0) press_n - Total pressure [hPa]
-        1) press_w_n - Water vapor partial pressure [hPa]
-        2) temp_n - Temperature [K]
-        3) a_n - Path length [km]
-        4) r_n - Radius (i.e., distance to Earth center) [km]
-        5) alpha_n - exit angle [rad]
-        6) delta_n - angle between current normal vector and first normal
-           vector (aka projected angular distance to starting point) [rad]
-        7) beta_n - entry angle [rad]
-        8) h_n - height above sea-level [km]
-
-    Refraction : float
-        Offset with respect to a hypothetical straight path, i.e., the
-        correction between real and apparent source elevation [deg]
-
-    Notes
-    -----
-    Although the `profile_func` must have the same signature as
-    `~pycraf.atm.profile_standard`, which is one of the standardized
-    atmospheric height profiles, only temperature, total pressure and
-    water vapor pressure are needed here, i.e., `profile_func` may return
-    dummy values for the rest.
-    '''
-
-    # construct height layers
-    # deltas = 0.0001 * np.exp(np.arange(922) / 100.)
-    # atm profiles only up to 80 km...
-    deltas = 0.0001 * np.exp(np.arange(899) / 100.)
-    heights = np.cumsum(deltas)
-
-    # radius calculation
-    # TODO: do we need to account for non-spherical Earth?
-    # probably not - some tests suggest that the relative error is < 1e-6
-    earth_radius = 6371. + obs_alt / 1000.
-    radii = earth_radius + heights  # distance Earth-center to layers
-
-    (
-        temperature,
-        pressure,
-        rho_water,
-        pressure_water,
-        ref_index,
-        humidity_water,
-        humidity_ice
-        ) = profile_func(apu.Quantity(heights, apu.km))
-    # handle units
-    temperature = temperature.to(apu.K).value
-    pressure = pressure.to(apu.hPa).value
-    rho_water = rho_water.to(apu.g / apu.m ** 3).value
-    pressure_water = pressure_water.to(apu.hPa).value
-    ref_index = ref_index.to(cnv.dimless).value
-    humidity_water = humidity_water.to(apu.percent).value
-    humidity_ice = humidity_ice.to(apu.percent).value
-
-    def fix_arg(arg):
-        '''
-        Ensure argument is in [-1., +1.] for arcsin, arccos functions.
-        '''
-
-        if arg < -1.:
-            return -1.
-        elif arg > 1.:
-            return 1.
-        else:
-            return arg
-
-    # calculate layer path lengths (Equation 17 to 19)
-    # all angles in rad
-    beta_n = beta_0 = np.radians(90. - elev)  # initial value
-
-    # we will store a_n, gamma_n, and temperature for each layer, to allow
-    # Tebb calculation
-    path_params = []
-    # angle of the normal vector (r_n) at current layer w.r.t. zenith (r_1):
-    delta_n = 0
-    path_length = 0
-
-    # find start layer index that is associated with observers altitude
-    start_i = np.searchsorted(heights, obs_alt / 1000.)
-
-    # TODO: this is certainly a case for cython
-    for i in range(start_i, len(heights) - 1):
-
-        r_n = radii[i]
-        d_n = deltas[i]
-        a_n = -r_n * np.cos(beta_n) + 0.5 * np.sqrt(
-            4 * r_n ** 2 * np.cos(beta_n) ** 2 + 8 * r_n * d_n + 4 * d_n ** 2
-            )
-        alpha_n = np.pi - np.arccos(fix_arg(
-            (-a_n ** 2 - 2 * r_n * d_n - d_n ** 2) / 2. / a_n / (r_n + d_n)
-            ))
-        delta_n += beta_n - alpha_n
-        beta_n = np.arcsin(
-            fix_arg(ref_index[i] / ref_index[i + 1] * np.sin(alpha_n))
-            )
-
-        h_n = 0.5 * (heights[i] + heights[i + 1])
-        press_n = 0.5 * (pressure[i] + pressure[i + 1])
-        press_w_n = 0.5 * (pressure_water[i] + pressure_water[i + 1])
-        temp_n = 0.5 * (temperature[i] + temperature[i + 1])
-
-        path_length += a_n
-        if path_length > max_path_length:
-            break
-
-        path_params.append((
-            press_n, press_w_n, temp_n,
-            a_n, r_n, alpha_n, delta_n, beta_n, h_n
-            ))
-
-    refraction = - np.degrees(beta_n + delta_n - beta_0)
-
-    return path_params, refraction
-
-
 @utils.ranged_quantity_input(
     freq_grid=(1.e-30, 1000, apu.GHz),
-    elevation=(-90, 90, apu.deg),
-    obs_alt=(1.e-30, None, apu.m),
-    t_bg=(1.e-30, None, apu.K),
-    max_path_length=(1.e-30, None, apu.km),
-    strip_input_units=True, output_unit=(cnv.dB, apu.deg, apu.K)
+    heights=(0, 80, apu.km),
+    strip_input_units=True, allow_none=True, output_unit=None
     )
-def atten_slant_annex1(
-        freq_grid, elevation, obs_alt, profile_func,
-        t_bg=2.73 * apu.K, max_path_length=1000. * apu.km
-        ):
+def atm_layers(freq_grid, profile_func, heights=None):
     '''
-    Path attenuation for a slant path through full atmosphere according to
-    `ITU-R P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_
-    Eq (17-20).
+    Calculate physical parameters for atmospheric layers to be used with
+    `~pycraf.atm.atten_slant_annex1` and other functions of the `~pycraf.atm`
+    sub-package.
+
+    This can be used to cache layer-profile data. Since it is only dependent
+    on frequency, one can re-use it to save computing time when doing batch
+    jobs (e.g., atmospheric dampening for each pixel in a map).
 
     Parameters
     ----------
     freq_grid : `~astropy.units.Quantity`
-        Frequencies at which to calculate line-width shapes [GHz]
-    elev : `~astropy.units.Quantity`, scalar
-        (Apparent) elevation of source as seen from observer [deg]
-    obs_alt : `~astropy.units.Quantity`, scalar
-        Height of observer above sea-level [m]
+        Frequencies at which to calculate the layer properties [GHz]
     profile_func : func
         A height profile function having the same signature as
         `~pycraf.atm.profile_standard`
+    heights : `~astropy.units.Quantity` [km], optional
+        Layer heights (above ground); see Notes [km]
+
+    Returns
+    -------
+    atm_layers_cache : dict
+        Pre-computed physical parameters for each atmopheric layer to be
+        used by functions `~pycraf.atm.raytrace_path`,
+        `~pycraf.atm.path_endpoint`, and `~pycraf.atm.atten_slant_annex1`.
+        It contains the following keys:
+
+        - "space_i" : int
+
+          Layer (edge) index of the top atmospheric layer, before space
+          begins. (See Notes.)
+
+        - "max_i" : int
+
+          Layer (edge) index of the outermost layer (can be in space).
+          (See Notes.)
+
+        - "freq_grid" : `~numpy.ndarray` (float)
+
+          Frequencies at which to calculate the layer properties [GHz]
+
+        - "heights" : `~numpy.ndarray` (float)
+
+          Layer heights above ground (lower edges) [km]
+
+        - "radii" : `~numpy.ndarray` (float)
+
+          Layer distances to Earth center (lower edges) [km]
+
+        - "temp" : `~numpy.ndarray` (float)
+
+          Layer temperatures (at layer mid point) [K]
+
+        - "press" : `~numpy.ndarray` (float)
+
+          Layer pressure (at layer mid point) [hPa]
+
+        - "press_w" : `~numpy.ndarray` (float)
+
+          Layer water pressure (at layer mid point) [hPa]
+
+        - "ref_index" : `~numpy.ndarray` (float)
+
+          Layer refractive index (at layer mid point) [dimless]
+
+        - "atten_dry_db" : `~numpy.ndarray` (float)
+
+          Layer specific attenuation (dry; at layer mid point) [dB/km]
+
+        - "atten_wet_db" : `~numpy.ndarray` (float)
+
+          Layer specific attenuation (wet; at layer mid point) [dB/km]
+
+        - "atten_db" : `~numpy.ndarray` (float)
+
+          Layer specific attenuation (total; at layer mid point) [dB/km]
+
+    Notes
+    -----
+    One should usually stick to the default layer heights (as defined in
+    `ITU-R Rec. P.676-11 <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_)
+    to ensure consistency with other software/results.
+
+    The layer heights are actually the layer edges, while the physical
+    quantities are calculated at the mid-points of the layers and only up
+    to the maximal height of the atmospheric profile function, i.e.::
+
+        >>> from astropy import units as u
+        >>> import numpy as np
+        >>> from pycraf import atm
+        >>>
+        >>> atm_layers_cache = atm.atm_layers(1 * u.GHz, atm.profile_standard)
+        >>> len(atm_layers_cache['heights'])
+        908
+        >>> len(atm_layers_cache['temp'])
+        901
+
+    This is also stored in the `space_i` variable::
+
+        >>> atm_layers_cache['space_i']
+        900
+
+    while the index of the last layer edge is stored in `max_i`:
+
+        >>> atm_layers_cache['max_i']
+        907
+
+    In contrast to P.676 we add outer-space layers (scaled for LEO, moon,
+    solar-sys and deep-space "heights") to allow correct path determination,
+    e.g. for satellites. Of course, these don't add attenuation (and have
+    refractivity One).
+    '''
+
+    freq_grid = np.atleast_1d(freq_grid)
+    if freq_grid.ndim != 1:
+        raise ValueError("'freq_grid' must be a 1D array or scalar")
+
+    if heights is None:
+        deltas = 0.0001 * np.exp(np.arange(900) / 100.)
+        heights = np.hstack([0., np.cumsum(deltas)])
+    else:
+        heights = np.asarray(heights)
+        if heights.ndim != 1:
+            raise ValueError("'heights' must be a 1D array")
+
+    # note that the heights are the layer edges, while the layer_mids
+    # are the mid-heights of the layers themselve; the latter define
+    # also the atmospheric parameters
+    layer_mids = np.hstack([
+        0.5 * (heights[1] + heights[0]),
+        0.5 * (heights[1:] + heights[:-1]),
+        ])
+    atm_hprof = profile_func(apu.Quantity(layer_mids, apu.km))
+
+    # Note, in contrast to P.676 we add outer-space layers
+    # (scaled for LEO, moon, solar-sys and deep-space "heights")
+    # to allow correct path determination, e.g. for satellites;
+    # of course, these don't add attenuation (and have refractivity One)
+    ref_index = atm_hprof.ref_index.to(cnv.dimless).value
+    # space_i is the index of the last layer edge! (not the last layer)
+    space_i = len(heights) - 1
+    heights = np.hstack([heights, [2e3, 4e5, 6e9, 3e15, 3e19, 3e22, 3e25]])
+    # need one more for refractive index
+    ref_index = np.hstack([ref_index, [1, 1, 1, 1, 1, 1, 1, 1]])
+
+    adict = {}
+    adict['space_i'] = space_i  # indicate, where space-path begins
+    adict['max_i'] = len(heights) - 1
+    adict['freq_grid'] = freq_grid
+    adict['heights'] = heights
+    adict['radii'] = EARTH_RADIUS + heights  # distance Earth-center to layers
+
+    # handle units
+    adict['temp'] = temp = atm_hprof.temperature.to(apu.K).value
+    adict['press'] = press = atm_hprof.pressure.to(apu.hPa).value
+    adict['press_w'] = press_w = atm_hprof.pressure_water.to(apu.hPa).value
+    adict['ref_index'] = ref_index
+
+    atten_dry_db = np.zeros((heights.size, freq_grid.size), dtype=np.float64)
+    atten_wet_db = np.zeros((heights.size, freq_grid.size), dtype=np.float64)
+
+    for idx in range(1, space_i):
+        atten_dry_db[idx], atten_wet_db[idx] = _atten_specific_annex1(
+            freq_grid, press[idx], press_w[idx], temp[idx]
+            )
+
+    adict['atten_dry_db'] = atten_dry_db
+    adict['atten_wet_db'] = atten_wet_db
+    adict['atten_db'] = atten_dry_db + atten_wet_db
+
+    return adict
+
+
+def _raytrace_path(
+        elev, obs_alt,
+        atm_layers_cache,
+        max_arc_length=180.,
+        max_path_length=1000.,
+        ):
+
+    radii = atm_layers_cache['radii']
+    heights = atm_layers_cache['heights']
+    ref_index = atm_layers_cache['ref_index']
+    space_i = atm_layers_cache['space_i']
+    max_i = atm_layers_cache['max_i']
+
+    # the algorithm below will fail, if observer is *on* the smallest height..
+    obs_alt = max([1.e-9, obs_alt])
+    start_i = np.searchsorted(heights, obs_alt)
+    # ..or on any layer height
+    if heights[start_i] == obs_alt:
+        start_i += 1
+        obs_alt += 1e-9
+
+    path_params, refraction, is_space_path = path_helper_cython(
+        start_i,
+        space_i,
+        max_i,
+        elev,  # deg
+        obs_alt,  # km
+        max_path_length,  # km
+        max_arc_length,  # deg
+        radii,
+        ref_index,
+        )
+
+    return path_params, refraction, is_space_path
+
+
+@utils.ranged_quantity_input(
+    elevation=(-90, 90, apu.deg),
+    obs_alt=(0, None, apu.km),
+    max_arc_length=(1.e-30, 180., apu.deg),
+    max_path_length=(1.e-30, None, apu.km),
+    strip_input_units=True, output_unit=(None, apu.deg, None),
+    )
+def raytrace_path(
+        elevation, obs_alt,
+        atm_layers_cache,
+        max_arc_length=180. * apu.deg,
+        max_path_length=1000. * apu.km,
+        ):
+    '''
+    Calculate the propagation path geometry through atmosphere by ray-tracing.
+
+    For several tasks related to the `~pycraf.atm` sub-package, it is
+    necessary to determine the exact path geometry of a propagating ray
+    through Earth's atmosphere. One example would be the application of
+    the `~pycraf.atm.atten_slant_annex1` function to calculate the
+    total attenuation along a (slant) path, where the length of a ray
+    within each of the discrete layers of an atmospheric model must be
+    multiplied with the specific attenuation of the layers.
+
+    Parameters
+    ----------
+    elevation : `~astropy.units.Quantity`, scalar
+        (Apparent) elevation of source/target as seen from observer [deg]
+    obs_alt : `~astropy.units.Quantity`, scalar
+        Height of observer above sea-level [km]
+    atm_layers_cache : dict
+        Pre-computed physical parameters for each atmopheric layer as
+        returned by the `~pycraf.atm.atm_layers` function.
+    max_path_length : `~astropy.units.Quantity`, scalar
+        Maximal length of path before stopping the ray-tracing [km]
+
+        (default: 1000 km; useful for terrestrial paths)
+    max_arc_length : `~astropy.units.Quantity`, scalar
+        Maximal arc-length (true angular distance between observer and source/
+        target) of path before stopping ray-tracing [deg]
+
+        (default: 180 deg; useful for terrestrial paths)
+
+    Returns
+    -------
+    path_params : `~numpy.recarray`
+        Geometric parameters of each piece of the paths (i.e., per layer)
+        as determined by the ray-tracing algorithm.
+        It has the following fields:
+
+        - a_n : float
+
+          Length of path through the layer during iteration `n`. [km]
+
+        - r_n : float
+
+          Distance to Earth's center after iteration `n`. [km]
+
+        - h_n : float
+
+          Height above Earth's surface after iteration `n`. [km]
+
+        - x_n/y_n : float
+
+          Cartesian coordinates of path after iteration `n`. [km]
+
+          The reference is Earth's center. Starting point is
+          `(0, r_E + obs_alt)`.
+
+        - alpha_n : float
+
+          Exit angle of path after going through the layer (relative to
+          surface normal vector) after iteration `n`. [km]
+
+        - beta_n : float
+
+          Entry angle of path into the layer (relative to surface normal
+          vector) at beginning of iteration `n`. [km]
+
+        - delta_n : float
+
+          Angular distance of path position after iteration `n` w.r.t.
+          starting point. [deg]
+
+          The polar coordinates `(r_n, delta_n)` are directly associated with
+          the cartesian coordinates `(x_n, y_n)`.
+
+        - layer_idx : int
+
+          Index of the layer, through which the path went during each step.
+          This could be used to query the physical parameters from the
+          atm layers cache (see `~pycraf.atm.atm_layers`).
+
+        - layer_edge_left_idx : int
+
+          Index of the layer edge to the left (associated with the entry
+          point) of current step.
+
+        - layer_edge_right_idx : int
+
+          Index of the layer edge to the right (associated with the exit
+          point) of current step.
+
+    refraction : `~astropy.units.Quantity`, scalar
+        Refraction angle (i.e., the total "bending" angle of the ray) [deg]
+    is_space_path : bool
+        Whether the paths ends outside of Earth's atmosphere (in
+        terms of the atmospheric profile function used).
+
+    Notes
+    -----
+    Terrain heights are neglected by the `~pycraf.atm` sub-package. All
+    heights are w.r.t. the flat (spherical) Earth (with a radius of 6371 km).
+
+    The first row in the `path_params` array is the starting point of the path
+    and has valid entries only for the `r_n`, `h_n`, and `x_n`/`y_n`
+    parameters. There are `n+1` layer edges and `n` layers. The edge
+    indices start from zero, while the layer indices start from one.
+    '''
+
+    return _raytrace_path(
+        elevation, obs_alt,
+        atm_layers_cache,
+        max_arc_length=max_arc_length,
+        max_path_length=max_path_length,
+        )
+
+
+def _path_endpoint(
+        elev, obs_alt,
+        atm_layers_cache,
+        max_arc_length=180.,
+        max_path_length=1000.,
+        ):
+
+    radii = atm_layers_cache['radii']
+    heights = atm_layers_cache['heights']
+    ref_index = atm_layers_cache['ref_index']
+    space_i = atm_layers_cache['space_i']
+    max_i = atm_layers_cache['max_i']
+
+    # the algorithm below will fail, if observer is *on* the smallest height..
+    obs_alt = max([1.e-9, obs_alt])
+    start_i = np.searchsorted(heights, obs_alt)
+    # ..or on any layer height
+    if heights[start_i] == obs_alt:
+        start_i += 1
+        obs_alt += 1e-9
+
+    ret = PathEndpoint(*path_endpoint_cython(
+        start_i,
+        space_i,
+        max_i,
+        elev,  # deg
+        obs_alt,  # km
+        max_path_length,  # km
+        max_arc_length,  # deg
+        radii,
+        ref_index,
+        ))
+
+    # (
+    #     a_n, r_n, h_n, x_n, y_n, alpha_n, delta_n, layer_idx,
+    #     path_length, nsteps,
+    #     refraction,
+    #     is_space_path,
+    #     ) = ret
+
+    return ret
+
+
+@utils.ranged_quantity_input(
+    elevation=(-90, 90, apu.deg),
+    obs_alt=(0, None, apu.km),
+    max_arc_length=(1.e-30, 180., apu.deg),
+    max_path_length=(1.e-30, None, apu.km),
+    strip_input_units=True, output_unit=None,
+    )
+def path_endpoint(
+        elevation, obs_alt,
+        atm_layers_cache,
+        max_arc_length=180. * apu.deg,
+        max_path_length=1000. * apu.km,
+        ):
+    '''
+    Calculate endpoint of propagation path through atmosphere by ray-tracing.
+
+    Like `~pycraf.atm.raytrace_path` this calculates the exact path geometry
+    of a propagating ray through Earth's atmosphere. The difference to
+    `~pycraf.atm.raytrace_path` is that only the final point is returned.
+    This is sufficient for some applications, e.g., when an elevation angle
+    needs to be determined with an optimization algorithm (see
+    `~pycraf.atm.find_elevation`).
+
+    Parameters
+    ----------
+    elevation : `~astropy.units.Quantity`, scalar
+        (Apparent) elevation of source/target as seen from observer [deg]
+    obs_alt : `~astropy.units.Quantity`, scalar
+        Height of observer above sea-level [km]
+    atm_layers_cache : dict
+        Pre-computed physical parameters for each atmopheric layer as
+        returned by the `~pycraf.atm.atm_layers` function.
+    max_path_length : `~astropy.units.Quantity`, scalar
+        Maximal length of path before stopping the ray-tracing [km]
+
+        (default: 1000 km; useful for terrestrial paths)
+    max_arc_length : `~astropy.units.Quantity`, scalar
+        Maximal arc-length (true angular distance between observer and source/
+        target) of path before stopping ray-tracing [deg]
+
+        (default: 180 deg; useful for terrestrial paths)
+
+    Returns
+    -------
+    a_n : `~astropy.units.Quantity`, scalar
+        Length of path through final layer of the ray-tracing. [km]
+
+        This is not too useful (perhaps for space-paths, where it gives
+        the fraction of the path that doesn't go through the atmosphere.)
+    r_n : `~astropy.units.Quantity`, scalar
+        Distance to Earth's center after complete ray-tracing. [km]
+    h_n : `~astropy.units.Quantity`, scalar
+        Height above Earth's surface after complete ray-tracing. [km]
+    x_n/y_n : `~astropy.units.Quantity`, scalar
+        Cartesian coordinates of path complete ray-tracing. [km]
+        The reference is Earth's center. Starting point is
+        `(0, r_E + obs_alt)`.
+    alpha_n : `~astropy.units.Quantity`, scalar
+        Exit angle of path after going through the layer (relative to
+        surface normal vector) after complete ray-tracing. [km]
+    delta_n : `~astropy.units.Quantity`, scalar
+        Angular distance of path position after complete ray-tracing w.r.t.
+        starting point. [deg]
+
+        The polar coordinates `(r_n, delta_n)` are directly associated with
+        the cartesian coordinates `(x_n, y_n)`.
+    layer_idx : int
+        Index of the layer, through which the path went during the last step.
+        This is probably only useful for debugging purposes.
+    path_length : `~astropy.units.Quantity`, scalar
+        Total path length of the propagation path. [km]
+    nsteps : int
+        Number of steps the algorithm performed.
+    refraction : `~astropy.units.Quantity`, scalar
+        Refraction angle (i.e., the total "bending" angle of the ray) [deg]
+    is_space_path : bool
+        Whether the paths ends outside of Earth's atmosphere (in
+        terms of the atmospheric profile function used).
+
+    Notes
+    -----
+    Terrain heights are neglected by the `~pycraf.atm` sub-package. All
+    heights are w.r.t. the flat (spherical) Earth (with a radius of 6371 km).
+
+    See also `~pycraf.atm.raytrace_path`.
+    '''
+    ret = _path_endpoint(
+        elevation, obs_alt,
+        atm_layers_cache,
+        max_arc_length=max_arc_length,
+        max_path_length=max_path_length,
+        )
+    qtup = tuple(
+        (q * u if u else q)
+        for (q, u) in zip(ret, path_endpoint_units)
+        )
+    return PathEndpoint(*qtup)
+
+
+def _find_elevation(
+        obs_alt, target_alt, arc_length,
+        atm_layers_cache,
+        niter=50, interval=10, stepsize=0.05,
+        seed=None,
+        ):
+
+    radii = atm_layers_cache['radii']
+    heights = atm_layers_cache['heights']
+    ref_index = atm_layers_cache['ref_index']
+    space_i = atm_layers_cache['space_i']
+    max_i = atm_layers_cache['max_i']
+
+    from scipy.optimize import basinhopping
+
+    # estimate elev_init (from path geometry neglecting refraction)
+    # why is the formular from cyprop.pyx not working???
+    # _dist = np.radians(arc_length) * EARTH_RADIUS
+    # elev_init = np.degrees(
+    #     (target_alt - obs_alt) / _dist - _dist / 2. / EARTH_RADIUS
+    #     )
+    # print('new elev_init', elev_init)
+    if arc_length < 1.e-6:
+        if obs_alt <= target_alt:
+            elev_init = 90.
+            max_path_length = target_alt - obs_alt
+        else:
+            elev_init = -90.
+            max_path_length = obs_alt - target_alt
+    else:
+        a_e = EARTH_RADIUS
+        arc_rad = np.radians(arc_length)
+        x1, y1 = 0., a_e + obs_alt
+        x2, y2 = (
+            np.sin(arc_rad) * (a_e + target_alt),
+            np.cos(arc_rad) * (a_e + target_alt),
+            )
+        max_path_length = 2 * np.sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2)
+        elev_init = np.degrees(np.arctan2(y2 - y1, x2 - x1))
+    # print('new elev_init', elev_init)
+    # print('max_path_length', max_path_length)
+
+    # use path_endpoint_cython directly to gain ~10% speed
+    obs_alt = max([1.e-9, obs_alt])
+    start_i = np.searchsorted(heights, obs_alt)
+
+    def func(x):
+
+        elev = x[0]
+        ret = path_endpoint_cython(
+            start_i,
+            space_i,
+            max_i,
+            elev,  # deg
+            obs_alt,  # km
+            max_path_length,  # km
+            arc_length,  # deg
+            radii,
+            ref_index,
+            )
+        h_n = ret[2]
+        arc_len = ret[6]
+        a_tot = ret[8]
+
+        return h_n, arc_len, a_tot
+
+    def opt_func(x):
+
+        elev = x[0]
+        if elev > 90:
+            x[0] = 90
+        elif elev < -90:
+            x[0] = -90
+
+        h_n, arc_len, a_tot = func(x)
+        mmin = (
+            # primary optimization aim
+            abs(h_n - target_alt) +
+            # make sure, arc length is compatible with condition
+            abs(np.degrees(arc_len) - arc_length) +
+            # help to avoid elevations outside range
+            (0 if elev < 90 else elev - 90) +
+            (0 if elev > -90 else -90 - elev)
+            )
+        return mmin
+
+    x0 = np.array([elev_init])
+    minimizer_kwargs = {'method': 'BFGS'}
+    res = basinhopping(
+        opt_func, x0,
+        T=0.05, minimizer_kwargs=minimizer_kwargs,
+        niter=niter, interval=interval, stepsize=stepsize,
+        seed=seed,
+        )
+
+    # print(res)
+    elev_final = res['x'][0]
+    h_final, arc_len_final = func(res['x'])[0:2]
+
+    return elev_final, h_final
+
+
+@utils.ranged_quantity_input(
+    obs_alt=(0, None, apu.km),
+    target_alt=(0, None, apu.km),
+    arc_length=(1.e-30, 180., apu.deg),
+    strip_input_units=True, output_unit=(apu.deg, apu.km)
+    )
+def find_elevation(
+        obs_alt, target_alt, arc_length,
+        atm_layers_cache,
+        niter=50, interval=10, stepsize=0.05,
+        seed=None,
+        ):
+    '''
+    Finds the optimal path elevation angle from an observer to reach target.
+
+    Based on `~scipy.optimize.basinhopping`; see their manual for an
+    explanation of the hyper-parameters (`niter`, `interval`, `stepsize`, and
+    `seed`).
+
+    Parameters
+    ----------
+    obs_alt : `~astropy.units.Quantity`, scalar
+        Height of observer above sea-level [km]
+    obs_alt : `~astropy.units.Quantity`, scalar
+        Height of target above sea-level [km]
+    arc_length : `~astropy.units.Quantity`, scalar
+        Arc-length (true angular distance) between observer and target [deg]
+    atm_layers_cache : dict
+        Pre-computed physical parameters for each atmopheric layer as
+        returned by the `~pycraf.atm.atm_layers` function.
+    niter : integer, optional
+        The number of basin hopping iterations (default: 50)
+    interval : integer, optional
+        Interval for how often to update the stepsize (default: 10)
+    stepsize : float, optional
+        Initial step size for use in the random displacement. (default: 0.05)
+    seed : int or np.random.RandomState, optional
+        Seed to use for internal random number generation. (default: None)
+
+    Notes
+    -----
+    Because of the approximation of Earth's atmosphere with layers of discrete
+    refractive indices, caustics are generated (see `~pycraf` manual), i.e.,
+    there are certains target points that cannot be reached, regardless of
+    the elevation angle at the observer. This in turns means that there is
+    only the possibility of using stochastic optimization algorithms to
+    get an approximate solution to the problem.
+    '''
+
+    return _find_elevation(
+        obs_alt, target_alt, arc_length,
+        atm_layers_cache,
+        niter=niter, interval=interval, stepsize=stepsize,
+        seed=seed,
+        )
+
+
+@utils.ranged_quantity_input(
+    elevation=(-90, 90, apu.deg),
+    obs_alt=(0, None, apu.km),
+    t_bg=(1.e-30, None, apu.K),
+    max_arc_length=(1.e-30, 180., apu.deg),
+    max_path_length=(1.e-30, None, apu.km),
+    strip_input_units=True, output_unit=(cnv.dB, apu.deg, apu.K)
+    )
+def atten_slant_annex1(
+        elevation, obs_alt, atm_layers_dict, do_tebb=True,
+        t_bg=2.73 * apu.K,
+        max_arc_length=180. * apu.deg,
+        max_path_length=1000. * apu.km,
+        ):
+    '''
+    Path attenuation for a slant path through full atmosphere according to
+    `ITU-R P.676-11 <https://www.itu.int/rec/R-REC-P.676-11-201609-I/en>`_
+    Eq (17-20).
+
+    Parameters
+    ----------
+    elevation : `~astropy.units.Quantity`, scalar
+        (Apparent) elevation of source as seen from observer [deg]
+    obs_alt : `~astropy.units.Quantity`, scalar
+        Height of observer above sea-level [km]
+    atm_layers_cache : dict
+        Pre-computed physical parameters for each atmopheric layer as
+        returned by the `~pycraf.atm.atm_layers` function.
+    do_tebb : boolean, optional
+        Whether to calculate the equivalent blackbody brightness temperature
+        of the (full) Earth's atmosphere. (default: True)
+
+        If you're only interested in path attenuation, you can switch this
+        off for (somewhat) improved computing speed. Note, that the result
+        will only be meaningful if the propagation path ends in space.
     t_bg : `~astropy.units.Quantity`, scalar, optional
         Background temperature, i.e. temperature just after the outermost
         layer (default: 2.73 K)
@@ -1579,7 +2353,13 @@ def atten_slant_annex1(
         frequencies, Galactic foreground contribution might play a role.
     max_path_length : `~astropy.units.Quantity`, scalar
         Maximal length of path before stopping iteration [km]
+
         (default: 1000 km; useful for terrestrial paths)
+    max_arc_length : `~astropy.units.Quantity`, scalar
+        Maximal arc-length (true angular distance between observer and source/
+        target) of path before stopping iteration [deg]
+
+        (default: 180 deg; useful for terrestrial paths)
 
     Returns
     -------
@@ -1592,13 +2372,7 @@ def atten_slant_annex1(
         Equivalent black body temperature of the atmosphere (accounting
         for any outside contribution, e.g., from CMB) [K]
 
-    Notes
-    -----
-    Although the `profile_func` must have the same signature as
-    `~pycraf.atm.profile_standard`, which is one of the standardized
-    atmospheric height profiles, only temperature, total pressure and
-    water vapor pressure are needed here, i.e., `profile_func` may return
-    dummy values for the rest.
+        Will be all-NaN if not a space path, or `do_tebb == False`.
     '''
 
     if not isinstance(elevation, numbers.Real):
@@ -1609,35 +2383,45 @@ def atten_slant_annex1(
         raise TypeError('t_bg must be a scalar float')
     if not isinstance(max_path_length, numbers.Real):
         raise TypeError('max_path_length must be a scalar float')
+    if not isinstance(max_arc_length, numbers.Real):
+        raise TypeError('max_arc_length must be a scalar float')
 
-    freq_grid = np.atleast_1d(freq_grid)
-    _freq = freq_grid
-    _elev = elevation
-    _alt = obs_alt
-    _t_bg = t_bg
-    _max_plen = max_path_length
+    adict = atm_layers_dict
 
-    total_atten_db = np.zeros(freq_grid.shape, dtype=np.float64)
-    tebb = np.ones(freq_grid.shape, dtype=np.float64) * _t_bg
+    tebb = np.ones(adict['freq_grid'].shape, dtype=np.float64) * t_bg
 
-    path_params, refraction = _prepare_path(
-        _elev, _alt, profile_func, max_path_length=_max_plen
+    path_params, refraction, is_space_path = _raytrace_path(
+        elevation, obs_alt,
+        adict,
+        max_path_length=max_path_length, max_arc_length=max_arc_length,
         )
 
-    # do backward raytracing (to allow tebb calculation)
-
-    for press_n, press_w_n, temp_n, a_n, _, _, _, _, _ in path_params[::-1]:
-
-        atten_dry, atten_wet = _atten_specific_annex1(
-            _freq, press_n, press_w_n, temp_n
+    # do backward raytracing (to allow tebb calculation); this makes only
+    # sense if we have a path that goes to space!
+    # need to skip first entry in path record, as it is just the starting
+    # point
+    atten_db = adict['atten_db']
+    temp = adict['temp']
+    total_atten_db = np.sum(
+        atten_db[path_params.layer_idx[1:]] *
+        path_params.a_n[1:, np.newaxis],
+        axis=0,
         )
-        gamma_n = atten_dry + atten_wet
-        total_atten_db += gamma_n * a_n
 
-        # need to calculate (linear) atten per layer for tebb
-        gamma_n_lin = 10 ** (-gamma_n * a_n / 10.)
-        tebb *= gamma_n_lin
-        tebb += (1. - gamma_n_lin) * temp_n
+    # TODO: do the following in cython?
+    if is_space_path and do_tebb:
+        for idx, lidx in list(enumerate(path_params.layer_idx))[:0:-1]:
+            if lidx >= adict['space_i']:
+                continue
+            # need to calculate (linear) atten per layer for tebb
+            atten_tot_lin = 10 ** (
+                -atten_db[lidx] * path_params.a_n[idx] / 10.
+                )
+            tebb *= atten_tot_lin
+            tebb += (1. - atten_tot_lin) * temp[lidx]
+
+    else:
+        tebb[...] = np.nan
 
     return total_atten_db, refraction, tebb
 
@@ -1929,7 +2713,7 @@ def equivalent_height_wet(freq_grid, press):
     atten_wet=(1.e-30, None, cnv.dB / apu.km),
     h_dry=(1.e-30, None, apu.km),
     h_wet=(1.e-30, None, apu.km),
-    elev=(-90, 90, apu.deg),
+    elev=(5, 90, apu.deg),
     strip_input_units=True, output_unit=cnv.dB
     )
 def atten_slant_annex2(atten_dry, atten_wet, h_dry, h_wet, elev):

@@ -1,6 +1,16 @@
 1.0.0 (unreleased)
 =======================
 
+pycraf.amt
+^^^^^^^^^^^^^^
+- Complete overhaul of the `pycraf.atm` sub-package [#11]. Now
+  - it does ray-tracing through atmosphere correctly,
+  - the computational speed for Annex 1 algorithms (such as ray-tracing) is
+    greatly improved, as performance critical sections are implemented in
+    Cython and physical properties of the atmospheric layers are cached
+  - there are new functions, such as `pycraf.atm.find_elevation`, which finds
+    optimal ray geometry (to reach a given target)
+
 Bugfixes
 --------
 - `pycraf.geospatial` produced an error with newer version of `pyproj`.
