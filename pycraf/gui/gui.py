@@ -3,10 +3,15 @@
 
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
+# import numpy as np
+from astropy import units as u
+# from scipy.interpolate import interp1d
 from matplotlib.ticker import ScalarFormatter
 from .resources.main_form import Ui_MainWindow
 from .plot_widget import CustomToolbar, PlotWidget
-from .workers import PathProfWorker, MapWorker
+from .helpers import setup_earth_axes
+from .workers import GeometryWorker, PathProfWorker, MapWorker
+from ..geometry import true_angular_distance
 
 __all__ = ['PycrafGui', 'start_gui']
 
@@ -63,6 +68,7 @@ MAP_DISPLAY_OPTIONS = [
 
 class PycrafGui(QtWidgets.QMainWindow):
 
+    geo_job_triggered = QtCore.pyqtSignal(dict, name='geo_job_triggered')
     pp_job_triggered = QtCore.pyqtSignal(dict, name='pp_job_triggered')
     map_job_triggered = QtCore.pyqtSignal(dict, name='map_job_triggered')
 
@@ -71,6 +77,8 @@ class PycrafGui(QtWidgets.QMainWindow):
         self.do_init = True
         super().__init__()
 
+        self.geometry_hprof_data = None
+        self.geometry_results = None
         self.pathprof_hprof_data = None
         self.pathprof_results = None
         self.map_hprof_data = None
@@ -127,6 +135,17 @@ class PycrafGui(QtWidgets.QMainWindow):
     @QtCore.pyqtSlot(object)
     def setup_workers(self):
 
+        self.my_geo_worker_thread = QtCore.QThread()
+        self.my_geo_worker = GeometryWorker(self)
+
+        self.my_geo_worker.moveToThread(self.my_geo_worker_thread)
+        # self.my_geo_worker.job_started.connect(self.busy_start)
+        # self.my_geo_worker.job_finished.connect(self.busy_stop)
+        # self.my_geo_worker.job_excepted.connect(self.busy_except)
+        self.geo_job_triggered.connect(self.my_geo_worker.on_job_triggered)
+        self.my_geo_worker.result_ready.connect(self.on_geometry_result_ready)
+        self.my_geo_worker_thread.start()
+
         self.my_pp_worker_thread = QtCore.QThread()
         self.my_pp_worker = PathProfWorker(self)
 
@@ -151,6 +170,11 @@ class PycrafGui(QtWidgets.QMainWindow):
 
     @QtCore.pyqtSlot()
     def create_plotters(self):
+
+        self.geometry_plot_area = PlotWidget(
+            subplotx=1, subploty=1, plottername='Geometry',
+            )
+        self.ui.geometryVerticalLayout.addWidget(self.geometry_plot_area)
 
         self.pathprof_plot_area = PlotWidget(
             subplotx=1, subploty=2,
@@ -236,6 +260,7 @@ class PycrafGui(QtWidgets.QMainWindow):
     def on_pathprof_compute_pressed(self):
 
         job_dict = self._get_parameters()
+        self.geo_job_triggered.emit(job_dict)
         self.pp_job_triggered.emit(job_dict)
 
     @QtCore.pyqtSlot()
@@ -247,6 +272,14 @@ class PycrafGui(QtWidgets.QMainWindow):
         job_dict['map_reso'] = self.ui.mapResolutionDoubleSpinBox.value()
 
         self.map_job_triggered.emit(job_dict)
+
+    @QtCore.pyqtSlot(object, object)
+    def on_geometry_result_ready(self, hprof_data, results):
+
+        self.geometry_hprof_data = hprof_data
+        self.geometry_results = results
+
+        self.plot_geometry()
 
     @QtCore.pyqtSlot(object, object)
     def on_pathprof_result_ready(self, hprof_data, results):
@@ -265,6 +298,86 @@ class PycrafGui(QtWidgets.QMainWindow):
 
         display_index = self.ui.mapPlotChooserComboBox.currentIndex()
         self.plot_map(display_index)
+
+    @QtCore.pyqtSlot()
+    def plot_geometry(self):
+
+        if self.geometry_hprof_data is None or self.geometry_results is None:
+            print('nothing to plot yet')
+            return
+
+        hprof = self.geometry_hprof_data
+        pp = self.geometry_results
+        print()
+
+        lons, lats, distance, distances, heights, *_ = hprof
+
+        lon_rx, lat_rx = pp.lon_r, pp.lat_r
+        h_tg, h_rg = pp.h_tg.to(u.m).value, pp.h_rg.to(u.m).value
+
+        _lons = lons.to(u.deg).value
+        _lats = lats.to(u.deg).value
+        _distances = distances.to(u.km).value
+        _heights = heights.to(u.m).value
+
+        delta = true_angular_distance(lon_rx, lat_rx, lons, lats)
+        _delta = delta.to(u.rad).value
+
+        theta_scale = (
+            (_delta[-1] - _delta[0]) / (_distances[-1] - _distances[0])
+            )
+
+        # bullington point:
+        d_bp = (
+            (pp.h_rs - pp.h_ts + pp.S_rim_50 * pp.distance) /
+            (pp.S_tim_50 + pp.S_rim_50)
+            )
+        h_bp = pp.h_ts + pp.S_tim_50 * d_bp
+        print('d_bp, h_bp', d_bp, h_bp)
+
+        a_e = pp.a_e_50.to(u.m).value
+
+        if pp.path_type == 1:
+            pp_x = [_distances[0], d_bp.to(u.km).value, _distances[-1]]
+            pp_y = [
+                _heights[0] + h_tg,
+                h_bp.to(u.m).value,
+                _heights[-1] + h_rg
+                ]
+        else:
+            pp_x = _distances[[0, -1]]
+            pp_y = [_heights[0] + h_tg, _heights[-1] + h_rg]
+
+        # # need to interpolate path (plot does straight lines)
+        # pp_hx = np.linspace(_distances[0], _distances[-1], 400)
+        # pp_hy = interp1d(pp_x, pp_y)(pp_hx)
+
+        theta_lim = _distances[0], _distances[-1]
+        h_lim = _heights.min(), 1.05 * max([_heights.max(), max(pp_y)])
+
+        plot_area = self.geometry_plot_area
+        fig = plot_area.figure
+        axes = plot_area.axes
+        try:
+            for ax in axes:
+                ax.clear()
+            print('len(axes)', len(axes))
+        except TypeError:
+            axes.clear()
+            fig.clear()
+
+        plot_area._axes = ax, aux_ax = setup_earth_axes(
+            fig, 111, theta_lim, h_lim, a_e, theta_scale
+            )
+
+        aux_ax.plot(_distances, _heights, '-')
+        aux_ax.plot(pp_x, pp_y, '-')
+        # aux_ax.plot(pp_hx, pp_hy, '-')
+        ax.grid(color='0.5')
+        ax.set_aspect('auto')
+
+        plot_area.clear_history()
+        plot_area.canvas.draw()
 
     @QtCore.pyqtSlot(int)
     def plot_pathprof(self, display_index):
