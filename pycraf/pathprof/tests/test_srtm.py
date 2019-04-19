@@ -16,6 +16,15 @@ TOL_KWARGS = {'atol': 1.e-4, 'rtol': 1.e-4}
 
 class TestSrtmConf:
 
+    def setup(self):
+
+        srtm.SrtmConf.set(
+            srtm_dir=os.environ.get('SRTMDATA', '.'),
+            download='never',
+            server='nasa_v2.1',
+            interp='linear',
+            )
+
     def test_context_manager(self):
 
         srtm_dir = srtm.SrtmConf.srtm_dir
