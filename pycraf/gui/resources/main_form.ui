@@ -26,7 +26,27 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_13">
         <item row="0" column="0">
-         <layout class="QVBoxLayout" name="geometryVerticalLayout"/>
+         <layout class="QVBoxLayout" name="geometryVerticalLayout">
+          <item>
+           <widget class="QLabel" name="ppRichTextLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::RichText</enum>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
@@ -60,7 +80,7 @@
      <x>0</x>
      <y>0</y>
      <width>1098</width>
-     <height>23</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>
@@ -84,8 +104,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>239</width>
-          <height>646</height>
+          <width>246</width>
+          <height>664</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_5">
@@ -176,7 +196,7 @@
                    <double>10000.000000000000000</double>
                   </property>
                   <property name="singleStep">
-                   <double>10.000000000000000</double>
+                   <double>1.000000000000000</double>
                   </property>
                   <property name="value">
                    <double>10.000000000000000</double>
@@ -311,6 +331,9 @@
                   <property name="maximum">
                    <double>180.000000000000000</double>
                   </property>
+                  <property name="singleStep">
+                   <double>0.050000000000000</double>
+                  </property>
                   <property name="value">
                    <double>6.883610000000000</double>
                   </property>
@@ -337,6 +360,9 @@
                   <property name="maximum">
                    <double>90.000000000000000</double>
                   </property>
+                  <property name="singleStep">
+                   <double>0.050000000000000</double>
+                  </property>
                   <property name="value">
                    <double>50.524830000000001</double>
                   </property>
@@ -362,6 +388,9 @@
                   </property>
                   <property name="maximum">
                    <double>1000000.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>5.000000000000000</double>
                   </property>
                   <property name="value">
                    <double>50.000000000000000</double>
@@ -412,6 +441,9 @@
                   <property name="maximum">
                    <double>180.000000000000000</double>
                   </property>
+                  <property name="singleStep">
+                   <double>0.050000000000000</double>
+                  </property>
                   <property name="value">
                    <double>7.000000000000000</double>
                   </property>
@@ -438,6 +470,9 @@
                   <property name="maximum">
                    <double>90.000000000000000</double>
                   </property>
+                  <property name="singleStep">
+                   <double>0.050000000000000</double>
+                  </property>
                   <property name="value">
                    <double>51.000000000000000</double>
                   </property>
@@ -463,6 +498,9 @@
                   </property>
                   <property name="maximum">
                    <double>1000000.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>5.000000000000000</double>
                   </property>
                   <property name="value">
                    <double>10.000000000000000</double>
@@ -512,8 +550,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>239</width>
-          <height>140</height>
+          <width>232</width>
+          <height>142</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_7">
@@ -526,6 +564,9 @@
             <widget class="QCheckBox" name="pathprofIncludeHeightCheckBox">
              <property name="text">
               <string>Include height profile</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -571,8 +612,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>239</width>
-          <height>181</height>
+          <width>232</width>
+          <height>184</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_12">
@@ -609,7 +650,7 @@
                 <double>5.000000000000000</double>
                </property>
                <property name="singleStep">
-                <double>0.100000000000000</double>
+                <double>0.050000000000000</double>
                </property>
                <property name="value">
                 <double>0.200000000000000</double>
@@ -631,7 +672,7 @@
                 <double>5.000000000000000</double>
                </property>
                <property name="singleStep">
-                <double>0.100000000000000</double>
+                <double>0.050000000000000</double>
                </property>
                <property name="value">
                 <double>0.200000000000000</double>

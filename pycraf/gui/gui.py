@@ -66,6 +66,73 @@ MAP_DISPLAY_OPTIONS = [
     ]
 
 
+PP_TEXT_TEMPLATE = '''
+<style>
+    table {{
+        color: black;
+        width: 100%;
+        text-align: center;
+        font-family: "Futura-Light", sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+    }}
+    th {{
+        color: blue;
+        font-size: 16px;
+    }}
+    th, td {{ padding: 2px; }}
+    thead.th {{
+        height: 110%;
+        border-bottom: solid 0.25em black;
+    }}
+    .lalign {{ text-align: left; padding-left: 12px;}}
+    .ralign {{ text-align: right; padding-right: 12px; }}
+</style>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="2">Radio properties</th>
+      <th colspan="2">Path geometry</th>
+      <th colspan="2">Path losses</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="lalign">a_e (50%)</td> <td class="ralign">{a_e_50:5.0f}</td>
+      <td class="lalign">alpha_tr</td><td class="ralign">{alpha_tr:8.3f}</td>
+      <td class="lalign">L_bfsg (LoS)</td><td class="ralign">{L_bfsg:5.1f}</td>
+    </tr>
+    <tr>
+      <td class="lalign">a_e (beta0)</td><td class="ralign">{a_e_b0:5.0f}</td>
+      <td class="lalign">alpha_rt</td><td class="ralign">{alpha_rt:8.3f}</td>
+      <td class="lalign">L_bd (Diffraction)</td><td class="ralign">{L_bd:5.1f}</td>
+    </tr>
+    <tr>
+      <td class="lalign">beta0</td><td class="ralign">{beta0:.2f}</td>
+      <td class="lalign">eps_pt</td><td class="ralign">{eps_pt:8.3f}</td>
+      <td class="lalign">L_bs (Troposcatter)</td><td class="ralign">{L_bs:5.1f}</td>
+    </tr>
+    <tr>
+      <td class="lalign">N0</td><td class="ralign">{N0:.1f}</td>
+      <td class="lalign">eps_pr</td><td class="ralign">{eps_pr:8.3f}</td>
+      <td class="lalign">L_ba (Anomalous)</td><td class="ralign">{L_ba:5.1f}</td>
+    </tr>
+    <tr>
+      <td class="lalign">Delta N</td><td class="ralign">{delta_N:.2f}</td>
+      <td class="lalign">Path type</td><td class="ralign">{path_type_str:s}</td>
+      <td class="lalign">L_b (Total)</td><td class="ralign">{L_b:5.1f}</td>
+    </tr>
+    <tr>
+      <td class="lalign"></td><td class="ralign"></td>
+      <td class="lalign"></td><td class="ralign"></td>
+      <td class="lalign" style="color: blue;">L_b_corr (Total + Clutter)</td>
+      <td class="ralign" style="color: blue;">{L_b_corr:5.1f}</td>
+    </tr>
+  </tbody>
+</table>
+'''
+
 class PycrafGui(QtWidgets.QMainWindow):
 
     geo_job_triggered = QtCore.pyqtSignal(dict, name='geo_job_triggered')
@@ -131,6 +198,28 @@ class PycrafGui(QtWidgets.QMainWindow):
         self.ui.mapPlotChooserComboBox.currentIndexChanged[int].connect(
             self.plot_map
             )
+
+        for w in [
+                self.ui.freqDoubleSpinBox,
+                self.ui.timepercentDoubleSpinBox,
+                self.ui.stepsizeDoubleSpinBox,
+                self.ui.tempDoubleSpinBox,
+                self.ui.pressDoubleSpinBox,
+                self.ui.txLonDoubleSpinBox,
+                self.ui.txLatDoubleSpinBox,
+                self.ui.txHeightDoubleSpinBox,
+                self.ui.rxLonDoubleSpinBox,
+                self.ui.rxLatDoubleSpinBox,
+                self.ui.rxHeightDoubleSpinBox,
+                ]:
+            w.valueChanged.connect(self.on_any_param_changed)
+
+        for w in [
+                self.ui.versionComboBox,
+                self.ui.txClutterComboBox,
+                self.ui.rxClutterComboBox,
+                ]:
+            w.currentIndexChanged.connect(self.on_any_param_changed)
 
     @QtCore.pyqtSlot(object)
     def setup_workers(self):
@@ -257,10 +346,16 @@ class PycrafGui(QtWidgets.QMainWindow):
         return job_dict
 
     @QtCore.pyqtSlot()
-    def on_pathprof_compute_pressed(self):
+    def on_any_param_changed(self):
 
         job_dict = self._get_parameters()
         self.geo_job_triggered.emit(job_dict)
+
+    @QtCore.pyqtSlot()
+    def on_pathprof_compute_pressed(self):
+
+        job_dict = self._get_parameters()
+        # self.geo_job_triggered.emit(job_dict)
         self.pp_job_triggered.emit(job_dict)
 
     @QtCore.pyqtSlot()
@@ -307,16 +402,16 @@ class PycrafGui(QtWidgets.QMainWindow):
             return
 
         hprof = self.geometry_hprof_data
-        pp = self.geometry_results
-        print()
+        results = self.geometry_results
 
         lons, lats, distance, distances, heights, *_ = hprof
 
-        lon_rx, lat_rx = pp.lon_r, pp.lat_r
-        h_tg, h_rg = pp.h_tg.to(u.m).value, pp.h_rg.to(u.m).value
+        lon_rx, lat_rx = results['lon_r'], results['lat_r']
+        h_tg, h_rg = results['h_tg'], results['h_rg']
+        _h_tg, _h_rg = h_tg.to(u.m).value, h_rg.to(u.m).value
 
-        _lons = lons.to(u.deg).value
-        _lats = lats.to(u.deg).value
+        # _lons = lons.to(u.deg).value
+        # _lats = lats.to(u.deg).value
         _distances = distances.to(u.km).value
         _heights = heights.to(u.m).value
 
@@ -329,24 +424,22 @@ class PycrafGui(QtWidgets.QMainWindow):
 
         # bullington point:
         d_bp = (
-            (pp.h_rs - pp.h_ts + pp.S_rim_50 * pp.distance) /
-            (pp.S_tim_50 + pp.S_rim_50)
-            )
-        h_bp = pp.h_ts + pp.S_tim_50 * d_bp
+            results['h_rs'] - results['h_ts'] +
+            results['S_rim_50'] * results['distance']
+            ) / (results['S_tim_50'] + results['S_rim_50'])
+        h_bp = results['h_ts'] + results['S_tim_50'] * d_bp
+        _d_bp = d_bp.to(u.km).value
+        _h_bp = h_bp.to(u.m).value
         print('d_bp, h_bp', d_bp, h_bp)
 
-        a_e = pp.a_e_50.to(u.m).value
+        a_e = results['a_e_50'].to(u.m).value
 
-        if pp.path_type == 1:
-            pp_x = [_distances[0], d_bp.to(u.km).value, _distances[-1]]
-            pp_y = [
-                _heights[0] + h_tg,
-                h_bp.to(u.m).value,
-                _heights[-1] + h_rg
-                ]
+        if results['path_type'] == 1:
+            pp_x = [_distances[0], _d_bp, _distances[-1]]
+            pp_y = [_heights[0] + _h_tg, _h_bp, _heights[-1] + _h_rg]
         else:
             pp_x = _distances[[0, -1]]
-            pp_y = [_heights[0] + h_tg, _heights[-1] + h_rg]
+            pp_y = [_heights[0] + _h_tg, _heights[-1] + _h_rg]
 
         # # need to interpolate path (plot does straight lines)
         # pp_hx = np.linspace(_distances[0], _distances[-1], 400)
@@ -378,6 +471,13 @@ class PycrafGui(QtWidgets.QMainWindow):
 
         plot_area.clear_history()
         plot_area.canvas.draw()
+
+        print(results)
+        results['path_type_str'] = ['LoS', 'Trans-horizon'][
+            int(results['path_type'])
+            ]
+
+        self.ui.ppRichTextLabel.setText(PP_TEXT_TEMPLATE.format(**results))
 
     @QtCore.pyqtSlot(int)
     def plot_pathprof(self, display_index):

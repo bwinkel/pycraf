@@ -92,7 +92,7 @@ class GeometryWorker(BaseWorker):
             bearing, back_bearing, back_bearings
             ) = hprof_data
 
-        results = pathprof.PathProp(
+        pp = pathprof.PathProp(
             jdict['freq'] * u.GHz,
             jdict['temp'] * u.K, jdict['press'] * u.hPa,
             jdict['tx_lon'] * u.deg, jdict['tx_lat'] * u.deg,
@@ -108,6 +108,18 @@ class GeometryWorker(BaseWorker):
             hprof_bearing=bearing,
             hprof_backbearing=back_bearing,
             )
+
+        results = dict(
+            (k, getattr(pp, k))
+            for k in dir(pp)
+            if not k.startswith('_')
+            )
+
+        losses = pathprof.loss_complete(pp)
+        loss_names = [
+            'L_bfsg', 'L_bd', 'L_bs', 'L_ba', 'L_b', 'L_b_corr',
+            ]
+        results.update(dict(zip(loss_names, losses)))
 
         self.result_ready.emit(hprof_data, results)
 
