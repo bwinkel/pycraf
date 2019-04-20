@@ -153,6 +153,12 @@ class PycrafGui(QtWidgets.QMainWindow):
 
         self.setup_gui()
 
+        # want that at start, user is presented with a plot
+        self.timer = QtCore.QTimer()
+        self.timer.setSingleShot(True)
+        self.timer.timeout.connect(self.on_any_param_changed)
+        self.timer.start(10)
+
     @QtCore.pyqtSlot()
     def setup_gui(self):
 
@@ -351,10 +357,16 @@ class PycrafGui(QtWidgets.QMainWindow):
         job_dict = self._get_parameters()
         self.geo_job_triggered.emit(job_dict)
 
+        if self.ui.pathprofAutoUpdateCheckBox.isChecked():
+            self.on_pathprof_compute_pressed()
+
     @QtCore.pyqtSlot()
     def on_pathprof_compute_pressed(self):
 
         job_dict = self._get_parameters()
+        job_dict['do_generic'] = (
+            not self.ui.pathprofIncludeHeightCheckBox.isChecked()
+            )
         # self.geo_job_triggered.emit(job_dict)
         self.pp_job_triggered.emit(job_dict)
 

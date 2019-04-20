@@ -23,6 +23,29 @@ def cached_height_path_data(*args, **kwargs):
     return pathprof.height_path_data(*args, **kwargs)
 
 
+# @lru_cache(maxsize=10, typed=False)
+# def cached_height_path_data_generic(*args, **kwargs):
+#     # height_path_data_generic has a different signature;
+#     # need to find mid point
+#     lon_t, lat_t, lon_r, lat_r, step = args
+#     distance, bearing, _ = pathprof.geoid_inverse(
+#         lon_t, lat_t, lon_r, lat_r
+#         )
+#     lon_mid, lat_mid, _ = pathprof.geoid_direct(
+#         lon_t, lat_r, bearing, distance / 2,
+#         )
+#     args = distance, step, lon_mid, lat_mid
+#     return pathprof.height_path_data_generic(*args, **kwargs)
+
+
+@lru_cache(maxsize=10, typed=False)
+def cached_height_path_data_generic(*args, **kwargs):
+    # height_path_data_generic has no backbearings, etc.
+    res = pathprof.height_path_data(*args, **kwargs)
+    res['heights'][...] = 0
+    return res
+
+
 @lru_cache(maxsize=10, typed=False)
 def cached_height_map_data(*args, **kwargs):
     return pathprof.height_map_data(*args, **kwargs)
@@ -135,12 +158,23 @@ class PathProfWorker(BaseWorker):
         jdict = self.job_dict
         print('doing job', jdict)
 
-        hprof_data = cached_height_path_data(
-            jdict['tx_lon'] * u.deg, jdict['tx_lat'] * u.deg,
-            jdict['rx_lon'] * u.deg, jdict['rx_lat'] * u.deg,
-            jdict['stepsize'] * u.m,
-            zone_t=jdict['tx_clutter'], zone_r=jdict['rx_clutter'],
-            )
+        if jdict['do_generic']:
+
+            hprof_data = cached_height_path_data_generic(
+                jdict['tx_lon'] * u.deg, jdict['tx_lat'] * u.deg,
+                jdict['rx_lon'] * u.deg, jdict['rx_lat'] * u.deg,
+                jdict['stepsize'] * u.m,
+                zone_t=jdict['tx_clutter'], zone_r=jdict['rx_clutter'],
+                )
+
+        else:
+
+            hprof_data = cached_height_path_data(
+                jdict['tx_lon'] * u.deg, jdict['tx_lat'] * u.deg,
+                jdict['rx_lon'] * u.deg, jdict['rx_lat'] * u.deg,
+                jdict['stepsize'] * u.m,
+                zone_t=jdict['tx_clutter'], zone_r=jdict['rx_clutter'],
+                )
 
         results = pathprof.atten_path_fast(
             jdict['freq'] * u.GHz,
