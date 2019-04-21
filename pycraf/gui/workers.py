@@ -23,21 +23,6 @@ def cached_height_path_data(*args, **kwargs):
     return pathprof.height_path_data(*args, **kwargs)
 
 
-# @lru_cache(maxsize=10, typed=False)
-# def cached_height_path_data_generic(*args, **kwargs):
-#     # height_path_data_generic has a different signature;
-#     # need to find mid point
-#     lon_t, lat_t, lon_r, lat_r, step = args
-#     distance, bearing, _ = pathprof.geoid_inverse(
-#         lon_t, lat_t, lon_r, lat_r
-#         )
-#     lon_mid, lat_mid, _ = pathprof.geoid_direct(
-#         lon_t, lat_r, bearing, distance / 2,
-#         )
-#     args = distance, step, lon_mid, lat_mid
-#     return pathprof.height_path_data_generic(*args, **kwargs)
-
-
 @lru_cache(maxsize=10, typed=False)
 def cached_height_path_data_generic(*args, **kwargs):
     # height_path_data_generic has no backbearings, etc.

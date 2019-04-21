@@ -154,6 +154,11 @@ class PycrafGui(QtWidgets.QMainWindow):
         self.setup_gui()
 
         # want that at start, user is presented with a plot
+        # we will also use this timer to implement a short delay between
+        # gui parameter changes and calling the plotting routine; this is
+        # because Qt will otherwise go through all intermediate steps
+        # (e.g., if one changes multiple digits in a spinbox), which
+        # is usually undesired
         self.timer = QtCore.QTimer()
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(self.on_any_param_changed)
@@ -218,14 +223,14 @@ class PycrafGui(QtWidgets.QMainWindow):
                 self.ui.rxLatDoubleSpinBox,
                 self.ui.rxHeightDoubleSpinBox,
                 ]:
-            w.valueChanged.connect(self.on_any_param_changed)
+            w.valueChanged.connect(self.on_any_param_changed_initiated)
 
         for w in [
                 self.ui.versionComboBox,
                 self.ui.txClutterComboBox,
                 self.ui.rxClutterComboBox,
                 ]:
-            w.currentIndexChanged.connect(self.on_any_param_changed)
+            w.currentIndexChanged.connect(self.on_any_param_changed_initiated)
 
     @QtCore.pyqtSlot(object)
     def setup_workers(self):
@@ -350,6 +355,10 @@ class PycrafGui(QtWidgets.QMainWindow):
         job_dict['rx_clutter'] = self.ui.rxClutterComboBox.currentIndex()
 
         return job_dict
+
+    @QtCore.pyqtSlot()
+    def on_any_param_changed_initiated(self):
+        self.timer.start(250)
 
     @QtCore.pyqtSlot()
     def on_any_param_changed(self):
