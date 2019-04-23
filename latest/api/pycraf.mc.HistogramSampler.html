@@ -208,10 +208,10 @@ be the better tool:</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pycraf.mc.HistogramSampler.__call__" title="pycraf.mc.HistogramSampler.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code></a>(n)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pycraf.mc.HistogramSampler.__call__" title="pycraf.mc.HistogramSampler.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code></a>(self, n)</p></td>
 <td><p>Convenience method to allow using an <em>instance</em> of <a class="reference internal" href="#pycraf.mc.HistogramSampler" title="pycraf.mc.HistogramSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HistogramSampler</span></code></a> like a function.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pycraf.mc.HistogramSampler.sample" title="pycraf.mc.HistogramSampler.sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code></a>(n)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pycraf.mc.HistogramSampler.sample" title="pycraf.mc.HistogramSampler.sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code></a>(self, n)</p></td>
 <td><p>Sample from the (discrete) density distribution.</p></td>
 </tr>
 </tbody>
@@ -219,7 +219,7 @@ be the better tool:</p>
 <p class="rubric">Methods Documentation</p>
 <dl class="method">
 <dt id="pycraf.mc.HistogramSampler.__call__">
-<code class="descname">__call__</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler.__call__"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/mc/sampler.py#L175" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler.__call__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__call__</code><span class="sig-paren">(</span><em>self</em>, <em>n</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler.__call__"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/mc/sampler.py#L175" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convenience method to allow using an <em>instance</em> of
 <a class="reference internal" href="#pycraf.mc.HistogramSampler" title="pycraf.mc.HistogramSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HistogramSampler</span></code></a> like a function:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">my_sampler</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">HistogramSampler</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
@@ -231,7 +231,7 @@ be the better tool:</p>
 
 <dl class="method">
 <dt id="pycraf.mc.HistogramSampler.sample">
-<code class="descname">sample</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler.sample"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/mc/sampler.py#L148" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler.sample" title="Permalink to this definition">¶</a></dt>
+<code class="descname">sample</code><span class="sig-paren">(</span><em>self</em>, <em>n</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler.sample"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/mc/sampler.py#L148" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler.sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sample from the (discrete) density distribution.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -279,7 +279,7 @@ discrete density array (aka histogram object). See
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1. &nbsp;
-    Last built 21 Apr 2019. <br/>
+    Last built 23 Apr 2019. <br/>
   </p>
 </footer>
   </body>
