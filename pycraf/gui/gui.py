@@ -3,7 +3,7 @@
 
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-# import numpy as np
+import numpy as np
 from astropy import units as u
 # from scipy.interpolate import interp1d
 from matplotlib.ticker import ScalarFormatter
@@ -443,31 +443,45 @@ class PycrafGui(QtWidgets.QMainWindow):
             (_delta[-1] - _delta[0]) / (_distances[-1] - _distances[0])
             )
 
+        _dist = results['distance'].to(u.km).value
+        _h_ts = results['h_ts'].to(u.m).value
+        _h_rs = results['h_rs'].to(u.m).value
+        _a_e_m = results['a_e_50'].to(u.m).value
+        _a_e_km = results['a_e_50'].to(u.km).value
+        _S_tim = results['S_tim_50'].to(1)
+        _S_rim = results['S_rim_50'].to(1)
+        _S_tr = results['S_tr_50'].to(1)
+
         # bullington point:
-        d_bp = (
-            results['h_rs'] - results['h_ts'] +
-            results['S_rim_50'] * results['distance']
-            ) / (results['S_tim_50'] + results['S_rim_50'])
-        h_bp = results['h_ts'] + results['S_tim_50'] * d_bp
-        _d_bp = d_bp.to(u.km).value
-        _h_bp = h_bp.to(u.m).value
-        print('d_bp, h_bp', d_bp, h_bp)
 
-        a_e = results['a_e_50'].to(u.m).value
-
+        x0 = 0
+        y0 = _a_e_km + _h_ts / 1000
         if results['path_type'] == 1:
-            pp_x = [_distances[0], _d_bp, _distances[-1]]
-            pp_y = [_heights[0] + _h_tg, _h_bp, _heights[-1] + _h_rg]
-        else:
-            pp_x = _distances[[0, -1]]
-            pp_y = [_heights[0] + _h_tg, _heights[-1] + _h_rg]
+            _d_bp = (
+                (_h_rs - _h_ts) / 1000 + _S_rim * _dist
+                ) / (_S_tim + _S_rim)
+            # _h_bp = _h_ts + (_S_tim - _dist / 2 / _a_e_km) * _d_bp * 1000
+            x_c = x0 + _d_bp
+            y_c = y0 + _d_bp * (_S_tim - _dist / 2 / _a_e_km)
 
+        else:
+            _d_bp = _distances[int(results['nu_bull_idx_50'])]
+            # _h_bp = _h_ts + (_S_tr - _dist / 2 / _a_e_km) * _d_bp * 1000
+            x_c = x0 + _d_bp
+            y_c = y0 + _d_bp * (_S_tr - _dist / 2 / _a_e_km)
+
+        d_c = np.arctan2(x_c, y_c) * _a_e_km
+        h_c = np.sqrt(x_c ** 2 + y_c ** 2) - _a_e_km
+        _h_bp = h_c * 1000
+        print('d_bp, h_bp, d_c, h_c', _d_bp, _h_bp, d_c, h_c)
         # # need to interpolate path (plot does straight lines)
         # pp_hx = np.linspace(_distances[0], _distances[-1], 400)
         # pp_hy = interp1d(pp_x, pp_y)(pp_hx)
 
         theta_lim = _distances[0], _distances[-1]
-        h_lim = _heights.min(), 1.05 * max([_heights.max(), max(pp_y)])
+        h_lim = _heights.min(), 1.05 * max([
+            _heights.max(), _h_ts, _h_rs, _h_bp
+            ])
 
         plot_area = self.geometry_plot_area
         fig = plot_area.figure
@@ -481,12 +495,51 @@ class PycrafGui(QtWidgets.QMainWindow):
             fig.clear()
 
         plot_area._axes = ax, aux_ax = setup_earth_axes(
-            fig, 111, theta_lim, h_lim, a_e, theta_scale
+            fig, 111, theta_lim, h_lim, _a_e_m, theta_scale
             )
 
         aux_ax.plot(_distances, _heights, '-')
-        aux_ax.plot(pp_x, pp_y, '-')
+        aux_ax.plot(_d_bp, _h_bp, 'o')
         # aux_ax.plot(pp_hx, pp_hy, '-')
+
+        # testing:
+
+        if results['path_type'] == 1:
+            a = np.arange(0, 200, 1)
+            # all numbers in km
+            x0 = 0
+            y0 = _a_e_km + _h_ts / 1000
+            x_a = x0 + a
+            y_a = y0 + a * (_S_tim - _dist / 2 / _a_e_km)
+            d_a = np.arctan2(x_a, y_a) * _a_e_km
+            h_a = np.sqrt(x_a ** 2 + y_a ** 2) - _a_e_km
+            # print(d_a, h_a)
+            aux_ax.plot(d_a, h_a * 1000, '--')
+
+            b = np.arange(0, 200, 1)
+            # all numbers in km
+            eps = _dist / _a_e_km
+            rn = _a_e_km + _h_rs / 1000
+            xn = rn * np.sin(eps)
+            yn = rn * np.cos(eps)
+            x_b = xn - b
+            # y_b = yn + b * np.tan(np.arctan(_S_rim) + eps)
+            y_b = yn + b * (_S_rim - _dist / 2 / _a_e_km + eps)
+            d_b = np.arctan2(x_b, y_b) * _a_e_km
+            h_b = np.sqrt(x_b ** 2 + y_b ** 2) - _a_e_km
+            # print(d_b, h_b)
+            aux_ax.plot(d_b, h_b * 1000, '--')
+
+        c = np.arange(0, 200, 1)
+        # all numbers in km
+        x0 = 0
+        y0 = _a_e_km + _h_ts / 1000
+        x_c = x0 + c
+        y_c = y0 + c * (_S_tr - _dist / 2 / _a_e_km)
+        d_c = np.arctan2(x_c, y_c) * _a_e_km
+        h_c = np.sqrt(x_c ** 2 + y_c ** 2) - _a_e_km
+        # print(d_c, h_c)
+        aux_ax.plot(d_c, h_c * 1000, '--')
         ax.grid(color='0.5')
         ax.set_aspect('auto')
 
