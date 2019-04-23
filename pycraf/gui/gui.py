@@ -99,39 +99,56 @@ PP_TEXT_TEMPLATE = '''
   </thead>
   <tbody>
     <tr>
-      <td class="lalign">a_e (50%)</td> <td class="ralign">{a_e_50:5.0f}</td>
-      <td class="lalign">alpha_tr</td><td class="ralign">{alpha_tr:8.3f}</td>
-      <td class="lalign">L_bfsg (LoS)</td><td class="ralign">{L_bfsg:5.1f}</td>
+      <td class="lalign">a_e (50%)</td>
+      <td class="ralign">{a_e_50:5.0f}</td>
+      <td class="lalign">alpha_tr</td>
+      <td class="ralign">{alpha_tr:8.3f}</td>
+      <td class="lalign">L_bfsg (LoS)</td>
+      <td class="ralign">{L_bfsg:5.1f}</td>
     </tr>
     <tr>
-      <td class="lalign">a_e (beta0)</td><td class="ralign">{a_e_b0:5.0f}</td>
-      <td class="lalign">alpha_rt</td><td class="ralign">{alpha_rt:8.3f}</td>
-      <td class="lalign">L_bd (Diffraction)</td><td class="ralign">{L_bd:5.1f}</td>
+      <td class="lalign">a_e (beta0)</td>
+      <td class="ralign">{a_e_b0:5.0f}</td>
+      <td class="lalign">alpha_rt</td>
+      <td class="ralign">{alpha_rt:8.3f}</td>
+      <td class="lalign">L_bd (Diffraction)</td>
+      <td class="ralign">{L_bd:5.1f}</td>
     </tr>
     <tr>
-      <td class="lalign">beta0</td><td class="ralign">{beta0:.2f}</td>
-      <td class="lalign">eps_pt</td><td class="ralign">{eps_pt:8.3f}</td>
-      <td class="lalign">L_bs (Troposcatter)</td><td class="ralign">{L_bs:5.1f}</td>
+      <td class="lalign">beta0</td>
+      <td class="ralign">{beta0:.2f}</td>
+      <td class="lalign">eps_pt</td>
+      <td class="ralign">{eps_pt:8.3f}</td>
+      <td class="lalign">L_bs (Troposcatter)</td>
+      <td class="ralign">{L_bs:5.1f}</td>
     </tr>
     <tr>
-      <td class="lalign">N0</td><td class="ralign">{N0:.1f}</td>
-      <td class="lalign">eps_pr</td><td class="ralign">{eps_pr:8.3f}</td>
-      <td class="lalign">L_ba (Anomalous)</td><td class="ralign">{L_ba:5.1f}</td>
+      <td class="lalign">N0</td>
+      <td class="ralign">{N0:.1f}</td>
+      <td class="lalign">eps_pr</td>
+      <td class="ralign">{eps_pr:8.3f}</td>
+      <td class="lalign">L_ba (Anomalous)</td>
+      <td class="ralign">{L_ba:5.1f}</td>
     </tr>
     <tr>
-      <td class="lalign">Delta N</td><td class="ralign">{delta_N:.2f}</td>
-      <td class="lalign">Path type</td><td class="ralign">{path_type_str:s}</td>
+      <td class="lalign">Delta N</td>
+      <td class="ralign">{delta_N:.2f}</td>
+      <td class="lalign">h_eff</td>
+      <td class="ralign">{h_eff:8.1f}</td>
       <td class="lalign">L_b (Total)</td><td class="ralign">{L_b:5.1f}</td>
     </tr>
     <tr>
-      <td class="lalign"></td><td class="ralign"></td>
-      <td class="lalign"></td><td class="ralign"></td>
+      <td class="lalign"></td>
+      <td class="ralign"></td>
+      <td class="lalign">Path type</td>
+      <td class="ralign">{path_type_str:s}</td>
       <td class="lalign" style="color: blue;">L_b_corr (Total + Clutter)</td>
       <td class="ralign" style="color: blue;">{L_b_corr:5.1f}</td>
     </tr>
   </tbody>
 </table>
 '''
+
 
 class PycrafGui(QtWidgets.QMainWindow):
 
@@ -429,59 +446,66 @@ class PycrafGui(QtWidgets.QMainWindow):
 
         lon_rx, lat_rx = results['lon_r'], results['lat_r']
         h_tg, h_rg = results['h_tg'], results['h_rg']
-        _h_tg, _h_rg = h_tg.to(u.m).value, h_rg.to(u.m).value
+        delta = true_angular_distance(lon_rx, lat_rx, lons, lats)
 
-        # _lons = lons.to(u.deg).value
-        # _lats = lats.to(u.deg).value
+        # strip units for calculations below (leading underscore -> no unit)
         _distances = distances.to(u.km).value
         _heights = heights.to(u.m).value
-
-        delta = true_angular_distance(lon_rx, lat_rx, lons, lats)
         _delta = delta.to(u.rad).value
+        _dist = results['distance'].to(u.km).value
+        _h_ts = results['h_ts'].to(u.m).value
+        _h_rs = results['h_rs'].to(u.m).value
+        _h_tg = results['h_tg'].to(u.m).value
+        _h_rg = results['h_rg'].to(u.m).value
+        _a_e_m = results['a_e_50'].to(u.m).value
+        _a_e_km = results['a_e_50'].to(u.km).value
+        _S_tim = results['S_tim_50'].to(1).value
+        _S_rim = results['S_rim_50'].to(1).value
+        _S_tr = results['S_tr_50'].to(1).value
+        nu_bull_idx_50 = int(results['nu_bull_idx_50'])
+
+        # infer bullington point from P.452 variables:
+        # (need to do this in cartesian space and correct the
+        # S_tim/S_rim/S_tr with angular distance to distance mid point,
+        # because the slopes in P.452 are w.r.t. the secant of the Tx/Rx
+        # foot points at sea level)
+
+        _x0 = 0
+        _y0 = _a_e_km + _h_ts / 1000
+        if results['path_type'] == 1:
+
+            _d_bp = (
+                (_h_rs - _h_ts) / 1000 + _S_rim * _dist
+                ) / (_S_tim + _S_rim)
+            _x_bp = _x0 + _d_bp
+            _y_bp = _y0 + _d_bp * (_S_tim - _dist / 2 / _a_e_km)
+            _h_bp = (np.sqrt(_x_bp ** 2 + _y_bp ** 2) - _a_e_km) * 1000
+            # knife edge foot point (located on LoS path):
+            _x_ke = _x0 + _d_bp
+            _y_ke = _y0 + _d_bp * (_S_tr - _dist / 2 / _a_e_km)
+            _h_ke = (np.sqrt(_x_ke ** 2 + _y_ke ** 2) - _a_e_km) * 1000
+            _h_eff = _h_bp - _h_ke
+
+        else:
+
+            _d_bp = _distances[nu_bull_idx_50]
+            _x_bp = _x0 + _d_bp
+            _y_bp = _y0 + _d_bp * (_S_tr - _dist / 2 / _a_e_km)
+            _h_bp = (np.sqrt(_x_bp ** 2 + _y_bp ** 2) - _a_e_km) * 1000
+            _h_ke = _heights[nu_bull_idx_50]
+            _h_eff = _h_ke - _h_bp
+
+        results['h_eff'] = _h_eff * u.m
+        print('d_bp, h_bp, h_ke', _d_bp, _h_bp, _h_ke)
 
         theta_scale = (
             (_delta[-1] - _delta[0]) / (_distances[-1] - _distances[0])
             )
-
-        _dist = results['distance'].to(u.km).value
-        _h_ts = results['h_ts'].to(u.m).value
-        _h_rs = results['h_rs'].to(u.m).value
-        _a_e_m = results['a_e_50'].to(u.m).value
-        _a_e_km = results['a_e_50'].to(u.km).value
-        _S_tim = results['S_tim_50'].to(1)
-        _S_rim = results['S_rim_50'].to(1)
-        _S_tr = results['S_tr_50'].to(1)
-
-        # bullington point:
-
-        x0 = 0
-        y0 = _a_e_km + _h_ts / 1000
-        if results['path_type'] == 1:
-            _d_bp = (
-                (_h_rs - _h_ts) / 1000 + _S_rim * _dist
-                ) / (_S_tim + _S_rim)
-            # _h_bp = _h_ts + (_S_tim - _dist / 2 / _a_e_km) * _d_bp * 1000
-            x_c = x0 + _d_bp
-            y_c = y0 + _d_bp * (_S_tim - _dist / 2 / _a_e_km)
-
-        else:
-            _d_bp = _distances[int(results['nu_bull_idx_50'])]
-            # _h_bp = _h_ts + (_S_tr - _dist / 2 / _a_e_km) * _d_bp * 1000
-            x_c = x0 + _d_bp
-            y_c = y0 + _d_bp * (_S_tr - _dist / 2 / _a_e_km)
-
-        d_c = np.arctan2(x_c, y_c) * _a_e_km
-        h_c = np.sqrt(x_c ** 2 + y_c ** 2) - _a_e_km
-        _h_bp = h_c * 1000
-        print('d_bp, h_bp, d_c, h_c', _d_bp, _h_bp, d_c, h_c)
-        # # need to interpolate path (plot does straight lines)
-        # pp_hx = np.linspace(_distances[0], _distances[-1], 400)
-        # pp_hy = interp1d(pp_x, pp_y)(pp_hx)
-
         theta_lim = _distances[0], _distances[-1]
-        h_lim = _heights.min(), 1.05 * max([
-            _heights.max(), _h_ts, _h_rs, _h_bp
-            ])
+        h_lim = (
+            min([_heights.min(), _h_ke]) - 5,
+            max([_heights.max(), _h_ts, _h_rs, _h_bp]) + 5
+            )
 
         plot_area = self.geometry_plot_area
         fig = plot_area.figure
@@ -498,48 +522,58 @@ class PycrafGui(QtWidgets.QMainWindow):
             fig, 111, theta_lim, h_lim, _a_e_m, theta_scale
             )
 
-        aux_ax.plot(_distances, _heights, '-')
-        aux_ax.plot(_d_bp, _h_bp, 'o')
-        # aux_ax.plot(pp_hx, pp_hy, '-')
+        # plot height profile
+        aux_ax.plot(_distances, _heights, 'k-')
+        # plot bullington point
+        # aux_ax.plot(_d_bp, _h_bp, 'o', color='orange')
+        # foot point of the knife edge
+        # aux_ax.plot(_d_bp, _h_ke, 'o', color='orange')
+        aux_ax.plot([_d_bp, _d_bp], [_h_ke, _h_bp], '-', color='orange', lw=2)
+        # plot Tx/Rx "heights"
+        aux_ax.plot(
+            [0, 0], [_heights[0], _heights[0] + _h_tg],
+            'b-', lw=3
+            )
+        aux_ax.plot(
+            [_dist, _dist], [_heights[-1], _heights[-1] + _h_rg],
+            'r-', lw=3
+            )
 
-        # testing:
+        # plot the paths to clarify the Bullington geometry
+        # need to interpolate paths (mpl.plot does straight lines in
+        # viewport not in physical space)
+        # Note: the paths appear curvy in the plot, but his is because
+        # the two axes are scaled so differently; we like to keep it like
+        # this - although the curvature is exaggerated, the heights in the
+        # plots are correct (i.e., the heights of Earth's surface as a
+        # function of the distance from Tx)
 
+        def _calc_path(d0, h0, S, steps, direction=1):
+
+            assert direction in [-1, 1]
+
+            eps0 = d0 / _a_e_km
+            r0 = _a_e_km + h0 / 1000
+            x0 = r0 * np.sin(eps0)
+            y0 = r0 * np.cos(eps0)
+
+            xs = x0 + direction * steps
+            ys = y0 + steps * (S - _dist / 2 / _a_e_km + eps0)
+            ds = np.arctan2(xs, ys) * _a_e_km
+            hs = np.sqrt(xs ** 2 + ys ** 2) - _a_e_km
+
+            return ds, hs
+
+        steps = np.linspace(0, 2 * _dist, 51)
         if results['path_type'] == 1:
-            a = np.arange(0, 200, 1)
-            # all numbers in km
-            x0 = 0
-            y0 = _a_e_km + _h_ts / 1000
-            x_a = x0 + a
-            y_a = y0 + a * (_S_tim - _dist / 2 / _a_e_km)
-            d_a = np.arctan2(x_a, y_a) * _a_e_km
-            h_a = np.sqrt(x_a ** 2 + y_a ** 2) - _a_e_km
-            # print(d_a, h_a)
-            aux_ax.plot(d_a, h_a * 1000, '--')
+            _ds, _hs = _calc_path(0, _h_ts, _S_tim, steps)
+            aux_ax.plot(_ds, _hs * 1000, 'b--')
+            _ds, _hs = _calc_path(_dist, _h_rs, _S_rim, steps, direction=-1)
+            aux_ax.plot(_ds, _hs * 1000, 'r--')
 
-            b = np.arange(0, 200, 1)
-            # all numbers in km
-            eps = _dist / _a_e_km
-            rn = _a_e_km + _h_rs / 1000
-            xn = rn * np.sin(eps)
-            yn = rn * np.cos(eps)
-            x_b = xn - b
-            # y_b = yn + b * np.tan(np.arctan(_S_rim) + eps)
-            y_b = yn + b * (_S_rim - _dist / 2 / _a_e_km + eps)
-            d_b = np.arctan2(x_b, y_b) * _a_e_km
-            h_b = np.sqrt(x_b ** 2 + y_b ** 2) - _a_e_km
-            # print(d_b, h_b)
-            aux_ax.plot(d_b, h_b * 1000, '--')
+        _ds, _hs = _calc_path(0, _h_ts, _S_tr, steps)
+        aux_ax.plot(_ds, _hs * 1000, 'g--')
 
-        c = np.arange(0, 200, 1)
-        # all numbers in km
-        x0 = 0
-        y0 = _a_e_km + _h_ts / 1000
-        x_c = x0 + c
-        y_c = y0 + c * (_S_tr - _dist / 2 / _a_e_km)
-        d_c = np.arctan2(x_c, y_c) * _a_e_km
-        h_c = np.sqrt(x_c ** 2 + y_c ** 2) - _a_e_km
-        # print(d_c, h_c)
-        aux_ax.plot(d_c, h_c * 1000, '--')
         ax.grid(color='0.5')
         ax.set_aspect('auto')
 
