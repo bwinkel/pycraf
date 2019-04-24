@@ -199,7 +199,7 @@ def test_check_availability_nasa():
     for ilon, ilat, name in nasa_cases:
 
         if name is None:
-            with pytest.raises(srtm.TileNotAvailableError):
+            with pytest.raises(srtm.TileNotAvailableOnServerError):
                 srtm._check_availability(ilon, ilat)
         else:
             assert srtm._check_availability(ilon, ilat) == name
@@ -237,7 +237,7 @@ def test_check_availability_pano():
         for ilon, ilat, name in pano_cases:
 
             if name is None:
-                with pytest.raises(srtm.TileNotAvailableError):
+                with pytest.raises(srtm.TileNotAvailableOnServerError):
                     srtm._check_availability(ilon, ilat)
             else:
                 assert srtm._check_availability(ilon, ilat) == name
@@ -293,7 +293,7 @@ def test_get_hgt_diskpath(srtm_temp_dir):
         open(os.path.join(srtm_temp_dir, 'd1', 'foo.hgt'), 'w').close()
         open(os.path.join(srtm_temp_dir, 'd2', 'foo.hgt'), 'w').close()
 
-        with pytest.raises(IOError):
+        with pytest.raises(IOError, match=r'.* exists .* times in .*'):
             srtm._get_hgt_diskpath('foo.hgt')
 
         # cleaning up
@@ -322,7 +322,10 @@ def test_get_hgt_file_download_never(srtm_temp_dir):
         ilon, ilat = 12, 50
         tile_name = srtm._hgt_filename(ilon, ilat)
 
-        with pytest.raises(IOError):
+        with pytest.raises(
+                srtm.TileNotAvailableOnDiskError,
+                match=r'.*No hgt-file found for .*'
+                ):
             srtm.get_hgt_file(ilon, ilat)
 
 
@@ -403,6 +406,24 @@ def test_get_tile_zero(srtm_temp_dir):
             ]))
         assert_allclose(lats[0, :], np.array([
             35., 35.25, 35.5, 35.75, 36.
+            ]))
+        assert_allclose(tile, np.zeros((5, 5), dtype=np.float32))
+
+
+def test_get_tile_warning(srtm_temp_dir):
+
+    with srtm.SrtmConf.set(srtm_dir=srtm_temp_dir):
+
+        # ilon, ilat = 6, 54
+        ilon, ilat = 15, 50
+        with pytest.warns(srtm.TileNotAvailableOnDiskWarning):
+            lons, lats, tile = srtm.get_tile_data(ilon, ilat)
+
+        assert_allclose(lons[:, 0], np.array([
+            15., 15.25, 15.5, 15.75, 16.
+            ]))
+        assert_allclose(lats[0, :], np.array([
+            50., 50.25, 50.5, 50.75, 51.
             ]))
         assert_allclose(tile, np.zeros((5, 5), dtype=np.float32))
 
