@@ -201,6 +201,8 @@ class TestPropagation:
                     pprop_true = json.loads(f.read().decode('utf-8'))
 
             for k in pprop._pp:
+                # if k not in pprop_true:
+                #     continue
                 assert_quantity_allclose(pprop._pp[k], pprop_true[k])
 
     def test_freespace_loss(self):
