@@ -238,16 +238,18 @@ class SrtmConf(utils.MultiState):
             if kwargs['srtm_dir'] != cls.srtm_dir:
                 get_tile_interpolator.cache_clear()
 
-        if 'download' in kwargs or 'server' in kwargs:
+        if 'download' in kwargs:
             # check if 'download' strategy was changed and clear cache
             # this is necessary, because missing tiles will lead to
             # zero heights in the tile cache (for that tile) and if user
             # later sets the option to download missing tiles, the reading
             # routine needs to run again
-            if (
-                    kwargs['download'] != cls.download or
-                    kwargs['server'] != cls.server
-                    ):
+            if kwargs['download'] != cls.download:
+                get_tile_interpolator.cache_clear()
+
+        if 'server' in kwargs:
+            # dito
+            if kwargs['server'] != cls.server:
                 get_tile_interpolator.cache_clear()
 
 
