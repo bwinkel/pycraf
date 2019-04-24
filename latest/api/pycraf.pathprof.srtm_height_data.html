@@ -79,7 +79,7 @@
 <h1>srtm_height_data<a class="headerlink" href="#srtm-height-data" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.pathprof.srtm_height_data">
-<code class="descclassname">pycraf.pathprof.</code><code class="descname">srtm_height_data</code><span class="sig-paren">(</span><em>lons</em>, <em>lats</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#srtm_height_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/srtm.py#L496" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.srtm_height_data" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.pathprof.</code><code class="descname">srtm_height_data</code><span class="sig-paren">(</span><em>lons</em>, <em>lats</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#srtm_height_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/srtm.py#L545" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.srtm_height_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Interpolated SRTM terrain data extracted from “.hgt” files.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -91,6 +91,15 @@
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
 <dt><strong>heights</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>SRTM heights [m]</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>TileNotAvailableOnDiskWarning</strong><span class="classifier">UserWarning</span></dt><dd><p>If a tile is requested that should exist on the chosen server
+but is not available on disk (at least not in the search path)
+a warning is raised. In this case, the tile height data is set
+to Zeros.</p>
 </dd>
 </dl>
 </dd>
@@ -136,7 +145,7 @@ For details see <a class="reference internal" href="../pathprof/working_with_srt
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1. &nbsp;
-    Last built 23 Apr 2019. <br/>
+    Last built 24 Apr 2019. <br/>
   </p>
 </footer>
   </body>

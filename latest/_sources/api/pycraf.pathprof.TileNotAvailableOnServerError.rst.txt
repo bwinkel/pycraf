@@ -1,0 +1,6 @@
+TileNotAvailableOnServerError
+=============================
+
+.. currentmodule:: pycraf.pathprof
+
+.. autoexception:: TileNotAvailableOnServerError

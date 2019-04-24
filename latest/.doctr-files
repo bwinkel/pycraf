@@ -133,6 +133,10 @@ latest/_sources/api/pycraf.pathprof.K_BETA.rst.txt
 latest/_sources/api/pycraf.pathprof.PathProp.rst.txt
 latest/_sources/api/pycraf.pathprof.R_E.rst.txt
 latest/_sources/api/pycraf.pathprof.SrtmConf.rst.txt
+latest/_sources/api/pycraf.pathprof.TileNotAvailableOnDiskError.rst.txt
+latest/_sources/api/pycraf.pathprof.TileNotAvailableOnDiskWarning.rst.txt
+latest/_sources/api/pycraf.pathprof.TileNotAvailableOnServerError.rst.txt
+latest/_sources/api/pycraf.pathprof.TilesSizeError.rst.txt
 latest/_sources/api/pycraf.pathprof.annual_timepercent_from_worst_month.rst.txt
 latest/_sources/api/pycraf.pathprof.atten_map_fast.rst.txt
 latest/_sources/api/pycraf.pathprof.atten_path_fast.rst.txt
@@ -327,6 +331,10 @@ latest/api/pycraf.pathprof.K_BETA.html
 latest/api/pycraf.pathprof.PathProp.html
 latest/api/pycraf.pathprof.R_E.html
 latest/api/pycraf.pathprof.SrtmConf.html
+latest/api/pycraf.pathprof.TileNotAvailableOnDiskError.html
+latest/api/pycraf.pathprof.TileNotAvailableOnDiskWarning.html
+latest/api/pycraf.pathprof.TileNotAvailableOnServerError.html
+latest/api/pycraf.pathprof.TilesSizeError.html
 latest/api/pycraf.pathprof.annual_timepercent_from_worst_month.html
 latest/api/pycraf.pathprof.atten_map_fast.html
 latest/api/pycraf.pathprof.atten_path_fast.html

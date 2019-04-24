@@ -93,6 +93,7 @@
 
 <span class="c1"># from functools import partial, lru_cache</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">from</span> <span class="nn">zipfile</span> <span class="k">import</span> <span class="n">ZipFile</span>
 <span class="kn">import</span> <span class="nn">re</span>
@@ -106,7 +107,13 @@
 <span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">utils</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SrtmConf&#39;</span><span class="p">,</span> <span class="s1">&#39;srtm_height_data&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;TileNotAvailableOnServerError&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;TileNotAvailableOnDiskError&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;TileNotAvailableOnDiskWarning&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;TilesSizeError&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;SrtmConf&#39;</span><span class="p">,</span> <span class="s1">&#39;srtm_height_data&#39;</span>
+    <span class="p">]</span>
 
 
 <span class="n">_NASA_JSON_NAME</span> <span class="o">=</span> <span class="n">get_pkg_data_filename</span><span class="p">(</span><span class="s1">&#39;data/nasa.json&#39;</span><span class="p">)</span>
@@ -118,14 +125,24 @@
 <span class="n">VIEWPANO_TILES</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">_VIEWPANO_NAME</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">TileNotAvailableError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="TileNotAvailableOnServerError"><a class="viewcode-back" href="../../../api/pycraf.pathprof.TileNotAvailableOnServerError.html#pycraf.pathprof.TileNotAvailableOnServerError">[docs]</a><span class="k">class</span> <span class="nc">TileNotAvailableOnServerError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 
-    <span class="k">pass</span>
+    <span class="k">pass</span></div>
 
 
-<span class="k">class</span> <span class="nc">TilesSizeError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="TileNotAvailableOnDiskError"><a class="viewcode-back" href="../../../api/pycraf.pathprof.TileNotAvailableOnDiskError.html#pycraf.pathprof.TileNotAvailableOnDiskError">[docs]</a><span class="k">class</span> <span class="nc">TileNotAvailableOnDiskError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 
-    <span class="k">pass</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="TileNotAvailableOnDiskWarning"><a class="viewcode-back" href="../../../api/pycraf.pathprof.TileNotAvailableOnDiskWarning.html#pycraf.pathprof.TileNotAvailableOnDiskWarning">[docs]</a><span class="k">class</span> <span class="nc">TileNotAvailableOnDiskWarning</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">):</span>
+
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="TilesSizeError"><a class="viewcode-back" href="../../../api/pycraf.pathprof.TilesSizeError.html#pycraf.pathprof.TilesSizeError">[docs]</a><span class="k">class</span> <span class="nc">TilesSizeError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+
+    <span class="k">pass</span></div>
 
 
 <div class="viewcode-block" id="SrtmConf"><a class="viewcode-back" href="../../../api/pycraf.pathprof.SrtmConf.html#pycraf.pathprof.SrtmConf">[docs]</a><span class="k">class</span> <span class="nc">SrtmConf</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">MultiState</span><span class="p">):</span>
@@ -285,6 +302,20 @@
         <span class="k">if</span> <span class="s1">&#39;srtm_dir&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="c1"># check if srtm_dir changed and clear cache</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;srtm_dir&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">srtm_dir</span><span class="p">:</span>
+                <span class="n">get_tile_interpolator</span><span class="o">.</span><span class="n">cache_clear</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="s1">&#39;download&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="c1"># check if &#39;download&#39; strategy was changed and clear cache</span>
+            <span class="c1"># this is necessary, because missing tiles will lead to</span>
+            <span class="c1"># zero heights in the tile cache (for that tile) and if user</span>
+            <span class="c1"># later sets the option to download missing tiles, the reading</span>
+            <span class="c1"># routine needs to run again</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;download&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">download</span><span class="p">:</span>
+                <span class="n">get_tile_interpolator</span><span class="o">.</span><span class="n">cache_clear</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="s1">&#39;server&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="c1"># dito</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;server&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">server</span><span class="p">:</span>
                 <span class="n">get_tile_interpolator</span><span class="o">.</span><span class="n">cache_clear</span><span class="p">()</span></div></div>
 
 
@@ -312,7 +343,7 @@
             <span class="k">if</span> <span class="n">tile_name</span> <span class="ow">in</span> <span class="n">tiles</span><span class="p">:</span>
                 <span class="k">break</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">TileNotAvailableError</span><span class="p">(</span>
+            <span class="k">raise</span> <span class="n">TileNotAvailableOnServerError</span><span class="p">(</span>
                 <span class="s1">&#39;No tile found for (</span><span class="si">{}</span><span class="s1">d, </span><span class="si">{}</span><span class="s1">d) in list of available &#39;</span>
                 <span class="s1">&#39;tiles.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">ilon</span><span class="p">,</span> <span class="n">ilat</span>
@@ -326,7 +357,7 @@
         <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tiles</span> <span class="o">==</span> <span class="n">tile_name</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tiles</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">TileNotAvailableError</span><span class="p">(</span>
+            <span class="k">raise</span> <span class="n">TileNotAvailableOnServerError</span><span class="p">(</span>
                 <span class="s1">&#39;No tile found for (</span><span class="si">{}</span><span class="s1">d, </span><span class="si">{}</span><span class="s1">d) in list of available &#39;</span>
                 <span class="s1">&#39;tiles.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">ilon</span><span class="p">,</span> <span class="n">ilat</span>
@@ -468,7 +499,7 @@
 
     <span class="n">hgt_file</span> <span class="o">=</span> <span class="n">_get_hgt_diskpath</span><span class="p">(</span><span class="n">tile_name</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">hgt_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span>
+        <span class="k">raise</span> <span class="n">TileNotAvailableOnDiskError</span><span class="p">(</span>
             <span class="s1">&#39;No hgt-file found for (</span><span class="si">{}</span><span class="s1">d, </span><span class="si">{}</span><span class="s1">d), was looking for </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span>
             <span class="s1">&#39;in directory: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">ilon</span><span class="p">,</span> <span class="n">ilat</span><span class="p">,</span> <span class="n">tile_name</span><span class="p">,</span> <span class="n">srtm_dir</span>
@@ -495,11 +526,29 @@
         <span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
         <span class="n">tile</span><span class="p">[</span><span class="n">bad_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
-    <span class="k">except</span> <span class="n">TileNotAvailableError</span><span class="p">:</span>
+    <span class="k">except</span> <span class="n">TileNotAvailableOnServerError</span><span class="p">:</span>
         <span class="c1"># always use very small tile size for zero tiles</span>
         <span class="c1"># (just enough to make spline interpolation work)</span>
         <span class="n">tile_size</span> <span class="o">=</span> <span class="mi">5</span>
         <span class="n">tile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">tile_size</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="n">TileNotAvailableOnDiskError</span><span class="p">:</span>
+        <span class="c1"># also set to zero, but raise a warning</span>
+        <span class="n">tile_size</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">tile_size</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+        <span class="n">tile_name</span> <span class="o">=</span> <span class="n">_hgt_filename</span><span class="p">(</span><span class="n">ilon</span><span class="p">,</span> <span class="n">ilat</span><span class="p">)</span>
+        <span class="n">srtm_dir</span> <span class="o">=</span> <span class="n">SrtmConf</span><span class="o">.</span><span class="n">srtm_dir</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">No hgt-file found for ({}d, {}d) - was looking for file {}</span>
+<span class="sd">in directory: {}</span>
+<span class="sd">Will set terrain heights in this area to zero. Note, you can have pycraf</span>
+<span class="sd">download missing tiles automatically - just use &quot;pycraf.pathprof.SrtmConf&quot;</span>
+<span class="sd">(see its documentation).&#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ilon</span><span class="p">,</span> <span class="n">ilat</span><span class="p">,</span> <span class="n">tile_name</span><span class="p">,</span> <span class="n">srtm_dir</span><span class="p">),</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">TileNotAvailableOnDiskWarning</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="p">)</span>
 
     <span class="n">dx</span> <span class="o">=</span> <span class="n">dy</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="n">tile_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ogrid</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">tile_size</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">tile_size</span><span class="p">]</span>
@@ -579,6 +628,14 @@
 <span class="sd">    heights : `~astropy.units.Quantity`</span>
 <span class="sd">        SRTM heights [m]</span>
 
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TileNotAvailableOnDiskWarning : UserWarning</span>
+<span class="sd">        If a tile is requested that should exist on the chosen server</span>
+<span class="sd">        but is not available on disk (at least not in the search path)</span>
+<span class="sd">        a warning is raised. In this case, the tile height data is set</span>
+<span class="sd">        to Zeros.</span>
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    - `SRTM &lt;https://www2.jpl.nasa.gov/srtm/&gt;`_ data tiles (`*.hgt`) need</span>
@@ -617,7 +674,7 @@
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1. &nbsp;
-    Last built 23 Apr 2019. <br/>
+    Last built 24 Apr 2019. <br/>
   </p>
 </footer>
   </body>

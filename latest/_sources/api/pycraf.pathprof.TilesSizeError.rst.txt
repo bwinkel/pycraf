@@ -1,0 +1,6 @@
+TilesSizeError
+==============
+
+.. currentmodule:: pycraf.pathprof
+
+.. autoexception:: TilesSizeError

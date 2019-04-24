@@ -1,0 +1,6 @@
+TileNotAvailableOnDiskError
+===========================
+
+.. currentmodule:: pycraf.pathprof
+
+.. autoexception:: TileNotAvailableOnDiskError

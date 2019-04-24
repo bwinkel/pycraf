@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="A_BETA" href="pycraf.pathprof.A_BETA.html" />
+    <link rel="next" title="TileNotAvailableOnDiskError" href="pycraf.pathprof.TileNotAvailableOnDiskError.html" />
     <link rel="prev" title="PathProp" href="pycraf.pathprof.PathProp.html" />
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 <script type="text/javascript" src="../_static/copybutton.js"></script>
@@ -49,7 +49,7 @@
     <h3>Navigation</h3>
     <ul>
       <li class="right">
-	<a href="pycraf.pathprof.A_BETA.html" title="A_BETA">
+	<a href="pycraf.pathprof.TileNotAvailableOnDiskError.html" title="TileNotAvailableOnDiskError">
 	  next &raquo;
 	</a>
       </li>
@@ -79,7 +79,7 @@
 <h1>SrtmConf<a class="headerlink" href="#srtmconf" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pycraf.pathprof.SrtmConf">
-<em class="property">class </em><code class="descclassname">pycraf.pathprof.</code><code class="descname">SrtmConf</code><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#SrtmConf"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/srtm.py#L65" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.SrtmConf" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pycraf.pathprof.</code><code class="descname">SrtmConf</code><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#SrtmConf"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/srtm.py#L82" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.SrtmConf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pycraf.utils.MultiState.html#pycraf.utils.MultiState" title="pycraf.utils.multistate.MultiState"><code class="docutils literal notranslate"><span class="pre">pycraf.utils.MultiState</span></code></a></p>
 <p>Provide a global state to adjust SRTM configuration.</p>
 <p>By default, <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf</span></code> will look for SRTM ‘.hgt’ files (the terrain data)
@@ -224,7 +224,7 @@ further information.</p>
 <p class="rubric">Methods Documentation</p>
 <dl class="classmethod">
 <dt id="pycraf.pathprof.SrtmConf.hook">
-<em class="property">classmethod </em><code class="descname">hook</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#SrtmConf.hook"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/srtm.py#L216" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.SrtmConf.hook" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">hook</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#SrtmConf.hook"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/srtm.py#L233" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.SrtmConf.hook" title="Permalink to this definition">¶</a></dt>
 <dd><p>A hook which is called everytime when attributes are about to change.</p>
 <p>You should override this method if you want to enable pre-processing
 or monitoring of your attributes. For example, one could use this
@@ -262,7 +262,7 @@ to react to attribute changes:</p>
 
 <dl class="classmethod">
 <dt id="pycraf.pathprof.SrtmConf.validate">
-<em class="property">classmethod </em><code class="descname">validate</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#SrtmConf.validate"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/srtm.py#L146" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.SrtmConf.validate" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">validate</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#SrtmConf.validate"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/srtm.py#L163" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.SrtmConf.validate" title="Permalink to this definition">¶</a></dt>
 <dd><p>This checks, if the provided inputs for <a class="reference internal" href="#pycraf.pathprof.SrtmConf.download" title="pycraf.pathprof.SrtmConf.download"><code class="xref py py-obj docutils literal notranslate"><span class="pre">download</span></code></a> and <a class="reference internal" href="#pycraf.pathprof.SrtmConf.server" title="pycraf.pathprof.SrtmConf.server"><code class="xref py py-obj docutils literal notranslate"><span class="pre">server</span></code></a> are
 allowed. Possible values are:</p>
 <ul class="simple">
@@ -301,7 +301,7 @@ allowed. Possible values are:</p>
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1. &nbsp;
-    Last built 23 Apr 2019. <br/>
+    Last built 24 Apr 2019. <br/>
   </p>
 </footer>
   </body>
