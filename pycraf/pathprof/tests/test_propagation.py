@@ -113,12 +113,18 @@ class TestPropagation:
             # Warning: if uncommenting, the test cases will be overwritten
             # do this only, if you need to update the json files
             # (make sure, that results are correct!)
-            # with ZipFile(self.cases_zip_name) as myzip:
+            # zip-file approach not working???
+            # with ZipFile('/tmp/cases.zip') as myzip:
             #     pprop_name = self.pprop_template.format(
             #         freq, h_tg, h_rg, time_percent, version
             #         )
             #     with myzip.open(pprop_name, 'w') as f:
             #         json.dump(pprop._pp, f)
+            # pprop_name = self.pprop_template.format(
+            #     freq, h_tg, h_rg, time_percent, version
+            #     )
+            # with open('/tmp/' + pprop_name, 'w') as f:
+            #     json.dump(pprop._pp, f)
 
             los_loss = pathprof.loss_freespace(pprop)
             trop_loss = pathprof.loss_troposcatter(
@@ -162,6 +168,11 @@ class TestPropagation:
             #         )
             #     with myzip.open(loss_name, 'w') as f:
             #         json.dump(losses, open(f, 'w'))
+            # loss_name = self.loss_template.format(
+            #     freq, h_tg, h_rg, time_percent, version, G_t, G_r
+            #     )
+            # with open('/tmp/' + loss_name, 'w') as f:
+            #     json.dump(losses, f)
 
     def teardown(self):
 
