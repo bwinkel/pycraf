@@ -27,6 +27,7 @@ from __future__ import (
 
 # from functools import partial, lru_cache
 import os
+import warnings
 import shutil
 from zipfile import ZipFile
 import re
@@ -40,7 +41,13 @@ from astropy import units as apu
 from .. import utils
 
 
-__all__ = ['SrtmConf', 'srtm_height_data']
+__all__ = [
+    'TileNotAvailableOnServerError',
+    'TileNotAvailableOnDiskError',
+    'TileNotAvailableOnDiskWarning',
+    'TilesSizeError',
+    'SrtmConf', 'srtm_height_data'
+    ]
 
 
 _NASA_JSON_NAME = get_pkg_data_filename('data/nasa.json')
@@ -52,7 +59,17 @@ with open(_NASA_JSON_NAME, 'r') as f:
 VIEWPANO_TILES = np.load(_VIEWPANO_NAME)
 
 
-class TileNotAvailableError(Exception):
+class TileNotAvailableOnServerError(Exception):
+
+    pass
+
+
+class TileNotAvailableOnDiskError(Exception):
+
+    pass
+
+
+class TileNotAvailableOnDiskWarning(UserWarning):
 
     pass
 
@@ -221,6 +238,18 @@ class SrtmConf(utils.MultiState):
             if kwargs['srtm_dir'] != cls.srtm_dir:
                 get_tile_interpolator.cache_clear()
 
+        if 'download' in kwargs or 'server' in kwargs:
+            # check if 'download' strategy was changed and clear cache
+            # this is necessary, because missing tiles will lead to
+            # zero heights in the tile cache (for that tile) and if user
+            # later sets the option to download missing tiles, the reading
+            # routine needs to run again
+            if (
+                    kwargs['download'] != cls.download or
+                    kwargs['server'] != cls.server
+                    ):
+                get_tile_interpolator.cache_clear()
+
 
 def _hgt_filename(ilon, ilat):
     # construct proper hgt-file name
@@ -246,7 +275,7 @@ def _check_availability(ilon, ilat):
             if tile_name in tiles:
                 break
         else:
-            raise TileNotAvailableError(
+            raise TileNotAvailableOnServerError(
                 'No tile found for ({}d, {}d) in list of available '
                 'tiles.'.format(
                     ilon, ilat
@@ -260,7 +289,7 @@ def _check_availability(ilon, ilat):
         idx = np.where(tiles == tile_name)
 
         if len(tiles[idx]) == 0:
-            raise TileNotAvailableError(
+            raise TileNotAvailableOnServerError(
                 'No tile found for ({}d, {}d) in list of available '
                 'tiles.'.format(
                     ilon, ilat
@@ -402,7 +431,7 @@ def get_hgt_file(ilon, ilat):
 
     hgt_file = _get_hgt_diskpath(tile_name)
     if hgt_file is None:
-        raise IOError(
+        raise TileNotAvailableOnDiskError(
             'No hgt-file found for ({}d, {}d), was looking for {}\n'
             'in directory: {}'.format(
                 ilon, ilat, tile_name, srtm_dir
@@ -429,11 +458,29 @@ def get_tile_data(ilon, ilat):
         tile = tile.astype(np.float32)
         tile[bad_mask] = np.nan
 
-    except TileNotAvailableError:
+    except TileNotAvailableOnServerError:
         # always use very small tile size for zero tiles
         # (just enough to make spline interpolation work)
         tile_size = 5
         tile = np.zeros((tile_size, tile_size), dtype=np.float32)
+
+    except TileNotAvailableOnDiskError:
+        # also set to zero, but raise a warning
+        tile_size = 5
+        tile = np.zeros((tile_size, tile_size), dtype=np.float32)
+
+        tile_name = _hgt_filename(ilon, ilat)
+        srtm_dir = SrtmConf.srtm_dir
+        warnings.warn(
+            '''
+No hgt-file found for ({}d, {}d) - was looking for file {}
+in directory: {}
+Will set terrain heights in this area to zero. Note, you can have pycraf
+download missing tiles automatically - just use "pycraf.pathprof.SrtmConf"
+(see its documentation).'''.format(ilon, ilat, tile_name, srtm_dir),
+            category=TileNotAvailableOnDiskWarning,
+            stacklevel=1,
+            )
 
     dx = dy = 1. / (tile_size - 1)
     x, y = np.ogrid[0:tile_size, 0:tile_size]
@@ -512,6 +559,14 @@ def srtm_height_data(lons, lats):
     -------
     heights : `~astropy.units.Quantity`
         SRTM heights [m]
+
+    Raises
+    ------
+    TileNotAvailableOnDiskWarning : UserWarning
+        If a tile is requested that should exist on the chosen server
+        but is not available on disk (at least not in the search path)
+        a warning is raised. In this case, the tile height data is set
+        to Zeros.
 
     Notes
     -----
