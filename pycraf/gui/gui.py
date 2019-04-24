@@ -103,8 +103,8 @@ PP_TEXT_TEMPLATE = '''
       <td class="ralign">{a_e_50:5.0f}</td>
       <td class="lalign">alpha_tr</td>
       <td class="ralign">{alpha_tr:8.3f}</td>
-      <td class="lalign">L_bfsg (LoS)</td>
-      <td class="ralign">{L_bfsg:5.1f}</td>
+      <td class="lalign">L_b0p (LoS)</td>
+      <td class="ralign">{L_b0p:5.1f}</td>
     </tr>
     <tr>
       <td class="lalign">a_e (beta0)</td>

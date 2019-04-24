@@ -128,6 +128,8 @@ class GeometryWorker(BaseWorker):
             'L_bfsg', 'L_bd', 'L_bs', 'L_ba', 'L_b', 'L_b_corr',
             ]
         results.update(dict(zip(loss_names, losses)))
+        flosses = pathprof.loss_freespace(pp)
+        results['L_b0p'] = flosses[0] + flosses[1]
 
         self.result_ready.emit(hprof_data, results)
 
