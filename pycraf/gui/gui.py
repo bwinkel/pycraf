@@ -134,7 +134,7 @@ PP_TEXT_TEMPLATE = '''
       <td class="lalign">Delta N</td>
       <td class="ralign">{delta_N:.2f}</td>
       <td class="lalign">h_eff</td>
-      <td class="ralign">{h_eff:8.1f}</td>
+      <td class="ralign">{h_eff_50:8.1f}</td>
       <td class="lalign">L_b (Total)</td><td class="ralign">{L_b:5.1f}</td>
     </tr>
     <tr>
@@ -445,7 +445,6 @@ class PycrafGui(QtWidgets.QMainWindow):
         lons, lats, distance, distances, heights, *_ = hprof
 
         lon_rx, lat_rx = results['lon_r'], results['lat_r']
-        h_tg, h_rg = results['h_tg'], results['h_rg']
         delta = true_angular_distance(lon_rx, lat_rx, lons, lats)
 
         # strip units for calculations below (leading underscore -> no unit)
@@ -462,40 +461,10 @@ class PycrafGui(QtWidgets.QMainWindow):
         _S_tim = results['S_tim_50'].to(1).value
         _S_rim = results['S_rim_50'].to(1).value
         _S_tr = results['S_tr_50'].to(1).value
-        nu_bull_idx_50 = int(results['nu_bull_idx_50'])
-
-        # infer bullington point from P.452 variables:
-        # (need to do this in cartesian space and correct the
-        # S_tim/S_rim/S_tr with angular distance to distance mid point,
-        # because the slopes in P.452 are w.r.t. the secant of the Tx/Rx
-        # foot points at sea level)
-
-        _x0 = 0
-        _y0 = _a_e_km + _h_ts / 1000
-        if results['path_type'] == 1:
-
-            _d_bp = (
-                (_h_rs - _h_ts) / 1000 + _S_rim * _dist
-                ) / (_S_tim + _S_rim)
-            _x_bp = _x0 + _d_bp
-            _y_bp = _y0 + _d_bp * (_S_tim - _dist / 2 / _a_e_km)
-            _h_bp = (np.sqrt(_x_bp ** 2 + _y_bp ** 2) - _a_e_km) * 1000
-            # knife edge foot point (located on LoS path):
-            _x_ke = _x0 + _d_bp
-            _y_ke = _y0 + _d_bp * (_S_tr - _dist / 2 / _a_e_km)
-            _h_ke = (np.sqrt(_x_ke ** 2 + _y_ke ** 2) - _a_e_km) * 1000
-            _h_eff = _h_bp - _h_ke
-
-        else:
-
-            _d_bp = _distances[nu_bull_idx_50]
-            _x_bp = _x0 + _d_bp
-            _y_bp = _y0 + _d_bp * (_S_tr - _dist / 2 / _a_e_km)
-            _h_bp = (np.sqrt(_x_bp ** 2 + _y_bp ** 2) - _a_e_km) * 1000
-            _h_ke = _heights[nu_bull_idx_50]
-            _h_eff = _h_ke - _h_bp
-
-        results['h_eff'] = _h_eff * u.m
+        _d_bp = results['d_bp_50'].to(u.km).value
+        _h_bp = results['h_bp_50'].to(u.m).value
+        _h_eff = results['h_eff_50'].to(u.m).value
+        _h_ke = _h_bp - abs(_h_eff)
         print('d_bp, h_bp, h_ke', _d_bp, _h_bp, _h_ke)
 
         theta_scale = (
