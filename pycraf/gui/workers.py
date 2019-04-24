@@ -6,14 +6,11 @@ from PyQt5 import QtCore
 from functools import lru_cache
 import numpy as np
 from astropy import units as u
-from pycraf import pathprof
-from pycraf import conversions as cnv
+from .. import pathprof
+# from .. import conversions as cnv
 
 
 __all__ = ['GeometryWorker', 'PathProfWorker', 'MapWorker']
-
-
-pathprof.SrtmConf.set(download='missing')
 
 
 # Note: pathprof.height_path_data is super fast usually, so this
@@ -47,6 +44,7 @@ class BaseWorker(QtCore.QObject):
     job_started = QtCore.pyqtSignal(name='job_started')
     job_finished = QtCore.pyqtSignal(name='job_finished')
     job_excepted = QtCore.pyqtSignal(str, name='job_excepted')
+    job_errored = QtCore.pyqtSignal(str, name='job_errored')
 
     def __init__(self, parent):
 
@@ -64,10 +62,21 @@ class BaseWorker(QtCore.QObject):
         self.job_waiting = True
 
     @QtCore.pyqtSlot()
+    def on_clear_caches_triggered(self):
+
+        cached_height_path_data.cache_clear()
+        cached_height_path_data_generic.cache_clear()
+        cached_height_map_data.cache_clear()
+        cached_heightprofile.cache_clear()
+
+    @QtCore.pyqtSlot()
     def event_loop(self):
 
         if self.job_waiting:
-            self.do_job()
+            try:
+                self.do_job()
+            except Exception as e:
+                self.job_errored.emit(e.args[0])
 
         # setup one-time counter
         self.timer = QtCore.QTimer()
@@ -89,6 +98,7 @@ class GeometryWorker(BaseWorker):
         self.job_waiting = False
         jdict = self.job_dict
         print('doing job', jdict)
+        print(pathprof.SrtmConf)
 
         hprof_data = cached_heightprofile(
             jdict['tx_lon'] * u.deg, jdict['tx_lat'] * u.deg,

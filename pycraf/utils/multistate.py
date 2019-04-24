@@ -34,6 +34,18 @@ class _MultiMeta(type):
             'Setting attributes directy is not allowed. Use "set" method!'
             )
 
+    def __repr__(cls):
+        if hasattr(cls, '__repr__'):
+            return getattr(cls, '__repr__')()
+        else:
+            return super().__repr__()
+
+    def __str__(cls):
+        if hasattr(cls, '__str__'):
+            return getattr(cls, '__str__')()
+        else:
+            return super().__repr__()
+
 
 class MultiState(object, metaclass=_MultiMeta):
     '''

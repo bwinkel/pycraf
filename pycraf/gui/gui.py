@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import os
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 import numpy as np
@@ -12,6 +13,7 @@ from .plot_widget import CustomToolbar, PlotWidget
 from .helpers import setup_earth_axes
 from .workers import GeometryWorker, PathProfWorker, MapWorker
 from ..geometry import true_angular_distance
+from ..pathprof import SrtmConf
 
 __all__ = ['PycrafGui', 'start_gui']
 
@@ -65,6 +67,8 @@ MAP_DISPLAY_OPTIONS = [
     ('Attenuation: Total loss with clutter', 'results', 'L_b_corr', 'dB'),
     ]
 
+SRTM_DOWNLOAD_MAPPING = ['never', 'missing', 'always']
+SRTM_SERVER_MAPPING = ['nasa_v1.0', 'nasa_v2.1', 'viewpano']
 
 PP_TEXT_TEMPLATE = '''
 <style>
@@ -150,11 +154,15 @@ PP_TEXT_TEMPLATE = '''
 '''
 
 
+SrtmConf.set(download='never', server='viewpano')
+
+
 class PycrafGui(QtWidgets.QMainWindow):
 
     geo_job_triggered = QtCore.pyqtSignal(dict, name='geo_job_triggered')
     pp_job_triggered = QtCore.pyqtSignal(dict, name='pp_job_triggered')
     map_job_triggered = QtCore.pyqtSignal(dict, name='map_job_triggered')
+    clear_caches_triggered = QtCore.pyqtSignal(name='clear_caches_triggered')
 
     def __init__(self, **kwargs):
 
@@ -196,13 +204,27 @@ class PycrafGui(QtWidgets.QMainWindow):
         names = [t[0] for t in PATH_DISPLAY_OPTIONS]
         _cb = self.ui.pathprofPlotChooserComboBox
         _cb.addItems(names)
-        _cb.setCurrentIndex(_cb.findText('Attenuation: Total loss with clutter'))
+        _cb.setCurrentIndex(_cb.findText(
+            'Attenuation: Total loss with clutter'
+            ))
 
         # fill map result combo box
         names = [t[0] for t in MAP_DISPLAY_OPTIONS]
         _cb = self.ui.mapPlotChooserComboBox
         _cb.addItems(names)
-        _cb.setCurrentIndex(_cb.findText('Attenuation: Total loss with clutter'))
+        _cb.setCurrentIndex(_cb.findText(
+            'Attenuation: Total loss with clutter'
+            ))
+
+        self.ui.srtmPathPushButton.setText(
+            os.path.abspath(SrtmConf.srtm_dir)
+            )
+        self.ui.srtmDownloadComboBox.setCurrentIndex(
+            SRTM_DOWNLOAD_MAPPING.index(SrtmConf.download)
+            )
+        self.ui.srtmServerComboBox.setCurrentIndex(
+            SRTM_SERVER_MAPPING.index(SrtmConf.server)
+            )
 
         self.create_plotters()
         self.setup_signals()
@@ -212,6 +234,16 @@ class PycrafGui(QtWidgets.QMainWindow):
 
     @QtCore.pyqtSlot(object)
     def setup_signals(self):
+
+        self.ui.srtmPathPushButton.pressed.connect(
+            self.on_options_srtmpath_pressed
+            )
+        self.ui.srtmDownloadComboBox.currentIndexChanged[int].connect(
+            self.on_options_srtmdownload_changed
+            )
+        self.ui.srtmDownloadComboBox.currentIndexChanged[int].connect(
+            self.on_options_srtmserver_changed
+            )
 
         self.ui.pathprofComputePushButton.pressed.connect(
             self.on_pathprof_compute_pressed
@@ -260,7 +292,13 @@ class PycrafGui(QtWidgets.QMainWindow):
         # self.my_geo_worker.job_finished.connect(self.busy_stop)
         # self.my_geo_worker.job_excepted.connect(self.busy_except)
         self.geo_job_triggered.connect(self.my_geo_worker.on_job_triggered)
-        self.my_geo_worker.result_ready.connect(self.on_geometry_result_ready)
+        self.clear_caches_triggered.connect(
+            self.my_geo_worker.on_clear_caches_triggered
+            )
+        self.my_geo_worker.result_ready[object, object].connect(
+            self.on_geometry_result_ready
+            )
+        self.my_geo_worker.job_errored[str].connect(self.on_job_errored)
         self.my_geo_worker_thread.start()
 
         self.my_pp_worker_thread = QtCore.QThread()
@@ -271,7 +309,13 @@ class PycrafGui(QtWidgets.QMainWindow):
         # self.my_pp_worker.job_finished.connect(self.busy_stop)
         # self.my_pp_worker.job_excepted.connect(self.busy_except)
         self.pp_job_triggered.connect(self.my_pp_worker.on_job_triggered)
-        self.my_pp_worker.result_ready.connect(self.on_pathprof_result_ready)
+        self.clear_caches_triggered.connect(
+            self.my_pp_worker.on_clear_caches_triggered
+            )
+        self.my_pp_worker.result_ready[object, object].connect(
+            self.on_pathprof_result_ready
+            )
+        self.my_pp_worker.job_errored[str].connect(self.on_job_errored)
         self.my_pp_worker_thread.start()
 
         self.my_map_worker_thread = QtCore.QThread()
@@ -282,7 +326,13 @@ class PycrafGui(QtWidgets.QMainWindow):
         # self.my_map_worker.job_finished.connect(self.busy_stop)
         # self.my_map_worker.job_excepted.connect(self.busy_except)
         self.map_job_triggered.connect(self.my_map_worker.on_job_triggered)
-        self.my_map_worker.result_ready.connect(self.on_map_result_ready)
+        self.clear_caches_triggered.connect(
+            self.my_map_worker.on_clear_caches_triggered
+            )
+        self.my_map_worker.result_ready[object, object].connect(
+            self.on_map_result_ready
+            )
+        self.my_map_worker.job_errored[str].connect(self.on_job_errored)
         self.my_map_worker_thread.start()
 
     @QtCore.pyqtSlot()
@@ -372,6 +422,43 @@ class PycrafGui(QtWidgets.QMainWindow):
         job_dict['rx_clutter'] = self.ui.rxClutterComboBox.currentIndex()
 
         return job_dict
+
+    @QtCore.pyqtSlot()
+    def on_options_srtmpath_pressed(self):
+
+        srtm_dir = QtWidgets.QFileDialog.getExistingDirectory(
+            self,
+            'Choose directory with SRTM tile data (.hgt files)',
+            SrtmConf.srtm_dir,
+            QtWidgets.QFileDialog.ShowDirsOnly |
+            QtWidgets.QFileDialog.DontResolveSymlinks,
+            )
+
+        if srtm_dir:
+            SrtmConf.set(srtm_dir=srtm_dir)
+            self.ui.srtmPathPushButton.setText(
+                os.path.abspath(SrtmConf.srtm_dir)
+                )
+            self.clear_caches_triggered.emit()
+
+    @QtCore.pyqtSlot(int)
+    def on_options_srtmdownload_changed(self, idx):
+
+        SrtmConf.set(download=SRTM_DOWNLOAD_MAPPING[idx])
+        self.clear_caches_triggered.emit()
+        print(SrtmConf)
+
+    @QtCore.pyqtSlot(int)
+    def on_options_srtmserver_changed(self, idx):
+
+        SrtmConf.set(server=SRTM_SERVER_MAPPING[idx])
+        self.clear_caches_triggered.emit()
+        print(SrtmConf)
+
+    @QtCore.pyqtSlot(str)
+    def on_job_errored(self, error_msg):
+        print('Job error: ', error_msg)
+        QtWidgets.QMessageBox.critical(self, 'Job error', error_msg)
 
     @QtCore.pyqtSlot()
     def on_any_param_changed_initiated(self):
