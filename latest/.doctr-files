@@ -17,6 +17,7 @@ latest/_images/index-4_01_00.png
 latest/_images/index-5.png
 latest/_images/index-6.png
 latest/_images/inheritance-00ea64733e67a150b9824abf03173267d2fe9ec8.svg
+latest/_images/pycraf-screenshot-low.jpg
 latest/_modules/astropy/units/quantity.html
 latest/_modules/index.html
 latest/_modules/pycraf.html
@@ -180,6 +181,7 @@ latest/_sources/conversions/index.rst.txt
 latest/_sources/generated/examples/index.rst.txt
 latest/_sources/geometry/index.rst.txt
 latest/_sources/geospatial/index.rst.txt
+latest/_sources/gui/index.rst.txt
 latest/_sources/importing_pycraf.rst.txt
 latest/_sources/index.rst.txt
 latest/_sources/install.rst.txt
@@ -403,6 +405,7 @@ latest/generated/examples/index.html
 latest/genindex.html
 latest/geometry/index.html
 latest/geospatial/index.html
+latest/gui/index.html
 latest/importing_pycraf.html
 latest/index.html
 latest/install.html
