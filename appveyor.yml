@@ -19,7 +19,7 @@ environment:
       # For this package-template, we include examples of Cython modules,
       # so Cython is required for testing. If your package does not include
       # Cython code, you can set CONDA_DEPENDENCIES=''
-      CONDA_DEPENDENCIES: "pip wheel numpy scipy astropy pytest cython h5py matplotlib pyproj sgp4 twine"
+      CONDA_DEPENDENCIES: "pip wheel numpy scipy astropy pytest pytest-qt cython h5py matplotlib pyproj sgp4 twine"
 
       # Conda packages for affiliated packages are hosted in channel
       # "astropy" while builds for astropy LTS with recent numpy versions
