@@ -580,9 +580,9 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>-39</y>
+          <y>-22</y>
           <width>222</width>
-          <height>130</height>
+          <height>132</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_7">
@@ -609,11 +609,33 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pathprofComputePushButton">
-             <property name="text">
-              <string>Compute</string>
-             </property>
-            </widget>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+              <widget class="QPushButton" name="pathprofComputePushButton">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Compute</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="pathprofBusyIndicatorLabel">
+               <property name="styleSheet">
+                <string notr="true">QLabel {
+	color : red;
+}</string>
+               </property>
+               <property name="text">
+                <string>Busy</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
             <spacer name="verticalSpacer_3">
@@ -655,9 +677,9 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>-98</y>
+          <y>-81</y>
           <width>222</width>
-          <height>161</height>
+          <height>163</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_12">
@@ -755,11 +777,33 @@
             <widget class="QComboBox" name="mapPlotChooserComboBox"/>
            </item>
            <item>
-            <widget class="QPushButton" name="mapComputePushButton">
-             <property name="text">
-              <string>Compute</string>
-             </property>
-            </widget>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QPushButton" name="mapComputePushButton">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Compute</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="mapBusyIndicatorLabel">
+               <property name="styleSheet">
+                <string notr="true">QLabel {
+	color : red;
+}</string>
+               </property>
+               <property name="text">
+                <string>Busy</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
             <spacer name="verticalSpacer_4">
@@ -941,7 +985,9 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>actionQuit</sender>

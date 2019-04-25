@@ -232,6 +232,11 @@ class PycrafGui(QtWidgets.QMainWindow):
         # self.setup_actions()
         self.setup_workers()
 
+        # setup busy indicator gif
+        self.busy_movie = QtGui.QMovie(":gifs/busy_indicator.gif")
+        self.ui.pathprofBusyIndicatorLabel.clear()
+        self.ui.mapBusyIndicatorLabel.clear()
+
     @QtCore.pyqtSlot(object)
     def setup_signals(self):
 
@@ -290,7 +295,7 @@ class PycrafGui(QtWidgets.QMainWindow):
         self.my_geo_worker.moveToThread(self.my_geo_worker_thread)
         # self.my_geo_worker.job_started.connect(self.busy_start)
         # self.my_geo_worker.job_finished.connect(self.busy_stop)
-        # self.my_geo_worker.job_excepted.connect(self.busy_except)
+        # self.my_geo_worker.job_excepted.connect(self.busy_stop)
         self.geo_job_triggered.connect(self.my_geo_worker.on_job_triggered)
         self.clear_caches_triggered.connect(
             self.my_geo_worker.on_clear_caches_triggered
@@ -298,16 +303,16 @@ class PycrafGui(QtWidgets.QMainWindow):
         self.my_geo_worker.result_ready[object, object].connect(
             self.on_geometry_result_ready
             )
-        self.my_geo_worker.job_errored[str].connect(self.on_job_errored)
+        self.my_geo_worker.job_excepted[str].connect(self.on_job_excepted)
         self.my_geo_worker_thread.start()
 
         self.my_pp_worker_thread = QtCore.QThread()
         self.my_pp_worker = PathProfWorker(self)
 
         self.my_pp_worker.moveToThread(self.my_pp_worker_thread)
-        # self.my_pp_worker.job_started.connect(self.busy_start)
-        # self.my_pp_worker.job_finished.connect(self.busy_stop)
-        # self.my_pp_worker.job_excepted.connect(self.busy_except)
+        self.my_pp_worker.job_started.connect(self.busy_start_pp)
+        self.my_pp_worker.job_finished.connect(self.busy_stop_pp)
+        self.my_pp_worker.job_excepted.connect(self.busy_stop_pp)
         self.pp_job_triggered.connect(self.my_pp_worker.on_job_triggered)
         self.clear_caches_triggered.connect(
             self.my_pp_worker.on_clear_caches_triggered
@@ -315,16 +320,16 @@ class PycrafGui(QtWidgets.QMainWindow):
         self.my_pp_worker.result_ready[object, object].connect(
             self.on_pathprof_result_ready
             )
-        self.my_pp_worker.job_errored[str].connect(self.on_job_errored)
+        self.my_pp_worker.job_excepted[str].connect(self.on_job_excepted)
         self.my_pp_worker_thread.start()
 
         self.my_map_worker_thread = QtCore.QThread()
         self.my_map_worker = MapWorker(self)
 
         self.my_map_worker.moveToThread(self.my_map_worker_thread)
-        # self.my_map_worker.job_started.connect(self.busy_start)
-        # self.my_map_worker.job_finished.connect(self.busy_stop)
-        # self.my_map_worker.job_excepted.connect(self.busy_except)
+        self.my_map_worker.job_started.connect(self.busy_start_map)
+        self.my_map_worker.job_finished.connect(self.busy_stop_map)
+        self.my_map_worker.job_excepted.connect(self.busy_stop_map)
         self.map_job_triggered.connect(self.my_map_worker.on_job_triggered)
         self.clear_caches_triggered.connect(
             self.my_map_worker.on_clear_caches_triggered
@@ -332,7 +337,7 @@ class PycrafGui(QtWidgets.QMainWindow):
         self.my_map_worker.result_ready[object, object].connect(
             self.on_map_result_ready
             )
-        self.my_map_worker.job_errored[str].connect(self.on_job_errored)
+        self.my_map_worker.job_excepted[str].connect(self.on_job_excepted)
         self.my_map_worker_thread.start()
 
     @QtCore.pyqtSlot()
@@ -456,7 +461,7 @@ class PycrafGui(QtWidgets.QMainWindow):
         print(SrtmConf)
 
     @QtCore.pyqtSlot(str)
-    def on_job_errored(self, error_msg):
+    def on_job_excepted(self, error_msg):
         print('Job error: ', error_msg)
         QtWidgets.QMessageBox.critical(self, 'Job error', error_msg)
 
@@ -472,6 +477,31 @@ class PycrafGui(QtWidgets.QMainWindow):
 
         if self.ui.pathprofAutoUpdateCheckBox.isChecked():
             self.on_pathprof_compute_pressed()
+
+    @QtCore.pyqtSlot()
+    def busy_start_pp(self):
+        self.ui.pathprofComputePushButton.setEnabled(False)
+        self.ui.pathprofBusyIndicatorLabel.setMovie(self.busy_movie)
+        print('movie start')
+        self.busy_movie.start()
+
+    @QtCore.pyqtSlot()
+    def busy_stop_pp(self):
+        self.busy_movie.stop()
+        self.ui.pathprofBusyIndicatorLabel.clear()
+        self.ui.pathprofComputePushButton.setEnabled(True)
+
+    @QtCore.pyqtSlot()
+    def busy_start_map(self):
+        self.ui.mapComputePushButton.setEnabled(False)
+        self.ui.mapBusyIndicatorLabel.setMovie(self.busy_movie)
+        self.busy_movie.start()
+
+    @QtCore.pyqtSlot()
+    def busy_stop_map(self):
+        self.busy_movie.stop()
+        self.ui.mapBusyIndicatorLabel.clear()
+        self.ui.mapComputePushButton.setEnabled(True)
 
     @QtCore.pyqtSlot()
     def on_pathprof_compute_pressed(self):

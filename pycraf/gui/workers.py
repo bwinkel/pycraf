@@ -44,7 +44,6 @@ class BaseWorker(QtCore.QObject):
     job_started = QtCore.pyqtSignal(name='job_started')
     job_finished = QtCore.pyqtSignal(name='job_finished')
     job_excepted = QtCore.pyqtSignal(str, name='job_excepted')
-    job_errored = QtCore.pyqtSignal(str, name='job_errored')
 
     def __init__(self, parent):
 
@@ -73,10 +72,13 @@ class BaseWorker(QtCore.QObject):
     def event_loop(self):
 
         if self.job_waiting:
+            self.job_started.emit()
             try:
                 self.do_job()
             except Exception as e:
-                self.job_errored.emit(e.args[0])
+                self.job_excepted.emit(e.args[0])
+            else:
+                self.job_finished.emit()
 
         # setup one-time counter
         self.timer = QtCore.QTimer()
