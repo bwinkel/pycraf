@@ -731,10 +731,39 @@ class PycrafGui(QtWidgets.QMainWindow):
         plot_area.clear_history()
         plot_area.canvas.draw()
 
+    def close(self):
+        '''
+        This is a must to prevent the error:
+
+        Qt has caught an exception thrown from an event handler. Throwing
+        exceptions from an event handler is not supported in Qt. You must not
+        let any exception whatsoever propagate through Qt code. If that is
+        not possible, in Qt 5 you must at least reimplement
+        QCoreApplication::notify() and catch all exceptions there.
+
+        Furthermore, one has to:
+
+            app.aboutToQuit.connect(my_mw.close)
+
+        (see below)
+        '''
+        self.my_geo_worker_thread.quit()
+        self.my_pp_worker_thread.quit()
+        self.my_map_worker_thread.quit()
+        self.my_geo_worker_thread.wait()
+        self.my_pp_worker_thread.wait()
+        self.my_map_worker_thread.wait()
+
+        super().close()
+
 
 def start_gui():
 
     app = QtWidgets.QApplication(sys.argv)
-    myapp = PycrafGui()
-    myapp.show()
+    my_mw = PycrafGui()
+    my_mw.show()
+
+    # this is necessary for everything other than file-menu -> quit
+    app.aboutToQuit.connect(my_mw.close)
+
     sys.exit(app.exec_())
