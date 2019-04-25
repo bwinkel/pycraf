@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
@@ -16,17 +17,17 @@
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
-<script type="text/javascript" src="../../../_static/copybutton.js"></script>
-
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 
   </head><body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../../../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
+    
     <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
     <li><a title="General Index" href="../../../genindex.html">Index</a></li>
     <li><a title="Module Index" href="../../../py-modindex.html">Modules</a></li>
@@ -316,7 +317,25 @@
         <span class="k">if</span> <span class="s1">&#39;server&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="c1"># dito</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;server&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">server</span><span class="p">:</span>
-                <span class="n">get_tile_interpolator</span><span class="o">.</span><span class="n">cache_clear</span><span class="p">()</span></div></div>
+                <span class="n">get_tile_interpolator</span><span class="o">.</span><span class="n">cache_clear</span><span class="p">()</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s1">&#39;&lt;SrtmConf dir: </span><span class="si">{}</span><span class="s1">, download: </span><span class="si">{}</span><span class="s1">, server: </span><span class="si">{}</span><span class="s1">, &#39;</span>
+            <span class="s1">&#39;interp: </span><span class="si">{}</span><span class="s1">, spline_opts: </span><span class="si">{}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">srtm_dir</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">download</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">server</span><span class="p">,</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">spline_opts</span>
+                <span class="p">))</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s1">&#39;SrtmConf</span><span class="se">\n</span><span class="s1">  directory: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">  download: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">  server: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="s1">&#39;  interp: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">  spline_opts: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">srtm_dir</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">download</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">server</span><span class="p">,</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">spline_opts</span>
+                <span class="p">))</span></div>
 
 
 <span class="k">def</span> <span class="nf">_hgt_filename</span><span class="p">(</span><span class="n">ilon</span><span class="p">,</span> <span class="n">ilat</span><span class="p">):</span>
@@ -475,9 +494,10 @@
     <span class="n">_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">srtm_dir</span><span class="p">,</span> <span class="s1">&#39;**&#39;</span><span class="p">,</span> <span class="n">tile_name</span><span class="p">),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_files</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> exists </span><span class="si">{}</span><span class="s1"> times in </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">tile_name</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">_files</span><span class="p">),</span> <span class="n">srtm_dir</span>
-            <span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span>
+            <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> exists </span><span class="si">{}</span><span class="s1"> times in </span><span class="si">{}</span><span class="s1"> and its sub-directories&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">tile_name</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">_files</span><span class="p">),</span> <span class="n">srtm_dir</span>
+                <span class="p">))</span>
     <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">_files</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="k">else</span><span class="p">:</span>
@@ -673,8 +693,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 2.0.1. &nbsp;
-    Last built 24 Apr 2019. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.0.1. &nbsp;
+    Last built 25 Apr 2019. <br/>
   </p>
 </footer>
   </body>
