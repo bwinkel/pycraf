@@ -1,5 +1,15 @@
 1.0.0 (unreleased)
 =======================
+New Features
+------------
+
+pycraf-gui
+^^^^^^^^^^
+- A simple graphical user interface was added, which can be used to quickly
+  analyze the path propogation losses along a transmitter-receiver sight-line
+  and plot the path geometry. It is also possible to compute attenuation
+  maps. At the moment, it doesn't come with an amazing amount of features,
+  but it is foreseen to add more in the future. [#15]
 
 pycraf.amt
 ^^^^^^^^^^^^^^

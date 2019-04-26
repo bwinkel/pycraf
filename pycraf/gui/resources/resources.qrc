@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="/forms">
+    <file>main_form.ui</file>
+  </qresource>
+  <qresource prefix="gifs">
+    <file>busy_indicator.gif</file>
+  </qresource>
+</RCC>

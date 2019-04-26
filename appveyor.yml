@@ -19,14 +19,14 @@ environment:
       # For this package-template, we include examples of Cython modules,
       # so Cython is required for testing. If your package does not include
       # Cython code, you can set CONDA_DEPENDENCIES=''
-      CONDA_DEPENDENCIES: "pip wheel numpy scipy astropy pytest cython h5py matplotlib pyproj sgp4 twine"
+      CONDA_DEPENDENCIES: "pip wheel numpy scipy astropy pytest pyqt=5.6 pytest-qt cython h5py matplotlib pyproj sgp4 twine"
 
       # Conda packages for affiliated packages are hosted in channel
       # "astropy" while builds for astropy LTS with recent numpy versions
       # are in astropy-ci-extras. If your package uses either of these,
       # add the channels to CONDA_CHANNELS along with any other channels
       # you want to use.
-      CONDA_CHANNELS: "astropy-ci-extras astropy conda-forge"
+      CONDA_CHANNELS: "conda-forge"
 
   matrix:
 
@@ -75,6 +75,7 @@ install:
     - "powershell ci-helpers/appveyor/install-miniconda.ps1"
     - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
     - "activate test"
+    # - "%PYTHON%\\Scripts\\activate.bat test"
 
 # Not a .NET project, we build the package in the install step instead
 build: false

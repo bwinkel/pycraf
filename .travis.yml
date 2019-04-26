@@ -48,7 +48,7 @@ env:
         # so Cython is required for testing. If your package does not include
         # Cython code, you can set CONDA_DEPENDENCIES=''
         # - CONDA_DEPENDENCIES='pip wheel numpy scipy pytest astropy cython h5py matplotlib pyproj sgp4 sphinx-astropy'
-        - CONDA_DEPENDENCIES='pip wheel scipy pytest cython h5py matplotlib pyproj<2 sgp4 sphinx-astropy'
+        - CONDA_DEPENDENCIES='pip wheel scipy pyqt>=5 pytest pytest-qt cython h5py matplotlib pyproj<2 sgp4 sphinx-astropy'
 
         # List other runtime dependencies for the package that are available as
         # pip packages here.
@@ -64,7 +64,7 @@ env:
 
         # If there are matplotlib or other GUI tests, uncomment the following
         # line to use the X virtual framebuffer.
-        # - SETUP_XVFB=True
+        - SETUP_XVFB=True
 
         # github pages secure key
         - secure: "c9cNFhnlRkx/J5kLiP8uEwTvPDq9hPuSQXG3qiR5+JfB0CeERwr59Vuyux3g6IXmWMwqHPhIMkohV7PtnmaxRWmO0RiGhEDIZOZ5NVI5XGCIrJYuNPJ2tJnGJ3GMDqCw+Mw49MS4xx04fS0ye0StGYbP3gmMIHwIk3LCV5DPjrmlS9t/3mOry1MKlQIqXb6JocJBHtlHtK094i91arW1UG+KEVM1Xv/sjOupHKRbQ4/2OZYGx9Kzl9aeVDCxbNUyXxLd12vJKjIn5toDbzLlFuqb2VgLg2LDMdFGcL2VnUS6MUWb4nPPn20cLKv9B/5auUWC08COMg+QJTzsGUuU8fMGlgaDgB0/geXNkwnY1vF8S19sQCUW4oAU1RjOuOYMhUlxBodz/ql+RGJ6f/mBoD+FJ9aSJ9fOb1hXosFmM9KSRNaa6PiPouWQ+Xx1foaeD5DelCO9d5ZiKR63PBJby7dq1sh0DyCbi5vcqZFwwwrut27Pb6yJmyYacvbyLpbXh3BuA5V20hoOlGdzxg+aObJLx4eArwj8BoMlYvQ1up3dk558KqSCa/KZgjgg32cdGoikRn60Yywd1fZ9dtJ+ctL20U3dA3Csg4vIW+a3r0S/evrpPSTzjXxVxaqi669Svw1Hj0OtiR4rR7y+Ph6U11BT+xSsK7N0J3DrUBKiq5I="
@@ -209,15 +209,15 @@ matrix:
           env: MAIN_CMD='pycodestyle pycraf --count' SETUP_CMD=''
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "clang" ]]; then brew update; brew install libomp; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "llvm" ]]; then brew update; brew install llvm; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "gcc" ]]; then brew update; brew install gcc; brew link --overwrite gcc; fi
-  - 'if [[ $TRAVIS_OS_NAME == "osx" && $COMPILER == "gcc" ]]; then
-       gcc --version;
-       gcc-6 --version && export CC="gcc-6" && export LD="gcc-6" && export LDFLAGS="-Wl,-rpath,/usr/local/opt/gcc/lib/gcc/6/" || true;
-       gcc-7 --version && export CC="gcc-7" && export LD="gcc-7" && export LDFLAGS="-Wl,-rpath,/usr/local/opt/gcc/lib/gcc/7/" || true;
-       gcc-8 --version && export CC="gcc-8" && export LD="gcc-8" && export LDFLAGS="-Wl,-rpath,/usr/local/opt/gcc/lib/gcc/8/" || true;
-     fi'
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "clang" ]]; then brew update; brew install libomp; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "llvm" ]]; then brew update; brew install llvm; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "gcc" ]]; then brew update; brew install gcc; brew link --overwrite gcc; fi
+    - 'if [[ $TRAVIS_OS_NAME == "osx" && $COMPILER == "gcc" ]]; then
+        gcc --version;
+        gcc-6 --version && export CC="gcc-6" && export LD="gcc-6" && export LDFLAGS="-Wl,-rpath,/usr/local/opt/gcc/lib/gcc/6/" || true;
+        gcc-7 --version && export CC="gcc-7" && export LD="gcc-7" && export LDFLAGS="-Wl,-rpath,/usr/local/opt/gcc/lib/gcc/7/" || true;
+        gcc-8 --version && export CC="gcc-8" && export LD="gcc-8" && export LDFLAGS="-Wl,-rpath,/usr/local/opt/gcc/lib/gcc/8/" || true;
+      fi'
 
 install:
 

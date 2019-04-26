@@ -125,7 +125,7 @@ def imt2020_single_element_pattern(
         Vertical 3dB beam width of single element [deg]
     k : float, optional
         Multiplication factor, can be used to get better match to
-        measured antenna patters (default: 12). See `WP5D-C-0936
+        measured antenna patters (default: 12). See `WP5D-C-0936`
 
     Returns
     -------
@@ -266,7 +266,7 @@ def imt2020_composite_pattern(
         Correlation level (see 3GPP TR 37.840, 5.4.4.1.4, default: 1) [dimless]
     k : float, optional
         Multiplication factor, can be used to get better match to
-        measured antenna patters (default: 12). See `WP5D-C-0936
+        measured antenna patters (default: 12). See `WP5D-C-0936`
 
     Returns
     -------
@@ -514,7 +514,7 @@ def imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz(
     .. math::
 
         \\vartheta_\\mathrm{3dB}=\\frac{31000\\times10^{-0.1G_0}}{\\varphi_\\mathrm{3dB}}
-    
+
     '''
 
     return _imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz(

@@ -252,6 +252,24 @@ class SrtmConf(utils.MultiState):
             if kwargs['server'] != cls.server:
                 get_tile_interpolator.cache_clear()
 
+    @classmethod
+    def __repr__(cls):
+        return (
+            '<SrtmConf dir: {}, download: {}, server: {}, '
+            'interp: {}, spline_opts: {}>'.format(
+                cls.srtm_dir, cls.download, cls.server,
+                cls.interp, cls.spline_opts
+                ))
+
+    @classmethod
+    def __str__(cls):
+        return (
+            'SrtmConf\n  directory: {}\n  download: {}\n  server: {}\n'
+            '  interp: {}\n  spline_opts: {}'.format(
+                cls.srtm_dir, cls.download, cls.server,
+                cls.interp, cls.spline_opts
+                ))
+
 
 def _hgt_filename(ilon, ilat):
     # construct proper hgt-file name
@@ -409,9 +427,10 @@ def _get_hgt_diskpath(tile_name):
     _files = glob.glob(os.path.join(srtm_dir, '**', tile_name), recursive=True)
 
     if len(_files) > 1:
-        raise IOError('{} exists {} times in {}'.format(
-            tile_name, len(_files), srtm_dir
-            ))
+        raise IOError(
+            '{} exists {} times in {} and its sub-directories'.format(
+                tile_name, len(_files), srtm_dir
+                ))
     elif len(_files) == 0:
         return None
     else:
