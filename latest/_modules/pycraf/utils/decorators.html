@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>pycraf.utils.decorators &#8212; pycraf v0.25.9.dev99</title>
+    <title>pycraf.utils.decorators &#8212; pycraf v0.25.9.dev100</title>
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -48,7 +48,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v0.25.9.dev99</a>
+	<a href="../../../index.html">pycraf v0.25.9.dev100</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -71,8 +71,8 @@
 <span class="c1"># Originally Licensed under a 3-clause BSD style license</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">from</span> <span class="nn">astropy.utils.decorators</span> <span class="k">import</span> <span class="n">wraps</span>
-<span class="kn">from</span> <span class="nn">astropy.utils.compat</span> <span class="k">import</span> <span class="n">funcsigs</span>
 <span class="kn">from</span> <span class="nn">astropy.units.core</span> <span class="k">import</span> <span class="n">UnitsError</span><span class="p">,</span> <span class="n">add_enabled_equivalencies</span>
 
 
@@ -284,7 +284,7 @@
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wrapped_function</span><span class="p">):</span>
 
         <span class="c1"># Extract the function signature for the function we are wrapping.</span>
-        <span class="n">wrapped_signature</span> <span class="o">=</span> <span class="n">funcsigs</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">wrapped_function</span><span class="p">)</span>
+        <span class="n">wrapped_signature</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">wrapped_function</span><span class="p">)</span>
 
         <span class="c1"># Define a new function to return in place of the wrapped one</span>
         <span class="nd">@wraps</span><span class="p">(</span><span class="n">wrapped_function</span><span class="p">)</span>
@@ -296,8 +296,8 @@
             <span class="c1"># Iterate through the parameters of the original signature</span>
             <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">wrapped_signature</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                 <span class="c1"># We do not support variable arguments (*args, **kwargs)</span>
-                <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">(</span><span class="n">funcsigs</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_KEYWORD</span><span class="p">,</span>
-                                  <span class="n">funcsigs</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_POSITIONAL</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_KEYWORD</span><span class="p">,</span>
+                                  <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_POSITIONAL</span><span class="p">):</span>
                     <span class="k">continue</span>
                 <span class="c1"># Catch the (never triggered) case where bind relied on</span>
                 <span class="c1">#  a default value.</span>
@@ -320,7 +320,7 @@
 
                 <span class="c1"># If the target unit is empty, then no unit was specified</span>
                 <span class="c1"># so we move past it</span>
-                <span class="k">if</span> <span class="n">target_unit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">funcsigs</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">target_unit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
 
                     <span class="c1"># skip over None values, if desired</span>
                     <span class="k">if</span> <span class="n">arg</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">allow_none</span><span class="p">:</span>
