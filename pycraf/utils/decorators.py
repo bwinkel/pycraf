@@ -4,8 +4,8 @@
 # Originally Licensed under a 3-clause BSD style license
 
 import numpy as np
+import inspect
 from astropy.utils.decorators import wraps
-from astropy.utils.compat import funcsigs
 from astropy.units.core import UnitsError, add_enabled_equivalencies
 
 
@@ -217,7 +217,7 @@ class RangedQuantityInput(object):
     def __call__(self, wrapped_function):
 
         # Extract the function signature for the function we are wrapping.
-        wrapped_signature = funcsigs.signature(wrapped_function)
+        wrapped_signature = inspect.signature(wrapped_function)
 
         # Define a new function to return in place of the wrapped one
         @wraps(wrapped_function)
@@ -229,8 +229,8 @@ class RangedQuantityInput(object):
             # Iterate through the parameters of the original signature
             for param in wrapped_signature.parameters.values():
                 # We do not support variable arguments (*args, **kwargs)
-                if param.kind in (funcsigs.Parameter.VAR_KEYWORD,
-                                  funcsigs.Parameter.VAR_POSITIONAL):
+                if param.kind in (inspect.Parameter.VAR_KEYWORD,
+                                  inspect.Parameter.VAR_POSITIONAL):
                     continue
                 # Catch the (never triggered) case where bind relied on
                 #  a default value.
@@ -253,7 +253,7 @@ class RangedQuantityInput(object):
 
                 # If the target unit is empty, then no unit was specified
                 # so we move past it
-                if target_unit is not funcsigs.Parameter.empty:
+                if target_unit is not inspect.Parameter.empty:
 
                     # skip over None values, if desired
                     if arg is None and self.allow_none:
