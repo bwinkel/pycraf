@@ -21,6 +21,8 @@ from libc.math cimport (
 import numpy as np
 from astropy import units as apu
 from . import heightprofile
+from . import srtm
+from . import cygeodesics
 from . import helper
 from .. import conversions as cnv
 from .. import utils
@@ -36,6 +38,8 @@ __all__ = [
 
 
 cdef double NAN = np.nan
+cdef double DEG2RAD = M_PI / 180
+cdef double RAD2DEG = 180 / M_PI
 
 cpdef enum CLUTTER:
     UNKNOWN = -1
@@ -2142,130 +2146,207 @@ def height_map_data_cython(
 
         # need 3x better resolution than map_resolution
         double hprof_step = map_resolution * 3600. / 1. * 30. / 3.
+        double cosdelta
+        double max_distance, min_pa_res
 
-        int xi, yi, i
-        int eidx, didx
+        int xi, yi, i, xidx, yidx, mid_idx
+        int bidx, didx
+        double refx, refy
+        double lon_t_rad, lat_t_rad, lon_r, lat_r
+        double pdist
+
+        # need views on all relevant numpy arrays for faster access
+        np.float64_t[::1] _xcoords, _ycoords
+        np.float64_t[::1] _distances, _start_bearings
+        np.float64_t[:, ::1] _lons, _lats, _back_bearings
+        np.float64_t[:, ::1] _heights
+        np.int32_t[:, ::1] _path_idx_map, _dist_end_idx_map
+        np.float64_t[:, ::1] _pix_dist_map
+        np.float64_t[:, ::1] _lon_mid_map, _lat_mid_map
+        np.float64_t[:, ::1] _dist_map
+        np.float64_t[:, ::1] _bearing_map, _backbearing_map
 
     # print('using hprof_step = {:.1f} m'.format(hprof_step))
 
-    cosdelta = 1. / np.cos(np.radians(lat_t)) if do_cos_delta else 1.
+    cosdelta = 1. / cos(DEG2RAD * lat_t) if do_cos_delta else 1.
 
     # construction map arrays
-    xcoords = np.arange(
+    _xcoords = xcoords = np.arange(
         lon_t - cosdelta * map_size_lon / 2,
         lon_t + cosdelta * map_size_lon / 2 + 1.e-6,
         cosdelta * map_resolution,
         )
-    ycoords = np.arange(
+    _ycoords = ycoords = np.arange(
         lat_t - map_size_lat / 2,
         lat_t + map_size_lat / 2 + 1.e-6,
         map_resolution,
         )
+    lon_t_rad, lat_t_rad = DEG2RAD * lon_t, DEG2RAD * lat_t
+    xcoords_rad = np.radians(xcoords)
+    ycoords_rad = np.radians(ycoords)
     # print(
     #     xcoords[0], xcoords[len(xcoords) - 1],
     #     ycoords[0], ycoords[len(ycoords) - 1]
     #     )
 
-    # use a 3x higher resolution version for edge coords for better accuracy
-    xcoords_hi = np.arange(
-        lon_t - cosdelta * map_size_lon / 2,
-        lon_t + cosdelta * map_size_lon / 2 + 1.e-6,
-        cosdelta * map_resolution / 3,
-        )
-    ycoords_hi = np.arange(
-        lat_t - map_size_lat / 2,
-        lat_t + map_size_lat / 2 + 1.e-6,
-        map_resolution / 3,
-        )
+    # find max distance (will be one of the edges)
+    max_distance = max([
+        cygeodesics.inverse_cython(
+            lon_t_rad, lat_t_rad, xcoords_rad[i], ycoords_rad[j],
+            )[0]
+        for i, j in [
+            (0, 0),
+            (0, ycoords_rad.size - 1),
+            (xcoords_rad.size - 1, 0),
+            (xcoords_rad.size - 1, ycoords_rad.size - 1)
+            ]
+        ])  # m
+    # print('max distance (to corner coords)', max_distance / 1000, 'km')
+
+    # find necessary position angle resolution (again, using edges)
+    min_pa_res = min([
+        fabs(
+            cygeodesics.inverse_cython(
+                lon_t_rad, lat_t_rad, xcoords_rad[i], ycoords_rad[k],
+                )[1] -
+            cygeodesics.inverse_cython(
+                lon_t_rad, lat_t_rad, xcoords_rad[j], ycoords_rad[k],
+                )[1]
+            )
+        for i, j, k in [
+            (0, 1, 0),
+            (0, 1, ycoords_rad.size - 1),
+            (xcoords_rad.size - 1, xcoords_rad.size - 2, 0),
+            (xcoords_rad.size - 1, xcoords_rad.size - 2, ycoords_rad.size - 1)
+            ]
+        ]) / 2  # rad
+    # print('min pos angle resolution (at corner coords)', min_pa_res)
+
 
     # path_idx_map stores the index of the edge-path that is closest
     # to any given map pixel
-    path_idx_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.int32)
+    _path_idx_map = path_idx_map = np.zeros(
+        (ycoords.size, xcoords.size), dtype=np.int32
+        )
 
     # to define and find closest paths, we store the true angular distance
     # in pix_dist_map; Note, since distances are small, it is ok to do
     # this on the sphere (and not on geoid)
-    pix_dist_map = np.ones((len(ycoords), len(xcoords)), dtype=np.float64)
-    pix_dist_map *= 1.e30
+    _pix_dist_map = pix_dist_map = np.full(
+        (ycoords.size, xcoords.size), 1.e30, dtype=np.float64
+        )
 
     # dist_end_idx_map stores the (distance) index in the height profile
     # of the closest edge path, such that one can use a slice (0, end_idx)
     # to get a height profile approximately valid for any given pixel
-    dist_end_idx_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.int32)
+    _dist_end_idx_map = dist_end_idx_map = np.zeros(
+        (ycoords.size, xcoords.size), dtype=np.int32
+        )
 
     # store lon_mid, lat_mid,
-    lon_mid_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
-    lat_mid_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
-    dist_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
+    _lon_mid_map = lon_mid_map = np.zeros(
+        (ycoords.size, xcoords.size), dtype=np.float64
+        )
+    _lat_mid_map = lat_mid_map = np.zeros(
+        (ycoords.size, xcoords.size), dtype=np.float64
+        )
+    _dist_map = dist_map = np.zeros(
+        (ycoords.size, xcoords.size), dtype=np.float64
+        )
 
     # store bearings
-    bearing_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
-    backbearing_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
+    _bearing_map = bearing_map = np.zeros(
+        (ycoords.size, xcoords.size), dtype=np.float64
+        )
+    _backbearing_map = backbearing_map = np.zeros(
+        (ycoords.size, xcoords.size), dtype=np.float64
+        )
 
-    # obtain all edge's height profiles
-    edge_coords = list(zip(
-        np.hstack([
-            xcoords_hi,
-            xcoords_hi[len(xcoords_hi) - 1] + 0. * xcoords_hi,
-            xcoords_hi[::-1],
-            xcoords_hi[0] + 0. * xcoords_hi,
-            ]),
-        np.hstack([
-            ycoords_hi[0] + 0. * ycoords_hi,
-            ycoords_hi,
-            ycoords_hi[len(ycoords_hi) - 1] + 0. * ycoords_hi,
-            ycoords_hi[::-1],
-            ]),
-        ))
+    # obtain all path's height profiles
+    # generate start bearings:
+    _start_bearings = start_bearings = np.arange(0, 2 * np.pi, min_pa_res)
 
-    # print('len(edge_coords)', len(edge_coords))
+    # calculate path positions
+    _distances = distances = np.arange(
+        0, max_distance + hprof_step, hprof_step
+        )
 
-    refx, refy = xcoords[0], ycoords[0]
-    cdef dict dist_dict = {}, height_dict = {}
+    lons_rad, lats_rad, back_bearings_rad = cygeodesics.direct_cython(
+        lon_t_rad, lat_t_rad,
+        start_bearings[:, np.newaxis],
+        distances[np.newaxis]
+        )
+    _lons, _lats = lons, lats = np.degrees(lons_rad), np.degrees(lats_rad)
+    _back_bearings = back_bearings = np.degrees(back_bearings_rad)
 
-    for eidx, (x, y) in enumerate(edge_coords):
+    # print(xcoords, ycoords)
+    # print(lons.min(), lons.max(), lats.min(), lats.max())
 
-        res = heightprofile._srtm_height_profile(
-            lon_t, lat_t,
-            x, y,
-            hprof_step
+    if hprof_step > srtm.SrtmConf.hgt_res / 1.5:
+        hdistances = np.arange(
+            0, max_distance + hprof_step / 3, hprof_step / 3
             )
-        (
-            lons, lats, _, dists, heights,
-            bearing, back_bearing, back_bearings
-            ) = res
-        dist_dict[eidx] = dists
-        height_dict[eidx] = heights
 
-        for didx, (lon_r, lat_r) in enumerate(zip(lons, lats)):
+        hlons_rad, hlats_rad, _ = cygeodesics.direct_cython(
+            lon_t_rad, lat_t_rad,
+            start_bearings[:, np.newaxis],
+            hdistances[np.newaxis]
+            )
 
-            # need to find closest pixel index in map
-            xidx = int((lon_r - refx) / cosdelta / map_resolution + 0.5)
-            yidx = int((lat_r - refy) / map_resolution + 0.5)
+        hheights = srtm._srtm_height_data(
+            np.degrees(hlons_rad), np.degrees(hlats_rad)
+            ).astype(np.float64)
+        heights = np.empty_like(lons_rad)
+        # now smooth/interpolate this to the desired step width
+        cygeodesics.regrid2d_with_x(
+            hdistances, hheights, distances, heights,
+            hprof_step / 2.35, regular=True
+            )
 
-            if xidx < 0:
-                xidx = 0
-            if xidx >= len(xcoords):
-                xidx = len(xcoords) - 1
-            if yidx < 0:
-                yidx = 0
-            if yidx >= len(ycoords):
-                yidx = len(ycoords) - 1
+    else:
 
-            pdist = true_angular_distance(
-                xcoords[xidx], ycoords[yidx], lon_r, lat_r
-                )
+        heights = srtm._srtm_height_data(lons, lats).astype(np.float64)
 
-            if pdist < pix_dist_map[yidx, xidx]:
-                pix_dist_map[yidx, xidx] = pdist
-                path_idx_map[yidx, xidx] = eidx
-                dist_end_idx_map[yidx, xidx] = didx
-                mid_idx = didx // 2
-                lon_mid_map[yidx, xidx] = lons[mid_idx]
-                lat_mid_map[yidx, xidx] = lats[mid_idx]
-                dist_map[yidx, xidx] = dists[didx]
-                bearing_map[yidx, xidx] = bearing
-                backbearing_map[yidx, xidx] = back_bearings[didx]
+    _heights = heights
+    distances *= 1e-3  # convert to km
+    _distances = distances
+
+    refx, refy = _xcoords[0], _ycoords[0]
+
+    with nogil:
+        for bidx in range(_start_bearings.shape[0]):
+
+            for didx in range(_distances.shape[0]):
+
+                lon_r, lat_r = _lons[bidx, didx], _lats[bidx, didx]
+
+                # need to find closest pixel index in map
+                xidx = int((lon_r - refx) / cosdelta / map_resolution + 0.5)
+                yidx = int((lat_r - refy) / map_resolution + 0.5)
+
+                if xidx < 0:
+                    xidx = 0
+                if xidx >= _xcoords.shape[0]:
+                    xidx = _xcoords.shape[0] - 1
+                if yidx < 0:
+                    yidx = 0
+                if yidx >= _ycoords.shape[0]:
+                    yidx = _ycoords.shape[0] - 1
+
+                pdist = true_angular_distance(
+                    _xcoords[xidx], _ycoords[yidx], lon_r, lat_r
+                    )
+
+                if pdist < _pix_dist_map[yidx, xidx]:
+                    _pix_dist_map[yidx, xidx] = pdist
+                    _path_idx_map[yidx, xidx] = bidx
+                    _dist_end_idx_map[yidx, xidx] = didx
+                    mid_idx = didx // 2
+                    _lon_mid_map[yidx, xidx] = _lons[bidx, mid_idx]
+                    _lat_mid_map[yidx, xidx] = _lats[bidx, mid_idx]
+                    _dist_map[yidx, xidx] = _distances[didx]
+                    _bearing_map[yidx, xidx] = _start_bearings[bidx]
+                    _backbearing_map[yidx, xidx] = _back_bearings[bidx, didx]
 
     # store delta_N, beta0, N0
     delta_N_map, beta0_map, N0_map = helper._radiomet_data_for_pathcenter(
@@ -2302,30 +2383,9 @@ def height_map_data_cython(
     else:
         omega_map = np.full_like(dist_map, omega)
 
-    # dict access not possible with nogil
-    # will store height profile dict in a 2D array, even though this
-    # needs somewhat more memory
-
-    # first, find max length that is needed:
-    proflengths = np.array([
-        len(dist_dict[k])
-        for k in sorted(dist_dict.keys())
-        ])
-    maxlen_idx = np.argmax(proflengths)
-    maxlen = proflengths[maxlen_idx]
-
-    # we can re-use the distances vector, because of equal spacing
-    dist_prof = dist_dict[maxlen_idx]
-    height_profs = np.zeros(
-        (len(height_dict), maxlen), dtype=np.float64
-        )
-    zheight_prof = np.zeros_like(dist_dict[maxlen_idx])
-
-    cdef double[:, ::1] height_profs_v = height_profs
-
-    for eidx, prof in height_dict.items():
-        for i in range(len(prof)):
-            height_profs_v[eidx, i] = prof[i]
+    dist_prof = distances
+    height_profs = heights
+    zheight_prof = np.zeros_like(distances)
 
     hprof_data = {}
     hprof_data['lon_t'] = lon_t
@@ -2816,6 +2876,53 @@ def atten_path_fast_cython(
         free(pp)
 
     return float_res, int_res
+
+
+# def atten_broadcast_cython(
+#         np.ndarray[double] freq,
+#         np.ndarray[double] temperature,
+#         np.ndarray[double] pressure,
+#         double lon_t, double lat_t,
+#         double lon_r, double lat_r,
+#         np.ndarray[double] h_tg, double h_rg,
+#         double hprof_step,
+#         np.ndarray[double] time_percent,
+#         np.ndarray[double] omega=None,
+#         np.ndarray[double] d_tm=None, np.ndarray[double] d_lm=None,
+#         np.ndarray[double] d_ct=None, np.ndarray[double] d_cr=None,
+#         np.ndarray[int] zone_t=None, np.ndarray[int] zone_r=None,
+#         np.ndarray[int] polarization=None,
+#         np.ndarray[int] version=None,
+#         ):
+
+#         # what to do about these:
+#         # # override if you don't want builtin method:
+#         # delta_N, N0,
+#         # # override if you don't want builtin method:
+#         # hprof_dists, hprof_heights,
+#         # hprof_bearing, hprof_backbearing,
+
+#     if d_tm is None:
+#         d_tm = np.array([distance])
+
+#     if d_lm is None:
+#         d_lm = np.array([distance])
+
+#     if d_ct is None:
+#         d_ct = np.array([50000.])
+
+#     if d_cr is None:
+#         d_cr = np.array([50000.])
+
+#     if omega is None:
+#         omega = np.array([0.])
+
+#     if zone_t is None:
+#         zone_t = np.array([-1])
+
+#     if zone_r is None:
+#         zone_r = np.array([-1])
+
 
 # ############################################################################
 # Atmospheric attenuation (Annex 2)

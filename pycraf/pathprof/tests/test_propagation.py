@@ -411,8 +411,8 @@ class TestPropagation:
             # Warning: if uncommenting, the test cases will be overwritten
             # do this only, if you need to update the h5py files
             # (make sure, that results are correct!)
-            # tfile = str(tdir.join(fname.replace('fastmap/', '')))
-            # print('writing temporary files to', tdir)
+            # tfile = str(zipdir.join(fname))
+            # print('writing temporary files to', zipdir)
             # with h5py.File(tfile, 'w') as h5f:
             #     for k, v in results.items():
             #         h5f[k] = v
@@ -528,7 +528,10 @@ class TestPropagation:
             # Warning: if uncommenting, the test cases will be overwritten
             # do this only, if you need to update the npz files
             # (make sure, that results are correct!)
-            # tfile = str(tdir.join(fname.replace('fastmap/', '')))
+            # Also, if you want to create all at once, comment-out the
+            # "with ZipFile" below; results will be in the tmp-dir
+            # and can be added manually to the zipfile
+            # tfile = str(zipdir.join(fname))
             # np.savez(tfile, **results)
 
             with ZipFile(self.fastmap_zip_name) as myzip:
