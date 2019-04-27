@@ -239,7 +239,11 @@ install:
 
     # Note, with llvm-openmp>=8.0 there is a problem with travis builds:
     # 'omp.h' not found;
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "conda-clang" ]]; then conda install -c conda-forge clang_osx-64 "llvm-openmp<8.0" "openmp<8.0"; fi
+    # - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "conda-clang" ]]; then conda install -c conda-forge clang_osx-64 "llvm-openmp<8.0" "openmp<8.0"; fi
+    # it turns out that the new build "llvm-openmp=4.0.1=hcfea43d_1"
+    # leads to the same problems as above, even with openmp pinned to 7.*
+    # need to specify the exact version for now
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "conda-clang" ]]; then conda install -c conda-forge clang_osx-64 "llvm-openmp=4.0.1=hcfea43d_1" "openmp=7.0.0=h2d50403_0"; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "conda-gcc" ]]; then conda install -c conda-forge gcc; gcc --version || true; fi
 
     # As described above, using ci-helpers, you should be able to set up an
