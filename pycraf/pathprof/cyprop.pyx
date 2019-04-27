@@ -2878,51 +2878,353 @@ def atten_path_fast_cython(
     return float_res, int_res
 
 
-# def atten_broadcast_cython(
-#         np.ndarray[double] freq,
-#         np.ndarray[double] temperature,
-#         np.ndarray[double] pressure,
-#         double lon_t, double lat_t,
-#         double lon_r, double lat_r,
-#         np.ndarray[double] h_tg, double h_rg,
-#         double hprof_step,
-#         np.ndarray[double] time_percent,
-#         np.ndarray[double] omega=None,
-#         np.ndarray[double] d_tm=None, np.ndarray[double] d_lm=None,
-#         np.ndarray[double] d_ct=None, np.ndarray[double] d_cr=None,
-#         np.ndarray[int] zone_t=None, np.ndarray[int] zone_r=None,
-#         np.ndarray[int] polarization=None,
-#         np.ndarray[int] version=None,
-#         ):
+def losses_complete_cython(
+        frequency,
+        temperature,
+        pressure,
+        double lon_t, double lat_t,
+        double lon_r, double lat_r,
+        h_tg, h_rg,
+        double hprof_step,
+        time_percent,
+        G_t=None, G_r=None,
+        omega=None,
+        d_tm=None, d_lm=None,
+        d_ct=None, d_cr=None,
+        zone_t=CLUTTER.UNKNOWN, zone_r=CLUTTER.UNKNOWN,
+        polarization=0,
+        version=16,
+        # override if you don't want builtin method:
+        delta_N=None, N0=None,
+        # override if you don't want builtin method:
+        hprof_dists=None,
+        hprof_heights=None,
+        hprof_bearing=None, hprof_backbearing=None,
+        ):
 
-#         # what to do about these:
-#         # # override if you don't want builtin method:
-#         # delta_N, N0,
-#         # # override if you don't want builtin method:
-#         # hprof_dists, hprof_heights,
-#         # hprof_bearing, hprof_backbearing,
+    # what to do about these:
+    # # override if you don't want builtin method:
+    # delta_N, N0,
+    # # override if you don't want builtin method:
+    # hprof_dists, hprof_heights,
+    # hprof_bearing, hprof_backbearing,
 
-#     if d_tm is None:
-#         d_tm = np.array([distance])
+    cdef:
+        # work arrays (for inner loop of nditer)
+        np.ndarray[double] _freq, _temp, _press
+        np.ndarray[double] _h_tg, _h_rg, _G_t, _G_r
+        np.ndarray[double] _time_percent, _omega
+        np.ndarray[double] _d_tm, _d_lm, _d_ct, _d_cr
+        np.ndarray[int] _zone_t, _zone_r, _polarization, _version
 
-#     if d_lm is None:
-#         d_lm = np.array([distance])
+        # output arrays
+        np.ndarray[double] _L_bfsg, _L_bd, _L_bs, _L_ba, _L_b, _L_b_corr
+        np.ndarray[double] _eps_pt, _eps_pr, _d_lt, _d_lr
+        np.ndarray[int] _path_type
 
-#     if d_ct is None:
-#         d_ct = np.array([50000.])
+        # other
 
-#     if d_cr is None:
-#         d_cr = np.array([50000.])
+        np.ndarray[double] lons, lats, distances, heights, zheights
+        double[::1] distances_v, heights_v, zheights_v
+        double distance, bearing, back_bearing
+        double lon_mid, lat_mid
+        double _delta_N, _N0
 
-#     if omega is None:
-#         omega = np.array([0.])
+        int hsize, mid_idx
 
-#     if zone_t is None:
-#         zone_t = np.array([-1])
+        ppstruct *pp
 
-#     if zone_r is None:
-#         zone_r = np.array([-1])
+        double[:, ::1] _clut_data = CLUTTER_DATA
 
+        # double L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
+        double L_dummy
+
+        double *last_freq
+        double *last_h_tg
+        double *last_h_rg
+        int *last_version
+        int *last_zone_t
+        int *last_zone_r
+
+        int i, size
+
+
+    assert np.all(time_percent <= 50.)
+    assert np.all((version == 14) | (version == 16))
+
+    assert np.all((zone_t >= -1) & (zone_t <= 11))
+    assert np.all((zone_r >= -1) & (zone_r <= 11))
+
+    assert (delta_N is None) == (N0 is None), (
+        'delta_N and N0 must both be None or both be provided'
+        )
+
+    assert (
+        (hprof_dists is None) == (hprof_heights is None) ==
+        (hprof_bearing is None) == (hprof_backbearing is None)
+        ), (
+            'hprof_dists, hprof_heights, bearing, and back_bearing '
+            'must all be None or all be provided'
+            )
+
+    if hprof_dists is None:
+        (
+            lons, lats, distance, distances, heights,
+            bearing, back_bearing, _,
+            ) = heightprofile._srtm_height_profile(
+                lon_t, lat_t,
+                lon_r, lat_r,
+                hprof_step
+                )
+    else:
+        distances = hprof_dists.astype(np.float64, order='C', copy=False)
+        heights = hprof_heights.astype(np.float64, order='C', copy=False)
+        hsize = distances.size
+        distance = distances[hsize - 1]
+        bearing = hprof_bearing
+        back_bearing = hprof_backbearing
+
+    if len(distances) < 5:
+        raise ValueError('Height profile must have at least 5 steps.')
+
+    zheights = np.zeros_like(heights)
+
+    distances_v = distances
+    heights_v = heights
+    zheights_v = zheights
+
+    hsize = distances.size
+    mid_idx = hsize // 2
+
+    if hprof_dists is None:
+        lon_mid = lons[mid_idx]
+        lat_mid = lats[mid_idx]
+    else:
+        lon_mid = 0.5 * (lon_t + lon_r)
+        lat_mid = 0.5 * (lat_t + lat_r)
+
+    if delta_N is None:
+        _delta_N, _N0 = helper._DN_N0_from_map(lon_mid, lat_mid)
+    else:
+        _delta_N, _N0 = delta_N, N0
+
+    if G_t is None:
+        G_t = np.array([0.])
+
+    if G_r is None:
+        G_r = np.array([0.])
+
+    if d_tm is None:
+        d_tm = np.array([distance])
+
+    if d_lm is None:
+        d_lm = np.array([distance])
+
+    if d_ct is None:
+        d_ct = np.array([50000.])
+
+    if d_cr is None:
+        d_cr = np.array([50000.])
+
+    if omega is None:
+        omega = np.array([0.])
+
+    # if zone_t is None:
+    #     zone_t = np.array([-1])
+
+    # if zone_r is None:
+    #     zone_r = np.array([-1])
+
+
+    # in the nditer, we first put all entities that have impact on the
+    # path geometry; this is to avoid unnecessary re-calculations
+
+    # these entities are:
+    # frequency, h_tg, h_rg, version, zone_t, zone_r
+
+    it = np.nditer(
+        [
+            frequency, h_tg, h_rg, G_t, G_r, version, zone_t, zone_r,
+            temperature, pressure, time_percent, omega,
+            d_tm, d_lm, d_ct, d_cr, polarization,
+            # L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr,
+            None, None, None, None, None, None,
+            # eps_pt, eps_pr, d_lt, d_lr, path_type
+            None, None, None, None, None,
+            ],
+        flags=['external_loop', 'buffered', 'delay_bufalloc'],
+        op_flags=[['readonly']] * 17 + [['readwrite', 'allocate']] * 11,
+        op_dtypes=(
+            ['float64'] * 5 + ['int32'] * 3 +
+            ['float64'] * 8 + ['int32'] * 1 +
+            ['float64'] * 10 + ['int32'] * 1
+            ),
+        )
+
+    it.reset()
+    for (
+            _freq, _h_tg, _h_rg, _G_t, _G_r, _version, _zone_t, _zone_r,
+            _temp, _press, _time_percent, _omega,
+            _d_tm, _d_lm, _d_ct, _d_cr, _polarization,
+            _L_bfsg, _L_bd, _L_bs, _L_ba, _L_b, _L_b_corr,
+            _eps_pt, _eps_pr, _d_lt, _d_lr, _path_type,
+            ) in it:
+
+        with nogil, parallel():
+
+            # could not find a solution to make last_h_tg a thread-local
+            # variable; using an array does the trick (but is ugly!!!)
+            last_freq = <double *> malloc(sizeof(double))
+            if last_freq == NULL:
+                abort()
+            last_h_tg = <double *> malloc(sizeof(double))
+            if last_h_tg == NULL:
+                abort()
+            last_h_rg = <double *> malloc(sizeof(double))
+            if last_h_rg == NULL:
+                abort()
+            last_version = <int *> malloc(sizeof(int))
+            if last_version == NULL:
+                abort()
+            last_zone_t = <int *> malloc(sizeof(int))
+            if last_zone_t == NULL:
+                abort()
+            last_zone_r = <int *> malloc(sizeof(int))
+            if last_zone_r == NULL:
+                abort()
+
+            # it seems, that this is not sufficient to initialize the
+            # "last"-vars for all threads (why not!?); therefore in
+            # the prange loop below, we always make sure that in the
+            # first iteration the path is re-processed
+            last_freq[0] = NAN
+            last_h_tg[0] = NAN
+            last_h_rg[0] = NAN
+            last_version[0] = -1000
+            last_zone_t[0] = -1000
+            last_zone_r[0] = -1000
+
+            pp = <ppstruct *> malloc(sizeof(ppstruct))
+            if pp == NULL:
+                abort()
+
+            # pp.lon_t = lon_t
+            # pp.lat_t = lat_t
+            # pp.lon_r = lon_r
+            # pp.lat_r = lat_r
+            pp.lon_mid = lon_mid
+            pp.lat_mid = lat_mid
+            pp.hprof_step = hprof_step  # dummy
+            pp.distance = distance
+            pp.bearing = bearing
+            pp.back_bearing = back_bearing
+            pp.alpha_tr = bearing
+            pp.alpha_rt = back_bearing
+            pp.delta_N = _delta_N
+            pp.N0 = _N0
+
+            size = _freq.shape[0]
+
+            for i in prange(size):
+
+                if (
+                        # 1 == 1 or
+                        # i == 0 or
+                        _freq[i] != last_freq[0] or
+                        _h_tg[i] != last_h_tg[0] or
+                        _h_rg[i] != last_h_rg[0] or
+                        _version[i] != last_version[0] or
+                        _zone_t[i] != last_zone_t[0] or
+                        _zone_r[i] != last_zone_r[0]
+                        ):
+                    last_freq[0] = _freq[i]
+                    last_h_tg[0] = _h_tg[i]
+                    last_h_rg[0] = _h_rg[i]
+                    last_version[0] = _version[i]
+                    last_zone_t[0] = _zone_t[i]
+                    last_zone_r[0] = _zone_r[i]
+
+                    # need to re-process path geometry ...
+                    pp.version = _version[i]
+                    pp.freq = _freq[i]
+                    pp.wavelen = 0.299792458 / pp.freq
+                    pp.zone_t = _zone_t[i]
+                    pp.zone_r = _zone_r[i]
+                    if pp.zone_t == CLUTTER.UNKNOWN:
+                        pp.h_tg = _h_tg[i]
+                    else:
+                        pp.h_tg = f_max(_clut_data[pp.zone_t, 0], _h_tg[i])
+
+                    if pp.zone_r == CLUTTER.UNKNOWN:
+                        pp.h_rg = _h_rg[i]
+                    else:
+                        pp.h_rg = f_max(_clut_data[pp.zone_r, 0], _h_rg[i])
+                    pp.h_tg_in = _h_tg[i]
+                    pp.h_rg_in = _h_rg[i]
+
+                    _process_path(
+                        pp,
+                        distances_v,
+                        heights_v,
+                        zheights_v,
+                        )
+
+                pp.temperature = _temp[i]
+                pp.pressure = _press[i]
+                pp.d_tm = _d_tm[i]
+                pp.d_lm = _d_lm[i]
+                pp.d_ct = _d_ct[i]
+                pp.d_cr = _d_cr[i]
+                pp.time_percent = _time_percent[i]
+                pp.polarization = _polarization[i]
+                pp.omega = _omega[i]
+                pp.beta0 = _beta_from_DN_N0(
+                    pp.lat_mid, pp.delta_N, pp.N0, pp.d_tm, pp.d_lm
+                    )
+
+                (
+                    _L_bfsg[i],
+                    _L_bd[i],
+                    _L_bs[i],
+                    _L_ba[i],
+                    _L_b[i],
+                    _L_b_corr[i],
+                    L_dummy,
+                    ) = _path_attenuation_complete(pp[0], _G_t[i], _G_r[i])
+
+                _eps_pt[i] = pp.eps_pt
+                _eps_pr[i] = pp.eps_pr
+                _d_lt[i] = pp.d_lt
+                _d_lr[i] = pp.d_lr
+                _path_type[i] = pp.path_type
+
+            free(last_freq)
+            free(last_h_tg)
+            free(last_h_rg)
+            free(last_version)
+            free(last_zone_t)
+            free(last_zone_r)
+            free(pp)
+
+    out = it.operands[17:]
+    return out
+
+    # although this is nice, it doesn't support units...
+    # return np.core.records.fromarrays(
+    #     out[17:],
+    #     names=(
+    #         # 'frequency, h_tg, h_rg, version, zone_t, zone_r, '
+    #         # 'temperature, pressure, time_percent, omega, '
+    #         # 'd_tm, d_lm, d_ct, d_cr, polarization, '
+    #         'L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, '
+    #         'eps_pt, eps_pr, d_lt, d_lr, path_type'
+    #         ),
+    #     formats=', '.join(
+    #         # ['f8'] * 3 + ['i4'] * 3 +
+    #         # ['f8'] * 8 + ['i4'] * 1 +
+    #         ['f8'] * 10 + ['i4'] * 1
+    #         )
+    #     )
 
 # ############################################################################
 # Atmospheric attenuation (Annex 2)

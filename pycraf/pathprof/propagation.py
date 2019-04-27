@@ -24,6 +24,7 @@ __all__ = [
     'clutter_correction', 'clutter_imt',
     'height_map_data', 'atten_map_fast',
     'height_path_data', 'height_path_data_generic', 'atten_path_fast',
+    'losses_complete',
     ]
 
 # Note, we have to curry the quantities here, because Cython produces
@@ -1384,6 +1385,258 @@ def atten_path_fast(
         'd_lt': float_res[8] * apu.km,
         'd_lr': float_res[9] * apu.km,
         'path_type': int_res[0],
+        }
+
+
+@utils.ranged_quantity_input(
+    freq=(0.1, 100, apu.GHz),
+    temperature=(None, None, apu.K),
+    pressure=(None, None, apu.hPa),
+    lon_t=(-180, 180, apu.deg),
+    lat_t=(-90, 90, apu.deg),
+    lon_r=(-180, 180, apu.deg),
+    lat_r=(-90, 90, apu.deg),
+    h_tg=(None, None, apu.m),
+    h_rg=(None, None, apu.m),
+    hprof_step=(None, None, apu.m),
+    timepercent=(0, 50, apu.percent),
+    G_t=(None, None, cnv.dBi),
+    G_r=(None, None, cnv.dBi),
+    omega=(0, 100, apu.percent),
+    d_tm=(None, None, apu.m),
+    d_lm=(None, None, apu.m),
+    d_ct=(None, None, apu.m),
+    d_cr=(None, None, apu.m),
+    delta_N=(None, None, cnv.dimless / apu.km),
+    N0=(None, None, cnv.dimless),
+    hprof_dists=(None, None, apu.km),
+    hprof_heights=(None, None, apu.m),
+    hprof_bearing=(None, None, apu.deg),
+    hprof_backbearing=(None, None, apu.deg),
+    strip_input_units=True, allow_none=True, output_unit=None
+    )
+def losses_complete(
+        freq,
+        temperature,
+        pressure,
+        lon_t, lat_t,
+        lon_r, lat_r,
+        h_tg, h_rg,
+        hprof_step,
+        timepercent,
+        G_t=0. * cnv.dBi, G_r=0. * cnv.dBi,
+        omega=0 * apu.percent,
+        d_tm=None, d_lm=None,
+        d_ct=None, d_cr=None,
+        zone_t=cyprop.CLUTTER.UNKNOWN, zone_r=cyprop.CLUTTER.UNKNOWN,
+        polarization=0,
+        version=16,
+        # override if you don't want builtin method:
+        delta_N=None, N0=None,
+        # override if you don't want builtin method:
+        hprof_dists=None, hprof_heights=None,
+        hprof_bearing=None, hprof_backbearing=None,
+        ):
+    '''
+    Calculate propagation losses for a fixed path using a parallelized method.
+
+    The difference to the usual `~pycraf.pathprof.PathProp` +
+    `~pycraf.pathprof.loss_complete` approach is, that `atten_fast` supports
+    full `~numpy` `broad-casting
+    <https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html>`_. This
+    allows perform many calculations at once, e.g., if one interested in
+    a statistics plot of `L` vs. `time_percent`, without querying the
+    height profile over and over.
+
+    Parameters
+    ----------
+    freq : `~astropy.units.Quantity`
+        Frequency of radiation [GHz]
+    temperature : `~astropy.units.Quantity`
+        Ambient temperature at path midpoint [K]
+    pressure : `~astropy.units.Quantity`
+        Ambient pressure at path midpoint  [hPa]
+    lon_t, lat_t : `~astropy.units.Quantity`, scalar
+        Geographic longitude/latitude of transmitter [deg]
+    lon_r, lat_r : `~astropy.units.Quantity`, scalar
+        Geographic longitude/latitude of receiver [deg]
+    h_tg, h_rg : `~astropy.units.Quantity`
+        Transmitter/receiver height over ground [m]
+    hprof_step : `~astropy.units.Quantity`, scalar
+        Distance resolution of height profile along path [m]
+    timepercent : `~astropy.units.Quantity`
+        Time percentage [%] (maximal 50%)
+    G_t, G_r  : `~astropy.units.Quantity`, optional
+        Antenna gain (transmitter, receiver) in the direction of the
+        horizon(!) along the great-circle interference path [dBi]
+    omega : `~astropy.units.Quantity`, optional
+        Fraction of the path over water [%] (see Table 3)
+        (default: 0%)
+    d_tm : `~astropy.units.Quantity`, optional
+        longest continuous land (inland + coastal) section of the
+        great-circle path [km]
+        (default: distance between Tx and Rx)
+    d_lm : `~astropy.units.Quantity`, optional
+        longest continuous inland section of the great-circle path [km]
+        (default: distance between Tx and Rx)
+    d_ct, d_cr : `~astropy.units.Quantity`, optional
+        Distance over land from transmitter/receiver antenna to the coast
+        along great circle interference path [km]
+        (default: 50000 km)
+    zone_t, zone_r : `~numpy.ndarray` of int (aka CLUTTER enum), optional
+        Clutter type for transmitter/receiver terminal.
+        (default: CLUTTER.UNKNOWN)
+    polarization : `~numpy.ndarray` of int, optional
+        Polarization (default: 0)
+        Allowed values are: 0 - horizontal, 1 - vertical
+    version : `~numpy.ndarray` of int, optional
+        ITU-R Rec. P.452 version. Allowed values are: 14, 16
+    delta_N : `~astropy.units.Quantity`, scalar, optional
+        Average radio-refractive index lapse-rate through the lowest 1 km of
+        the atmosphere [N-units/km = 1/km]
+        (default: query `~pycraf.pathprof.deltaN_N0_from_map`)
+    N_0 : `~astropy.units.Quantity`, scalar, optional
+        Sea-level surface refractivity [N-units = dimless]
+        (default: query `~pycraf.pathprof.deltaN_N0_from_map`)
+    hprof_dists : `~astropy.units.Quantity`, optional
+        Distance vector associated with the height profile `hprof_heights`.
+        (default: query `~pycraf.pathprof.srtm_height_profile`)
+    hprof_heights : `~astropy.units.Quantity`, optional
+        Terrain heights profile for the distances in `hprof_dists`.
+        (default: query `~pycraf.pathprof.srtm_height_profile`)
+    hprof_bearing : `~astropy.units.Quantity`, optional
+        Start bearing of the height profile path.
+        (default: query `~pycraf.pathprof.srtm_height_profile`)
+    hprof_backbearing : `~astropy.units.Quantity`, optional
+        Back-bearing of the height profile path.
+        (default: query `~pycraf.pathprof.srtm_height_profile`)
+
+    Returns
+    -------
+    results : dict
+        Results of the path attenuation calculation. Each entry
+        in the dictionary is a nD `~astropy.units.Quantity` containing
+        the associated values for the path.
+        The following entries are contained:
+
+        - `L_bfsg` - Free-space loss [dB]
+
+        - `L_bd` - Basic transmission loss associated with diffraction
+            not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
+
+        - `L_bs` - Tropospheric scatter loss [dB]
+
+        - `L_ba` - Ducting/layer reflection loss [dB]
+
+        - `L_b` - Complete path propagation loss [dB]
+
+        - `L_b_corr` - As L_b but with clutter correction [dB]
+
+        - `eps_pt` - Elevation angle of paths w.r.t. Tx [deg]
+
+        - `eps_pr` - Elevation angle of paths w.r.t. Rx [deg]
+
+        - `d_lt` - Distance to horizon w.r.t. Tx [km]
+
+        - `d_lr` - Distance to horizon w.r.t. Rx [km]
+
+        - `path_type` - Path type (0 - LoS, 1 - Trans-horizon)
+
+    Examples
+    --------
+
+    A typical usage would be::
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        from astropy import units as u
+        from pycraf import pathprof
+
+        frequency = np.logspace(-1, 2, 200) * u.GHz
+        temperature = 290. * u.K
+        pressure = 980 * u.hPa
+        lon_t, lat_t = 6.8836 * u.deg, 50.525 * u.deg
+        lon_r, lat_r = 7.3334 * u.deg, 50.635 * u.deg
+        h_tg, h_rg = 20 * u.m, 30 * u.m
+        hprof_step = 100 * u.m
+        time_percent = np.logspace(-3, np.log10(50), 100) * u.percent
+        zone_t, zone_r = pathprof.CLUTTER.URBAN, pathprof.CLUTTER.SUBURBAN
+
+        # as frequency and time_percent are arrays, we need to add
+        # new axes to allow proper broadcasting
+        results = pathprof.losses_complete(
+            frequency[:, np.newaxis],
+            temperature,
+            pressure,
+            lon_t, lat_t,
+            lon_r, lat_r,
+            h_tg, h_rg,
+            hprof_step,
+            time_percent[np.newaxis],
+            zone_t=zone_t, zone_r=zone_r,
+            )
+
+        # 2D plot of L_b vs frequency and time_percent
+        # (proper axes labels and units omitted!)
+        plt.imshow(results['L_b'].value)
+        plt.show()
+
+    Notes
+    -----
+    - It is extremely important how the broadcasting axes are chosen! There
+      are six entities - `freq`, `h_tg`, `h_rg`, `version`, `zone_t`, `zone_r`
+      - that have influence on the propagation path geometry. In the
+      broadcasted arrays, the associated axes should vary as slow as
+      possible. The internal Cython routine will trigger a re-computation of
+      the path geometry if one of these parameters changes. Therefore, if the
+      axes for `frequency` and `time_percent` would have been chosen in the
+      opposite manner, the function would run about an order of magnitude
+      slower!
+    - The diffraction-loss algorithm was changed between ITU-R P.452
+      version 14 and 15. The former used a Deygout method, the new one
+      is based on a Bullington calculation with correction terms.
+    - In future versions, more entries may be added to the results
+      dictionary.
+
+    '''
+
+    res = cyprop.losses_complete_cython(
+        freq,
+        temperature,
+        pressure,
+        lon_t, lat_t,
+        lon_r, lat_r,
+        h_tg, h_rg,
+        hprof_step,
+        timepercent,
+        G_t=G_t,
+        G_r=G_r,
+        omega=omega,
+        d_tm=d_tm,
+        d_lm=d_lm,
+        d_ct=d_ct,
+        d_cr=d_cr,
+        zone_t=zone_t, zone_r=zone_r,
+        polarization=polarization,
+        version=version,
+        delta_N=delta_N, N0=N0,
+        hprof_dists=hprof_dists,
+        hprof_heights=hprof_heights,
+        hprof_bearing=hprof_bearing,
+        hprof_backbearing=hprof_backbearing,
+        )
+    return {
+        'L_bfsg': res[0] * cnv.dB,
+        'L_bd': res[1] * cnv.dB,
+        'L_bs': res[2] * cnv.dB,
+        'L_ba': res[3] * cnv.dB,
+        'L_b': res[4] * cnv.dB,
+        'L_b_corr': res[5] * cnv.dB,
+        'eps_pt': res[6] * apu.deg,
+        'eps_pr': res[7] * apu.deg,
+        'd_lt': res[8] * apu.km,
+        'd_lr': res[9] * apu.km,
+        'path_type': res[10],
         }
 
 
