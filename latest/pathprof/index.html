@@ -594,25 +594,28 @@ estimation.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.loss_troposcatter.html#pycraf.pathprof.loss_troposcatter" title="pycraf.pathprof.loss_troposcatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_troposcatter</span></code></a>(pathprop[, G_t, G_r])</p></td>
 <td><p>Calculate the tropospheric scatter loss, L_bs, of a propagating radio wave according to ITU-R P.452-16 Eq (45).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.make_kmz.html#pycraf.pathprof.make_kmz" title="pycraf.pathprof.make_kmz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_kmz</span></code></a>(kmz_filename, atten_map, bbox[, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.losses_complete.html#pycraf.pathprof.losses_complete" title="pycraf.pathprof.losses_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losses_complete</span></code></a>(freq, temperature, pressure, …)</p></td>
+<td><p>Calculate propagation losses for a fixed path using a parallelized method.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.make_kmz.html#pycraf.pathprof.make_kmz" title="pycraf.pathprof.make_kmz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_kmz</span></code></a>(kmz_filename, atten_map, bbox[, …])</p></td>
 <td><p>Produce kmz file for use in GIS software (e.g., Google Earth).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.radiomet_data_for_pathcenter.html#pycraf.pathprof.radiomet_data_for_pathcenter" title="pycraf.pathprof.radiomet_data_for_pathcenter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">radiomet_data_for_pathcenter</span></code></a>(lon, lat, d_tm, …)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.radiomet_data_for_pathcenter.html#pycraf.pathprof.radiomet_data_for_pathcenter" title="pycraf.pathprof.radiomet_data_for_pathcenter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">radiomet_data_for_pathcenter</span></code></a>(lon, lat, d_tm, …)</p></td>
 <td><p>Calculate delta_N, beta_0, and N_0 values from digitized maps, according to ITU-R P.452-16 Eq (2-4).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.set_num_threads.html#pycraf.pathprof.set_num_threads" title="pycraf.pathprof.set_num_threads"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_num_threads</span></code></a>(int nthreads)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.set_num_threads.html#pycraf.pathprof.set_num_threads" title="pycraf.pathprof.set_num_threads"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_num_threads</span></code></a>(int nthreads)</p></td>
 <td><p>Change maximum number of threads to use.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_data.html#pycraf.pathprof.srtm_height_data" title="pycraf.pathprof.srtm_height_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_data</span></code></a>(lons, lats)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_data.html#pycraf.pathprof.srtm_height_data" title="pycraf.pathprof.srtm_height_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_data</span></code></a>(lons, lats)</p></td>
 <td><p>Interpolated SRTM terrain data extracted from “.hgt” files.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_map.html#pycraf.pathprof.srtm_height_map" title="pycraf.pathprof.srtm_height_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_map</span></code></a>(lon_c, lat_c, map_size_lon, …)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_map.html#pycraf.pathprof.srtm_height_map" title="pycraf.pathprof.srtm_height_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_map</span></code></a>(lon_c, lat_c, map_size_lon, …)</p></td>
 <td><p>Extract terrain map from SRTM data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_profile</span></code></a>(lon_t, lat_t, lon_r, …)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_profile</span></code></a>(lon_t, lat_t, lon_r, …)</p></td>
 <td><p>Extract a height profile from SRTM data.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.terrain_cmap_factory.html#pycraf.pathprof.terrain_cmap_factory" title="pycraf.pathprof.terrain_cmap_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">terrain_cmap_factory</span></code></a>([sealevel, vmax])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.terrain_cmap_factory.html#pycraf.pathprof.terrain_cmap_factory" title="pycraf.pathprof.terrain_cmap_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">terrain_cmap_factory</span></code></a>([sealevel, vmax])</p></td>
 <td><p>Produce terrain colormap and norm to be used in plt.imshow.</p></td>
 </tr>
 </tbody>
@@ -803,7 +806,7 @@ estimation.</p>
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.0.1. &nbsp;
-    Last built 26 Apr 2019. <br/>
+    Last built 27 Apr 2019. <br/>
   </p>
 </footer>
   </body>

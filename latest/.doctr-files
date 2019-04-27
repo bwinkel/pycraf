@@ -159,6 +159,7 @@ latest/_sources/api/pycraf.pathprof.loss_diffraction.rst.txt
 latest/_sources/api/pycraf.pathprof.loss_ducting.rst.txt
 latest/_sources/api/pycraf.pathprof.loss_freespace.rst.txt
 latest/_sources/api/pycraf.pathprof.loss_troposcatter.rst.txt
+latest/_sources/api/pycraf.pathprof.losses_complete.rst.txt
 latest/_sources/api/pycraf.pathprof.make_kmz.rst.txt
 latest/_sources/api/pycraf.pathprof.radiomet_data_for_pathcenter.rst.txt
 latest/_sources/api/pycraf.pathprof.set_num_threads.rst.txt
@@ -358,6 +359,7 @@ latest/api/pycraf.pathprof.loss_diffraction.html
 latest/api/pycraf.pathprof.loss_ducting.html
 latest/api/pycraf.pathprof.loss_freespace.html
 latest/api/pycraf.pathprof.loss_troposcatter.html
+latest/api/pycraf.pathprof.losses_complete.html
 latest/api/pycraf.pathprof.make_kmz.html
 latest/api/pycraf.pathprof.radiomet_data_for_pathcenter.html
 latest/api/pycraf.pathprof.set_num_threads.html

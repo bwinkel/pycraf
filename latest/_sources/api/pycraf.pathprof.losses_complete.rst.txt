@@ -1,0 +1,6 @@
+losses_complete
+===============
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: losses_complete
