@@ -147,6 +147,40 @@ def test_gui_startup_shows_pathgeometry(qtbot):
 
 @remote_data(source='any')
 @pytest.mark.usefixtures('srtm_handler')
+def test_stats_worker(qtbot):
+    # change download option to missing and test, if the results are correct
+
+    myapp = gui.PycrafGui()
+    qtbot.addWidget(myapp)
+    _set_parameters(myapp.ui)
+    myapp.ui.srtmDownloadComboBox.setCurrentIndex(
+        gui.SRTM_DOWNLOAD_MAPPING.index('missing')
+        )
+    with qtbot.waitSignal(
+            myapp.my_stats_worker.result_ready[object, object],
+            raising=False, timeout=50000,
+            ):
+        myapp.timer.start(10)
+
+    res = myapp.statistics_results
+
+    assert_quantity_allclose(
+        res['L_b'][:, ::20].to(cnv.dB).value, [
+            [138.8771118, 140.8853131, 142.8934803, 144.9016341, 147.7434509],
+            [156.2189124, 158.2270703, 160.2352217, 162.2433706, 164.7989202],
+            [165.3765899, 167.3847525, 169.3929057, 171.4010551, 173.6622298],
+            [174.5007580, 176.5089330, 178.5170906, 180.5252413, 182.7685164],
+            [186.5540705, 188.5623023, 190.5704806, 192.5786379, 194.8213818],
+            [195.9055898, 197.9140057, 199.9222511, 201.9304294, 204.1729092],
+            [210.4921391, 212.5046189, 214.5143471, 216.5229899, 218.7653956],
+            [236.8190545, 238.8738936, 240.8993047, 242.9128866, 245.1563437],
+            [243.0043903, 247.2872525, 251.7308653, 256.0069129, 259.5560927],
+            ])
+    # assert myapp.pathprof_results is None
+
+
+@remote_data(source='any')
+@pytest.mark.usefixtures('srtm_handler')
 def test_pp_worker(qtbot):
     # change download option to missing and test, if the results are correct
 
