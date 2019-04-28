@@ -1,4 +1,4 @@
-.. pycraf-gui:
+.. _pycraf-gui:
 
 *****************************************************************
 Graphical user interface (`pycraf-gui`)

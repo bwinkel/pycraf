@@ -115,7 +115,7 @@ Path attenuation
 The `~pycraf.pathprof` package implements `ITU-R Recommendation P.452-16
 <https://www.itu.int/rec/R-REC-P.452-16-201507-I/en>`_ for path propagation
 loss calculations. In `~pycraf.pathprof` this is a two-step procedure.
-First a helper object, a `~pycraf.pathprof.PathProf` object, has to be
+First a helper object, a `~pycraf.pathprof.PathProp` object, has to be
 instantiated. It contains all kinds of parameters that define the path
 geometry and hold other necessary quantities (there are many!). Second, one
 feeds this object into one of the functions that calculate attenuation
@@ -446,6 +446,95 @@ Therefore, we added a faster alternative, `~pycraf.pathprof.atten_map_fast`. The
 For a more illustrative example, have a look at the Jupyter `tutorial notebook
 <https://github.com/bwinkel/pycraf/tree/master/notebooks/03c_attenuation_maps.ipynb>`_
 on this topic.
+
+Quick analysis of a single path
+---------------------------------------
+Sometimes, one needs to analyse a single path (i.e., fixed transmitter and
+receiver location), which means one wants to know the propagation losses
+as a function of various parameters, such as frequency, time-percentages,
+or antenna heights. Depending on the number of desired samples, the approach
+of creating a `~pycraf.pathprof.PathProp` instance and then run one of
+the loss-functions on it (see
+:ref:`pathprof-getting-started-path-attenuation`) can be slow.
+
+Therefore, another convenience function is provided,
+`~pycraf.pathprof.losses_complete`, which has a very similar function
+signature as `~pycraf.pathprof.PathProp`, but accepts `~numpy.ndarrays`
+(or rather arrays of `~astropy.units.Quantity`) for most of the inputs.
+Obviously, parameters such as Tx and Rx location cannot be arrays, and
+as a consequence, the terrain height profile can only be a 1D array.
+
+The following shows a typical use case (which is also contained in the
+:ref:`pycraf-gui`):
+
+
+.. plot::
+    :include-source:
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from astropy import units as u
+    from pycraf import pathprof, conversions as cnv
+
+
+    lon_tx, lat_tx = 6.8836 * u.deg, 50.525 * u.deg
+    lon_rx, lat_rx = 7.3334 * u.deg, 50.635 * u.deg
+    hprof_step = 100 * u.m  # resolution of height profile
+    omega = 0. * u.percent
+    temperature = 290. * u.K
+    pressure = 1013. * u.hPa
+    h_tg, h_rg = 5 * u.m, 50 * u.m
+    G_t, G_r = 0 * cnv.dBi, 15 * cnv.dBi
+    zone_t, zone_r = pathprof.CLUTTER.URBAN, pathprof.CLUTTER.SUBURBAN
+
+    frequency = np.array([0.1, 0.5, 1, 2, 5, 10, 20, 50, 100])
+    time_percent = np.logspace(-3, np.log10(50), 100)
+
+    # as frequency and time_percent are arrays, we need to add
+    # new axes to allow proper broadcasting
+    results = pathprof.losses_complete(
+        frequency[:, np.newaxis] * u.GHz,
+        temperature,
+        pressure,
+        lon_tx, lat_tx,
+        lon_rx, lat_rx,
+        h_tg, h_rg,
+        hprof_step,
+        time_percent[np.newaxis] * u.percent,
+        zone_t=zone_t, zone_r=zone_r,
+        )
+
+    fig, ax = plt.subplots(1, figsize=(8, 8))
+    L_b_corr = results['L_b_corr'].value
+    t = time_percent.squeeze()
+    lidx = np.argmin(np.abs(t - 2e-3))
+    for idx, f in enumerate(frequency.squeeze()):
+        p = ax.semilogx(t, L_b_corr[idx], '-')
+        ax.text(
+            2e-3, L_b_corr[idx][lidx] - 1,
+            '{:.1f} GHz'.format(f),
+            ha='left', va='top', color=p[0].get_color(),
+            )
+
+    ax.grid()
+    ax.set_xlim((time_percent[0], time_percent[-1]))
+    ax.set_xlabel('Time percent [%]')
+    ax.set_ylabel('L_b_corr [dB]')
+
+.. note::
+
+    Even with the Tx/Rx location and the terrain height profile being constant
+    for one call of the `~pycraf.pathprof.losses_complete` function, the
+    computing time can be substantial. This is because changes in the
+    parameters `frequency`, `h_tg`, `h_rg`, `version`, `zone_t`, and ` zone_r`
+    have influence on the propagation path geometry.  In the ` broadcasted
+    arrays <https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html>`_,
+    the axes associated with the mentioned parameters should vary as slow as
+    possible. The underlying implementation will trigger a re-computation of
+    the path geometry if one of these parameters changes. Therefore, if the
+    broadcast axes for `frequency` and `time_percent` would have been chosen
+    in the opposite manner, the function would run about an order of magnitude
+    slower!
 
 See Also
 ========
