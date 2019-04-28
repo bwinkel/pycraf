@@ -80,7 +80,7 @@
 <h1>atten_path_fast<a class="headerlink" href="#atten-path-fast" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.pathprof.atten_path_fast">
-<code class="descclassname">pycraf.pathprof.</code><code class="descname">atten_path_fast</code><span class="sig-paren">(</span><em>freq</em>, <em>temperature</em>, <em>pressure</em>, <em>h_tg</em>, <em>h_rg</em>, <em>timepercent</em>, <em>hprof_data</em>, <em>polarization=0</em>, <em>version=16</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#atten_path_fast"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L1229" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.atten_path_fast" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pycraf.pathprof.</code><code class="descname">atten_path_fast</code><span class="sig-paren">(</span><em>freq</em>, <em>temperature</em>, <em>pressure</em>, <em>h_tg</em>, <em>h_rg</em>, <em>timepercent</em>, <em>hprof_data</em>, <em>polarization=0</em>, <em>version=16</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#atten_path_fast"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L1230" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.atten_path_fast" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate attenuation along a path using a parallelized method.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -113,7 +113,11 @@ in the dictionary is a 1D <a class="reference external" href="https://docs.scipy
 the associated value for the path.
 The following entries are contained:</p>
 <ul class="simple">
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_bfsg</span></code> - Free-space loss [dB]</p></li>
+<li><dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_b0p</span></code> - Free-space loss including focussing effects</dt><dd><p>(for p% of time) [dB]</p>
+</dd>
+</dl>
+</li>
 <li><dl class="simple">
 <dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_bd</span></code> - Basic transmission loss associated with diffraction</dt><dd><p>not exceeded for p% time [dB]; L_bd = L_b0p + L_dp</p>
 </dd>
@@ -218,7 +222,7 @@ dictionary.</p></li>
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.0.1. &nbsp;
-    Last built 27 Apr 2019. <br/>
+    Last built 28 Apr 2019. <br/>
   </p>
 </footer>
   </body>

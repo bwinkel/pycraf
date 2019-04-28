@@ -476,8 +476,8 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    L_bfsg : `~astropy.units.Quantity`</span>
-<span class="sd">        Free-space loss [dB]</span>
+<span class="sd">    L_b0p : `~astropy.units.Quantity`</span>
+<span class="sd">        Free-space loss including focussing effects (for p% of time) [dB]</span>
 <span class="sd">    L_bd : `~astropy.units.Quantity`</span>
 <span class="sd">        Basic transmission loss associated with diffraction not</span>
 <span class="sd">        exceeded for p% time [dB]::</span>
@@ -914,7 +914,8 @@
 <span class="sd">        the associated value for the map of dimension `(my, mx)`.</span>
 <span class="sd">        The following entries are contained:</span>
 
-<span class="sd">        - `L_bfsg` - Free-space loss [dB]</span>
+<span class="sd">        - `L_b0p` - Free-space loss including focussing effects</span>
+<span class="sd">            (for p% of time) [dB]</span>
 
 <span class="sd">        - `L_bd` - Basic transmission loss associated with diffraction</span>
 <span class="sd">            not exceeded for p% time [dB]; L_bd = L_b0p + L_dp</span>
@@ -958,7 +959,7 @@
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s1">&#39;L_bfsg&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
+        <span class="s1">&#39;L_b0p&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
         <span class="s1">&#39;L_bd&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
         <span class="s1">&#39;L_bs&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
         <span class="s1">&#39;L_ba&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
@@ -1345,7 +1346,8 @@
 <span class="sd">        the associated value for the path.</span>
 <span class="sd">        The following entries are contained:</span>
 
-<span class="sd">        - `L_bfsg` - Free-space loss [dB]</span>
+<span class="sd">        - `L_b0p` - Free-space loss including focussing effects</span>
+<span class="sd">           (for p% of time) [dB]</span>
 
 <span class="sd">        - `L_bd` - Basic transmission loss associated with diffraction</span>
 <span class="sd">            not exceeded for p% time [dB]; L_bd = L_b0p + L_dp</span>
@@ -1441,7 +1443,7 @@
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s1">&#39;L_bfsg&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
+        <span class="s1">&#39;L_b0p&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
         <span class="s1">&#39;L_bd&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
         <span class="s1">&#39;L_bs&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
         <span class="s1">&#39;L_ba&#39;</span><span class="p">:</span> <span class="n">float_res</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
@@ -1586,7 +1588,8 @@
 <span class="sd">        the associated values for the path.</span>
 <span class="sd">        The following entries are contained:</span>
 
-<span class="sd">        - `L_bfsg` - Free-space loss [dB]</span>
+<span class="sd">        - `L_b0p` - Free-space loss including focussing effects</span>
+<span class="sd">          (for p% of time) [dB]</span>
 
 <span class="sd">        - `L_bd` - Basic transmission loss associated with diffraction</span>
 <span class="sd">            not exceeded for p% time [dB]; L_bd = L_b0p + L_dp</span>
@@ -1693,7 +1696,7 @@
         <span class="n">hprof_backbearing</span><span class="o">=</span><span class="n">hprof_backbearing</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s1">&#39;L_bfsg&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
+        <span class="s1">&#39;L_b0p&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
         <span class="s1">&#39;L_bd&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
         <span class="s1">&#39;L_bs&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
         <span class="s1">&#39;L_ba&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
@@ -1728,7 +1731,7 @@
   <p>
     &copy; Copyright 2019, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.0.1. &nbsp;
-    Last built 27 Apr 2019. <br/>
+    Last built 28 Apr 2019. <br/>
   </p>
 </footer>
   </body>
