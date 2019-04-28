@@ -53,6 +53,16 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="statisticsTab">
+       <attribute name="title">
+        <string>Statistics</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_17">
+        <item row="0" column="0">
+         <layout class="QVBoxLayout" name="statisticsVerticalLayout"/>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="pathprofileTab">
        <attribute name="title">
         <string>Path profile</string>

@@ -10,7 +10,9 @@ from .. import pathprof
 # from .. import conversions as cnv
 
 
-__all__ = ['GeometryWorker', 'PathProfWorker', 'MapWorker']
+__all__ = [
+    'GeometryWorker', 'StatisticsWorker', 'PathProfWorker', 'MapWorker'
+    ]
 
 
 # Note: pathprof.height_path_data is super fast usually, so this
@@ -144,6 +146,51 @@ class GeometryWorker(BaseWorker):
         results['L_b0p'] = flosses[0] + flosses[1]
 
         self.result_ready.emit(hprof_data, results)
+
+        print('job finished')
+
+
+class StatisticsWorker(BaseWorker):
+
+    @QtCore.pyqtSlot()
+    def do_job(self):
+
+        self.job_waiting = False
+        jdict = self.job_dict
+        print('doing job', jdict)
+        print(pathprof.SrtmConf)
+
+        hprof_data = cached_heightprofile(
+            jdict['tx_lon'] * u.deg, jdict['tx_lat'] * u.deg,
+            jdict['rx_lon'] * u.deg, jdict['rx_lat'] * u.deg,
+            jdict['stepsize'] * u.m,
+            )
+        (
+            lons, lats, distance, distances, heights,
+            bearing, back_bearing, back_bearings
+            ) = hprof_data
+
+        frequency = np.array([0.1, 0.5, 1, 2, 5, 10, 20, 50, 100])
+        time_percent = np.logspace(-3, np.log10(50), 100)
+
+        results = pathprof.losses_complete(
+            frequency[:, np.newaxis] * u.GHz,
+            jdict['temp'] * u.K, jdict['press'] * u.hPa,
+            jdict['tx_lon'] * u.deg, jdict['tx_lat'] * u.deg,
+            jdict['rx_lon'] * u.deg, jdict['rx_lat'] * u.deg,
+            jdict['tx_height'] * u.m, jdict['rx_height'] * u.m,
+            jdict['stepsize'] * u.m,
+            time_percent[np.newaxis] * u.percent,
+            version=jdict['version'],
+            polarization=jdict['polarization'],
+            zone_t=jdict['tx_clutter'], zone_r=jdict['rx_clutter'],
+            hprof_dists=distances,
+            hprof_heights=heights,
+            hprof_bearing=bearing,
+            hprof_backbearing=back_bearing,
+            )
+
+        self.result_ready.emit((frequency, time_percent), results)
 
         print('job finished')
 

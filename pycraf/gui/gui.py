@@ -11,7 +11,9 @@ from matplotlib.ticker import ScalarFormatter
 from .resources.main_form import Ui_MainWindow
 from .plot_widget import CustomToolbar, PlotWidget
 from .helpers import setup_earth_axes
-from .workers import GeometryWorker, PathProfWorker, MapWorker
+from .workers import (
+    GeometryWorker, StatisticsWorker, PathProfWorker, MapWorker
+    )
 from ..geometry import true_angular_distance
 from ..pathprof import SrtmConf
 
@@ -160,6 +162,7 @@ SrtmConf.set(download='never', server='viewpano')
 class PycrafGui(QtWidgets.QMainWindow):
 
     geo_job_triggered = QtCore.pyqtSignal(dict, name='geo_job_triggered')
+    stats_job_triggered = QtCore.pyqtSignal(dict, name='stats_job_triggered')
     pp_job_triggered = QtCore.pyqtSignal(dict, name='pp_job_triggered')
     map_job_triggered = QtCore.pyqtSignal(dict, name='map_job_triggered')
     clear_caches_triggered = QtCore.pyqtSignal(name='clear_caches_triggered')
@@ -171,6 +174,8 @@ class PycrafGui(QtWidgets.QMainWindow):
 
         self.geometry_hprof_data = None
         self.geometry_results = None
+        self.statistics_f_p = None
+        self.statistics_results = None
         self.pathprof_hprof_data = None
         self.pathprof_results = None
         self.map_hprof_data = None
@@ -293,9 +298,6 @@ class PycrafGui(QtWidgets.QMainWindow):
         self.my_geo_worker = GeometryWorker(self)
 
         self.my_geo_worker.moveToThread(self.my_geo_worker_thread)
-        # self.my_geo_worker.job_started.connect(self.busy_start)
-        # self.my_geo_worker.job_finished.connect(self.busy_stop)
-        # self.my_geo_worker.job_excepted.connect(self.busy_stop)
         self.geo_job_triggered.connect(self.my_geo_worker.on_job_triggered)
         self.clear_caches_triggered.connect(
             self.my_geo_worker.on_clear_caches_triggered
@@ -305,6 +307,22 @@ class PycrafGui(QtWidgets.QMainWindow):
             )
         self.my_geo_worker.job_excepted[str].connect(self.on_job_excepted)
         self.my_geo_worker_thread.start()
+
+        self.my_stats_worker_thread = QtCore.QThread()
+        self.my_stats_worker = StatisticsWorker(self)
+
+        self.my_stats_worker.moveToThread(self.my_stats_worker_thread)
+        self.stats_job_triggered.connect(
+            self.my_stats_worker.on_job_triggered
+            )
+        self.clear_caches_triggered.connect(
+            self.my_stats_worker.on_clear_caches_triggered
+            )
+        self.my_stats_worker.result_ready[object, object].connect(
+            self.on_statistics_result_ready
+            )
+        self.my_stats_worker.job_excepted[str].connect(self.on_job_excepted)
+        self.my_stats_worker_thread.start()
 
         self.my_pp_worker_thread = QtCore.QThread()
         self.my_pp_worker = PathProfWorker(self)
@@ -347,6 +365,11 @@ class PycrafGui(QtWidgets.QMainWindow):
             subplotx=1, subploty=1, plottername='Geometry',
             )
         self.ui.geometryVerticalLayout.addWidget(self.geometry_plot_area)
+
+        self.statistics_plot_area = PlotWidget(
+            subplotx=1, subploty=1, plottername='Statistics',
+            )
+        self.ui.statisticsVerticalLayout.addWidget(self.statistics_plot_area)
 
         self.pathprof_plot_area = PlotWidget(
             subplotx=1, subploty=2,
@@ -474,6 +497,7 @@ class PycrafGui(QtWidgets.QMainWindow):
 
         job_dict = self._get_parameters()
         self.geo_job_triggered.emit(job_dict)
+        self.stats_job_triggered.emit(job_dict)
 
         if self.ui.pathprofAutoUpdateCheckBox.isChecked():
             self.on_pathprof_compute_pressed()
@@ -530,6 +554,14 @@ class PycrafGui(QtWidgets.QMainWindow):
         self.geometry_results = results
 
         self.plot_geometry()
+
+    @QtCore.pyqtSlot(object, object)
+    def on_statistics_result_ready(self, f_p_data, results):
+
+        self.statistics_f_p = f_p_data
+        self.statistics_results = results
+
+        self.plot_statistics()
 
     @QtCore.pyqtSlot(object, object)
     def on_pathprof_result_ready(self, hprof_data, results):
@@ -673,6 +705,48 @@ class PycrafGui(QtWidgets.QMainWindow):
 
         self.ui.ppRichTextLabel.setText(PP_TEXT_TEMPLATE.format(**results))
 
+    @QtCore.pyqtSlot()
+    def plot_statistics(self):
+
+        if self.statistics_f_p is None or self.statistics_results is None:
+            print('nothing to plot yet')
+            return
+
+        freqs, timepercents = self.statistics_f_p
+        L_b_corr = self.statistics_results['L_b_corr']
+
+        plot_area = self.statistics_plot_area
+        ax = plot_area.axes
+
+        ax.clear()
+
+        for sax in [ax.xaxis, ax.yaxis]:
+            sax.set_major_formatter(ScalarFormatter(useOffset=False))
+
+        ax.set_xlabel('Time percent [%]')
+        ax.grid()
+        ax.set_xlim((timepercents[0], timepercents[-1]))
+
+        t = timepercents.squeeze()
+        lidx = np.argmin(np.abs(t - 2e-3))
+        for idx, f in enumerate(freqs.squeeze()):
+            p = ax.semilogx(
+                t, L_b_corr.value[idx], '-', label='{:5.1f}'.format(f)
+                )
+            ax.text(
+                2e-3, L_b_corr.value[idx][lidx], '{:.1f} GHz'.format(f),
+                ha='left', va='top', color=p[0].get_color(),
+                )
+
+        ax.set_ylabel('L_b_corr [dB]')
+        # ax.legend(
+        #     *ax.get_legend_handles_labels(),
+        #     title='Frequency [GHz]', ncol=2,
+        #     )
+
+        plot_area.clear_history()
+        plot_area.canvas.draw()
+
     @QtCore.pyqtSlot(int)
     def plot_pathprof(self, display_index):
 
@@ -778,9 +852,11 @@ class PycrafGui(QtWidgets.QMainWindow):
         (see below)
         '''
         self.my_geo_worker_thread.quit()
+        self.my_stats_worker_thread.quit()
         self.my_pp_worker_thread.quit()
         self.my_map_worker_thread.quit()
         self.my_geo_worker_thread.wait()
+        self.my_stats_worker_thread.wait()
         self.my_pp_worker_thread.wait()
         self.my_map_worker_thread.wait()
 
