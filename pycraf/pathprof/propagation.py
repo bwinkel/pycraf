@@ -409,8 +409,8 @@ def loss_complete(
 
     Returns
     -------
-    L_bfsg : `~astropy.units.Quantity`
-        Free-space loss [dB]
+    L_b0p : `~astropy.units.Quantity`
+        Free-space loss including focussing effects (for p% of time) [dB]
     L_bd : `~astropy.units.Quantity`
         Basic transmission loss associated with diffraction not
         exceeded for p% time [dB]::
@@ -847,7 +847,8 @@ def atten_map_fast(
         the associated value for the map of dimension `(my, mx)`.
         The following entries are contained:
 
-        - `L_bfsg` - Free-space loss [dB]
+        - `L_b0p` - Free-space loss including focussing effects
+            (for p% of time) [dB]
 
         - `L_bd` - Basic transmission loss associated with diffraction
             not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
@@ -891,7 +892,7 @@ def atten_map_fast(
         )
 
     return {
-        'L_bfsg': float_res[0] * cnv.dB,
+        'L_b0p': float_res[0] * cnv.dB,
         'L_bd': float_res[1] * cnv.dB,
         'L_bs': float_res[2] * cnv.dB,
         'L_ba': float_res[3] * cnv.dB,
@@ -1278,7 +1279,8 @@ def atten_path_fast(
         the associated value for the path.
         The following entries are contained:
 
-        - `L_bfsg` - Free-space loss [dB]
+        - `L_b0p` - Free-space loss including focussing effects
+           (for p% of time) [dB]
 
         - `L_bd` - Basic transmission loss associated with diffraction
             not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
@@ -1374,7 +1376,7 @@ def atten_path_fast(
         )
 
     return {
-        'L_bfsg': float_res[0] * cnv.dB,
+        'L_b0p': float_res[0] * cnv.dB,
         'L_bd': float_res[1] * cnv.dB,
         'L_bs': float_res[2] * cnv.dB,
         'L_ba': float_res[3] * cnv.dB,
@@ -1519,7 +1521,8 @@ def losses_complete(
         the associated values for the path.
         The following entries are contained:
 
-        - `L_bfsg` - Free-space loss [dB]
+        - `L_b0p` - Free-space loss including focussing effects
+          (for p% of time) [dB]
 
         - `L_bd` - Basic transmission loss associated with diffraction
             not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
@@ -1626,7 +1629,7 @@ def losses_complete(
         hprof_backbearing=hprof_backbearing,
         )
     return {
-        'L_bfsg': res[0] * cnv.dB,
+        'L_b0p': res[0] * cnv.dB,
         'L_bd': res[1] * cnv.dB,
         'L_bs': res[2] * cnv.dB,
         'L_ba': res[3] * cnv.dB,

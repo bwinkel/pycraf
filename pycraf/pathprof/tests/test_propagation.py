@@ -161,7 +161,7 @@ class TestPropagation:
             losses['L_bd'] = diff_loss[3].to(cnv.dB).value
             losses['L_min_b0p'] = diff_loss[4].to(cnv.dB).value
 
-            losses['L_bfsg_t'] = tot_loss[0].to(cnv.dB).value
+            losses['L_b0p_t'] = tot_loss[0].to(cnv.dB).value
             losses['L_bd_t'] = tot_loss[1].to(cnv.dB).value
             losses['L_bs_t'] = tot_loss[2].to(cnv.dB).value
             losses['L_ba_t'] = tot_loss[3].to(cnv.dB).value
@@ -308,7 +308,7 @@ class TestPropagation:
                 pprop, G_t * cnv.dB, G_r * cnv.dB
                 )
             losses = {}
-            losses['L_bfsg_t'] = tot_loss[0].to(cnv.dB).value
+            losses['L_b0p_t'] = tot_loss[0].to(cnv.dB).value
             losses['L_bd_t'] = tot_loss[1].to(cnv.dB).value
             losses['L_bs_t'] = tot_loss[2].to(cnv.dB).value
             losses['L_ba_t'] = tot_loss[3].to(cnv.dB).value
@@ -359,7 +359,7 @@ class TestPropagation:
 
         for tup in np.nditer([
                 freqs, h_tgs, h_rgs, time_percents, G_ts, G_rs, versions,
-                results['L_bfsg'], results['L_bd'], results['L_bs'],
+                results['L_b0p'], results['L_bd'], results['L_bs'],
                 results['L_ba'], results['L_b'], results['L_b_corr'],
                 ]):
 
@@ -374,7 +374,7 @@ class TestPropagation:
                     loss_true = json.loads(f.read().decode('utf-8'))
 
                 for i, k in enumerate([
-                        'L_bfsg', 'L_bd', 'L_bs', 'L_ba', 'L_b', 'L_b_corr',
+                        'L_b0p', 'L_bd', 'L_bs', 'L_ba', 'L_b', 'L_b_corr',
                         ]):
                     assert_quantity_allclose(tup[i + 7], loss_true[k + '_t'])
 
@@ -473,6 +473,9 @@ class TestPropagation:
             # Warning: if uncommenting, the test cases will be overwritten
             # do this only, if you need to update the h5py files
             # (make sure, that results are correct!)
+            # Also, if you want to create all at once, comment-out the
+            # "with ZipFile" below; results will be in the tmp-dir
+            # and can be added manually to the zipfile
             # tfile = str(zipdir.join(fname))
             # print('writing temporary files to', zipdir)
             # with h5py.File(tfile, 'w') as h5f:
@@ -684,7 +687,7 @@ class TestPropagation:
             tot_loss = pathprof.loss_complete(pprop)
             atten_path[:, idx] = apu.Quantity(tot_loss).value[:-1]
 
-        assert np.allclose(atten_path[0], results['L_bfsg'].value, atol=1.e-3)
+        assert np.allclose(atten_path[0], results['L_b0p'].value, atol=1.e-3)
         assert np.allclose(atten_path[1], results['L_bd'].value, atol=1.e-3)
         assert np.allclose(atten_path[2], results['L_bs'].value, atol=1.e-3)
         assert np.allclose(atten_path[3], results['L_ba'].value, atol=1.e-3)
@@ -764,7 +767,7 @@ class TestPropagation:
             tot_loss = pathprof.loss_complete(pprop)
             atten_path[:, idx] = apu.Quantity(tot_loss).value[:-1]
 
-        assert np.allclose(atten_path[0], results['L_bfsg'].value, atol=1.e-3)
+        assert np.allclose(atten_path[0], results['L_b0p'].value, atol=1.e-3)
         assert np.allclose(atten_path[1], results['L_bd'].value, atol=1.e-3)
         assert np.allclose(atten_path[2], results['L_bs'].value, atol=1.e-3)
         assert np.allclose(atten_path[3], results['L_ba'].value, atol=1.e-3)

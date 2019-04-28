@@ -205,7 +205,7 @@ With the PathProp object, it is now just one function call to get the path
 loss::
 
     >>> tot_loss = pathprof.loss_complete(pprop, G_t, G_r)  # doctest: +REMOTE_DATA
-    >>> print('L_bfsg:   {:5.2f} - Free-space loss\n'  # doctest: +REMOTE_DATA
+    >>> print('L_b0p:   {:5.2f} - Free-space loss\n'  # doctest: +REMOTE_DATA
     ...       'L_bd:     {:5.2f} - Basic transmission loss associated '
     ...       'with diffraction\n'
     ...       'L_bs:     {:5.2f} - Tropospheric scatter loss\n'
@@ -215,7 +215,7 @@ loss::
     ...       'L:        {:5.2f} - As L_b_corr but with gain '
     ...       'correction'.format(*tot_loss)
     ...      )
-    L_bfsg:   123.34 dB - Free-space loss
+    L_b0p:    122.37 dB - Free-space loss
     L_bd:     173.73 dB - Basic transmission loss associated with diffraction
     L_bs:     225.76 dB - Tropospheric scatter loss
     L_ba:     212.81 dB - Ducting/layer reflection loss

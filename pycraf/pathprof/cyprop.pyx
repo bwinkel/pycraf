@@ -1890,7 +1890,7 @@ cdef (double, double, double, double, double, double, double) _path_attenuation_
     L_b_corr = L_b + A_ht + A_hr
     L = L_b_corr - G_t - G_r
 
-    return L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L
+    return L_b0p, L_bd, L_bs, L_ba, L_b, L_b_corr, L
 
 
 def path_attenuation_complete_cython(
@@ -1908,8 +1908,8 @@ def path_attenuation_complete_cython(
 
     Returns
     -------
-    (L_bfsg, L_bd, L_bs, L_ba, L_b)
-        L_bfsg - Free-space loss [dB]
+    (L_b0p, L_bd, L_bs, L_ba, L_b)
+        L_b0p - Free-space loss [dB]
         L_bd - Basic transmission loss associated with diffraction not
             exceeded for p% time [dB]; L_bd = L_b0p + L_dp
         L_bs - Tropospheric scatter loss [dB]
@@ -2475,7 +2475,8 @@ def atten_map_fast_cython(
         8-9: Path horizon distances (for LoS paths, this is distance
             to Bullington point)
 
-        0) L_bfsg - Free-space loss [dB]
+        0) L_b0p - Free-space loss including focussing effects
+           (for p% of time) [dB]
         1) L_bd - Basic transmission loss associated with diffraction
            not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
         2) L_bs - Tropospheric scatter loss [dB]
@@ -2515,7 +2516,7 @@ def atten_map_fast_cython(
 
         double[:, ::1] clutter_data_v = CLUTTER_DATA
 
-        double L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
+        double L_b0p, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
 
     xcoords, ycoords = hprof_data['xcoords'], hprof_data['ycoords']
 
@@ -2637,10 +2638,10 @@ def atten_map_fast_cython(
                     )
 
                 (
-                    L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
+                    L_b0p, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
                     ) = _path_attenuation_complete(pp[0], G_t, G_r)
 
-                float_res_v[0, yi, xi] = L_bfsg
+                float_res_v[0, yi, xi] = L_b0p
                 float_res_v[1, yi, xi] = L_bd
                 float_res_v[2, yi, xi] = L_bs
                 float_res_v[3, yi, xi] = L_ba
@@ -2695,25 +2696,6 @@ def atten_path_fast_cython(
 
     Returns
     -------
-    atten_path : 2D `~numpy.ndarray`
-        Attenuation values along path. First dimension has length 6,
-        which refers to:
-
-        0) L_bfsg - Free-space loss [dB]
-        1) L_bd - Basic transmission loss associated with diffraction
-           not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
-        2) L_bs - Tropospheric scatter loss [dB]
-        3) L_ba - Ducting/layer reflection loss [dB]
-        4) L_b - Complete path propagation loss [dB]
-        5) L_b_corr - As L_b but with clutter correction [dB]
-
-        (i.e., the output of path_attenuation_complete without
-        gain-corrected values)
-    eps_pt_path : 1D `~numpy.ndarray`
-        Elevation angles along path w.r.t. Tx [deg]
-    eps_pr_path : 1D `~numpy.ndarray`
-        Elevation angles along path w.r.t. Rx [deg]
-
     float_results : 2D `~numpy.ndarray`
 
         Results of the calculation. The second dimension refers to
@@ -2725,7 +2707,8 @@ def atten_path_fast_cython(
         8-9: Path horizon distances (for LoS paths, this is distance
             to Bullington point)
 
-        0) L_bfsg - Free-space loss [dB]
+        0) L_b0p - Free-space loss including focussing effects
+           (for p% of time) [dB]
         1) L_bd - Basic transmission loss associated with diffraction
            not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
         2) L_bs - Tropospheric scatter loss [dB]
@@ -2763,7 +2746,7 @@ def atten_path_fast_cython(
 
         double[:, ::1] clutter_data_v = CLUTTER_DATA
 
-        double L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
+        double L_b0p, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
 
         _cf = np.ascontiguousarray
 
@@ -2857,10 +2840,10 @@ def atten_path_fast_cython(
                 )
 
             (
-                L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
+                L_b0p, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
                 ) = _path_attenuation_complete(pp[0], G_t, G_r)
 
-            float_res_v[0, i] = L_bfsg
+            float_res_v[0, i] = L_b0p
             float_res_v[1, i] = L_bd
             float_res_v[2, i] = L_bs
             float_res_v[3, i] = L_ba
@@ -2891,7 +2874,7 @@ def losses_complete_cython(
         omega=None,
         d_tm=None, d_lm=None,
         d_ct=None, d_cr=None,
-        zone_t=CLUTTER.UNKNOWN, zone_r=CLUTTER.UNKNOWN,
+        zone_t=None, zone_r=None,
         polarization=0,
         version=16,
         # override if you don't want builtin method:
@@ -2902,13 +2885,6 @@ def losses_complete_cython(
         hprof_bearing=None, hprof_backbearing=None,
         ):
 
-    # what to do about these:
-    # # override if you don't want builtin method:
-    # delta_N, N0,
-    # # override if you don't want builtin method:
-    # hprof_dists, hprof_heights,
-    # hprof_bearing, hprof_backbearing,
-
     cdef:
         # work arrays (for inner loop of nditer)
         np.ndarray[double] _freq, _temp, _press
@@ -2918,7 +2894,7 @@ def losses_complete_cython(
         np.ndarray[int] _zone_t, _zone_r, _polarization, _version
 
         # output arrays
-        np.ndarray[double] _L_bfsg, _L_bd, _L_bs, _L_ba, _L_b, _L_b_corr
+        np.ndarray[double] _L_b0p, _L_bd, _L_bs, _L_ba, _L_b, _L_b_corr
         np.ndarray[double] _eps_pt, _eps_pr, _d_lt, _d_lr
         np.ndarray[int] _path_type
 
@@ -2936,7 +2912,6 @@ def losses_complete_cython(
 
         double[:, ::1] _clut_data = CLUTTER_DATA
 
-        # double L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
         double L_dummy
 
         double *last_freq
@@ -2947,7 +2922,6 @@ def losses_complete_cython(
         int *last_zone_r
 
         int i, size
-
 
     assert np.all(time_percent <= 50.)
     assert np.all((version == 14) | (version == 16))
@@ -3029,11 +3003,11 @@ def losses_complete_cython(
     if omega is None:
         omega = np.array([0.])
 
-    # if zone_t is None:
-    #     zone_t = np.array([-1])
+    if zone_t is None:
+        zone_t = np.array([-1])
 
-    # if zone_r is None:
-    #     zone_r = np.array([-1])
+    if zone_r is None:
+        zone_r = np.array([-1])
 
 
     # in the nditer, we first put all entities that have impact on the
@@ -3047,7 +3021,7 @@ def losses_complete_cython(
             frequency, h_tg, h_rg, G_t, G_r, version, zone_t, zone_r,
             temperature, pressure, time_percent, omega,
             d_tm, d_lm, d_ct, d_cr, polarization,
-            # L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr,
+            # L_b0p, L_bd, L_bs, L_ba, L_b, L_b_corr,
             None, None, None, None, None, None,
             # eps_pt, eps_pr, d_lt, d_lr, path_type
             None, None, None, None, None,
@@ -3066,7 +3040,7 @@ def losses_complete_cython(
             _freq, _h_tg, _h_rg, _G_t, _G_r, _version, _zone_t, _zone_r,
             _temp, _press, _time_percent, _omega,
             _d_tm, _d_lm, _d_ct, _d_cr, _polarization,
-            _L_bfsg, _L_bd, _L_bs, _L_ba, _L_b, _L_b_corr,
+            _L_b0p, _L_bd, _L_bs, _L_ba, _L_b, _L_b_corr,
             _eps_pt, _eps_pr, _d_lt, _d_lr, _path_type,
             ) in it:
 
@@ -3093,10 +3067,6 @@ def losses_complete_cython(
             if last_zone_r == NULL:
                 abort()
 
-            # it seems, that this is not sufficient to initialize the
-            # "last"-vars for all threads (why not!?); therefore in
-            # the prange loop below, we always make sure that in the
-            # first iteration the path is re-processed
             last_freq[0] = NAN
             last_h_tg[0] = NAN
             last_h_rg[0] = NAN
@@ -3128,8 +3098,6 @@ def losses_complete_cython(
             for i in prange(size):
 
                 if (
-                        # 1 == 1 or
-                        # i == 0 or
                         _freq[i] != last_freq[0] or
                         _h_tg[i] != last_h_tg[0] or
                         _h_rg[i] != last_h_rg[0] or
@@ -3183,7 +3151,7 @@ def losses_complete_cython(
                     )
 
                 (
-                    _L_bfsg[i],
+                    _L_b0p[i],
                     _L_bd[i],
                     _L_bs[i],
                     _L_ba[i],
@@ -3209,22 +3177,6 @@ def losses_complete_cython(
     out = it.operands[17:]
     return out
 
-    # although this is nice, it doesn't support units...
-    # return np.core.records.fromarrays(
-    #     out[17:],
-    #     names=(
-    #         # 'frequency, h_tg, h_rg, version, zone_t, zone_r, '
-    #         # 'temperature, pressure, time_percent, omega, '
-    #         # 'd_tm, d_lm, d_ct, d_cr, polarization, '
-    #         'L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, '
-    #         'eps_pt, eps_pr, d_lt, d_lr, path_type'
-    #         ),
-    #     formats=', '.join(
-    #         # ['f8'] * 3 + ['i4'] * 3 +
-    #         # ['f8'] * 8 + ['i4'] * 1 +
-    #         ['f8'] * 10 + ['i4'] * 1
-    #         )
-    #     )
 
 # ############################################################################
 # Atmospheric attenuation (Annex 2)
