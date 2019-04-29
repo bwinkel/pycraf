@@ -383,8 +383,8 @@ def _download(ilon, ilat):
 
         try:
             os.remove(tile_path + '.zip')
-        except FileNotFoundError:
-            # someone else was faster to delete?
+        except (FileNotFoundError, PermissionError):
+            # someone else was faster to delete or still accessing?
             pass
 
     elif server == 'viewpano':
@@ -405,7 +405,11 @@ def _download(ilon, ilat):
         with ZipFile(super_tile_path, 'r') as zf:
             zf.extractall(srtm_dir)
 
-        os.remove(super_tile_path)
+        try:
+            os.remove(super_tile_path)
+        except (FileNotFoundError, PermissionError):
+            # someone else was faster to delete or still accessing?
+            pass
 
 
 def _extract_hgt_coords(hgt_name):
