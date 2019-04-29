@@ -526,8 +526,8 @@ The following shows a typical use case (which is also contained in the
     Even with the Tx/Rx location and the terrain height profile being constant
     for one call of the `~pycraf.pathprof.losses_complete` function, the
     computing time can be substantial. This is because changes in the
-    parameters `frequency`, `h_tg`, `h_rg`, `version`, `zone_t`, and ` zone_r`
-    have influence on the propagation path geometry.  In the ` broadcasted
+    parameters `frequency`, `h_tg`, `h_rg`, `version`, `zone_t`, and `zone_r`
+    have influence on the propagation path geometry.  In the `broadcasted
     arrays <https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html>`_,
     the axes associated with the mentioned parameters should vary as slow as
     possible. The underlying implementation will trigger a re-computation of

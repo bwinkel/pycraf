@@ -116,7 +116,19 @@ Since pycraf uses the `Astropy Package Template <https://github.com/astropy/pack
 Installation
 ============
 
-The easiest way to install pycraf is via pip::
+We strongly recommend to use the `Anaconda Python distribution
+<https://www.anaconda.com/distribution/>`_, as it allows to download `pycraf`
+binaries for all major platforms (Linux, OSX, Windows). After installing
+Anaconda/Miniconda, one can use the `conda` package manager to install it::
+
+    conda install pycraf -c conda-forge
+
+Of course, it is always a good idea to do this in its own environment, such
+that you don't mess up with your standard environment::
+
+    conda create -n pycraf-env python=3.6 pycraf
+
+Otherwise, the easiest way to install pycraf is via pip::
 
     pip install pycraf
 

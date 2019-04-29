@@ -1443,8 +1443,8 @@ def losses_complete(
     Calculate propagation losses for a fixed path using a parallelized method.
 
     The difference to the usual `~pycraf.pathprof.PathProp` +
-    `~pycraf.pathprof.loss_complete` approach is, that `atten_fast` supports
-    full `~numpy` `broad-casting
+    `~pycraf.pathprof.loss_complete` approach is, that `losses_complete`
+    supports full `numpy broad-casting
     <https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html>`_. This
     allows perform many calculations at once, e.g., if one interested in
     a statistics plot of `L` vs. `time_percent`, without querying the
