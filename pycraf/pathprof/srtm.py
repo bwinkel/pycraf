@@ -381,7 +381,11 @@ def _download(ilon, ilat):
         with ZipFile(tile_path + '.zip', 'r') as zf:
             zf.extractall(srtm_dir)
 
-        os.remove(tile_path + '.zip')
+        try:
+            os.remove(tile_path + '.zip')
+        except FileNotFoundError:
+            # someone else was faster to delete?
+            pass
 
     elif server == 'viewpano':
 

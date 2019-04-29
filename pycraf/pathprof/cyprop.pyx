@@ -21,6 +21,8 @@ from libc.math cimport (
 import numpy as np
 from astropy import units as apu
 from . import heightprofile
+from . import srtm
+from . import cygeodesics
 from . import helper
 from .. import conversions as cnv
 from .. import utils
@@ -36,6 +38,8 @@ __all__ = [
 
 
 cdef double NAN = np.nan
+cdef double DEG2RAD = M_PI / 180
+cdef double RAD2DEG = 180 / M_PI
 
 cpdef enum CLUTTER:
     UNKNOWN = -1
@@ -1886,7 +1890,7 @@ cdef (double, double, double, double, double, double, double) _path_attenuation_
     L_b_corr = L_b + A_ht + A_hr
     L = L_b_corr - G_t - G_r
 
-    return L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L
+    return L_b0p, L_bd, L_bs, L_ba, L_b, L_b_corr, L
 
 
 def path_attenuation_complete_cython(
@@ -1904,8 +1908,8 @@ def path_attenuation_complete_cython(
 
     Returns
     -------
-    (L_bfsg, L_bd, L_bs, L_ba, L_b)
-        L_bfsg - Free-space loss [dB]
+    (L_b0p, L_bd, L_bs, L_ba, L_b)
+        L_b0p - Free-space loss [dB]
         L_bd - Basic transmission loss associated with diffraction not
             exceeded for p% time [dB]; L_bd = L_b0p + L_dp
         L_bs - Tropospheric scatter loss [dB]
@@ -2142,130 +2146,207 @@ def height_map_data_cython(
 
         # need 3x better resolution than map_resolution
         double hprof_step = map_resolution * 3600. / 1. * 30. / 3.
+        double cosdelta
+        double max_distance, min_pa_res
 
-        int xi, yi, i
-        int eidx, didx
+        int xi, yi, i, xidx, yidx, mid_idx
+        int bidx, didx
+        double refx, refy
+        double lon_t_rad, lat_t_rad, lon_r, lat_r
+        double pdist
+
+        # need views on all relevant numpy arrays for faster access
+        np.float64_t[::1] _xcoords, _ycoords
+        np.float64_t[::1] _distances, _start_bearings
+        np.float64_t[:, ::1] _lons, _lats, _back_bearings
+        np.float64_t[:, ::1] _heights
+        np.int32_t[:, ::1] _path_idx_map, _dist_end_idx_map
+        np.float64_t[:, ::1] _pix_dist_map
+        np.float64_t[:, ::1] _lon_mid_map, _lat_mid_map
+        np.float64_t[:, ::1] _dist_map
+        np.float64_t[:, ::1] _bearing_map, _backbearing_map
 
     # print('using hprof_step = {:.1f} m'.format(hprof_step))
 
-    cosdelta = 1. / np.cos(np.radians(lat_t)) if do_cos_delta else 1.
+    cosdelta = 1. / cos(DEG2RAD * lat_t) if do_cos_delta else 1.
 
     # construction map arrays
-    xcoords = np.arange(
+    _xcoords = xcoords = np.arange(
         lon_t - cosdelta * map_size_lon / 2,
         lon_t + cosdelta * map_size_lon / 2 + 1.e-6,
         cosdelta * map_resolution,
         )
-    ycoords = np.arange(
+    _ycoords = ycoords = np.arange(
         lat_t - map_size_lat / 2,
         lat_t + map_size_lat / 2 + 1.e-6,
         map_resolution,
         )
+    lon_t_rad, lat_t_rad = DEG2RAD * lon_t, DEG2RAD * lat_t
+    xcoords_rad = np.radians(xcoords)
+    ycoords_rad = np.radians(ycoords)
     # print(
     #     xcoords[0], xcoords[len(xcoords) - 1],
     #     ycoords[0], ycoords[len(ycoords) - 1]
     #     )
 
-    # use a 3x higher resolution version for edge coords for better accuracy
-    xcoords_hi = np.arange(
-        lon_t - cosdelta * map_size_lon / 2,
-        lon_t + cosdelta * map_size_lon / 2 + 1.e-6,
-        cosdelta * map_resolution / 3,
-        )
-    ycoords_hi = np.arange(
-        lat_t - map_size_lat / 2,
-        lat_t + map_size_lat / 2 + 1.e-6,
-        map_resolution / 3,
-        )
+    # find max distance (will be one of the edges)
+    max_distance = max([
+        cygeodesics.inverse_cython(
+            lon_t_rad, lat_t_rad, xcoords_rad[i], ycoords_rad[j],
+            )[0]
+        for i, j in [
+            (0, 0),
+            (0, ycoords_rad.size - 1),
+            (xcoords_rad.size - 1, 0),
+            (xcoords_rad.size - 1, ycoords_rad.size - 1)
+            ]
+        ])  # m
+    # print('max distance (to corner coords)', max_distance / 1000, 'km')
+
+    # find necessary position angle resolution (again, using edges)
+    min_pa_res = min([
+        fabs(
+            cygeodesics.inverse_cython(
+                lon_t_rad, lat_t_rad, xcoords_rad[i], ycoords_rad[k],
+                )[1] -
+            cygeodesics.inverse_cython(
+                lon_t_rad, lat_t_rad, xcoords_rad[j], ycoords_rad[k],
+                )[1]
+            )
+        for i, j, k in [
+            (0, 1, 0),
+            (0, 1, ycoords_rad.size - 1),
+            (xcoords_rad.size - 1, xcoords_rad.size - 2, 0),
+            (xcoords_rad.size - 1, xcoords_rad.size - 2, ycoords_rad.size - 1)
+            ]
+        ]) / 2  # rad
+    # print('min pos angle resolution (at corner coords)', min_pa_res)
+
 
     # path_idx_map stores the index of the edge-path that is closest
     # to any given map pixel
-    path_idx_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.int32)
+    _path_idx_map = path_idx_map = np.zeros(
+        (ycoords.size, xcoords.size), dtype=np.int32
+        )
 
     # to define and find closest paths, we store the true angular distance
     # in pix_dist_map; Note, since distances are small, it is ok to do
     # this on the sphere (and not on geoid)
-    pix_dist_map = np.ones((len(ycoords), len(xcoords)), dtype=np.float64)
-    pix_dist_map *= 1.e30
+    _pix_dist_map = pix_dist_map = np.full(
+        (ycoords.size, xcoords.size), 1.e30, dtype=np.float64
+        )
 
     # dist_end_idx_map stores the (distance) index in the height profile
     # of the closest edge path, such that one can use a slice (0, end_idx)
     # to get a height profile approximately valid for any given pixel
-    dist_end_idx_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.int32)
+    _dist_end_idx_map = dist_end_idx_map = np.zeros(
+        (ycoords.size, xcoords.size), dtype=np.int32
+        )
 
     # store lon_mid, lat_mid,
-    lon_mid_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
-    lat_mid_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
-    dist_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
+    _lon_mid_map = lon_mid_map = np.zeros(
+        (ycoords.size, xcoords.size), dtype=np.float64
+        )
+    _lat_mid_map = lat_mid_map = np.zeros(
+        (ycoords.size, xcoords.size), dtype=np.float64
+        )
+    _dist_map = dist_map = np.zeros(
+        (ycoords.size, xcoords.size), dtype=np.float64
+        )
 
     # store bearings
-    bearing_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
-    backbearing_map = np.zeros((len(ycoords), len(xcoords)), dtype=np.float64)
+    _bearing_map = bearing_map = np.zeros(
+        (ycoords.size, xcoords.size), dtype=np.float64
+        )
+    _backbearing_map = backbearing_map = np.zeros(
+        (ycoords.size, xcoords.size), dtype=np.float64
+        )
 
-    # obtain all edge's height profiles
-    edge_coords = list(zip(
-        np.hstack([
-            xcoords_hi,
-            xcoords_hi[len(xcoords_hi) - 1] + 0. * xcoords_hi,
-            xcoords_hi[::-1],
-            xcoords_hi[0] + 0. * xcoords_hi,
-            ]),
-        np.hstack([
-            ycoords_hi[0] + 0. * ycoords_hi,
-            ycoords_hi,
-            ycoords_hi[len(ycoords_hi) - 1] + 0. * ycoords_hi,
-            ycoords_hi[::-1],
-            ]),
-        ))
+    # obtain all path's height profiles
+    # generate start bearings:
+    _start_bearings = start_bearings = np.arange(0, 2 * np.pi, min_pa_res)
 
-    # print('len(edge_coords)', len(edge_coords))
+    # calculate path positions
+    _distances = distances = np.arange(
+        0, max_distance + hprof_step, hprof_step
+        )
 
-    refx, refy = xcoords[0], ycoords[0]
-    cdef dict dist_dict = {}, height_dict = {}
+    lons_rad, lats_rad, back_bearings_rad = cygeodesics.direct_cython(
+        lon_t_rad, lat_t_rad,
+        start_bearings[:, np.newaxis],
+        distances[np.newaxis]
+        )
+    _lons, _lats = lons, lats = np.degrees(lons_rad), np.degrees(lats_rad)
+    _back_bearings = back_bearings = np.degrees(back_bearings_rad)
 
-    for eidx, (x, y) in enumerate(edge_coords):
+    # print(xcoords, ycoords)
+    # print(lons.min(), lons.max(), lats.min(), lats.max())
 
-        res = heightprofile._srtm_height_profile(
-            lon_t, lat_t,
-            x, y,
-            hprof_step
+    if hprof_step > srtm.SrtmConf.hgt_res / 1.5:
+        hdistances = np.arange(
+            0, max_distance + hprof_step / 3, hprof_step / 3
             )
-        (
-            lons, lats, _, dists, heights,
-            bearing, back_bearing, back_bearings
-            ) = res
-        dist_dict[eidx] = dists
-        height_dict[eidx] = heights
 
-        for didx, (lon_r, lat_r) in enumerate(zip(lons, lats)):
+        hlons_rad, hlats_rad, _ = cygeodesics.direct_cython(
+            lon_t_rad, lat_t_rad,
+            start_bearings[:, np.newaxis],
+            hdistances[np.newaxis]
+            )
 
-            # need to find closest pixel index in map
-            xidx = int((lon_r - refx) / cosdelta / map_resolution + 0.5)
-            yidx = int((lat_r - refy) / map_resolution + 0.5)
+        hheights = srtm._srtm_height_data(
+            np.degrees(hlons_rad), np.degrees(hlats_rad)
+            ).astype(np.float64)
+        heights = np.empty_like(lons_rad)
+        # now smooth/interpolate this to the desired step width
+        cygeodesics.regrid2d_with_x(
+            hdistances, hheights, distances, heights,
+            hprof_step / 2.35, regular=True
+            )
 
-            if xidx < 0:
-                xidx = 0
-            if xidx >= len(xcoords):
-                xidx = len(xcoords) - 1
-            if yidx < 0:
-                yidx = 0
-            if yidx >= len(ycoords):
-                yidx = len(ycoords) - 1
+    else:
 
-            pdist = true_angular_distance(
-                xcoords[xidx], ycoords[yidx], lon_r, lat_r
-                )
+        heights = srtm._srtm_height_data(lons, lats).astype(np.float64)
 
-            if pdist < pix_dist_map[yidx, xidx]:
-                pix_dist_map[yidx, xidx] = pdist
-                path_idx_map[yidx, xidx] = eidx
-                dist_end_idx_map[yidx, xidx] = didx
-                mid_idx = didx // 2
-                lon_mid_map[yidx, xidx] = lons[mid_idx]
-                lat_mid_map[yidx, xidx] = lats[mid_idx]
-                dist_map[yidx, xidx] = dists[didx]
-                bearing_map[yidx, xidx] = bearing
-                backbearing_map[yidx, xidx] = back_bearings[didx]
+    _heights = heights
+    distances *= 1e-3  # convert to km
+    _distances = distances
+
+    refx, refy = _xcoords[0], _ycoords[0]
+
+    with nogil:
+        for bidx in range(_start_bearings.shape[0]):
+
+            for didx in range(_distances.shape[0]):
+
+                lon_r, lat_r = _lons[bidx, didx], _lats[bidx, didx]
+
+                # need to find closest pixel index in map
+                xidx = int((lon_r - refx) / cosdelta / map_resolution + 0.5)
+                yidx = int((lat_r - refy) / map_resolution + 0.5)
+
+                if xidx < 0:
+                    xidx = 0
+                if xidx >= _xcoords.shape[0]:
+                    xidx = _xcoords.shape[0] - 1
+                if yidx < 0:
+                    yidx = 0
+                if yidx >= _ycoords.shape[0]:
+                    yidx = _ycoords.shape[0] - 1
+
+                pdist = true_angular_distance(
+                    _xcoords[xidx], _ycoords[yidx], lon_r, lat_r
+                    )
+
+                if pdist < _pix_dist_map[yidx, xidx]:
+                    _pix_dist_map[yidx, xidx] = pdist
+                    _path_idx_map[yidx, xidx] = bidx
+                    _dist_end_idx_map[yidx, xidx] = didx
+                    mid_idx = didx // 2
+                    _lon_mid_map[yidx, xidx] = _lons[bidx, mid_idx]
+                    _lat_mid_map[yidx, xidx] = _lats[bidx, mid_idx]
+                    _dist_map[yidx, xidx] = _distances[didx]
+                    _bearing_map[yidx, xidx] = _start_bearings[bidx]
+                    _backbearing_map[yidx, xidx] = _back_bearings[bidx, didx]
 
     # store delta_N, beta0, N0
     delta_N_map, beta0_map, N0_map = helper._radiomet_data_for_pathcenter(
@@ -2302,30 +2383,9 @@ def height_map_data_cython(
     else:
         omega_map = np.full_like(dist_map, omega)
 
-    # dict access not possible with nogil
-    # will store height profile dict in a 2D array, even though this
-    # needs somewhat more memory
-
-    # first, find max length that is needed:
-    proflengths = np.array([
-        len(dist_dict[k])
-        for k in sorted(dist_dict.keys())
-        ])
-    maxlen_idx = np.argmax(proflengths)
-    maxlen = proflengths[maxlen_idx]
-
-    # we can re-use the distances vector, because of equal spacing
-    dist_prof = dist_dict[maxlen_idx]
-    height_profs = np.zeros(
-        (len(height_dict), maxlen), dtype=np.float64
-        )
-    zheight_prof = np.zeros_like(dist_dict[maxlen_idx])
-
-    cdef double[:, ::1] height_profs_v = height_profs
-
-    for eidx, prof in height_dict.items():
-        for i in range(len(prof)):
-            height_profs_v[eidx, i] = prof[i]
+    dist_prof = distances
+    height_profs = heights
+    zheight_prof = np.zeros_like(distances)
 
     hprof_data = {}
     hprof_data['lon_t'] = lon_t
@@ -2415,7 +2475,8 @@ def atten_map_fast_cython(
         8-9: Path horizon distances (for LoS paths, this is distance
             to Bullington point)
 
-        0) L_bfsg - Free-space loss [dB]
+        0) L_b0p - Free-space loss including focussing effects
+           (for p% of time) [dB]
         1) L_bd - Basic transmission loss associated with diffraction
            not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
         2) L_bs - Tropospheric scatter loss [dB]
@@ -2455,7 +2516,7 @@ def atten_map_fast_cython(
 
         double[:, ::1] clutter_data_v = CLUTTER_DATA
 
-        double L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
+        double L_b0p, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
 
     xcoords, ycoords = hprof_data['xcoords'], hprof_data['ycoords']
 
@@ -2577,10 +2638,10 @@ def atten_map_fast_cython(
                     )
 
                 (
-                    L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
+                    L_b0p, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
                     ) = _path_attenuation_complete(pp[0], G_t, G_r)
 
-                float_res_v[0, yi, xi] = L_bfsg
+                float_res_v[0, yi, xi] = L_b0p
                 float_res_v[1, yi, xi] = L_bd
                 float_res_v[2, yi, xi] = L_bs
                 float_res_v[3, yi, xi] = L_ba
@@ -2635,25 +2696,6 @@ def atten_path_fast_cython(
 
     Returns
     -------
-    atten_path : 2D `~numpy.ndarray`
-        Attenuation values along path. First dimension has length 6,
-        which refers to:
-
-        0) L_bfsg - Free-space loss [dB]
-        1) L_bd - Basic transmission loss associated with diffraction
-           not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
-        2) L_bs - Tropospheric scatter loss [dB]
-        3) L_ba - Ducting/layer reflection loss [dB]
-        4) L_b - Complete path propagation loss [dB]
-        5) L_b_corr - As L_b but with clutter correction [dB]
-
-        (i.e., the output of path_attenuation_complete without
-        gain-corrected values)
-    eps_pt_path : 1D `~numpy.ndarray`
-        Elevation angles along path w.r.t. Tx [deg]
-    eps_pr_path : 1D `~numpy.ndarray`
-        Elevation angles along path w.r.t. Rx [deg]
-
     float_results : 2D `~numpy.ndarray`
 
         Results of the calculation. The second dimension refers to
@@ -2665,7 +2707,8 @@ def atten_path_fast_cython(
         8-9: Path horizon distances (for LoS paths, this is distance
             to Bullington point)
 
-        0) L_bfsg - Free-space loss [dB]
+        0) L_b0p - Free-space loss including focussing effects
+           (for p% of time) [dB]
         1) L_bd - Basic transmission loss associated with diffraction
            not exceeded for p% time [dB]; L_bd = L_b0p + L_dp
         2) L_bs - Tropospheric scatter loss [dB]
@@ -2703,7 +2746,7 @@ def atten_path_fast_cython(
 
         double[:, ::1] clutter_data_v = CLUTTER_DATA
 
-        double L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
+        double L_b0p, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
 
         _cf = np.ascontiguousarray
 
@@ -2797,10 +2840,10 @@ def atten_path_fast_cython(
                 )
 
             (
-                L_bfsg, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
+                L_b0p, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
                 ) = _path_attenuation_complete(pp[0], G_t, G_r)
 
-            float_res_v[0, i] = L_bfsg
+            float_res_v[0, i] = L_b0p
             float_res_v[1, i] = L_bd
             float_res_v[2, i] = L_bs
             float_res_v[3, i] = L_ba
@@ -2816,6 +2859,324 @@ def atten_path_fast_cython(
         free(pp)
 
     return float_res, int_res
+
+
+def losses_complete_cython(
+        frequency,
+        temperature,
+        pressure,
+        double lon_t, double lat_t,
+        double lon_r, double lat_r,
+        h_tg, h_rg,
+        double hprof_step,
+        time_percent,
+        G_t=None, G_r=None,
+        omega=None,
+        d_tm=None, d_lm=None,
+        d_ct=None, d_cr=None,
+        zone_t=None, zone_r=None,
+        polarization=0,
+        version=16,
+        # override if you don't want builtin method:
+        delta_N=None, N0=None,
+        # override if you don't want builtin method:
+        hprof_dists=None,
+        hprof_heights=None,
+        hprof_bearing=None, hprof_backbearing=None,
+        ):
+
+    cdef:
+        # work arrays (for inner loop of nditer)
+        np.ndarray[double] _freq, _temp, _press
+        np.ndarray[double] _h_tg, _h_rg, _G_t, _G_r
+        np.ndarray[double] _time_percent, _omega
+        np.ndarray[double] _d_tm, _d_lm, _d_ct, _d_cr
+        np.ndarray[int] _zone_t, _zone_r, _polarization, _version
+
+        # output arrays
+        np.ndarray[double] _L_b0p, _L_bd, _L_bs, _L_ba, _L_b, _L_b_corr
+        np.ndarray[double] _eps_pt, _eps_pr, _d_lt, _d_lr
+        np.ndarray[int] _path_type
+
+        # other
+
+        np.ndarray[double] lons, lats, distances, heights, zheights
+        double[::1] distances_v, heights_v, zheights_v
+        double distance, bearing, back_bearing
+        double lon_mid, lat_mid
+        double _delta_N, _N0
+
+        int hsize, mid_idx
+
+        ppstruct *pp
+
+        double[:, ::1] _clut_data = CLUTTER_DATA
+
+        double L_dummy
+
+        double *last_freq
+        double *last_h_tg
+        double *last_h_rg
+        int *last_version
+        int *last_zone_t
+        int *last_zone_r
+
+        int i, size
+
+    assert np.all(time_percent <= 50.)
+    assert np.all((version == 14) | (version == 16))
+
+    assert np.all((zone_t >= -1) & (zone_t <= 11))
+    assert np.all((zone_r >= -1) & (zone_r <= 11))
+
+    assert (delta_N is None) == (N0 is None), (
+        'delta_N and N0 must both be None or both be provided'
+        )
+
+    assert (
+        (hprof_dists is None) == (hprof_heights is None) ==
+        (hprof_bearing is None) == (hprof_backbearing is None)
+        ), (
+            'hprof_dists, hprof_heights, bearing, and back_bearing '
+            'must all be None or all be provided'
+            )
+
+    if hprof_dists is None:
+        (
+            lons, lats, distance, distances, heights,
+            bearing, back_bearing, _,
+            ) = heightprofile._srtm_height_profile(
+                lon_t, lat_t,
+                lon_r, lat_r,
+                hprof_step
+                )
+    else:
+        distances = hprof_dists.astype(np.float64, order='C', copy=False)
+        heights = hprof_heights.astype(np.float64, order='C', copy=False)
+        hsize = distances.size
+        distance = distances[hsize - 1]
+        bearing = hprof_bearing
+        back_bearing = hprof_backbearing
+
+    if len(distances) < 5:
+        raise ValueError('Height profile must have at least 5 steps.')
+
+    zheights = np.zeros_like(heights)
+
+    distances_v = distances
+    heights_v = heights
+    zheights_v = zheights
+
+    hsize = distances.size
+    mid_idx = hsize // 2
+
+    if hprof_dists is None:
+        lon_mid = lons[mid_idx]
+        lat_mid = lats[mid_idx]
+    else:
+        lon_mid = 0.5 * (lon_t + lon_r)
+        lat_mid = 0.5 * (lat_t + lat_r)
+
+    if delta_N is None:
+        _delta_N, _N0 = helper._DN_N0_from_map(lon_mid, lat_mid)
+    else:
+        _delta_N, _N0 = delta_N, N0
+
+    if G_t is None:
+        G_t = np.array([0.])
+
+    if G_r is None:
+        G_r = np.array([0.])
+
+    if d_tm is None:
+        d_tm = np.array([distance])
+
+    if d_lm is None:
+        d_lm = np.array([distance])
+
+    if d_ct is None:
+        d_ct = np.array([50000.])
+
+    if d_cr is None:
+        d_cr = np.array([50000.])
+
+    if omega is None:
+        omega = np.array([0.])
+
+    if zone_t is None:
+        zone_t = np.array([-1])
+
+    if zone_r is None:
+        zone_r = np.array([-1])
+
+
+    # in the nditer, we first put all entities that have impact on the
+    # path geometry; this is to avoid unnecessary re-calculations
+
+    # these entities are:
+    # frequency, h_tg, h_rg, version, zone_t, zone_r
+
+    it = np.nditer(
+        [
+            frequency, h_tg, h_rg, G_t, G_r, version, zone_t, zone_r,
+            temperature, pressure, time_percent, omega,
+            d_tm, d_lm, d_ct, d_cr, polarization,
+            # L_b0p, L_bd, L_bs, L_ba, L_b, L_b_corr,
+            None, None, None, None, None, None,
+            # eps_pt, eps_pr, d_lt, d_lr, path_type
+            None, None, None, None, None,
+            ],
+        flags=['external_loop', 'buffered', 'delay_bufalloc'],
+        op_flags=[['readonly']] * 17 + [['readwrite', 'allocate']] * 11,
+        op_dtypes=(
+            ['float64'] * 5 + ['int32'] * 3 +
+            ['float64'] * 8 + ['int32'] * 1 +
+            ['float64'] * 10 + ['int32'] * 1
+            ),
+        )
+
+    it.reset()
+    for (
+            _freq, _h_tg, _h_rg, _G_t, _G_r, _version, _zone_t, _zone_r,
+            _temp, _press, _time_percent, _omega,
+            _d_tm, _d_lm, _d_ct, _d_cr, _polarization,
+            _L_b0p, _L_bd, _L_bs, _L_ba, _L_b, _L_b_corr,
+            _eps_pt, _eps_pr, _d_lt, _d_lr, _path_type,
+            ) in it:
+
+        with nogil, parallel():
+
+            # could not find a solution to make last_h_tg a thread-local
+            # variable; using an array does the trick (but is ugly!!!)
+            last_freq = <double *> malloc(sizeof(double))
+            if last_freq == NULL:
+                abort()
+            last_h_tg = <double *> malloc(sizeof(double))
+            if last_h_tg == NULL:
+                abort()
+            last_h_rg = <double *> malloc(sizeof(double))
+            if last_h_rg == NULL:
+                abort()
+            last_version = <int *> malloc(sizeof(int))
+            if last_version == NULL:
+                abort()
+            last_zone_t = <int *> malloc(sizeof(int))
+            if last_zone_t == NULL:
+                abort()
+            last_zone_r = <int *> malloc(sizeof(int))
+            if last_zone_r == NULL:
+                abort()
+
+            last_freq[0] = NAN
+            last_h_tg[0] = NAN
+            last_h_rg[0] = NAN
+            last_version[0] = -1000
+            last_zone_t[0] = -1000
+            last_zone_r[0] = -1000
+
+            pp = <ppstruct *> malloc(sizeof(ppstruct))
+            if pp == NULL:
+                abort()
+
+            # pp.lon_t = lon_t
+            # pp.lat_t = lat_t
+            # pp.lon_r = lon_r
+            # pp.lat_r = lat_r
+            pp.lon_mid = lon_mid
+            pp.lat_mid = lat_mid
+            pp.hprof_step = hprof_step  # dummy
+            pp.distance = distance
+            pp.bearing = bearing
+            pp.back_bearing = back_bearing
+            pp.alpha_tr = bearing
+            pp.alpha_rt = back_bearing
+            pp.delta_N = _delta_N
+            pp.N0 = _N0
+
+            size = _freq.shape[0]
+
+            for i in prange(size):
+
+                if (
+                        _freq[i] != last_freq[0] or
+                        _h_tg[i] != last_h_tg[0] or
+                        _h_rg[i] != last_h_rg[0] or
+                        _version[i] != last_version[0] or
+                        _zone_t[i] != last_zone_t[0] or
+                        _zone_r[i] != last_zone_r[0]
+                        ):
+                    last_freq[0] = _freq[i]
+                    last_h_tg[0] = _h_tg[i]
+                    last_h_rg[0] = _h_rg[i]
+                    last_version[0] = _version[i]
+                    last_zone_t[0] = _zone_t[i]
+                    last_zone_r[0] = _zone_r[i]
+
+                    # need to re-process path geometry ...
+                    pp.version = _version[i]
+                    pp.freq = _freq[i]
+                    pp.wavelen = 0.299792458 / pp.freq
+                    pp.zone_t = _zone_t[i]
+                    pp.zone_r = _zone_r[i]
+                    if pp.zone_t == CLUTTER.UNKNOWN:
+                        pp.h_tg = _h_tg[i]
+                    else:
+                        pp.h_tg = f_max(_clut_data[pp.zone_t, 0], _h_tg[i])
+
+                    if pp.zone_r == CLUTTER.UNKNOWN:
+                        pp.h_rg = _h_rg[i]
+                    else:
+                        pp.h_rg = f_max(_clut_data[pp.zone_r, 0], _h_rg[i])
+                    pp.h_tg_in = _h_tg[i]
+                    pp.h_rg_in = _h_rg[i]
+
+                    _process_path(
+                        pp,
+                        distances_v,
+                        heights_v,
+                        zheights_v,
+                        )
+
+                pp.temperature = _temp[i]
+                pp.pressure = _press[i]
+                pp.d_tm = _d_tm[i]
+                pp.d_lm = _d_lm[i]
+                pp.d_ct = _d_ct[i]
+                pp.d_cr = _d_cr[i]
+                pp.time_percent = _time_percent[i]
+                pp.polarization = _polarization[i]
+                pp.omega = _omega[i]
+                pp.beta0 = _beta_from_DN_N0(
+                    pp.lat_mid, pp.delta_N, pp.N0, pp.d_tm, pp.d_lm
+                    )
+
+                (
+                    _L_b0p[i],
+                    _L_bd[i],
+                    _L_bs[i],
+                    _L_ba[i],
+                    _L_b[i],
+                    _L_b_corr[i],
+                    L_dummy,
+                    ) = _path_attenuation_complete(pp[0], _G_t[i], _G_r[i])
+
+                _eps_pt[i] = pp.eps_pt
+                _eps_pr[i] = pp.eps_pr
+                _d_lt[i] = pp.d_lt
+                _d_lr[i] = pp.d_lr
+                _path_type[i] = pp.path_type
+
+            free(last_freq)
+            free(last_h_tg)
+            free(last_h_rg)
+            free(last_version)
+            free(last_zone_t)
+            free(last_zone_r)
+            free(pp)
+
+    out = it.operands[17:]
+    return out
+
 
 # ############################################################################
 # Atmospheric attenuation (Annex 2)

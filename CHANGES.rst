@@ -21,8 +21,20 @@ pycraf.amt
   - there are new functions, such as `pycraf.atm.find_elevation`, which finds
     optimal ray geometry (to reach a given target)
 
+pycraf.pathprof
+^^^^^^^^^^^^^^^
+- The `pycraf.pathprof` sub-package was re-worked to improve parallel
+  computations in various places. Most of these are "under the hood", but
+  one new function is `losses_complete`. It can be used to do bulk
+  calculations of path propagation loss for fixed Tx-Rx location. This
+  makes computations of statistics much faster (see user manual). [#16]
+
 Bugfixes
 --------
+- For `pycraf.pathprof` we used the BFSG loss (see Rec. ITU-R P.452-16) as
+  proxy for line-of-sight loss. However, to bring it inline with the other
+  quantities returned by the `pycraf.pathprof.loss_complete`, we now use
+  L_b0p, which includes focussing effects [#13, #16]
 - `pycraf.geospatial` produced an error with newer version of `pyproj`.
   Basically, the "+init=" part of the projection definition is now
   deprecated. We removed this from the `pycraf.geospatial` module, but

@@ -147,6 +147,40 @@ def test_gui_startup_shows_pathgeometry(qtbot):
 
 @remote_data(source='any')
 @pytest.mark.usefixtures('srtm_handler')
+def test_stats_worker(qtbot):
+    # change download option to missing and test, if the results are correct
+
+    myapp = gui.PycrafGui()
+    qtbot.addWidget(myapp)
+    _set_parameters(myapp.ui)
+    myapp.ui.srtmDownloadComboBox.setCurrentIndex(
+        gui.SRTM_DOWNLOAD_MAPPING.index('missing')
+        )
+    with qtbot.waitSignal(
+            myapp.my_stats_worker.result_ready[object, object],
+            raising=False, timeout=50000,
+            ):
+        myapp.timer.start(10)
+
+    res = myapp.statistics_results
+
+    assert_quantity_allclose(
+        res['L_b'][:, ::20].to(cnv.dB).value, [
+            [138.8771118, 140.8853131, 142.8934803, 144.9016341, 147.7434509],
+            [156.2189124, 158.2270703, 160.2352217, 162.2433706, 164.7989202],
+            [165.3765899, 167.3847525, 169.3929057, 171.4010551, 173.6622298],
+            [174.5007580, 176.5089330, 178.5170906, 180.5252413, 182.7685164],
+            [186.5540705, 188.5623023, 190.5704806, 192.5786379, 194.8213818],
+            [195.9055898, 197.9140057, 199.9222511, 201.9304294, 204.1729092],
+            [210.4921391, 212.5046189, 214.5143471, 216.5229899, 218.7653956],
+            [236.8190545, 238.8738936, 240.8993047, 242.9128866, 245.1563437],
+            [243.0043903, 247.2872525, 251.7308653, 256.0069129, 259.5560927],
+            ])
+    # assert myapp.pathprof_results is None
+
+
+@remote_data(source='any')
+@pytest.mark.usefixtures('srtm_handler')
 def test_pp_worker(qtbot):
     # change download option to missing and test, if the results are correct
 
@@ -195,19 +229,21 @@ def test_map_worker(qtbot):
 
     res = myapp.map_results
 
+    print(res['L_b'][::80, ::80].to(cnv.dB).value)
+    print(res['eps_pt'][::80, ::80].to(apu.deg).value)
     assert_quantity_allclose(
         res['L_b'][::80, ::80].to(cnv.dB).value, [
-            [147.83278909, 133.58127549, 111.43421362, 134.45908465],
-            [111.45317964, 126.40950486, 127.38498799, 119.25246431],
-            [119.00447374, 105.44468519, 126.87036123, 119.33221431],
-            [113.64151601, 125.49854085, 116.10536532, 136.80592942],
+            [147.92110506, 133.64246369, 111.43421362, 134.20808414],
+            [111.45317964, 126.50588342, 127.41079286, 119.47281152],
+            [118.95606625, 105.44468519, 126.89590692, 119.33537173],
+            [113.64151601, 125.3059271, 116.06473428, 136.72188462],
             ])
     assert_quantity_allclose(
         res['eps_pt'][::80, ::80].to(apu.deg).value, [
-            [0.27189932, 0.20469701, 0.65046079, 0.64865387],
-            [-0.06627310, 0.03763396, 0.44081357, 0.30713528],
-            [-0.37531096, -0.58974224, -0.46243938, -0.62455889],
-            [-0.37766769, -0.49652843, -0.62897185, -0.46686728],
+            [0.27265693, 0.20522323, 0.6505462, 0.64897268],
+            [-0.06723739, 0.03969113, 0.44085012, 0.30607933],
+            [-0.37428988, -0.58972059, -0.46088839, -0.62473188],
+            [-0.37882374, -0.49772378, -0.62911416, -0.46750982],
             ])
     assert_equal(res['path_type'][::80, ::80], [
         [1, 1, 0, 1],

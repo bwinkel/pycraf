@@ -63,14 +63,24 @@ class TestPropagation:
         self.temperature = (273.15 + 15.) * apu.K  # as in Excel sheet
         self.pressure = 1013. * apu.hPa
 
+        self.cases_freqs = [0.1, 1., 10.]
+        self.cases_h_tgs = [50., 200.]
+        self.cases_h_rgs = [50., 200.]
+        self.cases_time_percents = [2, 10, 50]
+        self.cases_versions = [14, 16]
+        self.cases_G_ts = [0, 20]
+        self.cases_G_rs = [0, 30]
+
         self.cases = list(
             # freq, (h_tg, h_rg), time_percent, version, (G_t, G_r)
             product(
-                [0.1, 1., 10.],
-                [(50, 50), (200, 200)],
-                [2, 10, 50],
-                [14, 16],
-                [(0, 0), (20, 30)],
+                self.cases_freqs,
+                # [(50, 50), (200, 200)],
+                list(zip(self.cases_h_tgs, self.cases_h_rgs)),
+                self.cases_time_percents,
+                self.cases_versions,
+                # [(0, 0), (20, 30)],
+                list(zip(self.cases_G_ts, self.cases_G_rs)),
             ))
 
         self.fast_cases = list(
@@ -151,7 +161,7 @@ class TestPropagation:
             losses['L_bd'] = diff_loss[3].to(cnv.dB).value
             losses['L_min_b0p'] = diff_loss[4].to(cnv.dB).value
 
-            losses['L_bfsg_t'] = tot_loss[0].to(cnv.dB).value
+            losses['L_b0p_t'] = tot_loss[0].to(cnv.dB).value
             losses['L_bd_t'] = tot_loss[1].to(cnv.dB).value
             losses['L_bs_t'] = tot_loss[2].to(cnv.dB).value
             losses['L_ba_t'] = tot_loss[3].to(cnv.dB).value
@@ -164,12 +174,12 @@ class TestPropagation:
             # (make sure, that results are correct!)
             # with ZipFile(self.cases_zip_name) as myzip:
             #     loss_name = self.loss_template.format(
-            #         freq, h_tg, h_rg, time_percent, version, G_t, G_r
+            #         freq, h_tg, h_rg, time_percent, G_t, G_r, version
             #         )
             #     with myzip.open(loss_name, 'w') as f:
             #         json.dump(losses, open(f, 'w'))
             # loss_name = self.loss_template.format(
-            #     freq, h_tg, h_rg, time_percent, version, G_t, G_r
+            #     freq, h_tg, h_rg, time_percent, G_t, G_r, version
             #     )
             # with open('/tmp/' + loss_name, 'w') as f:
             #     json.dump(losses, f)
@@ -218,7 +228,7 @@ class TestPropagation:
 
             with ZipFile(self.cases_zip_name) as myzip:
                 loss_name = self.loss_template.format(
-                    freq, h_tg, h_rg, time_percent, version, G_t, G_r
+                    freq, h_tg, h_rg, time_percent, G_t, G_r, version,
                     )
                 with myzip.open(loss_name, 'r') as f:
                     loss_true = json.loads(f.read().decode('utf-8'))
@@ -239,7 +249,7 @@ class TestPropagation:
 
             with ZipFile(self.cases_zip_name) as myzip:
                 loss_name = self.loss_template.format(
-                    freq, h_tg, h_rg, time_percent, version, G_t, G_r
+                    freq, h_tg, h_rg, time_percent, G_t, G_r, version,
                     )
                 with myzip.open(loss_name, 'r') as f:
                     loss_true = json.loads(f.read().decode('utf-8'))
@@ -258,7 +268,7 @@ class TestPropagation:
 
             with ZipFile(self.cases_zip_name) as myzip:
                 loss_name = self.loss_template.format(
-                    freq, h_tg, h_rg, time_percent, version, G_t, G_r
+                    freq, h_tg, h_rg, time_percent, G_t, G_r, version,
                     )
                 with myzip.open(loss_name, 'r') as f:
                     loss_true = json.loads(f.read().decode('utf-8'))
@@ -281,7 +291,7 @@ class TestPropagation:
 
             with ZipFile(self.cases_zip_name) as myzip:
                 loss_name = self.loss_template.format(
-                    freq, h_tg, h_rg, time_percent, version, G_t, G_r
+                    freq, h_tg, h_rg, time_percent, G_t, G_r, version,
                     )
                 with myzip.open(loss_name, 'r') as f:
                     loss_true = json.loads(f.read().decode('utf-8'))
@@ -298,7 +308,7 @@ class TestPropagation:
                 pprop, G_t * cnv.dB, G_r * cnv.dB
                 )
             losses = {}
-            losses['L_bfsg_t'] = tot_loss[0].to(cnv.dB).value
+            losses['L_b0p_t'] = tot_loss[0].to(cnv.dB).value
             losses['L_bd_t'] = tot_loss[1].to(cnv.dB).value
             losses['L_bs_t'] = tot_loss[2].to(cnv.dB).value
             losses['L_ba_t'] = tot_loss[3].to(cnv.dB).value
@@ -308,13 +318,65 @@ class TestPropagation:
 
             with ZipFile(self.cases_zip_name) as myzip:
                 loss_name = self.loss_template.format(
-                    freq, h_tg, h_rg, time_percent, version, G_t, G_r
+                    freq, h_tg, h_rg, time_percent, G_t, G_r, version,
                     )
                 with myzip.open(loss_name, 'r') as f:
                     loss_true = json.loads(f.read().decode('utf-8'))
 
             for k in losses:
                 assert_quantity_allclose(losses[k], loss_true[k])
+
+    def test_complete_losses(self):
+        # this is testing full broadcasting
+
+        n = np.newaxis
+        (
+            freqs, h_tgs, h_rgs, time_percents, versions, G_ts, G_rs
+            ) = np.broadcast_arrays(
+                np.array(self.cases_freqs)[:, n, n, n, n],
+                np.array(self.cases_h_tgs)[n, :, n, n, n],
+                np.array(self.cases_h_rgs)[n, :, n, n, n],
+                np.array(self.cases_time_percents)[n, n, :, n, n],
+                np.array(self.cases_versions, dtype=np.int32)[n, n, n, :, n],
+                np.array(self.cases_G_ts)[n, n, n, n, :],
+                np.array(self.cases_G_rs)[n, n, n, n, :],
+            )
+        results = pathprof.losses_complete(
+            freqs * apu.GHz,
+            self.temperature,
+            self.pressure,
+            self.lon_t, self.lat_t,
+            self.lon_r, self.lat_r,
+            h_tgs * apu.m,
+            h_rgs * apu.m,
+            self.hprof_step,
+            time_percents * apu.percent,
+            G_t=G_ts * cnv.dBi,
+            G_r=G_rs * cnv.dBi,
+            omega=self.omega,
+            version=versions,
+            )
+
+        for tup in np.nditer([
+                freqs, h_tgs, h_rgs, time_percents, G_ts, G_rs, versions,
+                results['L_b0p'], results['L_bd'], results['L_bs'],
+                results['L_ba'], results['L_b'], results['L_b_corr'],
+                ]):
+
+            with ZipFile(self.cases_zip_name) as myzip:
+
+                loss_name = self.loss_template.format(
+                    float(tup[0]), float(tup[1]), float(tup[2]),
+                    float(tup[3]), float(tup[4]), float(tup[5]),
+                    int(tup[6]),
+                    )
+                with myzip.open(loss_name, 'r') as f:
+                    loss_true = json.loads(f.read().decode('utf-8'))
+
+                for i, k in enumerate([
+                        'L_b0p', 'L_bd', 'L_bs', 'L_ba', 'L_b', 'L_b_corr',
+                        ]):
+                    assert_quantity_allclose(tup[i + 7], loss_true[k + '_t'])
 
     @skip_h5py
     def test_height_map_data_h5py(self, tmpdir_factory):
@@ -411,8 +473,11 @@ class TestPropagation:
             # Warning: if uncommenting, the test cases will be overwritten
             # do this only, if you need to update the h5py files
             # (make sure, that results are correct!)
-            # tfile = str(tdir.join(fname.replace('fastmap/', '')))
-            # print('writing temporary files to', tdir)
+            # Also, if you want to create all at once, comment-out the
+            # "with ZipFile" below; results will be in the tmp-dir
+            # and can be added manually to the zipfile
+            # tfile = str(zipdir.join(fname))
+            # print('writing temporary files to', zipdir)
             # with h5py.File(tfile, 'w') as h5f:
             #     for k, v in results.items():
             #         h5f[k] = v
@@ -528,7 +593,10 @@ class TestPropagation:
             # Warning: if uncommenting, the test cases will be overwritten
             # do this only, if you need to update the npz files
             # (make sure, that results are correct!)
-            # tfile = str(tdir.join(fname.replace('fastmap/', '')))
+            # Also, if you want to create all at once, comment-out the
+            # "with ZipFile" below; results will be in the tmp-dir
+            # and can be added manually to the zipfile
+            # tfile = str(zipdir.join(fname))
             # np.savez(tfile, **results)
 
             with ZipFile(self.fastmap_zip_name) as myzip:
@@ -619,7 +687,7 @@ class TestPropagation:
             tot_loss = pathprof.loss_complete(pprop)
             atten_path[:, idx] = apu.Quantity(tot_loss).value[:-1]
 
-        assert np.allclose(atten_path[0], results['L_bfsg'].value, atol=1.e-3)
+        assert np.allclose(atten_path[0], results['L_b0p'].value, atol=1.e-3)
         assert np.allclose(atten_path[1], results['L_bd'].value, atol=1.e-3)
         assert np.allclose(atten_path[2], results['L_bs'].value, atol=1.e-3)
         assert np.allclose(atten_path[3], results['L_ba'].value, atol=1.e-3)
@@ -699,7 +767,7 @@ class TestPropagation:
             tot_loss = pathprof.loss_complete(pprop)
             atten_path[:, idx] = apu.Quantity(tot_loss).value[:-1]
 
-        assert np.allclose(atten_path[0], results['L_bfsg'].value, atol=1.e-3)
+        assert np.allclose(atten_path[0], results['L_b0p'].value, atol=1.e-3)
         assert np.allclose(atten_path[1], results['L_bd'].value, atol=1.e-3)
         assert np.allclose(atten_path[2], results['L_bs'].value, atol=1.e-3)
         assert np.allclose(atten_path[3], results['L_ba'].value, atol=1.e-3)

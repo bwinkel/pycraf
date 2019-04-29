@@ -10,6 +10,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 cimport cython
+from cython.parallel import prange, parallel
 cimport numpy as np
 from numpy cimport PyArray_MultiIter_DATA as Py_Iter_DATA
 from libc.math cimport (
@@ -122,49 +123,75 @@ def inverse_cython(
         lon2_rad, lat2_rad,
         double eps=1.e-12,  # corresponds to approximately 0.06mm
         int maxiter=50,
+        out_dist=None,
+        out_bearing1=None,
+        out_bearing2=None
         ):
+    '''
+    As `inverse_cython` but parallelized. Needs testing...
+    '''
 
     cdef:
 
-        np.broadcast broadcast, it
-        np.ndarray dist_arr, bearing1_arr, bearing2_arr
+        # the memory view leads to an error:
+        # ValueError: buffer source array is read-only
+        # but new cython version should support it!?
+        # double [::] _lon1_rad, _lat1_rad, _lon2_rad, _lat2_rad
+        # double [::] _out_dist, _out_bearing1, _out_bearing2
+        np.ndarray[double] _lon1_rad, _lat1_rad, _lon2_rad, _lat2_rad
+        np.ndarray[double] _out_dist, _out_bearing1, _out_bearing2
 
-    # Turn all inputs into arrays
-    kwargs = dict(dtype=np.double, order='C', copy=False, subok=True)
-    lon1_rad = np.array(lon1_rad, **kwargs)
-    lat1_rad = np.array(lat1_rad, **kwargs)
-    lon2_rad = np.array(lon2_rad, **kwargs)
-    lat2_rad = np.array(lat2_rad, **kwargs)
+        int i, size
 
-    broadcast = np.broadcast(lon1_rad, lat1_rad, lon2_rad, lat2_rad)
-    dist_arr = np.empty(broadcast.shape + (), dtype=np.double)
-    bearing1_arr = np.empty(broadcast.shape + (), dtype=np.double)
-    bearing2_arr = np.empty(broadcast.shape + (), dtype=np.double)
-
-    it = np.broadcast(
-        lon1_rad, lat1_rad, lon2_rad, lat2_rad,
-        dist_arr, bearing1_arr, bearing2_arr,
+    it = np.nditer(
+        [
+            lon1_rad, lat1_rad, lon2_rad, lat2_rad,
+            out_dist, out_bearing1, out_bearing2
+            ],
+        flags=['external_loop', 'buffered', 'delay_bufalloc'],
+        op_flags=[
+            ['readonly'], ['readonly'], ['readonly'], ['readonly'],
+            ['readwrite', 'allocate'], ['readwrite', 'allocate'],
+            ['readwrite', 'allocate'],
+            ],
+        op_dtypes=[
+            'float64', 'float64', 'float64', 'float64',
+            'float64', 'float64', 'float64'
+            ]
         )
 
-    with nogil:
-        while np.PyArray_MultiIter_NOTDONE(it):
+    # it would be better to use the context manager but
+    # "with it:" requires numpy >= 1.14
+
+    it.reset()
+
+    for itup in it:
+        _lon1_rad = itup[0]
+        _lat1_rad = itup[1]
+        _lon2_rad = itup[2]
+        _lat2_rad = itup[3]
+        _out_dist = itup[4]
+        _out_bearing1 = itup[5]
+        _out_bearing2 = itup[6]
+
+        size = _lon1_rad.shape[0]
+
+        for i in prange(size, nogil=True):
 
             (
-                (<double*> Py_Iter_DATA(it, 4))[0],
-                (<double*> Py_Iter_DATA(it, 5))[0],
-                (<double*> Py_Iter_DATA(it, 6))[0],
+                _out_dist[i],
+                _out_bearing1[i],
+                _out_bearing2[i],
                 ) = _inverse(
-                    (<double*> Py_Iter_DATA(it, 0))[0],
-                    (<double*> Py_Iter_DATA(it, 1))[0],
-                    (<double*> Py_Iter_DATA(it, 2))[0],
-                    (<double*> Py_Iter_DATA(it, 3))[0],
+                    _lon1_rad[i],
+                    _lat1_rad[i],
+                    _lon2_rad[i],
+                    _lat2_rad[i],
                     eps,
                     maxiter,
                     )
 
-            np.PyArray_MultiIter_NEXT(it)
-
-    return dist_arr, bearing1_arr, bearing2_arr
+    return it.operands[4:7]
 
 
 cdef (double, double, double) _direct(
@@ -272,51 +299,77 @@ def direct_cython(
         double eps=1.e-12,  # corresponds to approximately 0.06mm
         int maxiter=50,
         wrap=True,
+        out_lon2=None,
+        out_lat2=None,
+        out_bearing2=None
         ):
+    '''
+    As `direct_cython` but parallelized. Needs testing...
+    '''
 
     cdef:
 
-        np.broadcast broadcast, it
-        np.ndarray lon2_arr, lat2_arr, bearing2_arr
+        # the memory view leads to an error:
+        # ValueError: buffer source array is read-only
+        # but new cython version should support it!?
+        # double [::] _lon1_rad, _lat1_rad, _lon2_rad, _lat2_rad
+        # double [::] _out_dist, _out_bearing1, _out_bearing2
+        np.ndarray[double] _lon1_rad, _lat1_rad, _bearing1_rad, _dist_m
+        np.ndarray[double] _out_lon2, _out_lat2, _out_bearing2
+
         int cwrap = 1 if wrap else 0
+        int i, size
 
-    # Turn all inputs into arrays
-    kwargs = dict(dtype=np.double, order='C', copy=False, subok=True)
-    lon1_rad = np.array(lon1_rad, **kwargs)
-    lat1_rad = np.array(lat1_rad, **kwargs)
-    bearing1_rad = np.array(bearing1_rad, **kwargs)
-    dist_m = np.array(dist_m, **kwargs)
-
-    broadcast = np.broadcast(lon1_rad, lat1_rad, bearing1_rad, dist_m)
-    lon2_arr = np.empty(broadcast.shape + (), dtype=np.double)
-    lat2_arr = np.empty(broadcast.shape + (), dtype=np.double)
-    bearing2_arr = np.empty(broadcast.shape + (), dtype=np.double)
-
-    it = np.broadcast(
-        lon1_rad, lat1_rad, bearing1_rad, dist_m,
-        lon2_arr, lat2_arr, bearing2_arr,
+    it = np.nditer(
+        [
+            lon1_rad, lat1_rad, bearing1_rad, dist_m,
+            out_lon2, out_lat2, out_bearing2
+            ],
+        flags=['external_loop', 'buffered', 'delay_bufalloc'],
+        op_flags=[
+            ['readonly'], ['readonly'], ['readonly'], ['readonly'],
+            ['readwrite', 'allocate'], ['readwrite', 'allocate'],
+            ['readwrite', 'allocate'],
+            ],
+        op_dtypes=[
+            'float64', 'float64', 'float64', 'float64',
+            'float64', 'float64', 'float64'
+            ]
         )
 
-    with nogil:
-        while np.PyArray_MultiIter_NOTDONE(it):
+    # it would be better to use the context manager but
+    # "with it:" requires numpy >= 1.14
+
+    it.reset()
+
+    for itup in it:
+        _lon1_rad = itup[0]
+        _lat1_rad = itup[1]
+        _bearing1_rad = itup[2]
+        _dist_m = itup[3]
+        _out_lon2 = itup[4]
+        _out_lat2 = itup[5]
+        _out_bearing2 = itup[6]
+
+        size = _lon1_rad.shape[0]
+
+        for i in prange(size, nogil=True):
 
             (
-                (<double*> Py_Iter_DATA(it, 4))[0],
-                (<double*> Py_Iter_DATA(it, 5))[0],
-                (<double*> Py_Iter_DATA(it, 6))[0],
+                _out_lon2[i],
+                _out_lat2[i],
+                _out_bearing2[i],
                 ) = _direct(
-                    (<double*> Py_Iter_DATA(it, 0))[0],
-                    (<double*> Py_Iter_DATA(it, 1))[0],
-                    (<double*> Py_Iter_DATA(it, 2))[0],
-                    (<double*> Py_Iter_DATA(it, 3))[0],
+                    _lon1_rad[i],
+                    _lat1_rad[i],
+                    _bearing1_rad[i],
+                    _dist_m[i],
                     eps,
                     maxiter,
-                    cwrap
+                    cwrap,
                     )
 
-            np.PyArray_MultiIter_NEXT(it)
-
-    return lon2_arr, lat2_arr, bearing2_arr
+    return it.operands[4:7]
 
 
 cdef double ellipse_radius(double phi_rad, double a, double b) nogil:
@@ -355,41 +408,52 @@ cdef double _area_wgs84(
     return area
 
 
-def area_wgs84_cython(lon1_rad, lon2_rad, lat1_rad, lat2_rad):
+def area_wgs84_cython(lon1_rad, lon2_rad, lat1_rad, lat2_rad, out_area=None):
 
     cdef:
 
-        np.broadcast broadcast, it
-        np.ndarray area_arr
+        np.ndarray[double] _lon1_rad, _lat1_rad, _lon2_rad, _lat2_rad
+        np.ndarray[double] _out_area
 
-    # Turn all inputs into arrays
-    kwargs = dict(dtype=np.double, order='C', copy=False, subok=True)
-    lon1_rad = np.array(lon1_rad, **kwargs)
-    lon2_rad = np.array(lon2_rad, **kwargs)
-    lat1_rad = np.array(lat1_rad, **kwargs)
-    lat2_rad = np.array(lat2_rad, **kwargs)
+        int i, size
 
-    broadcast = np.broadcast(lon1_rad, lon2_rad, lat1_rad, lat2_rad)
-    area_arr = np.empty(broadcast.shape + (), dtype=np.double)
-
-    it = np.broadcast(
-        lon1_rad, lon2_rad, lat1_rad, lat2_rad,
-        area_arr,
+    it = np.nditer(
+        [
+            lon1_rad, lat1_rad, lon2_rad, lat2_rad,
+            out_area,
+            ],
+        flags=['external_loop', 'buffered', 'delay_bufalloc'],
+        op_flags=[
+            ['readonly'], ['readonly'], ['readonly'], ['readonly'],
+            ['readwrite', 'allocate'],
+            ],
+        op_dtypes=[
+            'float64', 'float64', 'float64', 'float64',
+            'float64',
+            ]
         )
 
-    with nogil:
-        while np.PyArray_MultiIter_NOTDONE(it):
+    # it would be better to use the context manager but
+    # "with it:" requires numpy >= 1.14
 
-            (<double*> Py_Iter_DATA(it, 4))[0] = _area_wgs84(
-                (<double*> Py_Iter_DATA(it, 0))[0],
-                (<double*> Py_Iter_DATA(it, 1))[0],
-                (<double*> Py_Iter_DATA(it, 2))[0],
-                (<double*> Py_Iter_DATA(it, 3))[0],
+    it.reset()
+
+    for itup in it:
+        _lon1_rad = itup[0]
+        _lon2_rad = itup[1]
+        _lat1_rad = itup[2]
+        _lat2_rad = itup[3]
+        _out_area = itup[4]
+
+        size = _lon1_rad.shape[0]
+
+        for i in prange(size, nogil=True):
+
+            _out_area[i] = _area_wgs84(
+                _lon1_rad[i], _lat1_rad[i], _lon2_rad[i], _lat2_rad[i],
                 )
 
-            np.PyArray_MultiIter_NEXT(it)
-
-    return area_arr
+    return it.operands[4]
 
 
 cdef inline int find_in_ordered(
@@ -423,7 +487,7 @@ cdef inline int find_in_ordered(
     return i
 
 
-cdef inline double gauss1d(double offset, double s):
+cdef inline double gauss1d(double offset, double s) nogil:
 
     return exp(-0.5 * offset * offset / s / s)
 
@@ -442,7 +506,7 @@ def regrid1d_with_x(
 
     Example code::
 
-        >>> from pycraf.pathprof import regrid1d_with_x
+        >>> from pycraf.pathprof.cygeodesics import regrid1d_with_x
         >>> import numpy as np
         >>> import matplotlib.pyplot as plt
 
@@ -476,6 +540,7 @@ def regrid1d_with_x(
 
     assert x.size == y.size, 'x and y must have equal size'
 
+    # for i in prange(length_new, nogil=True):
     for i in range(length_new):
 
         this_x = x_new[i]
@@ -520,11 +585,113 @@ def regrid1d_with_x(
         ssum = 0.
         for j in range(s, e):
             kv = gauss1d(x[j] - this_x, width)
-            ssum += kv * y[j]
-            norm += kv
+            # inplace operation leads to an error:
+            # Cannot read reduction variable in loop body
+            # ssum += kv * y[j]
+            # norm += kv
+            ssum = ssum + kv * y[j]
+            norm = norm + kv
 
         # print(i, s, e, norm, ssum)
         if fabs(norm) < 1.e-12:
             y_new[i] = 0.
         else:
             y_new[i] = ssum / norm
+
+
+def regrid2d_with_x(
+        cython.floating[:] x not None,
+        cython.floating[:, :] y not None,
+        cython.floating[:] x_new not None,
+        cython.floating[:, :] y_new not None,  # output
+        cython.floating width,
+        bint regular=False,
+        bint ordered=True,
+        ):
+    '''
+    Like regrid1d_with_x but for batches of 1D arrays; openmp powered::
+
+        from pycraf.pathprof.cygeodesics import regrid1d_with_x, regrid2d_with_x
+        import numpy as np
+
+        x = np.linspace(0., 1., 100)
+        x_new = np.linspace(0., 1., 1000)
+        y_ = np.random.normal(0., 1., (50, 100))  # 50x length-100 arrays
+        y = np.empty((50, 100), dtype=np.float64)
+        y_new = np.empty((50, 1000), dtype=np.float64)
+
+        %timeit regrid1d_with_x(x, y_[0], x_new, y_new[0], 0.005, regular=True)
+        %timeit regrid2d_with_x(x, y_, x_new, y_new, 0.005, regular=True)
+
+    '''
+
+    cdef:
+
+        double this_x, kv, ssum, norm
+
+        int n, i, j, s, e
+        int maxn = y.shape[0]
+        int length = x.size
+        int length_new = x_new.size
+
+        double dx = fabs(x[0] - x[length - 1]) / length
+
+    assert x.size == y.shape[1], 'x and y[0] must have equal size'
+
+    for i in range(length_new):
+
+        this_x = x_new[i]
+
+        # find optimal s, e (if in ordered mode)
+        if regular:
+
+            s = int((this_x - 5. * width) / dx - 0.5)
+            e = int((this_x + 5. * width) / dx + 1.5)
+            if s < 0:
+                s = 0
+            if e >= length:
+                e = length
+
+        elif ordered:
+            s = find_in_ordered(x, this_x)
+            e = s + 1
+
+            while True:
+                s -= 1
+                if s < 1:
+                    s = 0
+                    break
+                if fabs(x[s] - this_x) > 5. * width:
+                    break
+
+            while True:
+                e += 1
+                if e >= length:
+                    e = length
+                    break
+                if fabs(x[e - 1] - this_x) > 5. * width:
+                    break
+
+        else:
+            s = 0
+            e = length
+
+        # print(i, s, e)
+
+        for n in prange(maxn, nogil=True):
+            norm = 0.
+            ssum = 0.
+            for j in range(s, e):
+                kv = gauss1d(x[j] - this_x, width)
+                # inplace operation leads to an error:
+                # Cannot read reduction variable in loop body
+                # ssum += kv * y[j]
+                # norm += kv
+                ssum = ssum + kv * y[n, j]
+                norm = norm + kv
+
+            # print(i, s, e, norm, ssum)
+            if fabs(norm) < 1.e-12:
+                y_new[n, i] = 0.
+            else:
+                y_new[n, i] = ssum / norm
