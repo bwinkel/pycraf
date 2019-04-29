@@ -26,7 +26,7 @@ pycraf has the following strict requirements:
 There are a few optional packages, which are necessary for some functionality:
 
 - `matplotlib <http://matplotlib.org/>`__ 1.5 or later: To provide plotting
-  functionality that `~pycraf.pathprof.helper` enhances.
+  functionality that `~pycraf.pathprof` enhances.
 
 - `pyproj <https://pypi.python.org/pypi/pyproj>`__ 1.9 or later: This is a
   requirement for the `~pycraf.geospatial` package.
@@ -37,6 +37,32 @@ There are a few optional packages, which are necessary for some functionality:
 
 Installing pycraf
 ==================
+
+There are various ways to install `pycraf`. The easiest and cleanest approach
+would be to use the `Anaconda/Miniconda Python distribution
+<https://www.anaconda.com/distribution/>`_, because it allows to download
+a binary package, which is well-tested against all dependency packages.
+
+Using Anaconda
+--------------
+After installing Anaconda, one can run the `conda package manager
+<https://docs.conda.io/en/latest/>`_::
+
+    conda install pycraf -c conda-forge
+
+.. note::
+
+    It is always a good idea to keep different projects separated and conda
+    allows to easily create virtual environments. To set one up for `pycraf`::
+
+        conda create -n pycraf-env python=3.6 pycraf
+
+    and to use it::
+
+        conda activate pycraf-env
+
+    (In conda versions before 4.6, one has to source the activate shell
+    script instead. See `conda manual <https://docs.conda.io/en/latest/>`_.)
 
 Using pip
 -------------
@@ -71,8 +97,8 @@ To install pycraf with `pip <http://www.pip-installer.org/en/latest/>`__, simply
     <https://www.continuum.io/downloads>`_, especially, if you are on
     :ref:`windows_install`.
 
-    Do **not** install pycraf or other third-party packages using ``sudo``
-    unless you are fully aware of the risks.
+    Do **not** install pycraf or other third-party packages as
+    Administrator/Root unless you are fully aware of the risks.
 
 .. _source_install:
 
@@ -211,7 +237,7 @@ Then follow the instructions in :ref:`source_install`.
 .. _testing_installed_pycraf:
 
 Testing an installed pycraf
-----------------------------
+=============================
 
 The easiest way to test if your installed version of pycraf is running
 correctly, is to use the `~pycraf.test()` function::
@@ -260,7 +286,7 @@ code, you can also do
 .. _srtm_data:
 
 Using SRTM data
----------------
+==================
 
 To make full use of the path attenuation calculations provided by pycraf,
 you will need to use NASA's Shuttle Radar Topography Mission

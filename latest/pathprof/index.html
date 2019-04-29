@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v0.25.9.dev106</title>
+    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v0.25.9.dev107</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -61,7 +61,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.9.dev106</a>
+	<a href="../index.html">pycraf v0.25.9.dev107</a>
 	 &#187;
       </li>
       
@@ -585,9 +585,9 @@ as a consequence, the terrain height profile can only be a 1D array.</p>
 <p>Even with the Tx/Rx location and the terrain height profile being constant
 for one call of the <a class="reference internal" href="../api/pycraf.pathprof.losses_complete.html#pycraf.pathprof.losses_complete" title="pycraf.pathprof.losses_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losses_complete</span></code></a> function, the
 computing time can be substantial. This is because changes in the
-parameters <code class="xref py py-obj docutils literal notranslate"><span class="pre">frequency</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">h_tg</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">h_rg</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">version</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">zone_t</span></code>, and ` zone_r`
-have influence on the propagation path geometry.  In the ` broadcasted
-arrays &lt;<a class="reference external" href="https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html</a>&gt;`_,
+parameters <code class="xref py py-obj docutils literal notranslate"><span class="pre">frequency</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">h_tg</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">h_rg</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">version</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">zone_t</span></code>, and <code class="xref py py-obj docutils literal notranslate"><span class="pre">zone_r</span></code>
+have influence on the propagation path geometry.  In the <a class="reference external" href="https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">broadcasted
+arrays</a>,
 the axes associated with the mentioned parameters should vary as slow as
 possible. The underlying implementation will trigger a re-computation of
 the path geometry if one of these parameters changes. Therefore, if the

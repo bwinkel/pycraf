@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>losses_complete &#8212; pycraf v0.25.9.dev106</title>
+    <title>losses_complete &#8212; pycraf v0.25.9.dev107</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -61,7 +61,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.9.dev106</a>
+	<a href="../index.html">pycraf v0.25.9.dev107</a>
 	 &#187;
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
@@ -83,8 +83,8 @@
 <code class="descclassname">pycraf.pathprof.</code><code class="descname">losses_complete</code><span class="sig-paren">(</span><em>freq</em>, <em>temperature</em>, <em>pressure</em>, <em>lon_t</em>, <em>lat_t</em>, <em>lon_r</em>, <em>lat_r</em>, <em>h_tg</em>, <em>h_rg</em>, <em>hprof_step</em>, <em>timepercent</em>, <em>G_t=&lt;Decibel 0.0 dB&gt;</em>, <em>G_r=&lt;Decibel 0.0 dB&gt;</em>, <em>omega=&lt;Quantity 0.0 %&gt;</em>, <em>d_tm=None</em>, <em>d_lm=None</em>, <em>d_ct=None</em>, <em>d_cr=None</em>, <em>zone_t=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em>zone_r=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em>polarization=0</em>, <em>version=16</em>, <em>delta_N=None</em>, <em>N0=None</em>, <em>hprof_dists=None</em>, <em>hprof_heights=None</em>, <em>hprof_bearing=None</em>, <em>hprof_backbearing=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#losses_complete"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L1393" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.losses_complete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate propagation losses for a fixed path using a parallelized method.</p>
 <p>The difference to the usual <a class="reference internal" href="pycraf.pathprof.PathProp.html#pycraf.pathprof.PathProp" title="pycraf.pathprof.PathProp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PathProp</span></code></a> +
-<a class="reference internal" href="pycraf.pathprof.loss_complete.html#pycraf.pathprof.loss_complete" title="pycraf.pathprof.loss_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_complete</span></code></a> approach is, that <code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_fast</span></code> supports
-full <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/index.html#module-numpy" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy</span></code></a> <a class="reference external" href="https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">broad-casting</a>. This
+<a class="reference internal" href="pycraf.pathprof.loss_complete.html#pycraf.pathprof.loss_complete" title="pycraf.pathprof.loss_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_complete</span></code></a> approach is, that <a class="reference internal" href="#pycraf.pathprof.losses_complete" title="pycraf.pathprof.losses_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losses_complete</span></code></a>
+supports full <a class="reference external" href="https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">numpy broad-casting</a>. This
 allows perform many calculations at once, e.g., if one interested in
 a statistics plot of <code class="xref py py-obj docutils literal notranslate"><span class="pre">L</span></code> vs. <code class="xref py py-obj docutils literal notranslate"><span class="pre">time_percent</span></code>, without querying the
 height profile over and over.</p>

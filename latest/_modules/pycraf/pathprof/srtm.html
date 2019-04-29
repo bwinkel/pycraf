@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>pycraf.pathprof.srtm &#8212; pycraf v0.25.9.dev106</title>
+    <title>pycraf.pathprof.srtm &#8212; pycraf v0.25.9.dev107</title>
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -48,7 +48,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v0.25.9.dev106</a>
+	<a href="../../../index.html">pycraf v0.25.9.dev107</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -450,8 +450,8 @@
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tile_path</span> <span class="o">+</span> <span class="s1">&#39;.zip&#39;</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-            <span class="c1"># someone else was faster to delete?</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">PermissionError</span><span class="p">):</span>
+            <span class="c1"># someone else was faster to delete or still accessing?</span>
             <span class="k">pass</span>
 
     <span class="k">elif</span> <span class="n">server</span> <span class="o">==</span> <span class="s1">&#39;viewpano&#39;</span><span class="p">:</span>
@@ -472,7 +472,11 @@
         <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">super_tile_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zf</span><span class="p">:</span>
             <span class="n">zf</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">srtm_dir</span><span class="p">)</span>
 
-        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">super_tile_path</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">super_tile_path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">PermissionError</span><span class="p">):</span>
+            <span class="c1"># someone else was faster to delete or still accessing?</span>
+            <span class="k">pass</span>
 
 
 <span class="k">def</span> <span class="nf">_extract_hgt_coords</span><span class="p">(</span><span class="n">hgt_name</span><span class="p">):</span>
