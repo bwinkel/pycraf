@@ -1,5 +1,6 @@
-1.0.0 (unreleased)
+1.0.0 (2020-01-08)
 =======================
+
 New Features
 ------------
 
@@ -39,6 +40,8 @@ Bugfixes
   Basically, the "+init=" part of the projection definition is now
   deprecated. We removed this from the `pycraf.geospatial` module, but
   as a consequence, `pyproj>=2.0` is now required. [#10]
+- Make `pycraf` compatible with `astropy>=4.0`, which doesn't offer some `
+  utils.compat` functions any more. [00556d]
 
 0.25.8 (2019-02-23)
 =======================
