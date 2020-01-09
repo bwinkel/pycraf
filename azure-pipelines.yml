@@ -41,11 +41,11 @@ jobs:
 
   strategy:
     matrix:
-      linux35:
-        imageName: 'ubuntu-16.04'
-        python.version: '3.5'
-        py_whl: 35
-        numpy.version: '1.13.1'
+      # linux35:
+      #   imageName: 'ubuntu-16.04'
+      #   python.version: '3.5'
+      #   py_whl: 35
+      #   numpy.version: '1.13.1'
       linux36:
         imageName: 'ubuntu-16.04'
         python.version: '3.6'
@@ -62,48 +62,48 @@ jobs:
         # independent
         build.tarball: ${{ true }}
         publish.tarball: ${{ eq(variables['is.tag'], true) }}
-      linux37:
-        imageName: 'ubuntu-16.04'
-        python.version: '3.7'
-        py_whl: 37
-        numpy.version: '1.14.5'
-      linux38:
-        imageName: 'ubuntu-16.04'
-        python.version: '3.8'
-        py_whl: 38
-        numpy.version: '1.14.5'
-      mac35:
-        imageName: 'macos-10.13'
-        python.version: '3.5'
-        numpy.version: '1.13.1'
+      # linux37:
+      #   imageName: 'ubuntu-16.04'
+      #   python.version: '3.7'
+      #   py_whl: 37
+      #   numpy.version: '1.14.5'
+      # linux38:
+      #   imageName: 'ubuntu-16.04'
+      #   python.version: '3.8'
+      #   py_whl: 38
+      #   numpy.version: '1.14.5'
+      # mac35:
+      #   imageName: 'macos-10.13'
+      #   python.version: '3.5'
+      #   numpy.version: '1.13.1'
       mac36:
         imageName: 'macos-10.13'
         python.version: '3.6'
         numpy.version: '1.13.1'
-      mac37:
-        imageName: 'macos-10.13'
-        python.version: '3.7'
-        numpy.version: '1.14.5'
-      mac38:
-        imageName: 'macos-10.13'
-        python.version: '3.8'
-        numpy.version: '1.14.5'
-      win35:
-        imageName: 'vs2017-win2016'
-        python.version: '3.5'
-        numpy.version: '1.13.1'
+      # mac37:
+      #   imageName: 'macos-10.13'
+      #   python.version: '3.7'
+      #   numpy.version: '1.14.5'
+      # mac38:
+      #   imageName: 'macos-10.13'
+      #   python.version: '3.8'
+      #   numpy.version: '1.14.5'
+      # win35:
+      #   imageName: 'vs2017-win2016'
+      #   python.version: '3.5'
+      #   numpy.version: '1.13.1'
       win36:
         imageName: 'vs2017-win2016'
         python.version: '3.6'
         numpy.version: '1.13.1'
-      win37:
-        imageName: 'vs2017-win2016'
-        python.version: '3.7'
-        numpy.version: '1.14.5'
-      win38:
-        imageName: 'vs2017-win2016'
-        python.version: '3.8'
-        numpy.version: '1.14.5'
+      # win37:
+      #   imageName: 'vs2017-win2016'
+      #   python.version: '3.7'
+      #   numpy.version: '1.14.5'
+      # win38:
+      #   imageName: 'vs2017-win2016'
+      #   python.version: '3.8'
+      #   numpy.version: '1.14.5'
 
   pool:
     vmImage: $(imageName)
@@ -152,7 +152,7 @@ jobs:
   # pip installation)
   - script: |
       $(conda.activate) pycraf-env
-      conda install --yes --quiet -c conda-forge python=$(python.version) cython h5py matplotlib numpy==$(numpy.version) pip pyproj<2 pyqt>=5 pytest pytest-astropy pytest-doctestplus pytest-qt scipy sgp4 sphinx-astropy twine wheel
+      conda install --yes --quiet -c conda-forge python=$(python.version) cython h5py matplotlib numpy==$(numpy.version) pip 'pyproj<2' 'pyqt>=5' pytest pytest-astropy pytest-doctestplus pytest-qt scipy sgp4 sphinx-astropy twine wheel
     displayName: Install Anaconda packages
 
   # need to fix cctools and ld64 to slightly older version, otherwise an
