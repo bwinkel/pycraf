@@ -152,7 +152,7 @@ jobs:
   # pip installation)
   - script: |
       $(conda.activate) pycraf-env
-      conda install --yes --quiet -c conda-forge python=$(python.version) cython h5py matplotlib numpy==$(numpy.version) pip 'pyproj<2' 'pyqt>=5' pytest pytest-astropy pytest-doctestplus pytest-qt scipy sgp4 sphinx-astropy twine wheel
+      conda install --yes --quiet -c conda-forge python=$(python.version) astropy=3 cython h5py matplotlib numpy==$(numpy.version) pip 'pyproj<2' 'pyqt>=5' pytest pytest-astropy pytest-doctestplus pytest-qt scipy sgp4 sphinx-astropy twine wheel
     displayName: Install Anaconda packages
 
   # need to fix cctools and ld64 to slightly older version, otherwise an
