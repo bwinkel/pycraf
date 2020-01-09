@@ -34,10 +34,11 @@ jobs:
     # plat: manylinux1_x86_64
     # image: skhep/manylinuxgcc-x86_64
     python.architecture: x64
-    ${{ if eq(variables['is.win'], true) }}:
-      srtmdata: ${{ format('{0}\srtm', variables['Agent.BuildDirectory']) }}
-    ${{ if eq(variables['is.win'], false) }}:
-      srtmdata: ${{ format('{0}/srtm', variables['Agent.BuildDirectory']) }}
+    # ${{ if not(startsWith(variables['Agent.OS'], 'Windows')) }}:
+    #   srtmdata: ${{ format('{0}/srtm', variables['Agent.BuildDirectory']) }}
+    # ${{ if startsWith(variables['Agent.OS'], 'Windows') }}:
+    #   srtmdata: ${{ format('{0}\srtm', variables['Agent.BuildDirectory']) }}
+    # srtmdata: ${{ format('{0}/srtm', variables['Agent.BuildDirectory']) }}
 
   strategy:
     matrix:
@@ -51,6 +52,7 @@ jobs:
         python.version: '3.6'
         py_whl: 36
         numpy.version: '1.13.1'
+        astropy.version: '3.0'
         # docs should only be published by one thread, as they are version-
         # independent; and only if not on a PR
         publish.docs: ${{ not(eq(variables['is.pullrequest'], true)) }}
@@ -62,11 +64,12 @@ jobs:
         # independent
         build.tarball: ${{ true }}
         publish.tarball: ${{ eq(variables['is.tag'], true) }}
-      # linux37:
-      #   imageName: 'ubuntu-16.04'
-      #   python.version: '3.7'
-      #   py_whl: 37
-      #   numpy.version: '1.14.5'
+      linux37:
+        imageName: 'ubuntu-16.04'
+        python.version: '3.7'
+        py_whl: 37
+        numpy.version: '1.16'
+        astropy.version: '4'
       # linux38:
       #   imageName: 'ubuntu-16.04'
       #   python.version: '3.8'
@@ -80,6 +83,7 @@ jobs:
         imageName: 'macos-10.13'
         python.version: '3.6'
         numpy.version: '1.13.1'
+        astropy.version: '3'
       # mac37:
       #   imageName: 'macos-10.13'
       #   python.version: '3.7'
@@ -96,10 +100,12 @@ jobs:
         imageName: 'vs2017-win2016'
         python.version: '3.6'
         numpy.version: '1.13.1'
-      # win37:
-      #   imageName: 'vs2017-win2016'
-      #   python.version: '3.7'
-      #   numpy.version: '1.14.5'
+        astropy.version: '3'
+      win37:
+        imageName: 'vs2017-win2016'
+        python.version: '3.7'
+        numpy.version: '1.16'
+        astropy.version: '4'
       # win38:
       #   imageName: 'vs2017-win2016'
       #   python.version: '3.8'
@@ -113,19 +119,26 @@ jobs:
   - bash: |
       echo "##vso[task.prependpath]$CONDA/bin"
       echo "##vso[task.setvariable variable=conda.activate]source activate"
+      echo "##vso[task.setvariable variable=srtmdata]$(Agent.BuildDirectory)/srtm"
     displayName: Add conda to PATH, Linux/MacOS
-    # condition: not(eq(variables['is.win'], true))
     condition: not(startsWith(variables['Agent.OS'], 'Windows'))
+
+  - bash: |
+      echo "##vso[task.setvariable variable=display]:99.0"
+      /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1920x1200x24 -ac +extension GLX +render -noreset
+    displayName: Activate display, Linux
+    condition: startsWith(variables['Agent.OS'], 'Linux')
 
   - powershell: |
       Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
       echo "##vso[task.setvariable variable=conda.activate]call activate"
+      echo "##vso[task.setvariable variable=srtmdata]$(Agent.BuildDirectory)\srtm"
     displayName: Add conda to PATH, Windows
-    # condition: eq(variables['is.win'], true)
     condition: startsWith(variables['Agent.OS'], 'Windows')
 
   - script: |
       echo "Build.SourceBranch" $(Build.SourceBranch)
+      echo "Agent.BuildDirectory" $(Agent.BuildDirectory)
       echo "Agent.OS" $(Agent.OS) "/" ${{ variables['Agent.OS'] }}
       echo "is.linux" $(is.linux) "/" ${{ variables['is.linux'] }}
       echo "is.macos" $(is.macos) "/" ${{ variables['is.macos'] }}
@@ -140,8 +153,13 @@ jobs:
       echo "python.version" $(python.version)
       echo "py_whl" $(py_whl)
       echo "numpy.version" $(numpy.version)
+      echo "astropy.version" $(astropy.version)
       echo "imageName" $(imageName)
     displayName: Show Vars
+
+  - script: |
+      mkdir $(srtmdata)
+    displayName: Create SRTM directory
 
   - script: conda create --yes --quiet --name pycraf-env -c conda-forge
     displayName: Create Anaconda environment
@@ -152,7 +170,7 @@ jobs:
   # pip installation)
   - script: |
       $(conda.activate) pycraf-env
-      conda install --yes --quiet -c conda-forge python=$(python.version) astropy=3 cython h5py matplotlib numpy==$(numpy.version) pip 'pyproj<2' 'pyqt>=5' pytest pytest-astropy pytest-doctestplus pytest-qt scipy sgp4 sphinx-astropy twine wheel
+      conda install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython h5py matplotlib numpy==$(numpy.version) pip 'pyproj>2' 'pyqt>=5' pytest pytest-astropy pytest-doctestplus pytest-qt scipy sgp4 sphinx-astropy twine wheel
     displayName: Install Anaconda packages
 
   # need to fix cctools and ld64 to slightly older version, otherwise an
@@ -169,95 +187,97 @@ jobs:
       pip install -e .
     displayName: Building
 
+  # pytest -rsx --doctest-rst docs pycraf
   - script: |
       $(conda.activate) pycraf-env
       pip install pytest-azurepipelines
-      pytest -rsx --doctest-rst docs pycraf
+      python setup.py test --remote-data=any
     displayName: Testing
 
+  # sphinx-build docs docs/_build/html -W -b html
+  # conda install --yes --quiet --name pycraf-env -c conda-forge sphinx-astropy
   - script: |
       $(conda.activate) pycraf-env
-      conda install --yes --quiet --name pycraf-env -c conda-forge astropy sphinx-astropy
-      sphinx-build docs docs/_build/html -W -b html
+      python setup.py build_docs
     displayName: Make docs
     condition: succeeded()
 
-  - task: DownloadSecureFile@1
-    inputs:
-      secureFile: ghpages_deploy_key_pycraf
-    displayName: 'Get the deploy key'
-    condition: and(succeeded(), eq(variables['publish.docs'], true))
+  # - task: DownloadSecureFile@1
+  #   inputs:
+  #     secureFile: ghpages_deploy_key_pycraf
+  #   displayName: 'Get the deploy key'
+  #   condition: and(succeeded(), eq(variables['publish.docs'], true))
 
-  - bash: |
-      mkdir ~/.ssh && mv $DOWNLOADSECUREFILE_SECUREFILEPATH ~/.ssh/id_rsa
-      chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa
-      ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-      mkdir gh_pages && cd gh_pages
-      git init
-      git config --local user.name "Benjamin Winkel"
-      git config --local user.email "bwinkel@mpifr.de"
-      git remote add github git@github.com:bwinkel/pycraf.git
-      git fetch github gh-pages
-      git checkout --track github/gh-pages
-      # mkdir -p ./$DOCS_TARGET
-      rsync -av ../docs/_build/html/ ${DOCS_TARGET}/
-      docs_version=$(python -c "import pycraf; print(pycraf.__version__)")
-      git add -A && git commit -m "Update docs for $docs_version ***NO_CI***"
-      bash ../retry.sh git push github
-    displayName: Publish docs
-    condition: and(succeeded(), eq(variables['publish.docs'], true))
+  # - bash: |
+  #     mkdir ~/.ssh && mv $DOWNLOADSECUREFILE_SECUREFILEPATH ~/.ssh/id_rsa
+  #     chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa
+  #     ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+  #     mkdir gh_pages && cd gh_pages
+  #     git init
+  #     git config --local user.name "Benjamin Winkel"
+  #     git config --local user.email "bwinkel@mpifr.de"
+  #     git remote add github git@github.com:bwinkel/pycraf.git
+  #     git fetch github gh-pages
+  #     git checkout --track github/gh-pages
+  #     # mkdir -p ./$DOCS_TARGET
+  #     rsync -av ../docs/_build/html/ ${DOCS_TARGET}/
+  #     docs_version=$(python -c "import pycraf; print(pycraf.__version__)")
+  #     git add -A && git commit -m "Update docs for $docs_version ***NO_CI***"
+  #     bash ../retry.sh git push github
+  #   displayName: Publish docs
+  #   condition: and(succeeded(), eq(variables['publish.docs'], true))
 
-  - task: TwineAuthenticate@1
-    inputs:
-      pythonUploadServiceConnection: pypi
-    displayName: 'Twine Authenticate'
+  # - task: TwineAuthenticate@1
+  #   inputs:
+  #     pythonUploadServiceConnection: pypi
+  #   displayName: 'Twine Authenticate'
 
-  - bash: |
-      docker run -e NPY_NUM_BUILD_JOBS=4 -e PLAT=$(plat) -e package_name=$(package_name) -e py_whl=$(py_whl) --rm -v `pwd`:/io $(image) /io/.ci/build-wheels.sh
-      ls -lh wheelhouse/
-      mkdir -p dist
-      cp wheelhouse/$(package_name)*.whl dist/.
-      ls dist
-    displayName: Build wheels, Linux
-    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'))
+  # - bash: |
+  #     docker run -e NPY_NUM_BUILD_JOBS=4 -e PLAT=$(plat) -e package_name=$(package_name) -e py_whl=$(py_whl) --rm -v `pwd`:/io $(image) /io/.ci/build-wheels.sh
+  #     ls -lh wheelhouse/
+  #     mkdir -p dist
+  #     cp wheelhouse/$(package_name)*.whl dist/.
+  #     ls dist
+  #   displayName: Build wheels, Linux
+  #   condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'))
 
-  - script: |
-      $(conda.activate) pycraf-env
-      python setup.py bdist_wheel
-    displayName: Build wheels, MacOS/Windows
-    condition: and(succeeded(), not(startsWith(variables['Agent.OS'], 'Linux')))
+  # - script: |
+  #     $(conda.activate) pycraf-env
+  #     python setup.py bdist_wheel
+  #   displayName: Build wheels, MacOS/Windows
+  #   condition: and(succeeded(), not(startsWith(variables['Agent.OS'], 'Linux')))
 
-  # twine upload with python 3.5 doesn't work?
-  # (pkg_resources.DistributionNotFound: The 'readme-renderer>=21.0' distribution was not found)
-  # will use system python for upload
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.6'
+  # # twine upload with python 3.5 doesn't work?
+  # # (pkg_resources.DistributionNotFound: The 'readme-renderer>=21.0' distribution was not found)
+  # # will use system python for upload
+  # - task: UsePythonVersion@0
+  #   inputs:
+  #     versionSpec: '3.6'
 
-  - script: |
-      pip install twine
-      python -m twine upload -r "pypi" --config-file $(PYPIRC_PATH) dist/*.whl
-    displayName: Upload wheels, Linux/MacOS
-    condition: and(succeeded(), eq(variables['publish.wheels'], true), not(startsWith(variables['Agent.OS'], 'Windows')))
+  # - script: |
+  #     pip install twine
+  #     python -m twine upload -r "pypi" --config-file $(PYPIRC_PATH) dist/*.whl
+  #   displayName: Upload wheels, Linux/MacOS
+  #   condition: and(succeeded(), eq(variables['publish.wheels'], true), not(startsWith(variables['Agent.OS'], 'Windows')))
 
-  - script: |
-      pip install twine
-      python -m twine upload -r "pypi" --config-file %PYPIRC_PATH% dist/*.whl
-    displayName: Upload wheels, Windows
-    condition: and(succeeded(), eq(variables['publish.wheels'], true), startsWith(variables['Agent.OS'], 'Windows'))
+  # - script: |
+  #     pip install twine
+  #     python -m twine upload -r "pypi" --config-file %PYPIRC_PATH% dist/*.whl
+  #   displayName: Upload wheels, Windows
+  #   condition: and(succeeded(), eq(variables['publish.wheels'], true), startsWith(variables['Agent.OS'], 'Windows'))
 
-  - script: |
-      $(conda.activate) pycraf-env
-      python setup.py sdist
-    displayName: Build tarball
-    condition: and(succeeded(), eq(variables['build.tarball'], true))
+  # - script: |
+  #     $(conda.activate) pycraf-env
+  #     python setup.py sdist
+  #   displayName: Build tarball
+  #   condition: and(succeeded(), eq(variables['build.tarball'], true))
 
-  - script: |
-      $(conda.activate) pycraf-env
-      python -m twine upload -r "pypi" --config-file $(PYPIRC_PATH) dist/*.tar.gz
-    displayName: Upload tarball
-    condition: and(succeeded(), eq(variables['publish.tarball'], true))
+  # - script: |
+  #     $(conda.activate) pycraf-env
+  #     python -m twine upload -r "pypi" --config-file $(PYPIRC_PATH) dist/*.tar.gz
+  #   displayName: Upload tarball
+  #   condition: and(succeeded(), eq(variables['publish.tarball'], true))
 
-  - script: rm ~/.ssh/id_rsa || true
-    displayName: 'Cleanup docs deploy key'
-    condition: and(always(), eq(variables['publish.docs'], true))
+  # - script: rm ~/.ssh/id_rsa || true
+  #   displayName: 'Cleanup docs deploy key'
+  #   condition: and(always(), eq(variables['publish.docs'], true))
