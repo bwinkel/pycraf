@@ -80,19 +80,19 @@
 <h1>find_elevation<a class="headerlink" href="#find-elevation" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.atm.find_elevation">
-<code class="descclassname">pycraf.atm.</code><code class="descname">find_elevation</code><span class="sig-paren">(</span><em>obs_alt</em>, <em>target_alt</em>, <em>arc_length</em>, <em>atm_layers_cache</em>, <em>niter=50</em>, <em>interval=10</em>, <em>stepsize=0.05</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#find_elevation"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L2255" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.find_elevation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pycraf.atm.</code><code class="sig-name descname">find_elevation</code><span class="sig-paren">(</span><em class="sig-param">obs_alt</em>, <em class="sig-param">target_alt</em>, <em class="sig-param">arc_length</em>, <em class="sig-param">atm_layers_cache</em>, <em class="sig-param">niter=50</em>, <em class="sig-param">interval=10</em>, <em class="sig-param">stepsize=0.05</em>, <em class="sig-param">seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#find_elevation"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L2255" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.find_elevation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds the optimal path elevation angle from an observer to reach target.</p>
-<p>Based on <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html#scipy.optimize.basinhopping" title="(in SciPy v1.2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">basinhopping</span></code></a>; see their manual for an
+<p>Based on <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html#scipy.optimize.basinhopping" title="(in SciPy v1.4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">basinhopping</span></code></a>; see their manual for an
 explanation of the hyper-parameters (<code class="xref py py-obj docutils literal notranslate"><span class="pre">niter</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">interval</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">stepsize</span></code>, and
 <code class="xref py py-obj docutils literal notranslate"><span class="pre">seed</span></code>).</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>obs_alt</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Height of observer above sea-level [km]</p>
+<dt><strong>obs_alt</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Height of observer above sea-level [km]</p>
 </dd>
-<dt><strong>obs_alt</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Height of target above sea-level [km]</p>
+<dt><strong>obs_alt</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Height of target above sea-level [km]</p>
 </dd>
-<dt><strong>arc_length</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Arc-length (true angular distance) between observer and target [deg]</p>
+<dt><strong>arc_length</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Arc-length (true angular distance) between observer and target [deg]</p>
 </dd>
 <dt><strong>atm_layers_cache</strong><span class="classifier">dict</span></dt><dd><p>Pre-computed physical parameters for each atmopheric layer as
 returned by the <a class="reference internal" href="pycraf.atm.atm_layers.html#pycraf.atm.atm_layers" title="pycraf.atm.atm_layers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atm_layers</span></code></a> function.</p>
@@ -136,14 +136,14 @@ get an approximate solution to the problem.</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/master/docs/api/pycraf.atm.find_elevation.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/master/docs/api/pycraf.atm.find_elevation.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.atm.find_elevation.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.0.1. &nbsp;
-    Last built 29 Apr 2019. <br/>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.3.1. &nbsp;
+    Last built 09 Jan 2020. <br/>
   </p>
 </footer>
   </body>

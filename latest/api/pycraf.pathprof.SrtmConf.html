@@ -80,7 +80,7 @@
 <h1>SrtmConf<a class="headerlink" href="#srtmconf" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pycraf.pathprof.SrtmConf">
-<em class="property">class </em><code class="descclassname">pycraf.pathprof.</code><code class="descname">SrtmConf</code><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#SrtmConf"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/srtm.py#L82" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.SrtmConf" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pycraf.pathprof.</code><code class="sig-name descname">SrtmConf</code><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#SrtmConf"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/srtm.py#L82" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.SrtmConf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pycraf.utils.MultiState.html#pycraf.utils.MultiState" title="pycraf.utils.multistate.MultiState"><code class="docutils literal notranslate"><span class="pre">pycraf.utils.MultiState</span></code></a></p>
 <p>Provide a global state to adjust SRTM configuration.</p>
 <p>By default, <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf</span></code> will look for SRTM ‘.hgt’ files (the terrain data)
@@ -88,7 +88,7 @@ in the SRTMDATA environment variable. If this is not defined, the
 local directory (‘./’) is used for look-up. It is possible during
 run-time to change the directory where to look for ‘.hgt’ files
 with the <a class="reference internal" href="#pycraf.pathprof.SrtmConf" title="pycraf.pathprof.SrtmConf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SrtmConf</span></code></a> manager:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pycraf.pathprof</span> <span class="k">import</span> <span class="n">SrtmConf</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pycraf.pathprof</span> <span class="kn">import</span> <span class="n">SrtmConf</span>
 <span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">srtm_dir</span><span class="o">=</span><span class="s1">&#39;/path/to/srtmdir&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -124,14 +124,14 @@ tiles from viewfinderpanorama (<code class="xref py py-obj docutils literal notr
 The default method uses bi-linear interpolation (<code class="xref py py-obj docutils literal notranslate"><span class="pre">interp='linear'</span></code>). One
 can also have nearest-neighbor (<code class="xref py py-obj docutils literal notranslate"><span class="pre">interp='nearest'</span></code>) or spline
 (<code class="xref py py-obj docutils literal notranslate"><span class="pre">interp='spline'</span></code>) interpolation. The two former internally use
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html#scipy.interpolate.RegularGridInterpolator" title="(in SciPy v1.2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RegularGridInterpolator</span></code></a>, the latter employs
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectBivariateSpline</span></code></a> that also allows custom
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html#scipy.interpolate.RegularGridInterpolator" title="(in SciPy v1.4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RegularGridInterpolator</span></code></a>, the latter employs
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectBivariateSpline</span></code></a> that also allows custom
 spline degrees (<code class="xref py py-obj docutils literal notranslate"><span class="pre">kx</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">ky</span></code>, default: 3) and smoothing factor (<code class="xref py py-obj docutils literal notranslate"><span class="pre">s</span></code>,
 default: 0.). To change these use:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">interp</span><span class="o">=</span><span class="s1">&#39;spline&#39;</span><span class="p">,</span> <span class="n">spline_opts</span><span class="o">=</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">s</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>We refer to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectBivariateSpline</span></code></a> description for
+<p>We refer to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectBivariateSpline</span></code></a> description for
 further information.</p>
 <p>Two read-only attributes are present, <a class="reference internal" href="#pycraf.pathprof.SrtmConf.tile_size" title="pycraf.pathprof.SrtmConf.tile_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tile_size</span></code></a> (pixels) and
 <a class="reference internal" href="#pycraf.pathprof.SrtmConf.hgt_res" title="pycraf.pathprof.SrtmConf.hgt_res"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hgt_res</span></code></a> (m), which are automatically inferred from the tile data.</p>
@@ -142,7 +142,7 @@ further information.</p>
 <li><p><a class="reference external" href="http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm">viewpano</a></p></li>
 </ul>
 <p class="rubric">Attributes Summary</p>
-<table class="longtable docutils align-center">
+<table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -172,7 +172,7 @@ further information.</p>
 </tbody>
 </table>
 <p class="rubric">Methods Summary</p>
-<table class="longtable docutils align-center">
+<table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -189,48 +189,48 @@ further information.</p>
 <p class="rubric">Attributes Documentation</p>
 <dl class="attribute">
 <dt id="pycraf.pathprof.SrtmConf.download">
-<code class="descname">download</code><em class="property"> = 'never'</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.download" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">download</code><em class="property"> = 'never'</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.download" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="pycraf.pathprof.SrtmConf.hgt_res">
-<code class="descname">hgt_res</code><em class="property"> = 90.0</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.hgt_res" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">hgt_res</code><em class="property"> = 90.0</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.hgt_res" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="pycraf.pathprof.SrtmConf.interp">
-<code class="descname">interp</code><em class="property"> = 'linear'</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.interp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">interp</code><em class="property"> = 'linear'</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.interp" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="pycraf.pathprof.SrtmConf.server">
-<code class="descname">server</code><em class="property"> = 'nasa_v2.1'</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.server" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">server</code><em class="property"> = 'nasa_v2.1'</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.server" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="pycraf.pathprof.SrtmConf.spline_opts">
-<code class="descname">spline_opts</code><em class="property"> = (3, 0)</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.spline_opts" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">spline_opts</code><em class="property"> = (3, 0)</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.spline_opts" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="pycraf.pathprof.SrtmConf.srtm_dir">
-<code class="descname">srtm_dir</code><em class="property"> = '/home/travis/build/bwinkel/pycraf/srtm'</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.srtm_dir" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">srtm_dir</code><em class="property"> = '/home/travis/build/bwinkel/pycraf/srtm'</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.srtm_dir" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="pycraf.pathprof.SrtmConf.tile_size">
-<code class="descname">tile_size</code><em class="property"> = 1201</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.tile_size" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">tile_size</code><em class="property"> = 1201</em><a class="headerlink" href="#pycraf.pathprof.SrtmConf.tile_size" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p class="rubric">Methods Documentation</p>
-<dl class="classmethod">
+<dl class="method">
 <dt id="pycraf.pathprof.SrtmConf.hook">
-<em class="property">classmethod </em><code class="descname">hook</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#SrtmConf.hook"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/srtm.py#L233" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.SrtmConf.hook" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">hook</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#SrtmConf.hook"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/srtm.py#L233" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.SrtmConf.hook" title="Permalink to this definition">¶</a></dt>
 <dd><p>A hook which is called everytime when attributes are about to change.</p>
 <p>You should override this method if you want to enable pre-processing
 or monitoring of your attributes. For example, one could use this
 to react to attribute changes:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf.utils</span> <span class="k">import</span> <span class="n">MultiState</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf.utils</span> <span class="kn">import</span> <span class="n">MultiState</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyState</span><span class="p">(</span><span class="n">MultiState</span><span class="p">):</span>
 <span class="gp">...</span>
@@ -261,9 +261,9 @@ to react to attribute changes:</p>
 </div>
 </dd></dl>
 
-<dl class="classmethod">
+<dl class="method">
 <dt id="pycraf.pathprof.SrtmConf.validate">
-<em class="property">classmethod </em><code class="descname">validate</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#SrtmConf.validate"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/srtm.py#L163" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.SrtmConf.validate" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">validate</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/srtm.html#SrtmConf.validate"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/srtm.py#L163" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.SrtmConf.validate" title="Permalink to this definition">¶</a></dt>
 <dd><p>This checks, if the provided inputs for <a class="reference internal" href="#pycraf.pathprof.SrtmConf.download" title="pycraf.pathprof.SrtmConf.download"><code class="xref py py-obj docutils literal notranslate"><span class="pre">download</span></code></a> and <a class="reference internal" href="#pycraf.pathprof.SrtmConf.server" title="pycraf.pathprof.SrtmConf.server"><code class="xref py py-obj docutils literal notranslate"><span class="pre">server</span></code></a> are
 allowed. Possible values are:</p>
 <ul class="simple">
@@ -295,14 +295,14 @@ allowed. Possible values are:</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/master/docs/api/pycraf.pathprof.SrtmConf.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/master/docs/api/pycraf.pathprof.SrtmConf.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.pathprof.SrtmConf.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.0.1. &nbsp;
-    Last built 29 Apr 2019. <br/>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.3.1. &nbsp;
+    Last built 09 Jan 2020. <br/>
   </p>
 </footer>
   </body>

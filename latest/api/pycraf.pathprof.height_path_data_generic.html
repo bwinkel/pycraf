@@ -80,7 +80,7 @@
 <h1>height_path_data_generic<a class="headerlink" href="#height-path-data-generic" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.pathprof.height_path_data_generic">
-<code class="descclassname">pycraf.pathprof.</code><code class="descname">height_path_data_generic</code><span class="sig-paren">(</span><em>distance</em>, <em>step</em>, <em>lon_mid</em>, <em>lat_mid</em>, <em>zone_t=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em>zone_r=&lt;CLUTTER.UNKNOWN: -1&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#height_path_data_generic"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L1075" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.height_path_data_generic" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pycraf.pathprof.</code><code class="sig-name descname">height_path_data_generic</code><span class="sig-paren">(</span><em class="sig-param">distance</em>, <em class="sig-param">step</em>, <em class="sig-param">lon_mid</em>, <em class="sig-param">lat_mid</em>, <em class="sig-param">zone_t=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em class="sig-param">zone_r=&lt;CLUTTER.UNKNOWN: -1&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#height_path_data_generic"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L1075" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.height_path_data_generic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate height profile auxillary data needed for
 <a class="reference internal" href="pycraf.pathprof.atten_path_fast.html#pycraf.pathprof.atten_path_fast" title="pycraf.pathprof.atten_path_fast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_path_fast</span></code></a>.</p>
 <p>This can be used to cache height-profile data. Since it is independent
@@ -110,22 +110,22 @@ this is without loss of generality).</p>
 <p>The dictionary contains the following entities (the path length
 is m):</p>
 <ul>
-<li><p>“lons”, “lats” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
+<li><p>“lons”, “lats” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
 <p>Longitudes and latitudes of path.</p>
 <p>This is returned for information, only. It is not
 needed by <a class="reference internal" href="pycraf.pathprof.atten_path_fast.html#pycraf.pathprof.atten_path_fast" title="pycraf.pathprof.atten_path_fast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_path_fast</span></code></a>!</p>
 </li>
-<li><p>“lon_mids”, “lat_mids” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
+<li><p>“lon_mids”, “lat_mids” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
 <p>Path center longitudes and latitudes of path. The values
 at index <code class="xref py py-obj docutils literal notranslate"><span class="pre">i</span></code> in these arrays are the midpoints of the
 paths from <code class="xref py py-obj docutils literal notranslate"><span class="pre">lons[0]</span></code> to <code class="xref py py-obj docutils literal notranslate"><span class="pre">lons[i]</span></code> (likewise for <code class="xref py py-obj docutils literal notranslate"><span class="pre">lats</span></code>).</p>
 <p>This is returned for information, only. It is not
 needed by <a class="reference internal" href="pycraf.pathprof.atten_path_fast.html#pycraf.pathprof.atten_path_fast" title="pycraf.pathprof.atten_path_fast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_path_fast</span></code></a>!</p>
 </li>
-<li><p>“distances” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
+<li><p>“distances” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
 <p>Distances of each point in the path from Tx position.</p>
 </li>
-<li><p>“heights” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
+<li><p>“heights” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
 <p>Height profile.</p>
 </li>
 <li><p>“bearing” : float</p>
@@ -133,27 +133,27 @@ needed by <a class="reference internal" href="pycraf.pathprof.atten_path_fast.ht
 <p>This is returned for information, only. It is not
 needed by <a class="reference internal" href="pycraf.pathprof.atten_path_fast.html#pycraf.pathprof.atten_path_fast" title="pycraf.pathprof.atten_path_fast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_path_fast</span></code></a>!</p>
 </li>
-<li><p>“backbearings” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
+<li><p>“backbearings” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
 <p>Back-bearing of each point in the path.</p>
 <p>This is returned for information, only. It is not
 needed by <a class="reference internal" href="pycraf.pathprof.atten_path_fast.html#pycraf.pathprof.atten_path_fast" title="pycraf.pathprof.atten_path_fast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_path_fast</span></code></a>!</p>
 </li>
-<li><p>“omega” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
+<li><p>“omega” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
 <p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">omega</span></code> values for each point in the path.</p>
 </li>
-<li><p>“d_tm”, “d_lm” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
+<li><p>“d_tm”, “d_lm” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
 <p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">d_tm</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">d_lm</span></code> values for each point in the path.</p>
 </li>
-<li><p>“d_ct”, “d_cr” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
+<li><p>“d_ct”, “d_cr” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
 <p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">d_ct</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">d_cr</span></code> values for each point in the path.</p>
 </li>
 <li><p>“zone_t” : int</p>
 <p>Clutter type at Tx.</p>
 </li>
-<li><p>“zone_r” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (int; (m,))</p>
+<li><p>“zone_r” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (int; (m,))</p>
 <p>Clutter type at Rx. (Currently only a single type is used.)</p>
 </li>
-<li><p>“N0”, “delta_N”, “beta0” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
+<li><p>“N0”, “delta_N”, “beta0” : <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (m,))</p>
 <p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">N0</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">delta_N</span></code>, and <code class="xref py py-obj docutils literal notranslate"><span class="pre">beta0</span></code> values for each point in the path.</p>
 </li>
 </ul>
@@ -188,14 +188,14 @@ arrays in <code class="xref py py-obj docutils literal notranslate"><span class=
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/master/docs/api/pycraf.pathprof.height_path_data_generic.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/master/docs/api/pycraf.pathprof.height_path_data_generic.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.pathprof.height_path_data_generic.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.0.1. &nbsp;
-    Last built 29 Apr 2019. <br/>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.3.1. &nbsp;
+    Last built 09 Jan 2020. <br/>
   </p>
 </footer>
   </body>

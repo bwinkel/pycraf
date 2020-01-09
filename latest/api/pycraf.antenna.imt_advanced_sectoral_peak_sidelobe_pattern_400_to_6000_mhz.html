@@ -80,7 +80,7 @@
 <h1>imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz<a class="headerlink" href="#imt-advanced-sectoral-peak-sidelobe-pattern-400-to-6000-mhz" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz">
-<code class="descclassname">pycraf.antenna.</code><code class="descname">imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz</code><span class="sig-paren">(</span><em>azim</em>, <em>elev</em>, <em>G0</em>, <em>phi_3db</em>, <em>theta_3db</em>, <em>k_p</em>, <em>k_h</em>, <em>k_v</em>, <em>tilt_m=0.0</em>, <em>tilt_e=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/antenna/imt.html#imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/antenna/imt.py#L453" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pycraf.antenna.</code><code class="sig-name descname">imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz</code><span class="sig-paren">(</span><em class="sig-param">azim</em>, <em class="sig-param">elev</em>, <em class="sig-param">G0</em>, <em class="sig-param">phi_3db</em>, <em class="sig-param">theta_3db</em>, <em class="sig-param">k_p</em>, <em class="sig-param">k_h</em>, <em class="sig-param">k_v</em>, <em class="sig-param">tilt_m=0.0</em>, <em class="sig-param">tilt_e=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/antenna/imt.html#imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/antenna/imt.py#L453" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz" title="Permalink to this definition">¶</a></dt>
 <dd><p>IMT advanced (LTE) antenna pattern (sectoral, peak side-lobe)
 for the frequency range 400 MHz to 6 GHz according to
 <a class="reference external" href="https://www.itu.int/rec/R-REC-F.1336-4-201402-I/en">ITU-R Rec F.1336-4</a>
@@ -88,9 +88,9 @@ Section 3.1.1.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>azim, elev</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Azimuth/Elevation [deg]</p>
+<dt><strong>azim, elev</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Azimuth/Elevation [deg]</p>
 </dd>
-<dt><strong>G0</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Antenna maximum gain [dBi]</p>
+<dt><strong>G0</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Antenna maximum gain [dBi]</p>
 </dd>
 <dt><strong>phi_3db, theta_3db</strong><span class="classifier">float</span></dt><dd><p>3-dB beamwidth in the azimuth/elevation plane [degrees]</p>
 </dd>
@@ -111,7 +111,7 @@ peak side-lobe patterns [dimless]</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>G</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Antenna pattern [dB]</p>
+<dt><strong>G</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Antenna pattern [dB]</p>
 </dd>
 </dl>
 </dd>
@@ -145,14 +145,14 @@ formula can be used to calculate <span class="math notranslate nohighlight">\(\v
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/master/docs/api/pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/master/docs/api/pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.0.1. &nbsp;
-    Last built 29 Apr 2019. <br/>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.3.1. &nbsp;
+    Last built 09 Jan 2020. <br/>
   </p>
 </footer>
   </body>

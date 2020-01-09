@@ -90,10 +90,10 @@ studies they are usually sufficient.</p>
 <p>For fixed link and mobile communications (IMT), several antenna patterns are
 provided in <a class="reference external" href="https://www.itu.int/rec/R-REC-F.1336-4-201402-I/en">ITU-R Rec F.1336-4</a>.</p>
 <p>Below, you can find a typical use case:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
-<span class="kn">import</span> <span class="nn">pycraf.conversions</span> <span class="kn">as</span> <span class="nn">cnv</span>
+<span class="kn">import</span> <span class="nn">pycraf.conversions</span> <span class="k">as</span> <span class="nn">cnv</span>
 <span class="kn">from</span> <span class="nn">pycraf.antenna</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">azims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mf">180.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
@@ -130,7 +130,7 @@ provided in <a class="reference external" href="https://www.itu.int/rec/R-REC-F.
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../antenna/index-1.png">png</a>, <a class="reference external" href="../antenna/index-1.svg">svg</a>, <a class="reference external" href="../antenna/index-1.pdf">pdf</a>)</p>
-<div class="figure align-center">
+<div class="figure align-default">
 <img alt="../_images/index-1.png" src="../_images/index-1.png" />
 </div>
 <p>Feel free to play with the mechanical (<code class="xref py py-obj docutils literal notranslate"><span class="pre">tilt_m</span></code>) and electrical (<code class="xref py py-obj docutils literal notranslate"><span class="pre">tilt_e</span></code>)
@@ -153,10 +153,10 @@ be useful for generic compatibility studies in the spurious/out-of-band domain
 <a class="reference internal" href="../api/pycraf.antenna.imt2020_composite_pattern.html#pycraf.antenna.imt2020_composite_pattern" title="pycraf.antenna.imt2020_composite_pattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imt2020_composite_pattern</span></code></a>.</p>
 <p>Both are easy to use. For example, plotting the patterns for base stations
 (with 8 x 8 elements):</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
-<span class="kn">import</span> <span class="nn">pycraf.conversions</span> <span class="kn">as</span> <span class="nn">cnv</span>
+<span class="kn">import</span> <span class="nn">pycraf.conversions</span> <span class="k">as</span> <span class="nn">cnv</span>
 <span class="kn">from</span> <span class="nn">pycraf.antenna</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">azims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mf">180.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
@@ -193,7 +193,7 @@ be useful for generic compatibility studies in the spurious/out-of-band domain
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../antenna/index-2_00_00.png">png</a>, <a class="reference external" href="../antenna/index-2_00_00.svg">svg</a>, <a class="reference external" href="../antenna/index-2_00_00.pdf">pdf</a>)</p>
-<div class="figure align-center">
+<div class="figure align-default">
 <img alt="../_images/index-2_00_00.png" src="../_images/index-2_00_00.png" />
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d_H</span><span class="p">,</span> <span class="n">d_V</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span>
@@ -233,14 +233,14 @@ be useful for generic compatibility studies in the spurious/out-of-band domain
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">))</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">))</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
-            <span class="s1">&#39;Escan: {:.1f}d, Tilt: {:.1f}d&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s1">&#39;Escan: </span><span class="si">{:.1f}</span><span class="s1">d, Tilt: </span><span class="si">{:.1f}</span><span class="s1">d&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">azim_i</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">elev_j</span><span class="o">.</span><span class="n">value</span>
             <span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../antenna/index-2_01_00.png">png</a>, <a class="reference external" href="../antenna/index-2_01_00.svg">svg</a>, <a class="reference external" href="../antenna/index-2_01_00.pdf">pdf</a>)</p>
-<div class="figure align-center">
+<div class="figure align-default">
 <img alt="../_images/index-2_01_00.png" src="../_images/index-2_01_00.png" />
 </div>
 </div>
@@ -251,9 +251,9 @@ which neglects a lot of details such as blocking by feed support legs and
 cabin, stray cones, possible coma effects, and tapering functions.</p>
 <p>Nevertheless, for most purposes in compatibility studies it should suffice.
 As an example, we plot the pattern:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">astropy.units</span> <span class="kn">as</span> <span class="nn">u</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
 <span class="kn">from</span> <span class="nn">pycraf.antenna</span> <span class="kn">import</span> <span class="n">ras_pattern</span>
 
 
@@ -269,12 +269,12 @@ As an example, we plot the pattern:</p>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../antenna/index-3_00_00.png">png</a>, <a class="reference external" href="../antenna/index-3_00_00.svg">svg</a>, <a class="reference external" href="../antenna/index-3_00_00.pdf">pdf</a>)</p>
-<div class="figure align-center">
+<div class="figure align-default">
 <img alt="../_images/index-3_00_00.png" src="../_images/index-3_00_00.png" />
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># zoom-in with Bessel correction</span>
 <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.8</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
-<span class="n">gain</span> <span class="o">=</span> <span class="n">ras_pattern</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mf">0.21</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">do_bessel</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">gain</span> <span class="o">=</span> <span class="n">ras_pattern</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mf">0.21</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">do_bessel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">gain</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.8</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Phi [deg]&#39;</span><span class="p">)</span>
@@ -283,15 +283,15 @@ As an example, we plot the pattern:</p>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../antenna/index-3_01_00.png">png</a>, <a class="reference external" href="../antenna/index-3_01_00.svg">svg</a>, <a class="reference external" href="../antenna/index-3_01_00.pdf">pdf</a>)</p>
-<div class="figure align-center">
+<div class="figure align-default">
 <img alt="../_images/index-3_01_00.png" src="../_images/index-3_01_00.png" />
 </div>
 </div>
 <div class="section" id="fixed-links-pattern">
 <h3>Fixed-links pattern<a class="headerlink" href="#fixed-links-pattern" title="Permalink to this headline">¶</a></h3>
 <p>Very similar to the RAS pattern, the fixed link pattern(s) work as follows:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
 <span class="kn">from</span> <span class="nn">pycraf.antenna</span> <span class="kn">import</span> <span class="o">*</span>
 
@@ -310,7 +310,7 @@ As an example, we plot the pattern:</p>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../antenna/index-4.png">png</a>, <a class="reference external" href="../antenna/index-4.svg">svg</a>, <a class="reference external" href="../antenna/index-4.pdf">pdf</a>)</p>
-<div class="figure align-center">
+<div class="figure align-default">
 <img alt="../_images/index-4.png" src="../_images/index-4.png" />
 </div>
 <div class="admonition note">
@@ -345,7 +345,7 @@ IMT.MODEL document (<a class="reference external" href="https://www.itu.int/md/R
 </ul>
 <div class="section" id="functions">
 <h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h4>
-<table class="longtable docutils align-center">
+<table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -422,14 +422,14 @@ IMT.MODEL document (<a class="reference external" href="https://www.itu.int/md/R
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/master/docs/antenna/index.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/master/docs/antenna/index.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/antenna/index.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.0.1. &nbsp;
-    Last built 29 Apr 2019. <br/>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.3.1. &nbsp;
+    Last built 09 Jan 2020. <br/>
   </p>
 </footer>
   </body>

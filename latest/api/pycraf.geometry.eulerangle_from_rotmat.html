@@ -80,12 +80,12 @@
 <h1>eulerangle_from_rotmat<a class="headerlink" href="#eulerangle-from-rotmat" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.geometry.eulerangle_from_rotmat">
-<code class="descclassname">pycraf.geometry.</code><code class="descname">eulerangle_from_rotmat</code><span class="sig-paren">(</span><em>R</em>, <em>etype='xyz'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geometry/geometry.html#eulerangle_from_rotmat"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/master/pycraf/geometry/geometry.py#L549" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.geometry.eulerangle_from_rotmat" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pycraf.geometry.</code><code class="sig-name descname">eulerangle_from_rotmat</code><span class="sig-paren">(</span><em class="sig-param">R</em>, <em class="sig-param">etype='xyz'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geometry/geometry.html#eulerangle_from_rotmat"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/geometry/geometry.py#L549" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.geometry.eulerangle_from_rotmat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cartesian rotation axis and angle from rotation matrix.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>R</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.16)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt><dd><p>Rotation matrix [no units!]</p>
+<dt><strong>R</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt><dd><p>Rotation matrix [no units!]</p>
 </dd>
 <dt><strong>etype</strong><span class="classifier">str, optional, ‘xyz’ or ‘zxz’</span></dt><dd><p>Desired Euler-angle ordering. (default: ‘xyz’)</p>
 <p>The ordering ‘xyz’ refers to the case where first a rotation
@@ -97,7 +97,7 @@ for ordering ‘zxz’ it is R = Rz(alpha3).Rx(alpha2).Rz(alpha1)</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>angle_{1, 2, 3}</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v3.1.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Euler rotation angles [deg]</p>
+<dt><strong>angle_{1, 2, 3}</strong><span class="classifier"><a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Euler rotation angles [deg]</p>
 </dd>
 </dl>
 </dd>
@@ -126,14 +126,14 @@ not unique.</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/master/docs/api/pycraf.geometry.eulerangle_from_rotmat.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/master/docs/api/pycraf.geometry.eulerangle_from_rotmat.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.geometry.eulerangle_from_rotmat.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.0.1. &nbsp;
-    Last built 29 Apr 2019. <br/>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.3.1. &nbsp;
+    Last built 09 Jan 2020. <br/>
   </p>
 </footer>
   </body>

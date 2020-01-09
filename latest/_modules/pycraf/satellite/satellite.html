@@ -68,10 +68,10 @@
 <span></span><span class="ch">#!/usr/bin/python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">lru_cache</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">astropy.coordinates</span> <span class="k">import</span> <span class="n">EarthLocation</span>
-<span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">time</span><span class="p">,</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
+<span class="kn">from</span> <span class="nn">astropy.coordinates</span> <span class="kn">import</span> <span class="n">EarthLocation</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">time</span><span class="p">,</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
 
 <span class="n">EARTH_EQUATORIAL_RADIUS</span> <span class="o">=</span> <span class="mf">6378.135</span>  <span class="c1"># equatorial radius</span>
 <span class="n">EARTH_FLATTENING_CONSTANT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mf">298.26</span>
@@ -111,8 +111,8 @@
 
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">sgp4</span>
-        <span class="kn">from</span> <span class="nn">sgp4.earth_gravity</span> <span class="k">import</span> <span class="n">wgs72</span>
-        <span class="kn">from</span> <span class="nn">sgp4.io</span> <span class="k">import</span> <span class="n">twoline2rv</span><span class="p">,</span> <span class="n">Satellite</span>
+        <span class="kn">from</span> <span class="nn">sgp4.earth_gravity</span> <span class="kn">import</span> <span class="n">wgs72</span>
+        <span class="kn">from</span> <span class="nn">sgp4.io</span> <span class="kn">import</span> <span class="n">twoline2rv</span><span class="p">,</span> <span class="n">Satellite</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
             <span class="s1">&#39;The &quot;sgp4&quot; package is necessary to use this function.&#39;</span>
@@ -178,7 +178,7 @@
 <span class="sd">    sat_obs : SatelliteObserver instance</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">obs_location</span>
             <span class="p">):</span>
 
@@ -337,7 +337,7 @@
 
         <span class="k">try</span><span class="p">:</span>
             <span class="kn">import</span> <span class="nn">sgp4</span>
-            <span class="kn">from</span> <span class="nn">sgp4.io</span> <span class="k">import</span> <span class="n">Satellite</span>
+            <span class="kn">from</span> <span class="nn">sgp4.io</span> <span class="kn">import</span> <span class="n">Satellite</span>
         <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
                 <span class="s1">&#39;The &quot;sgp4&quot; package is necessary to use this Class.&#39;</span>
@@ -377,9 +377,9 @@
   <p class="pull-right"> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2019, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.0.1. &nbsp;
-    Last built 29 Apr 2019. <br/>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.3.1. &nbsp;
+    Last built 09 Jan 2020. <br/>
   </p>
 </footer>
   </body>

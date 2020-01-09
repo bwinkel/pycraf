@@ -3,4 +3,4 @@ ranged_quantity_input
 
 .. currentmodule:: pycraf.utils
 
-.. autodata:: ranged_quantity_input
+.. autofunction:: ranged_quantity_input
