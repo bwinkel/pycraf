@@ -184,7 +184,7 @@ jobs:
 
   - task: DownloadSecureFile@1
     inputs:
-      secureFile: ghpages_deploy_key
+      secureFile: ghpages_deploy_key_pycraf
     displayName: 'Get the deploy key'
     condition: and(succeeded(), eq(variables['publish.docs'], true))
 
