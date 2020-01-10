@@ -95,6 +95,12 @@
 
     <span class="c1"># from .example_mod import *</span>
 
+    <span class="kn">import</span> <span class="nn">astropy</span>
+
+    <span class="k">if</span> <span class="n">astropy</span><span class="o">.</span><span class="n">__version__</span> <span class="o">&gt;=</span> <span class="s1">&#39;4&#39;</span><span class="p">:</span>
+        <span class="n">astropy</span><span class="o">.</span><span class="n">physical_constants</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;astropyconst20&#39;</span><span class="p">)</span>
+        <span class="n">astropy</span><span class="o">.</span><span class="n">astronomical_constants</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;astropyconst20&#39;</span><span class="p">)</span>
+
     <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">antenna</span>
     <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">atm</span>
     <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">conversions</span>
@@ -124,7 +130,7 @@
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.3.1. &nbsp;
-    Last built 09 Jan 2020. <br/>
+    Last built 10 Jan 2020. <br/>
   </p>
 </footer>
   </body>
