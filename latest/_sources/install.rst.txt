@@ -7,18 +7,18 @@ Requirements
 
 pycraf has the following strict requirements:
 
-- `Python <http://www.python.org/>`__ 3.5 or later
+- `Python <http://www.python.org/>`__ 3.6 or later
 
 - `setuptools <https://pythonhosted.org/setuptools/>`__: Used for the package
   installation.
 
-- `Cython <http://cython.org/>`__ 0.23 or later
+- `Cython <http://cython.org/>`__ 0.29 or later
 
-- `NumPy <http://www.numpy.org/>`__ 1.11 or later
+- `NumPy <http://www.numpy.org/>`__ 1.14 or later
 
-- `SciPy <https://scipy.org/>`__: 0.15 or later
+- `SciPy <https://scipy.org/>`__: 0.19 or later
 
-- `astropy <http://www.astropy.org/>`__: 1.3 or later (2.0 recommended)
+- `astropy <http://www.astropy.org/>`__: 3.0 or later
 
 - `pytest <https://pypi.python.org/pypi/pytest>`__ 2.6 or later
 
@@ -28,12 +28,13 @@ There are a few optional packages, which are necessary for some functionality:
 - `matplotlib <http://matplotlib.org/>`__ 1.5 or later: To provide plotting
   functionality that `~pycraf.pathprof` enhances.
 
-- `pyproj <https://pypi.python.org/pypi/pyproj>`__ 1.9 or later: This is a
+- `pyproj <https://pypi.python.org/pypi/pyproj>`__ 2.0 or later: This is a
   requirement for the `~pycraf.geospatial` package.
 
 - `sgp4 <https://pypi.python.org/pypi/sgp4>`__ 1.4 or later: This is a
   requirement for the `~pycraf.satellite` package.
 
+Older versions of these packages may work, but no support will be provided.
 
 Installing pycraf
 ==================

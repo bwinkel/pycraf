@@ -79,14 +79,15 @@
 <h1>test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pycraf.test">
-<code class="sig-prename descclassname">pycraf.</code><code class="sig-name descname">test</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/_astropy_init.py#L879" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.test" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pycraf.</code><code class="sig-name descname">test</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/_astropy_init.py#L259" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run the tests for the package.</p>
 <p>This method builds arguments for and then calls <code class="docutils literal notranslate"><span class="pre">pytest.main</span></code>.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>package</strong><span class="classifier">str, optional</span></dt><dd><p>The name of a specific package to test, e.g. ‘io.fits’ or ‘utils’.
-If nothing is specified all default Astropy tests are run.</p>
+<dt><strong>package</strong><span class="classifier">str, optional</span></dt><dd><p>The name of a specific package to test, e.g. ‘io.fits’ or
+‘utils’. Accepts comma separated string to specify multiple
+packages. If nothing is specified all default tests are run.</p>
 </dd>
 <dt><strong>args</strong><span class="classifier">str, optional</span></dt><dd><p>Additional arguments to be passed to <code class="docutils literal notranslate"><span class="pre">pytest.main</span></code> in the <code class="docutils literal notranslate"><span class="pre">args</span></code>
 keyword argument.</p>
@@ -114,7 +115,7 @@ tests. Same as specifying <code class="docutils literal notranslate"><span class
 <dt><strong>plugins</strong><span class="classifier">list, optional</span></dt><dd><p>Plugins to be passed to <code class="docutils literal notranslate"><span class="pre">pytest.main</span></code> in the <code class="docutils literal notranslate"><span class="pre">plugins</span></code> keyword
 argument.</p>
 </dd>
-<dt><strong>remote_data</strong><span class="classifier">{‘none’, ‘astropy’, ‘any’}, optional</span></dt><dd><p>Controls whether to run tests marked with &#64;remote_data. This can be
+<dt><strong>remote_data</strong><span class="classifier">{‘none’, ‘astropy’, ‘any’}, optional</span></dt><dd><p>Controls whether to run tests marked with &#64;pytest.mark.remote_data. This can be
 set to run no tests with remote data (<code class="docutils literal notranslate"><span class="pre">none</span></code>), only ones that use
 data from <a class="reference external" href="http://data.astropy.org">http://data.astropy.org</a> (<code class="docutils literal notranslate"><span class="pre">astropy</span></code>), or all tests that
 use remote data (<code class="docutils literal notranslate"><span class="pre">any</span></code>). The default is <code class="docutils literal notranslate"><span class="pre">none</span></code>.</p>
