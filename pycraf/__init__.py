@@ -29,6 +29,12 @@ if not _ASTROPY_SETUP_:
 
     # from .example_mod import *
 
+    import astropy
+
+    if astropy.__version__ >= '4':
+        astropy.physical_constants.set('astropyconst20')
+        astropy.astronomical_constants.set('astropyconst20')
+
     from . import antenna
     from . import atm
     from . import conversions
