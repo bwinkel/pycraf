@@ -143,23 +143,25 @@ Dependencies
 We kept the dependencies as minimal as possible. The following packages are
 required:
 
+* Python 3.6 or later
 * setuptools
-* cython 0.23 or later
-* numpy 1.11 or later
-* astropy 1.3 or later (2.0 recommended)
-* scipy 0.15 or later
+* cython 0.29 or later
+* numpy 1.14 or later
+* astropy 3.0 or later
+* scipy 0.19 or later
 * pytest 2.6 or later
 
 The following packages are optional, and you will need them for certain
 features and to build the docs:
 
-* matplotlib 1.2 or later; for some plot helpers
-* pyproj 1.9 or later; for the `geospatial` subpackage
+* matplotlib 2.0 or later; for some plot helpers
+* pyproj 2.0 or later; for the `geospatial` subpackage
 * sgp4 1.4 or later; for the `satellite` subpackage
 
 For further details, we refer to the online documention `installation
 instructions <https://bwinkel.github.io/pycraf/install.html>`_. It also
-includes some hints for running pycraf on Windows or MacOS.
+includes some hints for running pycraf on Windows or MacOS. Older versions
+of the packages may work, but no support will be provided.
 
 SRTM data
 ---------

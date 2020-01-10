@@ -48,7 +48,7 @@ env:
         # so Cython is required for testing. If your package does not include
         # Cython code, you can set CONDA_DEPENDENCIES=''
         # - CONDA_DEPENDENCIES='pip wheel numpy scipy pytest astropy cython h5py matplotlib pyproj sgp4 sphinx-astropy'
-        - CONDA_DEPENDENCIES='pip wheel scipy pyqt>=5 pytest pytest-qt cython h5py matplotlib pyproj<2 sgp4 sphinx-astropy'
+        - CONDA_DEPENDENCIES='pip wheel scipy pyqt>=5 pytest pytest-qt cython h5py matplotlib pyproj>2 sgp4 sphinx-astropy'
 
         # List other runtime dependencies for the package that are available as
         # pip packages here.
@@ -85,36 +85,52 @@ matrix:
         # otherwise users will keep getting "incompatible API" errors
         # (For more information on ABI problems with numpy see:
         # https://stackoverflow.com/questions/17709641/valueerror-numpy-dtype-has-the-wrong-size-try-recompiling/18369312)
-        # for Windows we'll use 1.11, for Linux/MacOS 1.11 is also used
-        # (because with 1.9 - the conda-forge recommendation - the setup.py
-        # script tries to download 1.16 for some reason...)
+
+        # Standard linux, release
+        - os: linux
+          env:
+            - PYTHON_VERSION=3.8
+            - DO_DIST=YES
+            - NUMPY_VERSION=1.16
+            # - ASTROPY_VERSION=stable
+            - ASTROPY_VERSION=4
 
         # Standard linux, release
         - os: linux
           env:
             - PYTHON_VERSION=3.7
             - DO_DIST=YES
-            - NUMPY_VERSION=1.11
+            - NUMPY_VERSION=1.16
             # - ASTROPY_VERSION=stable
-            - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
+            - ASTROPY_VERSION=4
 
         # Standard linux, release
         - os: linux
           env:
             - PYTHON_VERSION=3.6
             - DO_DIST=YES
-            - NUMPY_VERSION=1.11
+            - NUMPY_VERSION=1.14
             # - ASTROPY_VERSION=stable
-            - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
+            - ASTROPY_VERSION=3
 
-        # Standard linux, release
-        - os: linux
+        # # Standard linux, release
+        # - os: linux
+        #   env:
+        #     - PYTHON_VERSION=3.5
+        #     - DO_DIST=YES
+        #     - NUMPY_VERSION=1.11
+        #     # - ASTROPY_VERSION=stable
+        #     - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
+
+        # MacOS X - conda-clang, release
+        - os: osx
+          osx_image: xcode8.3
           env:
-            - PYTHON_VERSION=3.5
-            - DO_DIST=YES
-            - NUMPY_VERSION=1.11
-            # - ASTROPY_VERSION=stable
-            - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
+            - PYTHON_VERSION=3.8
+            - DO_MAC_DIST=YES
+            - NUMPY_VERSION=1.16
+            - COMPILER='conda-clang'
+            - ASTROPY_VERSION=4
 
         # MacOS X - conda-clang, release
         - os: osx
@@ -122,9 +138,9 @@ matrix:
           env:
             - PYTHON_VERSION=3.7
             - DO_MAC_DIST=YES
-            - NUMPY_VERSION=1.11
+            - NUMPY_VERSION=1.16
             - COMPILER='conda-clang'
-            - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
+            - ASTROPY_VERSION=4
 
         # MacOS X - conda-clang, release
         - os: osx
@@ -132,40 +148,27 @@ matrix:
           env:
             - PYTHON_VERSION=3.6
             - DO_MAC_DIST=YES
-            - NUMPY_VERSION=1.11
+            - NUMPY_VERSION=1.14
             - COMPILER='conda-clang'
-            - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
+            - ASTROPY_VERSION=3
 
-        # MacOS X - conda-clang, release
-        - os: osx
-          osx_image: xcode8.3
-          env:
-            - PYTHON_VERSION=3.5
-            - DO_MAC_DIST=YES
-            - NUMPY_VERSION=1.11
-            - COMPILER='conda-clang'
-            - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
+        # # MacOS X - conda-clang, release
+        # - os: osx
+        #   osx_image: xcode8.3
+        #   env:
+        #     - PYTHON_VERSION=3.5
+        #     - DO_MAC_DIST=YES
+        #     - NUMPY_VERSION=1.11
+        #     - COMPILER='conda-clang'
+        #     - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
 
         # MacOS X - conda-gcc
         - os: osx
           osx_image: xcode8.3
           env:
             - COMPILER='conda-gcc'
-
-        # MacOS X - gcc
-        - os: osx
-          osx_image: xcode8.3
-          env:
-            - COMPILER='gcc'
-
-        # MacOS X - LLVM
-        - os: osx
-          osx_image: xcode8.3
-          env:
-            - CC='/usr/local/opt/llvm/bin/clang'
-            - LDFLAGS='-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib -lgomp'
-            - CPPFLAGS='-I/usr/local/opt/llvm/include'
-            - COMPILER='llvm'
+            - NUMPY_VERSION=1.14
+            - ASTROPY_VERSION=3
 
         # Do a coverage test.
         - os: linux
@@ -180,8 +183,8 @@ matrix:
         - os: linux
           env:
             - PYTHON_VERSION=3.6
-            - NUMPY_VERSION=1.11
-            - ASTROPY_VERSION=2.0.11
+            - NUMPY_VERSION=1.14
+            - ASTROPY_VERSION=3
             - SETUP_CMD='build_docs'
             - UPLOAD_DOCS=YES
 
@@ -190,12 +193,12 @@ matrix:
           env: ASTROPY_VERSION=development
                EVENT_TYPE='pull_request push cron'
 
-        # Try py35 for compatibility
-        - os: linux
-          env:
-            - PYTHON_VERSION=3.5
-            - NUMPY_VERSION=1.11
-            - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
+        # # Try py35 for compatibility
+        # - os: linux
+        #   env:
+        #     - PYTHON_VERSION=3.5
+        #     - NUMPY_VERSION=1.11
+        #     - ASTROPY_VERSION=2.0.11  # need old astropy, for numpy 1.9
 
         # Do a PEP8 test with pycodestyle
         - os: linux
@@ -207,6 +210,25 @@ matrix:
         # (allow to fail unless your code completely compliant)
         - os: linux
           env: MAIN_CMD='pycodestyle pycraf --count' SETUP_CMD=''
+
+        # MacOS X - gcc
+        - os: osx
+          osx_image: xcode8.3
+          env:
+            - COMPILER='gcc'
+            - NUMPY_VERSION=1.14
+            - ASTROPY_VERSION=3
+
+        # MacOS X - LLVM
+        - os: osx
+          osx_image: xcode8.3
+          env:
+            - CC='/usr/local/opt/llvm/bin/clang'
+            - LDFLAGS='-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib -lgomp'
+            - CPPFLAGS='-I/usr/local/opt/llvm/include'
+            - COMPILER='llvm'
+            - NUMPY_VERSION=1.14
+            - ASTROPY_VERSION=3
 
 before_install:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $COMPILER == "clang" ]]; then brew update; brew install libomp; fi
