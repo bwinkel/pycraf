@@ -12,13 +12,12 @@ pr:
 variables:
   package_name: pycraf
   is.tag: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}
-  # publish.wheels: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}
-  publish.wheels: ${{ true }}
+  publish.wheels: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}
   is.master: ${{ startsWith(variables['Build.SourceBranch'], 'refs/heads/master') }}
   is.pullrequest: ${{ startsWith(variables['Build.Reason'], 'PullRequest') }}
   # is.tag: ${{ true }}
-  # publish.wheels: ${{ true }}
-  # why is the following not working?
+  # why is the following not working? --> because Agent.OS is not available
+  # at compile time (would be necessary for template expressions to work)
   is.linux: ${{ startsWith(variables['Agent.OS'], 'Linux') }}
   is.macos: ${{ startsWith(variables['Agent.OS'], 'Darwin') }}
   is.win: ${{ startsWith(variables['Agent.OS'], 'Windows') }}
@@ -44,27 +43,30 @@ jobs:
 
   strategy:
     matrix:
-      # linux35:
-      #   imageName: 'ubuntu-16.04'
-      #   python.version: '3.5'
-      #   py_whl: 35
-      #   numpy.version: '1.13.1'
-      # linux36:
-      #   imageName: 'ubuntu-16.04'
-      #   python.version: '3.6'
-      #   py_whl: 36
-      #   numpy.version: '1.13.1'
-      #   astropy.version: '3'
+      linux35:
+        imageName: 'ubuntu-16.04'
+        python.version: '3.5'
+        py_whl: 35
+        numpy.version: '1.13.1'
+        astropy.version: '2'
+      linux36:
+        imageName: 'ubuntu-16.04'
+        python.version: '3.6'
+        py_whl: 36
+        numpy.version: '1.13.1'
+        astropy.version: '3'
       linux37:
+        # note: manylinux builds could have different version pins!
+        # see pip-requirements-dev
         imageName: 'ubuntu-16.04'
         python.version: '3.7'
         py_whl: 37
-        numpy.version: '1.16'
-        astropy.version: '4'
+        numpy.version: '1.14.5'
+        astropy.version: '3'
         # docs should only be published by one thread, as they are version-
         # independent; and only if on the master branch
-        # publish.docs: ${{ eq(variables['is.master'], true) }}
-        publish.docs: ${{ true }}
+        publish.docs: ${{ eq(variables['is.master'], true) }}
+        # publish.docs: ${{ true }}
         ${{ if eq(variables['is.tag'], true) }}:
           docs.target: '.'
         ${{ if eq(variables['is.tag'], false) }}:
@@ -72,54 +74,54 @@ jobs:
         # tarball should only be published by one thread, as it is version-
         # independent
         build.tarball: ${{ true }}
-        # publish.tarball: ${{ eq(variables['is.tag'], true) }}
-        publish.tarball: ${{ true }}
-      # linux37:
-      #   imageName: 'ubuntu-16.04'
-      #   python.version: '3.7'
-      #   py_whl: 37
-      #   numpy.version: '1.16'
-      #   astropy.version: '4'
-      # linux38:
-      #   imageName: 'ubuntu-16.04'
-      #   python.version: '3.8'
-      #   py_whl: 38
-      #   numpy.version: '1.14.5'
-      # mac35:
-      #   imageName: 'macos-10.13'
-      #   python.version: '3.5'
-      #   numpy.version: '1.13.1'
-      # mac36:
-      #   imageName: 'macos-10.13'
-      #   python.version: '3.6'
-      #   numpy.version: '1.13.1'
-      #   astropy.version: '3'
+        publish.tarball: ${{ eq(variables['is.tag'], true) }}
+      linux38:
+        imageName: 'ubuntu-16.04'
+        python.version: '3.8'
+        py_whl: 38
+        numpy.version: '1.17.4'
+        astropy.version: '4'
+      mac35:
+        imageName: 'macos-10.13'
+        python.version: '3.5'
+        numpy.version: '1.13.1'
+        astropy.version: '2'
+      mac36:
+        imageName: 'macos-10.13'
+        python.version: '3.6'
+        numpy.version: '1.13.1'
+        astropy.version: '3'
       mac37:
         imageName: 'macos-10.13'
         python.version: '3.7'
         numpy.version: '1.14.5'
+        astropy.version: '3'
+      # mac 3.8 leads to anaconda conflicts
       # mac38:
       #   imageName: 'macos-10.13'
       #   python.version: '3.8'
-      #   numpy.version: '1.14.5'
-      # win35:
-      #   imageName: 'vs2017-win2016'
-      #   python.version: '3.5'
-      #   numpy.version: '1.13.1'
-      # win36:
-      #   imageName: 'vs2017-win2016'
-      #   python.version: '3.6'
-      #   numpy.version: '1.13.1'
-      #   astropy.version: '3'
+      #   numpy.version: '1.17.4'
+      #   astropy.version: '4'
+      win35:
+        imageName: 'vs2017-win2016'
+        python.version: '3.5'
+        numpy.version: '1.13.1'
+        astropy.version: '2'
+      win36:
+        imageName: 'vs2017-win2016'
+        python.version: '3.6'
+        numpy.version: '1.13.1'
+        astropy.version: '3'
       win37:
         imageName: 'vs2017-win2016'
         python.version: '3.7'
-        numpy.version: '1.16'
+        numpy.version: '1.14.5'
+        astropy.version: '3'
+      win38:
+        imageName: 'vs2017-win2016'
+        python.version: '3.8'
+        numpy.version: '1.17.4'
         astropy.version: '4'
-      # win38:
-      #   imageName: 'vs2017-win2016'
-      #   python.version: '3.8'
-      #   numpy.version: '1.14.5'
 
   pool:
     vmImage: $(imageName)
@@ -180,7 +182,7 @@ jobs:
   # pip installation)
   - script: |
       $(conda.activate) pycraf-env
-      conda install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython h5py matplotlib numpy==$(numpy.version) pip 'pyproj>2' 'pyqt>=5' pytest pytest-astropy pytest-doctestplus pytest-qt scipy sgp4 sphinx-astropy twine wheel
+      conda install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython h5py matplotlib numpy==$(numpy.version) pip pyproj pyqt pytest pytest-astropy pytest-doctestplus pytest-qt scipy sgp4 sphinx-astropy twine wheel
     displayName: Install Anaconda packages
 
   # need to fix cctools and ld64 to slightly older version, otherwise an
@@ -248,6 +250,7 @@ jobs:
     displayName: 'Twine Authenticate'
 
   - bash: |
+      rm -rf build
       docker run -e NPY_NUM_BUILD_JOBS=4 -e PLAT=$(plat) -e package_name=$(package_name) -e py_whl=$(py_whl) --rm -v `pwd`:/io $(image) /io/.ci/build-wheels.sh
       ls -lh wheelhouse/
       mkdir -p dist
@@ -279,7 +282,7 @@ jobs:
   - script: |
       pip install twine
       ls dist/*.whl
-      # python -m twine upload -r "pypi" --config-file %PYPIRC_PATH% dist/*.whl
+      python -m twine upload -r "pypi" --config-file %PYPIRC_PATH% dist/*.whl
     displayName: Upload wheels, Windows
     condition: and(succeeded(), eq(variables['publish.wheels'], true), startsWith(variables['Agent.OS'], 'Windows'))
 
@@ -292,7 +295,7 @@ jobs:
   - script: |
       $(conda.activate) pycraf-env
       ls dist/*.tar.gz
-      # python -m twine upload -r "pypi" --config-file $(PYPIRC_PATH) dist/*.tar.gz
+      python -m twine upload -r "pypi" --config-file $(PYPIRC_PATH) dist/*.tar.gz
     displayName: Upload tarball
     condition: and(succeeded(), eq(variables['publish.tarball'], true))
 
