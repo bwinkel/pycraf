@@ -12,7 +12,8 @@ pr:
 variables:
   package_name: pycraf
   is.tag: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}
-  publish.wheels: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}
+  # publish.wheels: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}
+  publish.wheels: ${{ true }}
   is.master: ${{ startsWith(variables['Build.SourceBranch'], 'refs/heads/master') }}
   is.pullrequest: ${{ startsWith(variables['Build.Reason'], 'PullRequest') }}
   # is.tag: ${{ true }}
@@ -48,12 +49,18 @@ jobs:
       #   python.version: '3.5'
       #   py_whl: 35
       #   numpy.version: '1.13.1'
-      linux36:
+      # linux36:
+      #   imageName: 'ubuntu-16.04'
+      #   python.version: '3.6'
+      #   py_whl: 36
+      #   numpy.version: '1.13.1'
+      #   astropy.version: '3'
+      linux37:
         imageName: 'ubuntu-16.04'
-        python.version: '3.6'
-        py_whl: 36
-        numpy.version: '1.13.1'
-        astropy.version: '3.0'
+        python.version: '3.7'
+        py_whl: 37
+        numpy.version: '1.16'
+        astropy.version: '4'
         # docs should only be published by one thread, as they are version-
         # independent; and only if on the master branch
         # publish.docs: ${{ eq(variables['is.master'], true) }}
@@ -65,7 +72,8 @@ jobs:
         # tarball should only be published by one thread, as it is version-
         # independent
         build.tarball: ${{ true }}
-        publish.tarball: ${{ eq(variables['is.tag'], true) }}
+        # publish.tarball: ${{ eq(variables['is.tag'], true) }}
+        publish.tarball: ${{ true }}
       # linux37:
       #   imageName: 'ubuntu-16.04'
       #   python.version: '3.7'
@@ -86,10 +94,10 @@ jobs:
       #   python.version: '3.6'
       #   numpy.version: '1.13.1'
       #   astropy.version: '3'
-      # mac37:
-      #   imageName: 'macos-10.13'
-      #   python.version: '3.7'
-      #   numpy.version: '1.14.5'
+      mac37:
+        imageName: 'macos-10.13'
+        python.version: '3.7'
+        numpy.version: '1.14.5'
       # mac38:
       #   imageName: 'macos-10.13'
       #   python.version: '3.8'
@@ -103,11 +111,11 @@ jobs:
       #   python.version: '3.6'
       #   numpy.version: '1.13.1'
       #   astropy.version: '3'
-      # win37:
-      #   imageName: 'vs2017-win2016'
-      #   python.version: '3.7'
-      #   numpy.version: '1.16'
-      #   astropy.version: '4'
+      win37:
+        imageName: 'vs2017-win2016'
+        python.version: '3.7'
+        numpy.version: '1.16'
+        astropy.version: '4'
       # win38:
       #   imageName: 'vs2017-win2016'
       #   python.version: '3.8'
@@ -215,6 +223,8 @@ jobs:
       mkdir ~/.ssh && mv $DOWNLOADSECUREFILE_SECUREFILEPATH ~/.ssh/id_rsa
       chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa
       ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+      $(conda.activate) pycraf-env
+      pip install .
       mkdir gh_pages && cd gh_pages
       git init
       git config --local user.name "Benjamin Winkel"
@@ -232,57 +242,60 @@ jobs:
     displayName: Publish docs
     condition: and(succeeded(), eq(variables['publish.docs'], true))
 
-  # - task: TwineAuthenticate@1
-  #   inputs:
-  #     pythonUploadServiceConnection: pypi
-  #   displayName: 'Twine Authenticate'
+  - task: TwineAuthenticate@1
+    inputs:
+      pythonUploadServiceConnection: pypi
+    displayName: 'Twine Authenticate'
 
-  # - bash: |
-  #     docker run -e NPY_NUM_BUILD_JOBS=4 -e PLAT=$(plat) -e package_name=$(package_name) -e py_whl=$(py_whl) --rm -v `pwd`:/io $(image) /io/.ci/build-wheels.sh
-  #     ls -lh wheelhouse/
-  #     mkdir -p dist
-  #     cp wheelhouse/$(package_name)*.whl dist/.
-  #     ls dist
-  #   displayName: Build wheels, Linux
-  #   condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'))
+  - bash: |
+      docker run -e NPY_NUM_BUILD_JOBS=4 -e PLAT=$(plat) -e package_name=$(package_name) -e py_whl=$(py_whl) --rm -v `pwd`:/io $(image) /io/.ci/build-wheels.sh
+      ls -lh wheelhouse/
+      mkdir -p dist
+      cp wheelhouse/$(package_name)*.whl dist/.
+      ls dist
+    displayName: Build wheels, Linux
+    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'))
 
-  # - script: |
-  #     $(conda.activate) pycraf-env
-  #     python setup.py bdist_wheel
-  #   displayName: Build wheels, MacOS/Windows
-  #   condition: and(succeeded(), not(startsWith(variables['Agent.OS'], 'Linux')))
+  - script: |
+      $(conda.activate) pycraf-env
+      python setup.py bdist_wheel
+    displayName: Build wheels, MacOS/Windows
+    condition: and(succeeded(), not(startsWith(variables['Agent.OS'], 'Linux')))
 
-  # # twine upload with python 3.5 doesn't work?
-  # # (pkg_resources.DistributionNotFound: The 'readme-renderer>=21.0' distribution was not found)
-  # # will use system python for upload
-  # - task: UsePythonVersion@0
-  #   inputs:
-  #     versionSpec: '3.6'
+  # twine upload with python 3.5 doesn't work?
+  # (pkg_resources.DistributionNotFound: The 'readme-renderer>=21.0' distribution was not found)
+  # will use system python for upload
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.6'
 
-  # - script: |
-  #     pip install twine
-  #     python -m twine upload -r "pypi" --config-file $(PYPIRC_PATH) dist/*.whl
-  #   displayName: Upload wheels, Linux/MacOS
-  #   condition: and(succeeded(), eq(variables['publish.wheels'], true), not(startsWith(variables['Agent.OS'], 'Windows')))
+  - script: |
+      pip install twine
+      ls dist/*.whl
+      # python -m twine upload -r "pypi" --config-file $(PYPIRC_PATH) dist/*.whl
+    displayName: Upload wheels, Linux/MacOS
+    condition: and(succeeded(), eq(variables['publish.wheels'], true), not(startsWith(variables['Agent.OS'], 'Windows')))
 
-  # - script: |
-  #     pip install twine
-  #     python -m twine upload -r "pypi" --config-file %PYPIRC_PATH% dist/*.whl
-  #   displayName: Upload wheels, Windows
-  #   condition: and(succeeded(), eq(variables['publish.wheels'], true), startsWith(variables['Agent.OS'], 'Windows'))
+  - script: |
+      pip install twine
+      ls dist/*.whl
+      # python -m twine upload -r "pypi" --config-file %PYPIRC_PATH% dist/*.whl
+    displayName: Upload wheels, Windows
+    condition: and(succeeded(), eq(variables['publish.wheels'], true), startsWith(variables['Agent.OS'], 'Windows'))
 
-  # - script: |
-  #     $(conda.activate) pycraf-env
-  #     python setup.py sdist
-  #   displayName: Build tarball
-  #   condition: and(succeeded(), eq(variables['build.tarball'], true))
+  - script: |
+      $(conda.activate) pycraf-env
+      python setup.py sdist
+    displayName: Build tarball
+    condition: and(succeeded(), eq(variables['build.tarball'], true))
 
-  # - script: |
-  #     $(conda.activate) pycraf-env
-  #     python -m twine upload -r "pypi" --config-file $(PYPIRC_PATH) dist/*.tar.gz
-  #   displayName: Upload tarball
-  #   condition: and(succeeded(), eq(variables['publish.tarball'], true))
+  - script: |
+      $(conda.activate) pycraf-env
+      ls dist/*.tar.gz
+      # python -m twine upload -r "pypi" --config-file $(PYPIRC_PATH) dist/*.tar.gz
+    displayName: Upload tarball
+    condition: and(succeeded(), eq(variables['publish.tarball'], true))
 
-  # - script: rm ~/.ssh/id_rsa || true
-  #   displayName: 'Cleanup docs deploy key'
-  #   condition: and(always(), eq(variables['publish.docs'], true))
+  - script: rm ~/.ssh/id_rsa || true
+    displayName: 'Cleanup docs deploy key'
+    condition: and(always(), eq(variables['publish.docs'], true))
