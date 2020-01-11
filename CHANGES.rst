@@ -1,5 +1,10 @@
-1.0.1 (unreleased)
+1.0.1 (2020-01-08)
 =======================
+
+Other
+-----
+- Migrate CI/CD to Azure Pipelines. This also allows to provide
+  (manylinux-based) binary wheels for Linux on PyPI. [#19]
 
 1.0.0 (2020-01-08)
 =======================
