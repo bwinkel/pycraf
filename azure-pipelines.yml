@@ -82,17 +82,17 @@ jobs:
         numpy.version: '1.17.4'
         astropy.version: '4'
       mac35:
-        imageName: 'macos-10.13'
+        imageName: 'macos-10.14'
         python.version: '3.5'
         numpy.version: '1.13.1'
         astropy.version: '2'
       mac36:
-        imageName: 'macos-10.13'
+        imageName: 'macos-10.14'
         python.version: '3.6'
         numpy.version: '1.13.1'
         astropy.version: '3'
       mac37:
-        imageName: 'macos-10.13'
+        imageName: 'macos-10.14'
         python.version: '3.7'
         numpy.version: '1.14.5'
         astropy.version: '3'
