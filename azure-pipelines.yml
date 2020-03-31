@@ -129,6 +129,11 @@ jobs:
   steps:
 
   - bash: |
+      sudo chown -R 501:20 $CONDA
+    displayName: Fix a conda bug on MacOS
+    condition: startsWith(variables['Agent.OS'], 'Darwin')
+
+  - bash: |
       echo "##vso[task.prependpath]$CONDA/bin"
       echo "##vso[task.setvariable variable=conda.activate]source activate"
       echo "##vso[task.setvariable variable=srtmdata]$(Agent.BuildDirectory)/srtm"
