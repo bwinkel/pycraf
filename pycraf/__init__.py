@@ -32,8 +32,24 @@ if not _ASTROPY_SETUP_:
     import astropy
 
     if astropy.__version__ >= '4':
-        astropy.physical_constants.set('astropyconst20')
-        astropy.astronomical_constants.set('astropyconst20')
+        try:
+            astropy.physical_constants.set('astropyconst20')
+            astropy.astronomical_constants.set('astropyconst20')
+        except RuntimeError as e:
+            # import ipdb
+            # ipdb.set_trace()
+            if 'astropy.units is already imported' in e.args:
+                e.args = (
+                    'Please note that pycraf uses the astropy.constants '
+                    'from Astropy v2 for backwards compatibility. '
+                    'Starting from Astropy v4, a "ScienceState" is used '
+                    'to allow versioning of physical constants. For '
+                    'technical reasons, it is necessary to import the '
+                    'astropy.units sub-package *after* pycraf.'
+                    '(see https://github.com/bwinkel/pycraf/issues/24)',
+                    )
+
+                raise e
 
     from . import antenna
     from . import atm
