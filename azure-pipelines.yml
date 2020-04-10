@@ -133,7 +133,7 @@ jobs:
   steps:
 
   - bash: |
-      sudo chown -R 501:20 $CONDA
+      sudo chown -R $USER $CONDA
     displayName: Fix a conda bug on MacOS
     condition: startsWith(variables['Agent.OS'], 'Darwin')
 
@@ -150,11 +150,17 @@ jobs:
     displayName: Activate display, Linux
     condition: startsWith(variables['Agent.OS'], 'Linux')
 
+  # echo "##vso[task.setvariable variable=conda.activate]call $env:CONDA\Scripts\activate.bat"
   - powershell: |
       Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
-      echo "##vso[task.setvariable variable=conda.activate]call activate"
+      echo "##vso[task.setvariable variable=conda.activate]call activate.bat"
       echo "##vso[task.setvariable variable=srtmdata]$(Agent.BuildDirectory)\srtm"
     displayName: Add conda to PATH, Windows
+    condition: startsWith(variables['Agent.OS'], 'Windows')
+
+  - script: |
+      echo on
+    displayName: Verbosity on Win
     condition: startsWith(variables['Agent.OS'], 'Windows')
 
   - script: |
@@ -175,6 +181,7 @@ jobs:
       echo "py_whl" $(py_whl)
       echo "numpy.version" $(numpy.version)
       echo "astropy.version" $(astropy.version)
+      echo "sphinx.version" $(sphinx.version)
       echo "imageName" $(imageName)
     displayName: Show Vars
 
@@ -191,7 +198,7 @@ jobs:
   # pip installation)
   - script: |
       $(conda.activate) pycraf-env
-      conda install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython h5py matplotlib numpy==$(numpy.version) pip pyproj pyqt pytest pytest-astropy pytest-doctestplus pytest-qt scipy 'sgp4<2' 'sphinx$(sphinx.version)' sphinx-astropy twine wheel
+      conda install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython h5py matplotlib numpy==$(numpy.version) pip pyproj pyqt pytest pytest-astropy pytest-doctestplus pytest-qt scipy "sgp4<2" "sphinx$(sphinx.version)" sphinx-astropy twine wheel
     displayName: Install Anaconda packages
 
   # need to fix cctools and ld64 to slightly older version, otherwise an
