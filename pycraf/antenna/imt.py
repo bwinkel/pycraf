@@ -27,7 +27,7 @@ def _A_EH(phi, A_m, phi_3db, k=12.):
     phi : np.ndarray, float
         Azimuth [deg]
     A_m : np.ndarray, float
-        Front-to-back ratio (horizontal) [dimless]
+        Front-to-back ratio (horizontal) [dB]
     phi_3db : np.ndarray, float
         Horizontal 3-dB beam width of single element [deg]
     k : float, optional
@@ -54,7 +54,7 @@ def _A_EV(theta, SLA_nu, theta_3db, k=12.):
     theta : np.ndarray, float
         Elevation [deg]
     SLA_nu : np.ndarray, float
-        Front-to-back ratio (vertical) [dimless]
+        Front-to-back ratio (vertical) [dB]
     theta_3db : np.ndarray, float
         Vertical 3-dB beam width of single element [deg]
     k : float, optional
@@ -90,8 +90,8 @@ def _imt2020_single_element_pattern(
     azim=(-180, 180, apu.deg),
     elev=(-90, 90, apu.deg),
     G_Emax=(None, None, cnv.dB),
-    A_m=(0, None, cnv.dimless),
-    SLA_nu=(0, None, cnv.dimless),
+    A_m=(0, None, cnv.dB),
+    SLA_nu=(0, None, cnv.dB),
     phi_3db=(0, None, apu.deg),
     theta_3db=(0, None, apu.deg),
     strip_input_units=True, output_unit=cnv.dBi
@@ -116,9 +116,9 @@ def imt2020_single_element_pattern(
     G_Emax : `~astropy.units.Quantity`
         Single element maximum gain [dBi]
     A_m : `~astropy.units.Quantity`
-        Front-to-back ratio (horizontal) [dimless]
+        Front-to-back ratio (horizontal) [dB]
     SLA_nu : `~astropy.units.Quantity`
-        Front-to-back ratio (vertical) [dimless]
+        Front-to-back ratio (vertical) [dB]
     phi_3db : `~astropy.units.Quantity`
         Horizontal 3dB beam width of single element [deg]
     theta_3db : `~astropy.units.Quantity`
@@ -221,8 +221,8 @@ def _imt2020_composite_pattern(
     azim_i=(-180, 180, apu.deg),
     elev_i=(-90, 90, apu.deg),
     G_Emax=(None, None, cnv.dB),
-    A_m=(0, None, cnv.dimless),
-    SLA_nu=(0, None, cnv.dimless),
+    A_m=(0, None, cnv.dB),
+    SLA_nu=(0, None, cnv.dB),
     phi_3db=(0, None, apu.deg),
     theta_3db=(0, None, apu.deg),
     d_H=(0, None, cnv.dimless),
@@ -254,7 +254,7 @@ def imt2020_composite_pattern(
     G_Emax : `~astropy.units.Quantity`
         Single element maximum gain [dBi]
     A_m, SLA_nu : `~astropy.units.Quantity`
-        Front-to-back ratio (horizontal/vertical) [dimless]
+        Front-to-back ratio (horizontal/vertical) [dB]
     phi_3db, theta_3db : `~astropy.units.Quantity`
         Horizontal/Vertical 3dB beam width of single element [deg]
     d_H, d_V : `~astropy.units.Quantity`

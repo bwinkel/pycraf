@@ -101,7 +101,7 @@ Both are easy to use. For example, plotting the patterns for base stations
 
     # BS (outdoor) according to IMT.PARAMETER table 10 (multipage!)
     G_Emax = 5 * cnv.dB
-    A_m, SLA_nu = 30. * cnv.dimless, 30. * cnv.dimless
+    A_m, SLA_nu = 30. * cnv.dB, 30. * cnv.dB
     azim_3db, elev_3db = 65. * u.deg, 65. * u.deg
 
     gains_single = imt2020_single_element_pattern(

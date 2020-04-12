@@ -101,8 +101,8 @@ def test_imt2020_single_element_pattern():
         (-180, 180, apu.deg),
         (-90, 90, apu.deg),
         (None, None, cnv.dB),
-        (0, None, cnv.dimless),
-        (0, None, cnv.dimless),
+        (0, None, cnv.dB),
+        (0, None, cnv.dB),
         (0, None, apu.deg),
         (0, None, apu.deg),
         ]
@@ -113,7 +113,7 @@ def test_imt2020_single_element_pattern():
 
     # BS (outdoor) according to IMT.PARAMETER table 10 (multipage!)
     G_Emax = 5 * cnv.dB
-    A_m, SLA_nu = 30. * cnv.dimless, 30. * cnv.dimless
+    A_m, SLA_nu = 30. * cnv.dB, 30. * cnv.dB
     azim_3db, elev_3db = 65. * apu.deg, 65. * apu.deg
 
     gains_single = imt.imt2020_single_element_pattern(
@@ -142,8 +142,8 @@ def test_imt2020_composite_pattern():
         (-180, 180, apu.deg),
         (-90, 90, apu.deg),
         (None, None, cnv.dB),
-        (0, None, cnv.dimless),
-        (0, None, cnv.dimless),
+        (0, None, cnv.dB),
+        (0, None, cnv.dB),
         (0, None, apu.deg),
         (0, None, apu.deg),
         (0, None, cnv.dimless),
@@ -158,7 +158,7 @@ def test_imt2020_composite_pattern():
 
     # BS (outdoor) according to IMT.PARAMETER table 10 (multipage!)
     G_Emax = 5 * cnv.dB
-    A_m, SLA_nu = 30. * cnv.dimless, 30. * cnv.dimless
+    A_m, SLA_nu = 30. * cnv.dB, 30. * cnv.dB
     azim_3db, elev_3db = 65. * apu.deg, 65. * apu.deg
 
     d_H, d_V = 0.5 * cnv.dimless, 0.5 * cnv.dimless
@@ -250,7 +250,7 @@ def test_imt2020_composite_pattern_oob():
 
     # BS (outdoor) according to IMT.PARAMETER table 10 (multipage!)
     G_Emax = 5 * cnv.dB
-    A_m, SLA_nu = 30. * cnv.dimless, 30. * cnv.dimless
+    A_m, SLA_nu = 30. * cnv.dB, 30. * cnv.dB
     azim_3db, elev_3db = 65. * apu.deg, 65. * apu.deg
 
     d_H, d_V = 0.46 * cnv.dimless, 0.46 * cnv.dimless
@@ -317,7 +317,7 @@ def test_imt2020_composite_pattern_broadcast():
     azim_i, elev_j = [0, -10] * apu.deg, [0, 5] * apu.deg
 
     G_Emax = 5 * cnv.dB
-    A_m, SLA_nu = 30. * cnv.dimless, 30. * cnv.dimless
+    A_m, SLA_nu = 30. * cnv.dB, 30. * cnv.dB
     azim_3db, elev_3db = 65. * apu.deg, 65. * apu.deg
 
     d_H, d_V = 0.5 * cnv.dimless, 0.5 * cnv.dimless
