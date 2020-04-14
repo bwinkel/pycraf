@@ -1,21 +1,23 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Geographical frames (pycraf.geospatial) &#8212; pycraf v1.0.1dev107</title>
+    <title>Geographical frames (pycraf.geospatial) &#8212; pycraf v1.0.2dev345</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -61,7 +63,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.1dev107</a>
+	<a href="../index.html">pycraf v1.0.2dev345</a>
 	 &#187;
       </li>
       
@@ -90,7 +92,7 @@ based on EPSG/ESRI codes or <code class="xref py py-obj docutils literal notrans
 <p>Internally, the <a class="reference internal" href="#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code></a> module uses the <a class="reference external" href="https://pypi.python.org/pypi/pyproj">pyproj</a> package, which itself is a wrapper
 around the <a class="reference external" href="http://proj4.org/">proj.4</a> software for the transformation.
 In principle, one could use <code class="xref py py-obj docutils literal notranslate"><span class="pre">pyproj</span></code> directly, but <a class="reference internal" href="#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code></a>
-offers unit checking (by making use of the <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v4.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a>
+offers unit checking (by making use of the <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v4.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a>
 functionality.)</p>
 </div>
 <p>There are thousands of pre-defined frames (which one can work with by simply
@@ -199,7 +201,7 @@ output). One can specifically ask for the original units by doing:</p>
 </pre></div>
 </div>
 <p>The <a class="reference internal" href="#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geospatial</span></code></a> sub-package makes life a bit easier,
-because we can use the <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v4.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> conversion:</p>
+because we can use the <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v4.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> conversion:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">transform_factory</span><span class="p">(</span><span class="mi">4326</span><span class="p">,</span> <span class="mi">3452</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="o">-</span><span class="mf">92.105819</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">30.447921</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span>  
@@ -353,8 +355,8 @@ around the <a class="reference external" href="http://proj4.org/">proj.4</a> sof
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.3.1. &nbsp;
-    Last built 10 Jan 2020. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.1. &nbsp;
+    Last built 14 Apr 2020. <br/>
   </p>
 </footer>
   </body>

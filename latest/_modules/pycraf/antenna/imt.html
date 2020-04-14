@@ -1,21 +1,23 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>pycraf.antenna.imt &#8212; pycraf v1.0.1dev107</title>
+    <title>pycraf.antenna.imt &#8212; pycraf v1.0.2dev345</title>
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-dataframe.css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/sidebar.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
@@ -48,7 +50,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v1.0.1dev107</a>
+	<a href="../../../index.html">pycraf v1.0.2dev345</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -94,7 +96,7 @@
 <span class="sd">    phi : np.ndarray, float</span>
 <span class="sd">        Azimuth [deg]</span>
 <span class="sd">    A_m : np.ndarray, float</span>
-<span class="sd">        Front-to-back ratio (horizontal) [dimless]</span>
+<span class="sd">        Front-to-back ratio (horizontal) [dB]</span>
 <span class="sd">    phi_3db : np.ndarray, float</span>
 <span class="sd">        Horizontal 3-dB beam width of single element [deg]</span>
 <span class="sd">    k : float, optional</span>
@@ -121,7 +123,7 @@
 <span class="sd">    theta : np.ndarray, float</span>
 <span class="sd">        Elevation [deg]</span>
 <span class="sd">    SLA_nu : np.ndarray, float</span>
-<span class="sd">        Front-to-back ratio (vertical) [dimless]</span>
+<span class="sd">        Front-to-back ratio (vertical) [dB]</span>
 <span class="sd">    theta_3db : np.ndarray, float</span>
 <span class="sd">        Vertical 3-dB beam width of single element [deg]</span>
 <span class="sd">    k : float, optional</span>
@@ -157,8 +159,8 @@
     <span class="n">azim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">elev</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">G_Emax</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">),</span>
-    <span class="n">A_m</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span>
-    <span class="n">SLA_nu</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span>
+    <span class="n">A_m</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">),</span>
+    <span class="n">SLA_nu</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">),</span>
     <span class="n">phi_3db</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">theta_3db</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span>
@@ -183,9 +185,9 @@
 <span class="sd">    G_Emax : `~astropy.units.Quantity`</span>
 <span class="sd">        Single element maximum gain [dBi]</span>
 <span class="sd">    A_m : `~astropy.units.Quantity`</span>
-<span class="sd">        Front-to-back ratio (horizontal) [dimless]</span>
+<span class="sd">        Front-to-back ratio (horizontal) [dB]</span>
 <span class="sd">    SLA_nu : `~astropy.units.Quantity`</span>
-<span class="sd">        Front-to-back ratio (vertical) [dimless]</span>
+<span class="sd">        Front-to-back ratio (vertical) [dB]</span>
 <span class="sd">    phi_3db : `~astropy.units.Quantity`</span>
 <span class="sd">        Horizontal 3dB beam width of single element [deg]</span>
 <span class="sd">    theta_3db : `~astropy.units.Quantity`</span>
@@ -288,8 +290,8 @@
     <span class="n">azim_i</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">elev_i</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">G_Emax</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">),</span>
-    <span class="n">A_m</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span>
-    <span class="n">SLA_nu</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span>
+    <span class="n">A_m</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">),</span>
+    <span class="n">SLA_nu</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">),</span>
     <span class="n">phi_3db</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">theta_3db</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">d_H</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span>
@@ -321,7 +323,7 @@
 <span class="sd">    G_Emax : `~astropy.units.Quantity`</span>
 <span class="sd">        Single element maximum gain [dBi]</span>
 <span class="sd">    A_m, SLA_nu : `~astropy.units.Quantity`</span>
-<span class="sd">        Front-to-back ratio (horizontal/vertical) [dimless]</span>
+<span class="sd">        Front-to-back ratio (horizontal/vertical) [dB]</span>
 <span class="sd">    phi_3db, theta_3db : `~astropy.units.Quantity`</span>
 <span class="sd">        Horizontal/Vertical 3dB beam width of single element [deg]</span>
 <span class="sd">    d_H, d_V : `~astropy.units.Quantity`</span>
@@ -612,8 +614,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.3.1. &nbsp;
-    Last built 10 Jan 2020. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.1. &nbsp;
+    Last built 14 Apr 2020. <br/>
   </p>
 </footer>
   </body>

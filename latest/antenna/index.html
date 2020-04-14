@@ -1,21 +1,23 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Antenna patterns (pycraf.antenna) &#8212; pycraf v1.0.1dev107</title>
+    <title>Antenna patterns (pycraf.antenna) &#8212; pycraf v1.0.2dev345</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -61,7 +63,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.1dev107</a>
+	<a href="../index.html">pycraf v1.0.2dev345</a>
 	 &#187;
       </li>
       
@@ -142,14 +144,14 @@ range between 400 MHz and 6 GHz is provided. This is the one, which can
 be used for IMT-advanced (LTE) basestations. Other patterns will follow.</p>
 </div>
 </div>
-<div class="section" id="wrc-agenda-item-1-13-imt2020">
-<h3>WRC Agenda Item 1.13, IMT2020<a class="headerlink" href="#wrc-agenda-item-1-13-imt2020" title="Permalink to this headline">¶</a></h3>
-<p>For AI 1.13 ITU Study Group 3 (SG3) proposes to use a special newly developed
-antenna pattern, which takes into account the phased array feeds of upcoming
-5G devices. In pycraf, we provide a single-element pattern
-(<a class="reference internal" href="../api/pycraf.antenna.imt2020_single_element_pattern.html#pycraf.antenna.imt2020_single_element_pattern" title="pycraf.antenna.imt2020_single_element_pattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imt2020_single_element_pattern</span></code></a>) - which can
-be useful for generic compatibility studies in the spurious/out-of-band domain
-- and the composite (aka phased-up) pattern,
+<div class="section" id="wrc-19-agenda-item-1-13-imt2020">
+<h3>WRC-19 Agenda Item 1.13, IMT2020<a class="headerlink" href="#wrc-19-agenda-item-1-13-imt2020" title="Permalink to this headline">¶</a></h3>
+<p>For WRC-19 AI 1.13 ITU Study Group 3 (SG3) proposed to use a special newly
+developed antenna pattern, which takes into account the phased array feeds of
+upcoming 5G devices. In pycraf, we provide a single-element pattern
+(<a class="reference internal" href="../api/pycraf.antenna.imt2020_single_element_pattern.html#pycraf.antenna.imt2020_single_element_pattern" title="pycraf.antenna.imt2020_single_element_pattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imt2020_single_element_pattern</span></code></a>) - which can be useful for
+generic compatibility studies in the spurious/out-of-band domain - and the
+composite (aka phased-up) pattern,
 <a class="reference internal" href="../api/pycraf.antenna.imt2020_composite_pattern.html#pycraf.antenna.imt2020_composite_pattern" title="pycraf.antenna.imt2020_composite_pattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imt2020_composite_pattern</span></code></a>.</p>
 <p>Both are easy to use. For example, plotting the patterns for base stations
 (with 8 x 8 elements):</p>
@@ -164,7 +166,7 @@ be useful for generic compatibility studies in the spurious/out-of-band domain
 
 <span class="c1"># BS (outdoor) according to IMT.PARAMETER table 10 (multipage!)</span>
 <span class="n">G_Emax</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
-<span class="n">A_m</span><span class="p">,</span> <span class="n">SLA_nu</span> <span class="o">=</span> <span class="mf">30.</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">,</span> <span class="mf">30.</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span>
+<span class="n">A_m</span><span class="p">,</span> <span class="n">SLA_nu</span> <span class="o">=</span> <span class="mf">30.</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="mf">30.</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
 <span class="n">azim_3db</span><span class="p">,</span> <span class="n">elev_3db</span> <span class="o">=</span> <span class="mf">65.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">65.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
 
 <span class="n">gains_single</span> <span class="o">=</span> <span class="n">imt2020_single_element_pattern</span><span class="p">(</span>
@@ -398,7 +400,7 @@ IMT.MODEL document (<a class="reference external" href="https://www.itu.int/md/R
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#using-pycraf-antenna">Using <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.antenna</span></code></a><ul>
 <li><a class="reference internal" href="#antenna-patterns-for-fixed-and-mobile-service-itu-r-rec-f-1336">Antenna patterns for fixed and mobile service (ITU-R Rec. F.1336)</a></li>
-<li><a class="reference internal" href="#wrc-agenda-item-1-13-imt2020">WRC Agenda Item 1.13, IMT2020</a></li>
+<li><a class="reference internal" href="#wrc-19-agenda-item-1-13-imt2020">WRC-19 Agenda Item 1.13, IMT2020</a></li>
 <li><a class="reference internal" href="#ras-telescope-pattern">RAS telescope pattern</a></li>
 <li><a class="reference internal" href="#fixed-links-pattern">Fixed-links pattern</a></li>
 </ul>
@@ -428,8 +430,8 @@ IMT.MODEL document (<a class="reference external" href="https://www.itu.int/md/R
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.3.1. &nbsp;
-    Last built 10 Jan 2020. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.1. &nbsp;
+    Last built 14 Apr 2020. <br/>
   </p>
 </footer>
   </body>

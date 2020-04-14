@@ -1,21 +1,23 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>pycraf &#8212; pycraf v1.0.1dev107</title>
+    <title>pycraf &#8212; pycraf v1.0.2dev345</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -48,7 +50,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../index.html">pycraf v1.0.1dev107</a>
+	<a href="../index.html">pycraf v1.0.2dev345</a>
 	 &#187;
       </li>
       <li><a href="index.html" accesskey="U">Module code</a> &#187;</li>
@@ -98,8 +100,24 @@
     <span class="kn">import</span> <span class="nn">astropy</span>
 
     <span class="k">if</span> <span class="n">astropy</span><span class="o">.</span><span class="n">__version__</span> <span class="o">&gt;=</span> <span class="s1">&#39;4&#39;</span><span class="p">:</span>
-        <span class="n">astropy</span><span class="o">.</span><span class="n">physical_constants</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;astropyconst20&#39;</span><span class="p">)</span>
-        <span class="n">astropy</span><span class="o">.</span><span class="n">astronomical_constants</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;astropyconst20&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">astropy</span><span class="o">.</span><span class="n">physical_constants</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;astropyconst20&#39;</span><span class="p">)</span>
+            <span class="n">astropy</span><span class="o">.</span><span class="n">astronomical_constants</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;astropyconst20&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># import ipdb</span>
+            <span class="c1"># ipdb.set_trace()</span>
+            <span class="k">if</span> <span class="s1">&#39;astropy.units is already imported&#39;</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
+                <span class="n">e</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s1">&#39;Please note that pycraf uses the astropy.constants &#39;</span>
+                    <span class="s1">&#39;from Astropy v2 for backwards compatibility. &#39;</span>
+                    <span class="s1">&#39;Starting from Astropy v4, a &quot;ScienceState&quot; is used &#39;</span>
+                    <span class="s1">&#39;to allow versioning of physical constants. For &#39;</span>
+                    <span class="s1">&#39;technical reasons, it is necessary to import the &#39;</span>
+                    <span class="s1">&#39;astropy.units sub-package *after* pycraf.&#39;</span>
+                    <span class="s1">&#39;(see https://github.com/bwinkel/pycraf/issues/24)&#39;</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                <span class="k">raise</span> <span class="n">e</span>
 
     <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">antenna</span>
     <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">atm</span>
@@ -129,8 +147,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.3.1. &nbsp;
-    Last built 10 Jan 2020. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.1. &nbsp;
+    Last built 14 Apr 2020. <br/>
   </p>
 </footer>
   </body>

@@ -1,21 +1,23 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Conversions (pycraf.conversions) &#8212; pycraf v1.0.1dev107</title>
+    <title>Conversions (pycraf.conversions) &#8212; pycraf v1.0.2dev345</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -61,7 +63,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.1dev107</a>
+	<a href="../index.html">pycraf v1.0.2dev345</a>
 	 &#187;
       </li>
       
@@ -109,7 +111,7 @@ Decibel units are defined (see <a class="reference internal" href="#reference-ap
 </pre></div>
 </div>
 <p>Because all function parameters and return values are Astropy Quantities
-(see <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>), unit conversion is automatically performed:</p>
+(see <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>), unit conversion is automatically performed:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">50</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span><span class="p">)</span>  
 <span class="go">&lt;Quantity 5.0 m2&gt;</span>
 
@@ -145,7 +147,7 @@ provided in the <a class="reference external" href="https://github.com/bwinkel/p
 <p>In the <a class="reference internal" href="#module-pycraf.conversions" title="pycraf.conversions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conversions</span></code></a> module, several Decibel units are defined
 that often occur in spectrum-management tasks. Examples are the
 <span class="math notranslate nohighlight">\(\mathrm{dB}\)</span> unit or <span class="math notranslate nohighlight">\(\mathrm{dBm}\equiv\mathrm{dB[mW]}\)</span>. In
-Python these are defined with the help of the <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v4.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> package, e.g.:</p>
+Python these are defined with the help of the <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v4.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> package, e.g.:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dB_W</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">dB</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
@@ -161,7 +163,7 @@ special. Engineers will usually call this symbol
 it is the power of the electrical field which is referred to,
 which means that the amplitude of the E-field has to be squared.</p>
 <p>In fact, if one would omit the squaring from the definition, the unit
-would not work in the equations, because the <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v4.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> framework
+would not work in the equations, because the <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v4.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> framework
 would notice an inconsistency of the units.</p>
 </div>
 <p>Working with the Decibel units is easy:</p>
@@ -183,7 +185,7 @@ usual:</p>
 <span class="go">1.3 W</span>
 </pre></div>
 </div>
-<p>Astropy <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v4.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> provide even some additional formatting options:</p>
+<p>Astropy <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v4.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> provide even some additional formatting options:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0.value:.1f}</span><span class="s1"> </span><span class="si">{0.unit}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">power</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span><span class="p">)))</span>
 <span class="go">1.3 W</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0.value:.1f}</span><span class="s1"> {0.unit:FITS}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">s</span><span class="p">))</span>
@@ -195,7 +197,7 @@ usual:</p>
 <p>Under some circumstances, the automatic conversion from the Decibel
 to the associated linear unit <a class="reference external" href="https://github.com/astropy/astropy/issues/6319">can fail</a>. This may get fixed in a future
 version of Astropy. It helps to construct the Quantities via
-multiplication, avoiding the <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a> constructor, i.e.,
+multiplication, avoiding the <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a> constructor, i.e.,
 <code class="code docutils literal notranslate"><span class="pre">1</span> <span class="pre">*</span> <span class="pre">cnv.dB</span></code> instead of <code class="code docutils literal notranslate"><span class="pre">u.Quantity(1,</span> <span class="pre">cnv.dB)</span></code>.</p>
 </div>
 </div>
@@ -204,7 +206,7 @@ multiplication, avoiding the <a class="reference external" href="http://docs.ast
 <p>For a complete list of the functions provided in the <a class="reference internal" href="#module-pycraf.conversions" title="pycraf.conversions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conversions</span></code></a>
 package, see the <a class="reference internal" href="#reference-api">Reference/API</a> section below. All functions expect
 the parameters to have appropriate units, and will return a
-<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, i.e. a value with a unit. This makes it sometimes
+<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, i.e. a value with a unit. This makes it sometimes
 a bit verbose to write code, but has the invaluable advantage that one
 avoids mistakes in the calculations that come from using the wrong units.</p>
 <p>For example, in the various ITU-R Recommendations, the described algorithms
@@ -366,7 +368,7 @@ other. Furthermore, some convenience decibel-Scales are defined.</p>
 <td><p>Effective antenna area from geometric area, given antenna efficiency.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.conversions.efield_equivalency.html#pycraf.conversions.efield_equivalency" title="pycraf.conversions.efield_equivalency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">efield_equivalency</span></code></a>()</p></td>
-<td><p><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v4.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> equivalency to handle log-scale E-field units.</p></td>
+<td><p><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v4.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> equivalency to handle log-scale E-field units.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.conversions.efield_from_powerflux.html#pycraf.conversions.efield_from_powerflux" title="pycraf.conversions.efield_from_powerflux"><code class="xref py py-obj docutils literal notranslate"><span class="pre">efield_from_powerflux</span></code></a>(powerflux)</p></td>
 <td><p>E-field strength from power flux density.</p></td>
@@ -478,8 +480,8 @@ other. Furthermore, some convenience decibel-Scales are defined.</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.3.1. &nbsp;
-    Last built 10 Jan 2020. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.1. &nbsp;
+    Last built 14 Apr 2020. <br/>
   </p>
 </footer>
   </body>

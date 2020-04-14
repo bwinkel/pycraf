@@ -1,21 +1,23 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v1.0.1dev107</title>
+    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v1.0.2dev345</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -61,7 +63,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.1dev107</a>
+	<a href="../index.html">pycraf v1.0.2dev345</a>
 	 &#187;
       </li>
       
@@ -166,7 +168,7 @@ SRTM tile data; see <a class="reference internal" href="working_with_srtm.html#w
 </div>
 <p>(<a class="reference external" href="../pathprof/index-1.png">png</a>, <a class="reference external" href="../pathprof/index-1.svg">svg</a>, <a class="reference external" href="../pathprof/index-1.pdf">pdf</a>)</p>
 <div class="figure align-default">
-<img alt="../_images/index-14.png" src="../_images/index-14.png" />
+<img alt="../_images/index-12.png" src="../_images/index-12.png" />
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -355,7 +357,7 @@ to produce terrain maps of a region:</p>
 </div>
 <p>(<a class="reference external" href="../pathprof/index-2.png">png</a>, <a class="reference external" href="../pathprof/index-2.svg">svg</a>, <a class="reference external" href="../pathprof/index-2.pdf">pdf</a>)</p>
 <div class="figure align-default">
-<img alt="../_images/index-22.png" src="../_images/index-22.png" />
+<img alt="../_images/index-21.png" src="../_images/index-21.png" />
 </div>
 <p>Here, we made use of a special <code class="xref py py-obj docutils literal notranslate"><span class="pre">matplotlib</span></code> colormap, which can be produced
 using <a class="reference internal" href="../api/pycraf.pathprof.terrain_cmap_factory.html#pycraf.pathprof.terrain_cmap_factory" title="pycraf.pathprof.terrain_cmap_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">terrain_cmap_factory</span></code></a>. It returns a <code class="xref py py-obj docutils literal notranslate"><span class="pre">cmap</span></code> and a
@@ -407,7 +409,7 @@ it’s different:</p>
 </div>
 <p>(<a class="reference external" href="../pathprof/index-3.png">png</a>, <a class="reference external" href="../pathprof/index-3.svg">svg</a>, <a class="reference external" href="../pathprof/index-3.pdf">pdf</a>)</p>
 <div class="figure align-default">
-<img alt="../_images/index-32.png" src="../_images/index-32.png" />
+<img alt="../_images/index-31.png" src="../_images/index-31.png" />
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -520,7 +522,7 @@ the loss-functions on it (see
 <p>Therefore, another convenience function is provided,
 <a class="reference internal" href="../api/pycraf.pathprof.losses_complete.html#pycraf.pathprof.losses_complete" title="pycraf.pathprof.losses_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losses_complete</span></code></a>, which has a very similar function
 signature as <a class="reference internal" href="../api/pycraf.pathprof.PathProp.html#pycraf.pathprof.PathProp" title="pycraf.pathprof.PathProp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PathProp</span></code></a>, but accepts <code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarrays</span></code>
-(or rather arrays of <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>) for most of the inputs.
+(or rather arrays of <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>) for most of the inputs.
 Obviously, parameters such as Tx and Rx location cannot be arrays, and
 as a consequence, the terrain height profile can only be a 1D array.</p>
 <p>The following shows a typical use case (which is also contained in the
@@ -578,7 +580,7 @@ as a consequence, the terrain height profile can only be a 1D array.</p>
 </div>
 <p>(<a class="reference external" href="../pathprof/index-5.png">png</a>, <a class="reference external" href="../pathprof/index-5.svg">svg</a>, <a class="reference external" href="../pathprof/index-5.pdf">pdf</a>)</p>
 <div class="figure align-default">
-<img alt="../_images/index-52.png" src="../_images/index-52.png" />
+<img alt="../_images/index-51.png" src="../_images/index-51.png" />
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -894,8 +896,8 @@ estimation.</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.3.1. &nbsp;
-    Last built 10 Jan 2020. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.1. &nbsp;
+    Last built 14 Apr 2020. <br/>
   </p>
 </footer>
   </body>

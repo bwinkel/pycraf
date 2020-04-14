@@ -1,21 +1,23 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>EPSG &#8212; pycraf v1.0.1dev107</title>
+    <title>EPSG &#8212; pycraf v1.0.2dev345</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -61,7 +63,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.1dev107</a>
+	<a href="../index.html">pycraf v1.0.2dev345</a>
 	 &#187;
       </li>
       <li><a href="../geospatial/index.html" accesskey="U">Geographical frames (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code>)</a> &#187;</li>
@@ -78,7 +80,7 @@
             
   <div class="section" id="epsg">
 <h1>EPSG<a class="headerlink" href="#epsg" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pycraf.geospatial.EPSG">
 <em class="property">class </em><code class="sig-prename descclassname">pycraf.geospatial.</code><code class="sig-name descname">EPSG</code><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#EPSG"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/geospatial/geospatial.py#L37" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.geospatial.EPSG" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
@@ -111,7 +113,7 @@
 </tbody>
 </table>
 <p class="rubric">Attributes Documentation</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pycraf.geospatial.EPSG.ETRS89">
 <code class="sig-name descname">ETRS89</code><em class="property"> = 3035</em><a class="headerlink" href="#pycraf.geospatial.EPSG.ETRS89" title="Permalink to this definition">¶</a></dt>
 <dd><p>European Terrestrial Reference System:
@@ -119,7 +121,7 @@
 Single CRS for all Europe.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pycraf.geospatial.EPSG.ITRF00">
 <code class="sig-name descname">ITRF00</code><em class="property"> = 4919</em><a class="headerlink" href="#pycraf.geospatial.EPSG.ITRF00" title="Permalink to this definition">¶</a></dt>
 <dd><p>International Terrestrial Reference Frame, Datum 2000:
@@ -127,7 +129,7 @@ Single CRS for all Europe.</p>
 Geocentric system.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pycraf.geospatial.EPSG.ITRF05">
 <code class="sig-name descname">ITRF05</code><em class="property"> = 4896</em><a class="headerlink" href="#pycraf.geospatial.EPSG.ITRF05" title="Permalink to this definition">¶</a></dt>
 <dd><p>International Terrestrial Reference Frame, Datum 2005:
@@ -135,7 +137,7 @@ Geocentric system.</p>
 Geocentric system.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pycraf.geospatial.EPSG.ITRF08">
 <code class="sig-name descname">ITRF08</code><em class="property"> = 5332</em><a class="headerlink" href="#pycraf.geospatial.EPSG.ITRF08" title="Permalink to this definition">¶</a></dt>
 <dd><p>International Terrestrial Reference Frame, Datum 2008:
@@ -143,14 +145,14 @@ Geocentric system.</p>
 Geocentric system.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pycraf.geospatial.EPSG.WEB_MERC">
 <code class="sig-name descname">WEB_MERC</code><em class="property"> = 3857</em><a class="headerlink" href="#pycraf.geospatial.EPSG.WEB_MERC" title="Permalink to this definition">¶</a></dt>
 <dd><p>Variant of Mercator projection; de facto standard for Web mapping applications:
 <a class="reference external" href="http://spatialreference.org/ref/sr-org/7483/">Web Mercator (WGS84)</a>.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pycraf.geospatial.EPSG.WGS84">
 <code class="sig-name descname">WGS84</code><em class="property"> = 4326</em><a class="headerlink" href="#pycraf.geospatial.EPSG.WGS84" title="Permalink to this definition">¶</a></dt>
 <dd><p>World Geodetic System:
@@ -185,8 +187,8 @@ Geocentric system.</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 2.3.1. &nbsp;
-    Last built 10 Jan 2020. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.1. &nbsp;
+    Last built 14 Apr 2020. <br/>
   </p>
 </footer>
   </body>
