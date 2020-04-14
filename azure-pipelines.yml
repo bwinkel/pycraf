@@ -256,7 +256,7 @@ jobs:
       rsync -av ../docs/docs/_build/html/ ${DOCS_TARGET}/
       docs_version=$(python -c "import pycraf; print(pycraf.__version__)")
       git add -A && git commit -m "Update docs for $docs_version ***NO_CI***"
-      # bash ../retry.sh git push github
+      bash ../retry.sh git push github
     displayName: Publish docs
     condition: and(succeeded(), eq(variables['publish.docs'], true))
 

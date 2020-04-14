@@ -73,15 +73,15 @@ tilt angles.
     range between 400 MHz and 6 GHz is provided. This is the one, which can
     be used for IMT-advanced (LTE) basestations. Other patterns will follow.
 
-WRC Agenda Item 1.13, IMT2020
------------------------------
+WRC-19 Agenda Item 1.13, IMT2020
+--------------------------------
 
-For AI 1.13 ITU Study Group 3 (SG3) proposes to use a special newly developed
-antenna pattern, which takes into account the phased array feeds of upcoming
-5G devices. In pycraf, we provide a single-element pattern
-(`~pycraf.antenna.imt2020_single_element_pattern`) - which can
-be useful for generic compatibility studies in the spurious/out-of-band domain
-- and the composite (aka phased-up) pattern,
+For WRC-19 AI 1.13 ITU Study Group 3 (SG3) proposed to use a special newly
+developed antenna pattern, which takes into account the phased array feeds of
+upcoming 5G devices. In pycraf, we provide a single-element pattern
+(`~pycraf.antenna.imt2020_single_element_pattern`) - which can be useful for
+generic compatibility studies in the spurious/out-of-band domain - and the
+composite (aka phased-up) pattern,
 `~pycraf.antenna.imt2020_composite_pattern`.
 
 Both are easy to use. For example, plotting the patterns for base stations
