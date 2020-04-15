@@ -203,7 +203,7 @@ def _imt2020_composite_pattern(
             ) / np.sqrt(N_H * N_V)
 
     tmp = np.zeros(
-        np.broadcast(phi, theta, phi_i, theta_i).shape, dtype=np.complex64
+        np.broadcast(phi, theta, phi_i, theta_i).shape, dtype=np.complex128
         )
     for m in range(N_H):
         for n in range(N_V):
