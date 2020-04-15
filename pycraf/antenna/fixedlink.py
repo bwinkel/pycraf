@@ -8,6 +8,7 @@ from __future__ import (
 # from functools import partial, lru_cache
 from astropy import units as apu
 import numpy as np
+from .cyantenna import fl_pattern_cython
 from .. import conversions as cnv
 from .. import utils
 
@@ -151,31 +152,6 @@ def _fl_pattern_2_3(phi, diameter_over_wavelength, G_max):
     return gain
 
 
-def _fl_pattern(phi, diameter, wavelength, G_max):
-
-    d_wlen = diameter / wavelength
-
-    phi, d_wlen, G_max = np.broadcast_arrays(phi, d_wlen, G_max)
-    gain = np.full(phi.shape, np.nan, np.float64)
-
-    tmp_mask = (0.00428 < wavelength) & (wavelength < 0.29979)  # 1...70 GHz
-    mask_2_1 = (d_wlen > 100) & tmp_mask
-    mask_2_2 = (d_wlen <= 100) & tmp_mask
-
-    tmp_mask = (0.29979 <= wavelength) & (wavelength < 2.99792)  # 0.1...1 GHz
-    mask_2_3 = (d_wlen > 0.63) & tmp_mask
-
-    for mask, func in [
-            (mask_2_1, _fl_pattern_2_1),
-            (mask_2_2, _fl_pattern_2_2),
-            (mask_2_3, _fl_pattern_2_3),
-            ]:
-
-        gain[mask] = func(phi[mask], d_wlen[mask], G_max[mask])
-
-    return gain
-
-
 @utils.ranged_quantity_input(
     phi=(-180, 180, apu.deg),
     diameter=(0.1, 1000., apu.m),
@@ -216,7 +192,7 @@ def fl_pattern(
       explanation and applicability of this model.
     '''
 
-    return _fl_pattern(phi, diameter, wavelength, G_max)
+    return fl_pattern_cython(phi, diameter, wavelength, G_max)
 
 
 def _fl_hpbw_from_size(diameter, wavelength):

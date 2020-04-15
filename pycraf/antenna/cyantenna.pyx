@@ -14,8 +14,9 @@ cimport numpy as np
 from numpy cimport uint16_t, float64_t
 from cython.parallel import prange, parallel
 from numpy cimport PyArray_MultiIter_DATA as Py_Iter_DATA
+from libc.math cimport M_PI, NAN
 from libc.math cimport (
-    exp, sqrt, fabs, M_PI, sin, cos, tan, asin, acos, atan2, fmod, log10
+    exp, sqrt, fabs, sin, cos, tan, asin, acos, atan2, fmod, log10
     )
 import numpy as np
 
@@ -227,7 +228,7 @@ def imt2020_single_element_pattern_cython(
         _k = itup[7]
         _gain = itup[8]
 
-        size = _azim.shape[0]
+        size = _gain.shape[0]
 
         for i in prange(size, nogil=True):
 
@@ -361,7 +362,7 @@ def imt2020_composite_pattern_cython(
     return A_E + 10 * np.log10(1 + rho * (it.operands[7] - 1))
 
 
-cdef inline float64_t  _G_hr(
+cdef float64_t  _G_hr(
         float64_t x_h, float64_t k_h, float64_t G180
         ) nogil:
 
@@ -380,7 +381,7 @@ cdef inline float64_t  _G_hr(
         return G
 
 
-cdef inline float64_t  _G_vr(
+cdef float64_t  _G_vr(
         float64_t x_v, float64_t k_v, float64_t k_p,
         float64_t theta_3db, float64_t G180
         ) nogil:
@@ -407,7 +408,7 @@ cdef inline float64_t  _G_vr(
         return G180
 
 
-cdef inline float64_t _imt_advanced_sectoral_peak_sidelobe_pattern(
+cdef float64_t _imt_advanced_sectoral_peak_sidelobe_pattern(
         float64_t azim, float64_t elev,
         float64_t G0, float64_t phi_3db, float64_t theta_3db,
         float64_t k_p, float64_t k_h, float64_t k_v,
@@ -542,7 +543,7 @@ def imt_advanced_sectoral_peak_sidelobe_pattern_cython(
         _tilt_e = itup[9]
         _gain = itup[10]
 
-        size = _azim.shape[0]
+        size = _gain.shape[0]
 
         for i in prange(size, nogil=True):
 
@@ -554,3 +555,148 @@ def imt_advanced_sectoral_peak_sidelobe_pattern_cython(
                 )
 
     return it.operands[10]
+
+
+# d_wlen = diameter / wavelength
+cdef float64_t _fl_pattern_2_1(
+        float64_t phi, float64_t d_wlen, float64_t G_max
+        ) nogil:
+
+    cdef:
+
+        float64_t g1 = 2. + 15. * log10(d_wlen)  # gain of first side-lobe
+        float64_t phi_m = 20. / d_wlen * sqrt(G_max - g1)
+        float64_t phi_r = 15.85 * d_wlen ** -0.6
+
+    phi = fabs(phi)
+
+    if 0 <= phi and phi < phi_m:
+        return G_max - 2.5e-3 * (d_wlen * phi) ** 2
+    elif phi_m <= phi and phi < phi_r:
+        return g1
+    elif phi_r <= phi and phi < 48.:
+        return 32. - 25. * log10(phi)
+    else:
+        # 48. <= phi and phi <= 180.
+        return -10.
+
+
+cdef float64_t _fl_pattern_2_2(
+        float64_t phi, float64_t d_wlen, float64_t G_max
+        ) nogil:
+
+    cdef:
+
+        float64_t g1 = 2. + 15. * log10(d_wlen)  # gain of first side-lobe
+        float64_t phi_m = 20. / d_wlen * sqrt(G_max - g1)
+        float64_t phi_r = 15.85 * d_wlen ** -0.6
+
+    phi = fabs(phi)
+
+    if 0 <= phi and phi < phi_m:
+        return G_max - 2.5e-3 * (d_wlen * phi) ** 2
+    elif phi_m <= phi and phi < phi_r:
+        return g1
+    elif phi_r <= phi and phi < 48.:
+        return 52 - 10 * log10(d_wlen) - 25 * log10(phi)
+    else:
+        # 48. <= phi and phi <= 180.
+        return -10. - 10 * log10(d_wlen)
+
+
+cdef float64_t _fl_pattern_2_3(
+        float64_t phi, float64_t d_wlen, float64_t G_max
+        ) nogil:
+
+    cdef:
+
+        float64_t g1 = 2. + 15. * log10(d_wlen)  # gain of first side-lobe
+        float64_t phi_m = 20. / d_wlen * sqrt(G_max - g1)
+        float64_t phi_t = 100. / d_wlen
+        float64_t phi_s = 144.5 * d_wlen ** -0.2
+
+    phi = fabs(phi)
+
+    if 0 <= phi and phi < phi_m:
+        return G_max - 2.5e-3 * (d_wlen * phi) ** 2
+    elif phi_m <= phi and phi < phi_t:
+        return g1
+    elif phi_t <= phi and phi < phi_s:
+        return 52 - 10 * log10(d_wlen) - 25 * log10(phi)
+    else:
+        # phi_s <= phi and phi <= 180.
+        return -2. - 5 * log10(d_wlen)
+
+
+cdef float64_t _fl_pattern(
+        float64_t phi, float64_t diameter, float64_t wavelength,
+        float64_t G_max
+        ) nogil:
+
+    cdef:
+        float64_t d_wlen = diameter / wavelength
+        float64_t gain = NAN
+
+    if 0.00428 < wavelength and wavelength < 0.29979:  # 1...70 GHz
+        if d_wlen > 100:
+            return _fl_pattern_2_1(phi, d_wlen, G_max)
+        else:
+            return _fl_pattern_2_2(phi, d_wlen, G_max)
+    elif 0.29979 <= wavelength and wavelength < 2.99792:  # 0.1...1 GHz
+        return _fl_pattern_2_3(phi, d_wlen, G_max)
+
+    return gain
+
+
+def fl_pattern_cython(
+        phi, diameter, wavelength, G_max,
+        gain=None,
+        ):
+    '''
+    Parallelized ITU-R Rec F.699 antenna pattern
+    '''
+
+    cdef:
+
+        np.ndarray[float64_t] _phi, _diameter, _wavelength, _G_max
+        np.ndarray[float64_t] _gain
+
+        int i, size
+
+    it = np.nditer(
+        [
+            phi, diameter, wavelength, G_max,
+            gain
+            ],
+        flags=['external_loop', 'buffered', 'delay_bufalloc'],
+        op_flags=[
+            ['readonly'], ['readonly'], ['readonly'], ['readonly'],
+            ['readwrite', 'allocate'],
+            ],
+        op_dtypes=[
+            FLOAT64, FLOAT64, FLOAT64, FLOAT64,
+            FLOAT64,
+            ]
+        )
+
+    # it would be better to use the context manager but
+    # "with it:" requires numpy >= 1.14
+
+    it.reset()
+
+    for itup in it:
+        _phi = itup[0]
+        _diameter = itup[1]
+        _wavelength = itup[2]
+        _G_max = itup[3]
+        _gain = itup[4]
+
+        size = _gain.shape[0]
+
+        for i in prange(size, nogil=True):
+
+            _gain[i] = _fl_pattern(
+                _phi[i], _diameter[i], _wavelength[i], _G_max[i]
+                )
+
+    return it.operands[4]
