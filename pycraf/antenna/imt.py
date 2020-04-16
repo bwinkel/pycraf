@@ -7,6 +7,9 @@ from __future__ import (
 
 from astropy import units as apu
 import numpy as np
+from .cyantenna import imt2020_single_element_pattern_cython
+from .cyantenna import imt2020_composite_pattern_cython
+from .cyantenna import imt_advanced_sectoral_peak_sidelobe_pattern_cython
 from .. import conversions as cnv
 from .. import utils
 
@@ -59,7 +62,7 @@ def _A_EV(theta, SLA_nu, theta_3db, k=12.):
         Vertical 3-dB beam width of single element [deg]
     k : float, optional
         Multiplication factor, can be used to get better match to
-        measured antenna patters (default: 12). See `WP5D-C-0936
+        measured antenna patterns (default: 12). See `WP5D-C-0936
 
     Returns
     -------
@@ -68,22 +71,6 @@ def _A_EV(theta, SLA_nu, theta_3db, k=12.):
     '''
 
     return -np.minimum(k * ((theta - 90.) / theta_3db) ** 2, SLA_nu)
-
-
-def _imt2020_single_element_pattern(
-        azim, elev,
-        G_Emax,
-        A_m, SLA_nu,
-        phi_3db, theta_3db,
-        k=12.,
-        ):
-
-    phi = azim
-    theta = 90. - elev
-    return G_Emax - np.minimum(
-        -_A_EH(phi, A_m, phi_3db, k=k) - _A_EV(theta, SLA_nu, theta_3db, k=k),
-        A_m
-        )
 
 
 @utils.ranged_quantity_input(
@@ -137,82 +124,13 @@ def imt2020_single_element_pattern(
     Further information can be found in 3GPP TR 37.840 Section 5.4.4.
     '''
 
-    return _imt2020_single_element_pattern(
+    return imt2020_single_element_pattern_cython(
         azim, elev,
         G_Emax,
         A_m, SLA_nu,
         phi_3db, theta_3db,
         k=k,
         )
-
-
-def _imt2020_composite_pattern(
-        azim, elev,
-        azim_i, elev_i,
-        G_Emax,
-        A_m, SLA_nu,
-        phi_3db, theta_3db,
-        d_H, d_V,
-        N_H, N_V,
-        rho,
-        k=12.
-        ):
-
-    phi = azim
-    theta = 90. - elev
-    phi_i = azim_i
-    theta_i = elev_i  # sic! (tilt angle in imt.model is elevation)
-
-    A_E = _imt2020_single_element_pattern(
-        azim, elev,
-        G_Emax,
-        A_m, SLA_nu,
-        phi_3db, theta_3db,
-        k=k,
-        )
-
-    # pre-compute some quantities for speed-up
-    _dV_cos_theta = d_V * np.cos(np.radians(theta))
-    _dH_sin_theta_sin_phi = (
-        d_H * np.sin(np.radians(theta)) * np.sin(np.radians(phi))
-        )
-
-    _dV_sin_theta_i = d_V * np.sin(np.radians(theta_i))
-    _dH_cos_theta_i_sin_phi_i = (
-        d_H * np.cos(np.radians(theta_i)) * np.sin(np.radians(phi_i))
-        )
-
-    def nu(m, n):
-        '''m, n zero-based (unlike in IMT.MODEL document, Table 4'''
-
-        return np.exp(
-            1j * 2 * np.pi * (
-                n * _dV_cos_theta +
-                m * _dH_sin_theta_sin_phi
-                )
-            )
-
-    def w(m, n):
-        '''m, n zero-based (unlike in IMT.MODEL document, Table 4'''
-
-        return np.exp(
-            1j * 2 * np.pi * (
-                n * _dV_sin_theta_i -
-                m * _dH_cos_theta_i_sin_phi_i
-                )
-            ) / np.sqrt(N_H * N_V)
-
-    tmp = np.zeros(
-        np.broadcast(phi, theta, phi_i, theta_i).shape, dtype=np.complex128
-        )
-    for m in range(N_H):
-        for n in range(N_V):
-            tmp += w(m, n) * nu(m, n)
-
-    # account for correlation level
-    tmp = 1 + rho * (np.abs(tmp) ** 2 - 1)
-
-    return A_E + 10 * np.log10(tmp)
 
 
 @utils.ranged_quantity_input(
@@ -287,7 +205,7 @@ def imt2020_composite_pattern(
     be used, i.e., 8 instead of 12.
     '''
 
-    return _imt2020_composite_pattern(
+    return imt2020_composite_pattern_cython(
         azim, elev,
         azim_i, elev_i,
         G_Emax,
@@ -394,62 +312,6 @@ def _G_vr(x_v, k_v, k_p, theta_3db, G180):
     return G
 
 
-def _imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz(
-        azim, elev,
-        G0, phi_3db, theta_3db,
-        k_p, k_h, k_v,
-        tilt_m=0., tilt_e=0.,
-        ):
-
-    # Not sure if mechanical and electrical tilt can really be combined...
-
-    azim = np.atleast_1d(azim)
-    elev = np.atleast_1d(elev)
-
-    if tilt_m != 0.:
-
-        azim, elev = np.radians(azim), np.radians(elev)
-        beta = np.radians(tilt_m)
-
-        # import ipdb; ipdb.set_trace()
-        elev_rot = np.arcsin(
-            np.sin(elev) * np.cos(beta) +
-            np.cos(elev) * np.cos(azim) * np.sin(beta)
-            )
-
-        tmp = (
-            -np.sin(elev) * np.sin(beta) +
-            np.cos(elev) * np.cos(azim) * np.cos(beta)
-            ) / np.cos(elev_rot)
-        tmp[tmp > 1.] = 1.
-        tmp[tmp < -1.] = -1.
-        azim_rot = np.arccos(tmp)
-
-        azim, elev = np.degrees(azim_rot), np.degrees(elev_rot)
-
-    if tilt_e != 0.:
-
-        _elev = elev + tilt_e
-        mask = _elev >= 0.
-        elev_rot = np.empty_like(elev)  # avoid in-place modification
-        elev_rot[mask] = 90 * _elev[mask] / (90 + tilt_e)
-        elev_rot[~mask] = 90 * _elev[~mask] / (90 - tilt_e)
-        elev = elev_rot
-
-    G180 = -12 + 10 * np.log10(1 + 8 * k_p) - 15 * np.log10(180. / theta_3db)
-
-    x_h = np.abs(azim) / phi_3db
-    x_v = np.abs(elev) / theta_3db
-    R = (
-        (_G_hr(x_h, k_h, G180) - _G_hr(180. / phi_3db, k_h, G180)) /
-        (_G_hr(0., k_h, G180) - _G_hr(180. / phi_3db, k_h, G180))
-        )
-
-    G = G0 + _G_hr(x_h, k_h, G180) + R * _G_vr(x_v, k_v, k_p, theta_3db, G180)
-
-    return G
-
-
 @utils.ranged_quantity_input(
     azim=(-180, 180, apu.deg),
     elev=(-90, 90, apu.deg),
@@ -517,11 +379,11 @@ def imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz(
 
     '''
 
-    return _imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz(
+    return imt_advanced_sectoral_peak_sidelobe_pattern_cython(
         azim, elev,
         G0, phi_3db, theta_3db,
         k_p, k_h, k_v,
-        tilt_m=tilt_m, tilt_e=tilt_e,
+        tilt_m, tilt_e,
         )
 
 

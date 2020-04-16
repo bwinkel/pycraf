@@ -495,18 +495,21 @@ def test_fl_pattern_broadcast():
 
     phi = np.logspace(0, 2, 10) * apu.deg
     diam = np.linspace(1, 10, 2) * apu.m
+    G_max = [20., 40.] * cnv.dBi
 
-    # apparently, if phi == 1, there is a problem!
+    # Note, if G_max is too small for the given diameter, wrong results
+    # will be returned!
+    gain = fixedlink.fl_pattern(
+        phi[:, np.newaxis], diam, 0.21 * apu.m, G_max
+        )
     assert_quantity_allclose(
-        fixedlink.fl_pattern(
-            phi[:, np.newaxis], diam, 0.21 * apu.m, 20 * cnv.dBi
-            ),
+        gain,
         [
-            [19.94331066, 0.],
+            [19.94331066, 34.33106576],
             [19.84225854, 29.66663739],
             [19.56107501, 24.11108184],
             [18.77866514, 18.55552628],
-            [22.99997073, 12.99997073],
+            [16.60156321, 12.99997073],
             [17.44441517, 7.44441517],
             [11.88885961, 1.88885961],
             [6.33330406, -3.66669594],

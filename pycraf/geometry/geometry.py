@@ -8,6 +8,9 @@ from __future__ import (
 from functools import reduce
 from astropy import units as apu
 import numpy as np
+from .cygeometry import (
+    true_angular_distance_cython, great_circle_bearing_cython
+    )
 from .. import utils
 
 
@@ -47,20 +50,22 @@ def true_angular_distance(l1, b1, l2, b2):
         True angular distance [deg]
     '''
 
-    sin_diff_lon = np.sin(np.radians(l2 - l1))
-    cos_diff_lon = np.cos(np.radians(l2 - l1))
-    sin_lat1 = np.sin(np.radians(b1))
-    sin_lat2 = np.sin(np.radians(b2))
-    cos_lat1 = np.cos(np.radians(b1))
-    cos_lat2 = np.cos(np.radians(b2))
+    # sin_diff_lon = np.sin(np.radians(l2 - l1))
+    # cos_diff_lon = np.cos(np.radians(l2 - l1))
+    # sin_lat1 = np.sin(np.radians(b1))
+    # sin_lat2 = np.sin(np.radians(b2))
+    # cos_lat1 = np.cos(np.radians(b1))
+    # cos_lat2 = np.cos(np.radians(b2))
 
-    num1 = cos_lat2 * sin_diff_lon
-    num2 = cos_lat1 * sin_lat2 - sin_lat1 * cos_lat2 * cos_diff_lon
-    denominator = sin_lat1 * sin_lat2 + cos_lat1 * cos_lat2 * cos_diff_lon
+    # num1 = cos_lat2 * sin_diff_lon
+    # num2 = cos_lat1 * sin_lat2 - sin_lat1 * cos_lat2 * cos_diff_lon
+    # denominator = sin_lat1 * sin_lat2 + cos_lat1 * cos_lat2 * cos_diff_lon
 
-    return np.degrees(np.arctan2(
-        np.sqrt(num1 ** 2 + num2 ** 2), denominator
-        ))
+    # return np.degrees(np.arctan2(
+    #     np.sqrt(num1 ** 2 + num2 ** 2), denominator
+    #     ))
+
+    return true_angular_distance_cython(l1, b1, l2, b2)
 
 
 @utils.ranged_quantity_input(
@@ -87,20 +92,22 @@ def great_circle_bearing(l1, b1, l2, b2):
         Great circle bearing [deg]
     '''
 
-    diff_lon_rad = np.radians(l2 - l1)
-    b1_rad, b2_rad = np.radians(b1), np.radians(b2)
+    # diff_lon_rad = np.radians(l2 - l1)
+    # b1_rad, b2_rad = np.radians(b1), np.radians(b2)
 
-    sin_diff_lon = np.sin(diff_lon_rad)
-    cos_diff_lon = np.cos(diff_lon_rad)
-    sin_lat1 = np.sin(b1_rad)
-    sin_lat2 = np.sin(b2_rad)
-    cos_lat1 = np.cos(b1_rad)
-    cos_lat2 = np.cos(b2_rad)
+    # sin_diff_lon = np.sin(diff_lon_rad)
+    # cos_diff_lon = np.cos(diff_lon_rad)
+    # sin_lat1 = np.sin(b1_rad)
+    # sin_lat2 = np.sin(b2_rad)
+    # cos_lat1 = np.cos(b1_rad)
+    # cos_lat2 = np.cos(b2_rad)
 
-    a = cos_lat2 * sin_diff_lon
-    b = cos_lat1 * sin_lat2 - sin_lat1 * cos_lat2 * cos_diff_lon
+    # a = cos_lat2 * sin_diff_lon
+    # b = cos_lat1 * sin_lat2 - sin_lat1 * cos_lat2 * cos_diff_lon
 
-    return np.degrees(np.arctan2(a, b))
+    # return np.degrees(np.arctan2(a, b))
+
+    return great_circle_bearing_cython(l1, b1, l2, b2)
 
 
 def _cart_to_sphere(x, y, z, broadcast_arrays=True):
