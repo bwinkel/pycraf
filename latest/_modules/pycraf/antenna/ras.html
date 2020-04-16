@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>pycraf.antenna.ras &#8212; pycraf v1.0.2dev346</title>
+    <title>pycraf.antenna.ras &#8212; pycraf v1.0.2dev350</title>
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -50,7 +50,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v1.0.2dev346</a>
+	<a href="../../../index.html">pycraf v1.0.2dev350</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -77,6 +77,7 @@
 <span class="c1"># from functools import partial, lru_cache</span>
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">.cyantenna</span> <span class="kn">import</span> <span class="n">ras_pattern_cython</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">utils</span>
 
@@ -141,47 +142,51 @@
     <span class="n">phi_m</span> <span class="o">=</span> <span class="mf">20.</span> <span class="o">/</span> <span class="n">d_wlen</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gmax</span> <span class="o">-</span> <span class="n">g1</span><span class="p">)</span>
     <span class="n">phi_r</span> <span class="o">=</span> <span class="mf">15.85</span> <span class="o">*</span> <span class="n">d_wlen</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.6</span>
 
-    <span class="c1"># note automatic broadcasting should be possible</span>
-    <span class="c1"># _tmp = np.broadcast(phi, _diam, _wlen)</span>
-    <span class="p">(</span>
-        <span class="n">phi</span><span class="p">,</span> <span class="n">d_wlen</span><span class="p">,</span> <span class="n">gmax</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">phi_m</span><span class="p">,</span> <span class="n">phi_r</span><span class="p">,</span>
-        <span class="p">)</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span>
-        <span class="n">phi</span><span class="p">,</span> <span class="n">d_wlen</span><span class="p">,</span> <span class="n">gmax</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">phi_m</span><span class="p">,</span> <span class="n">phi_r</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="n">gain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="c1"># # note automatic broadcasting should be possible</span>
+    <span class="c1"># # _tmp = np.broadcast(phi, _diam, _wlen)</span>
+    <span class="c1"># (</span>
+    <span class="c1">#     phi, d_wlen, gmax, g1, phi_m, phi_r,</span>
+    <span class="c1">#     ) = np.broadcast_arrays(</span>
+    <span class="c1">#     phi, d_wlen, gmax, g1, phi_m, phi_r,</span>
+    <span class="c1">#     )</span>
+    <span class="c1"># gain = np.zeros(phi.shape, np.float64)</span>
 
-    <span class="c1"># case 1:</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="n">phi_m</span><span class="p">)</span>
-    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">gmax</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">-</span> <span class="mf">2.5e-3</span> <span class="o">*</span> <span class="p">(</span><span class="n">d_wlen</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">*</span> <span class="n">phi</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="c1"># # case 1:</span>
+    <span class="c1"># mask = (0 &lt;= phi) &amp; (phi &lt; phi_m)</span>
+    <span class="c1"># gain[mask] = gmax[mask] - 2.5e-3 * (d_wlen[mask] * phi[mask]) ** 2</span>
 
-    <span class="c1"># case 2:</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">phi_m</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="n">phi_r</span><span class="p">)</span>
-    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">g1</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="c1"># # case 2:</span>
+    <span class="c1"># mask = (phi_m &lt;= phi) &amp; (phi &lt; phi_r)</span>
+    <span class="c1"># gain[mask] = g1[mask]</span>
 
-    <span class="c1"># case 3:</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">phi_r</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="mf">10.</span><span class="p">)</span>
-    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mf">29.</span> <span class="o">-</span> <span class="mf">25.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+    <span class="c1"># # case 3:</span>
+    <span class="c1"># mask = (phi_r &lt;= phi) &amp; (phi &lt; 10.)</span>
+    <span class="c1"># gain[mask] = 29. - 25. * np.log10(phi[mask])</span>
 
-    <span class="c1"># case 4:</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="mf">34.1</span><span class="p">)</span>
-    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mf">34.</span> <span class="o">-</span> <span class="mf">30.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+    <span class="c1"># # case 4:</span>
+    <span class="c1"># mask = (10. &lt;= phi) &amp; (phi &lt; 34.1)</span>
+    <span class="c1"># gain[mask] = 34. - 30. * np.log10(phi[mask])</span>
 
-    <span class="c1"># case 5:</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="mf">34.1</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="mf">80.</span><span class="p">)</span>
-    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">12.</span>
+    <span class="c1"># # case 5:</span>
+    <span class="c1"># mask = (34.1 &lt;= phi) &amp; (phi &lt; 80.)</span>
+    <span class="c1"># gain[mask] = -12.</span>
 
-    <span class="c1"># case 6:</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="mf">80.</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="mf">120.</span><span class="p">)</span>
-    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">7.</span>
+    <span class="c1"># # case 6:</span>
+    <span class="c1"># mask = (80. &lt;= phi) &amp; (phi &lt; 120.)</span>
+    <span class="c1"># gain[mask] = -7.</span>
 
-    <span class="c1"># case 7:</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="mf">120.</span> <span class="o">&lt;=</span> <span class="n">phi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;=</span> <span class="mf">180.</span><span class="p">)</span>
-    <span class="n">gain</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">12.</span>
+    <span class="c1"># # case 7:</span>
+    <span class="c1"># mask = (120. &lt;= phi) &amp; (phi &lt;= 180.)</span>
+    <span class="c1"># gain[mask] = -12.</span>
+
+    <span class="n">gain</span> <span class="o">=</span> <span class="n">ras_pattern_cython</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">d_wlen</span><span class="p">,</span> <span class="n">gmax</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">phi_m</span><span class="p">,</span> <span class="n">phi_r</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">do_bessel</span><span class="p">:</span>
 
         <span class="c1"># why not the spherical bessel function of first kind (spherical_jn)?</span>
         <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">j1</span>
+
+        <span class="n">phi</span><span class="p">,</span> <span class="n">d_wlen</span><span class="p">,</span> <span class="n">gmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">d_wlen</span><span class="p">,</span> <span class="n">gmax</span><span class="p">)</span>
 
         <span class="n">phi_0</span> <span class="o">=</span> <span class="mf">69.88</span> <span class="o">/</span> <span class="n">d_wlen</span>
         <span class="n">x_pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">d_wlen</span> <span class="o">*</span> <span class="n">phi</span><span class="p">)</span>
@@ -223,7 +228,7 @@
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.1. &nbsp;
-    Last built 15 Apr 2020. <br/>
+    Last built 16 Apr 2020. <br/>
   </p>
 </footer>
   </body>
