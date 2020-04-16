@@ -1,5 +1,29 @@
-1.0.2 (unreleased)
+1.0.2 (2020-04-16)
 =======================
+
+New Features
+------------
+pycraf.antenna, pycraf.geometry
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Several functions in the `antenna` and `geometry` sub-packages were
+  implemented in Cython and parallelized using OpenMP. This will greatly
+  speed-up Monte-Carlo simulations (e.g., EPFD, which is planned for the next
+  release), where lots of antenna-gain values and boresight angles need to be
+  computed. [#22]
+
+
+Bugfixes
+--------
+- `antenna.imt2020_composite_pattern` was using float32 precision, only, for
+  the real and imaginary part (in the complex valued internal calculation).
+  This has been fixed and now uses the `complex128` data type. [#26]
+- `antenna.imt` was using wrong units (dimension-less instead of dB) for
+  front-to-back ratios. Note, that all examples still have the same result,
+  as the input parameters were also chosen wrongly. [#25]
+- A more detailed error message is now raised, if `astropy.units` is already
+  imported - which is not allowed with `astropy` v4 anymore. Please see Issue
+  [#24]
+
 
 1.0.1 (2020-01-08)
 =======================
@@ -23,7 +47,7 @@ pycraf-gui
   maps. At the moment, it doesn't come with an amazing amount of features,
   but it is foreseen to add more in the future. [#15]
 
-pycraf.amt
+pycraf.atm
 ^^^^^^^^^^^^^^
 - Complete overhaul of the `pycraf.atm` sub-package [#11]. Now
   - it does ray-tracing through atmosphere correctly,
