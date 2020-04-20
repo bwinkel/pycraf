@@ -3,7 +3,7 @@ pycraf
 ******
 
 - *Version:* 1.0.2
-- *Author:* Benjamin Winkel
+- *Author:* Benjamin Winkel & Marta Bautista
 - *User manual:* `stable <https://bwinkel.github.io/pycraf/>`__ |
   `developer <https://bwinkel.github.io/pycraf/latest/>`__
 
