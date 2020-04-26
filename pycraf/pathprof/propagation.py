@@ -1552,8 +1552,8 @@ def losses_complete(
 
         import numpy as np
         import matplotlib.pyplot as plt
-        from astropy import units as u
         from pycraf import pathprof
+        from astropy import units as u
 
         frequency = np.logspace(-1, 2, 200) * u.GHz
         temperature = 290. * u.K

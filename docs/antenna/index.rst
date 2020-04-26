@@ -28,9 +28,9 @@ Below, you can find a typical use case:
 
     import numpy as np
     import matplotlib.pyplot as plt
-    from astropy import units as u
     import pycraf.conversions as cnv
     from pycraf.antenna import *
+    from astropy import units as u
 
     azims = np.arange(-180, 180.1, 0.5) * u.deg
     elevs = np.arange(-90, 90.1, 0.5) * u.deg
@@ -92,9 +92,9 @@ Both are easy to use. For example, plotting the patterns for base stations
 
     import numpy as np
     import matplotlib.pyplot as plt
-    from astropy import units as u
     import pycraf.conversions as cnv
     from pycraf.antenna import *
+    from astropy import units as u
 
     azims = np.arange(-180, 180.1, 0.5) * u.deg
     elevs = np.arange(-90, 90.1, 0.5) * u.deg
@@ -185,8 +185,8 @@ As an example, we plot the pattern:
 
     import numpy as np
     import matplotlib.pyplot as plt
-    import astropy.units as u
     from pycraf.antenna import ras_pattern
+    import astropy.units as u
 
 
     phi = np.linspace(0, 20, 1000) * u.deg
@@ -219,8 +219,8 @@ Very similar to the RAS pattern, the fixed link pattern(s) work as follows:
 
     import numpy as np
     import matplotlib.pyplot as plt
-    from astropy import units as u
     from pycraf.antenna import *
+    from astropy import units as u
 
     phi = np.linspace(0, 21, 1000) * u.deg
     diam = np.array([1, 2, 10])[:, np.newaxis] * u.m

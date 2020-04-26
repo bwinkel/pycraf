@@ -86,8 +86,8 @@ class RangedQuantityInput(object):
         behaves like `~astropy.units.quantity_input`, but adds
         range checking::
 
-            >>> import astropy.units as u
             >>> from pycraf.utils import ranged_quantity_input
+            >>> import astropy.units as u
 
             >>> @ranged_quantity_input(a=(0, 1, u.m))
             ... def func(a):

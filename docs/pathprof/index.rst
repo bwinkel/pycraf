@@ -73,8 +73,8 @@ Let's start with querying `SRTM data` and plot a height profile.
     :include-source:
 
     import matplotlib.pyplot as plt
-    from astropy import units as u
     from pycraf import pathprof
+    from astropy import units as u
 
     # allow download of missing SRTM data:
     pathprof.SrtmConf.set(download='missing')
@@ -133,8 +133,8 @@ it is usually sufficient to use that. The individual functions are only
 provided for reasons of computing speed, if one is really only interested in
 one component::
 
-    >>> from astropy import units as u
     >>> from pycraf import pathprof, conversions as cnv
+    >>> from astropy import units as u
 
     >>> pathprof.SrtmConf.set(download='missing')  # doctest: +IGNORE_OUTPUT
 
@@ -238,8 +238,8 @@ to produce terrain maps of a region:
     :include-source:
 
     import matplotlib.pyplot as plt
-    from astropy import units as u
     from pycraf import pathprof
+    from astropy import units as u
 
     pathprof.SrtmConf.set(download='missing')
 
@@ -321,8 +321,8 @@ it's different:
 
     import numpy as np
     import matplotlib.pyplot as plt
-    from astropy import units as u
     from pycraf import pathprof, geometry
+    from astropy import units as u
 
     lon, lat = 0 * u.deg, 70 * u.deg
     bearings = np.linspace(-180, 180, 721) * u.deg
@@ -370,8 +370,8 @@ Therefore, we added a faster alternative, `~pycraf.pathprof.atten_map_fast`. The
 .. plot::
    :include-source:
 
-    from astropy import units as u
     from pycraf import pathprof, conversions as cnv
+    from astropy import units as u
 
 
     def plot_atten_map(lons, lats, total_atten):
@@ -473,8 +473,8 @@ The following shows a typical use case (which is also contained in the
 
     import numpy as np
     import matplotlib.pyplot as plt
-    from astropy import units as u
     from pycraf import pathprof, conversions as cnv
+    from astropy import units as u
 
 
     lon_tx, lat_tx = 6.8836 * u.deg, 50.525 * u.deg

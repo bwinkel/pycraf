@@ -30,8 +30,8 @@ The function `~pycraf.protection.ra769_limits` returns a
 `~astropy.table.QTable` object that resembles (Table 1 to 3) from
 `ITU-R Rec. RA.769 <https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en>`_::
 
-    >>> import astropy.units as u
     >>> from pycraf import protection
+    >>> import astropy.units as u
 
     >>> protection.ra769_limits(mode='continuum')
     <QTable length=21>

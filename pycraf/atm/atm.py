@@ -680,9 +680,9 @@ def profile_standard(height):
     The return value is actually a `~collections.namedtuple`, so it is
     possible to do the following::
 
-        >>> from astropy import units as u
         >>> import numpy as np
         >>> from pycraf import atm
+        >>> from astropy import units as u
 
         >>> heights = np.linspace(0, 80, 9) * u.km
         >>> aprof = atm.profile_standard(heights)
@@ -845,9 +845,9 @@ def profile_lowlat(height):
     The return value is actually a `~collections.namedtuple`, so it is
     possible to do the following::
 
-        >>> from astropy import units as u
         >>> import numpy as np
         >>> from pycraf import atm
+        >>> from astropy import units as u
 
         >>> heights = np.linspace(0, 80, 9) * u.km
         >>> aprof = atm.profile_lowlat(heights)
@@ -945,9 +945,9 @@ def profile_midlat_summer(height):
     The return value is actually a `~collections.namedtuple`, so it is
     possible to do the following::
 
-        >>> from astropy import units as u
         >>> import numpy as np
         >>> from pycraf import atm
+        >>> from astropy import units as u
 
         >>> heights = np.linspace(0, 80, 9) * u.km
         >>> aprof = atm.profile_midlat_summer(heights)
@@ -1043,9 +1043,9 @@ def profile_midlat_winter(height):
     The return value is actually a `~collections.namedtuple`, so it is
     possible to do the following::
 
-        >>> from astropy import units as u
         >>> import numpy as np
         >>> from pycraf import atm
+        >>> from astropy import units as u
 
         >>> heights = np.linspace(0, 80, 9) * u.km
         >>> aprof = atm.profile_midlat_winter(heights)
@@ -1141,9 +1141,9 @@ def profile_highlat_summer(height):
     The return value is actually a `~collections.namedtuple`, so it is
     possible to do the following::
 
-        >>> from astropy import units as u
         >>> import numpy as np
         >>> from pycraf import atm
+        >>> from astropy import units as u
 
         >>> heights = np.linspace(0, 80, 9) * u.km
         >>> aprof = atm.profile_highlat_summer(heights)
@@ -1239,9 +1239,9 @@ def profile_highlat_winter(height):
     The return value is actually a `~collections.namedtuple`, so it is
     possible to do the following::
 
-        >>> from astropy import units as u
         >>> import numpy as np
         >>> from pycraf import atm
+        >>> from astropy import units as u
 
         >>> heights = np.linspace(0, 80, 9) * u.km
         >>> aprof = atm.profile_highlat_winter(heights)
@@ -1758,9 +1758,9 @@ def atm_layers(freq_grid, profile_func, heights=None):
     quantities are calculated at the mid-points of the layers and only up
     to the maximal height of the atmospheric profile function, i.e.::
 
-        >>> from astropy import units as u
         >>> import numpy as np
         >>> from pycraf import atm
+        >>> from astropy import units as u
         >>>
         >>> atm_layers_cache = atm.atm_layers(1 * u.GHz, atm.profile_standard)
         >>> len(atm_layers_cache['heights'])

@@ -35,8 +35,8 @@ class HistogramSampler(object):
     A trivial one-dimensional use case::
 
         >>> import numpy as np
-        >>> from astropy.utils.misc import NumpyRNGContext
         >>> from pycraf import mc
+        >>> from astropy.utils.misc import NumpyRNGContext
 
         >>> with NumpyRNGContext(1):
         ...     x = np.random.normal(0, 1, 100)
