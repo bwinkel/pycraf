@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Geographical frames (pycraf.geospatial) &#8212; pycraf v1.0.3dev354</title>
+    <title>Geographical frames (pycraf.geospatial) &#8212; pycraf v1.0.3dev356</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -63,7 +63,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.3dev354</a>
+	<a href="../index.html">pycraf v1.0.3dev356</a>
 	 &#187;
       </li>
       
@@ -108,8 +108,8 @@ the ETRS89 frame is defined with the following:</p>
 <h2>Using <a class="reference internal" href="#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code></a><a class="headerlink" href="#using-pycraf-geospatial" title="Permalink to this headline">¶</a></h2>
 <p>The provided functions are just a thin wrapper around <code class="xref py py-obj docutils literal notranslate"><span class="pre">pyproj</span></code>, mostly
 improving convenience for the user:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycraf.geospatial</span> <span class="k">as</span> <span class="nn">geo</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycraf.geospatial</span> <span class="k">as</span> <span class="nn">geo</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># coordinates of the 100-m telescope at Effelsberg/Germany</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rt_lon</span><span class="p">,</span> <span class="n">rt_lat</span> <span class="o">=</span> <span class="mf">6.88361</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.52483</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
@@ -179,8 +179,8 @@ are historical or of regional interest, only. Some of these don’t work
 with units of Meters, but feet, etc. Per default, <code class="xref py py-obj docutils literal notranslate"><span class="pre">pyproj</span></code> (versions prior
 to 2.0) converts all world (=physical) units to Meters (input and/or
 output). One can specifically ask for the original units by doing:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycraf.geospatial</span> <span class="k">as</span> <span class="nn">geo</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycraf.geospatial</span> <span class="k">as</span> <span class="nn">geo</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyproj</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">proj_wgs84</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="s1">&#39;+init=epsg:4326&#39;</span><span class="p">)</span>
@@ -356,7 +356,7 @@ around the <a class="reference external" href="http://proj4.org/">proj.4</a> sof
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.2. &nbsp;
-    Last built 20 Apr 2020. <br/>
+    Last built 26 Apr 2020. <br/>
   </p>
 </footer>
   </body>

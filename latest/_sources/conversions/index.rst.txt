@@ -22,8 +22,8 @@ Getting Started
 
 Using the `~pycraf.conversions` package is really simple::
 
-    >>> from astropy import units as u
     >>> from pycraf import conversions as cnv
+    >>> from astropy import units as u
 
     >>> A_eff = 10 * u.m ** 2  # effective area
     >>> A_geom = 20 * u.m ** 2  # geometric area
@@ -172,8 +172,8 @@ The following quantities are of interest in compatibility studies:
 
 A few examples::
 
-    >>> from astropy import units as u
     >>> from pycraf import conversions as cnv
+    >>> from astropy import units as u
 
     >>> frequency = 10 * u.GHz
     >>> S = 10 * u.Jy * u.MHz

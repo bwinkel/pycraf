@@ -1,8 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from astropy import units as u
 import pycraf.conversions as cnv
 from pycraf.antenna import *
+from astropy import units as u
 
 azims = np.arange(-180, 180.1, 0.5) * u.deg
 elevs = np.arange(-90, 90.1, 0.5) * u.deg

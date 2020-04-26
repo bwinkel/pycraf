@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>pycraf.atm.atm &#8212; pycraf v1.0.3dev354</title>
+    <title>pycraf.atm.atm &#8212; pycraf v1.0.3dev356</title>
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -50,7 +50,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v1.0.3dev354</a>
+	<a href="../../../index.html">pycraf v1.0.3dev356</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -749,9 +749,9 @@
 <span class="sd">    The return value is actually a `~collections.namedtuple`, so it is</span>
 <span class="sd">    possible to do the following::</span>
 
-<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">        &gt;&gt;&gt; from pycraf import atm</span>
+<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
 
 <span class="sd">        &gt;&gt;&gt; heights = np.linspace(0, 80, 9) * u.km</span>
 <span class="sd">        &gt;&gt;&gt; aprof = atm.profile_standard(heights)</span>
@@ -914,9 +914,9 @@
 <span class="sd">    The return value is actually a `~collections.namedtuple`, so it is</span>
 <span class="sd">    possible to do the following::</span>
 
-<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">        &gt;&gt;&gt; from pycraf import atm</span>
+<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
 
 <span class="sd">        &gt;&gt;&gt; heights = np.linspace(0, 80, 9) * u.km</span>
 <span class="sd">        &gt;&gt;&gt; aprof = atm.profile_lowlat(heights)</span>
@@ -1014,9 +1014,9 @@
 <span class="sd">    The return value is actually a `~collections.namedtuple`, so it is</span>
 <span class="sd">    possible to do the following::</span>
 
-<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">        &gt;&gt;&gt; from pycraf import atm</span>
+<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
 
 <span class="sd">        &gt;&gt;&gt; heights = np.linspace(0, 80, 9) * u.km</span>
 <span class="sd">        &gt;&gt;&gt; aprof = atm.profile_midlat_summer(heights)</span>
@@ -1112,9 +1112,9 @@
 <span class="sd">    The return value is actually a `~collections.namedtuple`, so it is</span>
 <span class="sd">    possible to do the following::</span>
 
-<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">        &gt;&gt;&gt; from pycraf import atm</span>
+<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
 
 <span class="sd">        &gt;&gt;&gt; heights = np.linspace(0, 80, 9) * u.km</span>
 <span class="sd">        &gt;&gt;&gt; aprof = atm.profile_midlat_winter(heights)</span>
@@ -1210,9 +1210,9 @@
 <span class="sd">    The return value is actually a `~collections.namedtuple`, so it is</span>
 <span class="sd">    possible to do the following::</span>
 
-<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">        &gt;&gt;&gt; from pycraf import atm</span>
+<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
 
 <span class="sd">        &gt;&gt;&gt; heights = np.linspace(0, 80, 9) * u.km</span>
 <span class="sd">        &gt;&gt;&gt; aprof = atm.profile_highlat_summer(heights)</span>
@@ -1308,9 +1308,9 @@
 <span class="sd">    The return value is actually a `~collections.namedtuple`, so it is</span>
 <span class="sd">    possible to do the following::</span>
 
-<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">        &gt;&gt;&gt; from pycraf import atm</span>
+<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
 
 <span class="sd">        &gt;&gt;&gt; heights = np.linspace(0, 80, 9) * u.km</span>
 <span class="sd">        &gt;&gt;&gt; aprof = atm.profile_highlat_winter(heights)</span>
@@ -1827,9 +1827,9 @@
 <span class="sd">    quantities are calculated at the mid-points of the layers and only up</span>
 <span class="sd">    to the maximal height of the atmospheric profile function, i.e.::</span>
 
-<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">        &gt;&gt;&gt; from pycraf import atm</span>
+<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
 <span class="sd">        &gt;&gt;&gt;</span>
 <span class="sd">        &gt;&gt;&gt; atm_layers_cache = atm.atm_layers(1 * u.GHz, atm.profile_standard)</span>
 <span class="sd">        &gt;&gt;&gt; len(atm_layers_cache[&#39;heights&#39;])</span>
@@ -2838,7 +2838,7 @@
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.2. &nbsp;
-    Last built 20 Apr 2020. <br/>
+    Last built 26 Apr 2020. <br/>
   </p>
 </footer>
   </body>

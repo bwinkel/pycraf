@@ -23,8 +23,8 @@ One can convert between cartesian and spherical coordinates using the two
 functions `~pycraf.geometry.cart_to_sphere` and
 `~pycraf.geometry.sphere_to_cart`::
 
-    >>> from astropy import units as u
     >>> from pycraf import geometry
+    >>> from astropy import units as u
     >>> import numpy as np
 
     >>> r, az, el = 1 * u.m, 0 * u.deg, 90 * u.deg  # z-axis

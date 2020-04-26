@@ -66,9 +66,9 @@ Let's start by having a look at the atmospheric standard height profile:
 
     >>> import numpy as np
     >>> import matplotlib.pyplot as plt
-    >>> from astropy import units as u
     >>> from pycraf import atm
     >>> from pycraf import conversions as cnv
+    >>> from astropy import units as u
     >>>
     >>> # define height grid
     >>> height_grid = np.arange(0, 85, 0.1) * u.km

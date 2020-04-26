@@ -1,5 +1,5 @@
-from astropy import units as u
 from pycraf import pathprof, conversions as cnv
+from astropy import units as u
 
 
 def plot_atten_map(lons, lats, total_atten):

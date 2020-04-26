@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from astropy import units as u
 from pycraf.antenna import *
+from astropy import units as u
 
 phi = np.linspace(0, 21, 1000) * u.deg
 diam = np.array([1, 2, 10])[:, np.newaxis] * u.m

@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-from astropy import units as u
 from pycraf import pathprof
+from astropy import units as u
 
 pathprof.SrtmConf.set(download='missing')
 

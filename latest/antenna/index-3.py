@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import astropy.units as u
 from pycraf.antenna import ras_pattern
+import astropy.units as u
 
 
 phi = np.linspace(0, 20, 1000) * u.deg

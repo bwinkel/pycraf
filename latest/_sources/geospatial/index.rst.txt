@@ -42,8 +42,8 @@ Using `pycraf.geospatial`
 The provided functions are just a thin wrapper around `pyproj`, mostly
 improving convenience for the user::
 
-    >>> import astropy.units as u
     >>> import pycraf.geospatial as geo
+    >>> import astropy.units as u
 
     >>> # coordinates of the 100-m telescope at Effelsberg/Germany
     >>> rt_lon, rt_lat = 6.88361 * u.deg, 50.52483 * u.deg
@@ -118,8 +118,8 @@ with units of Meters, but feet, etc. Per default, `pyproj` (versions prior
 to 2.0) converts all world (=physical) units to Meters (input and/or
 output). One can specifically ask for the original units by doing::
 
-    >>> import astropy.units as u
     >>> import pycraf.geospatial as geo
+    >>> import astropy.units as u
     >>> import pyproj
 
     >>> proj_wgs84 = pyproj.Proj('+init=epsg:4326')

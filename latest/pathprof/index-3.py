@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from astropy import units as u
 from pycraf import pathprof, geometry
+from astropy import units as u
 
 lon, lat = 0 * u.deg, 70 * u.deg
 bearings = np.linspace(-180, 180, 721) * u.deg

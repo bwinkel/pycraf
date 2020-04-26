@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from astropy import units as u
 from pycraf import pathprof, conversions as cnv
+from astropy import units as u
 
 
 lon_tx, lat_tx = 6.8836 * u.deg, 50.525 * u.deg
