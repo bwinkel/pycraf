@@ -31,7 +31,7 @@ np.import_array()
 
 
 __all__ = [
-    'CLUTTER', 'CLUTTER_DATA',
+    'CLUTTER', 'CLUTTER_NAMES', 'CLUTTER_DATA',
     'PARAMETERS_BASIC', 'PARAMETERS_V14', 'PARAMETERS_V16',
     'set_num_threads',
     ]
@@ -54,6 +54,21 @@ cpdef enum CLUTTER:
     DENSE_URBAN = 8
     HIGH_URBAN = 9
     INDUSTRIAL_ZONE = 10
+
+CLUTTER_NAMES = [
+    'UNKNOWN',
+    'SPARSE',
+    'VILLAGE',
+    'DECIDIOUS_TREES',
+    'CONIFEROUS_TREES',
+    'TROPICAL_FOREST',
+    'SUBURBAN',
+    'DENSE_SUBURBAN',
+    'URBAN',
+    'DENSE_URBAN',
+    'HIGH_URBAN',
+    'INDUSTRIAL_ZONE',
+    ]
 
 CLUTTER_DATA = np.array(
     [
