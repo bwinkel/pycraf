@@ -15,7 +15,10 @@ from .. import utils
 
 
 __all__ = [
-    'CORINE_TO_P452_CLASSES', 'P452_CLUTTER_COLORS',
+    'CORINE_TO_P452_CLASSES', 'IGBP_TO_P452_CLASSES', 'P452_CLUTTER_COLORS',
+    'landcover_to_p452_clutter_zones',
+    'wgs84_to_geotiff_pixels',
+    'regrid_from_geotiff',
     ]
 
 
@@ -25,6 +28,15 @@ _CORINE_TO_P452_CLASSES_FILE = get_pkg_data_filename(
 CORINE_TO_P452_CLASSES = dict(np.genfromtxt(
     _CORINE_TO_P452_CLASSES_FILE,
     dtype=np.dtype([('CorineID', np.uint16), ('ClutterName', np.str, 100)]),
+    delimiter=',',
+    ))
+
+_IGBP_TO_P452_CLASSES_FILE = get_pkg_data_filename(
+    'data/igbp_to_p452_classes.txt'
+    )
+IGBP_TO_P452_CLASSES = dict(np.genfromtxt(
+    _IGBP_TO_P452_CLASSES_FILE,
+    dtype=np.dtype([('IGBP_ID', np.uint8), ('ClutterName', np.str, 100)]),
     delimiter=',',
     ))
 
@@ -44,78 +56,114 @@ P452_CLUTTER_COLORS = {
     }
 
 
-def corine_to_p452_clutter_zones(corine_map):
+def landcover_to_p452_clutter_zones(landcover_map, conversion_table):
     '''
-    Interpolated SRTM terrain data extracted from ".hgt" files.
+    Convert a map of landcover class IDs to P.452 clutter types.
+
+    Two pre-defined mappings (conversion tables) are provided in
+    `~pycraf.pathprof`, one for the Corine landcover survey (by the Copernicus
+    mission) that is a high-resolution database for Europe, and one for IGBP
+    class IDs, which are used e.g., by  the Terra and Aqua combined Moderate
+    Resolution Imaging Spectroradiometer, MODIS, which is available for
+    several years. One version of that data, the "MOD12C1"
+    (Majority_Land_Cover_Type_1) map is a (rather low-resolution)
+    version for the full Earth.
+
+    Be careful, some data files seem to contain zero-indexed IGBP IDs! One
+    may need to increase the input map values by One in such cases.
 
     Parameters
     ----------
-    corine_map : 2D `~numpy.ndarray` of int16
+    landcover_map : 2D `~numpy.ndarray` (usually integer type)
         Map of land cover types (e.g. from Corine land cover survey). Data
-        type must be `~numpy.int16` and must contain Corine land cover class
-        IDs (see Notes below).
+        type will usually be some Integer type and must contain land cover
+        class IDs (see e.g. Notes below).
+    conversion_table : `dict`
+        A dictionary with a mapping (conversion) from the land cover ID to
+        the P.452 clutter zone type. Two mappings are pre-defined in
+        `~pycraf.pathprof`, the `~pycraf.pathprof.CORINE_TO_P452_CLASSES` and
+        the `~pycraf.pathprof.IGBP_TO_P452_CLASSES`.
 
     Returns
     -------
     p452_clutter_zones_map : 2D `~numpy.ndarray` of int8
-        Map of P.452 clutter zone types derived from the Corine class IDs.
-        The map (dictionary), which is used for translation is `pycraf.pathprof.CORINE_TO_P452_CLASSES`.
+        Map of P.452 clutter zone types derived from the provided dictionary
+        with the landcover class IDs.
 
     Notes
     -----
     - Corine land cover classes:
 
-      111 Continuous urban fabric
-      112 Discontinuous urban fabric
-      121 Industrial or commercial units
-      122 Road and rail networks and associated land
-      123 Port areas
-      124 Airports
-      131 Mineral extraction sites
-      132 Dump sites
-      133 Construction sites
-      141 Green urban areas
-      142 Sport and leisure facilities
-      211 Non-irrigated arable land
-      212 Permanently irrigated land
-      213 Rice fields
-      221 Vineyards
-      222 Fruit trees and berry plantations
-      223 Olive groves
-      231 Pastures
-      241 Annual crops associated with permanent crops
-      242 Complex cultivation patterns
-      243 Land principally occupied by agriculture with significant areas
-          of natural vegetation
-      244 Agro-forestry areas
-      311 Broad-leaved forest
-      312 Coniferous forest
-      313 Mixed forest
-      321 Natural grasslands
-      322 Moors and heathland
-      323 Sclerophyllous vegetation
-      324 Transitional woodland-shrub
-      331 Beaches dunes sands
-      332 Bare rocks
-      333 Sparsely vegetated areas
-      334 Burnt areas
-      335 Glaciers and perpetual snow
-      411 Inland marshes
-      412 Peat bogs
-      421 Salt marshes
-      422 Salines
-      423 Intertidal flats
-      511 Water courses
-      512 Water bodies
-      521 Coastal lagoons
-      522 Estuaries
-      523 Sea and ocean
-      999 NODA
+      | 111 Continuous urban fabric
+      | 112 Discontinuous urban fabric
+      | 121 Industrial or commercial units
+      | 122 Road and rail networks and associated land
+      | 123 Port areas
+      | 124 Airports
+      | 131 Mineral extraction sites
+      | 132 Dump sites
+      | 133 Construction sites
+      | 141 Green urban areas
+      | 142 Sport and leisure facilities
+      | 211 Non-irrigated arable land
+      | 212 Permanently irrigated land
+      | 213 Rice fields
+      | 221 Vineyards
+      | 222 Fruit trees and berry plantations
+      | 223 Olive groves
+      | 231 Pastures
+      | 241 Annual crops associated with permanent crops
+      | 242 Complex cultivation patterns
+      | 243 Agricultural land with significant areas of natural vegetation
+      | 244 Agro-forestry areas
+      | 311 Broad-leaved forest
+      | 312 Coniferous forest
+      | 313 Mixed forest
+      | 321 Natural grasslands
+      | 322 Moors and heathland
+      | 323 Sclerophyllous vegetation
+      | 324 Transitional woodland-shrub
+      | 331 Beaches dunes sands
+      | 332 Bare rocks
+      | 333 Sparsely vegetated areas
+      | 334 Burnt areas
+      | 335 Glaciers and perpetual snow
+      | 411 Inland marshes
+      | 412 Peat bogs
+      | 421 Salt marshes
+      | 422 Salines
+      | 423 Intertidal flats
+      | 511 Water courses
+      | 512 Water bodies
+      | 521 Coastal lagoons
+      | 522 Estuaries
+      | 523 Sea and ocean
+      | 999 NODATA
+
+    - IGBP land cover classes:
+
+      | 1  Evergreen needleleaf forests
+      | 2  Evergreen broadleaf forests
+      | 3  Deciduous needleleaf forests
+      | 4  Deciduous broadleaf forests
+      | 5  Mixed forests
+      | 6  Closed shrublands
+      | 7  Open shrublands
+      | 8  Woody savannas
+      | 9  Savannas
+      | 10 Grasslands
+      | 11 Permanent wetlands
+      | 12 Croplands
+      | 13 Urban and built-up lands
+      | 14 Cropland/natural vegetation mosaics
+      | 15 Snow and ice
+      | 16 Barren
+      | 17 Water bodies
     '''
 
-    clutter_map = np.full(corine_map.shape, -1, dtype=np.int8)
-    for cor_id, cl_name in CORINE_TO_P452_CLASSES.items():
-        mask = corine_map == cor_id
+    clutter_map = np.full(landcover_map.shape, -1, dtype=np.int8)
+    for cor_id, cl_name in conversion_table.items():
+        mask = landcover_map == cor_id
         clutter_map[mask] = getattr(cyprop.CLUTTER, cl_name)
 
     return clutter_map
@@ -166,10 +214,10 @@ def wgs84_to_geotiff_pixels(geotiff, lons, lats):
     lons, lats = np.broadcast_arrays(
         lons, lats
         ) * u.deg
-    wgs84_to_corine_world = geospatial.transform_factory(
+    wgs84_to_crs_world = geospatial.transform_factory(
         geospatial.EPSG.WGS84, geotiff.crs.to_string()
         )
-    wx, wy = wgs84_to_corine_world(lons, lats)
+    wx, wy = wgs84_to_crs_world(lons, lats)
     px, py = (~geotiff.transform) * np.array([
         wx.value.flatten(), wy.value.flatten()
         ])
@@ -212,6 +260,12 @@ def regrid_from_geotiff(geotiff, lons, lats, band=1):
         latitude positions. If the input GeoTiff has more than one band and
         you need to regrid several of the bands, please run the function
         repeatedly, specifying the band parameter.
+
+    Note
+    ----
+    If requested geo positions are all to close to the edge of the geotiff
+    file, the interpolation can fail (`~scipy.interpolate` will raise a
+    ValueError in such cases).
     '''
 
     try:
@@ -230,12 +284,17 @@ def regrid_from_geotiff(geotiff, lons, lats, band=1):
 
     xmin, xmax = np.int32([geo_x.min(), geo_x.max()])
     ymin, ymax = np.int32([geo_y.min(), geo_y.max()])
-    col_off, row_off = xmin - 1, ymin - 1
-    col_width, row_width = xmax - xmin + 2, ymax - ymin + 2
+    # slightly enlarge box to avoid edge effects
+    col_off, row_off = xmin - 5, ymin - 5
+    col_width, row_width = xmax - xmin + 10, ymax - ymin + 10
     window = rio.windows.Window(col_off, row_off, col_width, row_width)
 
     geo_data = geotiff.read(band, window=window)
 
+    # are the world coordinates associated with pixel centers?
+    # is there a shift about half a pixel necessary?
+    # --> according to https://gdal.org/user/raster_data_model.html#affine-geotransform
+    # the (0, 0) is the top left corner of the top left pixel
     geo_interp = RegularGridInterpolator(
         (np.arange(col_width), np.arange(row_width)),
         geo_data.T,
@@ -244,4 +303,4 @@ def regrid_from_geotiff(geotiff, lons, lats, band=1):
 
     geo_data_regridded = geo_interp((geo_x - col_off, geo_y - row_off))
 
-    return geo_data_regridded
+    return geo_data_regridded.astype(geo_data.dtype, copy=False)
