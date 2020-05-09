@@ -309,14 +309,8 @@ def _create_transform(sys1, sys2, code_in='epsg', code_out='epsg'):
 
     if pyproj.__version__ >= '2.0':
 
-        try:
-            proj1 = pyproj.Proj(init=sys[0], preserve_units=False)
-        except pyproj.exceptions.CRSError:
-            proj1 = pyproj.Proj(sys[0], preserve_units=False)
-        try:
-            proj2 = pyproj.Proj(init=sys[1], preserve_units=False)
-        except pyproj.exceptions.CRSError:
-            proj2 = pyproj.Proj(sys[1], preserve_units=False)
+        proj1 = pyproj.Proj(sys[0], preserve_units=False)
+        proj2 = pyproj.Proj(sys[1], preserve_units=False)
 
         in_islatlon = proj1.crs.is_geographic
         out_islatlon = proj2.crs.is_geographic
@@ -333,10 +327,10 @@ def _create_transform(sys1, sys2, code_in='epsg', code_out='epsg'):
         out_islatlon = proj2.is_latlong()
         needs_3d = proj1.is_geocent() or proj2.is_geocent()
 
+    # see https://github.com/pyproj4/pyproj/issues/538
+    kwargs = {'always_xy': True} if pyproj.__version__ >= '2.2.0' else {}
     return partial(
-        pyproj.transform, proj1, proj2
-        # pyproj.Proj(proj1.definition_string()),  # this shouldn't be necessary
-        # pyproj.Proj(proj2.definition_string()),  # but pyproj>=2 needs it atm
+        pyproj.transform, proj1, proj2, **kwargs
         ), in_islatlon, out_islatlon, needs_3d
 
 
