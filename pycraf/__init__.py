@@ -29,27 +29,32 @@ if not _ASTROPY_SETUP_:
 
     # from .example_mod import *
 
-    import astropy
+    # pycraf should try to avoid working with the astropy.constants module
+    # as this introduced versioning in v4+; this can lead to serious
+    # import problems all over the place, which are extremely hard to
+    # debug; the code below solves *some* problems, but not all
 
-    if astropy.__version__ >= '4':
-        try:
-            astropy.physical_constants.set('astropyconst20')
-            astropy.astronomical_constants.set('astropyconst20')
-        except RuntimeError as e:
-            # import ipdb
-            # ipdb.set_trace()
-            if 'astropy.units is already imported' in e.args:
-                e.args = (
-                    'Please note that pycraf uses the astropy.constants '
-                    'from Astropy v2 for backwards compatibility. '
-                    'Starting from Astropy v4, a "ScienceState" is used '
-                    'to allow versioning of physical constants. For '
-                    'technical reasons, it is necessary to import the '
-                    'astropy.units sub-package *after* pycraf.'
-                    '(see https://github.com/bwinkel/pycraf/issues/24)',
-                    )
+    # import astropy
 
-                raise e
+    # if astropy.__version__ >= '4':
+    #     try:
+    #         astropy.physical_constants.set('astropyconst20')
+    #         astropy.astronomical_constants.set('astropyconst20')
+    #     except RuntimeError as e:
+    #         # import ipdb
+    #         # ipdb.set_trace()
+    #         if 'astropy.units is already imported' in e.args:
+    #             e.args = (
+    #                 'Please note that pycraf uses the astropy.constants '
+    #                 'from Astropy v2 for backwards compatibility. '
+    #                 'Starting from Astropy v4, a "ScienceState" is used '
+    #                 'to allow versioning of physical constants. For '
+    #                 'technical reasons, it is necessary to import the '
+    #                 'astropy.units sub-package *after* pycraf.'
+    #                 '(see https://github.com/bwinkel/pycraf/issues/24)',
+    #                 )
+
+    #             raise e
 
     from . import antenna
     from . import atm

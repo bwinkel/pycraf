@@ -9,7 +9,7 @@ import os
 import numpy as np
 from astropy import units as apu
 # from astropy.units import Quantity, UnitsError
-import astropy.constants as con
+# import astropy.constants as con
 from astropy.table import QTable, Table
 from astropy.utils.data import get_pkg_data_filename
 from .. import conversions as cnv
@@ -105,10 +105,10 @@ def ra769_calculate_entry(
             np.sqrt(integ_time * bandwidth)
             ).to(apu.mK)
 
-        _P_rms_nu = con.k_B * T_rms
+        _P_rms_nu = cnv.KB * T_rms
 
         _Plim = 10 * apu.percent * _P_rms_nu * bandwidth
-        _Slim = 4. * np.pi / con.c ** 2 * frequency ** 2 * _Plim
+        _Slim = 4. * np.pi / cnv.C ** 2 * frequency ** 2 * _Plim
 
         P_rms_nu = _P_rms_nu.to(
             apu.Watt / apu.Hz if scale == 'linear' else cnv.dB_W_Hz
@@ -150,8 +150,8 @@ def ra769_calculate_entry(
         # than 1% of the receiver noise power to prevent serious errors in
         # the measurement of the amplitude of the cosmic signals.
 
-        _Plim_nu = 1 * apu.percent * con.k_B * (T_rx + T_A)
-        _Slim_nu = 4. * np.pi / con.c ** 2 * frequency ** 2 * _Plim_nu
+        _Plim_nu = 1 * apu.percent * cnv.KB * (T_rx + T_A)
+        _Slim_nu = 4. * np.pi / cnv.C ** 2 * frequency ** 2 * _Plim_nu
 
         Slim_nu = _Slim_nu.to(
             apu.Jy if scale == 'linear' else cnv.dB_W_m2_Hz

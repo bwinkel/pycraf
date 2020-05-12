@@ -9,7 +9,7 @@ from __future__ import (
 import numpy as np
 from astropy import units as apu
 from astropy.units import Quantity, UnitsError
-import astropy.constants as con
+# import astropy.constants as con
 from .. import utils
 
 
@@ -41,7 +41,7 @@ __all__ = [
     't_a_from_prx_nu', 'prx_nu_from_t_a',
     't_a_from_powerflux_nu', 'powerflux_nu_from_t_a',
     'free_space_loss',
-    'Erx_unit', 'R0', 'efield_equivalency',
+    'Erx_unit', 'R0', 'MU0', 'EPS0', 'C', 'KB', 'efield_equivalency',
     ] + UNITS
 
 
@@ -98,15 +98,24 @@ def efield_equivalency():
 apu.add_enabled_equivalencies(efield_equivalency())
 
 # define some useful constants
+MU0_VALUE = 1.2566370614359173e-06
+MU0 = MU0_VALUE * apu.N / apu.A ** 2
+EPS0_VALUE = 8.854187817e-12
+EPS0 = EPS0_VALUE * apu.F / apu.m
+C_VALUE = 299792458.0
+C = C_VALUE * apu.m / apu.s
+KB_VALUE = 1.38064852e-23
+KB = KB_VALUE * apu.J / apu.K
+
 R0 = (
-    1. * (con.mu0 / con.eps0) ** 0.5
+    1. * (MU0 / EPS0) ** 0.5
     ).to(apu.Ohm)
 Erx_unit = (
     (1 * apu.W / 4. / np.pi * R0) ** 0.5 / (1 * apu.km)
     ).to(apu.uV / apu.m)
-C_VALUE = con.c.to(apu.m / apu.s).value
+# C_VALUE = con.c.to(apu.m / apu.s).value
 R0_VALUE = R0.to(apu.Ohm).value
-KB_VALUE = con.k_B.to(apu.J / apu.K).value
+# KB_VALUE = con.k_B.to(apu.J / apu.K).value
 ERX_VALUE = Erx_unit.to(apu.V / apu.m).value
 
 
