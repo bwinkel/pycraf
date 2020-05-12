@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>pycraf.protection.ra769 &#8212; pycraf v1.0.3dev359</title>
+    <title>pycraf.protection.ra769 &#8212; pycraf v1.0.3dev361</title>
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -50,7 +50,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v1.0.3dev359</a>
+	<a href="../../../index.html">pycraf v1.0.3dev361</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -78,7 +78,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
 <span class="c1"># from astropy.units import Quantity, UnitsError</span>
-<span class="kn">import</span> <span class="nn">astropy.constants</span> <span class="k">as</span> <span class="nn">con</span>
+<span class="c1"># import astropy.constants as con</span>
 <span class="kn">from</span> <span class="nn">astropy.table</span> <span class="kn">import</span> <span class="n">QTable</span><span class="p">,</span> <span class="n">Table</span>
 <span class="kn">from</span> <span class="nn">astropy.utils.data</span> <span class="kn">import</span> <span class="n">get_pkg_data_filename</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
@@ -174,10 +174,10 @@
             <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">integ_time</span> <span class="o">*</span> <span class="n">bandwidth</span><span class="p">)</span>
             <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">mK</span><span class="p">)</span>
 
-        <span class="n">_P_rms_nu</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">k_B</span> <span class="o">*</span> <span class="n">T_rms</span>
+        <span class="n">_P_rms_nu</span> <span class="o">=</span> <span class="n">cnv</span><span class="o">.</span><span class="n">KB</span> <span class="o">*</span> <span class="n">T_rms</span>
 
         <span class="n">_Plim</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span> <span class="o">*</span> <span class="n">_P_rms_nu</span> <span class="o">*</span> <span class="n">bandwidth</span>
-        <span class="n">_Slim</span> <span class="o">=</span> <span class="mf">4.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">con</span><span class="o">.</span><span class="n">c</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">frequency</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">_Plim</span>
+        <span class="n">_Slim</span> <span class="o">=</span> <span class="mf">4.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">cnv</span><span class="o">.</span><span class="n">C</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">frequency</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">_Plim</span>
 
         <span class="n">P_rms_nu</span> <span class="o">=</span> <span class="n">_P_rms_nu</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
             <span class="n">apu</span><span class="o">.</span><span class="n">Watt</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_Hz</span>
@@ -219,8 +219,8 @@
         <span class="c1"># than 1% of the receiver noise power to prevent serious errors in</span>
         <span class="c1"># the measurement of the amplitude of the cosmic signals.</span>
 
-        <span class="n">_Plim_nu</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span> <span class="o">*</span> <span class="n">con</span><span class="o">.</span><span class="n">k_B</span> <span class="o">*</span> <span class="p">(</span><span class="n">T_rx</span> <span class="o">+</span> <span class="n">T_A</span><span class="p">)</span>
-        <span class="n">_Slim_nu</span> <span class="o">=</span> <span class="mf">4.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">con</span><span class="o">.</span><span class="n">c</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">frequency</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">_Plim_nu</span>
+        <span class="n">_Plim_nu</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">KB</span> <span class="o">*</span> <span class="p">(</span><span class="n">T_rx</span> <span class="o">+</span> <span class="n">T_A</span><span class="p">)</span>
+        <span class="n">_Slim_nu</span> <span class="o">=</span> <span class="mf">4.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">cnv</span><span class="o">.</span><span class="n">C</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">frequency</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">_Plim_nu</span>
 
         <span class="n">Slim_nu</span> <span class="o">=</span> <span class="n">_Slim_nu</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
             <span class="n">apu</span><span class="o">.</span><span class="n">Jy</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span> <span class="k">else</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2_Hz</span>
@@ -383,7 +383,7 @@
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.3. &nbsp;
-    Last built 04 May 2020. <br/>
+    Last built 12 May 2020. <br/>
   </p>
 </footer>
   </body>

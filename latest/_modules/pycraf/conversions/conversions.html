@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>pycraf.conversions.conversions &#8212; pycraf v1.0.3dev359</title>
+    <title>pycraf.conversions.conversions &#8212; pycraf v1.0.3dev361</title>
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -50,7 +50,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v1.0.3dev359</a>
+	<a href="../../../index.html">pycraf v1.0.3dev361</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -78,7 +78,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
 <span class="kn">from</span> <span class="nn">astropy.units</span> <span class="kn">import</span> <span class="n">Quantity</span><span class="p">,</span> <span class="n">UnitsError</span>
-<span class="kn">import</span> <span class="nn">astropy.constants</span> <span class="k">as</span> <span class="nn">con</span>
+<span class="c1"># import astropy.constants as con</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">utils</span>
 
 
@@ -110,7 +110,7 @@
     <span class="s1">&#39;t_a_from_prx_nu&#39;</span><span class="p">,</span> <span class="s1">&#39;prx_nu_from_t_a&#39;</span><span class="p">,</span>
     <span class="s1">&#39;t_a_from_powerflux_nu&#39;</span><span class="p">,</span> <span class="s1">&#39;powerflux_nu_from_t_a&#39;</span><span class="p">,</span>
     <span class="s1">&#39;free_space_loss&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Erx_unit&#39;</span><span class="p">,</span> <span class="s1">&#39;R0&#39;</span><span class="p">,</span> <span class="s1">&#39;efield_equivalency&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Erx_unit&#39;</span><span class="p">,</span> <span class="s1">&#39;R0&#39;</span><span class="p">,</span> <span class="s1">&#39;MU0&#39;</span><span class="p">,</span> <span class="s1">&#39;EPS0&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;KB&#39;</span><span class="p">,</span> <span class="s1">&#39;efield_equivalency&#39;</span><span class="p">,</span>
     <span class="p">]</span> <span class="o">+</span> <span class="n">UNITS</span>
 
 
@@ -167,15 +167,24 @@
 <span class="n">apu</span><span class="o">.</span><span class="n">add_enabled_equivalencies</span><span class="p">(</span><span class="n">efield_equivalency</span><span class="p">())</span>
 
 <span class="c1"># define some useful constants</span>
+<span class="n">MU0_VALUE</span> <span class="o">=</span> <span class="mf">1.2566370614359173e-06</span>
+<span class="n">MU0</span> <span class="o">=</span> <span class="n">MU0_VALUE</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">N</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">A</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="n">EPS0_VALUE</span> <span class="o">=</span> <span class="mf">8.854187817e-12</span>
+<span class="n">EPS0</span> <span class="o">=</span> <span class="n">EPS0_VALUE</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">F</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span>
+<span class="n">C_VALUE</span> <span class="o">=</span> <span class="mf">299792458.0</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">C_VALUE</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">s</span>
+<span class="n">KB_VALUE</span> <span class="o">=</span> <span class="mf">1.38064852e-23</span>
+<span class="n">KB</span> <span class="o">=</span> <span class="n">KB_VALUE</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">J</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span>
+
 <span class="n">R0</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="mf">1.</span> <span class="o">*</span> <span class="p">(</span><span class="n">con</span><span class="o">.</span><span class="n">mu0</span> <span class="o">/</span> <span class="n">con</span><span class="o">.</span><span class="n">eps0</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+    <span class="mf">1.</span> <span class="o">*</span> <span class="p">(</span><span class="n">MU0</span> <span class="o">/</span> <span class="n">EPS0</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
     <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">Ohm</span><span class="p">)</span>
 <span class="n">Erx_unit</span> <span class="o">=</span> <span class="p">(</span>
     <span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span> <span class="o">/</span> <span class="mf">4.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">R0</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">)</span>
     <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">uV</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
-<span class="n">C_VALUE</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+<span class="c1"># C_VALUE = con.c.to(apu.m / apu.s).value</span>
 <span class="n">R0_VALUE</span> <span class="o">=</span> <span class="n">R0</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">Ohm</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
-<span class="n">KB_VALUE</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">k_B</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">J</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+<span class="c1"># KB_VALUE = con.k_B.to(apu.J / apu.K).value</span>
 <span class="n">ERX_VALUE</span> <span class="o">=</span> <span class="n">Erx_unit</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">V</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 
 
@@ -1022,7 +1031,7 @@
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.3. &nbsp;
-    Last built 04 May 2020. <br/>
+    Last built 12 May 2020. <br/>
   </p>
 </footer>
   </body>
