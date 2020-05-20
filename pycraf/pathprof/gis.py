@@ -215,7 +215,7 @@ def wgs84_to_geotiff_pixels(geotiff, lons, lats):
         lons, lats
         ) * u.deg
     wgs84_to_crs_world = geospatial.transform_factory(
-        geospatial.EPSG.WGS84, geotiff.crs.to_string()
+        geospatial.EPSG.WGS84, geotiff.crs.to_proj4()
         )
     wx, wy = wgs84_to_crs_world(lons, lats)
     px, py = (~geotiff.transform) * np.array([

@@ -295,7 +295,7 @@ def _create_transform(sys1, sys2, code_in='epsg', code_out='epsg'):
                 'ESRI codes not supported anymore with pyproj >= 2.0'
                 )
 
-        prefix = '+init=' if pyproj.__version__ < '2.0' else ''
+        prefix = '+init=' if pyproj.__version__ < '2.2' else ''
         if isinstance(sys[i], int):
             sys[i] = '{}{}:{:04d}'.format(prefix, code[i], sys[i])
 

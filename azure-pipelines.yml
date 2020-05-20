@@ -41,7 +41,7 @@ jobs:
     #   srtmdata: ${{ format('{0}\srtm', variables['Agent.BuildDirectory']) }}
     # srtmdata: ${{ format('{0}/srtm', variables['Agent.BuildDirectory']) }}
     sphinx.version: '>=3.0'
-    pyproj.version: '>=2.2'
+    pyproj.version: '==1.9.5.1'
 
   strategy:
     matrix:
@@ -52,7 +52,6 @@ jobs:
         numpy.version: '1.13.1'
         astropy.version: '2'
         sphinx.version: '<3.0'
-        pyproj.version: '<2.0'
       linux36:
         imageName: 'ubuntu-16.04'
         python.version: '3.6'
@@ -85,13 +84,13 @@ jobs:
         py_whl: 38
         numpy.version: '1.17.4'
         astropy.version: '4'
+        pyproj.version: '>=2.2'
       mac35:
         imageName: 'macos-10.14'
         python.version: '3.5'
         numpy.version: '1.13.1'
         astropy.version: '2'
         sphinx.version: '<3.0'
-        pyproj.version: '<2.0'
       mac36:
         imageName: 'macos-10.14'
         python.version: '3.6'
@@ -114,7 +113,6 @@ jobs:
         numpy.version: '1.13.1'
         astropy.version: '2'
         sphinx.version: '<3.0'
-        pyproj.version: '<2.0'
       win36:
         imageName: 'vs2017-win2016'
         python.version: '3.6'
@@ -130,6 +128,7 @@ jobs:
         python.version: '3.8'
         numpy.version: '1.17.4'
         astropy.version: '4'
+        pyproj.version: '>=2.2'
 
   pool:
     vmImage: $(imageName)
