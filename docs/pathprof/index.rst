@@ -280,10 +280,10 @@ to produce terrain maps of a region:
     cbar.set_label(r'Height (amsl)', color='k')
     cbax.xaxis.set_label_position('top')
     for t in cbax.xaxis.get_major_ticks():
-        t.tick1On = True
-        t.tick2On = True
-        t.label1On = False
-        t.label2On = True
+        t.tick1line.set_visible(False)
+        t.tick2line.set_visible(True)
+        t.label1.set_visible(False)
+        t.label2.set_visible(True)
     ctics = np.arange(0, 1150, 50)
     cbar.set_ticks(ctics)
     cbar.ax.set_xticklabels(map('{:.0f} m'.format, ctics), color='k')
@@ -541,8 +541,10 @@ See Also
 
 - `Astropy Units and Quantities package <http://docs.astropy.org/en/stable/
   units/index.html>`_, which is used extensively in pycraf.
-- `ITU-R Recommendation P.452-16 <https://www.itu.int/rec/
+- `Recommendation ITU-R P.452-16 <https://www.itu.int/rec/
   R-REC-P.452-16-201507-I/en>`_
+- `Corine Landcover
+  <https://land.copernicus.eu/pan-european/corine-land-cover>`_
 
 Reference/API
 =============
@@ -555,8 +557,8 @@ Reference/API
     :skip: PARAMETERS_V14
     :skip: PARAMETERS_V16
 
-Available clutter types
------------------------
+Available clutter types in Rec. ITU-R P.452-16
+----------------------------------------------
 
 +-------+---------------------------+------+------+
 | Value | Alias                     | |ha| | |dk| |
@@ -588,3 +590,142 @@ Available clutter types
 
 .. |ha| replace:: :math:`h_\mathrm{a}~[\mathrm{m}]`
 .. |dk| replace:: :math:`d_\mathrm{k}~[\mathrm{m}]`
+
+Conversion between Landcover classes and P.452 clutter types
+--------------------------------------------------------------------
+The following tables provide a mapping between Corine and IGBP Landcover
+classes and P.452 clutter types. It is based on common sense, but unofficial!
+Note, that ITU-R also provides clutter information in its
+`ITU Digitized World Map (IDWM) and Subroutine Library (32-bit)
+<https://www.itu.int/pub/R-SOFT-IDWM>`_ but it's available for (old versions
+of) Windows, only, and comes with a steep price tag.
+
++----------+----------------------------------------------+------------------+
+| Corine ID| Explanation                                  | P.452 Class      |
++==========+==============================================+==================+
+| 111      | Continuous urban fabric                      | URBAN            |
++----------+----------------------------------------------+------------------+
+| 112      | Discontinuous urban fabric                   | SUBURBAN         |
++----------+----------------------------------------------+------------------+
+| 121      | Industrial or commercial units               | INDUSTRIAL_ZONE  |
++----------+----------------------------------------------+------------------+
+| 122      | Road and rail networks and associated land   | INDUSTRIAL_ZONE  |
++----------+----------------------------------------------+------------------+
+| 123      | Port areas                                   | INDUSTRIAL_ZONE  |
++----------+----------------------------------------------+------------------+
+| 124      | Airports                                     | INDUSTRIAL_ZONE  |
++----------+----------------------------------------------+------------------+
+| 131      | Mineral extraction sites                     | INDUSTRIAL_ZONE  |
++----------+----------------------------------------------+------------------+
+| 132      | Dump sites                                   | INDUSTRIAL_ZONE  |
++----------+----------------------------------------------+------------------+
+| 133      | Construction sites                           | INDUSTRIAL_ZONE  |
++----------+----------------------------------------------+------------------+
+| 141      | Green urban areas                            | URBAN            |
++----------+----------------------------------------------+------------------+
+| 142      | Sport and leisure facilities                 | INDUSTRIAL_ZONE  |
++----------+----------------------------------------------+------------------+
+| 211      | Non-irrigated arable land                    | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 212      | Permanently irrigated land                   | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 213      | Rice fields                                  | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 221      | Vineyards                                    | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 222      | Fruit trees and berry plantations            | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 223      | Olive groves                                 | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 231      | Pastures                                     | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 241      | Annual crops associated with permanent crops | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 242      | Complex cultivation patterns                 | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 243      | Land principally occupied by agriculture     | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 244      | Agro-forestry areas                          | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 311      | Broad-leaved forest                          | DECIDIOUS_TREES  |
++----------+----------------------------------------------+------------------+
+| 312      | Coniferous forest                            | CONIFEROUS_TREES |
++----------+----------------------------------------------+------------------+
+| 313      | Mixed forest                                 | DECIDIOUS_TREES  |
++----------+----------------------------------------------+------------------+
+| 321      | Natural grasslands                           | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 322      | Moors and heathland                          | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 323      | Sclerophyllous vegetation                    | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 324      | Transitional woodland-shrub                  | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 331      | Beaches, dunes, sands                        | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 332      | Bare rocks                                   | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 333      | Sparsely vegetated areas                     | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 334      | Burnt areas                                  | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 335      | Glaciers and perpetual snow                  | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 411      | Inland marshes                               | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 412      | Peat bogs                                    | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 421      | Salt marshes                                 | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 422      | Salines                                      | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 423      | Intertidal flats                             | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 511      | Water courses                                | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 512      | Water bodies                                 | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 521      | Coastal lagoons                              | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 522      | Estuaries                                    | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 523      | Sea and ocean                                | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+
++----------+----------------------------------------------+------------------+
+| IGBP ID  | Explanation                                  | P.452 Class      |
++==========+==============================================+==================+
+|  1       | Evergreen needleleaf forests                 | CONIFEROUS_TREES |
++----------+----------------------------------------------+------------------+
+|  2       | Evergreen broadleaf forests                  | DECIDIOUS_TREES  |
++----------+----------------------------------------------+------------------+
+|  3       | Deciduous needleleaf forests                 | CONIFEROUS_TREES |
++----------+----------------------------------------------+------------------+
+|  4       | Deciduous broadleaf forests                  | DECIDIOUS_TREES  |
++----------+----------------------------------------------+------------------+
+|  5       | Mixed forests                                | DECIDIOUS_TREES  |
++----------+----------------------------------------------+------------------+
+|  6       | Closed shrublands                            | SPARSE           |
++----------+----------------------------------------------+------------------+
+|  7       | Open shrublands                              | SPARSE           |
++----------+----------------------------------------------+------------------+
+|  8       | Woody savannas                               | DECIDIOUS_TREES  |
++----------+----------------------------------------------+------------------+
+|  9       | Savannas                                     | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 10       | Grasslands                                   | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 11       | Permanent wetlands                           | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 12       | Croplands                                    | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 13       | Urban and built-up lands                     | URBAN            |
++----------+----------------------------------------------+------------------+
+| 14       | Cropland/natural vegetation mosaics          | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 15       | Snow and ice                                 | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 16       | Barren                                       | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 17       | Water bodies                                 | UNKNOWN          |
++----------+----------------------------------------------+------------------+

@@ -1,0 +1,44 @@
+111,URBAN             # Continuous urban fabric
+112,SUBURBAN          # Discontinuous urban fabric
+121,INDUSTRIAL_ZONE   # Industrial or commercial units
+122,INDUSTRIAL_ZONE   # Road and rail networks and associated land
+123,INDUSTRIAL_ZONE   # Port areas
+124,INDUSTRIAL_ZONE   # Airports
+131,INDUSTRIAL_ZONE   # Mineral extraction sites
+132,INDUSTRIAL_ZONE   # Dump sites
+133,INDUSTRIAL_ZONE   # Construction sites
+141,URBAN             # Green urban areas
+142,INDUSTRIAL_ZONE   # Sport and leisure facilities
+211,SPARSE            # Non-irrigated arable land
+212,SPARSE            # Permanently irrigated land
+213,SPARSE            # Rice fields
+221,SPARSE            # Vineyards
+222,SPARSE            # Fruit trees and berry plantations
+223,SPARSE            # Olive groves
+231,SPARSE            # Pastures
+241,SPARSE            # Annual crops associated with permanent crops
+242,SPARSE            # Complex cultivation patterns
+243,SPARSE            # Land principally occupied by agriculture
+244,SPARSE            # Agro-forestry areas
+311,DECIDIOUS_TREES   # Broad-leaved forest
+312,CONIFEROUS_TREES  # Coniferous forest
+313,DECIDIOUS_TREES   # Mixed forest
+321,SPARSE            # Natural grasslands
+322,SPARSE            # Moors and heathland
+323,SPARSE            # Sclerophyllous vegetation
+324,SPARSE            # Transitional woodland-shrub
+331,SPARSE            # Beaches, dunes, sands
+332,SPARSE            # Bare rocks
+333,SPARSE            # Sparsely vegetated areas
+334,SPARSE            # Burnt areas
+335,SPARSE            # Glaciers and perpetual snow
+411,UNKNOWN           # Inland marshes
+412,UNKNOWN           # Peat bogs
+421,UNKNOWN           # Salt marshes
+422,UNKNOWN           # Salines
+423,UNKNOWN           # Intertidal flats
+511,UNKNOWN           # Water courses
+512,UNKNOWN           # Water bodies
+521,UNKNOWN           # Coastal lagoons
+522,UNKNOWN           # Estuaries
+523,UNKNOWN           # Sea and ocean

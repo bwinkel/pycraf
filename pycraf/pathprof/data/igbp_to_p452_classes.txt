@@ -1,0 +1,17 @@
+1,CONIFEROUS_TREES  # Evergreen needleleaf forests
+2,DECIDIOUS_TREES   # Evergreen broadleaf forests
+3,CONIFEROUS_TREES  # Deciduous needleleaf forests
+4,DECIDIOUS_TREES   # Deciduous broadleaf forests
+5,DECIDIOUS_TREES   # Mixed forests
+6,SPARSE            # Closed shrublands
+7,SPARSE            # Open shrublands
+8,DECIDIOUS_TREES   # Woody savannas
+9,SPARSE            # Savannas
+10,SPARSE           # Grasslands
+11,SPARSE           # Permanent wetlands
+12,SPARSE           # Croplands
+13,URBAN            # Urban and built-up lands
+14,SPARSE           # Cropland/natural vegetation mosaics
+15,UNKNOWN          # Snow and ice
+16,UNKNOWN          # Barren
+17,UNKNOWN          # Water bodies

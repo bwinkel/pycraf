@@ -28,7 +28,7 @@ def get_extensions():
     if platform.system().lower() == 'windows':
 
         comp_args = {
-            'extra_compile_args': ['/fopenmp'],
+            'extra_compile_args': ['/openmp'],
             'include_dirs': ['numpy'],
             }
 

@@ -1,6 +1,14 @@
 1.0.3 (unreleased)
 =======================
 
+New Features
+------------
+pycraf.pathprof
+^^^^^^^^^^^^^^^
+- Add some helper functions to ease working with other GIS data sets. An
+  example would be Landcover data (e.g., from Copernicus mission Corine data
+  set). There is also a tutorial notebook, demonstrating the use. [#29]
+
 1.0.2 (2020-04-16)
 =======================
 

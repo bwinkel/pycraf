@@ -110,6 +110,10 @@ to just use pycraf without the need to manually download necessary data files.
 However, these data files are not free for commercial use. For details, please
 see the `LICENSE.ITU <https://www.github.com/bwinkel/pycraf/blob/master/licenses/LICENSE.ITU>`_ file.
 
+Some of the examples/images in the pycraf documentation and tutorial notebooks
+make use of `Copernicus <https://www.copernicus.eu/en>`_ data. For these, the
+conditions in `COPERNICUS.EU <https://www.github.com/bwinkel/pycraf/blob/master/COPERNICUS.EU>`_ apply.
+
 Since pycraf uses the `Astropy Package Template <https://github.com/astropy/package-template>`_ for packaging, we also refer to the associated  `license <https://github.com/bwinkel/pycraf/blob/master/licenses/LICENSE_ASTROPY_PACKAGE_TEMPLATE.rst>`_.
 
 

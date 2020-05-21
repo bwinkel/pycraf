@@ -4,6 +4,7 @@ scipy >= 0.15
 astropy >= 2.0.11
 cython >= 0.23
 pytest >= 2.6
-pyproj >= 2.0
+pyproj <= 2.0 ; python_version == '3.5'
+pyproj >= 2.2 ; python_version >= '3.6'
 matplotlib >= 1.2
 sgp4 >= 1.4,<2.0

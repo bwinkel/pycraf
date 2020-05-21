@@ -10,6 +10,7 @@ estimation.
 
 from .cyprop import *
 from .geodesics import *
+from .gis import *
 from .heightprofile import *
 from .helper import *
 from .propagation import *
