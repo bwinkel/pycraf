@@ -1,0 +1,6 @@
+landcover_to_p452_clutter_zones
+===============================
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: landcover_to_p452_clutter_zones

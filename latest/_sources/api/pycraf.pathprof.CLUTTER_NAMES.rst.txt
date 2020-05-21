@@ -1,0 +1,6 @@
+CLUTTER_NAMES
+=============
+
+.. currentmodule:: pycraf.pathprof
+
+.. autodata:: CLUTTER_NAMES

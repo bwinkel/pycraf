@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v1.0.3dev361</title>
+    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v1.0.4dev373</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -63,7 +63,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.3dev361</a>
+	<a href="../index.html">pycraf v1.0.4dev373</a>
 	 &#187;
       </li>
       
@@ -342,10 +342,10 @@ to produce terrain maps of a region:</p>
 <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Height (amsl)&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
 <span class="n">cbax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cbax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">get_major_ticks</span><span class="p">():</span>
-    <span class="n">t</span><span class="o">.</span><span class="n">tick1On</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">t</span><span class="o">.</span><span class="n">tick2On</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">t</span><span class="o">.</span><span class="n">label1On</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">t</span><span class="o">.</span><span class="n">label2On</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">tick1line</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">tick2line</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">label1</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">label2</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">ctics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1150</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
 <span class="n">cbar</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><span class="n">ctics</span><span class="p">)</span>
 <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.0f}</span><span class="s1"> m&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">ctics</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
@@ -603,7 +603,8 @@ slower!</p>
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">Astropy Units and Quantities package</a>, which is used extensively in pycraf.</p></li>
-<li><p><a class="reference external" href="https://www.itu.int/rec/R-REC-P.452-16-201507-I/en">ITU-R Recommendation P.452-16</a></p></li>
+<li><p><a class="reference external" href="https://www.itu.int/rec/R-REC-P.452-16-201507-I/en">Recommendation ITU-R P.452-16</a></p></li>
+<li><p><a class="reference external" href="https://land.copernicus.eu/pan-european/corine-land-cover">Corine Landcover</a></p></li>
 </ul>
 </div>
 <div class="section" id="reference-api">
@@ -669,29 +670,35 @@ estimation.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.height_path_data_generic.html#pycraf.pathprof.height_path_data_generic" title="pycraf.pathprof.height_path_data_generic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">height_path_data_generic</span></code></a>(distance, step, …)</p></td>
 <td><p>Calculate height profile auxillary data needed for <a class="reference internal" href="../api/pycraf.pathprof.atten_path_fast.html#pycraf.pathprof.atten_path_fast" title="pycraf.pathprof.atten_path_fast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_path_fast</span></code></a>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.loss_complete.html#pycraf.pathprof.loss_complete" title="pycraf.pathprof.loss_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_complete</span></code></a>(pathprop[, G_t, G_r])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.landcover_to_p452_clutter_zones.html#pycraf.pathprof.landcover_to_p452_clutter_zones" title="pycraf.pathprof.landcover_to_p452_clutter_zones"><code class="xref py py-obj docutils literal notranslate"><span class="pre">landcover_to_p452_clutter_zones</span></code></a>(…)</p></td>
+<td><p>Convert a map of landcover class IDs to P.452 clutter types.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.loss_complete.html#pycraf.pathprof.loss_complete" title="pycraf.pathprof.loss_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_complete</span></code></a>(pathprop[, G_t, G_r])</p></td>
 <td><p>Calculate the total loss of a propagating radio wave according to ITU-R P.452-16 Eq (58-64).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.loss_diffraction.html#pycraf.pathprof.loss_diffraction" title="pycraf.pathprof.loss_diffraction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_diffraction</span></code></a>(pathprop)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.loss_diffraction.html#pycraf.pathprof.loss_diffraction" title="pycraf.pathprof.loss_diffraction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_diffraction</span></code></a>(pathprop)</p></td>
 <td><p>Calculate the Diffraction loss of a propagating radio wave according to ITU-R P.452-16 Eq (14-44).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.loss_ducting.html#pycraf.pathprof.loss_ducting" title="pycraf.pathprof.loss_ducting"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_ducting</span></code></a>(pathprop)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.loss_ducting.html#pycraf.pathprof.loss_ducting" title="pycraf.pathprof.loss_ducting"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_ducting</span></code></a>(pathprop)</p></td>
 <td><p>Calculate the ducting/layer reflection loss, L_ba, of a propagating radio wave according to ITU-R P.452-16 Eq (46-56).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.loss_freespace.html#pycraf.pathprof.loss_freespace" title="pycraf.pathprof.loss_freespace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_freespace</span></code></a>(pathprop)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.loss_freespace.html#pycraf.pathprof.loss_freespace" title="pycraf.pathprof.loss_freespace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_freespace</span></code></a>(pathprop)</p></td>
 <td><p>Calculate the free-space loss, L_bfsg, of a propagating radio wave according to ITU-R P.452-16 Eq (8-12).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.loss_troposcatter.html#pycraf.pathprof.loss_troposcatter" title="pycraf.pathprof.loss_troposcatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_troposcatter</span></code></a>(pathprop[, G_t, G_r])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.loss_troposcatter.html#pycraf.pathprof.loss_troposcatter" title="pycraf.pathprof.loss_troposcatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_troposcatter</span></code></a>(pathprop[, G_t, G_r])</p></td>
 <td><p>Calculate the tropospheric scatter loss, L_bs, of a propagating radio wave according to ITU-R P.452-16 Eq (45).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.losses_complete.html#pycraf.pathprof.losses_complete" title="pycraf.pathprof.losses_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losses_complete</span></code></a>(freq, temperature, pressure, …)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.losses_complete.html#pycraf.pathprof.losses_complete" title="pycraf.pathprof.losses_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losses_complete</span></code></a>(freq, temperature, pressure, …)</p></td>
 <td><p>Calculate propagation losses for a fixed path using a parallelized method.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.make_kmz.html#pycraf.pathprof.make_kmz" title="pycraf.pathprof.make_kmz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_kmz</span></code></a>(kmz_filename, atten_map, bbox[, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.make_kmz.html#pycraf.pathprof.make_kmz" title="pycraf.pathprof.make_kmz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_kmz</span></code></a>(kmz_filename, atten_map, bbox[, …])</p></td>
 <td><p>Produce kmz file for use in GIS software (e.g., Google Earth).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.radiomet_data_for_pathcenter.html#pycraf.pathprof.radiomet_data_for_pathcenter" title="pycraf.pathprof.radiomet_data_for_pathcenter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">radiomet_data_for_pathcenter</span></code></a>(lon, lat, d_tm, …)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.radiomet_data_for_pathcenter.html#pycraf.pathprof.radiomet_data_for_pathcenter" title="pycraf.pathprof.radiomet_data_for_pathcenter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">radiomet_data_for_pathcenter</span></code></a>(lon, lat, d_tm, …)</p></td>
 <td><p>Calculate delta_N, beta_0, and N_0 values from digitized maps, according to ITU-R P.452-16 Eq (2-4).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.regrid_from_geotiff.html#pycraf.pathprof.regrid_from_geotiff" title="pycraf.pathprof.regrid_from_geotiff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regrid_from_geotiff</span></code></a>(geotiff, lons, lats[, band])</p></td>
+<td><p>Retrieve interpolated GeoTiff raster values for given WGS84 coordinates (longitude, latitude).</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.set_num_threads.html#pycraf.pathprof.set_num_threads" title="pycraf.pathprof.set_num_threads"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_num_threads</span></code></a>(int nthreads)</p></td>
 <td><p>Change maximum number of threads to use.</p></td>
@@ -707,6 +714,9 @@ estimation.</p>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.terrain_cmap_factory.html#pycraf.pathprof.terrain_cmap_factory" title="pycraf.pathprof.terrain_cmap_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">terrain_cmap_factory</span></code></a>([sealevel, vmax])</p></td>
 <td><p>Produce terrain colormap and norm to be used in plt.imshow.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.wgs84_to_geotiff_pixels.html#pycraf.pathprof.wgs84_to_geotiff_pixels" title="pycraf.pathprof.wgs84_to_geotiff_pixels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wgs84_to_geotiff_pixels</span></code></a>(geotiff, lons, lats)</p></td>
+<td><p>Convert WGS84 (longitude, latitude) to pixel space of a GeoTiff.</p></td>
 </tr>
 </tbody>
 </table>
@@ -755,8 +765,20 @@ estimation.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.A_BETA.html#pycraf.pathprof.A_BETA" title="pycraf.pathprof.A_BETA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">A_BETA</span></code></a></p></td>
 <td><p>Effective Earth radius for beta_0 percent</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.K_BETA.html#pycraf.pathprof.K_BETA" title="pycraf.pathprof.K_BETA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">K_BETA</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.CLUTTER_NAMES.html#pycraf.pathprof.CLUTTER_NAMES" title="pycraf.pathprof.CLUTTER_NAMES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CLUTTER_NAMES</span></code></a></p></td>
+<td><p>Built-in mutable sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.CORINE_TO_P452_CLASSES.html#pycraf.pathprof.CORINE_TO_P452_CLASSES" title="pycraf.pathprof.CORINE_TO_P452_CLASSES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CORINE_TO_P452_CLASSES</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.IGBP_TO_P452_CLASSES.html#pycraf.pathprof.IGBP_TO_P452_CLASSES" title="pycraf.pathprof.IGBP_TO_P452_CLASSES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IGBP_TO_P452_CLASSES</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.K_BETA.html#pycraf.pathprof.K_BETA" title="pycraf.pathprof.K_BETA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">K_BETA</span></code></a></p></td>
 <td><p>Effective Earth radius factor for beta_0 percent</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.P452_CLUTTER_COLORS.html#pycraf.pathprof.P452_CLUTTER_COLORS" title="pycraf.pathprof.P452_CLUTTER_COLORS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">P452_CLUTTER_COLORS</span></code></a></p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.R_E.html#pycraf.pathprof.R_E" title="pycraf.pathprof.R_E"><code class="xref py py-obj docutils literal notranslate"><span class="pre">R_E</span></code></a></p></td>
 <td><p>Earth Radius</p></td>
@@ -765,8 +787,8 @@ estimation.</p>
 </table>
 </div>
 </div>
-<div class="section" id="available-clutter-types">
-<h3>Available clutter types<a class="headerlink" href="#available-clutter-types" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="available-clutter-types-in-rec-itu-r-p-452-16">
+<h3>Available clutter types in Rec. ITU-R P.452-16<a class="headerlink" href="#available-clutter-types-in-rec-itu-r-p-452-16" title="Permalink to this headline">¶</a></h3>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 15%" />
@@ -845,6 +867,288 @@ estimation.</p>
 </tbody>
 </table>
 </div>
+<div class="section" id="conversion-between-landcover-classes-and-p-452-clutter-types">
+<h3>Conversion between Landcover classes and P.452 clutter types<a class="headerlink" href="#conversion-between-landcover-classes-and-p-452-clutter-types" title="Permalink to this headline">¶</a></h3>
+<p>The following tables provide a mapping between Corine and IGBP Landcover
+classes and P.452 clutter types. It is based on common sense, but unofficial!
+Note, that ITU-R also provides clutter information in its
+<a class="reference external" href="https://www.itu.int/pub/R-SOFT-IDWM">ITU Digitized World Map (IDWM) and Subroutine Library (32-bit)</a> but it’s available for (old versions
+of) Windows, only, and comes with a steep price tag.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 62%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Corine ID</p></th>
+<th class="head"><p>Explanation</p></th>
+<th class="head"><p>P.452 Class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>111</p></td>
+<td><p>Continuous urban fabric</p></td>
+<td><p>URBAN</p></td>
+</tr>
+<tr class="row-odd"><td><p>112</p></td>
+<td><p>Discontinuous urban fabric</p></td>
+<td><p>SUBURBAN</p></td>
+</tr>
+<tr class="row-even"><td><p>121</p></td>
+<td><p>Industrial or commercial units</p></td>
+<td><p>INDUSTRIAL_ZONE</p></td>
+</tr>
+<tr class="row-odd"><td><p>122</p></td>
+<td><p>Road and rail networks and associated land</p></td>
+<td><p>INDUSTRIAL_ZONE</p></td>
+</tr>
+<tr class="row-even"><td><p>123</p></td>
+<td><p>Port areas</p></td>
+<td><p>INDUSTRIAL_ZONE</p></td>
+</tr>
+<tr class="row-odd"><td><p>124</p></td>
+<td><p>Airports</p></td>
+<td><p>INDUSTRIAL_ZONE</p></td>
+</tr>
+<tr class="row-even"><td><p>131</p></td>
+<td><p>Mineral extraction sites</p></td>
+<td><p>INDUSTRIAL_ZONE</p></td>
+</tr>
+<tr class="row-odd"><td><p>132</p></td>
+<td><p>Dump sites</p></td>
+<td><p>INDUSTRIAL_ZONE</p></td>
+</tr>
+<tr class="row-even"><td><p>133</p></td>
+<td><p>Construction sites</p></td>
+<td><p>INDUSTRIAL_ZONE</p></td>
+</tr>
+<tr class="row-odd"><td><p>141</p></td>
+<td><p>Green urban areas</p></td>
+<td><p>URBAN</p></td>
+</tr>
+<tr class="row-even"><td><p>142</p></td>
+<td><p>Sport and leisure facilities</p></td>
+<td><p>INDUSTRIAL_ZONE</p></td>
+</tr>
+<tr class="row-odd"><td><p>211</p></td>
+<td><p>Non-irrigated arable land</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-even"><td><p>212</p></td>
+<td><p>Permanently irrigated land</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-odd"><td><p>213</p></td>
+<td><p>Rice fields</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-even"><td><p>221</p></td>
+<td><p>Vineyards</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-odd"><td><p>222</p></td>
+<td><p>Fruit trees and berry plantations</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-even"><td><p>223</p></td>
+<td><p>Olive groves</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-odd"><td><p>231</p></td>
+<td><p>Pastures</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-even"><td><p>241</p></td>
+<td><p>Annual crops associated with permanent crops</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-odd"><td><p>242</p></td>
+<td><p>Complex cultivation patterns</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-even"><td><p>243</p></td>
+<td><p>Land principally occupied by agriculture</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-odd"><td><p>244</p></td>
+<td><p>Agro-forestry areas</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-even"><td><p>311</p></td>
+<td><p>Broad-leaved forest</p></td>
+<td><p>DECIDIOUS_TREES</p></td>
+</tr>
+<tr class="row-odd"><td><p>312</p></td>
+<td><p>Coniferous forest</p></td>
+<td><p>CONIFEROUS_TREES</p></td>
+</tr>
+<tr class="row-even"><td><p>313</p></td>
+<td><p>Mixed forest</p></td>
+<td><p>DECIDIOUS_TREES</p></td>
+</tr>
+<tr class="row-odd"><td><p>321</p></td>
+<td><p>Natural grasslands</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-even"><td><p>322</p></td>
+<td><p>Moors and heathland</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-odd"><td><p>323</p></td>
+<td><p>Sclerophyllous vegetation</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-even"><td><p>324</p></td>
+<td><p>Transitional woodland-shrub</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-odd"><td><p>331</p></td>
+<td><p>Beaches, dunes, sands</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-even"><td><p>332</p></td>
+<td><p>Bare rocks</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-odd"><td><p>333</p></td>
+<td><p>Sparsely vegetated areas</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-even"><td><p>334</p></td>
+<td><p>Burnt areas</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-odd"><td><p>335</p></td>
+<td><p>Glaciers and perpetual snow</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-even"><td><p>411</p></td>
+<td><p>Inland marshes</p></td>
+<td><p>UNKNOWN</p></td>
+</tr>
+<tr class="row-odd"><td><p>412</p></td>
+<td><p>Peat bogs</p></td>
+<td><p>UNKNOWN</p></td>
+</tr>
+<tr class="row-even"><td><p>421</p></td>
+<td><p>Salt marshes</p></td>
+<td><p>UNKNOWN</p></td>
+</tr>
+<tr class="row-odd"><td><p>422</p></td>
+<td><p>Salines</p></td>
+<td><p>UNKNOWN</p></td>
+</tr>
+<tr class="row-even"><td><p>423</p></td>
+<td><p>Intertidal flats</p></td>
+<td><p>UNKNOWN</p></td>
+</tr>
+<tr class="row-odd"><td><p>511</p></td>
+<td><p>Water courses</p></td>
+<td><p>UNKNOWN</p></td>
+</tr>
+<tr class="row-even"><td><p>512</p></td>
+<td><p>Water bodies</p></td>
+<td><p>UNKNOWN</p></td>
+</tr>
+<tr class="row-odd"><td><p>521</p></td>
+<td><p>Coastal lagoons</p></td>
+<td><p>UNKNOWN</p></td>
+</tr>
+<tr class="row-even"><td><p>522</p></td>
+<td><p>Estuaries</p></td>
+<td><p>UNKNOWN</p></td>
+</tr>
+<tr class="row-odd"><td><p>523</p></td>
+<td><p>Sea and ocean</p></td>
+<td><p>UNKNOWN</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 62%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>IGBP ID</p></th>
+<th class="head"><p>Explanation</p></th>
+<th class="head"><p>P.452 Class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Evergreen needleleaf forests</p></td>
+<td><p>CONIFEROUS_TREES</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Evergreen broadleaf forests</p></td>
+<td><p>DECIDIOUS_TREES</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Deciduous needleleaf forests</p></td>
+<td><p>CONIFEROUS_TREES</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Deciduous broadleaf forests</p></td>
+<td><p>DECIDIOUS_TREES</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Mixed forests</p></td>
+<td><p>DECIDIOUS_TREES</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>Closed shrublands</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>Open shrublands</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>Woody savannas</p></td>
+<td><p>DECIDIOUS_TREES</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>Savannas</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>Grasslands</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>Permanent wetlands</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>Croplands</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>Urban and built-up lands</p></td>
+<td><p>URBAN</p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>Cropland/natural vegetation mosaics</p></td>
+<td><p>SPARSE</p></td>
+</tr>
+<tr class="row-even"><td><p>15</p></td>
+<td><p>Snow and ice</p></td>
+<td><p>UNKNOWN</p></td>
+</tr>
+<tr class="row-odd"><td><p>16</p></td>
+<td><p>Barren</p></td>
+<td><p>UNKNOWN</p></td>
+</tr>
+<tr class="row-even"><td><p>17</p></td>
+<td><p>Water bodies</p></td>
+<td><p>UNKNOWN</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 
@@ -876,7 +1180,8 @@ estimation.</p>
 <li><a class="reference internal" href="#variables">Variables</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#available-clutter-types">Available clutter types</a></li>
+<li><a class="reference internal" href="#available-clutter-types-in-rec-itu-r-p-452-16">Available clutter types in Rec. ITU-R P.452-16</a></li>
+<li><a class="reference internal" href="#conversion-between-landcover-classes-and-p-452-clutter-types">Conversion between Landcover classes and P.452 clutter types</a></li>
 </ul>
 </li>
 </ul>
@@ -897,7 +1202,7 @@ estimation.</p>
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.3. &nbsp;
-    Last built 18 May 2020. <br/>
+    Last built 21 May 2020. <br/>
   </p>
 </footer>
   </body>

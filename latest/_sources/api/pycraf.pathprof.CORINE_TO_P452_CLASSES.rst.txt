@@ -1,0 +1,6 @@
+CORINE_TO_P452_CLASSES
+======================
+
+.. currentmodule:: pycraf.pathprof
+
+.. autodata:: CORINE_TO_P452_CLASSES
