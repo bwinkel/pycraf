@@ -280,10 +280,10 @@ to produce terrain maps of a region:
     cbar.set_label(r'Height (amsl)', color='k')
     cbax.xaxis.set_label_position('top')
     for t in cbax.xaxis.get_major_ticks():
-        t.tick1On = True
-        t.tick2On = True
-        t.label1On = False
-        t.label2On = True
+        t.tick1line.set_visible(False)
+        t.tick2line.set_visible(True)
+        t.label1.set_visible(False)
+        t.label2.set_visible(True)
     ctics = np.arange(0, 1150, 50)
     cbar.set_ticks(ctics)
     cbar.ax.set_xticklabels(map('{:.0f} m'.format, ctics), color='k')
@@ -591,8 +591,14 @@ Available clutter types in Rec. ITU-R P.452-16
 .. |ha| replace:: :math:`h_\mathrm{a}~[\mathrm{m}]`
 .. |dk| replace:: :math:`d_\mathrm{k}~[\mathrm{m}]`
 
-Conversion between Corine Landcover classes and P.452 clutter types
+Conversion between Landcover classes and P.452 clutter types
 --------------------------------------------------------------------
+The following tables provide a mapping between Corine and IGBP Landcover
+classes and P.452 clutter types. It is based on common sense, but unofficial!
+Note, that ITU-R also provides clutter information in its
+`ITU Digitized World Map (IDWM) and Subroutine Library (32-bit)
+<https://www.itu.int/pub/R-SOFT-IDWM>`_ but it's available for (old versions
+of) Windows, only, and comes with a steep price tag.
 
 +----------+----------------------------------------------+------------------+
 | Corine ID| Explanation                                  | P.452 Class      |
@@ -684,4 +690,42 @@ Conversion between Corine Landcover classes and P.452 clutter types
 | 522      | Estuaries                                    | UNKNOWN          |
 +----------+----------------------------------------------+------------------+
 | 523      | Sea and ocean                                | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+
++----------+----------------------------------------------+------------------+
+| IGBP ID  | Explanation                                  | P.452 Class      |
++==========+==============================================+==================+
+|  1       | Evergreen needleleaf forests                 | CONIFEROUS_TREES |
++----------+----------------------------------------------+------------------+
+|  2       | Evergreen broadleaf forests                  | DECIDIOUS_TREES  |
++----------+----------------------------------------------+------------------+
+|  3       | Deciduous needleleaf forests                 | CONIFEROUS_TREES |
++----------+----------------------------------------------+------------------+
+|  4       | Deciduous broadleaf forests                  | DECIDIOUS_TREES  |
++----------+----------------------------------------------+------------------+
+|  5       | Mixed forests                                | DECIDIOUS_TREES  |
++----------+----------------------------------------------+------------------+
+|  6       | Closed shrublands                            | SPARSE           |
++----------+----------------------------------------------+------------------+
+|  7       | Open shrublands                              | SPARSE           |
++----------+----------------------------------------------+------------------+
+|  8       | Woody savannas                               | DECIDIOUS_TREES  |
++----------+----------------------------------------------+------------------+
+|  9       | Savannas                                     | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 10       | Grasslands                                   | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 11       | Permanent wetlands                           | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 12       | Croplands                                    | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 13       | Urban and built-up lands                     | URBAN            |
++----------+----------------------------------------------+------------------+
+| 14       | Cropland/natural vegetation mosaics          | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 15       | Snow and ice                                 | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 16       | Barren                                       | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 17       | Water bodies                                 | UNKNOWN          |
 +----------+----------------------------------------------+------------------+

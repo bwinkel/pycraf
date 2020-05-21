@@ -261,8 +261,8 @@ def regrid_from_geotiff(geotiff, lons, lats, band=1):
         you need to regrid several of the bands, please run the function
         repeatedly, specifying the band parameter.
 
-    Note
-    ----
+    Notes
+    -----
     If requested geo positions are all to close to the edge of the geotiff
     file, the interpolation can fail (`~scipy.interpolate` will raise a
     ValueError in such cases).
