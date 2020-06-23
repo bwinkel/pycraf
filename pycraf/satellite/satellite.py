@@ -43,19 +43,18 @@ def get_sat(tle_string):
     '''
 
     try:
-        import sgp4
-        from sgp4.earth_gravity import wgs72
-        from sgp4.io import twoline2rv, Satellite
+        from sgp4.api import Satrec, WGS72
     except ImportError:
         raise ImportError(
-            'The "sgp4" package is necessary to use this function.'
+            'The "sgp4" package (version 2+) is necessary to use this '
+            'function.'
             )
 
     tle_string_list = tle_string.split('\n')
     satname = tle_string_list[0]
     if satname[0:2] == '0 ':  # remove leading 0 if present
         satname = satname[2:]
-    satellite = twoline2rv(tle_string_list[1], tle_string_list[2], wgs72)
+    satellite = Satrec.twoline2rv(*tle_string_list[1:3], WGS72)
 
     return satname, satellite
 
@@ -78,13 +77,26 @@ def _propagate(sat, dt):
     '''
 
     # pos [km], vel [km/s]
-    position, velocity = sat.propagate(
+
+    try:
+        from sgp4.api import jday, SGP4_ERRORS
+    except ImportError:
+        raise ImportError(
+            'The "sgp4" package (version 2+) is necessary to use this '
+            'function.'
+            )
+
+    jd, fr = jday(
         dt.year, dt.month, dt.day,
         dt.hour, dt.minute, dt.second + dt.microsecond / 1e6
         )
+    err_code, position, velocity = sat.sgp4(jd, fr)
 
-    if position is None:
-        raise ValueError('Satellite propagation error')
+    if err_code:
+        raise ValueError(
+            'Satellite propagation error', err_code,
+            '({})'.format(SGP4_ERRORS[err_code])
+            )
 
     return position
 
@@ -269,14 +281,13 @@ class SatelliteObserver(object):
             )
 
         try:
-            import sgp4
-            from sgp4.io import Satellite
+            from sgp4.api import Satrec
         except ImportError:
             raise ImportError(
                 'The "sgp4" package is necessary to use this Class.'
                 )
 
-        if not isinstance(satellite_or_tle, Satellite):
+        if not isinstance(satellite_or_tle, Satrec):
             _, satellite = get_sat(satellite_or_tle)
         else:
             satellite = satellite_or_tle

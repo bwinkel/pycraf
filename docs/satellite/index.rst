@@ -92,13 +92,14 @@ be processed::
     >>> satname, sat = satellite.get_sat(tle_string)
     >>> satname
     'ISS (ZARYA)'
-    >>> sat.epoch
-    datetime.datetime(2013, 6, 14, 14, 10, 59, 999807)
     >>> sat.satnum
     25544
 
     # using sgp4 directly, to get position and velocity in ECI coordinates
-    >>> position, velocity = sat.propagate(2017, 6, 29, 12, 50, 19)
+    >>> from sgp4.api import jday
+
+    >>> jd, fr = jday(2017, 6, 29, 12, 50, 19)
+    >>> err_code, position, velocity = sat.sgp4(jd, fr)
     >>> position  # km  # doctest: +FLOAT_CMP
     (3289.302521216188, 3816.880925531413, 4443.175627001508)
     >>> velocity  # km/s  # doctest: +FLOAT_CMP

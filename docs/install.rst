@@ -31,7 +31,7 @@ There are a few optional packages, which are necessary for some functionality:
 - `pyproj <https://pypi.python.org/pypi/pyproj>`__ 2.0 or later: This is a
   requirement for the `~pycraf.geospatial` package.
 
-- `sgp4 <https://pypi.python.org/pypi/sgp4>`__ 1.4 or later: This is a
+- `sgp4 <https://pypi.python.org/pypi/sgp4>`__ 2.0 or later: This is a
   requirement for the `~pycraf.satellite` package.
 
 Older versions of these packages may work, but no support will be provided.

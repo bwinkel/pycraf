@@ -14,5 +14,5 @@ pytest>=2.6
 pyproj<2.0; python_version=='3.5'
 pyproj>=2.2; python_version>='3.6'
 matplotlib>=2.0
-sgp4>=1.4,<2.0
+sgp4>=2.0
 h5py>=2.5

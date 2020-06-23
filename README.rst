@@ -160,7 +160,7 @@ features and to build the docs:
 
 * matplotlib 2.0 or later; for some plot helpers
 * pyproj 2.0 or later; for the `geospatial` subpackage
-* sgp4 1.4 or later; for the `satellite` subpackage
+* sgp4 2.0 or later; for the `satellite` subpackage
 
 For further details, we refer to the online documention `installation
 instructions <https://bwinkel.github.io/pycraf/install.html>`_. It also
