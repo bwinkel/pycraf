@@ -44,12 +44,23 @@ def get_sat(tle_string):
 
     try:
         import sgp4
-        from sgp4.earth_gravity import wgs72
-        from sgp4.io import twoline2rv, Satellite
     except ImportError:
         raise ImportError(
             'The "sgp4" package is necessary to use this function.'
             )
+
+    try:
+        from sgp4.io import Satellite
+    except ImportError:
+        try:
+            from sgp4.model import Satellite
+        except ImportError:
+            raise ImportError(
+                "Can't import sgp4 Satellite object."
+                )
+
+    from sgp4.earth_gravity import wgs72
+    from sgp4.io import twoline2rv
 
     tle_string_list = tle_string.split('\n')
     satname = tle_string_list[0]
@@ -267,14 +278,22 @@ class SatelliteObserver(object):
         assert isinstance(obstime, time.Time), (
             'obstime must be an astropy.time.Time object!'
             )
-
         try:
             import sgp4
-            from sgp4.io import Satellite
         except ImportError:
             raise ImportError(
                 'The "sgp4" package is necessary to use this Class.'
                 )
+
+        try:
+            from sgp4.io import Satellite
+        except ImportError:
+            try:
+                from sgp4.model import Satellite
+            except ImportError:
+                raise ImportError(
+                    "Can't import sgp4 Satellite object."
+                    )
 
         if not isinstance(satellite_or_tle, Satellite):
             _, satellite = get_sat(satellite_or_tle)
