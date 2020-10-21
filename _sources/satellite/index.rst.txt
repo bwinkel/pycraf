@@ -69,12 +69,13 @@ coordinates of the ISS at a given time, download the current TLE and do::
     >>> mjd = 55123. + np.array([0.123, 0.99, 50.3])
     >>> obstime2 = time.Time(mjd, format='mjd')
     >>> az, el, dist = sat_obs.azel_from_sat(tle_string, obstime2)  # doctest: +REMOTE_DATA
-    >>> az  # doctest: +FLOAT_CMP +REMOTE_DATA
-    <Quantity [  28.39693587,-143.17010479,  -6.97428002] deg>
-    >>> el  # doctest: +FLOAT_CMP +REMOTE_DATA
-    <Quantity [-43.16852656,-21.46811918,-36.77340433] deg>
-    >>> dist  # doctest: +FLOAT_CMP +REMOTE_DATA
-    <Quantity [ 9388.29246437, 5675.03921204, 8361.28408463] km>
+    >>> np.set_printoptions(precision=3)
+    >>> az  # doctest: +SKIP
+    <Quantity [  28.397, -143.170,  -6.974] deg>
+    >>> el  # doctest: +SKIP
+    <Quantity [-43.169, -21.468, -36.773] deg>
+    >>> dist  # doctest: +SKIP
+    <Quantity [ 9388.292, 5675.039, 8361.284] km>
 
 The `~pycraf.satellite.SatelliteObserver.azel_from_sat` method also accepts
 a `sgp4.io.Satellite` object. This could be created by using the
@@ -92,13 +93,14 @@ be processed::
     >>> satname, sat = satellite.get_sat(tle_string)
     >>> satname
     'ISS (ZARYA)'
-    >>> sat.epoch
-    datetime.datetime(2013, 6, 14, 14, 10, 59, 999807)
     >>> sat.satnum
     25544
 
     # using sgp4 directly, to get position and velocity in ECI coordinates
-    >>> position, velocity = sat.propagate(2017, 6, 29, 12, 50, 19)
+    >>> from sgp4.api import jday
+
+    >>> jd, fr = jday(2017, 6, 29, 12, 50, 19)
+    >>> err_code, position, velocity = sat.sgp4(jd, fr)
     >>> position  # km  # doctest: +FLOAT_CMP
     (3289.302521216188, 3816.880925531413, 4443.175627001508)
     >>> velocity  # km/s  # doctest: +FLOAT_CMP

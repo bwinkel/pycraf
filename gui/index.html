@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Graphical user interface (pycraf-gui) &#8212; pycraf v1.0.4</title>
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="test" href="../api/pycraf.test.html" />
+    <link rel="prev" title="MultiState" href="../api/pycraf.utils.MultiState.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="../api/pycraf.test.html" title="test">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="../api/pycraf.utils.MultiState.html" title="MultiState">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v1.0.4</a>
+	 &#187;
+      </li>
+      
+      <li>Graphical user interface (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf-gui</span></code>)</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="graphical-user-interface-pycraf-gui">
+<span id="pycraf-gui"></span><h1>Graphical user interface (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf-gui</span></code>)<a class="headerlink" href="#graphical-user-interface-pycraf-gui" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf</span></code> GUI is a little graphical application, which is shipped with
+the Python <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf</span></code> package. It can be used to quickly analyze the path
+propogation losses along a transmitter-receiver sight-line and plot the path
+geometry. It is also possible to compute attenuation maps. At the moment, it
+doesn’t come with an amazing amount of features, but it is foreseen to add
+more in the future.</p>
+</div>
+<div class="section" id="using-pycraf-gui">
+<h2>Using pycraf-gui<a class="headerlink" href="#using-pycraf-gui" title="Permalink to this headline">¶</a></h2>
+<p>To run the application, simply run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pycraf-gui</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As for the <a class="reference internal" href="../pathprof/index.html#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pathprof</span></code></a> sub-package, SRTM tile data is necessary
+to query terrain height profiles. It is possible to have the GUI download
+the tiles automatically. Nevertheless, if you already have SRTM (or other
+.hgt) tiles, you can use them; see also <a class="reference internal" href="../pathprof/working_with_srtm.html#working-with-srtm"><span class="std std-ref">Working with SRTM data</span></a>.</p>
+</div>
+<p>The GUI looks like the following:</p>
+<a class="reference internal image-reference" href="../_images/pycraf-screenshot-low.jpg"><img alt="pycraf-gui screenshot" class="align-left" src="../_images/pycraf-screenshot-low.jpg" style="width: 800.0px; height: 699.0px;" /></a>
+<p>In the “General parameters” pane, one can change the environmental properties,
+such as temperature and pressure, the desired radio frequency and of course
+the location of transmitter and receiver with their antenna heights, etc.
+Any change to these numbers will automatically update the “Geometry” display,
+i.e., the results of the path loss calculation and the associate path plot.
+It is also possible to compute plots of the path losses vs. distance (“Path
+profile” pane) and attenuation maps (“Mapping” pane).</p>
+<p>Currently, it is possible to save the plots as images (pdf, png, etc.) but it
+is not yet possible to export the data into a disk file.</p>
+</div>
+<div class="section" id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">Astropy Units and Quantities package</a>, which is used extensively in pycraf.</p></li>
+<li><p><a class="reference external" href="https://www.itu.int/rec/R-REC-P.452-16-201507-I/en">ITU-R Recommendation P.452-16</a></p></li>
+</ul>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">Graphical user interface (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf-gui</span></code>)</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#using-pycraf-gui">Using pycraf-gui</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/gui/index.rst">Edit This Page on Github</a> &nbsp;
+    <a href="../_sources/gui/index.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
+  </p>
+</footer>
+  </body>
+</html>

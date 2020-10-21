@@ -1,41 +1,38 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pressure_water_from_humidity &#8212; pycraf v0.25.4</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pressure_water_from_humidity &#8212; pycraf v1.0.4</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.25.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pressure_water_from_rho_water" href="pycraf.atm.pressure_water_from_rho_water.html" />
-    <link rel="prev" title="opacity_from_atten" href="pycraf.atm.opacity_from_atten.html" />
-<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
-<script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link rel="prev" title="path_endpoint" href="pycraf.atm.path_endpoint.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 
-
-  </head>
-  <body>
+  </head><body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
+    
     <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
     <li><a title="General Index" href="../genindex.html">Index</a></li>
     <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
@@ -61,16 +58,16 @@
 	</a>
       </li>
       <li class="right">
-	<a href="pycraf.atm.opacity_from_atten.html" title="opacity_from_atten">
+	<a href="pycraf.atm.path_endpoint.html" title="path_endpoint">
 	  &laquo; previous
 	</a>
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.4</a>
+	<a href="../index.html">pycraf v1.0.4</a>
 	 &#187;
       </li>
-      <li><a href="../atm/index.html" accesskey="U">Atmospheric models (<code class="docutils literal"><span class="pre">pycraf.atm</span></code>)</a> &#187;</li>
+      <li><a href="../atm/index.html" accesskey="U">Atmospheric models (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.atm</span></code>)</a> &#187;</li>
       
       <li>pressure_water_from_humidity</li> 
     </ul>
@@ -84,45 +81,36 @@
             
   <div class="section" id="pressure-water-from-humidity">
 <h1>pressure_water_from_humidity<a class="headerlink" href="#pressure-water-from-humidity" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
+<dl class="py function">
 <dt id="pycraf.atm.pressure_water_from_humidity">
-<code class="descclassname">pycraf.atm.</code><code class="descname">pressure_water_from_humidity</code><span class="sig-paren">(</span><em>temp</em>, <em>press</em>, <em>humidity</em>, <em>wet_type='water'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#pressure_water_from_humidity"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.4/pycraf/atm/atm.py#L200" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.pressure_water_from_humidity" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pycraf.atm.</code><code class="sig-name descname">pressure_water_from_humidity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">temp</span></em>, <em class="sig-param"><span class="n">press</span></em>, <em class="sig-param"><span class="n">humidity</span></em>, <em class="sig-param"><span class="n">wet_type</span><span class="o">=</span><span class="default_value">'water'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#pressure_water_from_humidity"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.0.4/pycraf/atm/atm.py#L398" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.pressure_water_from_humidity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Water pressure according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.453-12-201609-I/en">ITU-R P.453-12</a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>temp</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Air temperature [K]</p>
-</div></blockquote>
-<p><strong>press</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Total air pressure [hPa]</p>
-</div></blockquote>
-<p><strong>humidity</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Relative humidity [%]</p>
-</div></blockquote>
-<p><strong>wet_type</strong> : str, optional</p>
-<blockquote>
-<div><p>Type of wet material: ‘water’, ‘ice’</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>press_w</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote class="last">
-<div><p>Water vapor partial pressure [hPa]</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>temp</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Air temperature [K]</p>
+</dd>
+<dt><strong>press</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Total air pressure [hPa]</p>
+</dd>
+<dt><strong>humidity</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Relative humidity [%]</p>
+</dd>
+<dt><strong>wet_type</strong><span class="classifier">str, optional</span></dt><dd><p>Type of wet material: ‘water’, ‘ice’</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>press_w</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Water vapor partial pressure [hPa]</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -139,14 +127,14 @@
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.4/docs/api/pycraf.atm.pressure_water_from_humidity.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/api/pycraf.atm.pressure_water_from_humidity.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.atm.pressure_water_from_humidity.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 21 Sep 2017. <br/>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
   </p>
 </footer>
   </body>

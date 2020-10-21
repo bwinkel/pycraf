@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gamma_from_eff_area &#8212; pycraf v1.0.4</title>
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="geom_from_eff_area" href="pycraf.conversions.geom_from_eff_area.html" />
+    <link rel="prev" title="gain_from_eff_area" href="pycraf.conversions.gain_from_eff_area.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="pycraf.conversions.geom_from_eff_area.html" title="geom_from_eff_area">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="pycraf.conversions.gain_from_eff_area.html" title="gain_from_eff_area">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v1.0.4</a>
+	 &#187;
+      </li>
+      <li><a href="../conversions/index.html" accesskey="U">Conversions (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.conversions</span></code>)</a> &#187;</li>
+      
+      <li>gamma_from_eff_area</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="gamma-from-eff-area">
+<h1>gamma_from_eff_area<a class="headerlink" href="#gamma-from-eff-area" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="pycraf.conversions.gamma_from_eff_area">
+<code class="sig-prename descclassname">pycraf.conversions.</code><code class="sig-name descname">gamma_from_eff_area</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eff_area</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/conversions/conversions.html#gamma_from_eff_area"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.0.4/pycraf/conversions/conversions.py#L254" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.conversions.gamma_from_eff_area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Antenna sensitivity (“Kelvins-per-Jansky”) from effective antenna area.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>eff_area</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Effective antenna area, A_eff [m**2]</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>Gamma</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Antenna sensitivity [K / Jy]</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Because all parameters/returned values are Astropy Quantities (see
+<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>), unit conversion is automatically performed.</p>
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">gamma_from_eff_area</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/api/pycraf.conversions.gamma_from_eff_area.rst">Edit This Page on Github</a> &nbsp;
+    <a href="../_sources/api/pycraf.conversions.gamma_from_eff_area.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
+  </p>
+</footer>
+  </body>
+</html>

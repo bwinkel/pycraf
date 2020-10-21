@@ -1,39 +1,36 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pycraf.utils.multistate &#8212; pycraf v0.25.4</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pycraf.utils.multistate &#8212; pycraf v1.0.4</title>
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '0.25.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
-<script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 
-
-  </head>
-  <body>
+  </head><body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../../../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
+    
     <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
     <li><a title="General Index" href="../../../genindex.html">Index</a></li>
     <li><a title="Module Index" href="../../../py-modindex.html">Modules</a></li>
@@ -54,10 +51,11 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v0.25.4</a>
+	<a href="../../../index.html">pycraf v1.0.4</a>
 	 &#187;
       </li>
-      <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+      <li><a href="../../index.html" >Module code</a> &#187;</li>
+      <li><a href="../../pycraf.html" accesskey="U">pycraf</a> &#187;</li>
       
        
     </ul>
@@ -79,7 +77,7 @@
 
 <span class="k">class</span> <span class="nc">_MultiMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s1">&#39;_attributes&#39;</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
@@ -101,10 +99,22 @@
 
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__setattr__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__setattr__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
             <span class="s1">&#39;Setting attributes directy is not allowed. Use &quot;set&quot; method!&#39;</span>
             <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;__repr__&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;__repr__&#39;</span><span class="p">)()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;__str__&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;__str__&#39;</span><span class="p">)()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="MultiState"><a class="viewcode-back" href="../../../api/pycraf.utils.MultiState.html#pycraf.utils.MultiState">[docs]</a><span class="k">class</span> <span class="nc">MultiState</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">_MultiMeta</span><span class="p">):</span>
@@ -190,11 +200,11 @@
 
     <span class="n">_attributes</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;This class is a singleton.  Do not instantiate.&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="MultiState.set"><a class="viewcode-back" href="../../../api/pycraf.utils.MultiState.html#pycraf.utils.MultiState.set">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">_do_validate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the current science state value.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -207,26 +217,29 @@
                     <span class="p">)</span>
 
         <span class="k">class</span> <span class="nc">_Context</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-            <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="n">parent</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_values</span> <span class="o">=</span> <span class="p">{}</span>
                 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
 
-            <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
                 <span class="k">pass</span>
 
-            <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
+            <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">hook</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span>
                         <span class="p">)</span>
 
-            <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
                 <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;&lt;MultiState </span><span class="si">{0}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
 
         <span class="n">ctx</span> <span class="o">=</span> <span class="n">_Context</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_attributes</span><span class="p">)</span>
-        <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_do_validate</span><span class="p">:</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">hook</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">cls</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
 
@@ -250,9 +263,50 @@
 <span class="sd">        - Check that the kwargs keys are in _attributes tuple.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
 
-        <span class="k">return</span> <span class="n">kwargs</span></div></div>
+        <span class="k">return</span> <span class="n">kwargs</span></div>
+
+<div class="viewcode-block" id="MultiState.hook"><a class="viewcode-back" href="../../../api/pycraf.utils.MultiState.html#pycraf.utils.MultiState.hook">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">hook</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        A hook which is called everytime when attributes are about to change.</span>
+
+<span class="sd">        You should override this method if you want to enable pre-processing</span>
+<span class="sd">        or monitoring of your attributes. For example, one could use this</span>
+<span class="sd">        to react to attribute changes::</span>
+
+<span class="sd">            &gt;&gt;&gt; from pycraf.utils import MultiState</span>
+
+<span class="sd">            &gt;&gt;&gt; class MyState(MultiState):</span>
+<span class="sd">            ...</span>
+<span class="sd">            ...     _attributes = (&#39;foo&#39;, &#39;bar&#39;)</span>
+<span class="sd">            ...     foo = 1</span>
+<span class="sd">            ...     bar = &quot;guido&quot;</span>
+<span class="sd">            ...</span>
+<span class="sd">            ...     @classmethod</span>
+<span class="sd">            ...     def hook(cls, **kwargs):</span>
+<span class="sd">            ...         if &#39;bar&#39; in kwargs:</span>
+<span class="sd">            ...             if kwargs[&#39;bar&#39;] != cls.bar:</span>
+<span class="sd">            ...                 print(&#39;{} about to change: {} --&gt; {}&#39;.format(</span>
+<span class="sd">            ...                     &#39;bar&#39;, kwargs[&#39;bar&#39;], cls.bar</span>
+<span class="sd">            ...                     ))</span>
+<span class="sd">            ...                 # do stuff ...</span>
+
+<span class="sd">            &gt;&gt;&gt; _ = MyState.set(bar=&quot;david&quot;)</span>
+<span class="sd">            bar about to change: david --&gt; guido</span>
+<span class="sd">            &gt;&gt;&gt; _ = MyState.set(bar=&quot;david&quot;)</span>
+<span class="sd">            &gt;&gt;&gt; _ = MyState.set(bar=&quot;guido&quot;)</span>
+<span class="sd">            bar about to change: guido --&gt; david</span>
+
+<span class="sd">            &gt;&gt;&gt; with MyState.set(bar=&quot;david&quot;):</span>
+<span class="sd">            ...     pass</span>
+<span class="sd">            bar about to change: david --&gt; guido</span>
+<span class="sd">            bar about to change: guido --&gt; david</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">pass</span></div></div>
 </pre></div>
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -268,9 +322,9 @@
   <p class="pull-right"> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 21 Sep 2017. <br/>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
   </p>
 </footer>
   </body>

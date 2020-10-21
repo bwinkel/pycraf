@@ -1,0 +1,6 @@
+regrid_from_geotiff
+===================
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: regrid_from_geotiff

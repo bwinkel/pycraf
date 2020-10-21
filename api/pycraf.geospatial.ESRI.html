@@ -1,41 +1,38 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>ESRI &#8212; pycraf v0.25.4</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ESRI &#8212; pycraf v1.0.4</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.25.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Satellites (pycraf.satellite)" href="../satellite/index.html" />
     <link rel="prev" title="EPSG" href="pycraf.geospatial.EPSG.html" />
-<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
-<script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 
-
-  </head>
-  <body>
+  </head><body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
+    
     <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
     <li><a title="General Index" href="../genindex.html">Index</a></li>
     <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
@@ -67,10 +64,10 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.4</a>
+	<a href="../index.html">pycraf v1.0.4</a>
 	 &#187;
       </li>
-      <li><a href="../geospatial/index.html" accesskey="U">Geographical frames (<code class="docutils literal"><span class="pre">pycraf.geospatial</span></code>)</a> &#187;</li>
+      <li><a href="../geospatial/index.html" accesskey="U">Geographical frames (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code>)</a> &#187;</li>
       
       <li>ESRI</li> 
     </ul>
@@ -84,89 +81,83 @@
             
   <div class="section" id="esri">
 <h1>ESRI<a class="headerlink" href="#esri" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pycraf.geospatial.ESRI">
-<em class="property">class </em><code class="descclassname">pycraf.geospatial.</code><code class="descname">ESRI</code><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#ESRI"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.4/pycraf/geospatial/geospatial.py#L81" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.geospatial.ESRI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">pycraf.geospatial.</code><code class="sig-name descname">ESRI</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#ESRI"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.0.4/pycraf/geospatial/geospatial.py#L81" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.geospatial.ESRI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Enum with often used ESRI codes.</p>
 <p class="rubric">Attributes Summary</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pycraf.geospatial.ESRI.BONNE" title="pycraf.geospatial.ESRI.BONNE"><code class="xref py py-obj docutils literal"><span class="pre">BONNE</span></code></a></td>
-<td><a class="reference external" href="http://spatialreference.org/ref/esri/54024/">World Bonne (WGS84)</a></td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pycraf.geospatial.ESRI.BONNE" title="pycraf.geospatial.ESRI.BONNE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BONNE</span></code></a></p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pycraf.geospatial.ESRI.GALL" title="pycraf.geospatial.ESRI.GALL"><code class="xref py py-obj docutils literal"><span class="pre">GALL</span></code></a></td>
-<td><a class="reference external" href="http://spatialreference.org/ref/esri/54016/">World Gall Stereographic (WGS84)</a></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pycraf.geospatial.ESRI.GALL" title="pycraf.geospatial.ESRI.GALL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GALL</span></code></a></p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pycraf.geospatial.ESRI.MERCATOR" title="pycraf.geospatial.ESRI.MERCATOR"><code class="xref py py-obj docutils literal"><span class="pre">MERCATOR</span></code></a></td>
-<td><a class="reference external" href="http://spatialreference.org/ref/esri/54004/">World Mercator (WGS84)</a></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pycraf.geospatial.ESRI.MERCATOR" title="pycraf.geospatial.ESRI.MERCATOR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MERCATOR</span></code></a></p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pycraf.geospatial.ESRI.MOLLWEIDE" title="pycraf.geospatial.ESRI.MOLLWEIDE"><code class="xref py py-obj docutils literal"><span class="pre">MOLLWEIDE</span></code></a></td>
-<td><a class="reference external" href="http://spatialreference.org/ref/esri/54009/">World Mollweide (WGS84)</a></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pycraf.geospatial.ESRI.MOLLWEIDE" title="pycraf.geospatial.ESRI.MOLLWEIDE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MOLLWEIDE</span></code></a></p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pycraf.geospatial.ESRI.ROBINSON" title="pycraf.geospatial.ESRI.ROBINSON"><code class="xref py py-obj docutils literal"><span class="pre">ROBINSON</span></code></a></td>
-<td><a class="reference external" href="http://spatialreference.org/ref/esri/54030/">World Robinson (WGS84)</a></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pycraf.geospatial.ESRI.ROBINSON" title="pycraf.geospatial.ESRI.ROBINSON"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ROBINSON</span></code></a></p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pycraf.geospatial.ESRI.SINUSOIDAL" title="pycraf.geospatial.ESRI.SINUSOIDAL"><code class="xref py py-obj docutils literal"><span class="pre">SINUSOIDAL</span></code></a></td>
-<td><a class="reference external" href="http://spatialreference.org/ref/esri/54008/">World Sinusoidal (WGS84)</a></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pycraf.geospatial.ESRI.SINUSOIDAL" title="pycraf.geospatial.ESRI.SINUSOIDAL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SINUSOIDAL</span></code></a></p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pycraf.geospatial.ESRI.STEREO" title="pycraf.geospatial.ESRI.STEREO"><code class="xref py py-obj docutils literal"><span class="pre">STEREO</span></code></a></td>
-<td><a class="reference external" href="http://spatialreference.org/ref/esri/54026/">World Stereographic (WGS84)</a></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pycraf.geospatial.ESRI.STEREO" title="pycraf.geospatial.ESRI.STEREO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">STEREO</span></code></a></p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Attributes Documentation</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pycraf.geospatial.ESRI.BONNE">
-<code class="descname">BONNE</code><em class="property"> = 54024</em><a class="headerlink" href="#pycraf.geospatial.ESRI.BONNE" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference external" href="http://spatialreference.org/ref/esri/54024/">World Bonne (WGS84)</a></p>
-</dd></dl>
+<code class="sig-name descname">BONNE</code><em class="property"> = '+ellps=WGS84 +datum=WGS84 +units=m no_defs'</em><a class="headerlink" href="#pycraf.geospatial.ESRI.BONNE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pycraf.geospatial.ESRI.GALL">
-<code class="descname">GALL</code><em class="property"> = 54016</em><a class="headerlink" href="#pycraf.geospatial.ESRI.GALL" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference external" href="http://spatialreference.org/ref/esri/54016/">World Gall Stereographic (WGS84)</a></p>
-</dd></dl>
+<code class="sig-name descname">GALL</code><em class="property"> = '+proj=gall +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m no_defs'</em><a class="headerlink" href="#pycraf.geospatial.ESRI.GALL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pycraf.geospatial.ESRI.MERCATOR">
-<code class="descname">MERCATOR</code><em class="property"> = 54004</em><a class="headerlink" href="#pycraf.geospatial.ESRI.MERCATOR" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference external" href="http://spatialreference.org/ref/esri/54004/">World Mercator (WGS84)</a></p>
-</dd></dl>
+<code class="sig-name descname">MERCATOR</code><em class="property"> = '+proj=merc +lat_ts=0 +lon_0=0 +k=1.000000 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m no_defs'</em><a class="headerlink" href="#pycraf.geospatial.ESRI.MERCATOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pycraf.geospatial.ESRI.MOLLWEIDE">
-<code class="descname">MOLLWEIDE</code><em class="property"> = 54009</em><a class="headerlink" href="#pycraf.geospatial.ESRI.MOLLWEIDE" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference external" href="http://spatialreference.org/ref/esri/54009/">World Mollweide (WGS84)</a></p>
-</dd></dl>
+<code class="sig-name descname">MOLLWEIDE</code><em class="property"> = '+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m no_defs'</em><a class="headerlink" href="#pycraf.geospatial.ESRI.MOLLWEIDE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pycraf.geospatial.ESRI.ROBINSON">
-<code class="descname">ROBINSON</code><em class="property"> = 54030</em><a class="headerlink" href="#pycraf.geospatial.ESRI.ROBINSON" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference external" href="http://spatialreference.org/ref/esri/54030/">World Robinson (WGS84)</a></p>
-</dd></dl>
+<code class="sig-name descname">ROBINSON</code><em class="property"> = '+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m no_defs'</em><a class="headerlink" href="#pycraf.geospatial.ESRI.ROBINSON" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pycraf.geospatial.ESRI.SINUSOIDAL">
-<code class="descname">SINUSOIDAL</code><em class="property"> = 54008</em><a class="headerlink" href="#pycraf.geospatial.ESRI.SINUSOIDAL" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference external" href="http://spatialreference.org/ref/esri/54008/">World Sinusoidal (WGS84)</a></p>
-</dd></dl>
+<code class="sig-name descname">SINUSOIDAL</code><em class="property"> = '+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m no_defs'</em><a class="headerlink" href="#pycraf.geospatial.ESRI.SINUSOIDAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pycraf.geospatial.ESRI.STEREO">
-<code class="descname">STEREO</code><em class="property"> = 54026</em><a class="headerlink" href="#pycraf.geospatial.ESRI.STEREO" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference external" href="http://spatialreference.org/ref/esri/54026/">World Stereographic (WGS84)</a></p>
-</dd></dl>
+<code class="sig-name descname">STEREO</code><em class="property"> = '+proj=stere +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m no_defs'</em><a class="headerlink" href="#pycraf.geospatial.ESRI.STEREO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -183,14 +174,14 @@
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.4/docs/api/pycraf.geospatial.ESRI.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/api/pycraf.geospatial.ESRI.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.geospatial.ESRI.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 21 Sep 2017. <br/>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
   </p>
 </footer>
   </body>

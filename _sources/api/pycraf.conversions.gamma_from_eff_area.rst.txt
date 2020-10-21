@@ -1,0 +1,6 @@
+gamma_from_eff_area
+===================
+
+.. currentmodule:: pycraf.conversions
+
+.. autofunction:: gamma_from_eff_area

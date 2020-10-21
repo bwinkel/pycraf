@@ -11,25 +11,31 @@ SrtmConf
    .. autosummary::
 
       ~SrtmConf.download
+      ~SrtmConf.hgt_res
       ~SrtmConf.interp
       ~SrtmConf.server
       ~SrtmConf.spline_opts
       ~SrtmConf.srtm_dir
+      ~SrtmConf.tile_size
 
    .. rubric:: Methods Summary
 
    .. autosummary::
 
+      ~SrtmConf.hook
       ~SrtmConf.validate
 
    .. rubric:: Attributes Documentation
 
    .. autoattribute:: download
+   .. autoattribute:: hgt_res
    .. autoattribute:: interp
    .. autoattribute:: server
    .. autoattribute:: spline_opts
    .. autoattribute:: srtm_dir
+   .. autoattribute:: tile_size
 
    .. rubric:: Methods Documentation
 
+   .. automethod:: hook
    .. automethod:: validate

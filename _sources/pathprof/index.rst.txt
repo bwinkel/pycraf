@@ -73,8 +73,8 @@ Let's start with querying `SRTM data` and plot a height profile.
     :include-source:
 
     import matplotlib.pyplot as plt
-    from astropy import units as u
     from pycraf import pathprof
+    from astropy import units as u
 
     # allow download of missing SRTM data:
     pathprof.SrtmConf.set(download='missing')
@@ -115,7 +115,7 @@ Path attenuation
 The `~pycraf.pathprof` package implements `ITU-R Recommendation P.452-16
 <https://www.itu.int/rec/R-REC-P.452-16-201507-I/en>`_ for path propagation
 loss calculations. In `~pycraf.pathprof` this is a two-step procedure.
-First a helper object, a `~pycraf.pathprof.PathProf` object, has to be
+First a helper object, a `~pycraf.pathprof.PathProp` object, has to be
 instantiated. It contains all kinds of parameters that define the path
 geometry and hold other necessary quantities (there are many!). Second, one
 feeds this object into one of the functions that calculate attenuation
@@ -133,8 +133,8 @@ it is usually sufficient to use that. The individual functions are only
 provided for reasons of computing speed, if one is really only interested in
 one component::
 
-    >>> from astropy import units as u
     >>> from pycraf import pathprof, conversions as cnv
+    >>> from astropy import units as u
 
     >>> pathprof.SrtmConf.set(download='missing')  # doctest: +IGNORE_OUTPUT
 
@@ -205,7 +205,7 @@ With the PathProp object, it is now just one function call to get the path
 loss::
 
     >>> tot_loss = pathprof.loss_complete(pprop, G_t, G_r)  # doctest: +REMOTE_DATA
-    >>> print('L_bfsg:   {:5.2f} - Free-space loss\n'  # doctest: +REMOTE_DATA
+    >>> print('L_b0p:   {:5.2f} - Free-space loss\n'  # doctest: +REMOTE_DATA
     ...       'L_bd:     {:5.2f} - Basic transmission loss associated '
     ...       'with diffraction\n'
     ...       'L_bs:     {:5.2f} - Tropospheric scatter loss\n'
@@ -215,7 +215,7 @@ loss::
     ...       'L:        {:5.2f} - As L_b_corr but with gain '
     ...       'correction'.format(*tot_loss)
     ...      )
-    L_bfsg:   123.34 dB - Free-space loss
+    L_b0p:    122.37 dB - Free-space loss
     L_bd:     173.73 dB - Basic transmission loss associated with diffraction
     L_bs:     225.76 dB - Tropospheric scatter loss
     L_ba:     212.81 dB - Ducting/layer reflection loss
@@ -238,8 +238,8 @@ to produce terrain maps of a region:
     :include-source:
 
     import matplotlib.pyplot as plt
-    from astropy import units as u
     from pycraf import pathprof
+    from astropy import units as u
 
     pathprof.SrtmConf.set(download='missing')
 
@@ -280,10 +280,10 @@ to produce terrain maps of a region:
     cbar.set_label(r'Height (amsl)', color='k')
     cbax.xaxis.set_label_position('top')
     for t in cbax.xaxis.get_major_ticks():
-        t.tick1On = True
-        t.tick2On = True
-        t.label1On = False
-        t.label2On = True
+        t.tick1line.set_visible(False)
+        t.tick2line.set_visible(True)
+        t.label1.set_visible(False)
+        t.label2.set_visible(True)
     ctics = np.arange(0, 1150, 50)
     cbar.set_ticks(ctics)
     cbar.ax.set_xticklabels(map('{:.0f} m'.format, ctics), color='k')
@@ -321,8 +321,8 @@ it's different:
 
     import numpy as np
     import matplotlib.pyplot as plt
-    from astropy import units as u
     from pycraf import pathprof, geometry
+    from astropy import units as u
 
     lon, lat = 0 * u.deg, 70 * u.deg
     bearings = np.linspace(-180, 180, 721) * u.deg
@@ -370,8 +370,8 @@ Therefore, we added a faster alternative, `~pycraf.pathprof.atten_map_fast`. The
 .. plot::
    :include-source:
 
-    from astropy import units as u
     from pycraf import pathprof, conversions as cnv
+    from astropy import units as u
 
 
     def plot_atten_map(lons, lats, total_atten):
@@ -427,7 +427,7 @@ Therefore, we added a faster alternative, `~pycraf.pathprof.atten_map_fast`. The
         zone_t=zone_t, zone_r=zone_r,
         )  # dict-like
 
-    atten_maps, eps_pt_map, eps_pr_map = pathprof.atten_map_fast(
+    results = pathprof.atten_map_fast(
         freq,
         temperature,
         pressure,
@@ -439,7 +439,7 @@ Therefore, we added a faster alternative, `~pycraf.pathprof.atten_map_fast`. The
     lons = hprof_cache['xcoords']
     lats = hprof_cache['ycoords']
     # index 4 is total loss without clutter/gain included:
-    total_atten = atten_maps[4]
+    total_atten = results['L_b'].value
 
     plot_atten_map(lons, lats, total_atten)
 
@@ -447,13 +447,104 @@ For a more illustrative example, have a look at the Jupyter `tutorial notebook
 <https://github.com/bwinkel/pycraf/tree/master/notebooks/03c_attenuation_maps.ipynb>`_
 on this topic.
 
+Quick analysis of a single path
+---------------------------------------
+Sometimes, one needs to analyse a single path (i.e., fixed transmitter and
+receiver location), which means one wants to know the propagation losses
+as a function of various parameters, such as frequency, time-percentages,
+or antenna heights. Depending on the number of desired samples, the approach
+of creating a `~pycraf.pathprof.PathProp` instance and then run one of
+the loss-functions on it (see
+:ref:`pathprof-getting-started-path-attenuation`) can be slow.
+
+Therefore, another convenience function is provided,
+`~pycraf.pathprof.losses_complete`, which has a very similar function
+signature as `~pycraf.pathprof.PathProp`, but accepts `~numpy.ndarrays`
+(or rather arrays of `~astropy.units.Quantity`) for most of the inputs.
+Obviously, parameters such as Tx and Rx location cannot be arrays, and
+as a consequence, the terrain height profile can only be a 1D array.
+
+The following shows a typical use case (which is also contained in the
+:ref:`pycraf-gui`):
+
+
+.. plot::
+    :include-source:
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from pycraf import pathprof, conversions as cnv
+    from astropy import units as u
+
+
+    lon_tx, lat_tx = 6.8836 * u.deg, 50.525 * u.deg
+    lon_rx, lat_rx = 7.3334 * u.deg, 50.635 * u.deg
+    hprof_step = 100 * u.m  # resolution of height profile
+    omega = 0. * u.percent
+    temperature = 290. * u.K
+    pressure = 1013. * u.hPa
+    h_tg, h_rg = 5 * u.m, 50 * u.m
+    G_t, G_r = 0 * cnv.dBi, 15 * cnv.dBi
+    zone_t, zone_r = pathprof.CLUTTER.URBAN, pathprof.CLUTTER.SUBURBAN
+
+    frequency = np.array([0.1, 0.5, 1, 2, 5, 10, 20, 50, 100])
+    time_percent = np.logspace(-3, np.log10(50), 100)
+
+    # as frequency and time_percent are arrays, we need to add
+    # new axes to allow proper broadcasting
+    results = pathprof.losses_complete(
+        frequency[:, np.newaxis] * u.GHz,
+        temperature,
+        pressure,
+        lon_tx, lat_tx,
+        lon_rx, lat_rx,
+        h_tg, h_rg,
+        hprof_step,
+        time_percent[np.newaxis] * u.percent,
+        zone_t=zone_t, zone_r=zone_r,
+        )
+
+    fig, ax = plt.subplots(1, figsize=(8, 8))
+    L_b_corr = results['L_b_corr'].value
+    t = time_percent.squeeze()
+    lidx = np.argmin(np.abs(t - 2e-3))
+    for idx, f in enumerate(frequency.squeeze()):
+        p = ax.semilogx(t, L_b_corr[idx], '-')
+        ax.text(
+            2e-3, L_b_corr[idx][lidx] - 1,
+            '{:.1f} GHz'.format(f),
+            ha='left', va='top', color=p[0].get_color(),
+            )
+
+    ax.grid()
+    ax.set_xlim((time_percent[0], time_percent[-1]))
+    ax.set_xlabel('Time percent [%]')
+    ax.set_ylabel('L_b_corr [dB]')
+
+.. note::
+
+    Even with the Tx/Rx location and the terrain height profile being constant
+    for one call of the `~pycraf.pathprof.losses_complete` function, the
+    computing time can be substantial. This is because changes in the
+    parameters `frequency`, `h_tg`, `h_rg`, `version`, `zone_t`, and `zone_r`
+    have influence on the propagation path geometry.  In the `broadcasted
+    arrays <https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html>`_,
+    the axes associated with the mentioned parameters should vary as slow as
+    possible. The underlying implementation will trigger a re-computation of
+    the path geometry if one of these parameters changes. Therefore, if the
+    broadcast axes for `frequency` and `time_percent` would have been chosen
+    in the opposite manner, the function would run about an order of magnitude
+    slower!
+
 See Also
 ========
 
 - `Astropy Units and Quantities package <http://docs.astropy.org/en/stable/
   units/index.html>`_, which is used extensively in pycraf.
-- `ITU-R Recommendation P.452-16 <https://www.itu.int/rec/
+- `Recommendation ITU-R P.452-16 <https://www.itu.int/rec/
   R-REC-P.452-16-201507-I/en>`_
+- `Corine Landcover
+  <https://land.copernicus.eu/pan-european/corine-land-cover>`_
 
 Reference/API
 =============
@@ -466,8 +557,8 @@ Reference/API
     :skip: PARAMETERS_V14
     :skip: PARAMETERS_V16
 
-Available clutter types
------------------------
+Available clutter types in Rec. ITU-R P.452-16
+----------------------------------------------
 
 +-------+---------------------------+------+------+
 | Value | Alias                     | |ha| | |dk| |
@@ -499,3 +590,142 @@ Available clutter types
 
 .. |ha| replace:: :math:`h_\mathrm{a}~[\mathrm{m}]`
 .. |dk| replace:: :math:`d_\mathrm{k}~[\mathrm{m}]`
+
+Conversion between Landcover classes and P.452 clutter types
+--------------------------------------------------------------------
+The following tables provide a mapping between Corine and IGBP Landcover
+classes and P.452 clutter types. It is based on common sense, but unofficial!
+Note, that ITU-R also provides clutter information in its
+`ITU Digitized World Map (IDWM) and Subroutine Library (32-bit)
+<https://www.itu.int/pub/R-SOFT-IDWM>`_ but it's available for (old versions
+of) Windows, only, and comes with a steep price tag.
+
++----------+----------------------------------------------+------------------+
+| Corine ID| Explanation                                  | P.452 Class      |
++==========+==============================================+==================+
+| 111      | Continuous urban fabric                      | URBAN            |
++----------+----------------------------------------------+------------------+
+| 112      | Discontinuous urban fabric                   | SUBURBAN         |
++----------+----------------------------------------------+------------------+
+| 121      | Industrial or commercial units               | INDUSTRIAL_ZONE  |
++----------+----------------------------------------------+------------------+
+| 122      | Road and rail networks and associated land   | INDUSTRIAL_ZONE  |
++----------+----------------------------------------------+------------------+
+| 123      | Port areas                                   | INDUSTRIAL_ZONE  |
++----------+----------------------------------------------+------------------+
+| 124      | Airports                                     | INDUSTRIAL_ZONE  |
++----------+----------------------------------------------+------------------+
+| 131      | Mineral extraction sites                     | INDUSTRIAL_ZONE  |
++----------+----------------------------------------------+------------------+
+| 132      | Dump sites                                   | INDUSTRIAL_ZONE  |
++----------+----------------------------------------------+------------------+
+| 133      | Construction sites                           | INDUSTRIAL_ZONE  |
++----------+----------------------------------------------+------------------+
+| 141      | Green urban areas                            | URBAN            |
++----------+----------------------------------------------+------------------+
+| 142      | Sport and leisure facilities                 | INDUSTRIAL_ZONE  |
++----------+----------------------------------------------+------------------+
+| 211      | Non-irrigated arable land                    | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 212      | Permanently irrigated land                   | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 213      | Rice fields                                  | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 221      | Vineyards                                    | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 222      | Fruit trees and berry plantations            | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 223      | Olive groves                                 | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 231      | Pastures                                     | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 241      | Annual crops associated with permanent crops | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 242      | Complex cultivation patterns                 | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 243      | Land principally occupied by agriculture     | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 244      | Agro-forestry areas                          | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 311      | Broad-leaved forest                          | DECIDIOUS_TREES  |
++----------+----------------------------------------------+------------------+
+| 312      | Coniferous forest                            | CONIFEROUS_TREES |
++----------+----------------------------------------------+------------------+
+| 313      | Mixed forest                                 | DECIDIOUS_TREES  |
++----------+----------------------------------------------+------------------+
+| 321      | Natural grasslands                           | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 322      | Moors and heathland                          | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 323      | Sclerophyllous vegetation                    | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 324      | Transitional woodland-shrub                  | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 331      | Beaches, dunes, sands                        | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 332      | Bare rocks                                   | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 333      | Sparsely vegetated areas                     | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 334      | Burnt areas                                  | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 335      | Glaciers and perpetual snow                  | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 411      | Inland marshes                               | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 412      | Peat bogs                                    | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 421      | Salt marshes                                 | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 422      | Salines                                      | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 423      | Intertidal flats                             | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 511      | Water courses                                | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 512      | Water bodies                                 | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 521      | Coastal lagoons                              | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 522      | Estuaries                                    | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 523      | Sea and ocean                                | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+
++----------+----------------------------------------------+------------------+
+| IGBP ID  | Explanation                                  | P.452 Class      |
++==========+==============================================+==================+
+|  1       | Evergreen needleleaf forests                 | CONIFEROUS_TREES |
++----------+----------------------------------------------+------------------+
+|  2       | Evergreen broadleaf forests                  | DECIDIOUS_TREES  |
++----------+----------------------------------------------+------------------+
+|  3       | Deciduous needleleaf forests                 | CONIFEROUS_TREES |
++----------+----------------------------------------------+------------------+
+|  4       | Deciduous broadleaf forests                  | DECIDIOUS_TREES  |
++----------+----------------------------------------------+------------------+
+|  5       | Mixed forests                                | DECIDIOUS_TREES  |
++----------+----------------------------------------------+------------------+
+|  6       | Closed shrublands                            | SPARSE           |
++----------+----------------------------------------------+------------------+
+|  7       | Open shrublands                              | SPARSE           |
++----------+----------------------------------------------+------------------+
+|  8       | Woody savannas                               | DECIDIOUS_TREES  |
++----------+----------------------------------------------+------------------+
+|  9       | Savannas                                     | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 10       | Grasslands                                   | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 11       | Permanent wetlands                           | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 12       | Croplands                                    | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 13       | Urban and built-up lands                     | URBAN            |
++----------+----------------------------------------------+------------------+
+| 14       | Cropland/natural vegetation mosaics          | SPARSE           |
++----------+----------------------------------------------+------------------+
+| 15       | Snow and ice                                 | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 16       | Barren                                       | UNKNOWN          |
++----------+----------------------------------------------+------------------+
+| 17       | Water bodies                                 | UNKNOWN          |
++----------+----------------------------------------------+------------------+

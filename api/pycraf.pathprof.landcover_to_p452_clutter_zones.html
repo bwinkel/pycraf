@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>landcover_to_p452_clutter_zones &#8212; pycraf v1.0.4</title>
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="loss_complete" href="pycraf.pathprof.loss_complete.html" />
+    <link rel="prev" title="height_path_data_generic" href="pycraf.pathprof.height_path_data_generic.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="pycraf.pathprof.loss_complete.html" title="loss_complete">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="pycraf.pathprof.height_path_data_generic.html" title="height_path_data_generic">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v1.0.4</a>
+	 &#187;
+      </li>
+      <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
+      
+      <li>landcover_to_p452_clutter_zones</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="landcover-to-p452-clutter-zones">
+<h1>landcover_to_p452_clutter_zones<a class="headerlink" href="#landcover-to-p452-clutter-zones" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="pycraf.pathprof.landcover_to_p452_clutter_zones">
+<code class="sig-prename descclassname">pycraf.pathprof.</code><code class="sig-name descname">landcover_to_p452_clutter_zones</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">landcover_map</span></em>, <em class="sig-param"><span class="n">conversion_table</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/gis.html#landcover_to_p452_clutter_zones"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.0.4/pycraf/pathprof/gis.py#L59" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.landcover_to_p452_clutter_zones" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a map of landcover class IDs to P.452 clutter types.</p>
+<p>Two pre-defined mappings (conversion tables) are provided in
+<a class="reference internal" href="../pathprof/index.html#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pathprof</span></code></a>, one for the Corine landcover survey (by the Copernicus
+mission) that is a high-resolution database for Europe, and one for IGBP
+class IDs, which are used e.g., by  the Terra and Aqua combined Moderate
+Resolution Imaging Spectroradiometer, MODIS, which is available for
+several years. One version of that data, the “MOD12C1”
+(Majority_Land_Cover_Type_1) map is a (rather low-resolution)
+version for the full Earth.</p>
+<p>Be careful, some data files seem to contain zero-indexed IGBP IDs! One
+may need to increase the input map values by One in such cases.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>landcover_map</strong><span class="classifier">2D <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> (usually integer type)</span></dt><dd><p>Map of land cover types (e.g. from Corine land cover survey). Data
+type will usually be some Integer type and must contain land cover
+class IDs (see e.g. Notes below).</p>
+</dd>
+<dt><strong>conversion_table</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>A dictionary with a mapping (conversion) from the land cover ID to
+the P.452 clutter zone type. Two mappings are pre-defined in
+<a class="reference internal" href="../pathprof/index.html#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pathprof</span></code></a>, the <a class="reference internal" href="pycraf.pathprof.CORINE_TO_P452_CLASSES.html#pycraf.pathprof.CORINE_TO_P452_CLASSES" title="pycraf.pathprof.CORINE_TO_P452_CLASSES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CORINE_TO_P452_CLASSES</span></code></a> and
+the <a class="reference internal" href="pycraf.pathprof.IGBP_TO_P452_CLASSES.html#pycraf.pathprof.IGBP_TO_P452_CLASSES" title="pycraf.pathprof.IGBP_TO_P452_CLASSES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IGBP_TO_P452_CLASSES</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>p452_clutter_zones_map</strong><span class="classifier">2D <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> of int8</span></dt><dd><p>Map of P.452 clutter zone types derived from the provided dictionary
+with the landcover class IDs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul>
+<li><p>Corine land cover classes:</p>
+<div class="line-block">
+<div class="line">111 Continuous urban fabric</div>
+<div class="line">112 Discontinuous urban fabric</div>
+<div class="line">121 Industrial or commercial units</div>
+<div class="line">122 Road and rail networks and associated land</div>
+<div class="line">123 Port areas</div>
+<div class="line">124 Airports</div>
+<div class="line">131 Mineral extraction sites</div>
+<div class="line">132 Dump sites</div>
+<div class="line">133 Construction sites</div>
+<div class="line">141 Green urban areas</div>
+<div class="line">142 Sport and leisure facilities</div>
+<div class="line">211 Non-irrigated arable land</div>
+<div class="line">212 Permanently irrigated land</div>
+<div class="line">213 Rice fields</div>
+<div class="line">221 Vineyards</div>
+<div class="line">222 Fruit trees and berry plantations</div>
+<div class="line">223 Olive groves</div>
+<div class="line">231 Pastures</div>
+<div class="line">241 Annual crops associated with permanent crops</div>
+<div class="line">242 Complex cultivation patterns</div>
+<div class="line">243 Agricultural land with significant areas of natural vegetation</div>
+<div class="line">244 Agro-forestry areas</div>
+<div class="line">311 Broad-leaved forest</div>
+<div class="line">312 Coniferous forest</div>
+<div class="line">313 Mixed forest</div>
+<div class="line">321 Natural grasslands</div>
+<div class="line">322 Moors and heathland</div>
+<div class="line">323 Sclerophyllous vegetation</div>
+<div class="line">324 Transitional woodland-shrub</div>
+<div class="line">331 Beaches dunes sands</div>
+<div class="line">332 Bare rocks</div>
+<div class="line">333 Sparsely vegetated areas</div>
+<div class="line">334 Burnt areas</div>
+<div class="line">335 Glaciers and perpetual snow</div>
+<div class="line">411 Inland marshes</div>
+<div class="line">412 Peat bogs</div>
+<div class="line">421 Salt marshes</div>
+<div class="line">422 Salines</div>
+<div class="line">423 Intertidal flats</div>
+<div class="line">511 Water courses</div>
+<div class="line">512 Water bodies</div>
+<div class="line">521 Coastal lagoons</div>
+<div class="line">522 Estuaries</div>
+<div class="line">523 Sea and ocean</div>
+<div class="line">999 NODATA</div>
+</div>
+</li>
+<li><p>IGBP land cover classes:</p>
+<div class="line-block">
+<div class="line">1  Evergreen needleleaf forests</div>
+<div class="line">2  Evergreen broadleaf forests</div>
+<div class="line">3  Deciduous needleleaf forests</div>
+<div class="line">4  Deciduous broadleaf forests</div>
+<div class="line">5  Mixed forests</div>
+<div class="line">6  Closed shrublands</div>
+<div class="line">7  Open shrublands</div>
+<div class="line">8  Woody savannas</div>
+<div class="line">9  Savannas</div>
+<div class="line">10 Grasslands</div>
+<div class="line">11 Permanent wetlands</div>
+<div class="line">12 Croplands</div>
+<div class="line">13 Urban and built-up lands</div>
+<div class="line">14 Cropland/natural vegetation mosaics</div>
+<div class="line">15 Snow and ice</div>
+<div class="line">16 Barren</div>
+<div class="line">17 Water bodies</div>
+</div>
+</li>
+</ul>
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">landcover_to_p452_clutter_zones</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/api/pycraf.pathprof.landcover_to_p452_clutter_zones.rst">Edit This Page on Github</a> &nbsp;
+    <a href="../_sources/api/pycraf.pathprof.landcover_to_p452_clutter_zones.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
+  </p>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz
+===========================================================
+
+.. currentmodule:: pycraf.antenna
+
+.. autofunction:: imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz

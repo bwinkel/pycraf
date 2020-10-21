@@ -1,41 +1,38 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>profile_lowlat &#8212; pycraf v0.25.4</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>profile_lowlat &#8212; pycraf v1.0.4</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.25.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="profile_midlat_summer" href="pycraf.atm.profile_midlat_summer.html" />
     <link rel="prev" title="profile_highlat_winter" href="pycraf.atm.profile_highlat_winter.html" />
-<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
-<script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 
-
-  </head>
-  <body>
+  </head><body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
+    
     <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
     <li><a title="General Index" href="../genindex.html">Index</a></li>
     <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
@@ -67,10 +64,10 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.4</a>
+	<a href="../index.html">pycraf v1.0.4</a>
 	 &#187;
       </li>
-      <li><a href="../atm/index.html" accesskey="U">Atmospheric models (<code class="docutils literal"><span class="pre">pycraf.atm</span></code>)</a> &#187;</li>
+      <li><a href="../atm/index.html" accesskey="U">Atmospheric models (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.atm</span></code>)</a> &#187;</li>
       
       <li>profile_lowlat</li> 
     </ul>
@@ -84,58 +81,69 @@
             
   <div class="section" id="profile-lowlat">
 <h1>profile_lowlat<a class="headerlink" href="#profile-lowlat" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
+<dl class="py function">
 <dt id="pycraf.atm.profile_lowlat">
-<code class="descclassname">pycraf.atm.</code><code class="descname">profile_lowlat</code><span class="sig-paren">(</span><em>height</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#profile_lowlat"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.4/pycraf/atm/atm.py#L582" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.profile_lowlat" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pycraf.atm.</code><code class="sig-name descname">profile_lowlat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">height</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#profile_lowlat"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.0.4/pycraf/atm/atm.py#L806" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.profile_lowlat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Low latitude height profiles according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.835-5-201202-I/en">ITU-R P.835-5</a>.</p>
-<p>Valid for geographic latitudes <img class="math" src="../_images/math/10841fccf3b7466738182b4a3bc209c599b336e5.png" alt="\vert \phi\vert &lt; 22^\circ"/>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>height</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Height above ground [km]</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>temp</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Temperature [K]</p>
-</div></blockquote>
-<p><strong>press</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Total pressure [hPa]</p>
-</div></blockquote>
-<p><strong>rho_w</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Water vapor density [g / m**3]</p>
-</div></blockquote>
-<p><strong>press_w</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Water vapor partial pressure [hPa]</p>
-</div></blockquote>
-<p><strong>n_index</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Refractive index [dimless]</p>
-</div></blockquote>
-<p><strong>humidity_water</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote>
-<div><p>Relative humidity if water vapor was in form of liquid water [%]</p>
-</div></blockquote>
-<p><strong>humidity_ice</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a></p>
-<blockquote class="last">
-<div><p>Relative humidity if water vapor was in form of ice [%]</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<p>Valid for geographic latitudes <span class="math notranslate nohighlight">\(\vert \phi\vert &lt; 22^\circ\)</span>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>height</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Height above ground [km]</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>temperature</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Temperature [K]</p>
+</dd>
+<dt><strong>pressure</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Total pressure [hPa]</p>
+</dd>
+<dt><strong>rho_water</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Water vapor density [g / m**3]</p>
+</dd>
+<dt><strong>pressure_water</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Water vapor partial pressure [hPa]</p>
+</dd>
+<dt><strong>ref_index</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Refractive index [dimless]</p>
+</dd>
+<dt><strong>humidity_water</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Relative humidity if water vapor was in form of liquid water [%]</p>
+</dd>
+<dt><strong>humidity_ice</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Relative humidity if water vapor was in form of ice [%]</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>For convenience, derived quantities like water density/pressure
+and refraction indices are also returned.</p>
+<p>The return value is actually a <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.namedtuple" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">namedtuple</span></code></a>, so it is
+possible to do the following:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">atm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">heights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aprof</span> <span class="o">=</span> <span class="n">atm</span><span class="o">.</span><span class="n">profile_lowlat</span><span class="p">(</span><span class="n">heights</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">height</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">press</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">heights</span><span class="p">,</span> <span class="n">aprof</span><span class="o">.</span><span class="n">temperature</span><span class="p">,</span> <span class="n">aprof</span><span class="o">.</span><span class="n">pressure</span>
+<span class="gp">... </span>        <span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:2.0f}</span><span class="s1">: </span><span class="si">{:5.1f}</span><span class="s1"> </span><span class="si">{:6.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">))</span>
+<span class="go"> 0 km: 300.4 K 1012.0 hPa</span>
+<span class="go">10 km: 237.5 K  284.9 hPa</span>
+<span class="go">20 km: 201.6 K   65.5 hPa</span>
+<span class="go">30 km: 226.9 K   15.1 hPa</span>
+<span class="go">40 km: 252.3 K    3.5 hPa</span>
+<span class="go">50 km: 270.0 K    0.8 hPa</span>
+<span class="go">60 km: 245.4 K    0.2 hPa</span>
+<span class="go">70 km: 214.7 K    0.0 hPa</span>
+<span class="go">80 km: 184.0 K    0.0 hPa</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -152,14 +160,14 @@
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.4/docs/api/pycraf.atm.profile_lowlat.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/api/pycraf.atm.profile_lowlat.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.atm.profile_lowlat.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 21 Sep 2017. <br/>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
   </p>
 </footer>
   </body>

@@ -169,7 +169,7 @@ tt, code {
 code.xref, a code {
     margin: 0;
     padding: 0 1px 0 1px;
-    background-color: none;
+    background-color: transparent;
     border: none;
 }
 
@@ -232,9 +232,11 @@ div.topbar {
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #333333), color-stop(100%, #222222));
   background-image: -webkit-linear-gradient(top, #333333, #222222);
   background-image: -o-linear-gradient(top, #333333, #222222);
-  background-image: linear-gradient(top, #333333, #222222);
+  background-image: linear-gradient(to top, #333333, #222222);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#333333', endColorstr='#222222', GradientType=0);
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  width: 100%;
 }
 
 div.topbar a.brand {
@@ -271,7 +273,7 @@ div.topbar .brand:hover, div.topbar ul li a.homelink:hover {
 
 div.topbar ul {
     font-size: 110%;
-    list-style: none;
+    list-style-type: none;
     margin: 0;
     padding: 0 0 0 10px;
     float: right;
@@ -282,7 +284,7 @@ div.topbar ul {
 }
 div.topbar ul li {
     float: left;
-    display: inline;
+    display: inline-block;
     height: 30px;
     margin: 5px;
     padding: 0px;
@@ -302,6 +304,67 @@ div.topbar ul li a {
 div.topbar ul li a:hover {
   color: #ffffff;
   text-decoration: none;
+}
+
+div.dropdown {
+    position: relative; /* Fixed this to relative */
+    display: inline-block;
+    z-index: 999999;
+}
+
+div.dropdown-content {
+    display: none; /* Fix this at none */
+    background-color: DimGray;
+    color: White;
+    width: 235px;
+    height: 155px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding-top: 3px; 
+    padding-right: 15px;
+    position: fixed;
+}
+
+div.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+div.dropdown-content a {
+    display: block;
+}
+
+div.dropdown-content a:hover {
+    color: white;
+}
+
+div.dropdown a:hover {
+    color: #FF5000;
+}
+
+div.dropdown z:hover {
+    color: #FF5000;
+    width: 10px;
+    display: none;
+}
+
+div.dropdown z {
+    color: white;
+}
+
+div.dropdown:after {
+    content: "";
+    position: absolute;
+    right: -13px;
+    top: 9px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid white;
+    z-index: 999999;
+}
+
+div.dropdown:hover {
+  cursor: pointer;
 }
 
 div.topbar ul li a.homelink {
@@ -328,8 +391,8 @@ div.topbar input {
   background-color: #444;
   background-color: rgba(255, 255, 255, 0.3);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: normal;
-  font-weight: 13px;
+  font-size: medium;
+  font-weight: 200;
   line-height: 1;
   padding: 4px 9px;
   color: #ffffff;
@@ -377,12 +440,12 @@ div.related {
     height: 21px;
     width: auto;
     margin: 0 10px;
-    position: absolute;
+    position: relative;
     top: 42px;
     clear: both;
     left: 0;
     right: 0;
-    z-index: 10000;
+    z-index: 999;
     font-size: 100%;
     vertical-align: middle;
     background-color: #fff;
@@ -501,7 +564,7 @@ a.headerlink {
 a.headerlink:hover {
     background-color: #0069d6;
     color: white;
-    text-docoration: none;
+    text-decoration: none;
 }
 
 

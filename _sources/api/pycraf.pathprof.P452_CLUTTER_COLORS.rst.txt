@@ -1,0 +1,6 @@
+P452_CLUTTER_COLORS
+===================
+
+.. currentmodule:: pycraf.pathprof
+
+.. autodata:: P452_CLUTTER_COLORS

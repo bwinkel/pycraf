@@ -1,41 +1,38 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>MultiState &#8212; pycraf v0.25.4</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MultiState &#8212; pycraf v1.0.4</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.25.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="test" href="pycraf.test.html" />
+    <link rel="next" title="Graphical user interface (pycraf-gui)" href="../gui/index.html" />
     <link rel="prev" title="ranged_quantity_input" href="pycraf.utils.ranged_quantity_input.html" />
-<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
-<script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 
-
-  </head>
-  <body>
+  </head><body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
+    
     <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
     <li><a title="General Index" href="../genindex.html">Index</a></li>
     <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
@@ -56,7 +53,7 @@
     <h3>Navigation</h3>
     <ul>
       <li class="right">
-	<a href="pycraf.test.html" title="test">
+	<a href="../gui/index.html" title="Graphical user interface (pycraf-gui)">
 	  next &raquo;
 	</a>
       </li>
@@ -67,10 +64,10 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.4</a>
+	<a href="../index.html">pycraf v1.0.4</a>
 	 &#187;
       </li>
-      <li><a href="../utils/index.html" accesskey="U">Utilities (<code class="docutils literal"><span class="pre">pycraf.utils</span></code>)</a> &#187;</li>
+      <li><a href="../utils/index.html" accesskey="U">Utilities (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.utils</span></code>)</a> &#187;</li>
       
       <li>MultiState</li> 
     </ul>
@@ -84,20 +81,20 @@
             
   <div class="section" id="multistate">
 <h1>MultiState<a class="headerlink" href="#multistate" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pycraf.utils.MultiState">
-<em class="property">class </em><code class="descclassname">pycraf.utils.</code><code class="descname">MultiState</code><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.4/pycraf/utils/multistate.py#L38" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.utils.MultiState" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">pycraf.utils.</code><code class="sig-name descname">MultiState</code><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.0.4/pycraf/utils/multistate.py#L50" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.utils.MultiState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Multi state subclasses are used to manage global items.</p>
-<p><a class="reference internal" href="#pycraf.utils.MultiState" title="pycraf.utils.MultiState"><code class="xref py py-obj docutils literal"><span class="pre">MultiState</span></code></a> is a so-called Singleton, which means that no instances
-can be created. This way, it is guaranteed that only one <a class="reference internal" href="#pycraf.utils.MultiState" title="pycraf.utils.MultiState"><code class="xref py py-obj docutils literal"><span class="pre">MultiState</span></code></a>
+<p><a class="reference internal" href="#pycraf.utils.MultiState" title="pycraf.utils.MultiState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiState</span></code></a> is a so-called Singleton, which means that no instances
+can be created. This way, it is guaranteed that only one <a class="reference internal" href="#pycraf.utils.MultiState" title="pycraf.utils.MultiState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiState</span></code></a>
 entity exists. Thus it offers the possibilty to handle a “global”
 state, because from anywhere in the code, one could query the
 current state and react to it. One usecase would be to
 temporarily allow downloading of files, otherwise being forbidden.</p>
-<p>The <a class="reference internal" href="#pycraf.utils.MultiState" title="pycraf.utils.MultiState"><code class="xref py py-obj docutils literal"><span class="pre">MultiState</span></code></a> class is not useful on its own, but you have to
+<p>The <a class="reference internal" href="#pycraf.utils.MultiState" title="pycraf.utils.MultiState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiState</span></code></a> class is not useful on its own, but you have to
 subclass it:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf.utils</span> <span class="k">import</span> <span class="n">MultiState</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf.utils</span> <span class="kn">import</span> <span class="n">MultiState</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyState</span><span class="p">(</span><span class="n">MultiState</span><span class="p">):</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="c1"># define list of allowed attributes</span>
@@ -112,7 +109,7 @@ subclass it:</p>
 create these instance attributes and assign default values.
 During class creation, this will be validated, for convenience.</p>
 <p>After defining the state class, one can do the following:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MyState</span><span class="o">.</span><span class="n">foo</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MyState</span><span class="o">.</span><span class="n">foo</span>
 <span class="go">1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">MyState</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">foo</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="go">&lt;MultiState MyState&gt;</span>
@@ -120,8 +117,8 @@ During class creation, this will be validated, for convenience.</p>
 <span class="go">2</span>
 </pre></div>
 </div>
-<p>The <a class="reference internal" href="#pycraf.utils.MultiState.set" title="pycraf.utils.MultiState.set"><code class="xref py py-obj docutils literal"><span class="pre">set</span></code></a> method returns a context manager,:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">MyState</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">foo</span><span class="o">=</span><span class="s2">&quot;dave&quot;</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<p>The <a class="reference internal" href="#pycraf.utils.MultiState.set" title="pycraf.utils.MultiState.set"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set</span></code></a> method returns a context manager,:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">MyState</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">foo</span><span class="o">=</span><span class="s2">&quot;dave&quot;</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">MyState</span><span class="o">.</span><span class="n">foo</span><span class="p">,</span> <span class="n">MyState</span><span class="o">.</span><span class="n">bar</span><span class="p">)</span>
 <span class="go">dave 10</span>
 
@@ -130,19 +127,19 @@ During class creation, this will be validated, for convenience.</p>
 </pre></div>
 </div>
 <p>which makes it possible to temporarily change the state object and
-go back to the original value, once the <code class="xref py py-obj docutils literal"><span class="pre">with</span></code> scope has ended.</p>
+go back to the original value, once the <code class="xref py py-obj docutils literal notranslate"><span class="pre">with</span></code> scope has ended.</p>
 <p>Note, that one cannot set the attributes directly (to ensure
 that the validation method is always run):</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MyState</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="mi">0</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MyState</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gt">Traceback (most recent call last):</span>
 <span class="c">...</span>
 <span class="gr">RuntimeError</span>: <span class="n">Setting attributes directy is not allowed. Use &quot;set&quot; method!</span>
 </pre></div>
 </div>
-<p>Subclasses will generally override <a class="reference internal" href="#pycraf.utils.MultiState.validate" title="pycraf.utils.MultiState.validate"><code class="xref py py-obj docutils literal"><span class="pre">validate</span></code></a> to convert from any
+<p>Subclasses will generally override <a class="reference internal" href="#pycraf.utils.MultiState.validate" title="pycraf.utils.MultiState.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a> to convert from any
 of the acceptable inputs (such as strings) to the appropriate
 internal objects:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyState</span><span class="p">(</span><span class="n">MultiState</span><span class="p">):</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyState</span><span class="p">(</span><span class="n">MultiState</span><span class="p">):</span>
 
     <span class="c1"># define list of allowed attributes</span>
     <span class="n">_attributes</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
@@ -159,42 +156,83 @@ internal objects:</p>
 </pre></div>
 </div>
 <p class="rubric">Notes</p>
-<p>This class was adapted from the <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.utils.state.ScienceState.html#astropy.utils.state.ScienceState" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">ScienceState</span></code></a> class.</p>
+<p>This class was adapted from the <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.utils.state.ScienceState.html#astropy.utils.state.ScienceState" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScienceState</span></code></a> class.</p>
 <p class="rubric">Methods Summary</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pycraf.utils.MultiState.set" title="pycraf.utils.MultiState.set"><code class="xref py py-obj docutils literal"><span class="pre">set</span></code></a>(**kwargs)</td>
-<td>Set the current science state value.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pycraf.utils.MultiState.hook" title="pycraf.utils.MultiState.hook"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hook</span></code></a>(**kwargs)</p></td>
+<td><p>A hook which is called everytime when attributes are about to change.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pycraf.utils.MultiState.validate" title="pycraf.utils.MultiState.validate"><code class="xref py py-obj docutils literal"><span class="pre">validate</span></code></a>(**kwargs)</td>
-<td>Validate the keyword arguments and return the (converted) kwargs dictionary.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pycraf.utils.MultiState.set" title="pycraf.utils.MultiState.set"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set</span></code></a>(*[, _do_validate])</p></td>
+<td><p>Set the current science state value.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pycraf.utils.MultiState.validate" title="pycraf.utils.MultiState.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a>(**kwargs)</p></td>
+<td><p>Validate the keyword arguments and return the (converted) kwargs dictionary.</p></td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods Documentation</p>
-<dl class="classmethod">
+<dl class="py method">
+<dt id="pycraf.utils.MultiState.hook">
+<em class="property">classmethod </em><code class="sig-name descname">hook</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState.hook"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.0.4/pycraf/utils/multistate.py#L198" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.utils.MultiState.hook" title="Permalink to this definition">¶</a></dt>
+<dd><p>A hook which is called everytime when attributes are about to change.</p>
+<p>You should override this method if you want to enable pre-processing
+or monitoring of your attributes. For example, one could use this
+to react to attribute changes:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf.utils</span> <span class="kn">import</span> <span class="n">MultiState</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyState</span><span class="p">(</span><span class="n">MultiState</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">_attributes</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">foo</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="n">bar</span> <span class="o">=</span> <span class="s2">&quot;guido&quot;</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="nd">@classmethod</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">hook</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="s1">&#39;bar&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;bar&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">bar</span><span class="p">:</span>
+<span class="gp">... </span>                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> about to change: </span><span class="si">{}</span><span class="s1"> --&gt; </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+<span class="gp">... </span>                    <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;bar&#39;</span><span class="p">],</span> <span class="bp">cls</span><span class="o">.</span><span class="n">bar</span>
+<span class="gp">... </span>                    <span class="p">))</span>
+<span class="gp">... </span>                <span class="c1"># do stuff ...</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">MyState</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s2">&quot;david&quot;</span><span class="p">)</span>
+<span class="go">bar about to change: david --&gt; guido</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">MyState</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s2">&quot;david&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">MyState</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s2">&quot;guido&quot;</span><span class="p">)</span>
+<span class="go">bar about to change: guido --&gt; david</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">MyState</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="s2">&quot;david&quot;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="go">bar about to change: david --&gt; guido</span>
+<span class="go">bar about to change: guido --&gt; david</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt id="pycraf.utils.MultiState.set">
-<em class="property">classmethod </em><code class="descname">set</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState.set"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.4/pycraf/utils/multistate.py#L124" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.utils.MultiState.set" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">_do_validate</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState.set"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.0.4/pycraf/utils/multistate.py#L136" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.utils.MultiState.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the current science state value.</p>
 </dd></dl>
 
-<dl class="classmethod">
+<dl class="py method">
 <dt id="pycraf.utils.MultiState.validate">
-<em class="property">classmethod </em><code class="descname">validate</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState.validate"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.4/pycraf/utils/multistate.py#L163" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.utils.MultiState.validate" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">validate</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState.validate"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.0.4/pycraf/utils/multistate.py#L178" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.utils.MultiState.validate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validate the keyword arguments and return the (converted) kwargs
 dictionary.</p>
 <p>You should override this method if you want to enable validation
 of your attributes.</p>
 <p class="rubric">Notes</p>
 <p>One doesn’t need to validate the following things, as it is already
-take care of by the <a class="reference internal" href="#pycraf.utils.MultiState" title="pycraf.utils.MultiState"><code class="xref py py-obj docutils literal"><span class="pre">MultiState</span></code></a> class:</p>
+take care of by the <a class="reference internal" href="#pycraf.utils.MultiState" title="pycraf.utils.MultiState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiState</span></code></a> class:</p>
 <ul class="simple">
-<li>Check that each argument is assigned with a default.</li>
-<li>Check that the kwargs keys are in _attributes tuple.</li>
+<li><p>Check that each argument is assigned with a default.</p></li>
+<li><p>Check that the kwargs keys are in _attributes tuple.</p></li>
 </ul>
 </dd></dl>
 
@@ -203,6 +241,7 @@ take care of by the <a class="reference internal" href="#pycraf.utils.MultiState
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -219,14 +258,14 @@ take care of by the <a class="reference internal" href="#pycraf.utils.MultiState
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.4/docs/api/pycraf.utils.MultiState.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/api/pycraf.utils.MultiState.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.utils.MultiState.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 21 Sep 2017. <br/>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
   </p>
 </footer>
   </body>

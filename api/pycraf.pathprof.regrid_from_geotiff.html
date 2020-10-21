@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>regrid_from_geotiff &#8212; pycraf v1.0.4</title>
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="set_num_threads" href="pycraf.pathprof.set_num_threads.html" />
+    <link rel="prev" title="radiomet_data_for_pathcenter" href="pycraf.pathprof.radiomet_data_for_pathcenter.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="pycraf.pathprof.set_num_threads.html" title="set_num_threads">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="pycraf.pathprof.radiomet_data_for_pathcenter.html" title="radiomet_data_for_pathcenter">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v1.0.4</a>
+	 &#187;
+      </li>
+      <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
+      
+      <li>regrid_from_geotiff</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="regrid-from-geotiff">
+<h1>regrid_from_geotiff<a class="headerlink" href="#regrid-from-geotiff" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="pycraf.pathprof.regrid_from_geotiff">
+<code class="sig-prename descclassname">pycraf.pathprof.</code><code class="sig-name descname">regrid_from_geotiff</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">geotiff</span></em>, <em class="sig-param"><span class="n">lons</span></em>, <em class="sig-param"><span class="n">lats</span></em>, <em class="sig-param"><span class="n">band</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/gis.html#regrid_from_geotiff"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.0.4/pycraf/pathprof/gis.py#L228" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.regrid_from_geotiff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve interpolated GeoTiff raster values for given WGS84 coordinates
+(longitude, latitude).</p>
+<p>Most GeoTiff raster maps will be based on reference frames other than
+geographic (WGS84), such that it is often necessary to reproject a map,
+e.g. to get the data values for the positions present in an terrain height
+map such as SRTM, which is the basis for path propagation loss
+calculations. By means of nearest neighbour interpolation one can quickly
+reproject (or regrid) a GeoTiff raster map to the required positions.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>geotiff</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DatasetReader</span></code> instance</span></dt><dd><p>A geotiff raster map opened with the Python package <a class="reference external" href="https://rasterio.readthedocs.io/">Rasterio</a>.</p>
+</dd>
+<dt><strong>lons, lats</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Geographic longitudes/latitudes (WGS84) [deg]</p>
+</dd>
+<dt><strong>band</strong><span class="classifier">int, Optional (default: 1)</span></dt><dd><p>The GeoTiff band to use.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>geo_data_regridded</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>Regridded values of the input raster map on the given longitude and
+latitude positions. If the input GeoTiff has more than one band and
+you need to regrid several of the bands, please run the function
+repeatedly, specifying the band parameter.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>If requested geo positions are all to close to the edge of the geotiff
+file, the interpolation can fail (<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/interpolate.html#module-scipy.interpolate" title="(in SciPy v1.5.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate</span></code></a> will raise a
+ValueError in such cases).</p>
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">regrid_from_geotiff</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/api/pycraf.pathprof.regrid_from_geotiff.rst">Edit This Page on Github</a> &nbsp;
+    <a href="../_sources/api/pycraf.pathprof.regrid_from_geotiff.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
+  </p>
+</footer>
+  </body>
+</html>

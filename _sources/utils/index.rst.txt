@@ -9,7 +9,8 @@ Utilities (`pycraf.utils`)
 Introduction
 ============
 
-Therefore, the `~pycraf.utils` sub-package offers routines
+The `~pycraf.utils` sub-package offers various helper/utility routines
+used throughout `~pycraf`.
 
 Using `pycraf.utils`
 =========================

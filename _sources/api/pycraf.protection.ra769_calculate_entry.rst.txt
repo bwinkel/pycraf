@@ -1,0 +1,6 @@
+ra769_calculate_entry
+=====================
+
+.. currentmodule:: pycraf.protection
+
+.. autofunction:: ra769_calculate_entry

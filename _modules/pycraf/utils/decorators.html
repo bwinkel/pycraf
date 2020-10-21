@@ -1,39 +1,36 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pycraf.utils.decorators &#8212; pycraf v0.25.4</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pycraf.utils.decorators &#8212; pycraf v1.0.4</title>
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '0.25.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
-<script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 
-
-  </head>
-  <body>
+  </head><body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../../../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
+    
     <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
     <li><a title="General Index" href="../../../genindex.html">Index</a></li>
     <li><a title="Module Index" href="../../../py-modindex.html">Modules</a></li>
@@ -54,10 +51,11 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v0.25.4</a>
+	<a href="../../../index.html">pycraf v1.0.4</a>
 	 &#187;
       </li>
-      <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+      <li><a href="../../index.html" >Module code</a> &#187;</li>
+      <li><a href="../../pycraf.html" accesskey="U">pycraf</a> &#187;</li>
       
        
     </ul>
@@ -76,9 +74,9 @@
 <span class="c1"># Originally Licensed under a 3-clause BSD style license</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">astropy.utils.decorators</span> <span class="k">import</span> <span class="n">wraps</span>
-<span class="kn">from</span> <span class="nn">astropy.utils.compat</span> <span class="k">import</span> <span class="n">funcsigs</span>
-<span class="kn">from</span> <span class="nn">astropy.units.core</span> <span class="k">import</span> <span class="n">UnitsError</span><span class="p">,</span> <span class="n">add_enabled_equivalencies</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">from</span> <span class="nn">astropy.utils.decorators</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">astropy.units.core</span> <span class="kn">import</span> <span class="n">UnitsError</span><span class="p">,</span> <span class="n">add_enabled_equivalencies</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ranged_quantity_input&#39;</span><span class="p">]</span>
@@ -158,14 +156,14 @@
 <span class="sd">        behaves like `~astropy.units.quantity_input`, but adds</span>
 <span class="sd">        range checking::</span>
 
-<span class="sd">            &gt;&gt;&gt; import astropy.units as u</span>
 <span class="sd">            &gt;&gt;&gt; from pycraf.utils import ranged_quantity_input</span>
+<span class="sd">            &gt;&gt;&gt; import astropy.units as u</span>
 
 <span class="sd">            &gt;&gt;&gt; @ranged_quantity_input(a=(0, 1, u.m))</span>
 <span class="sd">            ... def func(a):</span>
 <span class="sd">            ...     return a ** 2</span>
 
-<span class="sd">            &gt;&gt;&gt; func(0.5 * u.m)</span>
+<span class="sd">            &gt;&gt;&gt; func(0.5 * u.m)  # doctest: +FLOAT_CMP</span>
 <span class="sd">            &lt;Quantity 0.25 m2&gt;</span>
 
 <span class="sd">            &gt;&gt;&gt; func(2 * u.m)</span>
@@ -181,7 +179,7 @@
 <span class="sd">            ... def func(a):</span>
 <span class="sd">            ...     return a ** 2</span>
 
-<span class="sd">            &gt;&gt;&gt; func(2 * u.m)</span>
+<span class="sd">            &gt;&gt;&gt; func(2 * u.m)  # doctest: +FLOAT_CMP</span>
 <span class="sd">            &lt;Quantity 4.0 m2&gt;</span>
 
 <span class="sd">        Often one wants to add units support to third-party functions,</span>
@@ -208,7 +206,7 @@
 <span class="sd">            &gt;&gt;&gt; #    a=(0, 1, u.m), strip_input_units=True</span>
 <span class="sd">            &gt;&gt;&gt; #    )(_func)</span>
 
-<span class="sd">            &gt;&gt;&gt; func(0.5 * u.m)</span>
+<span class="sd">            &gt;&gt;&gt; func(0.5 * u.m)  # doctest: +FLOAT_CMP</span>
 <span class="sd">            0.25</span>
 
 <span class="sd">        However, by doing this there are still no units for the output.</span>
@@ -222,7 +220,7 @@
 <span class="sd">            ... def func(a):</span>
 <span class="sd">            ...     return _func(a)</span>
 
-<span class="sd">            &gt;&gt;&gt; func(0.5 * u.m)</span>
+<span class="sd">            &gt;&gt;&gt; func(0.5 * u.m)  # doctest: +FLOAT_CMP</span>
 <span class="sd">            &lt;Quantity 0.25 m2&gt;</span>
 
 <span class="sd">        If you have several return values (tuple), just provide a tuple</span>
@@ -234,7 +232,7 @@
 <span class="sd">            ... def func(a=0.5 * u.m):</span>
 <span class="sd">            ...     return a ** 2</span>
 
-<span class="sd">            &gt;&gt;&gt; func()</span>
+<span class="sd">            &gt;&gt;&gt; func()  # doctest: +FLOAT_CMP</span>
 <span class="sd">            &lt;Quantity 0.25 m2&gt;</span>
 
 <span class="sd">        However, sometimes one wants to use `None` as default, which will</span>
@@ -258,7 +256,7 @@
 <span class="sd">            ...         a = 0.5</span>
 <span class="sd">            ...     return a ** 2</span>
 
-<span class="sd">            &gt;&gt;&gt; func()</span>
+<span class="sd">            &gt;&gt;&gt; func()  # doctest: +FLOAT_CMP</span>
 <span class="sd">            0.25</span>
 
 <span class="sd">        and of course, the unit check still works,  if a something other</span>
@@ -278,7 +276,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">equivalencies</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;equivalencies&#39;</span><span class="p">,</span> <span class="p">[])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">strip_input_units</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;strip_input_units&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
@@ -286,10 +284,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">allow_none</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;allow_none&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">decorator_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
 
-    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wrapped_function</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wrapped_function</span><span class="p">):</span>
 
         <span class="c1"># Extract the function signature for the function we are wrapping.</span>
-        <span class="n">wrapped_signature</span> <span class="o">=</span> <span class="n">funcsigs</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">wrapped_function</span><span class="p">)</span>
+        <span class="n">wrapped_signature</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">wrapped_function</span><span class="p">)</span>
 
         <span class="c1"># Define a new function to return in place of the wrapped one</span>
         <span class="nd">@wraps</span><span class="p">(</span><span class="n">wrapped_function</span><span class="p">)</span>
@@ -301,8 +299,8 @@
             <span class="c1"># Iterate through the parameters of the original signature</span>
             <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">wrapped_signature</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                 <span class="c1"># We do not support variable arguments (*args, **kwargs)</span>
-                <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">(</span><span class="n">funcsigs</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_KEYWORD</span><span class="p">,</span>
-                                  <span class="n">funcsigs</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_POSITIONAL</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_KEYWORD</span><span class="p">,</span>
+                                  <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_POSITIONAL</span><span class="p">):</span>
                     <span class="k">continue</span>
                 <span class="c1"># Catch the (never triggered) case where bind relied on</span>
                 <span class="c1">#  a default value.</span>
@@ -325,7 +323,7 @@
 
                 <span class="c1"># If the target unit is empty, then no unit was specified</span>
                 <span class="c1"># so we move past it</span>
-                <span class="k">if</span> <span class="n">target_unit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">funcsigs</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">target_unit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
 
                     <span class="c1"># skip over None values, if desired</span>
                     <span class="k">if</span> <span class="n">arg</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">allow_none</span><span class="p">:</span>
@@ -434,6 +432,7 @@
 <span class="n">ranged_quantity_input</span> <span class="o">=</span> <span class="n">RangedQuantityInput</span><span class="o">.</span><span class="n">as_decorator</span>
 </pre></div>
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -449,9 +448,9 @@
   <p class="pull-right"> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 21 Sep 2017. <br/>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
   </p>
 </footer>
   </body>

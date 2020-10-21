@@ -1,5 +1,5 @@
-from astropy import units as u
 from pycraf import pathprof, conversions as cnv
+from astropy import units as u
 
 
 def plot_atten_map(lons, lats, total_atten):
@@ -55,7 +55,7 @@ hprof_cache = pathprof.height_map_data(
     zone_t=zone_t, zone_r=zone_r,
     )  # dict-like
 
-atten_maps, eps_pt_map, eps_pr_map = pathprof.atten_map_fast(
+results = pathprof.atten_map_fast(
     freq,
     temperature,
     pressure,
@@ -67,6 +67,6 @@ atten_maps, eps_pt_map, eps_pr_map = pathprof.atten_map_fast(
 lons = hprof_cache['xcoords']
 lats = hprof_cache['ycoords']
 # index 4 is total loss without clutter/gain included:
-total_atten = atten_maps[4]
+total_atten = results['L_b'].value
 
 plot_atten_map(lons, lats, total_atten)

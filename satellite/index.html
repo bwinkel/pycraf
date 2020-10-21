@@ -1,41 +1,38 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Satellites (pycraf.satellite) &#8212; pycraf v0.25.4</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Satellites (pycraf.satellite) &#8212; pycraf v1.0.4</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.25.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="satellite.get_sat" href="../api/pycraf.satellite.get_sat.html" />
+    <link rel="next" title="get_sat" href="../api/pycraf.satellite.get_sat.html" />
     <link rel="prev" title="ESRI" href="../api/pycraf.geospatial.ESRI.html" />
-<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
-<script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 
-
-  </head>
-  <body>
+  </head><body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
+    
     <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
     <li><a title="General Index" href="../genindex.html">Index</a></li>
     <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
@@ -56,7 +53,7 @@
     <h3>Navigation</h3>
     <ul>
       <li class="right">
-	<a href="../api/pycraf.satellite.get_sat.html" title="satellite.get_sat">
+	<a href="../api/pycraf.satellite.get_sat.html" title="get_sat">
 	  next &raquo;
 	</a>
       </li>
@@ -67,11 +64,11 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.4</a>
+	<a href="../index.html">pycraf v1.0.4</a>
 	 &#187;
       </li>
       
-      <li>Satellites (<code class="docutils literal"><span class="pre">pycraf.satellite</span></code>)</li> 
+      <li>Satellites (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.satellite</span></code>)</li> 
     </ul>
 </div>
   
@@ -82,40 +79,40 @@
           <div class="body" role="main">
             
   <div class="section" id="satellites-pycraf-satellite">
-<h1>Satellites (<a class="reference internal" href="#module-pycraf.satellite" title="pycraf.satellite"><code class="xref py py-obj docutils literal"><span class="pre">pycraf.satellite</span></code></a>)<a class="headerlink" href="#satellites-pycraf-satellite" title="Permalink to this headline">¶</a></h1>
+<h1>Satellites (<a class="reference internal" href="#module-pycraf.satellite" title="pycraf.satellite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.satellite</span></code></a>)<a class="headerlink" href="#satellites-pycraf-satellite" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>Often the compatibility of space-based radio communications with other
 services has to be studied. Then, it may happen, that one has to determine the
 position of one or more satellites with respect to an observer on Earth’s
-surface. The <a class="reference internal" href="#module-pycraf.satellite" title="pycraf.satellite"><code class="xref py py-obj docutils literal"><span class="pre">satellite</span></code></a> sub-package uses the <a class="reference external" href="https://pypi.python.org/pypi/sgp4/">sgp4 package</a> to calculate Geocentric cartesian
+surface. The <a class="reference internal" href="#module-pycraf.satellite" title="pycraf.satellite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">satellite</span></code></a> sub-package uses the <a class="reference external" href="https://pypi.python.org/pypi/sgp4/">sgp4 package</a> to calculate Geocentric cartesian
 inertial (ECI) position for a given time and adds the transformations to the (
 local) horizontal coordinates (azimuth, elevation, distance) of an observer.</p>
 </div>
 <div class="section" id="using-pycraf-satellite">
-<h2>Using <a class="reference internal" href="#module-pycraf.satellite" title="pycraf.satellite"><code class="xref py py-obj docutils literal"><span class="pre">pycraf.satellite</span></code></a><a class="headerlink" href="#using-pycraf-satellite" title="Permalink to this headline">¶</a></h2>
+<h2>Using <a class="reference internal" href="#module-pycraf.satellite" title="pycraf.satellite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.satellite</span></code></a><a class="headerlink" href="#using-pycraf-satellite" title="Permalink to this headline">¶</a></h2>
 <p>The first step to calculate a satellite’s position is to obtain a so-called
 <a class="reference external" href="https://en.wikipedia.org/wiki/Two-line_element_set">Two-line element set (TLE)</a>.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The TLEs are usually published once a day, because the contained
+<p class="admonition-title">Note</p>
+<p>The TLEs are usually published once a day, because the contained
 parameters quickly change; drag forces cause rapid changes in the orbits
 of almost all satellites.</p>
 </div>
 <p>On most websites that offer TLEs (e.g., <a class="reference external" href="http://celestrak.com/">Celestrak</a>)
 in fact three-line strings are used, where the first line just contains the name of the satellite:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>ISS (ZARYA)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ISS (ZARYA)
 1 25544U 98067A   13165.59097222  .00004759  00000-0  88814-4 0    47
 2 25544  51.6478 121.2152 0011003  68.5125 263.9959 15.50783143834295
 </pre></div>
 </div>
 <p>The pycraf package follows this format. To calculate the horizontal
 coordinates of the ISS at a given time, download the current TLE and do:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datetime</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datetime</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy.coordinates</span> <span class="k">import</span> <span class="n">EarthLocation</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy</span> <span class="k">import</span> <span class="n">time</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">satellite</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy.coordinates</span> <span class="kn">import</span> <span class="n">EarthLocation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">time</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">satellite</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tle_string</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;ISS (ZARYA)</span>
 <span class="gp">... </span><span class="s1">1 25544U 98067A   13165.59097222  .00004759  00000-0  88814-4 0    47</span>
@@ -138,21 +135,22 @@ coordinates of the ISS at a given time, download the current TLE and do:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mjd</span> <span class="o">=</span> <span class="mf">55123.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.123</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">,</span> <span class="mf">50.3</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obstime2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">Time</span><span class="p">(</span><span class="n">mjd</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;mjd&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">sat_obs</span><span class="o">.</span><span class="n">azel_from_sat</span><span class="p">(</span><span class="n">tle_string</span><span class="p">,</span> <span class="n">obstime2</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">az</span>  
-<span class="go">&lt;Quantity [  28.39693587,-143.17010479,  -6.97428002] deg&gt;</span>
+<span class="go">&lt;Quantity [  28.397, -143.170,  -6.974] deg&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">el</span>  
-<span class="go">&lt;Quantity [-43.16852656,-21.46811918,-36.77340433] deg&gt;</span>
+<span class="go">&lt;Quantity [-43.169, -21.468, -36.773] deg&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span>  
-<span class="go">&lt;Quantity [ 9388.29246437, 5675.03921204, 8361.28408463] km&gt;</span>
+<span class="go">&lt;Quantity [ 9388.292, 5675.039, 8361.284] km&gt;</span>
 </pre></div>
 </div>
-<p>The <a class="reference internal" href="../api/pycraf.satellite.SatelliteObserver.html#pycraf.satellite.SatelliteObserver.azel_from_sat" title="pycraf.satellite.SatelliteObserver.azel_from_sat"><code class="xref py py-obj docutils literal"><span class="pre">azel_from_sat</span></code></a> method also accepts
-a <code class="xref py py-obj docutils literal"><span class="pre">sgp4.io.Satellite</span></code> object. This could be created by using the
-<a class="reference external" href="https://pypi.python.org/pypi/sgp4/">sgp4 package</a> directly. pycraf also offers a convenience routine, <a class="reference internal" href="../api/pycraf.satellite.get_sat.html#pycraf.satellite.get_sat" title="pycraf.satellite.get_sat"><code class="xref py py-obj docutils literal"><span class="pre">get_sat</span></code></a>, which does the TLE
-parsing for your and returns the satellite name and <code class="xref py py-obj docutils literal"><span class="pre">Satellite</span></code> object. It also
+<p>The <a class="reference internal" href="../api/pycraf.satellite.SatelliteObserver.html#pycraf.satellite.SatelliteObserver.azel_from_sat" title="pycraf.satellite.SatelliteObserver.azel_from_sat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">azel_from_sat</span></code></a> method also accepts
+a <code class="xref py py-obj docutils literal notranslate"><span class="pre">sgp4.io.Satellite</span></code> object. This could be created by using the
+<a class="reference external" href="https://pypi.python.org/pypi/sgp4/">sgp4 package</a> directly. pycraf also offers a convenience routine, <a class="reference internal" href="../api/pycraf.satellite.get_sat.html#pycraf.satellite.get_sat" title="pycraf.satellite.get_sat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sat</span></code></a>, which does the TLE
+parsing for your and returns the satellite name and <code class="xref py py-obj docutils literal notranslate"><span class="pre">Satellite</span></code> object. It also
 uses caching to save some computing time, if many different satellites are to
 be processed:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="k">import</span> <span class="n">satellite</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">satellite</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tle_string</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;ISS (ZARYA)</span>
 <span class="gp">... </span><span class="s1">1 25544U 98067A   13165.59097222  .00004759  00000-0  88814-4 0    47</span>
@@ -161,13 +159,14 @@ be processed:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">satname</span><span class="p">,</span> <span class="n">sat</span> <span class="o">=</span> <span class="n">satellite</span><span class="o">.</span><span class="n">get_sat</span><span class="p">(</span><span class="n">tle_string</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">satname</span>
 <span class="go">&#39;ISS (ZARYA)&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sat</span><span class="o">.</span><span class="n">epoch</span>
-<span class="go">datetime.datetime(2013, 6, 14, 14, 10, 59, 999807)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sat</span><span class="o">.</span><span class="n">satnum</span>
 <span class="go">25544</span>
 
 <span class="go"># using sgp4 directly, to get position and velocity in ECI coordinates</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">position</span><span class="p">,</span> <span class="n">velocity</span> <span class="o">=</span> <span class="n">sat</span><span class="o">.</span><span class="n">propagate</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">19</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sgp4.api</span> <span class="kn">import</span> <span class="n">jday</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jd</span><span class="p">,</span> <span class="n">fr</span> <span class="o">=</span> <span class="n">jday</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">19</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">err_code</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">velocity</span> <span class="o">=</span> <span class="n">sat</span><span class="o">.</span><span class="n">sgp4</span><span class="p">(</span><span class="n">jd</span><span class="p">,</span> <span class="n">fr</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">position</span>  <span class="c1"># km  </span>
 <span class="go">(3289.302521216188, 3816.880925531413, 4443.175627001508)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">velocity</span>  <span class="c1"># km/s  </span>
@@ -178,10 +177,10 @@ be processed:</p>
 <div class="section" id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">Astropy Units and Quantities package</a>, which is used extensively in pycraf.</li>
-<li><a class="reference external" href="https://pypi.python.org/pypi/sgp4/">sgp4 package</a></li>
-<li><a class="reference external" href="https://en.wikipedia.org/wiki/Two-line_element_set">Two-line element set (TLE)</a></li>
-<li><a class="reference external" href="http://celestrak.com/">Celestrak</a></li>
+<li><p><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">Astropy Units and Quantities package</a>, which is used extensively in pycraf.</p></li>
+<li><p><a class="reference external" href="https://pypi.python.org/pypi/sgp4/">sgp4 package</a></p></li>
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Two-line_element_set">Two-line element set (TLE)</a></p></li>
+<li><p><a class="reference external" href="http://celestrak.com/">Celestrak</a></p></li>
 </ul>
 </div>
 <div class="section" id="reference-api">
@@ -195,28 +194,28 @@ string (TLE).</p>
 <a class="reference external" href="https://pypi.python.org/pypi/sgp4/">sgp4 Python package</a>.</p>
 <div class="section" id="functions">
 <h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h4>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.satellite.get_sat.html#pycraf.satellite.get_sat" title="pycraf.satellite.get_sat"><code class="xref py py-obj docutils literal"><span class="pre">get_sat</span></code></a></td>
-<td>Construct a satellite instance (<code class="xref py py-obj docutils literal"><span class="pre">sgp4.io.Satellite</span></code>) from TLE string.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.satellite.get_sat.html#pycraf.satellite.get_sat" title="pycraf.satellite.get_sat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sat</span></code></a>(tle_string)</p></td>
+<td><p>Construct a satellite instance (<code class="xref py py-obj docutils literal notranslate"><span class="pre">sgp4.io.Satellite</span></code>) from TLE string.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="classes">
 <h4>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h4>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="../api/pycraf.satellite.SatelliteObserver.html#pycraf.satellite.SatelliteObserver" title="pycraf.satellite.SatelliteObserver"><code class="xref py py-obj docutils literal"><span class="pre">SatelliteObserver</span></code></a>(obs_location)</td>
-<td>Calculate position of a satellite relative to an observer on Earth.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.satellite.SatelliteObserver.html#pycraf.satellite.SatelliteObserver" title="pycraf.satellite.SatelliteObserver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SatelliteObserver</span></code></a>(obs_location)</p></td>
+<td><p>Calculate position of a satellite relative to an observer on Earth.</p></td>
 </tr>
 </tbody>
 </table>
@@ -226,15 +225,16 @@ string (TLE).</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
 <ul>
-<li><a class="reference internal" href="#">Satellites (<code class="docutils literal"><span class="pre">pycraf.satellite</span></code>)</a><ul>
+<li><a class="reference internal" href="#">Satellites (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.satellite</span></code>)</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
-<li><a class="reference internal" href="#using-pycraf-satellite">Using <code class="docutils literal"><span class="pre">pycraf.satellite</span></code></a></li>
+<li><a class="reference internal" href="#using-pycraf-satellite">Using <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.satellite</span></code></a></li>
 <li><a class="reference internal" href="#see-also">See Also</a></li>
 <li><a class="reference internal" href="#reference-api">Reference/API</a><ul>
 <li><a class="reference internal" href="#module-pycraf.satellite">pycraf.satellite Package</a><ul>
@@ -255,14 +255,14 @@ string (TLE).</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.4/docs/satellite/index.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/satellite/index.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/satellite/index.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 21 Sep 2017. <br/>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
   </p>
 </footer>
   </body>

@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ra769_calculate_entry &#8212; pycraf v1.0.4</title>
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ra769_limits" href="pycraf.protection.ra769_limits.html" />
+    <link rel="prev" title="cispr22_limits" href="pycraf.protection.cispr22_limits.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="pycraf.protection.ra769_limits.html" title="ra769_limits">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="pycraf.protection.cispr22_limits.html" title="cispr22_limits">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v1.0.4</a>
+	 &#187;
+      </li>
+      <li><a href="../protection/index.html" accesskey="U">Protection levels (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.protection</span></code>)</a> &#187;</li>
+      
+      <li>ra769_calculate_entry</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ra769-calculate-entry">
+<h1>ra769_calculate_entry<a class="headerlink" href="#ra769-calculate-entry" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="pycraf.protection.ra769_calculate_entry">
+<code class="sig-prename descclassname">pycraf.protection.</code><code class="sig-name descname">ra769_calculate_entry</code><span class="sig-paren">(</span><em class="sig-param">frequency</em>, <em class="sig-param">bandwidth</em>, <em class="sig-param">T_A</em>, <em class="sig-param">T_rx</em>, <em class="sig-param">mode='continuum'</em>, <em class="sig-param">scale='dB'</em>, <em class="sig-param">integ_time=&lt;Quantity 2000. s&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/protection/ra769.html#ra769_calculate_entry"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.0.4/pycraf/protection/ra769.py#L22" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.protection.ra769_calculate_entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Limits (single entry) for spectral line, continuum, and VLBI observations
+according to
+<a class="reference external" href="https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en">ITU-R Rec RA.769</a>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>frequency</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Center frequency [Hz]</p>
+</dd>
+<dt><strong>bandwidth</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Assumed bandwidth [Hz]</p>
+<p>Note, if <code class="xref py py-obj docutils literal notranslate"><span class="pre">mode='vlbi'</span></code> the bandwidth is irrelevant, since only the
+spectral power flux density is calculated.</p>
+</dd>
+<dt><strong>T_A</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Minimum antenna noise temperature [K]</p>
+</dd>
+<dt><strong>T_rx</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Receiver noise temperature [K]</p>
+</dd>
+<dt><strong>mode</strong><span class="classifier">str, optional</span></dt><dd><p>Observing mode: ‘continuum’, ‘spectroscopy’, or ‘vlbi’
+(default: ‘continuum’)</p>
+</dd>
+<dt><strong>scale</strong><span class="classifier">str, optional</span></dt><dd><p>Default scale to use: ‘linear’, ‘dB’ (default: ‘linear’)</p>
+</dd>
+<dt><strong>integ_time</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Integration time [s] (default: 2000)</p>
+<p>Note, if <code class="xref py py-obj docutils literal notranslate"><span class="pre">mode='vlbi'</span></code> integration time is irrelevant, because the
+limits are based on 1% of the receiver noise plus antenna temperature.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>T_rms</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>System noise after integration [K]</p>
+</dd>
+<dt><strong>P_rms_nu</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>System noise power spectral density [W/Hz, dB(W/Hz)]</p>
+</dd>
+<dt><strong>Plim</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Power limit [W, dB(W)]</p>
+</dd>
+<dt><strong>Plim_nu</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Spectral power limit [W/Hz, dB(W/Hz)]</p>
+</dd>
+<dt><strong>Slim</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Power flux density (pfd) limit [W/m^2, dB(W/m^2)]</p>
+</dd>
+<dt><strong>Slim_nu</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Spectral power flux density limit [Jy, dB(W/m^2/Hz)]</p>
+</dd>
+<dt><strong>Efield</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Electrical field strength limit [uV/m, db(uV^2/m^2)]</p>
+</dd>
+<dt><strong>Efield_norm</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>As <code class="xref py py-obj docutils literal notranslate"><span class="pre">Efield</span></code> but normalized to 1 MHz bandwidth [uV/m, db(uV^2/m^2)]</p>
+</dd>
+<dt>Note, if <code class="xref py py-obj docutils literal notranslate"><span class="pre">mode='vlbi'</span></code> only <code class="xref py py-obj docutils literal notranslate"><span class="pre">Slim_nu</span></code> is returned.</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Because all columns are Astropy Quantities (see
+<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>), one can easily convert between linear and
+log-scale at a later stage. the <code class="xref py py-obj docutils literal notranslate"><span class="pre">scale</span></code> parameter just defines the
+scale to use initially.</p>
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">ra769_calculate_entry</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/api/pycraf.protection.ra769_calculate_entry.rst">Edit This Page on Github</a> &nbsp;
+    <a href="../_sources/api/pycraf.protection.ra769_calculate_entry.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
+  </p>
+</footer>
+  </body>
+</html>

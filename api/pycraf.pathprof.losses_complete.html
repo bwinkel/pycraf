@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>losses_complete &#8212; pycraf v1.0.4</title>
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="make_kmz" href="pycraf.pathprof.make_kmz.html" />
+    <link rel="prev" title="loss_troposcatter" href="pycraf.pathprof.loss_troposcatter.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="pycraf.pathprof.make_kmz.html" title="make_kmz">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="pycraf.pathprof.loss_troposcatter.html" title="loss_troposcatter">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v1.0.4</a>
+	 &#187;
+      </li>
+      <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
+      
+      <li>losses_complete</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="losses-complete">
+<h1>losses_complete<a class="headerlink" href="#losses-complete" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="pycraf.pathprof.losses_complete">
+<code class="sig-prename descclassname">pycraf.pathprof.</code><code class="sig-name descname">losses_complete</code><span class="sig-paren">(</span><em class="sig-param">freq</em>, <em class="sig-param">temperature</em>, <em class="sig-param">pressure</em>, <em class="sig-param">lon_t</em>, <em class="sig-param">lat_t</em>, <em class="sig-param">lon_r</em>, <em class="sig-param">lat_r</em>, <em class="sig-param">h_tg</em>, <em class="sig-param">h_rg</em>, <em class="sig-param">hprof_step</em>, <em class="sig-param">timepercent</em>, <em class="sig-param">G_t=&lt;Decibel 0. dB&gt;</em>, <em class="sig-param">G_r=&lt;Decibel 0. dB&gt;</em>, <em class="sig-param">omega=&lt;Quantity 0. %&gt;</em>, <em class="sig-param">d_tm=None</em>, <em class="sig-param">d_lm=None</em>, <em class="sig-param">d_ct=None</em>, <em class="sig-param">d_cr=None</em>, <em class="sig-param">zone_t=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em class="sig-param">zone_r=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em class="sig-param">polarization=0</em>, <em class="sig-param">version=16</em>, <em class="sig-param">delta_N=None</em>, <em class="sig-param">N0=None</em>, <em class="sig-param">hprof_dists=None</em>, <em class="sig-param">hprof_heights=None</em>, <em class="sig-param">hprof_bearing=None</em>, <em class="sig-param">hprof_backbearing=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#losses_complete"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.0.4/pycraf/pathprof/propagation.py#L1393" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.losses_complete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate propagation losses for a fixed path using a parallelized method.</p>
+<p>The difference to the usual <a class="reference internal" href="pycraf.pathprof.PathProp.html#pycraf.pathprof.PathProp" title="pycraf.pathprof.PathProp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PathProp</span></code></a> +
+<a class="reference internal" href="pycraf.pathprof.loss_complete.html#pycraf.pathprof.loss_complete" title="pycraf.pathprof.loss_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_complete</span></code></a> approach is, that <a class="reference internal" href="#pycraf.pathprof.losses_complete" title="pycraf.pathprof.losses_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losses_complete</span></code></a>
+supports full <a class="reference external" href="https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">numpy broad-casting</a>. This
+allows perform many calculations at once, e.g., if one interested in
+a statistics plot of <code class="xref py py-obj docutils literal notranslate"><span class="pre">L</span></code> vs. <code class="xref py py-obj docutils literal notranslate"><span class="pre">time_percent</span></code>, without querying the
+height profile over and over.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>freq</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Frequency of radiation [GHz]</p>
+</dd>
+<dt><strong>temperature</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Ambient temperature at path midpoint [K]</p>
+</dd>
+<dt><strong>pressure</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Ambient pressure at path midpoint  [hPa]</p>
+</dd>
+<dt><strong>lon_t, lat_t</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Geographic longitude/latitude of transmitter [deg]</p>
+</dd>
+<dt><strong>lon_r, lat_r</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Geographic longitude/latitude of receiver [deg]</p>
+</dd>
+<dt><strong>h_tg, h_rg</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Transmitter/receiver height over ground [m]</p>
+</dd>
+<dt><strong>hprof_step</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Distance resolution of height profile along path [m]</p>
+</dd>
+<dt><strong>timepercent</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Time percentage [%] (maximal 50%)</p>
+</dd>
+<dt><strong>G_t, G_r</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Antenna gain (transmitter, receiver) in the direction of the
+horizon(!) along the great-circle interference path [dBi]</p>
+</dd>
+<dt><strong>omega</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Fraction of the path over water [%] (see Table 3)
+(default: 0%)</p>
+</dd>
+<dt><strong>d_tm</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>longest continuous land (inland + coastal) section of the
+great-circle path [km]
+(default: distance between Tx and Rx)</p>
+</dd>
+<dt><strong>d_lm</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>longest continuous inland section of the great-circle path [km]
+(default: distance between Tx and Rx)</p>
+</dd>
+<dt><strong>d_ct, d_cr</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Distance over land from transmitter/receiver antenna to the coast
+along great circle interference path [km]
+(default: 50000 km)</p>
+</dd>
+<dt><strong>zone_t, zone_r</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> of int (aka CLUTTER enum), optional</span></dt><dd><p>Clutter type for transmitter/receiver terminal.
+(default: CLUTTER.UNKNOWN)</p>
+</dd>
+<dt><strong>polarization</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> of int, optional</span></dt><dd><p>Polarization (default: 0)
+Allowed values are: 0 - horizontal, 1 - vertical</p>
+</dd>
+<dt><strong>version</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> of int, optional</span></dt><dd><p>ITU-R Rec. P.452 version. Allowed values are: 14, 16</p>
+</dd>
+<dt><strong>delta_N</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar, optional</span></dt><dd><p>Average radio-refractive index lapse-rate through the lowest 1 km of
+the atmosphere [N-units/km = 1/km]
+(default: query <a class="reference internal" href="pycraf.pathprof.deltaN_N0_from_map.html#pycraf.pathprof.deltaN_N0_from_map" title="pycraf.pathprof.deltaN_N0_from_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deltaN_N0_from_map</span></code></a>)</p>
+</dd>
+<dt><strong>N_0</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar, optional</span></dt><dd><p>Sea-level surface refractivity [N-units = dimless]
+(default: query <a class="reference internal" href="pycraf.pathprof.deltaN_N0_from_map.html#pycraf.pathprof.deltaN_N0_from_map" title="pycraf.pathprof.deltaN_N0_from_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deltaN_N0_from_map</span></code></a>)</p>
+</dd>
+<dt><strong>hprof_dists</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Distance vector associated with the height profile <code class="xref py py-obj docutils literal notranslate"><span class="pre">hprof_heights</span></code>.
+(default: query <a class="reference internal" href="pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_profile</span></code></a>)</p>
+</dd>
+<dt><strong>hprof_heights</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Terrain heights profile for the distances in <code class="xref py py-obj docutils literal notranslate"><span class="pre">hprof_dists</span></code>.
+(default: query <a class="reference internal" href="pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_profile</span></code></a>)</p>
+</dd>
+<dt><strong>hprof_bearing</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Start bearing of the height profile path.
+(default: query <a class="reference internal" href="pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_profile</span></code></a>)</p>
+</dd>
+<dt><strong>hprof_backbearing</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Back-bearing of the height profile path.
+(default: query <a class="reference internal" href="pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_profile</span></code></a>)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>results</strong><span class="classifier">dict</span></dt><dd><p>Results of the path attenuation calculation. Each entry
+in the dictionary is a nD <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a> containing
+the associated values for the path.
+The following entries are contained:</p>
+<ul class="simple">
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_b0p</span></code> - Free-space loss including focussing effects
+(for p% of time) [dB]</p></li>
+<li><dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_bd</span></code> - Basic transmission loss associated with diffraction</dt><dd><p>not exceeded for p% time [dB]; L_bd = L_b0p + L_dp</p>
+</dd>
+</dl>
+</li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_bs</span></code> - Tropospheric scatter loss [dB]</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_ba</span></code> - Ducting/layer reflection loss [dB]</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_b</span></code> - Complete path propagation loss [dB]</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">L_b_corr</span></code> - As L_b but with clutter correction [dB]</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">eps_pt</span></code> - Elevation angle of paths w.r.t. Tx [deg]</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">eps_pr</span></code> - Elevation angle of paths w.r.t. Rx [deg]</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">d_lt</span></code> - Distance to horizon w.r.t. Tx [km]</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">d_lr</span></code> - Distance to horizon w.r.t. Rx [km]</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">path_type</span></code> - Path type (0 - LoS, 1 - Trans-horizon)</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>It is extremely important how the broadcasting axes are chosen! There
+are six entities - <code class="xref py py-obj docutils literal notranslate"><span class="pre">freq</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">h_tg</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">h_rg</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">version</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">zone_t</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">zone_r</span></code>
+- that have influence on the propagation path geometry. In the
+broadcasted arrays, the associated axes should vary as slow as
+possible. The internal Cython routine will trigger a re-computation of
+the path geometry if one of these parameters changes. Therefore, if the
+axes for <code class="xref py py-obj docutils literal notranslate"><span class="pre">frequency</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">time_percent</span></code> would have been chosen in the
+opposite manner, the function would run about an order of magnitude
+slower!</p></li>
+<li><p>The diffraction-loss algorithm was changed between ITU-R P.452
+version 14 and 15. The former used a Deygout method, the new one
+is based on a Bullington calculation with correction terms.</p></li>
+<li><p>In future versions, more entries may be added to the results
+dictionary.</p></li>
+</ul>
+<p class="rubric">Examples</p>
+<p>A typical usage would be:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">pathprof</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+
+<span class="n">frequency</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">GHz</span>
+<span class="n">temperature</span> <span class="o">=</span> <span class="mf">290.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">K</span>
+<span class="n">pressure</span> <span class="o">=</span> <span class="mi">980</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">hPa</span>
+<span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span> <span class="o">=</span> <span class="mf">6.8836</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.525</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<span class="n">lon_r</span><span class="p">,</span> <span class="n">lat_r</span> <span class="o">=</span> <span class="mf">7.3334</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.635</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<span class="n">h_tg</span><span class="p">,</span> <span class="n">h_rg</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mi">30</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
+<span class="n">hprof_step</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
+<span class="n">time_percent</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="mi">100</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span>
+<span class="n">zone_t</span><span class="p">,</span> <span class="n">zone_r</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">CLUTTER</span><span class="o">.</span><span class="n">URBAN</span><span class="p">,</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">CLUTTER</span><span class="o">.</span><span class="n">SUBURBAN</span>
+
+<span class="c1"># as frequency and time_percent are arrays, we need to add</span>
+<span class="c1"># new axes to allow proper broadcasting</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">losses_complete</span><span class="p">(</span>
+    <span class="n">frequency</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+    <span class="n">temperature</span><span class="p">,</span>
+    <span class="n">pressure</span><span class="p">,</span>
+    <span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span><span class="p">,</span>
+    <span class="n">lon_r</span><span class="p">,</span> <span class="n">lat_r</span><span class="p">,</span>
+    <span class="n">h_tg</span><span class="p">,</span> <span class="n">h_rg</span><span class="p">,</span>
+    <span class="n">hprof_step</span><span class="p">,</span>
+    <span class="n">time_percent</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+    <span class="n">zone_t</span><span class="o">=</span><span class="n">zone_t</span><span class="p">,</span> <span class="n">zone_r</span><span class="o">=</span><span class="n">zone_r</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="c1"># 2D plot of L_b vs frequency and time_percent</span>
+<span class="c1"># (proper axes labels and units omitted!)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;L_b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">losses_complete</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/api/pycraf.pathprof.losses_complete.rst">Edit This Page on Github</a> &nbsp;
+    <a href="../_sources/api/pycraf.pathprof.losses_complete.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
+  </p>
+</footer>
+  </body>
+</html>

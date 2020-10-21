@@ -1,41 +1,38 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>ra769_limits &#8212; pycraf v0.25.4</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ra769_limits &#8212; pycraf v1.0.4</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.25.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Geographical frames (pycraf.geospatial)" href="../geospatial/index.html" />
-    <link rel="prev" title="cispr22_limits" href="pycraf.protection.cispr22_limits.html" />
-<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
-<script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link rel="prev" title="ra769_calculate_entry" href="pycraf.protection.ra769_calculate_entry.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 
-
-  </head>
-  <body>
+  </head><body>
 <div class="topbar">
   <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
   <ul>
+    
     <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
     <li><a title="General Index" href="../genindex.html">Index</a></li>
     <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
@@ -61,16 +58,16 @@
 	</a>
       </li>
       <li class="right">
-	<a href="pycraf.protection.cispr22_limits.html" title="cispr22_limits">
+	<a href="pycraf.protection.ra769_calculate_entry.html" title="ra769_calculate_entry">
 	  &laquo; previous
 	</a>
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v0.25.4</a>
+	<a href="../index.html">pycraf v1.0.4</a>
 	 &#187;
       </li>
-      <li><a href="../protection/index.html" accesskey="U">Protection levels (<code class="docutils literal"><span class="pre">pycraf.protection</span></code>)</a> &#187;</li>
+      <li><a href="../protection/index.html" accesskey="U">Protection levels (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.protection</span></code>)</a> &#187;</li>
       
       <li>ra769_limits</li> 
     </ul>
@@ -84,72 +81,65 @@
             
   <div class="section" id="ra769-limits">
 <h1>ra769_limits<a class="headerlink" href="#ra769-limits" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
+<dl class="py function">
 <dt id="pycraf.protection.ra769_limits">
-<code class="descclassname">pycraf.protection.</code><code class="descname">ra769_limits</code><span class="sig-paren">(</span><em>mode='continuum'</em>, <em>scale='dB'</em>, <em>integ_time=&lt;Quantity 2000.0 s&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/protection/ra769.html#ra769_limits"><span class="viewcode-link">[source]</span></a><a class="reference external" href="http://github.com/bwinkel/pycraf/tree/v0.25.4/pycraf/protection/ra769.py#L22" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.protection.ra769_limits" title="Permalink to this definition">¶</a></dt>
-<dd><p>Limits for spectral line and continuum observations according to
+<code class="sig-prename descclassname">pycraf.protection.</code><code class="sig-name descname">ra769_limits</code><span class="sig-paren">(</span><em class="sig-param">mode='continuum'</em>, <em class="sig-param">scale='dB'</em>, <em class="sig-param">integ_time=&lt;Quantity 2000. s&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/protection/ra769.html#ra769_limits"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.0.4/pycraf/protection/ra769.py#L163" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.protection.ra769_limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Limits for spectral line, continuum, and VLBI observations according to
 <a class="reference external" href="https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en">ITU-R Rec RA.769</a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : str, optional</p>
-<blockquote>
-<div><p>Observing mode: ‘continuum’, ‘spectroscopy’, or ‘vlbi’
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>mode</strong><span class="classifier">str, optional</span></dt><dd><p>Observing mode: ‘continuum’, ‘spectroscopy’, or ‘vlbi’
 (default: ‘continuum’)</p>
-</div></blockquote>
-<p><strong>scale</strong> : str, optional</p>
-<blockquote>
-<div><p>Default scale to use: ‘linear’, ‘dB’ (default: ‘linear’)</p>
-</div></blockquote>
-<p><strong>integ_time</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>, optional</p>
-<blockquote>
-<div><p>Integration time [s] (default: 2000)</p>
-<p>Note, if <code class="xref py py-obj docutils literal"><span class="pre">mode='vlbi'</span></code> integration time is irrelevant, because the
+</dd>
+<dt><strong>scale</strong><span class="classifier">str, optional</span></dt><dd><p>Default scale to use: ‘linear’, ‘dB’ (default: ‘linear’)</p>
+</dd>
+<dt><strong>integ_time</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Integration time [s] (default: 2000)</p>
+<p>Note, if <code class="xref py py-obj docutils literal notranslate"><span class="pre">mode='vlbi'</span></code> integration time is irrelevant, because the
 limits are based on 1% of the receiver noise plus antenna temperature.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ra769_limits</strong> : <a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.table.Table.html#astropy.table.Table" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Table</span></code></a></p>
-<blockquote class="last">
-<div><p>A table with the following columns:</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>ra769_limits</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.table.Table.html#astropy.table.Table" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Table</span></code></a></span></dt><dd><p>A table with the following columns:</p>
 <ul class="simple">
-<li>“frequency” [MHz]</li>
-<li>“bandwidth” [MHz]</li>
-<li>“T_A” [K]</li>
-<li>“T_rx” [K]</li>
-<li>“T_rms” [K]</li>
-<li>“P_rms_nu” [W/Hz, dB(W/Hz)]</li>
-<li>“Plim” [W, dB(W)]</li>
-<li>“Plim_nu” [W/Hz, dB(W/Hz)]</li>
-<li>“Slim” [W/m^2, dB(W/m^2)]</li>
-<li>“Slim_nu” [Jy, dB(W/m^2/Hz)]</li>
-<li>“Efield” [uV/m, db(uV^2/m^2)]</li>
-<li>“Efield_norm”, normalized to 1 MHz bandwidth [uV/m, db(uV^2/m^2)]</li>
+<li><p>“frequency” [MHz]</p></li>
+<li><p>“bandwidth” [MHz]</p></li>
+<li><p>“T_A” [K]</p></li>
+<li><p>“T_rx” [K]</p></li>
+<li><p>“T_rms” [K]</p></li>
+<li><p>“P_rms_nu” [W/Hz, dB(W/Hz)]</p></li>
+<li><p>“Plim” [W, dB(W)]</p></li>
+<li><p>“Plim_nu” [W/Hz, dB(W/Hz)]</p></li>
+<li><p>“Slim” [W/m^2, dB(W/m^2)]</p></li>
+<li><p>“Slim_nu” [Jy, dB(W/m^2/Hz)]</p></li>
+<li><p>“Efield” [uV/m, db(uV^2/m^2)]</p></li>
+<li><p>“Efield_norm”, normalized to 1 MHz bandwidth [uV/m, db(uV^2/m^2)]</p></li>
 </ul>
-<p>If <code class="xref py py-obj docutils literal"><span class="pre">mode='vlbi'</span></code> the returned table has the following entries, only</p>
+<p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">mode='vlbi'</span></code> the returned table has the following entries, only</p>
 <ul class="simple">
-<li>“frequency” [MHz]</li>
-<li>“bandwidth” [MHz]</li>
-<li>“T_A” [K]</li>
-<li>“T_rx” [K]</li>
-<li>“Slim_nu” [Jy, dB(W/m^2/Hz)]</li>
+<li><p>“frequency” [MHz]</p></li>
+<li><p>“bandwidth” [MHz]</p></li>
+<li><p>“T_A” [K]</p></li>
+<li><p>“T_rx” [K]</p></li>
+<li><p>“Slim_nu” [Jy, dB(W/m^2/Hz)]</p></li>
 </ul>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Notes</p>
 <p>Because all columns are Astropy Quantities (see
-<a class="reference external" href="http://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v2.0.2)"><code class="xref py py-obj docutils literal"><span class="pre">Quantity</span></code></a>), one can easily convert between linear and
-log-scale at a later stage. the <code class="xref py py-obj docutils literal"><span class="pre">scale</span></code> parameter just defines the
+<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>), one can easily convert between linear and
+log-scale at a later stage. the <code class="xref py py-obj docutils literal notranslate"><span class="pre">scale</span></code> parameter just defines the
 scale to use initially.</p>
 </dd></dl>
 
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -166,14 +156,14 @@ scale to use initially.</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="http://github.com/bwinkel/pycraf/tree/v0.25.4/docs/api/pycraf.protection.ra769_limits.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/api/pycraf.protection.ra769_limits.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.protection.ra769_limits.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2017, Benjamin Winkel.<br/>
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.3. &nbsp;
-    Last built 21 Sep 2017. <br/>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
   </p>
 </footer>
   </body>

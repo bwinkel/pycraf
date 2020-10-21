@@ -1,0 +1,6 @@
+airmass_from_elevation
+======================
+
+.. currentmodule:: pycraf.atm
+
+.. autofunction:: airmass_from_elevation

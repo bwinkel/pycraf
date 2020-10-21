@@ -1,6 +1,6 @@
-satellite.get_sat
-=================
+get_sat
+=======
 
-.. currentmodule:: pycraf
+.. currentmodule:: pycraf.satellite
 
-.. autoattribute:: satellite.get_sat
+.. autofunction:: get_sat

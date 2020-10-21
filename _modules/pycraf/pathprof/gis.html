@@ -1,0 +1,401 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pycraf.pathprof.gis &#8212; pycraf v1.0.4</title>
+    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../../../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../../../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../../../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li>
+	<a href="../../../index.html">pycraf v1.0.4</a>
+	 &#187;
+      </li>
+      <li><a href="../../index.html" >Module code</a> &#187;</li>
+      <li><a href="../../pycraf.html" accesskey="U">pycraf</a> &#187;</li>
+      
+       
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pycraf.pathprof.gis</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">absolute_import</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+    <span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">RegularGridInterpolator</span>
+<span class="kn">from</span> <span class="nn">astropy.utils.data</span> <span class="kn">import</span> <span class="n">get_pkg_data_filename</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">cyprop</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">geospatial</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">utils</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;CORINE_TO_P452_CLASSES&#39;</span><span class="p">,</span> <span class="s1">&#39;IGBP_TO_P452_CLASSES&#39;</span><span class="p">,</span> <span class="s1">&#39;P452_CLUTTER_COLORS&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;landcover_to_p452_clutter_zones&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;wgs84_to_geotiff_pixels&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;regrid_from_geotiff&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+
+<span class="n">_CORINE_TO_P452_CLASSES_FILE</span> <span class="o">=</span> <span class="n">get_pkg_data_filename</span><span class="p">(</span>
+    <span class="s1">&#39;data/corine_to_p452_classes.txt&#39;</span>
+    <span class="p">)</span>
+<span class="n">CORINE_TO_P452_CLASSES</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span>
+    <span class="n">_CORINE_TO_P452_CLASSES_FILE</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;CorineID&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;ClutterName&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">str</span><span class="p">,</span> <span class="mi">100</span><span class="p">)]),</span>
+    <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
+    <span class="p">))</span>
+
+<span class="n">_IGBP_TO_P452_CLASSES_FILE</span> <span class="o">=</span> <span class="n">get_pkg_data_filename</span><span class="p">(</span>
+    <span class="s1">&#39;data/igbp_to_p452_classes.txt&#39;</span>
+    <span class="p">)</span>
+<span class="n">IGBP_TO_P452_CLASSES</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span>
+    <span class="n">_IGBP_TO_P452_CLASSES_FILE</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;IGBP_ID&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;ClutterName&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">str</span><span class="p">,</span> <span class="mi">100</span><span class="p">)]),</span>
+    <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
+    <span class="p">))</span>
+
+<span class="n">P452_CLUTTER_COLORS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;UNKNOWN&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="s1">&#39;SPARSE&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+    <span class="s1">&#39;VILLAGE&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">160</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+    <span class="s1">&#39;DECIDIOUS_TREES&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+    <span class="s1">&#39;CONIFEROUS_TREES&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">166</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+    <span class="s1">&#39;TROPICAL_FOREST&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">166</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+    <span class="s1">&#39;SUBURBAN&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+    <span class="s1">&#39;DENSE_SUBURBAN&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+    <span class="s1">&#39;URBAN&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+    <span class="s1">&#39;DENSE_URBAN&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+    <span class="s1">&#39;HIGH_URBAN&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+    <span class="s1">&#39;INDUSTRIAL_ZONE&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+    <span class="p">}</span>
+
+
+<div class="viewcode-block" id="landcover_to_p452_clutter_zones"><a class="viewcode-back" href="../../../api/pycraf.pathprof.landcover_to_p452_clutter_zones.html#pycraf.pathprof.landcover_to_p452_clutter_zones">[docs]</a><span class="k">def</span> <span class="nf">landcover_to_p452_clutter_zones</span><span class="p">(</span><span class="n">landcover_map</span><span class="p">,</span> <span class="n">conversion_table</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Convert a map of landcover class IDs to P.452 clutter types.</span>
+
+<span class="sd">    Two pre-defined mappings (conversion tables) are provided in</span>
+<span class="sd">    `~pycraf.pathprof`, one for the Corine landcover survey (by the Copernicus</span>
+<span class="sd">    mission) that is a high-resolution database for Europe, and one for IGBP</span>
+<span class="sd">    class IDs, which are used e.g., by  the Terra and Aqua combined Moderate</span>
+<span class="sd">    Resolution Imaging Spectroradiometer, MODIS, which is available for</span>
+<span class="sd">    several years. One version of that data, the &quot;MOD12C1&quot;</span>
+<span class="sd">    (Majority_Land_Cover_Type_1) map is a (rather low-resolution)</span>
+<span class="sd">    version for the full Earth.</span>
+
+<span class="sd">    Be careful, some data files seem to contain zero-indexed IGBP IDs! One</span>
+<span class="sd">    may need to increase the input map values by One in such cases.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    landcover_map : 2D `~numpy.ndarray` (usually integer type)</span>
+<span class="sd">        Map of land cover types (e.g. from Corine land cover survey). Data</span>
+<span class="sd">        type will usually be some Integer type and must contain land cover</span>
+<span class="sd">        class IDs (see e.g. Notes below).</span>
+<span class="sd">    conversion_table : `dict`</span>
+<span class="sd">        A dictionary with a mapping (conversion) from the land cover ID to</span>
+<span class="sd">        the P.452 clutter zone type. Two mappings are pre-defined in</span>
+<span class="sd">        `~pycraf.pathprof`, the `~pycraf.pathprof.CORINE_TO_P452_CLASSES` and</span>
+<span class="sd">        the `~pycraf.pathprof.IGBP_TO_P452_CLASSES`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    p452_clutter_zones_map : 2D `~numpy.ndarray` of int8</span>
+<span class="sd">        Map of P.452 clutter zone types derived from the provided dictionary</span>
+<span class="sd">        with the landcover class IDs.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Corine land cover classes:</span>
+
+<span class="sd">      | 111 Continuous urban fabric</span>
+<span class="sd">      | 112 Discontinuous urban fabric</span>
+<span class="sd">      | 121 Industrial or commercial units</span>
+<span class="sd">      | 122 Road and rail networks and associated land</span>
+<span class="sd">      | 123 Port areas</span>
+<span class="sd">      | 124 Airports</span>
+<span class="sd">      | 131 Mineral extraction sites</span>
+<span class="sd">      | 132 Dump sites</span>
+<span class="sd">      | 133 Construction sites</span>
+<span class="sd">      | 141 Green urban areas</span>
+<span class="sd">      | 142 Sport and leisure facilities</span>
+<span class="sd">      | 211 Non-irrigated arable land</span>
+<span class="sd">      | 212 Permanently irrigated land</span>
+<span class="sd">      | 213 Rice fields</span>
+<span class="sd">      | 221 Vineyards</span>
+<span class="sd">      | 222 Fruit trees and berry plantations</span>
+<span class="sd">      | 223 Olive groves</span>
+<span class="sd">      | 231 Pastures</span>
+<span class="sd">      | 241 Annual crops associated with permanent crops</span>
+<span class="sd">      | 242 Complex cultivation patterns</span>
+<span class="sd">      | 243 Agricultural land with significant areas of natural vegetation</span>
+<span class="sd">      | 244 Agro-forestry areas</span>
+<span class="sd">      | 311 Broad-leaved forest</span>
+<span class="sd">      | 312 Coniferous forest</span>
+<span class="sd">      | 313 Mixed forest</span>
+<span class="sd">      | 321 Natural grasslands</span>
+<span class="sd">      | 322 Moors and heathland</span>
+<span class="sd">      | 323 Sclerophyllous vegetation</span>
+<span class="sd">      | 324 Transitional woodland-shrub</span>
+<span class="sd">      | 331 Beaches dunes sands</span>
+<span class="sd">      | 332 Bare rocks</span>
+<span class="sd">      | 333 Sparsely vegetated areas</span>
+<span class="sd">      | 334 Burnt areas</span>
+<span class="sd">      | 335 Glaciers and perpetual snow</span>
+<span class="sd">      | 411 Inland marshes</span>
+<span class="sd">      | 412 Peat bogs</span>
+<span class="sd">      | 421 Salt marshes</span>
+<span class="sd">      | 422 Salines</span>
+<span class="sd">      | 423 Intertidal flats</span>
+<span class="sd">      | 511 Water courses</span>
+<span class="sd">      | 512 Water bodies</span>
+<span class="sd">      | 521 Coastal lagoons</span>
+<span class="sd">      | 522 Estuaries</span>
+<span class="sd">      | 523 Sea and ocean</span>
+<span class="sd">      | 999 NODATA</span>
+
+<span class="sd">    - IGBP land cover classes:</span>
+
+<span class="sd">      | 1  Evergreen needleleaf forests</span>
+<span class="sd">      | 2  Evergreen broadleaf forests</span>
+<span class="sd">      | 3  Deciduous needleleaf forests</span>
+<span class="sd">      | 4  Deciduous broadleaf forests</span>
+<span class="sd">      | 5  Mixed forests</span>
+<span class="sd">      | 6  Closed shrublands</span>
+<span class="sd">      | 7  Open shrublands</span>
+<span class="sd">      | 8  Woody savannas</span>
+<span class="sd">      | 9  Savannas</span>
+<span class="sd">      | 10 Grasslands</span>
+<span class="sd">      | 11 Permanent wetlands</span>
+<span class="sd">      | 12 Croplands</span>
+<span class="sd">      | 13 Urban and built-up lands</span>
+<span class="sd">      | 14 Cropland/natural vegetation mosaics</span>
+<span class="sd">      | 15 Snow and ice</span>
+<span class="sd">      | 16 Barren</span>
+<span class="sd">      | 17 Water bodies</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">clutter_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">landcover_map</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">cor_id</span><span class="p">,</span> <span class="n">cl_name</span> <span class="ow">in</span> <span class="n">conversion_table</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">landcover_map</span> <span class="o">==</span> <span class="n">cor_id</span>
+        <span class="n">clutter_map</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cyprop</span><span class="o">.</span><span class="n">CLUTTER</span><span class="p">,</span> <span class="n">cl_name</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">clutter_map</span></div>
+
+
+<div class="viewcode-block" id="wgs84_to_geotiff_pixels"><a class="viewcode-back" href="../../../api/pycraf.pathprof.wgs84_to_geotiff_pixels.html#pycraf.pathprof.wgs84_to_geotiff_pixels">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">lons</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">lats</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">wgs84_to_geotiff_pixels</span><span class="p">(</span><span class="n">geotiff</span><span class="p">,</span> <span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Convert WGS84 (longitude, latitude) to pixel space of a GeoTiff.</span>
+
+<span class="sd">    This is purely a convenience function, which internally calls `pyproj`</span>
+<span class="sd">    with the appropriate CRS of the GeoTiff file. The GeoTiff file must be</span>
+<span class="sd">    opened with the Python package `Rasterio</span>
+<span class="sd">    &lt;https://rasterio.readthedocs.io/&gt;`_</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    geotiff : `~rasterio.io.DatasetReader` instance</span>
+<span class="sd">        A geotiff raster map opened with the Python package `Rasterio</span>
+<span class="sd">        &lt;https://rasterio.readthedocs.io/&gt;`_.</span>
+<span class="sd">    lons, lats : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic longitudes/latitudes (WGS84) [deg]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    xpix, ypix : `~numpy.ndarray` of float64</span>
+<span class="sd">        Pixel coordinates (floating point!) of the provided geographic</span>
+<span class="sd">        position(s) in the given GeoTiff raster map.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">rasterio</span> <span class="k">as</span> <span class="nn">rio</span>
+    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Python package rasterio is needed for this function.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">e</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">geotiff</span><span class="p">,</span> <span class="n">rio</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">DatasetReader</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s1">&#39;&quot;geotiff&quot; parameter must be an instance of &#39;</span>
+            <span class="s1">&#39;&quot;rasterio.io.DatasetReader&quot; (a Rasterio geotiff file object)&#39;</span>
+            <span class="p">)</span>
+
+    <span class="n">lons</span><span class="p">,</span> <span class="n">lats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span>
+        <span class="n">lons</span><span class="p">,</span> <span class="n">lats</span>
+        <span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+    <span class="n">wgs84_to_crs_world</span> <span class="o">=</span> <span class="n">geospatial</span><span class="o">.</span><span class="n">transform_factory</span><span class="p">(</span>
+        <span class="n">geospatial</span><span class="o">.</span><span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">,</span> <span class="n">geotiff</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">to_proj4</span><span class="p">()</span>
+        <span class="p">)</span>
+    <span class="n">wx</span><span class="p">,</span> <span class="n">wy</span> <span class="o">=</span> <span class="n">wgs84_to_crs_world</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">)</span>
+    <span class="n">px</span><span class="p">,</span> <span class="n">py</span> <span class="o">=</span> <span class="p">(</span><span class="o">~</span><span class="n">geotiff</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">wy</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">px</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">lons</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">py</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">lats</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="regrid_from_geotiff"><a class="viewcode-back" href="../../../api/pycraf.pathprof.regrid_from_geotiff.html#pycraf.pathprof.regrid_from_geotiff">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">lons</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">lats</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">regrid_from_geotiff</span><span class="p">(</span><span class="n">geotiff</span><span class="p">,</span> <span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Retrieve interpolated GeoTiff raster values for given WGS84 coordinates</span>
+<span class="sd">    (longitude, latitude).</span>
+
+<span class="sd">    Most GeoTiff raster maps will be based on reference frames other than</span>
+<span class="sd">    geographic (WGS84), such that it is often necessary to reproject a map,</span>
+<span class="sd">    e.g. to get the data values for the positions present in an terrain height</span>
+<span class="sd">    map such as SRTM, which is the basis for path propagation loss</span>
+<span class="sd">    calculations. By means of nearest neighbour interpolation one can quickly</span>
+<span class="sd">    reproject (or regrid) a GeoTiff raster map to the required positions.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    geotiff : `~rasterio.io.DatasetReader` instance</span>
+<span class="sd">        A geotiff raster map opened with the Python package `Rasterio</span>
+<span class="sd">        &lt;https://rasterio.readthedocs.io/&gt;`_.</span>
+<span class="sd">    lons, lats : `~astropy.units.Quantity`</span>
+<span class="sd">        Geographic longitudes/latitudes (WGS84) [deg]</span>
+<span class="sd">    band : int, Optional (default: 1)</span>
+<span class="sd">        The GeoTiff band to use.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    geo_data_regridded : `~numpy.ndarray`</span>
+<span class="sd">        Regridded values of the input raster map on the given longitude and</span>
+<span class="sd">        latitude positions. If the input GeoTiff has more than one band and</span>
+<span class="sd">        you need to regrid several of the bands, please run the function</span>
+<span class="sd">        repeatedly, specifying the band parameter.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    If requested geo positions are all to close to the edge of the geotiff</span>
+<span class="sd">    file, the interpolation can fail (`~scipy.interpolate` will raise a</span>
+<span class="sd">    ValueError in such cases).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">rasterio</span> <span class="k">as</span> <span class="nn">rio</span>
+    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Python package rasterio is needed for this function.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">e</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">geotiff</span><span class="p">,</span> <span class="n">rio</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">DatasetReader</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s1">&#39;&quot;geotiff&quot; parameter must be an instance of &#39;</span>
+            <span class="s1">&#39;&quot;rasterio.io.DatasetReader&quot; (a Rasterio geotiff file object)&#39;</span>
+            <span class="p">)</span>
+
+    <span class="n">geo_x</span><span class="p">,</span> <span class="n">geo_y</span> <span class="o">=</span> <span class="n">wgs84_to_geotiff_pixels</span><span class="p">(</span><span class="n">geotiff</span><span class="p">,</span> <span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">)</span>
+
+    <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">([</span><span class="n">geo_x</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">geo_x</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
+    <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">([</span><span class="n">geo_y</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">geo_y</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
+    <span class="c1"># slightly enlarge box to avoid edge effects</span>
+    <span class="n">col_off</span><span class="p">,</span> <span class="n">row_off</span> <span class="o">=</span> <span class="n">xmin</span> <span class="o">-</span> <span class="mi">5</span><span class="p">,</span> <span class="n">ymin</span> <span class="o">-</span> <span class="mi">5</span>
+    <span class="n">col_width</span><span class="p">,</span> <span class="n">row_width</span> <span class="o">=</span> <span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span> <span class="o">+</span> <span class="mi">10</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="n">rio</span><span class="o">.</span><span class="n">windows</span><span class="o">.</span><span class="n">Window</span><span class="p">(</span><span class="n">col_off</span><span class="p">,</span> <span class="n">row_off</span><span class="p">,</span> <span class="n">col_width</span><span class="p">,</span> <span class="n">row_width</span><span class="p">)</span>
+
+    <span class="n">geo_data</span> <span class="o">=</span> <span class="n">geotiff</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">band</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span>
+
+    <span class="c1"># are the world coordinates associated with pixel centers?</span>
+    <span class="c1"># is there a shift about half a pixel necessary?</span>
+    <span class="c1"># --&gt; according to https://gdal.org/user/raster_data_model.html#affine-geotransform</span>
+    <span class="c1"># the (0, 0) is the top left corner of the top left pixel</span>
+    <span class="n">geo_interp</span> <span class="o">=</span> <span class="n">RegularGridInterpolator</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">col_width</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">row_width</span><span class="p">)),</span>
+        <span class="n">geo_data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">geo_data_regridded</span> <span class="o">=</span> <span class="n">geo_interp</span><span class="p">((</span><span class="n">geo_x</span> <span class="o">-</span> <span class="n">col_off</span><span class="p">,</span> <span class="n">geo_y</span> <span class="o">-</span> <span class="n">row_off</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">geo_data_regridded</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">geo_data</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right"> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2020, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
+  </p>
+</footer>
+  </body>
+</html>

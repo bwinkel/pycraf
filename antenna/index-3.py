@@ -1,17 +1,24 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from astropy import units as u
-from pycraf.antenna import *
+from pycraf.antenna import ras_pattern
+import astropy.units as u
 
-phi = np.linspace(0, 21, 1000) * u.deg
-diam = np.array([1, 2, 10])[:, np.newaxis] * u.m
-wavlen = 0.03 * u.m  # about 10 GHz
-G_max = fl_G_max_from_size(diam, wavlen)
-gain = fl_pattern(phi, diam, wavlen, G_max)
 
+phi = np.linspace(0, 20, 1000) * u.deg
+diam = np.array([10, 50, 100]) * u.m
+gain = ras_pattern(phi, diam[:, np.newaxis], 0.21 * u.m)
 plt.plot(phi, gain.T, '-')
-plt.legend(['d=1 m', 'd=2 m', 'd=10 m'])
-plt.xlim((0, 21))
+plt.legend(['d=10 m', 'd=50 m', 'd=100 m'])
+plt.xlim((0, 2.8))
+plt.xlabel('Phi [deg]')
+plt.ylabel('Gain [dBi]')
+plt.show()
+
+# zoom-in with Bessel correction
+phi = np.linspace(0, 2.8, 10000) * u.deg
+gain = ras_pattern(phi, 100 * u.m, 0.21 * u.m, do_bessel=True)
+plt.plot(phi, gain, 'k-')
+plt.xlim((0, 2.8))
 plt.xlabel('Phi [deg]')
 plt.ylabel('Gain [dBi]')
 plt.show()
