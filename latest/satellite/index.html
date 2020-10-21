@@ -135,12 +135,13 @@ coordinates of the ISS at a given time, download the current TLE and do:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mjd</span> <span class="o">=</span> <span class="mf">55123.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.123</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">,</span> <span class="mf">50.3</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obstime2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">Time</span><span class="p">(</span><span class="n">mjd</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;mjd&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">sat_obs</span><span class="o">.</span><span class="n">azel_from_sat</span><span class="p">(</span><span class="n">tle_string</span><span class="p">,</span> <span class="n">obstime2</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">az</span>  
-<span class="go">&lt;Quantity [  28.39693587,-143.17010479,  -6.97428002] deg&gt;</span>
+<span class="go">&lt;Quantity [  28.397, -143.170,  -6.974] deg&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">el</span>  
-<span class="go">&lt;Quantity [-43.16852656,-21.46811918,-36.77340433] deg&gt;</span>
+<span class="go">&lt;Quantity [-43.169, -21.468, -36.773] deg&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span>  
-<span class="go">&lt;Quantity [ 9388.29246437, 5675.03921204, 8361.28408463] km&gt;</span>
+<span class="go">&lt;Quantity [ 9388.292, 5675.039, 8361.284] km&gt;</span>
 </pre></div>
 </div>
 <p>The <a class="reference internal" href="../api/pycraf.satellite.SatelliteObserver.html#pycraf.satellite.SatelliteObserver.azel_from_sat" title="pycraf.satellite.SatelliteObserver.azel_from_sat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">azel_from_sat</span></code></a> method also accepts
