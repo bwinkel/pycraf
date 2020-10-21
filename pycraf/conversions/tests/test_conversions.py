@@ -208,7 +208,7 @@ class TestConversions:
     def test_eff_area_from_gain(self):
 
         args_list = [
-            (1.e-30, None, cnv.dimless),
+            (1.e-60, None, cnv.dimless),
             (0, None, apu.Hz),
             ]
         check_astro_quantities(cnv.eff_area_from_gain, args_list)
@@ -225,7 +225,7 @@ class TestConversions:
     def test_antfactor_from_gain(self):
 
         args_list = [
-            (1.e-30, None, cnv.dimless),
+            (1.e-60, None, cnv.dimless),
             (0, None, apu.Hz),
             (0, None, apu.Ohm),
             ]
@@ -265,7 +265,7 @@ class TestConversions:
     def test_powerflux_from_efield(self):
 
         args_list = [
-            (1.e-30, None, apu.V / apu.meter),
+            (1.e-60, None, apu.V / apu.meter),
             ]
         check_astro_quantities(cnv.powerflux_from_efield, args_list)
 
@@ -302,9 +302,9 @@ class TestConversions:
     def test_ptx_from_efield(self):
 
         args_list = [
-            (1.e-30, None, apu.V / apu.meter),
+            (1.e-60, None, apu.V / apu.meter),
             (1.e-30, None, apu.m),
-            (1.e-30, None, cnv.dimless),
+            (1.e-60, None, cnv.dimless),
             ]
         check_astro_quantities(cnv.ptx_from_efield, args_list)
 
@@ -327,9 +327,9 @@ class TestConversions:
     def test_efield_from_ptx(self):
 
         args_list = [
-            (1.e-30, None, apu.W),
+            (1.e-60, None, apu.W),
             (1.e-30, None, apu.m),
-            (1.e-30, None, cnv.dimless),
+            (1.e-60, None, cnv.dimless),
             ]
         check_astro_quantities(cnv.efield_from_ptx, args_list)
 
@@ -345,9 +345,9 @@ class TestConversions:
     def test_powerflux_from_ptx(self):
 
         args_list = [
-            (1.e-30, None, apu.W),
+            (1.e-60, None, apu.W),
             (1.e-30, None, apu.m),
-            (1.e-30, None, cnv.dimless),
+            (1.e-60, None, cnv.dimless),
             ]
         check_astro_quantities(cnv.powerflux_from_ptx, args_list)
 
@@ -363,9 +363,9 @@ class TestConversions:
     def test_ptx_from_powerflux(self):
 
         args_list = [
-            (1.e-30, None, apu.W / apu.m ** 2),
+            (1.e-60, None, apu.W / apu.m ** 2),
             (1.e-30, None, apu.m),
-            (1.e-30, None, cnv.dimless),
+            (1.e-60, None, cnv.dimless),
             ]
         check_astro_quantities(cnv.ptx_from_powerflux, args_list)
 
@@ -383,9 +383,9 @@ class TestConversions:
     def test_powerflux_from_prx(self):
 
         args_list = [
-            (1.e-30, None, apu.W),
+            (1.e-90, None, apu.W),
             (1.e-30, None, apu.Hz),
-            (1.e-30, None, cnv.dimless),
+            (1.e-60, None, cnv.dimless),
             ]
         check_astro_quantities(cnv.powerflux_from_prx, args_list)
 
@@ -401,9 +401,9 @@ class TestConversions:
     def test_prx_from_powerflux(self):
 
         args_list = [
-            (1.e-30, None, apu.W / apu.m ** 2),
+            (1.e-90, None, apu.W / apu.m ** 2),
             (1.e-30, None, apu.Hz),
-            (1.e-30, None, cnv.dimless),
+            (1.e-60, None, cnv.dimless),
             ]
         check_astro_quantities(cnv.prx_from_powerflux, args_list)
 
@@ -423,7 +423,7 @@ class TestConversions:
     def test_t_a_from_prx_nu(self):
 
         args_list = [
-            (1.e-30, None, apu.W / apu.Hz),
+            (1.e-60, None, apu.W / apu.Hz),
             ]
         check_astro_quantities(cnv.t_a_from_prx_nu, args_list)
 
@@ -488,9 +488,9 @@ class TestConversions:
     def test_prx_from_ptx(self):
 
         args_list = [
-            (1.e-30, None, apu.W),
-            (1.e-30, None, cnv.dimless),
-            (1.e-30, None, cnv.dimless),
+            (1.e-60, None, apu.W),
+            (1.e-60, None, cnv.dimless),
+            (1.e-60, None, cnv.dimless),
             (1.e-30, None, apu.m),
             (1.e-30, None, apu.Hz),
             ]
@@ -516,9 +516,9 @@ class TestConversions:
     def test_ptx_from_prx(self):
 
         args_list = [
-            (1.e-30, None, apu.W),
-            (1.e-30, None, cnv.dimless),
-            (1.e-30, None, cnv.dimless),
+            (1.e-60, None, apu.W),
+            (1.e-60, None, cnv.dimless),
+            (1.e-60, None, cnv.dimless),
             (1.e-30, None, apu.m),
             (1.e-30, None, apu.Hz),
             ]

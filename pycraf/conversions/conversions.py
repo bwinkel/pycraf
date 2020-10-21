@@ -338,7 +338,7 @@ def gain_from_eff_area(eff_area, freq):
 
 
 @utils.ranged_quantity_input(
-    gain=(1.e-30, None, dimless),
+    gain=(1.e-60, None, dimless),
     freq=(0, None, apu.Hz),
     strip_input_units=True, output_unit=apu.m ** 2
     )
@@ -368,7 +368,7 @@ def eff_area_from_gain(gain, freq):
 
 
 @utils.ranged_quantity_input(
-    gain=(1.e-30, None, dimless),
+    gain=(1.e-60, None, dimless),
     freq=(0, None, apu.Hz),
     zi=(0, None, apu.Ohm),
     strip_input_units=True, output_unit=dB_1_m
@@ -403,7 +403,7 @@ def antfactor_from_gain(gain, freq, zi):
 
 
 @utils.ranged_quantity_input(
-    antfactor=(1.e-30, None, 1. / apu.m),
+    antfactor=(1.e-60, None, 1. / apu.m),
     freq=(0, None, apu.Hz),
     zi=(0, None, apu.Ohm),
     strip_input_units=True, output_unit=dBi
@@ -439,7 +439,7 @@ def gain_from_antfactor(antfactor, freq, zi):
 
 # @apu.quantity_input(E=dB_uV_m, equivalencies=efield_equivalency())
 @utils.ranged_quantity_input(
-    efield=(1.e-30, None, apu.V / apu.meter),
+    efield=(1.e-60, None, apu.V / apu.meter),
     strip_input_units=True, output_unit=apu.W / apu.m ** 2
     )
 def powerflux_from_efield(efield):
@@ -493,9 +493,9 @@ def efield_from_powerflux(powerflux):
 
 
 @utils.ranged_quantity_input(
-    efield=(1.e-30, None, apu.V / apu.meter),
+    efield=(1.e-60, None, apu.V / apu.meter),
     dist=(1.e-30, None, apu.m),
-    gtx=(1.e-30, None, dimless),
+    gtx=(1.e-60, None, dimless),
     strip_input_units=True, output_unit=apu.W
     )
 def ptx_from_efield(efield, dist, gtx):
@@ -526,9 +526,9 @@ def ptx_from_efield(efield, dist, gtx):
 
 
 @utils.ranged_quantity_input(
-    ptx=(1.e-30, None, apu.W),
+    ptx=(1.e-60, None, apu.W),
     dist=(1.e-30, None, apu.m),
-    gtx=(1.e-30, None, dimless),
+    gtx=(1.e-60, None, dimless),
     strip_input_units=True, output_unit=apu.uV / apu.meter
     )
 def efield_from_ptx(ptx, dist, gtx):
@@ -559,9 +559,9 @@ def efield_from_ptx(ptx, dist, gtx):
 
 
 @utils.ranged_quantity_input(
-    ptx=(1.e-30, None, apu.W),
+    ptx=(1.e-60, None, apu.W),
     dist=(1.e-30, None, apu.m),
-    gtx=(1.e-30, None, dimless),
+    gtx=(1.e-60, None, dimless),
     strip_input_units=True, output_unit=apu.W / apu.m ** 2
     )
 def powerflux_from_ptx(ptx, dist, gtx):
@@ -592,9 +592,9 @@ def powerflux_from_ptx(ptx, dist, gtx):
 
 
 @utils.ranged_quantity_input(
-    powerflux=(1.e-30, None, apu.W / apu.m ** 2),
+    powerflux=(1.e-60, None, apu.W / apu.m ** 2),
     dist=(1.e-30, None, apu.m),
-    gtx=(1.e-30, None, dimless),
+    gtx=(1.e-60, None, dimless),
     strip_input_units=True, output_unit=apu.W
     )
 def ptx_from_powerflux(powerflux, dist, gtx):
@@ -625,9 +625,9 @@ def ptx_from_powerflux(powerflux, dist, gtx):
 
 
 @utils.ranged_quantity_input(
-    prx=(1.e-30, None, apu.W),
+    prx=(1.e-90, None, apu.W),
     freq=(1.e-30, None, apu.Hz),
-    grx=(1.e-30, None, dimless),
+    grx=(1.e-60, None, dimless),
     strip_input_units=True, output_unit=apu.W / apu.m ** 2
     )
 def powerflux_from_prx(prx, freq, grx):
@@ -663,9 +663,9 @@ def powerflux_from_prx(prx, freq, grx):
 
 
 @utils.ranged_quantity_input(
-    powerflux=(1.e-30, None, apu.W / apu.m ** 2),
+    powerflux=(1.e-90, None, apu.W / apu.m ** 2),
     freq=(1.e-30, None, apu.Hz),
-    grx=(1.e-30, None, dimless),
+    grx=(1.e-60, None, dimless),
     strip_input_units=True, output_unit=apu.W
     )
 def prx_from_powerflux(powerflux, freq, grx):
@@ -701,7 +701,7 @@ def prx_from_powerflux(powerflux, freq, grx):
 
 
 @utils.ranged_quantity_input(
-    prx_nu=(1.e-30, None, apu.W / apu.Hz),
+    prx_nu=(1.e-60, None, apu.W / apu.Hz),
     strip_input_units=True, output_unit=apu.K
     )
 def t_a_from_prx_nu(prx_nu):
@@ -864,9 +864,9 @@ def free_space_loss(dist, freq):
 
 
 @utils.ranged_quantity_input(
-    ptx=(1.e-30, None, apu.W),
-    gtx=(1.e-30, None, dimless),
-    grx=(1.e-30, None, dimless),
+    ptx=(1.e-60, None, apu.W),
+    gtx=(1.e-60, None, dimless),
+    grx=(1.e-60, None, dimless),
     dist=(1.e-30, None, apu.m),
     freq=(1.e-30, None, apu.Hz),
     strip_input_units=True, output_unit=apu.W
@@ -903,9 +903,9 @@ def prx_from_ptx(ptx, gtx, grx, dist, freq):
 
 
 @utils.ranged_quantity_input(
-    prx=(1.e-30, None, apu.W),
-    gtx=(1.e-30, None, dimless),
-    grx=(1.e-30, None, dimless),
+    prx=(1.e-60, None, apu.W),
+    gtx=(1.e-60, None, dimless),
+    grx=(1.e-60, None, dimless),
     dist=(1.e-30, None, apu.m),
     freq=(1.e-30, None, apu.Hz),
     strip_input_units=True, output_unit=apu.W
