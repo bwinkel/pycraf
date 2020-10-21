@@ -68,7 +68,7 @@ jobs:
         astropy.version: '3'
         # docs should only be published by one thread, as they are version-
         # independent; and only if on the master branch
-        publish.docs: ${{ eq(variables['is.master'], true) }}
+        publish.docs: ${{ or(eq(variables['is.master'], true), eq(variables['is.tag'], true)) }}
         # publish.docs: ${{ true }}
         ${{ if eq(variables['is.tag'], true) }}:
           docs.target: '.'
