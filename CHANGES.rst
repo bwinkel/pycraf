@@ -1,5 +1,10 @@
-1.0.4 (unreleased)
+1.0.4 (2020-10-21)
 =======================
+
+Bugfixes
+~~~~~~~~~~
+- Fix (stable) HTML manual
+- Make satellite sub-package work with `sgp4 2.0+`
 
 1.0.3 (2020-05-21)
 =======================
