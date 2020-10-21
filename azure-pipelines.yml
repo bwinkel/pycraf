@@ -101,12 +101,11 @@ jobs:
         python.version: '3.7'
         numpy.version: '1.14.5'
         astropy.version: '3'
-      # mac 3.8 leads to anaconda conflicts
-      # mac38:
-      #   imageName: 'macos-10.13'
-      #   python.version: '3.8'
-      #   numpy.version: '1.17.4'
-      #   astropy.version: '4'
+      mac38:
+        imageName: 'macos-10.15'
+        python.version: '3.8'
+        numpy.version: '1.18.1'
+        astropy.version: '4'
       win35:
         imageName: 'vs2017-win2016'
         python.version: '3.5'
