@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v1.0.4dev373</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v1.0.4</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -17,7 +18,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -63,7 +64,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.4dev373</a>
+	<a href="../index.html">pycraf v1.0.4</a>
 	 &#187;
       </li>
       
@@ -522,7 +523,7 @@ the loss-functions on it (see
 <p>Therefore, another convenience function is provided,
 <a class="reference internal" href="../api/pycraf.pathprof.losses_complete.html#pycraf.pathprof.losses_complete" title="pycraf.pathprof.losses_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losses_complete</span></code></a>, which has a very similar function
 signature as <a class="reference internal" href="../api/pycraf.pathprof.PathProp.html#pycraf.pathprof.PathProp" title="pycraf.pathprof.PathProp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PathProp</span></code></a>, but accepts <code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarrays</span></code>
-(or rather arrays of <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>) for most of the inputs.
+(or rather arrays of <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>) for most of the inputs.
 Obviously, parameters such as Tx and Rx location cannot be arrays, and
 as a consequence, the terrain height profile can only be a 1D array.</p>
 <p>The following shows a typical use case (which is also contained in the
@@ -729,11 +730,11 @@ estimation.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CLUTTER</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CLUTTER</span></code>(value)</p></td>
 <td><p><p>Clutter types are defined according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.452-16-201507-I/en">ITU-R Recommendation P.452-16</a>.</p>
 </p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.PathProp.html#pycraf.pathprof.PathProp" title="pycraf.pathprof.PathProp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PathProp</span></code></a>(freq, temperature, pressure, lon_t, …)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.PathProp.html#pycraf.pathprof.PathProp" title="pycraf.pathprof.PathProp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PathProp</span></code></a>(**func_kwargs)</p></td>
 <td><p>Container class that holds all path profile properties.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.SrtmConf.html#pycraf.pathprof.SrtmConf" title="pycraf.pathprof.SrtmConf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SrtmConf</span></code></a>()</p></td>
@@ -1153,6 +1154,7 @@ of) Windows, only, and comes with a steep price tag.</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -1195,14 +1197,14 @@ of) Windows, only, and comes with a steep price tag.</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/master/docs/pathprof/index.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/pathprof/index.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/pathprof/index.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.3. &nbsp;
-    Last built 21 May 2020. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
   </p>
 </footer>
   </body>

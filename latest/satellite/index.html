@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Satellites (pycraf.satellite) &#8212; pycraf v1.0.4dev373</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Satellites (pycraf.satellite) &#8212; pycraf v1.0.4</title>
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -17,7 +18,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -63,7 +64,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.4dev373</a>
+	<a href="../index.html">pycraf v1.0.4</a>
 	 &#187;
       </li>
       
@@ -157,13 +158,14 @@ be processed:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">satname</span><span class="p">,</span> <span class="n">sat</span> <span class="o">=</span> <span class="n">satellite</span><span class="o">.</span><span class="n">get_sat</span><span class="p">(</span><span class="n">tle_string</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">satname</span>
 <span class="go">&#39;ISS (ZARYA)&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sat</span><span class="o">.</span><span class="n">epoch</span>
-<span class="go">datetime.datetime(2013, 6, 14, 14, 10, 59, 999807)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sat</span><span class="o">.</span><span class="n">satnum</span>
 <span class="go">25544</span>
 
 <span class="go"># using sgp4 directly, to get position and velocity in ECI coordinates</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">position</span><span class="p">,</span> <span class="n">velocity</span> <span class="o">=</span> <span class="n">sat</span><span class="o">.</span><span class="n">propagate</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">19</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sgp4.api</span> <span class="kn">import</span> <span class="n">jday</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jd</span><span class="p">,</span> <span class="n">fr</span> <span class="o">=</span> <span class="n">jday</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">19</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">err_code</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">velocity</span> <span class="o">=</span> <span class="n">sat</span><span class="o">.</span><span class="n">sgp4</span><span class="p">(</span><span class="n">jd</span><span class="p">,</span> <span class="n">fr</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">position</span>  <span class="c1"># km  </span>
 <span class="go">(3289.302521216188, 3816.880925531413, 4443.175627001508)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">velocity</span>  <span class="c1"># km/s  </span>
@@ -222,6 +224,7 @@ string (TLE).</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -251,14 +254,14 @@ string (TLE).</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/master/docs/satellite/index.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/satellite/index.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/satellite/index.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.3. &nbsp;
-    Last built 21 May 2020. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
   </p>
 </footer>
   </body>

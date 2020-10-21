@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>pycraf.conversions.conversions &#8212; pycraf v1.0.4dev373</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pycraf.conversions.conversions &#8212; pycraf v1.0.4</title>
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -17,7 +18,7 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/sidebar.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
@@ -50,7 +51,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v1.0.4dev373</a>
+	<a href="../../../index.html">pycraf v1.0.4</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -407,7 +408,7 @@
 
 
 <div class="viewcode-block" id="eff_area_from_gain"><a class="viewcode-back" href="../../../api/pycraf.conversions.eff_area_from_gain.html#pycraf.conversions.eff_area_from_gain">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">gain</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
+    <span class="n">gain</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
     <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="p">)</span>
@@ -437,7 +438,7 @@
 
 
 <div class="viewcode-block" id="antfactor_from_gain"><a class="viewcode-back" href="../../../api/pycraf.conversions.antfactor_from_gain.html#pycraf.conversions.antfactor_from_gain">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">gain</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
+    <span class="n">gain</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
     <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span><span class="p">),</span>
     <span class="n">zi</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">Ohm</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">dB_1_m</span>
@@ -472,7 +473,7 @@
 
 
 <div class="viewcode-block" id="gain_from_antfactor"><a class="viewcode-back" href="../../../api/pycraf.conversions.gain_from_antfactor.html#pycraf.conversions.gain_from_antfactor">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">antfactor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">antfactor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
     <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span><span class="p">),</span>
     <span class="n">zi</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">Ohm</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">dBi</span>
@@ -508,7 +509,7 @@
 
 <span class="c1"># @apu.quantity_input(E=dB_uV_m, equivalencies=efield_equivalency())</span>
 <div class="viewcode-block" id="powerflux_from_efield"><a class="viewcode-back" href="../../../api/pycraf.conversions.powerflux_from_efield.html#pycraf.conversions.powerflux_from_efield">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">efield</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">V</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">meter</span><span class="p">),</span>
+    <span class="n">efield</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">V</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">meter</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">W</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">powerflux_from_efield</span><span class="p">(</span><span class="n">efield</span><span class="p">):</span>
@@ -562,9 +563,9 @@
 
 
 <div class="viewcode-block" id="ptx_from_efield"><a class="viewcode-back" href="../../../api/pycraf.conversions.ptx_from_efield.html#pycraf.conversions.ptx_from_efield">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">efield</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">V</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">meter</span><span class="p">),</span>
+    <span class="n">efield</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">V</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">meter</span><span class="p">),</span>
     <span class="n">dist</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
-    <span class="n">gtx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
+    <span class="n">gtx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">W</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">ptx_from_efield</span><span class="p">(</span><span class="n">efield</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">gtx</span><span class="p">):</span>
@@ -595,9 +596,9 @@
 
 
 <div class="viewcode-block" id="efield_from_ptx"><a class="viewcode-back" href="../../../api/pycraf.conversions.efield_from_ptx.html#pycraf.conversions.efield_from_ptx">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">ptx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span><span class="p">),</span>
+    <span class="n">ptx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span><span class="p">),</span>
     <span class="n">dist</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
-    <span class="n">gtx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
+    <span class="n">gtx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">uV</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">meter</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">efield_from_ptx</span><span class="p">(</span><span class="n">ptx</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">gtx</span><span class="p">):</span>
@@ -628,9 +629,9 @@
 
 
 <div class="viewcode-block" id="powerflux_from_ptx"><a class="viewcode-back" href="../../../api/pycraf.conversions.powerflux_from_ptx.html#pycraf.conversions.powerflux_from_ptx">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">ptx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span><span class="p">),</span>
+    <span class="n">ptx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span><span class="p">),</span>
     <span class="n">dist</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
-    <span class="n">gtx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
+    <span class="n">gtx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">W</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">powerflux_from_ptx</span><span class="p">(</span><span class="n">ptx</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">gtx</span><span class="p">):</span>
@@ -661,9 +662,9 @@
 
 
 <div class="viewcode-block" id="ptx_from_powerflux"><a class="viewcode-back" href="../../../api/pycraf.conversions.ptx_from_powerflux.html#pycraf.conversions.ptx_from_powerflux">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">powerflux</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">powerflux</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
     <span class="n">dist</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
-    <span class="n">gtx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
+    <span class="n">gtx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">W</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">ptx_from_powerflux</span><span class="p">(</span><span class="n">powerflux</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">gtx</span><span class="p">):</span>
@@ -694,9 +695,9 @@
 
 
 <div class="viewcode-block" id="powerflux_from_prx"><a class="viewcode-back" href="../../../api/pycraf.conversions.powerflux_from_prx.html#pycraf.conversions.powerflux_from_prx">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">prx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span><span class="p">),</span>
+    <span class="n">prx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-90</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span><span class="p">),</span>
     <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span><span class="p">),</span>
-    <span class="n">grx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
+    <span class="n">grx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">W</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">powerflux_from_prx</span><span class="p">(</span><span class="n">prx</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">grx</span><span class="p">):</span>
@@ -732,9 +733,9 @@
 
 
 <div class="viewcode-block" id="prx_from_powerflux"><a class="viewcode-back" href="../../../api/pycraf.conversions.prx_from_powerflux.html#pycraf.conversions.prx_from_powerflux">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">powerflux</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">powerflux</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-90</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
     <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span><span class="p">),</span>
-    <span class="n">grx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
+    <span class="n">grx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">W</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">prx_from_powerflux</span><span class="p">(</span><span class="n">powerflux</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">grx</span><span class="p">):</span>
@@ -770,7 +771,7 @@
 
 
 <div class="viewcode-block" id="t_a_from_prx_nu"><a class="viewcode-back" href="../../../api/pycraf.conversions.t_a_from_prx_nu.html#pycraf.conversions.t_a_from_prx_nu">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">prx_nu</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span><span class="p">),</span>
+    <span class="n">prx_nu</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">K</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">t_a_from_prx_nu</span><span class="p">(</span><span class="n">prx_nu</span><span class="p">):</span>
@@ -933,9 +934,9 @@
 
 
 <div class="viewcode-block" id="prx_from_ptx"><a class="viewcode-back" href="../../../api/pycraf.conversions.prx_from_ptx.html#pycraf.conversions.prx_from_ptx">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">ptx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span><span class="p">),</span>
-    <span class="n">gtx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
-    <span class="n">grx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
+    <span class="n">ptx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span><span class="p">),</span>
+    <span class="n">gtx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
+    <span class="n">grx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
     <span class="n">dist</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
     <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">W</span>
@@ -972,9 +973,9 @@
 
 
 <div class="viewcode-block" id="ptx_from_prx"><a class="viewcode-back" href="../../../api/pycraf.conversions.ptx_from_prx.html#pycraf.conversions.ptx_from_prx">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">prx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span><span class="p">),</span>
-    <span class="n">gtx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
-    <span class="n">grx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
+    <span class="n">prx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">W</span><span class="p">),</span>
+    <span class="n">gtx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
+    <span class="n">grx</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-60</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dimless</span><span class="p">),</span>
     <span class="n">dist</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
     <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">W</span>
@@ -1014,6 +1015,7 @@
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This not a standalone python program! Use as module.&#39;</span><span class="p">)</span>
 </pre></div>
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -1030,8 +1032,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.3. &nbsp;
-    Last built 21 May 2020. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
+    Last built 21 Oct 2020. <br/>
   </p>
 </footer>
   </body>
