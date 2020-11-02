@@ -463,6 +463,47 @@ def clutter_correction(
     return cyprop.clutter_correction_cython(h_g, zone, freq)
 
 
+def _Qinv(x):
+    # Note, this is *not* identical to cyprop._I_helper
+    # only good between 1.e-6 and 0.5
+    # See R-Rec P.1546
+
+    x = np.atleast_1d(x).copy()
+    mask = x > 0.5
+    x[mask] = 1 - x[mask]
+
+    T = np.sqrt(-2 * np.log(x))
+    Z = (
+        (
+            ((0.010328 * T + 0.802853) * T) + 2.515516698
+            ) /
+        (
+            ((0.001308 * T + 0.189269) * T + 1.432788) * T + 1.
+            )
+        )
+
+    Q = T - Z
+    Q[mask] *= -1
+    return Q
+
+
+# def Qinv(x):
+#     # larger x range than the approximation given in P.1546?
+#     # definitely much slower
+
+#     from scipy.stats import norm as qnorm
+
+#     x = np.atleast_1d(x).copy()
+
+#     mask = x > 0.5
+#     x[mask] = 1 - x[mask]
+
+#     Q = -qnorm.ppf(x, 0)
+#     Q[mask] *= -1
+
+#     return Q
+
+
 def _clutter_imt(
         freq,
         dist,
@@ -472,51 +513,12 @@ def _clutter_imt(
 
     assert num_end_points in [1, 2]
 
-    def Qinv(x):
-        # Note, this is *not* identical to cyprop._I_helper
-        # only good between 1.e-6 and 0.5
-        # See R-Rec P.1546
-
-        x = np.atleast_1d(x).copy()
-        mask = x > 0.5
-        x[mask] = 1 - x[mask]
-
-        T = np.sqrt(-2 * np.log(x))
-        Z = (
-            (
-                ((0.010328 * T + 0.802853) * T) + 2.515516698
-                ) /
-            (
-                ((0.001308 * T + 0.189269) * T + 1.432788) * T + 1.
-                )
-            )
-
-        Q = T - Z
-        Q[mask] *= -1
-        return Q
-
-    # def Qinv(x):
-    #     # larger x range than the approximation given in P.1546?
-    #     # definitely much slower
-
-    #     from scipy.stats import norm as qnorm
-
-    #     x = np.atleast_1d(x).copy()
-
-    #     mask = x > 0.5
-    #     x[mask] = 1 - x[mask]
-
-    #     Q = -qnorm.ppf(x, 0)
-    #     Q[mask] *= -1
-
-    #     return Q
-
     L_l = 23.5 + 9.6 * np.log10(freq)
     L_s = 32.98 + 23.9 * np.log10(dist) + 3.0 * np.log10(freq)
 
     L_clutter = -5 * np.log10(
         np.power(10, -0.2 * L_l) + np.power(10, -0.2 * L_s)
-        ) - 6 * Qinv(location_percent / 100.)
+        ) - 6 * _Qinv(location_percent / 100.)
 
     if num_end_points == 2:
         L_clutter *= 2
