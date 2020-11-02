@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>srtm_height_map &#8212; pycraf v1.0.5dev383</title>
-    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <title>srtm_height_map &#8212; pycraf v1.0.5dev386</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
@@ -64,7 +64,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.5dev383</a>
+	<a href="../index.html">pycraf v1.0.5dev386</a>
 	 &#187;
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
@@ -88,13 +88,13 @@
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>lon_t, lat_t</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Geographic longitude/latitude of map center [deg]</p>
+<dt><strong>lon_t, lat_t</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Geographic longitude/latitude of map center [deg]</p>
 </dd>
-<dt><strong>map_size_lon, map_size_lat</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Map size in longitude/latitude[deg]</p>
+<dt><strong>map_size_lon, map_size_lat</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Map size in longitude/latitude[deg]</p>
 </dd>
-<dt><strong>map_resolution</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Pixel resolution of map [deg] (default: 3 arcsec)</p>
+<dt><strong>map_resolution</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Pixel resolution of map [deg] (default: 3 arcsec)</p>
 </dd>
-<dt><strong>hprof_step</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Pixel resolution of map [m] (default: None)
+<dt><strong>hprof_step</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Pixel resolution of map [m] (default: None)
 Overrides <code class="xref py py-obj docutils literal notranslate"><span class="pre">map_resolution</span></code> if given!</p>
 </dd>
 <dt><strong>do_cos_delta</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, divide <code class="xref py py-obj docutils literal notranslate"><span class="pre">map_size_lon</span></code> by <code class="xref py py-obj docutils literal notranslate"><span class="pre">cos(lat_c)</span></code> to produce a more
@@ -106,11 +106,11 @@ square-like map. (default: True)</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>lons</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, 1D or 2D</span></dt><dd><p>Geographic longitudes [deg]</p>
+<dt><strong>lons</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, 1D or 2D</span></dt><dd><p>Geographic longitudes [deg]</p>
 </dd>
-<dt><strong>lats</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, 1D or 2D</span></dt><dd><p>Geographic latitudes [deg]</p>
+<dt><strong>lats</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, 1D or 2D</span></dt><dd><p>Geographic latitudes [deg]</p>
 </dd>
-<dt><strong>heights</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, 1D or 2D</span></dt><dd><p>Height map [m]</p>
+<dt><strong>heights</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, 1D or 2D</span></dt><dd><p>Height map [m]</p>
 </dd>
 </dl>
 </dd>
@@ -156,8 +156,8 @@ For details see <a class="reference internal" href="../pathprof/working_with_srt
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
-    Last built 21 Oct 2020. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.3.0. &nbsp;
+    Last built 02 Nov 2020. <br/>
   </p>
 </footer>
   </body>

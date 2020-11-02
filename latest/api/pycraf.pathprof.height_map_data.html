@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>height_map_data &#8212; pycraf v1.0.5dev383</title>
-    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <title>height_map_data &#8212; pycraf v1.0.5dev386</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
@@ -64,7 +64,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.5dev383</a>
+	<a href="../index.html">pycraf v1.0.5dev386</a>
 	 &#187;
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
@@ -83,7 +83,7 @@
 <h1>height_map_data<a class="headerlink" href="#height-map-data" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="pycraf.pathprof.height_map_data">
-<code class="sig-prename descclassname">pycraf.pathprof.</code><code class="sig-name descname">height_map_data</code><span class="sig-paren">(</span><em class="sig-param">lon_t</em>, <em class="sig-param">lat_t</em>, <em class="sig-param">map_size_lon</em>, <em class="sig-param">map_size_lat</em>, <em class="sig-param">map_resolution=&lt;Quantity 3. arcsec&gt;</em>, <em class="sig-param">do_cos_delta=True</em>, <em class="sig-param">zone_t=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em class="sig-param">zone_r=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em class="sig-param">d_tm=None</em>, <em class="sig-param">d_lm=None</em>, <em class="sig-param">d_ct=None</em>, <em class="sig-param">d_cr=None</em>, <em class="sig-param">omega_percent=&lt;Quantity 0. %&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#height_map_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L591" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.height_map_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pycraf.pathprof.</code><code class="sig-name descname">height_map_data</code><span class="sig-paren">(</span><em class="sig-param">lon_t</em>, <em class="sig-param">lat_t</em>, <em class="sig-param">map_size_lon</em>, <em class="sig-param">map_size_lat</em>, <em class="sig-param">map_resolution=&lt;Quantity 3. arcsec&gt;</em>, <em class="sig-param">do_cos_delta=True</em>, <em class="sig-param">zone_t=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em class="sig-param">zone_r=&lt;CLUTTER.UNKNOWN: -1&gt;</em>, <em class="sig-param">d_tm=None</em>, <em class="sig-param">d_lm=None</em>, <em class="sig-param">d_ct=None</em>, <em class="sig-param">d_cr=None</em>, <em class="sig-param">omega_percent=&lt;Quantity 0. %&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#height_map_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L593" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.height_map_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate height profiles and auxillary maps needed for
 <a class="reference internal" href="pycraf.pathprof.atten_map_fast.html#pycraf.pathprof.atten_map_fast" title="pycraf.pathprof.atten_map_fast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_map_fast</span></code></a>.</p>
 <p>This can be used to cache height-profile data. Since it is independent
@@ -110,11 +110,11 @@ in <a class="reference internal" href="pycraf.pathprof.atten_map_fast.html#pycra
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>lon_t, lat_t</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Geographic longitude/latitude of transmitter [deg]</p>
+<dt><strong>lon_t, lat_t</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Geographic longitude/latitude of transmitter [deg]</p>
 </dd>
-<dt><strong>map_size_lon, map_size_lat</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Map size in longitude/latitude[deg]</p>
+<dt><strong>map_size_lon, map_size_lat</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Map size in longitude/latitude[deg]</p>
 </dd>
-<dt><strong>map_resolution</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Pixel resolution of map [deg] (default: 3 arcsec)</p>
+<dt><strong>map_resolution</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Pixel resolution of map [deg] (default: 3 arcsec)</p>
 </dd>
 <dt><strong>do_cos_delta</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, divide <code class="xref py py-obj docutils literal notranslate"><span class="pre">map_size_lon</span></code> by <code class="xref py py-obj docutils literal notranslate"><span class="pre">cos(lat_t)</span></code> to produce a more
 square-like map. (default: True)</p>
@@ -122,18 +122,18 @@ square-like map. (default: True)</p>
 <dt><strong>zone_t, zone_r</strong><span class="classifier">CLUTTER enum, optional</span></dt><dd><p>Clutter type for transmitter/receiver terminal.
 (default: CLUTTER.UNKNOWN)</p>
 </dd>
-<dt><strong>d_tm</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>longest continuous land (inland + coastal) section of the
+<dt><strong>d_tm</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>longest continuous land (inland + coastal) section of the
 great-circle path [km]
 (default: distance between Tx and Rx)</p>
 </dd>
-<dt><strong>d_lm</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>longest continuous inland section of the great-circle path [km]
+<dt><strong>d_lm</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>longest continuous inland section of the great-circle path [km]
 (default: distance between Tx and Rx)</p>
 </dd>
-<dt><strong>d_ct, d_cr</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Distance over land from transmitter/receiver antenna to the coast
+<dt><strong>d_ct, d_cr</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Distance over land from transmitter/receiver antenna to the coast
 along great circle interference path [km]
 (default: 50000 km)</p>
 </dd>
-<dt><strong>omega_percent</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Fraction of the path over water [%] (see Table 3)
+<dt><strong>omega_percent</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Fraction of the path over water [%] (see Table 3)
 (default: 0%)</p>
 </dd>
 </dl>
@@ -261,8 +261,8 @@ For details see <a class="reference internal" href="../pathprof/working_with_srt
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
-    Last built 21 Oct 2020. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.3.0. &nbsp;
+    Last built 02 Nov 2020. <br/>
   </p>
 </footer>
   </body>

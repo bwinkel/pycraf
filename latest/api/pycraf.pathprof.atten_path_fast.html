@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>atten_path_fast &#8212; pycraf v1.0.5dev383</title>
-    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <title>atten_path_fast &#8212; pycraf v1.0.5dev386</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
@@ -64,7 +64,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.5dev383</a>
+	<a href="../index.html">pycraf v1.0.5dev386</a>
 	 &#187;
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
@@ -83,20 +83,20 @@
 <h1>atten_path_fast<a class="headerlink" href="#atten-path-fast" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="pycraf.pathprof.atten_path_fast">
-<code class="sig-prename descclassname">pycraf.pathprof.</code><code class="sig-name descname">atten_path_fast</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">freq</span></em>, <em class="sig-param"><span class="n">temperature</span></em>, <em class="sig-param"><span class="n">pressure</span></em>, <em class="sig-param"><span class="n">h_tg</span></em>, <em class="sig-param"><span class="n">h_rg</span></em>, <em class="sig-param"><span class="n">timepercent</span></em>, <em class="sig-param"><span class="n">hprof_data</span></em>, <em class="sig-param"><span class="n">polarization</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">version</span><span class="o">=</span><span class="default_value">16</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#atten_path_fast"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L1230" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.atten_path_fast" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pycraf.pathprof.</code><code class="sig-name descname">atten_path_fast</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">freq</span></em>, <em class="sig-param"><span class="n">temperature</span></em>, <em class="sig-param"><span class="n">pressure</span></em>, <em class="sig-param"><span class="n">h_tg</span></em>, <em class="sig-param"><span class="n">h_rg</span></em>, <em class="sig-param"><span class="n">timepercent</span></em>, <em class="sig-param"><span class="n">hprof_data</span></em>, <em class="sig-param"><span class="n">polarization</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">version</span><span class="o">=</span><span class="default_value">16</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#atten_path_fast"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L1232" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.atten_path_fast" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate attenuation along a path using a parallelized method.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>freq</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Frequency of radiation [GHz]</p>
+<dt><strong>freq</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Frequency of radiation [GHz]</p>
 </dd>
-<dt><strong>temperature</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Temperature (K)</p>
+<dt><strong>temperature</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Temperature (K)</p>
 </dd>
-<dt><strong>pressure</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Pressure (hPa)</p>
+<dt><strong>pressure</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Pressure (hPa)</p>
 </dd>
-<dt><strong>h_tg, h_rg</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Transmitter/receiver heights over ground [m]</p>
+<dt><strong>h_tg, h_rg</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Transmitter/receiver heights over ground [m]</p>
 </dd>
-<dt><strong>timepercent</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Time percentage [%] (maximal 50%)</p>
+<dt><strong>timepercent</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Time percentage [%] (maximal 50%)</p>
 </dd>
 <dt><strong>hprof_data</strong><span class="classifier">dict, dict-like</span></dt><dd><p>Dictionary with height profile auxillary data as
 calculated with <a class="reference internal" href="pycraf.pathprof.height_path_data.html#pycraf.pathprof.height_path_data" title="pycraf.pathprof.height_path_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">height_path_data</span></code></a> or
@@ -225,8 +225,8 @@ dictionary.</p></li>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
-    Last built 21 Oct 2020. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.3.0. &nbsp;
+    Last built 02 Nov 2020. <br/>
   </p>
 </footer>
   </body>
