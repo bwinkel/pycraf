@@ -18,7 +18,7 @@ __all__ = [
 
 
 def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
-    # angles in rad; lengths in m
+    # angles in deg; lengths in m
 
     # first find start bearing (and backward bearing for the curious people)
     # and distance
@@ -54,6 +54,9 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
     # print(time.time() - t)
     # t = time.time()
 
+    # hgt_res may not be set correctly yet, if no call to srtm was made before
+    # let's do a simple query to make sure, it is set
+    srtm._srtm_height_data(lon_t, lat_t)
     hgt_res = srtm.SrtmConf.hgt_res
     if step > hgt_res / 1.5:
         hdistances = np.arange(
