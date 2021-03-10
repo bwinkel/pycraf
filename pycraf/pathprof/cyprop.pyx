@@ -2306,6 +2306,10 @@ def height_map_data_cython(
     # print(xcoords, ycoords)
     # print(lons.min(), lons.max(), lats.min(), lats.max())
 
+    # hgt_res may not be set correctly yet, if no call to srtm was made before
+    # let's do a simple query to make sure, it is set
+    srtm._srtm_height_data(lon_t, lat_t)
+
     if hprof_step > srtm.SrtmConf.hgt_res / 1.5:
         hdistances = np.arange(
             0, max_distance + hprof_step / 3, hprof_step / 3
