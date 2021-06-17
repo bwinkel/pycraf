@@ -191,7 +191,7 @@ def test_imt2020_composite_pattern():
         atol=1.e-4 * cnv.dB,  # rtol=1.e-4,
         )
 
-    azim_i, elev_j = -30 * apu.deg, 15 * apu.deg
+    azim_i, elev_j = -30 * apu.deg, -15 * apu.deg
 
     gains_array = imt.imt2020_composite_pattern(
         azims[:, np.newaxis], elevs[np.newaxis],
@@ -286,7 +286,7 @@ def test_imt2020_composite_pattern_oob():
         atol=1.e-4 * cnv.dB,  # rtol=1.e-4,
         )
 
-    azim_i, elev_j = -30 * apu.deg, 15 * apu.deg
+    azim_i, elev_j = -30 * apu.deg, -15 * apu.deg
 
     gains_array = imt.imt2020_composite_pattern(
         azims[:, np.newaxis], elevs[np.newaxis],
@@ -318,7 +318,7 @@ def test_imt2020_composite_pattern_broadcast():
     azims = np.linspace(-50, 50, 3) * apu.deg
     elevs = np.linspace(-65, 65, 3) * apu.deg
 
-    azim_i, elev_j = [0, -10] * apu.deg, [0, 5] * apu.deg
+    azim_i, elev_j = [0, -10] * apu.deg, [0, -5] * apu.deg
 
     G_Emax = 5 * cnv.dB
     A_m, SLA_nu = 30. * cnv.dB, 30. * cnv.dB
