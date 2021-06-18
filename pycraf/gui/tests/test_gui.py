@@ -123,6 +123,7 @@ def _set_parameters(ui):
 
 
 @remote_data(source='any')
+@pytest.mark.timeout(60)
 @pytest.mark.usefixtures('srtm_handler')
 def test_gui_startup_shows_pathgeometry(qtbot):
     # change download option to missing and test, if the results label
@@ -146,6 +147,7 @@ def test_gui_startup_shows_pathgeometry(qtbot):
 
 
 @remote_data(source='any')
+@pytest.mark.timeout(60)
 @pytest.mark.usefixtures('srtm_handler')
 def test_stats_worker(qtbot):
     # change download option to missing and test, if the results are correct
@@ -180,6 +182,7 @@ def test_stats_worker(qtbot):
 
 
 @remote_data(source='any')
+@pytest.mark.timeout(60)
 @pytest.mark.usefixtures('srtm_handler')
 def test_pp_worker(qtbot):
     # change download option to missing and test, if the results are correct
@@ -211,6 +214,7 @@ def test_pp_worker(qtbot):
 
 
 @remote_data(source='any')
+@pytest.mark.timeout(60)
 @pytest.mark.usefixtures('srtm_handler')
 def test_map_worker(qtbot):
     # change download option to missing and test, if the results are correct

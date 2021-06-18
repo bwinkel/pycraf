@@ -47,19 +47,19 @@ jobs:
 
   strategy:
     matrix:
-      linux35:
-        imageName: 'ubuntu-latest'
-        python.version: '3.5'
-        py_whl: 35
-        numpy.version: '1.13.1'
-        astropy.version: '2'
-        sphinx.version: '<3.0'
-      linux36:
-        imageName: 'ubuntu-latest'
-        python.version: '3.6'
-        py_whl: 36
-        numpy.version: '1.13.1'
-        astropy.version: '3'
+      # linux35:
+      #   imageName: 'ubuntu-latest'
+      #   python.version: '3.5'
+      #   py_whl: 35
+      #   numpy.version: '1.13.1'
+      #   astropy.version: '2'
+      #   sphinx.version: '<3.0'
+      # linux36:
+      #   imageName: 'ubuntu-latest'
+      #   python.version: '3.6'
+      #   py_whl: 36
+      #   numpy.version: '1.13.1'
+      #   astropy.version: '3'
       linux37:
         # note: manylinux builds could have different version pins!
         # see pip-requirements-dev
@@ -98,12 +98,12 @@ jobs:
         pyproj.version: '>=2.2'
         qt.version: '>=5.11'
         pytestqt.version: '>=4'
-      mac35:
-        imageName: 'macos-10.14'
-        python.version: '3.5'
-        numpy.version: '1.13.1'
-        astropy.version: '2'
-        sphinx.version: '<3.0'
+      # mac35:
+      #   imageName: 'macos-10.14'
+      #   python.version: '3.5'
+      #   numpy.version: '1.13.1'
+      #   astropy.version: '2'
+      #   sphinx.version: '<3.0'
       mac36:
         imageName: 'macos-10.14'
         python.version: '3.6'
@@ -115,19 +115,19 @@ jobs:
         numpy.version: '1.14.5'
         astropy.version: '3'
       # mac 3.8 leads to anaconda conflicts
-      mac38:
-        imageName: 'macos-10.15'
-        python.version: '3.8'
-        numpy.version: '1.18.1'
-        astropy.version: '4'
-        qt.version: '>=5.11'
-        pytestqt.version: '>=4'
-      win35:
-        imageName: 'vs2017-win2016'
-        python.version: '3.5'
-        numpy.version: '1.13.1'
-        astropy.version: '2'
-        sphinx.version: '<3.0'
+      # mac38:
+      #   imageName: 'macos-10.15'
+      #   python.version: '3.8'
+      #   numpy.version: '1.18.1'
+      #   astropy.version: '4'
+      #   qt.version: '>=5.11'
+      #   pytestqt.version: '>=4'
+      # win35:
+      #   imageName: 'vs2017-win2016'
+      #   python.version: '3.5'
+      #   numpy.version: '1.13.1'
+      #   astropy.version: '2'
+      #   sphinx.version: '<3.0'
       win36:
         imageName: 'vs2017-win2016'
         python.version: '3.6'
@@ -219,7 +219,7 @@ jobs:
   # pip installation)
   - script: |
       $(conda.activate) pycraf-env
-      conda install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython h5py matplotlib numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pyqt$(qt.version)" "pytest<6" pytest-astropy "pytest-doctestplus<0.6.1" hypothesis "pytest-qt$(pytestqt.version)" rasterio scipy "sgp4>2" "sphinx$(sphinx.version)" sphinx-astropy twine wheel
+      conda install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython h5py matplotlib numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pyqt$(qt.version)" "pytest<6" pytest-astropy "pytest-doctestplus<0.6.1" pytest-timeout hypothesis "pytest-qt$(pytestqt.version)" rasterio scipy "sgp4>2" "sphinx$(sphinx.version)" sphinx-astropy twine wheel
     displayName: Install Anaconda packages
 
   # need to fix cctools and ld64 to slightly older version, otherwise an
