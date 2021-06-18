@@ -145,6 +145,13 @@ class SrtmConf(utils.MultiState):
     - `nasa_v2.1 <https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/>`__
     - `nasa_v1.0 <https://dds.cr.usgs.gov/srtm/version1/>`__
     - `viewpano <http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm>`__
+
+    Note: As of Spring 2021, NASA decided to put all SRTM data products
+    behind a log-in page, such that automatic download ceases to work.
+    If you prefer to use NASA tiles (over viewpano), please use their
+    services, e.g., the `Land Processes Distributed Active Archive Center
+    <https://lpdaac.usgs.gov/>`
+
     '''
 
     _attributes = (
@@ -154,7 +161,7 @@ class SrtmConf(utils.MultiState):
 
     srtm_dir = os.environ.get('SRTMDATA', '.')
     download = 'never'
-    server = 'nasa_v2.1'
+    server = 'viewpano'
     interp = 'linear'
     spline_opts = (3, 0)
     tile_size = 1201
@@ -167,7 +174,7 @@ class SrtmConf(utils.MultiState):
         allowed. Possible values are:
 
         - `download`:  'never', 'missing', 'always'
-        - `server`:  'nasa_v2.1', 'nasa_v1.0', 'viewpano'
+        - `server`:  'viewpano'  # removed: 'nasa_v2.1', 'nasa_v1.0'
         - `interp`:  'nearest', 'linear', 'spline'
         - `spline_opts`:  tuple(k, s) (k = degree, s = smoothing factor)
 
@@ -188,10 +195,10 @@ class SrtmConf(utils.MultiState):
                         'are supported for "download" option.'
                         )
             if k == 'server':
-                if v not in ['nasa_v2.1', 'nasa_v1.0', 'viewpano']:
+                if v not in ['viewpano']:
                     raise ValueError(
-                        'Only the values "nasa_v2.1", "nasa_v1.0", and '
-                        '"viewpano" are supported for "server" option.'
+                        'Only the value "viewpano" is currently '
+                        'supported for "server" option.'
                         )
 
             if k == 'interp':

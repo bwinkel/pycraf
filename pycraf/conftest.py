@@ -75,7 +75,7 @@ def srtm_handler(srtm_temp_dir):
 
     with pathprof.srtm.SrtmConf.set(
             srtm_dir=srtm_temp_dir,
-            server='nasa_v2.1',
+            server='viewpano',
             download='missing',
             ):
 
