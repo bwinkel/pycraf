@@ -30,9 +30,14 @@ class _MultiMeta(type):
         return super().__new__(cls, *args)
 
     def __setattr__(cls, attr, value):
-        raise RuntimeError(
-            'Setting attributes directy is not allowed. Use "set" method!'
-            )
+
+        if attr == '__annotations__':
+            # apparently numpy's autodoc is trying to store this in the class
+            super().__setattr__(attr, value)
+        else:
+            raise RuntimeError(
+                'Setting attributes directy is not allowed. Use "set" method!'
+                )
 
     def __repr__(cls):
         if hasattr(cls, '__repr__'):
