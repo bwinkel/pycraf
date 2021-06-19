@@ -73,7 +73,7 @@ def produce_rotmat_test_cases():
 
 # Warning: if you want to produce new test cases (replacing the old ones)
 # you better make sure, that everything is 100% correct
-produce_rotmat_test_cases()
+# produce_rotmat_test_cases()
 
 
 TOL_KWARGS = {'atol': 1.e-4, 'rtol': 1.e-4}
