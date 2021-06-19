@@ -84,11 +84,12 @@ jobs:
         imageName: 'ubuntu-latest'
         python.version: '3.8'
         py_whl: 38
-        numpy.version: '1.17.4'
+        # numpy.version: '1.17.4'
+        numpy.version: '1.18.1'
         astropy.version: '4'
         pyproj.version: '>=2.2'
-        qt.version: '>=5.11'
-        pytestqt.version: '>=4'
+        # qt.version: '>=5.11'
+        # pytestqt.version: '>=4'
       linux39:
         imageName: 'ubuntu-latest'
         python.version: '3.9'
@@ -115,24 +116,25 @@ jobs:
         numpy.version: '1.14.5'
         astropy.version: '3'
       # mac 3.8 leads to anaconda conflicts
-      mac38:
-        imageName: 'macos-10.15'
-        python.version: '3.8'
-        numpy.version: '1.18.1'
-        astropy.version: '4'
-        qt.version: '>=5.11'
-        pytestqt.version: '>=4'
+      # mac38:
+      #   imageName: 'macos-10.15'
+      #   python.version: '3.8'
+      #   numpy.version: '1.18.1'
+      #   astropy.version: '4'
+      #   pyproj.version: '>=2.2'
+      #   # qt.version: '>=5.11'
+      #   # pytestqt.version: '>=4'
       # win35:
       #   imageName: 'vs2017-win2016'
       #   python.version: '3.5'
       #   numpy.version: '1.13.1'
       #   astropy.version: '2'
       #   sphinx.version: '<3.0'
-      win36:
-        imageName: 'vs2017-win2016'
-        python.version: '3.6'
-        numpy.version: '1.13.1'
-        astropy.version: '3'
+      # win36:
+      #   imageName: 'vs2017-win2016'
+      #   python.version: '3.6'
+      #   numpy.version: '1.13.1'
+      #   astropy.version: '3'
       win37:
         imageName: 'vs2017-win2016'
         python.version: '3.7'
@@ -141,7 +143,16 @@ jobs:
       win38:
         imageName: 'vs2017-win2016'
         python.version: '3.8'
-        numpy.version: '1.17.4'
+        # numpy.version: '1.17.4'
+        numpy.version: '1.18.1'
+        astropy.version: '4'
+        pyproj.version: '>=2.2'
+        # qt.version: '>=5.11'
+        # pytestqt.version: '>=4'
+      win39:
+        imageName: 'vs2017-win2016'
+        python.version: '3.9'
+        numpy.version: '1.20.0'
         astropy.version: '4'
         pyproj.version: '>=2.2'
         qt.version: '>=5.11'
@@ -211,7 +222,7 @@ jobs:
     displayName: Create SRTM directory
 
   - script: |
-      conda install mamba
+      conda install --yes -c conda-forge mamba
       conda create --yes --quiet --name pycraf-env -c conda-forge
     displayName: Create Anaconda environment
 
@@ -231,7 +242,14 @@ jobs:
       mamba install --yes --quiet --name pycraf-env -c conda-forge clang_osx-64 clangxx_osx-64 llvm-openmp openmp cctools==921 ld64==409.12
     displayName: Prepare clang, MacOS
     # condition: and(succeeded(), eq(variables['is.macos'], true))
-    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'))
+    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'), lt(variables['python.version'], 3.8))
+
+  - script: |
+      $(conda.activate) pycraf-env
+      mamba install --yes --quiet --name pycraf-env -c conda-forge clang_osx-64 clangxx_osx-64 llvm-openmp openmp cctools ld64
+    displayName: Prepare clang, MacOS
+    # condition: and(succeeded(), eq(variables['is.macos'], true))
+    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'), ge(variables['python.version'], 3.8))
 
   - script: |
       $(conda.activate) pycraf-env
