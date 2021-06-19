@@ -21,7 +21,7 @@ class TestSrtmConf:
         srtm.SrtmConf.set(
             srtm_dir=os.environ.get('SRTMDATA', '.'),
             download='never',
-            server='nasa_v2.1',
+            server='viewpano',
             interp='linear',
             )
 
@@ -40,24 +40,24 @@ class TestSrtmConf:
 
         assert srtm.SrtmConf.srtm_dir == os.environ.get('SRTMDATA', '.')
         assert srtm.SrtmConf.download == 'never'
-        assert srtm.SrtmConf.server == 'nasa_v2.1'
+        assert srtm.SrtmConf.server == 'viewpano'
 
     def test_setter(self):
 
         with srtm.SrtmConf.set(srtm_dir='foo'):
             assert srtm.SrtmConf.srtm_dir == 'foo'
             assert srtm.SrtmConf.download == 'never'
-            assert srtm.SrtmConf.server == 'nasa_v2.1'
+            assert srtm.SrtmConf.server == 'viewpano'
 
         with srtm.SrtmConf.set(download='missing'):
             assert srtm.SrtmConf.srtm_dir == os.environ.get('SRTMDATA', '.')
             assert srtm.SrtmConf.download == 'missing'
-            assert srtm.SrtmConf.server == 'nasa_v2.1'
+            assert srtm.SrtmConf.server == 'viewpano'
 
         with srtm.SrtmConf.set(srtm_dir='bar', download='always'):
             assert srtm.SrtmConf.srtm_dir == 'bar'
             assert srtm.SrtmConf.download == 'always'
-            assert srtm.SrtmConf.server == 'nasa_v2.1'
+            assert srtm.SrtmConf.server == 'viewpano'
 
         with pytest.raises(RuntimeError):
             srtm.SrtmConf.srtm_dir = 'bar'
@@ -158,6 +158,7 @@ def test_extract_hgt_coords():
         assert srtm._extract_hgt_coords(name) == (ilon, ilat)
 
 
+@pytest.mark.skip(reason="NASA tiles not available without log-in anymore")
 def test_check_availability_nasa():
 
     nasa_tiles = [
@@ -243,6 +244,7 @@ def test_check_availability_pano():
                 assert srtm._check_availability(ilon, ilat) == name
 
 
+@pytest.mark.skip(reason="NASA tiles not available without log-in anymore")
 @remote_data(source='any')
 def test_download_nasa(srtm_temp_dir):
 
@@ -263,6 +265,20 @@ def test_download_nasa(srtm_temp_dir):
 
 @remote_data(source='any')
 def test_download_pano(srtm_temp_dir):
+
+    ilon, ilat = 6, 50
+    tile_name = srtm._hgt_filename(ilon, ilat)
+
+    with srtm.SrtmConf.set(srtm_dir=srtm_temp_dir, server='viewpano'):
+
+        srtm._download(ilon, ilat)
+
+        dl_path = srtm._get_hgt_diskpath(tile_name)
+
+        assert dl_path is not None
+
+        assert dl_path.startswith(srtm_temp_dir)
+        assert dl_path.endswith(tile_name)
 
     ilon, ilat = -175, -4
     tile_name = srtm._hgt_filename(ilon, ilat)
@@ -415,7 +431,7 @@ def test_get_tile_warning(srtm_temp_dir):
     with srtm.SrtmConf.set(srtm_dir=srtm_temp_dir):
 
         # ilon, ilat = 6, 54
-        ilon, ilat = 15, 50
+        ilon, ilat = 15, 47
         with pytest.warns(srtm.TileNotAvailableOnDiskWarning):
             lons, lats, tile = srtm.get_tile_data(ilon, ilat)
 
@@ -423,7 +439,7 @@ def test_get_tile_warning(srtm_temp_dir):
             15., 15.25, 15.5, 15.75, 16.
             ]))
         assert_allclose(lats[0, :], np.array([
-            50., 50.25, 50.5, 50.75, 51.
+            47., 47.25, 47.5, 47.75, 48.
             ]))
         assert_allclose(tile, np.zeros((5, 5), dtype=np.float32))
 
