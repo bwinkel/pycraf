@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Working with SRTM data &#8212; pycraf v1.0.5dev395</title>
+    <title>Working with SRTM data &#8212; pycraf v1.0.5dev396</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -64,7 +64,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.5dev395</a>
+	<a href="../index.html">pycraf v1.0.5dev396</a>
 	 &#187;
       </li>
       
@@ -172,6 +172,15 @@ also use the (very old) data (<code class="xref py py-obj docutils literal notra
 tiles from <a class="reference external" href="http://viewfinderpanoramas.org/">viewfinderpanoramas.org</a> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">server='viewpano'</span></code>):</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">server</span><span class="o">=</span><span class="s1">&#39;viewpano&#39;</span><span class="p">)</span>  
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note: As of Spring 2021, NASA decided to put all SRTM data products
+behind a log-in page, such that automatic download ceases to work.
+For the time being, the default server (and only server) will thus be
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">viewpano</span></code>.
+If you prefer to use NASA tiles (over viewpano), please use their
+services, e.g., the <code class="xref py py-obj docutils literal notranslate"><span class="pre">Land</span> <span class="pre">Processes</span> <span class="pre">Distributed</span> <span class="pre">Active</span> <span class="pre">Archive</span> <span class="pre">Center</span></code>.</p>
 </div>
 <p>Of course, one can set several of these options simultaneously:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>

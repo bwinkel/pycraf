@@ -110,6 +110,15 @@ tiles from `viewfinderpanoramas.org
 
     >>> SrtmConf.set(server='viewpano')  # doctest: +IGNORE_OUTPUT
 
+.. note::
+  Note: As of Spring 2021, NASA decided to put all SRTM data products
+  behind a log-in page, such that automatic download ceases to work.
+  For the time being, the default server (and only server) will thus be
+  `viewpano`.
+  If you prefer to use NASA tiles (over viewpano), please use their
+  services, e.g., the `Land Processes Distributed Active Archive Center
+  <https://lpdaac.usgs.gov/>`.
+
 Of course, one can set several of these options simultaneously::
 
     with SrtmConf.set(
