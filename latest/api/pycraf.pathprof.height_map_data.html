@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>height_map_data &#8212; pycraf v1.0.5dev396</title>
+    <title>height_map_data &#8212; pycraf v1.0.5dev400</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -64,7 +64,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.5dev396</a>
+	<a href="../index.html">pycraf v1.0.5dev400</a>
 	 &#187;
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
@@ -83,7 +83,7 @@
 <h1>height_map_data<a class="headerlink" href="#height-map-data" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pycraf.pathprof.height_map_data">
-<span class="sig-prename descclassname"><span class="pre">pycraf.pathprof.</span></span><span class="sig-name descname"><span class="pre">height_map_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lon_t</span></em>, <em class="sig-param"><span class="pre">lat_t</span></em>, <em class="sig-param"><span class="pre">map_size_lon</span></em>, <em class="sig-param"><span class="pre">map_size_lat</span></em>, <em class="sig-param"><span class="pre">map_resolution=&lt;Quantity</span> <span class="pre">3.</span> <span class="pre">arcsec&gt;</span></em>, <em class="sig-param"><span class="pre">do_cos_delta=True</span></em>, <em class="sig-param"><span class="pre">zone_t=&lt;CLUTTER.UNKNOWN:</span> <span class="pre">-1&gt;</span></em>, <em class="sig-param"><span class="pre">zone_r=&lt;CLUTTER.UNKNOWN:</span> <span class="pre">-1&gt;</span></em>, <em class="sig-param"><span class="pre">d_tm=None</span></em>, <em class="sig-param"><span class="pre">d_lm=None</span></em>, <em class="sig-param"><span class="pre">d_ct=None</span></em>, <em class="sig-param"><span class="pre">d_cr=None</span></em>, <em class="sig-param"><span class="pre">omega_percent=&lt;Quantity</span> <span class="pre">0.</span> <span class="pre">%&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#height_map_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L593" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.pathprof.height_map_data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pycraf.pathprof.</span></span><span class="sig-name descname"><span class="pre">height_map_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lon_t</span></em>, <em class="sig-param"><span class="pre">lat_t</span></em>, <em class="sig-param"><span class="pre">map_size_lon</span></em>, <em class="sig-param"><span class="pre">map_size_lat</span></em>, <em class="sig-param"><span class="pre">map_resolution=&lt;Quantity</span> <span class="pre">3.</span> <span class="pre">arcsec&gt;</span></em>, <em class="sig-param"><span class="pre">do_cos_delta=True</span></em>, <em class="sig-param"><span class="pre">zone_t=&lt;CLUTTER.UNKNOWN:</span> <span class="pre">-1&gt;</span></em>, <em class="sig-param"><span class="pre">zone_r=&lt;CLUTTER.UNKNOWN:</span> <span class="pre">-1&gt;</span></em>, <em class="sig-param"><span class="pre">d_tm=None</span></em>, <em class="sig-param"><span class="pre">d_lm=None</span></em>, <em class="sig-param"><span class="pre">d_ct=None</span></em>, <em class="sig-param"><span class="pre">d_cr=None</span></em>, <em class="sig-param"><span class="pre">omega_percent=&lt;Quantity</span> <span class="pre">0.</span> <span class="pre">%&gt;</span></em>, <em class="sig-param"><span class="pre">cache_path=None</span></em>, <em class="sig-param"><span class="pre">clobber=False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#height_map_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L594" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.pathprof.height_map_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate height profiles and auxillary maps needed for
 <a class="reference internal" href="pycraf.pathprof.atten_map_fast.html#pycraf.pathprof.atten_map_fast" title="pycraf.pathprof.atten_map_fast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_map_fast</span></code></a>.</p>
 <p>This can be used to cache height-profile data. Since it is independent
@@ -135,6 +135,16 @@ along great circle interference path [km]
 </dd>
 <dt><strong>omega_percent</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Fraction of the path over water [%] (see Table 3)
 (default: 0%)</p>
+</dd>
+<dt><strong>cache_path</strong><span class="classifier">str, optional</span></dt><dd><p>If set, the <a class="reference external" href="https://joblib.readthedocs.io/en/latest/">joblib package</a> is used to cache
+results provided by this function on disk, such that future queries
+are executed much faster. If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, no caching is performed.
+(default: None)</p>
+</dd>
+<dt><strong>clobber</strong><span class="classifier">bool, optional</span></dt><dd><p>If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a> and caching is active re-compute the result even
+if an older result is found in cache. This is useful, when something
+has change with the underlying terrain data, e.g., new tiles were
+downloaded. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>)</p>
 </dd>
 </dl>
 </dd>
