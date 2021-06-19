@@ -239,6 +239,8 @@ jobs:
     displayName: Building
 
   # pytest -rsx --doctest-rst docs pycraf
+  # If GUI tests are desired:
+  # python setup.py test --remote-data=any -a --do-gui-tests
   - script: |
       $(conda.activate) pycraf-env
       pip install pytest-azurepipelines

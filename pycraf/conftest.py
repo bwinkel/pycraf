@@ -63,6 +63,17 @@ import pytest
 from . import pathprof
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        '--do-gui-tests', action='store_true', help='Do GUI tests.'
+        )
+
+
+def pytest_runtest_setup(item):
+    if 'do_gui_tests' in item.keywords and not item.config.getoption('--do-gui-tests'):
+        pytest.skip('GUI tests are only executed if user provides "--do-gui-tests" command line option')
+
+
 @pytest.fixture(scope='session')
 def srtm_temp_dir(tmpdir_factory):
 
