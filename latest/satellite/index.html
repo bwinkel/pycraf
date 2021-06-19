@@ -4,21 +4,21 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Satellites (pycraf.satellite) &#8212; pycraf v1.0.5dev386</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Satellites (pycraf.satellite) &#8212; pycraf v1.0.5dev395</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -64,7 +64,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.5dev386</a>
+	<a href="../index.html">pycraf v1.0.5dev395</a>
 	 &#187;
       </li>
       
@@ -78,9 +78,9 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="satellites-pycraf-satellite">
+  <section id="satellites-pycraf-satellite">
 <h1>Satellites (<a class="reference internal" href="#module-pycraf.satellite" title="pycraf.satellite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.satellite</span></code></a>)<a class="headerlink" href="#satellites-pycraf-satellite" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="introduction">
+<section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>Often the compatibility of space-based radio communications with other
 services has to be studied. Then, it may happen, that one has to determine the
@@ -88,8 +88,8 @@ position of one or more satellites with respect to an observer on Earth’s
 surface. The <a class="reference internal" href="#module-pycraf.satellite" title="pycraf.satellite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">satellite</span></code></a> sub-package uses the <a class="reference external" href="https://pypi.python.org/pypi/sgp4/">sgp4 package</a> to calculate Geocentric cartesian
 inertial (ECI) position for a given time and adds the transformations to the (
 local) horizontal coordinates (azimuth, elevation, distance) of an observer.</p>
-</div>
-<div class="section" id="using-pycraf-satellite">
+</section>
+<section id="using-pycraf-satellite">
 <h2>Using <a class="reference internal" href="#module-pycraf.satellite" title="pycraf.satellite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.satellite</span></code></a><a class="headerlink" href="#using-pycraf-satellite" title="Permalink to this headline">¶</a></h2>
 <p>The first step to calculate a satellite’s position is to obtain a so-called
 <a class="reference external" href="https://en.wikipedia.org/wiki/Two-line_element_set">Two-line element set (TLE)</a>.</p>
@@ -173,8 +173,8 @@ be processed:</p>
 <span class="go">(-2.958995807371371, 6.335950621185331, -3.241778555003016)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="see-also">
+</section>
+<section id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">Astropy Units and Quantities package</a>, which is used extensively in pycraf.</p></li>
@@ -182,17 +182,17 @@ be processed:</p>
 <li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Two-line_element_set">Two-line element set (TLE)</a></p></li>
 <li><p><a class="reference external" href="http://celestrak.com/">Celestrak</a></p></li>
 </ul>
-</div>
-<div class="section" id="reference-api">
+</section>
+<section id="reference-api">
 <h2>Reference/API<a class="headerlink" href="#reference-api" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="module-pycraf.satellite">
+<section id="module-pycraf.satellite">
 <span id="pycraf-satellite-package"></span><h3>pycraf.satellite Package<a class="headerlink" href="#module-pycraf.satellite" title="Permalink to this headline">¶</a></h3>
 <p>This sub-package provides a helper class to get position of a satellite
 in horizontal system (i.e, azimuth/elevation) from a two-line element
 string (TLE).</p>
 <p>All the complicated calculations are done with the help of the
 <a class="reference external" href="https://pypi.python.org/pypi/sgp4/">sgp4 Python package</a>.</p>
-<div class="section" id="functions">
+<section id="functions">
 <h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h4>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -205,8 +205,8 @@ string (TLE).</p>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="classes">
+</section>
+<section id="classes">
 <h4>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h4>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -219,10 +219,10 @@ string (TLE).</p>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -260,9 +260,9 @@ string (TLE).</p>
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.3.0. &nbsp;
-    Last built 02 Nov 2020. <br/>
+    &copy; Copyright 2021, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.2. &nbsp;
+    Last built 19 Jun 2021. <br/>
   </p>
 </footer>
   </body>
