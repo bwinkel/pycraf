@@ -12,6 +12,7 @@ import numpy as np
 from . import cyprop
 from . import heightprofile
 from . import helper
+from . import srtm
 from .. import conversions as cnv
 from .. import utils
 # import ipdb
@@ -612,6 +613,7 @@ def height_map_data(
         d_tm=None, d_lm=None,
         d_ct=None, d_cr=None,
         omega_percent=0 * apu.percent,
+        cache_path=None, clobber=False,
         ):
 
     '''
@@ -670,6 +672,17 @@ def height_map_data(
     omega_percent : `~astropy.units.Quantity`, optional
         Fraction of the path over water [%] (see Table 3)
         (default: 0%)
+    cache_path : str, optional
+        If set, the `joblib package
+        <https://joblib.readthedocs.io/en/latest/>`_ is used to cache
+        results provided by this function on disk, such that future queries
+        are executed much faster. If set to `None`, no caching is performed.
+        (default: None)
+    clobber : bool, optional
+        If set to `True` and caching is active re-compute the result even
+        if an older result is found in cache. This is useful, when something
+        has change with the underlying terrain data, e.g., new tiles were
+        downloaded. (default: `False`)
 
     Returns
     -------
@@ -785,16 +798,55 @@ def height_map_data(
       For details see :ref:`working_with_srtm`.
     '''
 
-    return cyprop.height_map_data_cython(
-        lon_t, lat_t,
-        map_size_lon, map_size_lat,
+    args = lon_t, lat_t, map_size_lon, map_size_lat
+    kwargs = dict(
         map_resolution=map_resolution,
         do_cos_delta=1 if do_cos_delta else 0,
-        zone_t=zone_t, zone_r=zone_r,
+        zone_t=int(zone_t), zone_r=int(zone_r),  # needed for joblib
         d_tm=d_tm, d_lm=d_lm,
         d_ct=d_ct, d_cr=d_cr,
         omega=omega_percent,
         )
+
+    joblib_available = True
+    try:
+        import joblib
+        memory = joblib.Memory(cache_path, compress=5, verbose=False)
+    except ImportError:
+        joblib_available = False
+
+    if cache_path and joblib_available:
+
+        def wrapped(*args, **kwargs):
+            @memory.cache
+            def f(tile_path, interp, spline_opts, *args, **kwargs):
+                return cyprop.height_map_data_cython(*args, **kwargs)
+
+            if clobber:
+                result = f.call_and_shelve(
+                    srtm.SrtmConf.srtm_dir,
+                    srtm.SrtmConf.interp,
+                    srtm.SrtmConf.spline_opts,
+                    *args, **kwargs
+                    )
+                try:
+                    result.clear()
+                except KeyError:
+                    pass
+
+            return f(
+                srtm.SrtmConf.srtm_dir,
+                srtm.SrtmConf.interp,
+                srtm.SrtmConf.spline_opts,
+                *args, **kwargs
+                )
+
+    elif cache_path and not joblib_available:
+        raise ImportError('"joblib" package must be installed for caching')
+    else:
+        wrapped = cyprop.height_map_data_cython
+
+    return wrapped(*args, **kwargs)
 
 
 @utils.ranged_quantity_input(
