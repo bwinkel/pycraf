@@ -115,13 +115,13 @@ jobs:
         numpy.version: '1.14.5'
         astropy.version: '3'
       # mac 3.8 leads to anaconda conflicts
-      # mac38:
-      #   imageName: 'macos-10.15'
-      #   python.version: '3.8'
-      #   numpy.version: '1.18.1'
-      #   astropy.version: '4'
-      #   qt.version: '>=5.11'
-      #   pytestqt.version: '>=4'
+      mac38:
+        imageName: 'macos-10.15'
+        python.version: '3.8'
+        numpy.version: '1.18.1'
+        astropy.version: '4'
+        qt.version: '>=5.11'
+        pytestqt.version: '>=4'
       # win35:
       #   imageName: 'vs2017-win2016'
       #   python.version: '3.5'
@@ -210,7 +210,9 @@ jobs:
       mkdir $(srtmdata)
     displayName: Create SRTM directory
 
-  - script: conda create --yes --quiet --name pycraf-env -c conda-forge
+  - script: |
+      conda install mamba
+      conda create --yes --quiet --name pycraf-env -c conda-forge
     displayName: Create Anaconda environment
 
   # note: with project.toml it should not be necessary to have cython
@@ -219,14 +221,14 @@ jobs:
   # pip installation)
   - script: |
       $(conda.activate) pycraf-env
-      conda install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython h5py matplotlib numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pyqt$(qt.version)" "pytest<6" pytest-astropy "pytest-doctestplus<0.6.1" pytest-timeout pytest-xvfb hypothesis "pytest-qt$(pytestqt.version)" rasterio scipy "sgp4>2" "sphinx$(sphinx.version)" sphinx-astropy twine wheel
+      mamba install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython h5py matplotlib numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pyqt$(qt.version)" "pytest<6" pytest-astropy "pytest-doctestplus<0.6.1" hypothesis "pytest-qt$(pytestqt.version)" rasterio scipy "sgp4>2" "sphinx$(sphinx.version)" sphinx-astropy twine wheel
     displayName: Install Anaconda packages
 
   # need to fix cctools and ld64 to slightly older version, otherwise an
   # error ("ld: library not found for -lSystem") occurs during build
   - script: |
       $(conda.activate) pycraf-env
-      conda install --yes --quiet --name pycraf-env -c conda-forge clang_osx-64 clangxx_osx-64 llvm-openmp openmp cctools==921 ld64==409.12
+      mamba install --yes --quiet --name pycraf-env -c conda-forge clang_osx-64 clangxx_osx-64 llvm-openmp openmp cctools==921 ld64==409.12
     displayName: Prepare clang, MacOS
     # condition: and(succeeded(), eq(variables['is.macos'], true))
     condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'))
