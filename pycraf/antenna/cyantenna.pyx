@@ -285,7 +285,7 @@ def imt2020_composite_pattern_cython(
     phi = azim
     theta = 90. - elev
     phi_i = azim_i
-    theta_i = elev_i  # sic! (tilt angle in imt.model is elevation)
+    theta_i = -elev_i  # sic! (tilt angle in imt.model is -elevation)
 
     dV_cos_theta = d_V * np.cos(np.radians(theta))
     dH_sin_theta_sin_phi = (

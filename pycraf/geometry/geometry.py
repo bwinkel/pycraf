@@ -214,40 +214,37 @@ def sphere_to_cart(r, phi, theta, broadcast_arrays=True):
 def _Rx(angle):
 
     angle_rad = np.radians(angle)
-    sin_a, cos_a = np.broadcast_arrays(
-        np.sin(angle_rad.flat), np.cos(angle_rad.flat)
-        )
+    sin_a, cos_a = np.sin(angle_rad.flat), np.cos(angle_rad.flat)
     o, z = np.ones_like(sin_a), np.zeros_like(sin_a)
 
     R = np.array([[o, z, z], [z, cos_a, -sin_a], [z, sin_a, cos_a]])
 
-    return R.swapaxes(0, 2).reshape(angle_rad.shape + (3, 3))
+    new_sh = angle_rad.shape + (3, 3)
+    return np.moveaxis(R, [0, 1, 2], [1, 2, 0]).reshape(new_sh)
 
 
 def _Ry(angle):
 
     angle_rad = np.radians(angle)
-    sin_a, cos_a = np.broadcast_arrays(
-        np.sin(angle_rad.flat), np.cos(angle_rad.flat)
-        )
+    sin_a, cos_a = np.sin(angle_rad.flat), np.cos(angle_rad.flat)
     o, z = np.ones_like(sin_a), np.zeros_like(sin_a)
 
     R = np.array([[cos_a, z, sin_a], [z, o, z], [-sin_a, z, cos_a]])
 
-    return R.swapaxes(0, 2).reshape(angle_rad.shape + (3, 3))
+    new_sh = angle_rad.shape + (3, 3)
+    return np.moveaxis(R, [0, 1, 2], [1, 2, 0]).reshape(new_sh)
 
 
 def _Rz(angle):
 
     angle_rad = np.radians(angle)
-    sin_a, cos_a = np.broadcast_arrays(
-        np.sin(angle_rad.flat), np.cos(angle_rad.flat)
-        )
+    sin_a, cos_a = np.sin(angle_rad.flat), np.cos(angle_rad.flat)
     o, z = np.ones_like(sin_a), np.zeros_like(sin_a)
 
     R = np.array([[cos_a, -sin_a, z], [sin_a, cos_a, z], [z, z, o]])
 
-    return R.swapaxes(0, 2).reshape(angle_rad.shape + (3, 3))
+    new_sh = angle_rad.shape + (3, 3)
+    return np.moveaxis(R, [0, 1, 2], [1, 2, 0]).reshape(new_sh)
 
 
 @utils.ranged_quantity_input(
@@ -378,12 +375,12 @@ def _rotmat_from_rotaxis(rotax_x, rotax_y, rotax_z, angle_deg):
     d /= np.linalg.norm(d, axis=0)
 
     W = np.zeros(rot_axes.shape[1:] + (3, 3))
-    W[..., 0, 1] = d[2]
-    W[..., 0, 2] = -d[1]
-    W[..., 1, 0] = -d[2]
-    W[..., 1, 2] = d[0]
-    W[..., 2, 0] = d[1]
-    W[..., 2, 1] = -d[0]
+    W[..., 0, 1] = -d[2]
+    W[..., 0, 2] = d[1]
+    W[..., 1, 0] = d[2]
+    W[..., 1, 2] = -d[0]
+    W[..., 2, 0] = -d[1]
+    W[..., 2, 1] = d[0]
     W2 = np.matmul(W, W)
 
     _a = angle_rad[..., np.newaxis, np.newaxis]
@@ -434,7 +431,7 @@ def _rotaxis_from_rotmat(R):
     rot_angle = np.arccos(
         0.5 * (np.trace(R, axis1=-2, axis2=-1) - 1)
         )
-    norm = -1. / 2. / np.sin(rot_angle)  # different sign (vs. Wikipedia)
+    norm = 1. / 2. / np.sin(rot_angle)
 
     rotax_x = norm * (R[..., 2, 1] - R[..., 1, 2])
     rotax_y = norm * (R[..., 0, 2] - R[..., 2, 0])
@@ -512,10 +509,6 @@ def _eulerangle_from_rotmat(R, etype='xyz'):
         alpha_2[mask] = np.arcsin(-sub_R[:, 2, 0])
         alpha_3[mask] = np.arctan2(sub_R[:, 1, 0], sub_R[:, 0, 0])
 
-        # why are the signs opposite to the EulerAngles.pdf document
-        # (only for zyx, not for zxz?)
-        alpha_1, alpha_2, alpha_3 = -alpha_1, -alpha_2, -alpha_3
-
     elif etype == 'zxz':
 
         mask1 = R[..., 2, 2] == 1
@@ -535,12 +528,6 @@ def _eulerangle_from_rotmat(R, etype='xyz'):
         alpha_1[mask] = np.arctan2(sub_R[:, 2, 0], sub_R[:, 2, 1])
         alpha_2[mask] = np.arccos(sub_R[:, 2, 2])
         alpha_3[mask] = np.arctan2(sub_R[:, 0, 2], -sub_R[:, 1, 2])
-
-        # again, the above seems to be wrong; this fixes it:
-        alpha_1 = np.pi - alpha_1
-        alpha_1 = (alpha_1 + np.pi) % (2 * np.pi) - np.pi
-        alpha_3 = -np.pi - alpha_3
-        alpha_3 = (alpha_3 + np.pi) % (2 * np.pi) - np.pi
 
     alpha_1, alpha_2, alpha_3 = (
         np.degrees(alpha_1), np.degrees(alpha_2), np.degrees(alpha_3)
