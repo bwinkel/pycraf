@@ -98,6 +98,12 @@ class PathProp(cyprop._PathProp):
     hprof_backbearing : `~astropy.units.Quantity`, optional
         Back-bearing of the height profile path.
         (default: query `~pycraf.pathprof.srtm_height_profile`)
+    generic_heights : bool
+        If `generic_heights` is set to True, heights will be set to zero.
+        This can be useful for generic (aka flat-Earth) computations.
+        The option is only meaningful, if the hprof_xxx parameters are set
+        to `None` (which means automatic querying of the profiles).
+        (Default: False)
 
     Returns
     -------
@@ -191,6 +197,7 @@ class PathProp(cyprop._PathProp):
             # override if you don't want builtin method:
             hprof_dists=None, hprof_heights=None,
             hprof_bearing=None, hprof_backbearing=None,
+            generic_heights=False
             ):
 
         super().__init__(
@@ -213,6 +220,7 @@ class PathProp(cyprop._PathProp):
             hprof_heights=hprof_heights,
             hprof_bearing=hprof_bearing,
             hprof_backbearing=hprof_backbearing,
+            generic_heights=generic_heights,
             )
 
         self.__params = list(cyprop.PARAMETERS_BASIC)  # make a copy
@@ -1492,6 +1500,7 @@ def losses_complete(
         # override if you don't want builtin method:
         hprof_dists=None, hprof_heights=None,
         hprof_bearing=None, hprof_backbearing=None,
+        generic_heights=False,
         ):
     '''
     Calculate propagation losses for a fixed path using a parallelized method.
@@ -1566,6 +1575,12 @@ def losses_complete(
     hprof_backbearing : `~astropy.units.Quantity`, optional
         Back-bearing of the height profile path.
         (default: query `~pycraf.pathprof.srtm_height_profile`)
+    generic_heights : bool
+        If `generic_heights` is set to True, heights will be set to zero.
+        This can be useful for generic (aka flat-Earth) computations.
+        The option is only meaningful, if the hprof_xxx parameters are set
+        to `None` (which means automatic querying of the profiles).
+        (Default: False)
 
     Returns
     -------
@@ -1681,6 +1696,7 @@ def losses_complete(
         hprof_heights=hprof_heights,
         hprof_bearing=hprof_bearing,
         hprof_backbearing=hprof_backbearing,
+        generic_heights=generic_heights,
         )
     return {
         'L_b0p': res[0] * cnv.dB,

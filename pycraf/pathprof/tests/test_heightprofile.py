@@ -71,6 +71,54 @@ def test_srtm_height_profile(srtm_temp_dir):
         )
 
 
+def test_srtm_height_profile_generic():
+
+    lon_t, lat_t = 6.5 * apu.deg, 50.5 * apu.deg
+    lon_r, lat_r = 6.52 * apu.deg, 50.52 * apu.deg
+
+    # Geodesics are already tested, so only check heights
+    (
+        _, _, _, _, heights, _, _, _,
+        ) = pathprof.srtm_height_profile(
+        lon_t, lat_t, lon_r, lat_r, 100 * apu.m, generic_heights=True
+        )
+
+    assert_quantity_allclose(
+        heights,
+        np.array([
+            0., 0., 0., 0.,
+            0., 0., 0., 0.,
+            0., 0., 0., 0.,
+            0., 0., 0., 0.,
+            0., 0., 0., 0.,
+            0., 0., 0., 0.,
+            0., 0., 0., 0.,
+            ]) * apu.m
+        )
+
+    lon_t, lat_t = 6.5 * apu.deg, 50.5 * apu.deg
+    lon_r, lat_r = 6.502 * apu.deg, 50.502 * apu.deg
+
+    (
+        _, _, _, _, heights, _, _, _,
+        ) = pathprof.srtm_height_profile(
+        lon_t, lat_t, lon_r, lat_r, 10 * apu.m, generic_heights=True
+        )
+
+    assert_quantity_allclose(
+        heights,
+        np.array([
+            0., 0., 0., 0.,
+            0., 0., 0., 0.,
+            0., 0., 0., 0.,
+            0., 0., 0., 0.,
+            0., 0., 0., 0.,
+            0., 0., 0., 0.,
+            0., 0., 0., 0.,
+            ]) * apu.m
+        )
+
+
 @remote_data(source='any')
 @pytest.mark.usefixtures('srtm_handler')
 def test_srtm_height_map():

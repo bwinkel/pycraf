@@ -22,6 +22,7 @@ import numpy as np
 from astropy import units as apu
 from . import heightprofile
 from . import srtm
+from . import geodesics
 from . import cygeodesics
 from . import helper
 from .. import conversions as cnv
@@ -396,6 +397,9 @@ cdef class _PathProp(object):
             # override if you don't want builtin method:
             hprof_dists, hprof_heights,
             hprof_bearing, hprof_backbearing,
+            # set terrain heights to zero if desired
+            # (only if hprof_xxx set to None aka automatic)
+            bint generic_heights=False,
             ):
 
         assert time_percent <= 50.
@@ -455,7 +459,8 @@ cdef class _PathProp(object):
                 ) = heightprofile._srtm_height_profile(
                     lon_t, lat_t,
                     lon_r, lat_r,
-                    hprof_step
+                    hprof_step,
+                    generic_heights=generic_heights
                     )
         else:
             distances = hprof_dists.astype(np.float64, order='C', copy=False)
@@ -2914,6 +2919,7 @@ def losses_complete_cython(
         hprof_dists=None,
         hprof_heights=None,
         hprof_bearing=None, hprof_backbearing=None,
+        generic_heights=False,
         ):
 
     cdef:
@@ -2979,7 +2985,8 @@ def losses_complete_cython(
             ) = heightprofile._srtm_height_profile(
                 lon_t, lat_t,
                 lon_r, lat_r,
-                hprof_step
+                hprof_step,
+                generic_heights=generic_heights,
                 )
     else:
         distances = hprof_dists.astype(np.float64, order='C', copy=False)

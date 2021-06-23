@@ -17,7 +17,9 @@ __all__ = [
     ]
 
 
-def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
+def _srtm_height_profile(
+        lon_t, lat_t, lon_r, lat_r, step, generic_heights=False
+        ):
     # angles in deg; lengths in m
 
     # first find start bearing (and backward bearing for the curious people)
@@ -45,40 +47,45 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
 
     back_bearings = bearing_2s % 360 - 180
 
-    # important: unless the requested resolution is super-fine, we always
-    # have to query the raw height profile data using sufficient resolution,
-    # to acquire all features
-    # only afterwards, we may smooth the data to the desired distance-step
-    # resolution
-
-    # print(time.time() - t)
-    # t = time.time()
-
-    # hgt_res may not be set correctly yet, if no call to srtm was made before
-    # let's do a simple query to make sure, it is set
-    srtm._srtm_height_data(lon_t, lat_t)
-    hgt_res = srtm.SrtmConf.hgt_res
-    if step > hgt_res / 1.5:
-        hdistances = np.arange(
-            0., distance + hgt_res / 3., hgt_res / 3.
-            )
-        hlons, hlats, _ = cygeodesics.direct_cython(
-            lon_t_rad, lat_t_rad, bearing_1_rad, hdistances
-            )
-        hlons = np.degrees(hlons)
-        hlats = np.degrees(hlats)
-
-        hheights = srtm._srtm_height_data(hlons, hlats).astype(np.float64)
-        heights = np.empty_like(distances)
-        # now smooth/interpolate this to the desired step width
-        cygeodesics.regrid1d_with_x(
-            hdistances, hheights, distances, heights,
-            step / 2.35, regular=True
-            )
+    if generic_heights:
+        heights = np.zeros_like(lons)
 
     else:
+        # important: unless the requested resolution is super-fine, we always
+        # have to query the raw height profile data using sufficient
+        # resolution, to acquire all features
+        # only afterwards, we may smooth the data to the desired distance-step
+        # resolution
 
-        heights = srtm._srtm_height_data(lons, lats).astype(np.float64)
+        # print(time.time() - t)
+        # t = time.time()
+
+        # hgt_res may not be set correctly yet, if call to srtm wasn't made
+        # before
+        # let's do a simple query to make sure, it is set
+        srtm._srtm_height_data(lon_t, lat_t)
+        hgt_res = srtm.SrtmConf.hgt_res
+        if step > hgt_res / 1.5:
+            hdistances = np.arange(
+                0., distance + hgt_res / 3., hgt_res / 3.
+                )
+            hlons, hlats, _ = cygeodesics.direct_cython(
+                lon_t_rad, lat_t_rad, bearing_1_rad, hdistances
+                )
+            hlons = np.degrees(hlons)
+            hlats = np.degrees(hlats)
+
+            hheights = srtm._srtm_height_data(hlons, hlats).astype(np.float64)
+            heights = np.empty_like(distances)
+            # now smooth/interpolate this to the desired step width
+            cygeodesics.regrid1d_with_x(
+                hdistances, hheights, distances, heights,
+                step / 2.35, regular=True
+                )
+
+        else:
+
+            heights = srtm._srtm_height_data(lons, lats).astype(np.float64)
 
     return (
         lons, lats,
@@ -99,7 +106,9 @@ def _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
         apu.deg, apu.deg, apu.km, apu.km, apu.m, apu.deg, apu.deg, apu.deg
         )
     )
-def srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
+def srtm_height_profile(
+        lon_t, lat_t, lon_r, lat_r, step, generic_heights=False
+        ):
     '''
     Extract a height profile from SRTM data.
 
@@ -111,6 +120,10 @@ def srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
         Geographic longitude/latitude of end point (receiver) [deg]
     step : `~astropy.units.Quantity`
         Distance resolution of height profile along path [m]
+    generic_heights : bool
+        If `generic_heights` is set to True, heights will be set to zero.
+        This can be useful for generic (aka flat-Earth) computations.
+        (Default: False)
 
     Returns
     -------
@@ -146,7 +159,9 @@ def srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step):
       For details see :ref:`working_with_srtm`.
     '''
 
-    return _srtm_height_profile(lon_t, lat_t, lon_r, lat_r, step)
+    return _srtm_height_profile(
+        lon_t, lat_t, lon_r, lat_r, step, generic_heights
+        )
 
 
 @utils.ranged_quantity_input(
