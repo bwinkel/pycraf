@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pycraf.pathprof.propagation &#8212; pycraf v1.0.5dev406</title>
+    <title>pycraf.pathprof.propagation &#8212; pycraf v1.0.5dev408</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -50,7 +50,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v1.0.5dev406</a>
+	<a href="../../../index.html">pycraf v1.0.5dev408</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -167,6 +167,12 @@
 <span class="sd">    hprof_backbearing : `~astropy.units.Quantity`, optional</span>
 <span class="sd">        Back-bearing of the height profile path.</span>
 <span class="sd">        (default: query `~pycraf.pathprof.srtm_height_profile`)</span>
+<span class="sd">    generic_heights : bool</span>
+<span class="sd">        If `generic_heights` is set to True, heights will be set to zero.</span>
+<span class="sd">        This can be useful for generic (aka flat-Earth) computations.</span>
+<span class="sd">        The option is only meaningful, if the hprof_xxx parameters are set</span>
+<span class="sd">        to `None` (which means automatic querying of the profiles).</span>
+<span class="sd">        (Default: False)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -260,6 +266,7 @@
             <span class="c1"># override if you don&#39;t want builtin method:</span>
             <span class="n">hprof_dists</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hprof_heights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">hprof_bearing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hprof_backbearing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">generic_heights</span><span class="o">=</span><span class="kc">False</span>
             <span class="p">):</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -282,6 +289,7 @@
             <span class="n">hprof_heights</span><span class="o">=</span><span class="n">hprof_heights</span><span class="p">,</span>
             <span class="n">hprof_bearing</span><span class="o">=</span><span class="n">hprof_bearing</span><span class="p">,</span>
             <span class="n">hprof_backbearing</span><span class="o">=</span><span class="n">hprof_backbearing</span><span class="p">,</span>
+            <span class="n">generic_heights</span><span class="o">=</span><span class="n">generic_heights</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cyprop</span><span class="o">.</span><span class="n">PARAMETERS_BASIC</span><span class="p">)</span>  <span class="c1"># make a copy</span>
@@ -1561,6 +1569,7 @@
         <span class="c1"># override if you don&#39;t want builtin method:</span>
         <span class="n">hprof_dists</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hprof_heights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">hprof_bearing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hprof_backbearing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">generic_heights</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate propagation losses for a fixed path using a parallelized method.</span>
@@ -1635,6 +1644,12 @@
 <span class="sd">    hprof_backbearing : `~astropy.units.Quantity`, optional</span>
 <span class="sd">        Back-bearing of the height profile path.</span>
 <span class="sd">        (default: query `~pycraf.pathprof.srtm_height_profile`)</span>
+<span class="sd">    generic_heights : bool</span>
+<span class="sd">        If `generic_heights` is set to True, heights will be set to zero.</span>
+<span class="sd">        This can be useful for generic (aka flat-Earth) computations.</span>
+<span class="sd">        The option is only meaningful, if the hprof_xxx parameters are set</span>
+<span class="sd">        to `None` (which means automatic querying of the profiles).</span>
+<span class="sd">        (Default: False)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1750,6 +1765,7 @@
         <span class="n">hprof_heights</span><span class="o">=</span><span class="n">hprof_heights</span><span class="p">,</span>
         <span class="n">hprof_bearing</span><span class="o">=</span><span class="n">hprof_bearing</span><span class="p">,</span>
         <span class="n">hprof_backbearing</span><span class="o">=</span><span class="n">hprof_backbearing</span><span class="p">,</span>
+        <span class="n">generic_heights</span><span class="o">=</span><span class="n">generic_heights</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span>
         <span class="s1">&#39;L_b0p&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>

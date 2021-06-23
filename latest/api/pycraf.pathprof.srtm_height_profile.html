@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>srtm_height_profile &#8212; pycraf v1.0.5dev406</title>
+    <title>srtm_height_profile &#8212; pycraf v1.0.5dev408</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -64,7 +64,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.5dev406</a>
+	<a href="../index.html">pycraf v1.0.5dev408</a>
 	 &#187;
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
@@ -83,7 +83,7 @@
 <h1>srtm_height_profile<a class="headerlink" href="#srtm-height-profile" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pycraf.pathprof.srtm_height_profile">
-<span class="sig-prename descclassname"><span class="pre">pycraf.pathprof.</span></span><span class="sig-name descname"><span class="pre">srtm_height_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lon_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/heightprofile.html#srtm_height_profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/heightprofile.py#L91" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.pathprof.srtm_height_profile" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pycraf.pathprof.</span></span><span class="sig-name descname"><span class="pre">srtm_height_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lon_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generic_heights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/heightprofile.html#srtm_height_profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/heightprofile.py#L98" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.pathprof.srtm_height_profile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract a height profile from SRTM data.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -93,6 +93,10 @@
 <dt><strong>lon_r, lat_r</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Geographic longitude/latitude of end point (receiver) [deg]</p>
 </dd>
 <dt><strong>step</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Distance resolution of height profile along path [m]</p>
+</dd>
+<dt><strong>generic_heights</strong><span class="classifier">bool</span></dt><dd><p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">generic_heights</span></code> is set to True, heights will be set to zero.
+This can be useful for generic (aka flat-Earth) computations.
+(Default: False)</p>
 </dd>
 </dl>
 </dd>
