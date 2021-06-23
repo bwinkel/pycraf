@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Geometry helpers (pycraf.geometry) &#8212; pycraf v1.0.5dev400</title>
+    <title>Geometry helpers (pycraf.geometry) &#8212; pycraf v1.0.5dev406</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -65,7 +65,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.5dev400</a>
+	<a href="../index.html">pycraf v1.0.5dev406</a>
 	 &#187;
       </li>
       
@@ -171,9 +171,9 @@ order) and apply the result to the target vector.</p>
 </div>
 <p>Example:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">multiply_matrices</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">geometry</span><span class="o">.</span><span class="n">Rz</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">geometry</span><span class="o">.</span><span class="n">Ry</span><span class="p">(</span><span class="mi">30</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">geometry</span><span class="o">.</span><span class="n">Rx</span><span class="p">(</span><span class="mi">15</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">geometry</span><span class="o">.</span><span class="n">Rz</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">geometry</span><span class="o">.</span><span class="n">Ry</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">geometry</span><span class="o">.</span><span class="n">Rx</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
 <span class="gp">... </span>    <span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">R</span>  
 <span class="go">array([[ 0.85286853, -0.04028776, -0.52056908],</span>
@@ -188,7 +188,7 @@ order) and apply the result to the target vector.</p>
 <p>The second approach is by specifying a rotation axis and angle and use
 <a class="reference external" href="https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula">Rodrigues’ Rotation Formula</a>:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rotax</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rotang</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rotang</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">R2</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">rotmat_from_rotaxis</span><span class="p">(</span><span class="o">*</span><span class="n">rotax</span><span class="p">,</span> <span class="n">rotang</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">R2</span>  
 <span class="go">array([[ 0.98889169, -0.14241824, -0.04254725],</span>
@@ -306,7 +306,7 @@ is not unique!</p>
   <p>
     &copy; Copyright 2021, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.2. &nbsp;
-    Last built 19 Jun 2021. <br/>
+    Last built 23 Jun 2021. <br/>
   </p>
 </footer>
   </body>

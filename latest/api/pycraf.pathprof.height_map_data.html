@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>height_map_data &#8212; pycraf v1.0.5dev400</title>
+    <title>height_map_data &#8212; pycraf v1.0.5dev406</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -64,7 +64,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.5dev400</a>
+	<a href="../index.html">pycraf v1.0.5dev406</a>
 	 &#187;
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
@@ -167,59 +167,59 @@ is mx * my):</p>
 <li><p>“do_cos_delta” : int</p>
 <p>Whether cos-delta correction was applied for map size creation.</p>
 </li>
-<li><p>“xcoords”, “ycoords” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (mx, ); (my, ))</p>
+<li><p>“xcoords”, “ycoords” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float; (mx, ); (my, ))</p>
 <p>Longitude and latitude coordinates of first row and first column
 in the map</p>
 </li>
-<li><p>“lon_mid_map”, “lat_mid_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
+<li><p>“lon_mid_map”, “lat_mid_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>Longitude and latitude path center coordinates for each pixel
 w.r.t. map center.</p>
 <p>This is returned for information, only. It is not
 needed by <code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_map_fast</span></code>!</p>
 </li>
-<li><p>“dist_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
+<li><p>“dist_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>Distances to map center for each pixel.</p>
 </li>
-<li><p>“d_ct_map”, “d_cr_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
+<li><p>“d_ct_map”, “d_cr_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">d_ct</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">d_cr</span></code> values for each pixel in the map.</p>
 </li>
-<li><p>“d_lm_map”, “d_tm_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
+<li><p>“d_lm_map”, “d_tm_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">d_lm</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">d_tm</span></code> values for each pixel in the map.</p>
 </li>
-<li><p>“omega_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
+<li><p>“omega_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">omega</span></code> values for each pixel in the map.</p>
 </li>
-<li><p>“zone_t_map”, “zone_r_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (CLUTTER enum; (mx, my))</p>
+<li><p>“zone_t_map”, “zone_r_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (CLUTTER enum; (mx, my))</p>
 <p>The clutter zone types <code class="xref py py-obj docutils literal notranslate"><span class="pre">zone_t</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">zone_r</span></code> for each pixel in the
 map.</p>
 </li>
-<li><p>“bearing_map”, “back_bearing_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
+<li><p>“bearing_map”, “back_bearing_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">bearing</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">backbearing</span></code> values for each pixel in the map.</p>
 <p>This is returned for information, only. It is not
 needed by <code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_map_fast</span></code>!</p>
 </li>
-<li><p>“N0_map”, “delta_N_map”, “beta0_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
+<li><p>“N0_map”, “delta_N_map”, “beta0_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">N0</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">delta_N</span></code>, and <code class="xref py py-obj docutils literal notranslate"><span class="pre">beta0</span></code> values for each pixel in the map.</p>
 </li>
-<li><p>“path_idx_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (int; (mx, my))</p>
+<li><p>“path_idx_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (int; (mx, my))</p>
 <p>Path IDs for each pixel in the map. With this index, one can query
 the associated height profile from <code class="xref py py-obj docutils literal notranslate"><span class="pre">height_profs</span></code>.</p>
 </li>
-<li><p>“pix_dist_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
+<li><p>“pix_dist_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float; (mx, my))</p>
 <p>Angular distance of the closest path to each of the map pixels.</p>
 </li>
-<li><p>“dist_end_idx_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (int; (mx, my))</p>
+<li><p>“dist_end_idx_map” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (int; (mx, my))</p>
 <p>Index of the last element in the dist/height profiles to be used
 when querying the profiles from <code class="xref py py-obj docutils literal notranslate"><span class="pre">dist_prof</span></code> and
 <code class="xref py py-obj docutils literal notranslate"><span class="pre">height_profs</span></code>.</p>
 </li>
-<li><p>“dist_prof” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float, (mh, ))</p>
+<li><p>“dist_prof” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float, (mh, ))</p>
 <p>Distance values for each of the paths stored in <code class="xref py py-obj docutils literal notranslate"><span class="pre">height_profs</span></code>.</p>
 </li>
-<li><p>“height_profs” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float, (me, mh))</p>
+<li><p>“height_profs” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 2D (float, (me, mh))</p>
 <p>Height profiles to each of the pixels on the map edge, zero padded.</p>
 </li>
-<li><p>“zheight_prof” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float, (mh, ))</p>
+<li><p>“zheight_prof” : <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> 1D (float, (mh, ))</p>
 <p>Zero-valued array of the same length as <code class="xref py py-obj docutils literal notranslate"><span class="pre">height_profs</span></code> for
 convenience.</p>
 </li>
@@ -272,7 +272,7 @@ For details see <a class="reference internal" href="../pathprof/working_with_srt
   <p>
     &copy; Copyright 2021, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.2. &nbsp;
-    Last built 19 Jun 2021. <br/>
+    Last built 23 Jun 2021. <br/>
   </p>
 </footer>
   </body>

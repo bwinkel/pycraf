@@ -105,9 +105,9 @@ first is via concatenation, :math:`R=R_z(\alpha_3)R_y(\alpha_2)R_x(\alpha_1)`, o
 Example::
 
     >>> R = geometry.multiply_matrices(
-    ...     geometry.Rz(-10 * u.deg),
-    ...     geometry.Ry(30 * u.deg),
-    ...     geometry.Rx(15 * u.deg),
+    ...     geometry.Rz(10 * u.deg),
+    ...     geometry.Ry(-30 * u.deg),
+    ...     geometry.Rx(-15 * u.deg),
     ...     )
     >>> R  # doctest: +FLOAT_CMP
     array([[ 0.85286853, -0.04028776, -0.52056908],
@@ -123,7 +123,7 @@ The second approach is by specifying a rotation axis and angle and use
 <https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula>`__::
 
     >>> rotax = (0.5, 0.2, -0.8) * u.m
-    >>> rotang = 10 * u.deg
+    >>> rotang = -10 * u.deg
     >>> R2 = geometry.rotmat_from_rotaxis(*rotax, rotang)
     >>> R2  # doctest: +FLOAT_CMP
     array([[ 0.98889169, -0.14241824, -0.04254725],

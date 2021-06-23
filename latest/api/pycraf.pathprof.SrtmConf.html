@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>SrtmConf &#8212; pycraf v1.0.5dev400</title>
+    <title>SrtmConf &#8212; pycraf v1.0.5dev406</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -64,7 +64,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.5dev400</a>
+	<a href="../index.html">pycraf v1.0.5dev406</a>
 	 &#187;
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
@@ -127,14 +127,14 @@ tiles from viewfinderpanorama (<code class="xref py py-obj docutils literal notr
 The default method uses bi-linear interpolation (<code class="xref py py-obj docutils literal notranslate"><span class="pre">interp='linear'</span></code>). One
 can also have nearest-neighbor (<code class="xref py py-obj docutils literal notranslate"><span class="pre">interp='nearest'</span></code>) or spline
 (<code class="xref py py-obj docutils literal notranslate"><span class="pre">interp='spline'</span></code>) interpolation. The two former internally use
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html#scipy.interpolate.RegularGridInterpolator" title="(in SciPy v1.6.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RegularGridInterpolator</span></code></a>, the latter employs
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.6.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectBivariateSpline</span></code></a> that also allows custom
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/reference/generated/scipy.interpolate.RegularGridInterpolator.html#scipy.interpolate.RegularGridInterpolator" title="(in SciPy v1.7.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RegularGridInterpolator</span></code></a>, the latter employs
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.7.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectBivariateSpline</span></code></a> that also allows custom
 spline degrees (<code class="xref py py-obj docutils literal notranslate"><span class="pre">kx</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">ky</span></code>, default: 3) and smoothing factor (<code class="xref py py-obj docutils literal notranslate"><span class="pre">s</span></code>,
 default: 0.). To change these use:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">interp</span><span class="o">=</span><span class="s1">&#39;spline&#39;</span><span class="p">,</span> <span class="n">spline_opts</span><span class="o">=</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">s</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>We refer to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.6.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectBivariateSpline</span></code></a> description for
+<p>We refer to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.7.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectBivariateSpline</span></code></a> description for
 further information.</p>
 <p>Two read-only attributes are present, <a class="reference internal" href="#pycraf.pathprof.SrtmConf.tile_size" title="pycraf.pathprof.SrtmConf.tile_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tile_size</span></code></a> (pixels) and
 <a class="reference internal" href="#pycraf.pathprof.SrtmConf.hgt_res" title="pycraf.pathprof.SrtmConf.hgt_res"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hgt_res</span></code></a> (m), which are automatically inferred from the tile data.</p>
@@ -310,7 +310,7 @@ allowed. Possible values are:</p>
   <p>
     &copy; Copyright 2021, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.2. &nbsp;
-    Last built 19 Jun 2021. <br/>
+    Last built 23 Jun 2021. <br/>
   </p>
 </footer>
   </body>
