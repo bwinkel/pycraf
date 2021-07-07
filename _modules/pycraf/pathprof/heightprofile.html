@@ -5,20 +5,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pycraf.pathprof.heightprofile &#8212; pycraf v1.0.4</title>
-    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <title>pycraf.pathprof.heightprofile &#8212; pycraf v1.1.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/sidebar.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
@@ -51,7 +50,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v1.0.4</a>
+	<a href="../../../index.html">pycraf v1.1.0</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -87,8 +86,10 @@
     <span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">_srtm_height_profile</span><span class="p">(</span><span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span><span class="p">,</span> <span class="n">lon_r</span><span class="p">,</span> <span class="n">lat_r</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
-    <span class="c1"># angles in rad; lengths in m</span>
+<span class="k">def</span> <span class="nf">_srtm_height_profile</span><span class="p">(</span>
+        <span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span><span class="p">,</span> <span class="n">lon_r</span><span class="p">,</span> <span class="n">lat_r</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">generic_heights</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">):</span>
+    <span class="c1"># angles in deg; lengths in m</span>
 
     <span class="c1"># first find start bearing (and backward bearing for the curious people)</span>
     <span class="c1"># and distance</span>
@@ -115,37 +116,45 @@
 
     <span class="n">back_bearings</span> <span class="o">=</span> <span class="n">bearing_2s</span> <span class="o">%</span> <span class="mi">360</span> <span class="o">-</span> <span class="mi">180</span>
 
-    <span class="c1"># important: unless the requested resolution is super-fine, we always</span>
-    <span class="c1"># have to query the raw height profile data using sufficient resolution,</span>
-    <span class="c1"># to acquire all features</span>
-    <span class="c1"># only afterwards, we may smooth the data to the desired distance-step</span>
-    <span class="c1"># resolution</span>
-
-    <span class="c1"># print(time.time() - t)</span>
-    <span class="c1"># t = time.time()</span>
-
-    <span class="n">hgt_res</span> <span class="o">=</span> <span class="n">srtm</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">hgt_res</span>
-    <span class="k">if</span> <span class="n">step</span> <span class="o">&gt;</span> <span class="n">hgt_res</span> <span class="o">/</span> <span class="mf">1.5</span><span class="p">:</span>
-        <span class="n">hdistances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
-            <span class="mf">0.</span><span class="p">,</span> <span class="n">distance</span> <span class="o">+</span> <span class="n">hgt_res</span> <span class="o">/</span> <span class="mf">3.</span><span class="p">,</span> <span class="n">hgt_res</span> <span class="o">/</span> <span class="mf">3.</span>
-            <span class="p">)</span>
-        <span class="n">hlons</span><span class="p">,</span> <span class="n">hlats</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cygeodesics</span><span class="o">.</span><span class="n">direct_cython</span><span class="p">(</span>
-            <span class="n">lon_t_rad</span><span class="p">,</span> <span class="n">lat_t_rad</span><span class="p">,</span> <span class="n">bearing_1_rad</span><span class="p">,</span> <span class="n">hdistances</span>
-            <span class="p">)</span>
-        <span class="n">hlons</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">hlons</span><span class="p">)</span>
-        <span class="n">hlats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">hlats</span><span class="p">)</span>
-
-        <span class="n">hheights</span> <span class="o">=</span> <span class="n">srtm</span><span class="o">.</span><span class="n">_srtm_height_data</span><span class="p">(</span><span class="n">hlons</span><span class="p">,</span> <span class="n">hlats</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-        <span class="n">heights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>
-        <span class="c1"># now smooth/interpolate this to the desired step width</span>
-        <span class="n">cygeodesics</span><span class="o">.</span><span class="n">regrid1d_with_x</span><span class="p">(</span>
-            <span class="n">hdistances</span><span class="p">,</span> <span class="n">hheights</span><span class="p">,</span> <span class="n">distances</span><span class="p">,</span> <span class="n">heights</span><span class="p">,</span>
-            <span class="n">step</span> <span class="o">/</span> <span class="mf">2.35</span><span class="p">,</span> <span class="n">regular</span><span class="o">=</span><span class="kc">True</span>
-            <span class="p">)</span>
+    <span class="k">if</span> <span class="n">generic_heights</span><span class="p">:</span>
+        <span class="n">heights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">lons</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># important: unless the requested resolution is super-fine, we always</span>
+        <span class="c1"># have to query the raw height profile data using sufficient</span>
+        <span class="c1"># resolution, to acquire all features</span>
+        <span class="c1"># only afterwards, we may smooth the data to the desired distance-step</span>
+        <span class="c1"># resolution</span>
 
-        <span class="n">heights</span> <span class="o">=</span> <span class="n">srtm</span><span class="o">.</span><span class="n">_srtm_height_data</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="c1"># print(time.time() - t)</span>
+        <span class="c1"># t = time.time()</span>
+
+        <span class="c1"># hgt_res may not be set correctly yet, if call to srtm wasn&#39;t made</span>
+        <span class="c1"># before</span>
+        <span class="c1"># let&#39;s do a simple query to make sure, it is set</span>
+        <span class="n">srtm</span><span class="o">.</span><span class="n">_srtm_height_data</span><span class="p">(</span><span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span><span class="p">)</span>
+        <span class="n">hgt_res</span> <span class="o">=</span> <span class="n">srtm</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">hgt_res</span>
+        <span class="k">if</span> <span class="n">step</span> <span class="o">&gt;</span> <span class="n">hgt_res</span> <span class="o">/</span> <span class="mf">1.5</span><span class="p">:</span>
+            <span class="n">hdistances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+                <span class="mf">0.</span><span class="p">,</span> <span class="n">distance</span> <span class="o">+</span> <span class="n">hgt_res</span> <span class="o">/</span> <span class="mf">3.</span><span class="p">,</span> <span class="n">hgt_res</span> <span class="o">/</span> <span class="mf">3.</span>
+                <span class="p">)</span>
+            <span class="n">hlons</span><span class="p">,</span> <span class="n">hlats</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cygeodesics</span><span class="o">.</span><span class="n">direct_cython</span><span class="p">(</span>
+                <span class="n">lon_t_rad</span><span class="p">,</span> <span class="n">lat_t_rad</span><span class="p">,</span> <span class="n">bearing_1_rad</span><span class="p">,</span> <span class="n">hdistances</span>
+                <span class="p">)</span>
+            <span class="n">hlons</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">hlons</span><span class="p">)</span>
+            <span class="n">hlats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">hlats</span><span class="p">)</span>
+
+            <span class="n">hheights</span> <span class="o">=</span> <span class="n">srtm</span><span class="o">.</span><span class="n">_srtm_height_data</span><span class="p">(</span><span class="n">hlons</span><span class="p">,</span> <span class="n">hlats</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="n">heights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>
+            <span class="c1"># now smooth/interpolate this to the desired step width</span>
+            <span class="n">cygeodesics</span><span class="o">.</span><span class="n">regrid1d_with_x</span><span class="p">(</span>
+                <span class="n">hdistances</span><span class="p">,</span> <span class="n">hheights</span><span class="p">,</span> <span class="n">distances</span><span class="p">,</span> <span class="n">heights</span><span class="p">,</span>
+                <span class="n">step</span> <span class="o">/</span> <span class="mf">2.35</span><span class="p">,</span> <span class="n">regular</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">heights</span> <span class="o">=</span> <span class="n">srtm</span><span class="o">.</span><span class="n">_srtm_height_data</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">,</span>
@@ -166,7 +175,9 @@
         <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span>
         <span class="p">)</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">srtm_height_profile</span><span class="p">(</span><span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span><span class="p">,</span> <span class="n">lon_r</span><span class="p">,</span> <span class="n">lat_r</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">srtm_height_profile</span><span class="p">(</span>
+        <span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span><span class="p">,</span> <span class="n">lon_r</span><span class="p">,</span> <span class="n">lat_r</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">generic_heights</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Extract a height profile from SRTM data.</span>
 
@@ -178,6 +189,10 @@
 <span class="sd">        Geographic longitude/latitude of end point (receiver) [deg]</span>
 <span class="sd">    step : `~astropy.units.Quantity`</span>
 <span class="sd">        Distance resolution of height profile along path [m]</span>
+<span class="sd">    generic_heights : bool</span>
+<span class="sd">        If `generic_heights` is set to True, heights will be set to zero.</span>
+<span class="sd">        This can be useful for generic (aka flat-Earth) computations.</span>
+<span class="sd">        (Default: False)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -213,7 +228,9 @@
 <span class="sd">      For details see :ref:`working_with_srtm`.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="k">return</span> <span class="n">_srtm_height_profile</span><span class="p">(</span><span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span><span class="p">,</span> <span class="n">lon_r</span><span class="p">,</span> <span class="n">lat_r</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_srtm_height_profile</span><span class="p">(</span>
+        <span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span><span class="p">,</span> <span class="n">lon_r</span><span class="p">,</span> <span class="n">lat_r</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">generic_heights</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="srtm_height_map"><a class="viewcode-back" href="../../../api/pycraf.pathprof.srtm_height_map.html#pycraf.pathprof.srtm_height_map">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
@@ -325,9 +342,9 @@
   <p class="pull-right"> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
-    Last built 21 Oct 2020. <br/>
+    &copy; Copyright 2021, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.3. &nbsp;
+    Last built 07 Jul 2021. <br/>
   </p>
 </footer>
   </body>

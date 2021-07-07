@@ -4,21 +4,22 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Geometry helpers (pycraf.geometry) &#8212; pycraf v1.0.4</title>
-    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Geometry helpers (pycraf.geometry) &#8212; pycraf v1.1.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -64,7 +65,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.4</a>
+	<a href="../index.html">pycraf v1.1.0</a>
 	 &#187;
       </li>
       
@@ -78,16 +79,16 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="geometry-helpers-pycraf-geometry">
+  <section id="geometry-helpers-pycraf-geometry">
 <h1>Geometry helpers (<a class="reference internal" href="#module-pycraf.geometry" title="pycraf.geometry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geometry</span></code></a>)<a class="headerlink" href="#geometry-helpers-pycraf-geometry" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="introduction">
+<section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference internal" href="#module-pycraf.geometry" title="pycraf.geometry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geometry</span></code></a> sub-package just offers some convenience functions
 for various geometrical calculations, e.g., in spherical coordinates.</p>
-</div>
-<div class="section" id="using-pycraf-geometry">
+</section>
+<section id="using-pycraf-geometry">
 <h2>Using <a class="reference internal" href="#module-pycraf.geometry" title="pycraf.geometry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geometry</span></code></a><a class="headerlink" href="#using-pycraf-geometry" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="spherical-coordinates">
+<section id="spherical-coordinates">
 <h3>Spherical coordinates<a class="headerlink" href="#spherical-coordinates" title="Permalink to this headline">¶</a></h3>
 <p>One can convert between cartesian and spherical coordinates using the two
 functions <a class="reference internal" href="../api/pycraf.geometry.cart_to_sphere.html#pycraf.geometry.cart_to_sphere" title="pycraf.geometry.cart_to_sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cart_to_sphere</span></code></a> and
@@ -128,8 +129,8 @@ bearing of a point on the sphere w.r.t. another point:</p>
 <p>If you need angular distances/bearings on the Geoid with high accuracy
 use the Geodesics methods in the <a class="reference internal" href="../pathprof/index.html#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pathprof</span></code></a> subpackage.</p>
 </div>
-</div>
-<div class="section" id="rotation-matrices">
+</section>
+<section id="rotation-matrices">
 <h3>Rotation matrices<a class="headerlink" href="#rotation-matrices" title="Permalink to this headline">¶</a></h3>
 <p>Sometimes one needs to rotate quantities (e.g., antenna diagrams) in 3D space
 when using compatibility studies. In pycraf a few routines are provided that
@@ -170,9 +171,9 @@ order) and apply the result to the target vector.</p>
 </div>
 <p>Example:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">multiply_matrices</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">geometry</span><span class="o">.</span><span class="n">Rz</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">geometry</span><span class="o">.</span><span class="n">Ry</span><span class="p">(</span><span class="mi">30</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">geometry</span><span class="o">.</span><span class="n">Rx</span><span class="p">(</span><span class="mi">15</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">geometry</span><span class="o">.</span><span class="n">Rz</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">geometry</span><span class="o">.</span><span class="n">Ry</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">geometry</span><span class="o">.</span><span class="n">Rx</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
 <span class="gp">... </span>    <span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">R</span>  
 <span class="go">array([[ 0.85286853, -0.04028776, -0.52056908],</span>
@@ -187,7 +188,7 @@ order) and apply the result to the target vector.</p>
 <p>The second approach is by specifying a rotation axis and angle and use
 <a class="reference external" href="https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula">Rodrigues’ Rotation Formula</a>:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rotax</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rotang</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rotang</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">R2</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">rotmat_from_rotaxis</span><span class="p">(</span><span class="o">*</span><span class="n">rotax</span><span class="p">,</span> <span class="n">rotang</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">R2</span>  
 <span class="go">array([[ 0.98889169, -0.14241824, -0.04254725],</span>
@@ -200,9 +201,9 @@ a given rotation matrix, with the functions
 <a class="reference internal" href="../api/pycraf.geometry.eulerangle_from_rotmat.html#pycraf.geometry.eulerangle_from_rotmat" title="pycraf.geometry.eulerangle_from_rotmat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eulerangle_from_rotmat</span></code></a> and
 <a class="reference internal" href="../api/pycraf.geometry.rotaxis_from_rotmat.html#pycraf.geometry.rotaxis_from_rotmat" title="pycraf.geometry.rotaxis_from_rotmat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotaxis_from_rotmat</span></code></a>, but keep in mind that the solution
 is not unique!</p>
-</div>
-</div>
-<div class="section" id="see-also">
+</section>
+</section>
+<section id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">Astropy Units and Quantities package</a>, which is used extensively in pycraf.</p></li>
@@ -210,13 +211,13 @@ is not unique!</p>
 <li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Rotation_matrix">Rotation matrix</a></p></li>
 <li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula">Rodrigues’ Rotation Formula</a></p></li>
 </ul>
-</div>
-<div class="section" id="reference-api">
+</section>
+<section id="reference-api">
 <h2>Reference/API<a class="headerlink" href="#reference-api" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="module-pycraf.geometry">
+<section id="module-pycraf.geometry">
 <span id="pycraf-geometry-package"></span><h3>pycraf.geometry Package<a class="headerlink" href="#module-pycraf.geometry" title="Permalink to this headline">¶</a></h3>
 <p>Contains convenience functions for geometrical calculations on the sphere.</p>
-<div class="section" id="functions">
+<section id="functions">
 <h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h4>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -259,10 +260,10 @@ is not unique!</p>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -298,14 +299,14 @@ is not unique!</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/geometry/index.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.0/docs/geometry/index.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/geometry/index.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
-    Last built 21 Oct 2020. <br/>
+    &copy; Copyright 2021, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.3. &nbsp;
+    Last built 07 Jul 2021. <br/>
   </p>
 </footer>
   </body>

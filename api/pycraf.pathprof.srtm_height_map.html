@@ -4,21 +4,21 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>srtm_height_map &#8212; pycraf v1.0.4</title>
-    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>srtm_height_map &#8212; pycraf v1.1.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -64,7 +64,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.4</a>
+	<a href="../index.html">pycraf v1.1.0</a>
 	 &#187;
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
@@ -79,22 +79,22 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="srtm-height-map">
+  <section id="srtm-height-map">
 <h1>srtm_height_map<a class="headerlink" href="#srtm-height-map" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="pycraf.pathprof.srtm_height_map">
-<code class="sig-prename descclassname">pycraf.pathprof.</code><code class="sig-name descname">srtm_height_map</code><span class="sig-paren">(</span><em class="sig-param">lon_c</em>, <em class="sig-param">lat_c</em>, <em class="sig-param">map_size_lon</em>, <em class="sig-param">map_size_lat</em>, <em class="sig-param">map_resolution=&lt;Quantity 3. arcsec&gt;</em>, <em class="sig-param">hprof_step=None</em>, <em class="sig-param">do_cos_delta=True</em>, <em class="sig-param">do_coords_2d=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/heightprofile.html#srtm_height_map"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.0.4/pycraf/pathprof/heightprofile.py#L149" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.pathprof.srtm_height_map" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pycraf.pathprof.srtm_height_map">
+<span class="sig-prename descclassname"><span class="pre">pycraf.pathprof.</span></span><span class="sig-name descname"><span class="pre">srtm_height_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">lon_c</span></em>, <em class="sig-param"><span class="pre">lat_c</span></em>, <em class="sig-param"><span class="pre">map_size_lon</span></em>, <em class="sig-param"><span class="pre">map_size_lat</span></em>, <em class="sig-param"><span class="pre">map_resolution=&lt;Quantity</span> <span class="pre">3.</span> <span class="pre">arcsec&gt;</span></em>, <em class="sig-param"><span class="pre">hprof_step=None</span></em>, <em class="sig-param"><span class="pre">do_cos_delta=True</span></em>, <em class="sig-param"><span class="pre">do_coords_2d=False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/heightprofile.html#srtm_height_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.1.0/pycraf/pathprof/heightprofile.py#L167" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.pathprof.srtm_height_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract terrain map from SRTM data.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>lon_t, lat_t</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Geographic longitude/latitude of map center [deg]</p>
+<dt><strong>lon_t, lat_t</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Geographic longitude/latitude of map center [deg]</p>
 </dd>
-<dt><strong>map_size_lon, map_size_lat</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Map size in longitude/latitude[deg]</p>
+<dt><strong>map_size_lon, map_size_lat</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Map size in longitude/latitude[deg]</p>
 </dd>
-<dt><strong>map_resolution</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Pixel resolution of map [deg] (default: 3 arcsec)</p>
+<dt><strong>map_resolution</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Pixel resolution of map [deg] (default: 3 arcsec)</p>
 </dd>
-<dt><strong>hprof_step</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Pixel resolution of map [m] (default: None)
+<dt><strong>hprof_step</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Pixel resolution of map [m] (default: None)
 Overrides <code class="xref py py-obj docutils literal notranslate"><span class="pre">map_resolution</span></code> if given!</p>
 </dd>
 <dt><strong>do_cos_delta</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, divide <code class="xref py py-obj docutils literal notranslate"><span class="pre">map_size_lon</span></code> by <code class="xref py py-obj docutils literal notranslate"><span class="pre">cos(lat_c)</span></code> to produce a more
@@ -106,11 +106,11 @@ square-like map. (default: True)</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>lons</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, 1D or 2D</span></dt><dd><p>Geographic longitudes [deg]</p>
+<dt><strong>lons</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, 1D or 2D</span></dt><dd><p>Geographic longitudes [deg]</p>
 </dd>
-<dt><strong>lats</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, 1D or 2D</span></dt><dd><p>Geographic latitudes [deg]</p>
+<dt><strong>lats</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, 1D or 2D</span></dt><dd><p>Geographic latitudes [deg]</p>
 </dd>
-<dt><strong>heights</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, 1D or 2D</span></dt><dd><p>Height map [m]</p>
+<dt><strong>heights</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, 1D or 2D</span></dt><dd><p>Height map [m]</p>
 </dd>
 </dl>
 </dd>
@@ -130,7 +130,7 @@ For details see <a class="reference internal" href="../pathprof/working_with_srt
 </ul>
 </dd></dl>
 
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -150,14 +150,14 @@ For details see <a class="reference internal" href="../pathprof/working_with_srt
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/api/pycraf.pathprof.srtm_height_map.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.0/docs/api/pycraf.pathprof.srtm_height_map.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.pathprof.srtm_height_map.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
-    Last built 21 Oct 2020. <br/>
+    &copy; Copyright 2021, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.3. &nbsp;
+    Last built 07 Jul 2021. <br/>
   </p>
 </footer>
   </body>

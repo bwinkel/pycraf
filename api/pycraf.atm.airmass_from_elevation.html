@@ -4,21 +4,22 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>airmass_from_elevation &#8212; pycraf v1.0.4</title>
-    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>airmass_from_elevation &#8212; pycraf v1.1.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -64,7 +65,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.4</a>
+	<a href="../index.html">pycraf v1.1.0</a>
 	 &#187;
       </li>
       <li><a href="../atm/index.html" accesskey="U">Atmospheric models (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.atm</span></code>)</a> &#187;</li>
@@ -79,22 +80,22 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="airmass-from-elevation">
+  <section id="airmass-from-elevation">
 <h1>airmass_from_elevation<a class="headerlink" href="#airmass-from-elevation" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="pycraf.atm.airmass_from_elevation">
-<code class="sig-prename descclassname">pycraf.atm.</code><code class="sig-name descname">airmass_from_elevation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">elev</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#airmass_from_elevation"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.0.4/pycraf/atm/atm.py#L109" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.atm.airmass_from_elevation" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pycraf.atm.airmass_from_elevation">
+<span class="sig-prename descclassname"><span class="pre">pycraf.atm.</span></span><span class="sig-name descname"><span class="pre">airmass_from_elevation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elev</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#airmass_from_elevation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.1.0/pycraf/atm/atm.py#L109" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.atm.airmass_from_elevation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Airmass derived from elevation using extrapolation by Maddalena &amp; Johnson.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>elev</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Elevation [deg]</p>
+<dt><strong>elev</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Elevation [deg]</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>airmass</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Airmass [dimless]</p>
+<dt><strong>airmass</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Airmass [dimless]</p>
 </dd>
 </dl>
 </dd>
@@ -110,7 +111,7 @@ Johnson (2006) propose the following extrapolation for El &lt; 32 deg:</p>
     \end{cases}\end{split}\]</div>
 </dd></dl>
 
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -130,14 +131,14 @@ Johnson (2006) propose the following extrapolation for El &lt; 32 deg:</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/api/pycraf.atm.airmass_from_elevation.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.0/docs/api/pycraf.atm.airmass_from_elevation.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.atm.airmass_from_elevation.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
-    Last built 21 Oct 2020. <br/>
+    &copy; Copyright 2021, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.3. &nbsp;
+    Last built 07 Jul 2021. <br/>
   </p>
 </footer>
   </body>

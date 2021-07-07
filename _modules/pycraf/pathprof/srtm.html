@@ -5,20 +5,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pycraf.pathprof.srtm &#8212; pycraf v1.0.4</title>
-    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <title>pycraf.pathprof.srtm &#8212; pycraf v1.1.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/sidebar.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
@@ -51,7 +50,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v1.0.4</a>
+	<a href="../../../index.html">pycraf v1.1.0</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -215,6 +214,13 @@
 <span class="sd">    - `nasa_v2.1 &lt;https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/&gt;`__</span>
 <span class="sd">    - `nasa_v1.0 &lt;https://dds.cr.usgs.gov/srtm/version1/&gt;`__</span>
 <span class="sd">    - `viewpano &lt;http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm&gt;`__</span>
+
+<span class="sd">    Note: As of Spring 2021, NASA decided to put all SRTM data products</span>
+<span class="sd">    behind a log-in page, such that automatic download ceases to work.</span>
+<span class="sd">    If you prefer to use NASA tiles (over viewpano), please use their</span>
+<span class="sd">    services, e.g., the `Land Processes Distributed Active Archive Center</span>
+<span class="sd">    &lt;https://lpdaac.usgs.gov/&gt;`</span>
+
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="n">_attributes</span> <span class="o">=</span> <span class="p">(</span>
@@ -224,7 +230,7 @@
 
     <span class="n">srtm_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SRTMDATA&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
     <span class="n">download</span> <span class="o">=</span> <span class="s1">&#39;never&#39;</span>
-    <span class="n">server</span> <span class="o">=</span> <span class="s1">&#39;nasa_v2.1&#39;</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="s1">&#39;viewpano&#39;</span>
     <span class="n">interp</span> <span class="o">=</span> <span class="s1">&#39;linear&#39;</span>
     <span class="n">spline_opts</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">tile_size</span> <span class="o">=</span> <span class="mi">1201</span>
@@ -237,7 +243,7 @@
 <span class="sd">        allowed. Possible values are:</span>
 
 <span class="sd">        - `download`:  &#39;never&#39;, &#39;missing&#39;, &#39;always&#39;</span>
-<span class="sd">        - `server`:  &#39;nasa_v2.1&#39;, &#39;nasa_v1.0&#39;, &#39;viewpano&#39;</span>
+<span class="sd">        - `server`:  &#39;viewpano&#39;  # removed: &#39;nasa_v2.1&#39;, &#39;nasa_v1.0&#39;</span>
 <span class="sd">        - `interp`:  &#39;nearest&#39;, &#39;linear&#39;, &#39;spline&#39;</span>
 <span class="sd">        - `spline_opts`:  tuple(k, s) (k = degree, s = smoothing factor)</span>
 
@@ -258,10 +264,10 @@
                         <span class="s1">&#39;are supported for &quot;download&quot; option.&#39;</span>
                         <span class="p">)</span>
             <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;server&#39;</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;nasa_v2.1&#39;</span><span class="p">,</span> <span class="s1">&#39;nasa_v1.0&#39;</span><span class="p">,</span> <span class="s1">&#39;viewpano&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;viewpano&#39;</span><span class="p">]:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="s1">&#39;Only the values &quot;nasa_v2.1&quot;, &quot;nasa_v1.0&quot;, and &#39;</span>
-                        <span class="s1">&#39;&quot;viewpano&quot; are supported for &quot;server&quot; option.&#39;</span>
+                        <span class="s1">&#39;Only the value &quot;viewpano&quot; is currently &#39;</span>
+                        <span class="s1">&#39;supported for &quot;server&quot; option.&#39;</span>
                         <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;interp&#39;</span><span class="p">:</span>
@@ -704,9 +710,9 @@
   <p class="pull-right"> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
-    Last built 21 Oct 2020. <br/>
+    &copy; Copyright 2021, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.3. &nbsp;
+    Last built 07 Jul 2021. <br/>
   </p>
 </footer>
   </body>

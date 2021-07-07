@@ -5,20 +5,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pycraf.pathprof.propagation &#8212; pycraf v1.0.4</title>
-    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <title>pycraf.pathprof.propagation &#8212; pycraf v1.1.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/sidebar.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
@@ -51,7 +50,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v1.0.4</a>
+	<a href="../../../index.html">pycraf v1.1.0</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -82,6 +81,7 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">cyprop</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">heightprofile</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">helper</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">srtm</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">utils</span>
 <span class="c1"># import ipdb</span>
@@ -167,6 +167,12 @@
 <span class="sd">    hprof_backbearing : `~astropy.units.Quantity`, optional</span>
 <span class="sd">        Back-bearing of the height profile path.</span>
 <span class="sd">        (default: query `~pycraf.pathprof.srtm_height_profile`)</span>
+<span class="sd">    generic_heights : bool</span>
+<span class="sd">        If `generic_heights` is set to True, heights will be set to zero.</span>
+<span class="sd">        This can be useful for generic (aka flat-Earth) computations.</span>
+<span class="sd">        The option is only meaningful, if the hprof_xxx parameters are set</span>
+<span class="sd">        to `None` (which means automatic querying of the profiles).</span>
+<span class="sd">        (Default: False)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -260,6 +266,7 @@
             <span class="c1"># override if you don&#39;t want builtin method:</span>
             <span class="n">hprof_dists</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hprof_heights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">hprof_bearing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hprof_backbearing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">generic_heights</span><span class="o">=</span><span class="kc">False</span>
             <span class="p">):</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -282,6 +289,7 @@
             <span class="n">hprof_heights</span><span class="o">=</span><span class="n">hprof_heights</span><span class="p">,</span>
             <span class="n">hprof_bearing</span><span class="o">=</span><span class="n">hprof_bearing</span><span class="p">,</span>
             <span class="n">hprof_backbearing</span><span class="o">=</span><span class="n">hprof_backbearing</span><span class="p">,</span>
+            <span class="n">generic_heights</span><span class="o">=</span><span class="n">generic_heights</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cyprop</span><span class="o">.</span><span class="n">PARAMETERS_BASIC</span><span class="p">)</span>  <span class="c1"># make a copy</span>
@@ -533,6 +541,47 @@
     <span class="k">return</span> <span class="n">cyprop</span><span class="o">.</span><span class="n">clutter_correction_cython</span><span class="p">(</span><span class="n">h_g</span><span class="p">,</span> <span class="n">zone</span><span class="p">,</span> <span class="n">freq</span><span class="p">)</span></div>
 
 
+<span class="k">def</span> <span class="nf">_Qinv</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="c1"># Note, this is *not* identical to cyprop._I_helper</span>
+    <span class="c1"># only good between 1.e-6 and 0.5</span>
+    <span class="c1"># See R-Rec P.1546</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mf">0.5</span>
+    <span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+    <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span>
+            <span class="p">((</span><span class="mf">0.010328</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">0.802853</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="mf">2.515516698</span>
+            <span class="p">)</span> <span class="o">/</span>
+        <span class="p">(</span>
+            <span class="p">((</span><span class="mf">0.001308</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">0.189269</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">1.432788</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">1.</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">T</span> <span class="o">-</span> <span class="n">Z</span>
+    <span class="n">Q</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">return</span> <span class="n">Q</span>
+
+
+<span class="c1"># def Qinv(x):</span>
+<span class="c1">#     # larger x range than the approximation given in P.1546?</span>
+<span class="c1">#     # definitely much slower</span>
+
+<span class="c1">#     from scipy.stats import norm as qnorm</span>
+
+<span class="c1">#     x = np.atleast_1d(x).copy()</span>
+
+<span class="c1">#     mask = x &gt; 0.5</span>
+<span class="c1">#     x[mask] = 1 - x[mask]</span>
+
+<span class="c1">#     Q = -qnorm.ppf(x, 0)</span>
+<span class="c1">#     Q[mask] *= -1</span>
+
+<span class="c1">#     return Q</span>
+
+
 <span class="k">def</span> <span class="nf">_clutter_imt</span><span class="p">(</span>
         <span class="n">freq</span><span class="p">,</span>
         <span class="n">dist</span><span class="p">,</span>
@@ -542,51 +591,12 @@
 
     <span class="k">assert</span> <span class="n">num_end_points</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">Qinv</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-        <span class="c1"># Note, this is *not* identical to cyprop._I_helper</span>
-        <span class="c1"># only good between 1.e-6 and 0.5</span>
-        <span class="c1"># See R-Rec P.1546</span>
-
-        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mf">0.5</span>
-        <span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
-
-        <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-        <span class="n">Z</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="p">(</span>
-                <span class="p">((</span><span class="mf">0.010328</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">0.802853</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="mf">2.515516698</span>
-                <span class="p">)</span> <span class="o">/</span>
-            <span class="p">(</span>
-                <span class="p">((</span><span class="mf">0.001308</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">0.189269</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">1.432788</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">1.</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-
-        <span class="n">Q</span> <span class="o">=</span> <span class="n">T</span> <span class="o">-</span> <span class="n">Z</span>
-        <span class="n">Q</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="k">return</span> <span class="n">Q</span>
-
-    <span class="c1"># def Qinv(x):</span>
-    <span class="c1">#     # larger x range than the approximation given in P.1546?</span>
-    <span class="c1">#     # definitely much slower</span>
-
-    <span class="c1">#     from scipy.stats import norm as qnorm</span>
-
-    <span class="c1">#     x = np.atleast_1d(x).copy()</span>
-
-    <span class="c1">#     mask = x &gt; 0.5</span>
-    <span class="c1">#     x[mask] = 1 - x[mask]</span>
-
-    <span class="c1">#     Q = -qnorm.ppf(x, 0)</span>
-    <span class="c1">#     Q[mask] *= -1</span>
-
-    <span class="c1">#     return Q</span>
-
     <span class="n">L_l</span> <span class="o">=</span> <span class="mf">23.5</span> <span class="o">+</span> <span class="mf">9.6</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
     <span class="n">L_s</span> <span class="o">=</span> <span class="mf">32.98</span> <span class="o">+</span> <span class="mf">23.9</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span> <span class="o">+</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
 
     <span class="n">L_clutter</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span> <span class="o">*</span> <span class="n">L_l</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span> <span class="o">*</span> <span class="n">L_s</span><span class="p">)</span>
-        <span class="p">)</span> <span class="o">-</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">Qinv</span><span class="p">(</span><span class="n">location_percent</span> <span class="o">/</span> <span class="mf">100.</span><span class="p">)</span>
+        <span class="p">)</span> <span class="o">-</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">_Qinv</span><span class="p">(</span><span class="n">location_percent</span> <span class="o">/</span> <span class="mf">100.</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">num_end_points</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="n">L_clutter</span> <span class="o">*=</span> <span class="mi">2</span>
@@ -680,6 +690,7 @@
         <span class="n">d_tm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">d_lm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">d_ct</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">d_cr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">omega_percent</span><span class="o">=</span><span class="mi">0</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">,</span>
+        <span class="n">cache_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">clobber</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">):</span>
 
     <span class="sd">&#39;&#39;&#39;</span>
@@ -738,6 +749,17 @@
 <span class="sd">    omega_percent : `~astropy.units.Quantity`, optional</span>
 <span class="sd">        Fraction of the path over water [%] (see Table 3)</span>
 <span class="sd">        (default: 0%)</span>
+<span class="sd">    cache_path : str, optional</span>
+<span class="sd">        If set, the `joblib package</span>
+<span class="sd">        &lt;https://joblib.readthedocs.io/en/latest/&gt;`_ is used to cache</span>
+<span class="sd">        results provided by this function on disk, such that future queries</span>
+<span class="sd">        are executed much faster. If set to `None`, no caching is performed.</span>
+<span class="sd">        (default: None)</span>
+<span class="sd">    clobber : bool, optional</span>
+<span class="sd">        If set to `True` and caching is active re-compute the result even</span>
+<span class="sd">        if an older result is found in cache. This is useful, when something</span>
+<span class="sd">        has change with the underlying terrain data, e.g., new tiles were</span>
+<span class="sd">        downloaded. (default: `False`)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -853,16 +875,55 @@
 <span class="sd">      For details see :ref:`working_with_srtm`.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="k">return</span> <span class="n">cyprop</span><span class="o">.</span><span class="n">height_map_data_cython</span><span class="p">(</span>
-        <span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span><span class="p">,</span>
-        <span class="n">map_size_lon</span><span class="p">,</span> <span class="n">map_size_lat</span><span class="p">,</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">lon_t</span><span class="p">,</span> <span class="n">lat_t</span><span class="p">,</span> <span class="n">map_size_lon</span><span class="p">,</span> <span class="n">map_size_lat</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">map_resolution</span><span class="o">=</span><span class="n">map_resolution</span><span class="p">,</span>
         <span class="n">do_cos_delta</span><span class="o">=</span><span class="mi">1</span> <span class="k">if</span> <span class="n">do_cos_delta</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="n">zone_t</span><span class="o">=</span><span class="n">zone_t</span><span class="p">,</span> <span class="n">zone_r</span><span class="o">=</span><span class="n">zone_r</span><span class="p">,</span>
+        <span class="n">zone_t</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">zone_t</span><span class="p">),</span> <span class="n">zone_r</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">zone_r</span><span class="p">),</span>  <span class="c1"># needed for joblib</span>
         <span class="n">d_tm</span><span class="o">=</span><span class="n">d_tm</span><span class="p">,</span> <span class="n">d_lm</span><span class="o">=</span><span class="n">d_lm</span><span class="p">,</span>
         <span class="n">d_ct</span><span class="o">=</span><span class="n">d_ct</span><span class="p">,</span> <span class="n">d_cr</span><span class="o">=</span><span class="n">d_cr</span><span class="p">,</span>
         <span class="n">omega</span><span class="o">=</span><span class="n">omega_percent</span><span class="p">,</span>
-        <span class="p">)</span></div>
+        <span class="p">)</span>
+
+    <span class="n">joblib_available</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">joblib</span>
+        <span class="n">memory</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">Memory</span><span class="p">(</span><span class="n">cache_path</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">joblib_available</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">cache_path</span> <span class="ow">and</span> <span class="n">joblib_available</span><span class="p">:</span>
+
+        <span class="k">def</span> <span class="nf">wrapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="nd">@memory</span><span class="o">.</span><span class="n">cache</span>
+            <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">tile_path</span><span class="p">,</span> <span class="n">interp</span><span class="p">,</span> <span class="n">spline_opts</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">cyprop</span><span class="o">.</span><span class="n">height_map_data_cython</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">clobber</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">call_and_shelve</span><span class="p">(</span>
+                    <span class="n">srtm</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">srtm_dir</span><span class="p">,</span>
+                    <span class="n">srtm</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span>
+                    <span class="n">srtm</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">spline_opts</span><span class="p">,</span>
+                    <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+                    <span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+            <span class="k">return</span> <span class="n">f</span><span class="p">(</span>
+                <span class="n">srtm</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">srtm_dir</span><span class="p">,</span>
+                <span class="n">srtm</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">interp</span><span class="p">,</span>
+                <span class="n">srtm</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">spline_opts</span><span class="p">,</span>
+                <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+                <span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">cache_path</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">joblib_available</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s1">&#39;&quot;joblib&quot; package must be installed for caching&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">wrapped</span> <span class="o">=</span> <span class="n">cyprop</span><span class="o">.</span><span class="n">height_map_data_cython</span>
+
+    <span class="k">return</span> <span class="n">wrapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="atten_map_fast"><a class="viewcode-back" href="../../../api/pycraf.pathprof.atten_map_fast.html#pycraf.pathprof.atten_map_fast">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
@@ -1508,6 +1569,7 @@
         <span class="c1"># override if you don&#39;t want builtin method:</span>
         <span class="n">hprof_dists</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hprof_heights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">hprof_bearing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hprof_backbearing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">generic_heights</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate propagation losses for a fixed path using a parallelized method.</span>
@@ -1582,6 +1644,12 @@
 <span class="sd">    hprof_backbearing : `~astropy.units.Quantity`, optional</span>
 <span class="sd">        Back-bearing of the height profile path.</span>
 <span class="sd">        (default: query `~pycraf.pathprof.srtm_height_profile`)</span>
+<span class="sd">    generic_heights : bool</span>
+<span class="sd">        If `generic_heights` is set to True, heights will be set to zero.</span>
+<span class="sd">        This can be useful for generic (aka flat-Earth) computations.</span>
+<span class="sd">        The option is only meaningful, if the hprof_xxx parameters are set</span>
+<span class="sd">        to `None` (which means automatic querying of the profiles).</span>
+<span class="sd">        (Default: False)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1697,6 +1765,7 @@
         <span class="n">hprof_heights</span><span class="o">=</span><span class="n">hprof_heights</span><span class="p">,</span>
         <span class="n">hprof_bearing</span><span class="o">=</span><span class="n">hprof_bearing</span><span class="p">,</span>
         <span class="n">hprof_backbearing</span><span class="o">=</span><span class="n">hprof_backbearing</span><span class="p">,</span>
+        <span class="n">generic_heights</span><span class="o">=</span><span class="n">generic_heights</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span>
         <span class="s1">&#39;L_b0p&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
@@ -1733,9 +1802,9 @@
   <p class="pull-right"> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
-    Last built 21 Oct 2020. <br/>
+    &copy; Copyright 2021, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.3. &nbsp;
+    Last built 07 Jul 2021. <br/>
   </p>
 </footer>
   </body>

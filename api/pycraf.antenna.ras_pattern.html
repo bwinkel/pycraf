@@ -4,21 +4,21 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ras_pattern &#8212; pycraf v1.0.4</title>
-    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>ras_pattern &#8212; pycraf v1.1.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -64,7 +64,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.4</a>
+	<a href="../index.html">pycraf v1.1.0</a>
 	 &#187;
       </li>
       <li><a href="../antenna/index.html" accesskey="U">Antenna patterns (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.antenna</span></code>)</a> &#187;</li>
@@ -79,22 +79,22 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ras-pattern">
+  <section id="ras-pattern">
 <h1>ras_pattern<a class="headerlink" href="#ras-pattern" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="pycraf.antenna.ras_pattern">
-<code class="sig-prename descclassname">pycraf.antenna.</code><code class="sig-name descname">ras_pattern</code><span class="sig-paren">(</span><em class="sig-param">phi</em>, <em class="sig-param">diameter</em>, <em class="sig-param">wavelength</em>, <em class="sig-param">eta_a=&lt;Quantity 100. %&gt;</em>, <em class="sig-param">do_bessel=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/antenna/ras.html#ras_pattern"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.0.4/pycraf/antenna/ras.py#L21" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;[edit on github]</span></a><a class="headerlink" href="#pycraf.antenna.ras_pattern" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pycraf.antenna.ras_pattern">
+<span class="sig-prename descclassname"><span class="pre">pycraf.antenna.</span></span><span class="sig-name descname"><span class="pre">ras_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">diameter</span></em>, <em class="sig-param"><span class="pre">wavelength</span></em>, <em class="sig-param"><span class="pre">eta_a=&lt;Quantity</span> <span class="pre">100.</span> <span class="pre">%&gt;</span></em>, <em class="sig-param"><span class="pre">do_bessel=False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/antenna/ras.html#ras_pattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.1.0/pycraf/antenna/ras.py#L21" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.antenna.ras_pattern" title="Permalink to this definition">¶</a></dt>
 <dd><p>Antenna gain as a function of angular distance after <a class="reference external" href="https://www.itu.int/rec/R-REC-RA.1631-0-200305-I/en">ITU-R Rec RA.1631</a>.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>phi</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Angular distance from looking direction [deg]</p>
+<dt><strong>phi</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Angular distance from looking direction [deg]</p>
 </dd>
-<dt><strong>diameter</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Antenna diameter [m]</p>
+<dt><strong>diameter</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Antenna diameter [m]</p>
 </dd>
-<dt><strong>wavelength</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Observing wavelength [m]</p>
+<dt><strong>wavelength</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Observing wavelength [m]</p>
 </dd>
-<dt><strong>eta_a</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Antenna efficiency (default: 100%)</p>
+<dt><strong>eta_a</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Antenna efficiency (default: 100%)</p>
 </dd>
 <dt><strong>do_bessel</strong><span class="classifier">bool, optional</span></dt><dd><p>If set to True, use Bessel function approximation for inner 1 deg
 of the pattern (see RA.1631 for details). (default: False)</p>
@@ -103,7 +103,7 @@ of the pattern (see RA.1631 for details). (default: False)</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>gain</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Antenna gain [dBi]</p>
+<dt><strong>gain</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Antenna gain [dBi]</p>
 </dd>
 </dl>
 </dd>
@@ -115,7 +115,7 @@ explanations and applicability of this model.</p></li>
 </ul>
 </dd></dl>
 
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -135,14 +135,14 @@ explanations and applicability of this model.</p></li>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/api/pycraf.antenna.ras_pattern.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.0/docs/api/pycraf.antenna.ras_pattern.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.antenna.ras_pattern.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
-    Last built 21 Oct 2020. <br/>
+    &copy; Copyright 2021, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.3. &nbsp;
+    Last built 07 Jul 2021. <br/>
   </p>
 </footer>
   </body>

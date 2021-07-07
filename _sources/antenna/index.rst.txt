@@ -136,7 +136,7 @@ Both are easy to use. For example, plotting the patterns for base stations
     cax = fig.add_axes([0.8, 0.1, 0.02, 0.8])
 
     for i, azim_i in enumerate(u.Quantity([0, 30], u.deg)):
-        for j, elev_j in enumerate(u.Quantity([0, 15], u.deg)):
+        for j, elev_j in enumerate(u.Quantity([0, -15], u.deg)):
 
             ax = axes[i, j]
             gains_array = imt2020_composite_pattern(
@@ -166,7 +166,7 @@ Both are easy to use. For example, plotting the patterns for base stations
             ax.set_ylim((-90, 90))
             ax.set_title(
                 'Escan: {:.1f}d, Tilt: {:.1f}d'.format(
-                    azim_i.value, elev_j.value
+                    azim_i.value, -elev_j.value
                 ))
     plt.show()
 

@@ -4,21 +4,21 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Protection levels (pycraf.protection) &#8212; pycraf v1.0.4</title>
-    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Protection levels (pycraf.protection) &#8212; pycraf v1.1.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -64,7 +64,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.4</a>
+	<a href="../index.html">pycraf v1.1.0</a>
 	 &#187;
       </li>
       
@@ -78,9 +78,9 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="protection-levels-pycraf-protection">
+  <section id="protection-levels-pycraf-protection">
 <h1>Protection levels (<a class="reference internal" href="#module-pycraf.protection" title="pycraf.protection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.protection</span></code></a>)<a class="headerlink" href="#protection-levels-pycraf-protection" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="introduction">
+<section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference internal" href="#module-pycraf.protection" title="pycraf.protection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">protection</span></code></a> sub-package is a small convenience module, which
 contains protection levels (the bare numbers) for various scenarios.
@@ -90,13 +90,13 @@ as well as industry-level device emission limits according to
 <a class="reference external" href="http://rfemcdevelopment.eu/index.php/en/emc-emi-standards/en-55011-2009">CISPR-11 (EN 55011)</a> and
 <a class="reference external" href="http://www.rfemcdevelopment.eu/en/en-55022-2010">CISPR-22 (EN 55022)</a>
 are provided.</p>
-</div>
-<div class="section" id="using-pycraf-protection">
+</section>
+<section id="using-pycraf-protection">
 <h2>Using <a class="reference internal" href="#module-pycraf.protection" title="pycraf.protection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.protection</span></code></a><a class="headerlink" href="#using-pycraf-protection" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="ra-769">
+<section id="ra-769">
 <h3>RA.769<a class="headerlink" href="#ra-769" title="Permalink to this headline">¶</a></h3>
 <p>The function <a class="reference internal" href="../api/pycraf.protection.ra769_limits.html#pycraf.protection.ra769_limits" title="pycraf.protection.ra769_limits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ra769_limits</span></code></a> returns a
-<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.table.QTable.html#astropy.table.QTable" title="(in Astropy v4.0.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QTable</span></code></a> object that resembles (Table 1 to 3) from
+<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.table.QTable.html#astropy.table.QTable" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QTable</span></code></a> object that resembles (Table 1 to 3) from
 <a class="reference external" href="https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en">ITU-R Rec. RA.769</a>:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">protection</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
@@ -162,8 +162,8 @@ integration time:</p>
 <span class="go">-6.3 dB</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="cispr-limits">
+</section>
+<section id="cispr-limits">
 <h3>CISPR limits<a class="headerlink" href="#cispr-limits" title="Permalink to this headline">¶</a></h3>
 <p>The two functions <a class="reference internal" href="../api/pycraf.protection.cispr11_limits.html#pycraf.protection.cispr11_limits" title="pycraf.protection.cispr11_limits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cispr11_limits</span></code></a> and
 <a class="reference internal" href="../api/pycraf.protection.cispr22_limits.html#pycraf.protection.cispr22_limits" title="pycraf.protection.cispr22_limits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cispr22_limits</span></code></a> have a different call signature (see
@@ -177,9 +177,9 @@ API reference), but are similarly easy to use:</p>
 <p>These return a tuple with the electrical field limit and the detector
 bandwidth (currently always 120 kHz) for a frequency and distance. Two
 detector types are available: Quasi-Peak (QP) and RMS.</p>
-</div>
-</div>
-<div class="section" id="see-also">
+</section>
+</section>
+<section id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">Astropy Units and Quantities package</a>, which is used extensively in pycraf.</p></li>
@@ -187,14 +187,14 @@ detector types are available: Quasi-Peak (QP) and RMS.</p>
 <li><p><a class="reference external" href="http://rfemcdevelopment.eu/index.php/en/emc-emi-standards/en-55011-2009">CISPR-11 (EN 55011)</a></p></li>
 <li><p><a class="reference external" href="http://www.rfemcdevelopment.eu/en/en-55022-2010">CISPR-22 (EN 55022)</a></p></li>
 </ul>
-</div>
-<div class="section" id="reference-api">
+</section>
+<section id="reference-api">
 <h2>Reference/API<a class="headerlink" href="#reference-api" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="module-pycraf.protection">
+<section id="module-pycraf.protection">
 <span id="pycraf-protection-package"></span><h3>pycraf.protection Package<a class="headerlink" href="#module-pycraf.protection" title="Permalink to this headline">¶</a></h3>
 <p>This sub-package contains various protection criteria and interference limits,
 e.g. for the radio-astronomy service (RAS).</p>
-<div class="section" id="functions">
+<section id="functions">
 <h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h4>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -219,10 +219,10 @@ e.g. for the radio-astronomy service (RAS).</p>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -258,14 +258,14 @@ e.g. for the radio-astronomy service (RAS).</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/v1.0.4/docs/protection/index.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.0/docs/protection/index.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/protection/index.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2020, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.2.1. &nbsp;
-    Last built 21 Oct 2020. <br/>
+    &copy; Copyright 2021, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.3. &nbsp;
+    Last built 07 Jul 2021. <br/>
   </p>
 </footer>
   </body>
