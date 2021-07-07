@@ -1,5 +1,36 @@
-1.0.5 (unreleased)
+1.1.0 (2021-07-07)
 =======================
+
+New Features
+------------
+pycraf.pathprof
+^^^^^^^^^^^^^^^
+- Add a `cache` option to `pathprof.height_map_data`, which is based on the
+  `joblib` Python package. With this, one can easily re-use existing height
+  data (`hprof_cache`) from a previous run to save computing time. [#b86c7d]
+- Add a `generic_heights` option to the several functions and the `PathProp`
+  class in the `pathprof` sub-package. With this, one case set terrain heights
+  to zero more conveniently. [#a3e799]
+
+Notes
+-----
+- As of Spring 2021, NASA decided to put all SRTM data products behind a
+  log-in page, such that automatic download ceases to work. For the time
+  being, the default server (and only server) in pycraf will thus be
+  `viewpano`. If you prefer to use NASA tiles (over `viewpano`), please use
+  their services, e.g., the Land Processes Distributed Active Archive Center.
+
+Bugfixes
+~~~~~~~~~~
+- In some cases, but only when working with hgt tiles having a different
+  angular resolution than 3", terrain height interpolation was still based
+  on the 3" instead of the proper resolution. [#89e0b0]
+- There was a bug in the `geometry` sub-package, which caused all rotation
+  matrices be transposed (which is the same a applying a negative rotation
+  angle). We used the opportunity to also fix the sign of the `etilt` angle
+  in the `imt2020_composite_pattern`. [#47e772,#9fb8d6]
+
+
 
 1.0.4 (2020-10-21)
 =======================

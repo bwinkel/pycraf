@@ -31,6 +31,8 @@ jobs:
     arch: x86_64
     plat: manylinux2010_x86_64
     image: quay.io/pypa/manylinux2010_x86_64
+    # plat: manylinux2014_x86_64
+    # image: quay.io/pypa/manylinux2014_x86_64
     # for very old systems, the following would also be an alternative:
     # plat: manylinux1_x86_64
     # image: skhep/manylinuxgcc-x86_64
@@ -70,16 +72,6 @@ jobs:
         astropy.version: '3'
         # docs should only be published by one thread, as they are version-
         # independent; and only if on the master branch
-        publish.docs: ${{ or(eq(variables['is.master'], true), eq(variables['is.tag'], true)) }}
-        # publish.docs: ${{ true }}
-        ${{ if eq(variables['is.tag'], true) }}:
-          docs.target: '.'
-        ${{ if eq(variables['is.tag'], false) }}:
-          docs.target: 'latest'
-        # tarball should only be published by one thread, as it is version-
-        # independent
-        build.tarball: ${{ true }}
-        publish.tarball: ${{ eq(variables['is.tag'], true) }}
       linux38:
         imageName: 'ubuntu-latest'
         python.version: '3.8'
@@ -90,10 +82,20 @@ jobs:
         pyproj.version: '>=2.2'
         # qt.version: '>=5.11'
         # pytestqt.version: '>=4'
+        publish.docs: ${{ or(eq(variables['is.master'], true), eq(variables['is.tag'], true)) }}
+        # publish.docs: ${{ true }}
+        ${{ if eq(variables['is.tag'], true) }}:
+          docs.target: '.'
+        ${{ if eq(variables['is.tag'], false) }}:
+          docs.target: 'latest'
+        # tarball should only be published by one thread, as it is version-
+        # independent
+        build.tarball: ${{ true }}
+        publish.tarball: ${{ eq(variables['is.tag'], true) }}
       linux39:
         imageName: 'ubuntu-latest'
         python.version: '3.9'
-        py_whl: 38
+        py_whl: 39
         numpy.version: '1.20.0'
         astropy.version: '4'
         pyproj.version: '>=2.2'
