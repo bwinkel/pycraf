@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
@@ -82,7 +83,7 @@
 <h1>test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pycraf.test">
-<span class="sig-prename descclassname"><span class="pre">pycraf.</span></span><span class="sig-name descname"><span class="pre">test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.1.0/pycraf/_astropy_init.py#L259" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.test" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pycraf.</span></span><span class="sig-name descname"><span class="pre">test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.1.0/pycraf/_astropy_init.py#L263" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run the tests for the package.</p>
 <p>This method builds arguments for and then calls <code class="docutils literal notranslate"><span class="pre">pytest.main</span></code>.</p>
 <dl class="field-list">
@@ -105,7 +106,7 @@ this adds extra run time to the test suite.  Requires the
 number of CPUs.  If parallel is <code class="docutils literal notranslate"><span class="pre">'auto'</span></code>, it will use the all
 the cores on the machine.  Requires the <code class="docutils literal notranslate"><span class="pre">pytest-xdist</span></code> plugin.</p>
 </dd>
-<dt><strong>pastebin</strong><span class="classifier">(‘failed’, ‘all’, None), optional</span></dt><dd><p>Convenience option for turning on py.test pastebin output. Set to
+<dt><strong>pastebin</strong><span class="classifier">(‘failed’, ‘all’, None), optional</span></dt><dd><p>Convenience option for turning on pytest pastebin output. Set to
 ‘failed’ to upload info for failed tests, or ‘all’ to upload info
 for all tests.</p>
 </dd>
@@ -132,7 +133,7 @@ useful for diagnosing sporadic failures.</p>
 directory. Must be specified absolutely or relative to the
 calling directory.</p>
 </dd>
-<dt><strong>verbose</strong><span class="classifier">bool, optional</span></dt><dd><p>Convenience option to turn on verbose output from py.test. Passing
+<dt><strong>verbose</strong><span class="classifier">bool, optional</span></dt><dd><p>Convenience option to turn on verbose output from pytest. Passing
 True is the same as specifying <code class="docutils literal notranslate"><span class="pre">-v</span></code> in <code class="docutils literal notranslate"><span class="pre">args</span></code>.</p>
 </dd>
 </dl>
