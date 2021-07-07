@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>HistogramSampler &#8212; pycraf v1.0.5dev410</title>
+    <title>HistogramSampler &#8212; pycraf v1.1.0</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -64,7 +64,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.0.5dev410</a>
+	<a href="../index.html">pycraf v1.1.0</a>
 	 &#187;
       </li>
       <li><a href="../mc/index.html" accesskey="U">Monte-Carlo helpers (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.mc</span></code>)</a> &#187;</li>
@@ -83,7 +83,7 @@
 <h1>HistogramSampler<a class="headerlink" href="#histogramsampler" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pycraf.mc.HistogramSampler">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pycraf.mc.</span></span><span class="sig-name descname"><span class="pre">HistogramSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">histvals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/mc/sampler.py#L10" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pycraf.mc.</span></span><span class="sig-name descname"><span class="pre">HistogramSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">histvals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.1.0/pycraf/mc/sampler.py#L10" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Sampler to get random values obeying a discrete(!) density distribution.</p>
 <p>With this class, one can use discrete densities (think of them as
@@ -223,7 +223,7 @@ be the better tool:</p>
 <p class="rubric">Methods Documentation</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pycraf.mc.HistogramSampler.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/mc/sampler.py#L175" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler.__call__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.1.0/pycraf/mc/sampler.py#L175" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convenience method to allow using an <em>instance</em> of
 <a class="reference internal" href="#pycraf.mc.HistogramSampler" title="pycraf.mc.HistogramSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HistogramSampler</span></code></a> like a function:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">my_sampler</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">HistogramSampler</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
@@ -235,7 +235,7 @@ be the better tool:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycraf.mc.HistogramSampler.sample">
-<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/mc/sampler.py#L148" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler.sample" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.1.0/pycraf/mc/sampler.py#L148" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler.sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sample from the (discrete) density distribution.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -277,14 +277,14 @@ discrete density array (aka histogram object). See
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/master/docs/api/pycraf.mc.HistogramSampler.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.0/docs/api/pycraf.mc.HistogramSampler.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.mc.HistogramSampler.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2021, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.3. &nbsp;
-    Last built 06 Jul 2021. <br/>
+    Last built 07 Jul 2021. <br/>
   </p>
 </footer>
   </body>
