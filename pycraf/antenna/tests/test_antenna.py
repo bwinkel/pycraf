@@ -460,6 +460,102 @@ def test_imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz():
         )
 
 
+
+
+def test_imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz():
+
+    _gfunc = imt.imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz
+    args_list = [
+        (-180, 180, apu.deg),
+        (-90, 90, apu.deg),
+        (None, None, cnv.dB),
+        (0, None, apu.deg),
+        (0, None, apu.deg),
+        (0, None, cnv.dimless),
+        (0, None, cnv.dimless),
+        (0, None, cnv.dimless),
+        (-90, 90, apu.deg),
+        (-90, 90, apu.deg),
+        ]
+    check_astro_quantities(_gfunc, args_list)
+
+    azims = np.arange(-180, 180, 0.5)[50:-50:150] * apu.deg
+    elevs = np.arange(-90, 90, 0.5)[30:-30:70] * apu.deg
+
+    G0 = 18. * cnv.dB
+    phi_3db = 65. * apu.deg
+    # theta_3db can be inferred in the following way:
+    theta_3db = 31000 / G0.to(cnv.dimless) / phi_3db.value * apu.deg
+    k_a, k_h, k_v = (0.7, 0.7, 0.3) * cnv.dimless
+    tilt_m, tilt_e = (0, 0) * apu.deg
+
+    bs_gain = _gfunc(
+        0 * apu.deg, 0 * apu.deg,
+        G0, phi_3db, theta_3db,
+        k_a, k_h, k_v,
+        tilt_m=tilt_m, tilt_e=tilt_e,
+        )
+
+    assert_quantity_allclose(bs_gain, G0)
+
+    bs_gains = _gfunc(
+        azims[np.newaxis], elevs[:, np.newaxis],
+        G0, phi_3db, theta_3db,
+        k_a, k_h, k_v,
+        tilt_m=tilt_m, tilt_e=tilt_e,
+        )
+    assert_quantity_allclose(
+        bs_gains,
+        [
+            [-9.45692316, -8.73264105, -7.99973768, -8.59935781, -9.45692316],
+            [-9.45692316, -6.23545959, -2.9756504 , -5.64264212, -9.45692316],
+            [-9.45692316,  1.55191039, 12.6917839 ,  3.57776872, -9.45692316],
+            [-9.45692316, -5.11617053, -0.72374921, -4.3173802 , -9.45692316],
+            [-9.45692316, -8.16416531, -6.85601954, -7.9262705 , -9.45692316],
+            ] * cnv.dB
+        )
+
+    tilt_m, tilt_e = (40, 0) * apu.deg
+
+    bs_gains = _gfunc(
+        azims[np.newaxis], elevs[:, np.newaxis],
+        G0, phi_3db, theta_3db,
+        k_a, k_h, k_v,
+        tilt_m=tilt_m, tilt_e=tilt_e,
+        )
+
+    assert_quantity_allclose(
+        bs_gains,
+        [
+            [-6.65167057, -4.21643061, -1.90092642, -3.78461285, -6.46818041],
+            [-9.04857002, -2.88936373, 17.95595854, -1.93430988, -8.57901892],
+            [-9.45692316,  3.69272869, -1.87877821, -2.04640382, -9.45692316],
+            [-9.45692316, -7.09347806, -7.4361134 , -6.90931547, -9.45692316],
+            [-9.45692316, -9.45692316, -9.45692316, -9.45692316, -9.45692316],
+            ] * cnv.dB
+        )
+
+    tilt_m, tilt_e = (0, 40) * apu.deg
+
+    bs_gains = _gfunc(
+        azims[np.newaxis], elevs[:, np.newaxis],
+        G0, phi_3db, theta_3db,
+        k_a, k_h, k_v,
+        tilt_m=tilt_m, tilt_e=tilt_e,
+        )
+
+    assert_quantity_allclose(
+        bs_gains,
+        [
+            [-9.45692316, -8.04001291, -6.60623694, -7.77927144, -9.45692316],
+            [-9.45692316,  4.15502284, 17.92899408,  6.65990894, -9.45692316],
+            [-9.45692316, -4.88763097, -0.26394973, -4.04678451, -9.45692316],
+            [-9.45692316, -6.99775686, -4.5093187 , -6.54521822, -9.45692316],
+            [-9.45692316, -8.60848865, -7.74995508, -8.45235874, -9.45692316],
+            ] * cnv.dB
+        )
+
+
 def test_fl_pattern():
 
     args_list = [
