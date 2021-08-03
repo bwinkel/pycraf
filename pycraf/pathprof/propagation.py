@@ -9,6 +9,7 @@ from __future__ import (
 from astropy import units as apu
 import numpy as np
 
+from . import cyimt
 from . import cyprop
 from . import heightprofile
 from . import helper
@@ -26,6 +27,8 @@ __all__ = [
     'height_map_data', 'atten_map_fast',
     'height_path_data', 'height_path_data_generic', 'atten_path_fast',
     'losses_complete',
+    'imt_rural_macro_losses', 'imt_urban_macro_losses',
+    'imt_urban_micro_losses',
     ]
 
 # Note, we have to curry the quantities here, because Cython produces
@@ -1711,6 +1714,173 @@ def losses_complete(
         'd_lr': res[9] * apu.km,
         'path_type': res[10],
         }
+
+
+@utils.ranged_quantity_input(
+    freq=(0.5, 30, apu.GHz),
+    dist_2d=(0, 100000, apu.m),
+    h_bs=(10, 150, apu.m),
+    h_ue=(1, 10, apu.m),
+    W=(5, 50, apu.m),
+    h=(5, 50, apu.m),
+    strip_input_units=True, allow_none=False, output_unit=(cnv.dB, cnv.dB)
+    )
+def imt_rural_macro_losses(
+        freq,
+        dist_2d,
+        h_bs=35 * apu.m, h_ue=1.5 * apu.m,
+        W=20 * apu.m, h=5 * apu.m,
+        ):
+    '''
+    Calculate los/non-los propagation losses Rural-Macro IMT scenario.
+
+    The computation is in accordance with `3GPP TR 38.901 Table 7.4.1-1
+    <https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173>`_
+
+    Parameters
+    ----------
+    freq : `~astropy.units.Quantity`
+        Frequency of radiation [GHz]
+    dist_2d : `~astropy.units.Quantity`
+        Distance on the ground between BS and UE device [m]
+        Note: Well-defined only for distances between 10 m and 10 km.
+    h_bs : `~astropy.units.Quantity`, optional
+        Basestation height [m] (Default: 35 m)
+    h_ue : `~astropy.units.Quantity`, optional
+        User equipment height [m] (Default: 1.5 m)
+    W : `~astropy.units.Quantity`, optional
+        Average street width [m] (Default: 20 m)
+    h : `~astropy.units.Quantity`, optional
+        Average building height [m] (Default: 5 m)
+
+    Returns
+    -------
+    PL_los : `~astropy.units.Quantity`
+        Path loss for line-of-sight cases [dB]
+    PL_nlos : `~astropy.units.Quantity`
+        Path loss for non-line-of-sight cases [dB]
+
+    Notes
+    -----
+    - In statistical simulations, the LoS and Non-LoS cases occur with
+      certain probabilities. For sampling of path losses the functions
+      TODO should be used, which accounts for the likelihoods according
+      to `3GPP TR 38.901 Table 7.4.2-1 <https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173>`_
+
+    '''
+
+    return cyimt.rural_macro_losses_cython(
+        freq, dist_2d, h_bs, h_ue, W, h,
+        )
+
+
+@utils.ranged_quantity_input(
+    freq=(0.5, 30, apu.GHz),
+    dist_2d=(0, 100000, apu.m),
+    h_bs=(10, 150, apu.m),  # according to 3GPP TR 38.901 only 25 m allowed!?
+    h_ue=(1, 22.5, apu.m),
+    h_e=(0, 20, apu.m),
+    strip_input_units=True, allow_none=False, output_unit=(cnv.dB, cnv.dB)
+    )
+def imt_urban_macro_losses(
+        freq,
+        dist_2d,
+        h_bs=25 * apu.m, h_ue=1.5 * apu.m,
+        h_e=1 * apu.m,
+        ):
+    '''
+    Calculate los/non-los propagation losses Rural-Macro IMT scenario.
+
+    The computation is in accordance with `3GPP TR 38.901 Table 7.4.1-1
+    <https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173>`_
+
+    Parameters
+    ----------
+    freq : `~astropy.units.Quantity`
+        Frequency of radiation [GHz]
+    dist_2d : `~astropy.units.Quantity`
+        Distance on the ground between BS and UE device [m]
+        Note: Well-defined only for distances between 10 m and 5 km.
+    h_bs : `~astropy.units.Quantity`, optional
+        Basestation height [m] (Default: 35 m)
+    h_ue : `~astropy.units.Quantity`, optional
+        User equipment height [m] (Default: 1.5 m)
+    h_e : `~astropy.units.Quantity`, optional
+        Effective environment height [m] (Default: 1 m)
+        Important: for `h_ue > 13 m`, this is subject to random sampling;
+        see `3GPP TR 38.901 Table 7.4.1-1 Note 1
+        <https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173>`_
+
+    Returns
+    -------
+    PL_los : `~astropy.units.Quantity`
+        Path loss for line-of-sight cases [dB]
+    PL_nlos : `~astropy.units.Quantity`
+        Path loss for non-line-of-sight cases [dB]
+
+    Notes
+    -----
+    - In statistical simulations, the LoS and Non-LoS cases occur with
+      certain probabilities. For sampling of path losses the functions
+      TODO should be used, which accounts for the likelihoods according
+      to `3GPP TR 38.901 Table 7.4.2-1 <https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173>`_
+
+    '''
+
+    return cyimt.urban_macro_losses_cython(
+        freq, dist_2d, h_bs, h_ue, h_ue,
+        )
+
+
+@utils.ranged_quantity_input(
+    freq=(0.5, 100, apu.GHz),
+    dist_2d=(0, 100000, apu.m),
+    h_bs=(10, 150, apu.m),  # according to 3GPP TR 38.901 only 10 m allowed!?
+    h_ue=(1, 22.5, apu.m),
+    strip_input_units=True, allow_none=False, output_unit=(cnv.dB, cnv.dB)
+    )
+def imt_urban_micro_losses(
+        freq,
+        dist_2d,
+        h_bs=10 * apu.m, h_ue=1.5 * apu.m,
+        ):
+    '''
+    Calculate los/non-los propagation losses Rural-Macro IMT scenario.
+
+    The computation is in accordance with `3GPP TR 38.901 Table 7.4.1-1
+    <https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173>`_
+
+    Parameters
+    ----------
+    freq : `~astropy.units.Quantity`
+        Frequency of radiation [GHz]
+    dist_2d : `~astropy.units.Quantity`
+        Distance on the ground between BS and UE device [m]
+        Note: Well-defined only for distances between 10 m and 5 km.
+    h_bs : `~astropy.units.Quantity`, optional
+        Basestation height [m] (Default: 35 m)
+    h_ue : `~astropy.units.Quantity`, optional
+        User equipment height [m] (Default: 1.5 m)
+
+    Returns
+    -------
+    PL_los : `~astropy.units.Quantity`
+        Path loss for line-of-sight cases [dB]
+    PL_nlos : `~astropy.units.Quantity`
+        Path loss for non-line-of-sight cases [dB]
+
+    Notes
+    -----
+    - In statistical simulations, the LoS and Non-LoS cases occur with
+      certain probabilities. For sampling of path losses the functions
+      TODO should be used, which accounts for the likelihoods according
+      to `3GPP TR 38.901 Table 7.4.2-1 <https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173>`_
+
+    '''
+
+    return cyimt.urban_micro_losses_cython(
+        freq, dist_2d, h_bs, h_ue,
+        )
 
 
 if __name__ == '__main__':

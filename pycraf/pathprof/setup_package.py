@@ -51,6 +51,12 @@ def get_extensions():
         comp_args['extra_compile_args'] = extra_compile_args
         # comp_args['extra_link_args'].append('-lgomp')
 
+    ext_module_pathprof_cyimt = Extension(
+        name='pycraf.pathprof.cyimt',
+        sources=[os.path.join(PYXDIR, 'cyimt.pyx')],
+        **comp_args
+        )
+
     ext_module_pathprof_cyprop = Extension(
         name='pycraf.pathprof.cyprop',
         sources=[os.path.join(PYXDIR, 'cyprop.pyx')],
@@ -63,4 +69,8 @@ def get_extensions():
         **comp_args
         )
 
-    return [ext_module_pathprof_cyprop, ext_module_pathprof_geodesics]
+    return [
+        ext_module_pathprof_cyimt,
+        ext_module_pathprof_cyprop,
+        ext_module_pathprof_geodesics
+        ]
