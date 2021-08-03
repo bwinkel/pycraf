@@ -17,8 +17,22 @@ from .. import utils
 
 __all__ = [
     'imt_rural_macro_losses', 'imt_urban_macro_losses',
-    'imt_urban_micro_losses', 'clutter_imt',
+    'imt_urban_micro_losses', 'P_pusch', 'UE_MIN_MAX_DISTANCES',
+    'clutter_imt',
     ]
+
+
+UE_MIN_MAX_DISTANCES = {
+    'rural_macro': (10, 10000),
+    'urban_macro': (10, 5000),
+    'urban_micro': (10, 5000),
+    }
+
+# UE_MIN_MAX_DISTANCES.__doc__ = '''
+#     Minimum and maximum distances that UEs have from base stations in each of
+#     the IMT propagation models. Below and beyond these, the path losses will
+#     be NaN.
+#     '''
 
 # Note, we have to curry the quantities here, because Cython produces
 # "built-in" functions that don't provide a signature (such that
@@ -195,13 +209,55 @@ def imt_rural_macro_losses(
         Path loss for line-of-sight cases [dB]
     PL_nlos : `~astropy.units.Quantity`
         Path loss for non-line-of-sight cases [dB]
+    los_prob : `~astropy.units.Quantity`
+        Probability for a path to be line-of-sight. [dimless]
+        (see Notes and Examples)
 
     Notes
     -----
     - In statistical simulations, the LoS and Non-LoS cases occur with
-      certain probabilities. For sampling of path losses the functions
-      TODO should be used, which accounts for the likelihoods according
-      to `3GPP TR 38.901 Table 7.4.2-1 <https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173>`_
+      certain probabilities. For sampling of path losses the return
+      parameter `los_prob` can be used, which accounts for the likelihoods
+      according to `3GPP TR 38.901 Table 7.4.2-1
+      <https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173>`_
+
+
+    Examples
+    --------
+
+    A typical usage, which also accounts for the line-of-sight probabilities,
+    would be::
+
+        >>> import numpy as np
+        >>> from pycraf import pathprof
+        >>> from astropy import units as u
+        >>> from astropy.utils.misc import NumpyRNGContext
+
+        >>> freq = 1 * u.GHz
+        >>> h_bs, h_ue = 35 * u.m, 1.5 * u.m
+        >>> distances = [5, 20, 1000, 20000] * u.m  # 2D distances
+        >>> # Note: too small or large distances will lead to NaN values
+
+        >>> PL_los, PL_nlos, los_prob = pathprof.imt_rural_macro_losses(
+        ...     freq, distances, h_bs=h_bs, h_ue=h_ue
+        ...     )
+        >>> PL_los  # doctest: +FLOAT_CMP
+        <Decibel [        nan, 64.38071083, 94.57828524,         nan] dB>
+        >>> PL_nlos  # doctest: +FLOAT_CMP
+        <Decibel [         nan,  65.10847815, 119.54294519,          nan] dB>
+        >>> los_prob  # doctest: +FLOAT_CMP
+        <Quantity [1.00000000e+00, 9.90049834e-01, 3.71576691e-01, 2.08186856e-09]>
+
+        >>> # randomly assign LOS or Non-LOS type to UE (according to above prob.)
+        >>> with NumpyRNGContext(0):
+        ...     los_type = np.random.uniform(0, 1, distances.size) < los_prob
+        >>> # note: los_type == True : LOS
+        >>> #       los_type == False: Non-LOS
+        >>> los_type
+        array([ True,  True, False, False])
+        >>> PL = np.where(los_type, PL_los, PL_nlos)
+        >>> PL  # doctest: +FLOAT_CMP
+        <Decibel [         nan,  64.38071083, 119.54294519,          nan] dB>
 
     '''
 
@@ -261,13 +317,55 @@ def imt_urban_macro_losses(
         Path loss for line-of-sight cases [dB]
     PL_nlos : `~astropy.units.Quantity`
         Path loss for non-line-of-sight cases [dB]
+    los_prob : `~astropy.units.Quantity`
+        Probability for a path to be line-of-sight. [dimless]
+        (see Notes and Examples)
 
     Notes
     -----
     - In statistical simulations, the LoS and Non-LoS cases occur with
-      certain probabilities. For sampling of path losses the functions
-      TODO should be used, which accounts for the likelihoods according
-      to `3GPP TR 38.901 Table 7.4.2-1 <https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173>`_
+      certain probabilities. For sampling of path losses the return
+      parameter `los_prob` can be used, which accounts for the likelihoods
+      according to `3GPP TR 38.901 Table 7.4.2-1
+      <https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173>`_
+
+
+    Examples
+    --------
+
+    A typical usage, which also accounts for the line-of-sight probabilities,
+    would be::
+
+        >>> import numpy as np
+        >>> from pycraf import pathprof
+        >>> from astropy import units as u
+        >>> from astropy.utils.misc import NumpyRNGContext
+
+        >>> freq = 1 * u.GHz
+        >>> h_bs, h_ue = 25 * u.m, 1.5 * u.m
+        >>> distances = [5, 20, 1000, 20000] * u.m  # 2D distances
+        >>> # Note: too small or large distances will lead to NaN values
+
+        >>> PL_los, PL_nlos, los_prob = pathprof.imt_urban_macro_losses(
+        ...     freq, distances, h_bs=h_bs, h_ue=h_ue
+        ...     )
+        >>> PL_los  # doctest: +FLOAT_CMP
+        <Decibel [         nan,  60.76626079, 108.24721393,          nan] dB>
+        >>> PL_nlos  # doctest: +FLOAT_CMP
+        <Decibel [         nan,  71.74479418, 130.78468516,          nan] dB>
+        >>> los_prob  # doctest: +FLOAT_CMP
+        <Quantity [1.00000000e+00, 9.72799557e-01, 1.80001255e-02, 9.00000000e-04]>
+
+        >>> # randomly assign LOS or Non-LOS type to UE (according to above prob.)
+        >>> with NumpyRNGContext(0):
+        ...     los_type = np.random.uniform(0, 1, distances.size) < los_prob
+        >>> # note: los_type == True : LOS
+        >>> #       los_type == False: Non-LOS
+        >>> los_type
+        array([ True,  True, False, False])
+        >>> PL = np.where(los_type, PL_los, PL_nlos)
+        >>> PL  # doctest: +FLOAT_CMP
+        <Decibel [         nan,  60.76626079, 130.78468516,          nan] dB>
 
     '''
     # for h_ue > 13 m, need to implement "C" function; then "h_e" is needed!
@@ -332,13 +430,55 @@ def imt_urban_micro_losses(
         Path loss for line-of-sight cases [dB]
     PL_nlos : `~astropy.units.Quantity`
         Path loss for non-line-of-sight cases [dB]
+    los_prob : `~astropy.units.Quantity`
+        Probability for a path to be line-of-sight. [dimless]
+        (see Notes and Examples)
 
     Notes
     -----
     - In statistical simulations, the LoS and Non-LoS cases occur with
-      certain probabilities. For sampling of path losses the functions
-      TODO should be used, which accounts for the likelihoods according
-      to `3GPP TR 38.901 Table 7.4.2-1 <https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173>`_
+      certain probabilities. For sampling of path losses the return
+      parameter `los_prob` can be used, which accounts for the likelihoods
+      according to `3GPP TR 38.901 Table 7.4.2-1
+      <https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173>`_
+
+
+    Examples
+    --------
+
+    A typical usage, which also accounts for the line-of-sight probabilities,
+    would be::
+
+        >>> import numpy as np
+        >>> from pycraf import pathprof
+        >>> from astropy import units as u
+        >>> from astropy.utils.misc import NumpyRNGContext
+
+        >>> freq = 1 * u.GHz
+        >>> h_bs, h_ue = 10 * u.m, 1.5 * u.m
+        >>> distances = [5, 20, 1000, 20000] * u.m  # 2D distances
+        >>> # Note: too small or large distances will lead to NaN values
+
+        >>> PL_los, PL_nlos, los_prob = pathprof.imt_urban_micro_losses(
+        ...     freq, distances, h_bs=h_bs, h_ue=h_ue
+        ...     )
+        >>> PL_los  # doctest: +FLOAT_CMP
+        <Decibel [         nan,  60.47880565, 118.53377126,          nan] dB>
+        >>> PL_nlos  # doctest: +FLOAT_CMP
+        <Decibel [         nan,  69.59913521, 128.3005538 ,          nan] dB>
+        >>> los_prob  # doctest: +FLOAT_CMP
+        <Quantity [1.00000000e+00, 9.57375342e-01, 1.80000000e-02, 9.00000000e-04]>
+
+        >>> # randomly assign LOS or Non-LOS type to UE (according to above prob.)
+        >>> with NumpyRNGContext(0):
+        ...     los_type = np.random.uniform(0, 1, distances.size) < los_prob
+        >>> # note: los_type == True : LOS
+        >>> #       los_type == False: Non-LOS
+        >>> los_type
+        array([ True,  True, False, False])
+        >>> PL = np.where(los_type, PL_los, PL_nlos)
+        >>> PL  # doctest: +FLOAT_CMP
+        <Decibel [         nan,  60.47880565, 128.3005538 ,          nan] dB>
 
     '''
 
@@ -356,6 +496,117 @@ def imt_urban_micro_losses(
     los_prob = np.broadcast_to(los_prob, pl_los.shape)
 
     return pl_los, pl_nlos, los_prob
+
+
+@utils.ranged_quantity_input(
+    P_cmax=(-20, 50, cnv.dBm),  # range pretty large, but what is realistic?
+    P_0_pusch=(-200, 100, cnv.dBm),  # dito
+    alpha=(0, 1, cnv.dimless),
+    PL=(-100, 300, cnv.dB),
+    strip_input_units=True, allow_none=False,
+    output_unit=(cnv.dBm)
+    )
+def P_pusch(P_cmax, M_pusch, P_0_pusch, alpha, PL):
+    '''
+    Calculate power output level after UE power control.
+
+    See `ITU-R Rec. M.2101-0 <https://www.itu.int/rec/R-REC-M.2101/en>`_
+    Section 4.1.
+
+    Parameters
+    ----------
+    P_cmax : `~astropy.units.Quantity`
+        Maximum transmit power [dBm]
+    M_pusch : `numpy.ndarray`, int
+        Number of allocated resource blocks (RBs)
+
+        Is this the bandwidth per carrier divided by the RB bandwidth (
+        typically 180 kHz) and number of UE devices associated to each
+        carrier?
+    P_0_pusch : `numpy.ndarray`
+        Initial receive target UE power level per RB [dBm]
+    alpha : `~astropy.units.Quantity`
+        Balancing factor for UEs with bad channel and UEs with good channel
+    PL : `~astropy.units.Quantity`
+        Path loss between UE and its associated BS [dB]
+        One should use one of the functions
+        `~pathprof.imt_rural_macro_losses`,
+        `~pathprof.imt_urban_macro_losses`, or
+        `~pathprof.imt_urban_micro_losses` to determine PL for the required
+        scenario.
+
+        Note: Antenna gains should be included, so this is rather the
+        coupling loss than the path loss, unlike what is stated in
+        `ITU-R Rec. M.2101-0 <https://www.itu.int/rec/R-REC-M.2101/en>`_.
+        ``
+
+    Returns
+    -------
+    P_pusch : `~astropy.units.Quantity`
+        Transmit power of the terminal [dBm]
+
+
+
+    Examples
+    --------
+
+    A typical usage would be::
+
+        >>> import numpy as np
+        >>> from pycraf import conversions as cnv
+        >>> from pycraf import pathprof
+        >>> from astropy import units as u
+        >>> from astropy.utils.misc import NumpyRNGContext
+
+        >>> freq = 6.65 * u.GHz
+        >>> h_bs, h_ue = 10 * u.m, 1.5 * u.m
+        >>> distances = [20, 100, 500, 1000] * u.m  # 2D distances
+
+        >>> PL_los, PL_nlos, los_prob = pathprof.imt_urban_micro_losses(
+        ...     freq, distances, h_bs=h_bs, h_ue=h_ue
+        ...     )
+
+        >>> # randomly assign LOS or Non-LOS type to UE (according to above prob.)
+        >>> with NumpyRNGContext(0):
+        ...     los_type = np.random.uniform(0, 1, distances.size) < los_prob
+        >>> # note: los_type == True : LOS
+        >>> #       los_type == False: Non-LOS
+        >>> PL = np.where(los_type, PL_los, PL_nlos)
+        >>> PL  # doctest: +FLOAT_CMP
+        <Decibel [ 76.93523856, 110.58128371, 135.20195715, 145.82665484] dB>
+
+        >>> # Assume some antenna gains:
+        >>> G_bs, G_ue = 20 * cnv.dBi, 5 * cnv.dBi
+        >>> CL = (
+        ...     PL.to_value(cnv.dB) -
+        ...     G_bs.to_value(cnv.dBi) -
+        ...     G_ue.to_value(cnv.dBi)
+        ...     ) * cnv.dB
+
+
+        >>> bw_carrier = 100 * u.MHz
+        >>> bw_rb = 180 * u.kHz  # resource block bandwidth
+        >>> num_ue = 3  # 3 UEs per BS sector and carrier
+        >>> M_pusch = int(bw_carrier / bw_rb / num_ue)
+        >>> M_pusch
+        185
+
+        >>> P_cmax = 23 * cnv.dBm
+        >>> P_0_pusch = -95.5 * cnv.dBm
+        >>> alpha = 0.8 * cnv.dimless
+
+        >>> P_pusch = pathprof.P_pusch(
+        ...     P_cmax, M_pusch, P_0_pusch, alpha, CL
+        ...     )
+        >>> P_pusch.to(cnv.dBm)
+        <Decibel [-31.28009187,  -4.36325575,  15.333283  ,  23.          ] dB(mW)>
+
+    '''
+
+    P_pusch = 10 * np.log10(M_pusch) + P_0_pusch + alpha * PL
+    P_pusch[P_pusch > P_cmax] = P_cmax
+
+    return P_pusch
 
 
 if __name__ == '__main__':
