@@ -14,6 +14,7 @@ from .gis import *
 from .heightprofile import *
 from .helper import *
 from .propagation import *
+from .imt import *
 from .srtm import *
 
 _clutter_table = '''
