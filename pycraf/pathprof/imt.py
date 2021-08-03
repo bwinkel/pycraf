@@ -158,7 +158,8 @@ def clutter_imt(
     h_ue=(1, 10, apu.m),
     W=(5, 50, apu.m),
     h=(5, 50, apu.m),
-    strip_input_units=True, allow_none=False, output_unit=(cnv.dB, cnv.dB)
+    strip_input_units=True, allow_none=False,
+    output_unit=(cnv.dB, cnv.dB, cnv.dimless)
     )
 def imt_rural_macro_losses(
         freq,
@@ -204,24 +205,33 @@ def imt_rural_macro_losses(
 
     '''
 
-    return cyimt.rural_macro_losses_cython(
+    pl_los, pl_nlos = cyimt.rural_macro_losses_cython(
         freq, dist_2d, h_bs, h_ue, W, h,
         )
+
+    # probability to have a LOS path;
+    # see 3GPP TR 38.901, Table 7.4.2
+    los_prob = np.exp(-(dist_2d - 10) / 1000)
+    los_prob[dist_2d < 10] = 1.
+    los_prob = np.broadcast_to(los_prob, pl_los.shape)
+
+    return pl_los, pl_nlos, los_prob
 
 
 @utils.ranged_quantity_input(
     freq=(0.5, 30, apu.GHz),
     dist_2d=(0, 100000, apu.m),
     h_bs=(10, 150, apu.m),  # according to 3GPP TR 38.901 only 25 m allowed!?
-    h_ue=(1, 22.5, apu.m),
+    h_ue=(1, 13, apu.m),  # for larger h_ue, need to implement "C" function
     h_e=(0, 20, apu.m),
-    strip_input_units=True, allow_none=False, output_unit=(cnv.dB, cnv.dB)
+    strip_input_units=True, allow_none=False,
+    output_unit=(cnv.dB, cnv.dB, cnv.dimless)
     )
 def imt_urban_macro_losses(
         freq,
         dist_2d,
         h_bs=25 * apu.m, h_ue=1.5 * apu.m,
-        h_e=1 * apu.m,
+        # h_e=1 * apu.m,
         ):
     '''
     Calculate los/non-los propagation losses Rural-Macro IMT scenario.
@@ -240,11 +250,10 @@ def imt_urban_macro_losses(
         Basestation height [m] (Default: 35 m)
     h_ue : `~astropy.units.Quantity`, optional
         User equipment height [m] (Default: 1.5 m)
-    h_e : `~astropy.units.Quantity`, optional
-        Effective environment height [m] (Default: 1 m)
-        Important: for `h_ue > 13 m`, this is subject to random sampling;
-        see `3GPP TR 38.901 Table 7.4.1-1 Note 1
-        <https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173>`_
+        Note: in the `pycraf` implementation this is restricted to
+        `h_ue < 13 m`. 3GPP TR 38.901 also has a model for heights up
+        to 22.5 m, but this involves a `h_e` different from 1 m and is
+        probabilistic, which would make the interface much more complicated.
 
     Returns
     -------
@@ -261,10 +270,29 @@ def imt_urban_macro_losses(
       to `3GPP TR 38.901 Table 7.4.2-1 <https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173>`_
 
     '''
+    # for h_ue > 13 m, need to implement "C" function; then "h_e" is needed!
+    # h_e : `~astropy.units.Quantity`, optional
+    #     Effective environment height [m] (Default: 1 m)
+    #     Important: for `h_ue > 13 m`, this is subject to random sampling;
+    #     see `3GPP TR 38.901 Table 7.4.1-1 Note 1
+    #     <https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173>`_
 
-    return cyimt.urban_macro_losses_cython(
-        freq, dist_2d, h_bs, h_ue, h_ue,
+    h_e = 1.
+    pl_los, pl_nlos = cyimt.urban_macro_losses_cython(
+        freq, dist_2d, h_bs, h_ue, h_e,
         )
+
+    # probability to have a LOS path;
+    # see 3GPP TR 38.901, Table 7.4.2
+    _x = 18 / dist_2d
+    los_prob = (
+        # for h_e > 13 m, a correction factor would be necessary!!!
+        _x + np.exp(-18 / 63 / _x) * (1 - _x)
+        )
+    los_prob[dist_2d < 18] = 1.
+    los_prob = np.broadcast_to(los_prob, pl_los.shape)
+
+    return pl_los, pl_nlos, los_prob
 
 
 @utils.ranged_quantity_input(
@@ -272,7 +300,8 @@ def imt_urban_macro_losses(
     dist_2d=(0, 100000, apu.m),
     h_bs=(10, 150, apu.m),  # according to 3GPP TR 38.901 only 10 m allowed!?
     h_ue=(1, 22.5, apu.m),
-    strip_input_units=True, allow_none=False, output_unit=(cnv.dB, cnv.dB)
+    strip_input_units=True, allow_none=False,
+    output_unit=(cnv.dB, cnv.dB, cnv.dimless)
     )
 def imt_urban_micro_losses(
         freq,
@@ -313,9 +342,20 @@ def imt_urban_micro_losses(
 
     '''
 
-    return cyimt.urban_micro_losses_cython(
+    pl_los, pl_nlos = cyimt.urban_micro_losses_cython(
         freq, dist_2d, h_bs, h_ue,
         )
+
+    # probability to have a LOS path;
+    # see 3GPP TR 38.901, Table 7.4.2
+    _x = 18 / dist_2d
+    los_prob = (
+        _x + np.exp(-0.5 / _x) * (1 - _x)
+        )
+    los_prob[dist_2d < 18] = 1.
+    los_prob = np.broadcast_to(los_prob, pl_los.shape)
+
+    return pl_los, pl_nlos, los_prob
 
 
 if __name__ == '__main__':

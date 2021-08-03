@@ -89,7 +89,10 @@ def test_imt_rural_macro_losses():
     freq = [1, 5] * apu.GHz
     dist = np.array([5, 20, 1000, 20000])[:, np.newaxis] * apu.m
 
-    PL_los, PL_nlos = _func(freq, dist)
+    PL_los, PL_nlos, los_prob = _func(freq, dist)
+    print(PL_los)
+    print(PL_nlos)
+    print(los_prob)
     assert_quantity_allclose(
         PL_los,
         [
@@ -108,8 +111,17 @@ def test_imt_rural_macro_losses():
             [      np.nan,       np.nan],
             ] * cnv.dB,
         )
+    assert_quantity_allclose(
+        los_prob,
+        [
+            [1.00000000e+00, 1.00000000e+00],
+            [9.90049834e-01, 9.90049834e-01],
+            [3.71576691e-01, 3.71576691e-01],
+            [2.08186856e-09, 2.08186856e-09],
+            ] * cnv.dimless,
+        )
 
-    PL_los, PL_nlos = _func(freq, dist, h_bs=20 * apu.m)
+    PL_los, PL_nlos, los_prob = _func(freq, dist, h_bs=20 * apu.m)
     print(PL_los)
     print(PL_nlos)
     assert_quantity_allclose(
@@ -139,8 +151,7 @@ def test_imt_urban_macro_losses():
         (0.5, 30, apu.GHz),
         (0, 100000, apu.m),
         (10, 150, apu.m),
-        (1, 22.5, apu.m),
-        (0, 20, apu.m),
+        (1, 13, apu.m),
         ]
 
     check_astro_quantities(_func, args_list)
@@ -148,15 +159,16 @@ def test_imt_urban_macro_losses():
     freq = [1, 5] * apu.GHz
     dist = np.array([5, 20, 1000, 20000])[:, np.newaxis] * apu.m
 
-    PL_los, PL_nlos = _func(freq, dist)
+    PL_los, PL_nlos, los_prob = _func(freq, dist)
     print(PL_los)
     print(PL_nlos)
+    print(los_prob)
     assert_quantity_allclose(
         PL_los,
         [
             [      np.nan,       np.nan],
-            [ 62.89579811,  76.87519819],
-            [123.32557394, 137.30497402],
+            [ 60.76626079,  74.74566088],
+            [108.24721393, 109.7252045 ],
             [      np.nan,       np.nan],
             ] * cnv.dB,
         )
@@ -169,16 +181,25 @@ def test_imt_urban_macro_losses():
             [      np.nan,       np.nan],
             ] * cnv.dB,
         )
+    assert_quantity_allclose(
+        los_prob,
+        [
+            [1.00000000e+00, 1.00000000e+00],
+            [9.72799557e-01, 9.72799557e-01],
+            [1.80001255e-02, 1.80001255e-02],
+            [9.00000000e-04, 9.00000000e-04],
+            ] * cnv.dimless,
+        )
 
-    PL_los, PL_nlos = _func(freq, dist, h_bs=20 * apu.m)
+    PL_los, PL_nlos, los_prob = _func(freq, dist, h_bs=20 * apu.m)
     print(PL_los)
     print(PL_nlos)
     assert_quantity_allclose(
         PL_los,
         [
             [      np.nan,       np.nan],
-            [ 62.60191301,  76.5813131 ],
-            [125.19388113, 139.17328121],
+            [ 59.57605227,  73.55545236],
+            [110.07255004, 111.54965644],
             [      np.nan,       np.nan],
             ] * cnv.dB,
         )
@@ -208,7 +229,7 @@ def test_imt_urban_micro_losses():
     freq = [1, 5] * apu.GHz
     dist = np.array([5, 20, 1000, 20000])[:, np.newaxis] * apu.m
 
-    PL_los, PL_nlos = _func(freq, dist)
+    PL_los, PL_nlos, los_prob = _func(freq, dist)
     print(PL_los)
     print(PL_nlos)
     assert_quantity_allclose(
