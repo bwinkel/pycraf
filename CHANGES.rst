@@ -1,3 +1,26 @@
+1.1.1 (2021-08-04)
+=======================
+
+New Features
+------------
+pycraf.antenna
+^^^^^^^^^^^^^^
+- Add average sectoral antenna pattern for fixed links according to Rec.
+  ITU-R F.1336-5. (The peak sectoral antenna patter was already included,
+  previously.) [#7094f34]
+
+pycraf.pathprof
+^^^^^^^^^^^^^^^
+- Add more of the 3GPP TR38.901 path propagation models for IMT (i.e., Urban/
+  Rural Macro). This is needed for applying power control algorithm related
+  to user equipment in 5G compatibility studies. [#125b25b]
+
+Bugfixes
+~~~~~~~~~~
+- Fix some bugs related to newer matplotlib version in various tutorial
+  notebooks [#b55c014]
+
+
 1.1.0 (2021-07-07)
 =======================
 

@@ -147,10 +147,10 @@ Dependencies
 We kept the dependencies as minimal as possible. The following packages are
 required:
 
-* Python 3.6 or later
+* Python 3.7 or later
 * setuptools
 * cython 0.29 or later
-* numpy 1.14 or later
+* numpy 1.14.5 or later
 * astropy 3.0 or later
 * scipy 0.19 or later
 * pytest 2.6 or later
@@ -158,7 +158,7 @@ required:
 The following packages are optional, and you will need them for certain
 features and to build the docs:
 
-* matplotlib 2.0 or later; for some plot helpers
+* matplotlib 3.0 or later; for some plot helpers
 * pyproj 2.0 or later; for the `geospatial` subpackage
 * sgp4 2.0 or later; for the `satellite` subpackage
 
