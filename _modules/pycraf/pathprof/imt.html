@@ -1,0 +1,719 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pycraf.pathprof.imt &#8212; pycraf v1.1.1</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pycraf.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-rendered-html.css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../../../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../../../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../../../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li>
+	<a href="../../../index.html">pycraf v1.1.1</a>
+	 &#187;
+      </li>
+      <li><a href="../../index.html" >Module code</a> &#187;</li>
+      <li><a href="../../pycraf.html" accesskey="U">pycraf</a> &#187;</li>
+      
+       
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pycraf.pathprof.imt</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">absolute_import</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+    <span class="p">)</span>
+
+<span class="c1"># from functools import partial, lru_cache</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">cyimt</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="c1"># import ipdb</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;imt_rural_macro_losses&#39;</span><span class="p">,</span> <span class="s1">&#39;imt_urban_macro_losses&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;imt_urban_micro_losses&#39;</span><span class="p">,</span> <span class="s1">&#39;P_pusch&#39;</span><span class="p">,</span> <span class="s1">&#39;UE_MIN_MAX_DISTANCES&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;clutter_imt&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+
+<span class="n">UE_MIN_MAX_DISTANCES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;rural_macro&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10000</span><span class="p">),</span>
+    <span class="s1">&#39;urban_macro&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5000</span><span class="p">),</span>
+    <span class="s1">&#39;urban_micro&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5000</span><span class="p">),</span>
+    <span class="p">}</span>
+
+<span class="c1"># UE_MIN_MAX_DISTANCES.__doc__ = &#39;&#39;&#39;</span>
+<span class="c1">#     Minimum and maximum distances that UEs have from base stations in each of</span>
+<span class="c1">#     the IMT propagation models. Below and beyond these, the path losses will</span>
+<span class="c1">#     be NaN.</span>
+<span class="c1">#     &#39;&#39;&#39;</span>
+
+<span class="c1"># Note, we have to curry the quantities here, because Cython produces</span>
+<span class="c1"># &quot;built-in&quot; functions that don&#39;t provide a signature (such that</span>
+<span class="c1"># ranged_quantity_input fails)</span>
+
+
+<span class="k">def</span> <span class="nf">_Qinv</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="c1"># Note, this is *not* identical to cyprop._I_helper</span>
+    <span class="c1"># only good between 1.e-6 and 0.5</span>
+    <span class="c1"># See R-Rec P.1546</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mf">0.5</span>
+    <span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+    <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span>
+            <span class="p">((</span><span class="mf">0.010328</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">0.802853</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="mf">2.515516698</span>
+            <span class="p">)</span> <span class="o">/</span>
+        <span class="p">(</span>
+            <span class="p">((</span><span class="mf">0.001308</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">0.189269</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">1.432788</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">1.</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">T</span> <span class="o">-</span> <span class="n">Z</span>
+    <span class="n">Q</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">return</span> <span class="n">Q</span>
+
+
+<span class="c1"># def Qinv(x):</span>
+<span class="c1">#     # larger x range than the approximation given in P.1546?</span>
+<span class="c1">#     # definitely much slower</span>
+
+<span class="c1">#     from scipy.stats import norm as qnorm</span>
+
+<span class="c1">#     x = np.atleast_1d(x).copy()</span>
+
+<span class="c1">#     mask = x &gt; 0.5</span>
+<span class="c1">#     x[mask] = 1 - x[mask]</span>
+
+<span class="c1">#     Q = -qnorm.ppf(x, 0)</span>
+<span class="c1">#     Q[mask] *= -1</span>
+
+<span class="c1">#     return Q</span>
+
+
+<span class="k">def</span> <span class="nf">_clutter_imt</span><span class="p">(</span>
+        <span class="n">freq</span><span class="p">,</span>
+        <span class="n">dist</span><span class="p">,</span>
+        <span class="n">location_percent</span><span class="p">,</span>
+        <span class="n">num_end_points</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">):</span>
+
+    <span class="k">assert</span> <span class="n">num_end_points</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+
+    <span class="n">L_l</span> <span class="o">=</span> <span class="mf">23.5</span> <span class="o">+</span> <span class="mf">9.6</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
+    <span class="n">L_s</span> <span class="o">=</span> <span class="mf">32.98</span> <span class="o">+</span> <span class="mf">23.9</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span> <span class="o">+</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
+
+    <span class="n">L_clutter</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span> <span class="o">*</span> <span class="n">L_l</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span> <span class="o">*</span> <span class="n">L_s</span><span class="p">)</span>
+        <span class="p">)</span> <span class="o">-</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">_Qinv</span><span class="p">(</span><span class="n">location_percent</span> <span class="o">/</span> <span class="mf">100.</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">num_end_points</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">L_clutter</span> <span class="o">*=</span> <span class="mi">2</span>
+
+    <span class="k">return</span> <span class="n">L_clutter</span>
+
+
+<div class="viewcode-block" id="clutter_imt"><a class="viewcode-back" href="../../../api/pycraf.pathprof.clutter_imt.html#pycraf.pathprof.clutter_imt">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">GHz</span><span class="p">),</span>
+    <span class="n">dist</span><span class="o">=</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
+    <span class="n">location_percent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">clutter_imt</span><span class="p">(</span>
+        <span class="n">freq</span><span class="p">,</span>
+        <span class="n">dist</span><span class="p">,</span>
+        <span class="n">location_percent</span><span class="p">,</span>
+        <span class="n">num_end_points</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate the Clutter loss according to IMT.CLUTTER document (method 2).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    freq : `~astropy.units.Quantity`</span>
+<span class="sd">        Frequency of radiation [GHz]</span>
+<span class="sd">    dist : `~astropy.units.Quantity`</span>
+<span class="sd">        Distance between Tx/Rx antennas [km]</span>
+
+<span class="sd">        Minimal distance must be 0.25 km (single endpoint clutter) or 1 km</span>
+<span class="sd">        (if both endpoints are to be corrected for clutter)</span>
+<span class="sd">    location_percent : `~astropy.units.Quantity`</span>
+<span class="sd">        Percentage of locations for which the clutter loss `L_clutter`</span>
+<span class="sd">        (calculated with this function) will not be exceeded [%]</span>
+<span class="sd">    num_end_points : int, optional</span>
+<span class="sd">        number of endpoints affected by clutter, allowed values: 1, 2</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    L_clutter : `~astropy.units.Quantity`</span>
+<span class="sd">        Clutter loss [dB]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - The algorithm is independent of effective antenna height (w.r.t.</span>
+<span class="sd">      clutter height), i.e., it doesn&#39;t distinguish between terminals which</span>
+<span class="sd">      are close to the ground and those closer to the top of the building.</span>
+<span class="sd">      However, the model is only appropriate if the terminal is &quot;in the</span>
+<span class="sd">      clutter&quot;, below the rooftops.</span>
+<span class="sd">    - The result of this function is to be understood as a cumulative</span>
+<span class="sd">      value. For example, if `location_percent = 2%`, it means that for</span>
+<span class="sd">      2% of all possible locations, the clutter loss will not exceed the</span>
+<span class="sd">      returned `L_clutter` value, for the remaining 98% of locations it</span>
+<span class="sd">      will therefore be lower than `L_clutter`. The smaller `location_percent`,</span>
+<span class="sd">      the smaller the returned `L_clutter`, i.e., low clutter attenuations</span>
+<span class="sd">      are more unlikely.</span>
+<span class="sd">    - This model was proposed by ITU study group SG 3 to replace</span>
+<span class="sd">      `~pycraf.pathprof.clutter_correction` for IMT 5G studies (especially,</span>
+<span class="sd">      at higher frequencies, where multipath effects play a role in</span>
+<span class="sd">      urban and suburban areas).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_clutter_imt</span><span class="p">(</span>
+        <span class="n">freq</span><span class="p">,</span>
+        <span class="n">dist</span><span class="p">,</span>
+        <span class="n">location_percent</span><span class="p">,</span>
+        <span class="n">num_end_points</span><span class="o">=</span><span class="n">num_end_points</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="imt_rural_macro_losses"><a class="viewcode-back" href="../../../api/pycraf.pathprof.imt_rural_macro_losses.html#pycraf.pathprof.imt_rural_macro_losses">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">GHz</span><span class="p">),</span>
+    <span class="n">dist_2d</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">h_bs</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">h_ue</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">W</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">h</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">imt_rural_macro_losses</span><span class="p">(</span>
+        <span class="n">freq</span><span class="p">,</span>
+        <span class="n">dist_2d</span><span class="p">,</span>
+        <span class="n">h_bs</span><span class="o">=</span><span class="mi">35</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">h_ue</span><span class="o">=</span><span class="mf">1.5</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">,</span>
+        <span class="n">W</span><span class="o">=</span><span class="mi">20</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">5</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">,</span>
+        <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate los/non-los propagation losses Rural-Macro IMT scenario.</span>
+
+<span class="sd">    The computation is in accordance with `3GPP TR 38.901 Table 7.4.1-1</span>
+<span class="sd">    &lt;https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173&gt;`_</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    freq : `~astropy.units.Quantity`</span>
+<span class="sd">        Frequency of radiation [GHz]</span>
+<span class="sd">    dist_2d : `~astropy.units.Quantity`</span>
+<span class="sd">        Distance on the ground between BS and UE device [m]</span>
+<span class="sd">        Note: Well-defined only for distances between 10 m and 10 km.</span>
+<span class="sd">    h_bs : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        Basestation height [m] (Default: 35 m)</span>
+<span class="sd">    h_ue : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        User equipment height [m] (Default: 1.5 m)</span>
+<span class="sd">    W : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        Average street width [m] (Default: 20 m)</span>
+<span class="sd">    h : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        Average building height [m] (Default: 5 m)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    PL_los : `~astropy.units.Quantity`</span>
+<span class="sd">        Path loss for line-of-sight cases [dB]</span>
+<span class="sd">    PL_nlos : `~astropy.units.Quantity`</span>
+<span class="sd">        Path loss for non-line-of-sight cases [dB]</span>
+<span class="sd">    los_prob : `~astropy.units.Quantity`</span>
+<span class="sd">        Probability for a path to be line-of-sight. [dimless]</span>
+<span class="sd">        (see Notes and Examples)</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - In statistical simulations, the LoS and Non-LoS cases occur with</span>
+<span class="sd">      certain probabilities. For sampling of path losses the return</span>
+<span class="sd">      parameter `los_prob` can be used, which accounts for the likelihoods</span>
+<span class="sd">      according to `3GPP TR 38.901 Table 7.4.2-1</span>
+<span class="sd">      &lt;https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173&gt;`_</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    A typical usage, which also accounts for the line-of-sight probabilities,</span>
+<span class="sd">    would be::</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from pycraf import conversions as cnv</span>
+<span class="sd">        &gt;&gt;&gt; from pycraf import pathprof</span>
+<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
+<span class="sd">        &gt;&gt;&gt; from astropy.utils.misc import NumpyRNGContext</span>
+
+<span class="sd">        &gt;&gt;&gt; freq = 1 * u.GHz</span>
+<span class="sd">        &gt;&gt;&gt; h_bs, h_ue = 35 * u.m, 1.5 * u.m</span>
+<span class="sd">        &gt;&gt;&gt; distances = [5, 20, 1000, 20000] * u.m  # 2D distances</span>
+<span class="sd">        &gt;&gt;&gt; # Note: too small or large distances will lead to NaN values</span>
+
+<span class="sd">        &gt;&gt;&gt; PL_los, PL_nlos, los_prob = pathprof.imt_rural_macro_losses(</span>
+<span class="sd">        ...     freq, distances, h_bs=h_bs, h_ue=h_ue</span>
+<span class="sd">        ...     )</span>
+<span class="sd">        &gt;&gt;&gt; PL_los  # doctest: +FLOAT_CMP</span>
+<span class="sd">        &lt;Decibel [        nan, 64.38071083, 94.57828524,         nan] dB&gt;</span>
+<span class="sd">        &gt;&gt;&gt; PL_nlos  # doctest: +FLOAT_CMP</span>
+<span class="sd">        &lt;Decibel [         nan,  65.10847815, 119.54294519,          nan] dB&gt;</span>
+<span class="sd">        &gt;&gt;&gt; los_prob  # doctest: +FLOAT_CMP</span>
+<span class="sd">        &lt;Quantity [1.00000000e+00, 9.90049834e-01, 3.71576691e-01, 2.08186856e-09]&gt;</span>
+
+<span class="sd">        &gt;&gt;&gt; # randomly assign LOS or Non-LOS type to UE (according to above prob.)</span>
+<span class="sd">        &gt;&gt;&gt; with NumpyRNGContext(0):</span>
+<span class="sd">        ...     los_type = np.random.uniform(0, 1, distances.size) &lt; los_prob</span>
+<span class="sd">        &gt;&gt;&gt; # note: los_type == True : LOS</span>
+<span class="sd">        &gt;&gt;&gt; #       los_type == False: Non-LOS</span>
+<span class="sd">        &gt;&gt;&gt; los_type</span>
+<span class="sd">        array([ True,  True, False, False])</span>
+<span class="sd">        &gt;&gt;&gt; PL = np.where(</span>
+<span class="sd">        ...     los_type, PL_los.to_value(cnv.dB), PL_nlos.to_value(cnv.dB)</span>
+<span class="sd">        ...     ) * cnv.dB</span>
+<span class="sd">        &gt;&gt;&gt; PL  # doctest: +FLOAT_CMP</span>
+<span class="sd">        &lt;Decibel [         nan,  64.38071083, 119.54294519,          nan] dB&gt;</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">pl_los</span><span class="p">,</span> <span class="n">pl_nlos</span> <span class="o">=</span> <span class="n">cyimt</span><span class="o">.</span><span class="n">rural_macro_losses_cython</span><span class="p">(</span>
+        <span class="n">freq</span><span class="p">,</span> <span class="n">dist_2d</span><span class="p">,</span> <span class="n">h_bs</span><span class="p">,</span> <span class="n">h_ue</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># probability to have a LOS path;</span>
+    <span class="c1"># see 3GPP TR 38.901, Table 7.4.2</span>
+    <span class="n">los_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">dist_2d</span> <span class="o">-</span> <span class="mi">10</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">los_prob</span><span class="p">[</span><span class="n">dist_2d</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">los_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">los_prob</span><span class="p">,</span> <span class="n">pl_los</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pl_los</span><span class="p">,</span> <span class="n">pl_nlos</span><span class="p">,</span> <span class="n">los_prob</span></div>
+
+
+<div class="viewcode-block" id="imt_urban_macro_losses"><a class="viewcode-back" href="../../../api/pycraf.pathprof.imt_urban_macro_losses.html#pycraf.pathprof.imt_urban_macro_losses">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">GHz</span><span class="p">),</span>
+    <span class="n">dist_2d</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">h_bs</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>  <span class="c1"># according to 3GPP TR 38.901 only 25 m allowed!?</span>
+    <span class="n">h_ue</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>  <span class="c1"># for larger h_ue, need to implement &quot;C&quot; function</span>
+    <span class="n">h_e</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">imt_urban_macro_losses</span><span class="p">(</span>
+        <span class="n">freq</span><span class="p">,</span>
+        <span class="n">dist_2d</span><span class="p">,</span>
+        <span class="n">h_bs</span><span class="o">=</span><span class="mi">25</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">h_ue</span><span class="o">=</span><span class="mf">1.5</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">,</span>
+        <span class="c1"># h_e=1 * apu.m,</span>
+        <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate los/non-los propagation losses Rural-Macro IMT scenario.</span>
+
+<span class="sd">    The computation is in accordance with `3GPP TR 38.901 Table 7.4.1-1</span>
+<span class="sd">    &lt;https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173&gt;`_</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    freq : `~astropy.units.Quantity`</span>
+<span class="sd">        Frequency of radiation [GHz]</span>
+<span class="sd">    dist_2d : `~astropy.units.Quantity`</span>
+<span class="sd">        Distance on the ground between BS and UE device [m]</span>
+<span class="sd">        Note: Well-defined only for distances between 10 m and 5 km.</span>
+<span class="sd">    h_bs : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        Basestation height [m] (Default: 35 m)</span>
+<span class="sd">    h_ue : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        User equipment height [m] (Default: 1.5 m)</span>
+<span class="sd">        Note: in the `pycraf` implementation this is restricted to</span>
+<span class="sd">        `h_ue &lt; 13 m`. 3GPP TR 38.901 also has a model for heights up</span>
+<span class="sd">        to 22.5 m, but this involves a `h_e` different from 1 m and is</span>
+<span class="sd">        probabilistic, which would make the interface much more complicated.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    PL_los : `~astropy.units.Quantity`</span>
+<span class="sd">        Path loss for line-of-sight cases [dB]</span>
+<span class="sd">    PL_nlos : `~astropy.units.Quantity`</span>
+<span class="sd">        Path loss for non-line-of-sight cases [dB]</span>
+<span class="sd">    los_prob : `~astropy.units.Quantity`</span>
+<span class="sd">        Probability for a path to be line-of-sight. [dimless]</span>
+<span class="sd">        (see Notes and Examples)</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - In statistical simulations, the LoS and Non-LoS cases occur with</span>
+<span class="sd">      certain probabilities. For sampling of path losses the return</span>
+<span class="sd">      parameter `los_prob` can be used, which accounts for the likelihoods</span>
+<span class="sd">      according to `3GPP TR 38.901 Table 7.4.2-1</span>
+<span class="sd">      &lt;https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173&gt;`_</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    A typical usage, which also accounts for the line-of-sight probabilities,</span>
+<span class="sd">    would be::</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from pycraf import conversions as cnv</span>
+<span class="sd">        &gt;&gt;&gt; from pycraf import pathprof</span>
+<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
+<span class="sd">        &gt;&gt;&gt; from astropy.utils.misc import NumpyRNGContext</span>
+
+<span class="sd">        &gt;&gt;&gt; freq = 1 * u.GHz</span>
+<span class="sd">        &gt;&gt;&gt; h_bs, h_ue = 25 * u.m, 1.5 * u.m</span>
+<span class="sd">        &gt;&gt;&gt; distances = [5, 20, 1000, 20000] * u.m  # 2D distances</span>
+<span class="sd">        &gt;&gt;&gt; # Note: too small or large distances will lead to NaN values</span>
+
+<span class="sd">        &gt;&gt;&gt; PL_los, PL_nlos, los_prob = pathprof.imt_urban_macro_losses(</span>
+<span class="sd">        ...     freq, distances, h_bs=h_bs, h_ue=h_ue</span>
+<span class="sd">        ...     )</span>
+<span class="sd">        &gt;&gt;&gt; PL_los  # doctest: +FLOAT_CMP</span>
+<span class="sd">        &lt;Decibel [         nan,  60.76626079, 108.24721393,          nan] dB&gt;</span>
+<span class="sd">        &gt;&gt;&gt; PL_nlos  # doctest: +FLOAT_CMP</span>
+<span class="sd">        &lt;Decibel [         nan,  71.74479418, 130.78468516,          nan] dB&gt;</span>
+<span class="sd">        &gt;&gt;&gt; los_prob  # doctest: +FLOAT_CMP</span>
+<span class="sd">        &lt;Quantity [1.00000000e+00, 9.72799557e-01, 1.80001255e-02, 9.00000000e-04]&gt;</span>
+
+<span class="sd">        &gt;&gt;&gt; # randomly assign LOS or Non-LOS type to UE (according to above prob.)</span>
+<span class="sd">        &gt;&gt;&gt; with NumpyRNGContext(0):</span>
+<span class="sd">        ...     los_type = np.random.uniform(0, 1, distances.size) &lt; los_prob</span>
+<span class="sd">        &gt;&gt;&gt; # note: los_type == True : LOS</span>
+<span class="sd">        &gt;&gt;&gt; #       los_type == False: Non-LOS</span>
+<span class="sd">        &gt;&gt;&gt; los_type</span>
+<span class="sd">        array([ True,  True, False, False])</span>
+<span class="sd">        &gt;&gt;&gt; PL = np.where(</span>
+<span class="sd">        ...     los_type, PL_los.to_value(cnv.dB), PL_nlos.to_value(cnv.dB)</span>
+<span class="sd">        ...     ) * cnv.dB</span>
+<span class="sd">        &gt;&gt;&gt; PL  # doctest: +FLOAT_CMP</span>
+<span class="sd">        &lt;Decibel [         nan,  60.76626079, 130.78468516,          nan] dB&gt;</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># for h_ue &gt; 13 m, need to implement &quot;C&quot; function; then &quot;h_e&quot; is needed!</span>
+    <span class="c1"># h_e : `~astropy.units.Quantity`, optional</span>
+    <span class="c1">#     Effective environment height [m] (Default: 1 m)</span>
+    <span class="c1">#     Important: for `h_ue &gt; 13 m`, this is subject to random sampling;</span>
+    <span class="c1">#     see `3GPP TR 38.901 Table 7.4.1-1 Note 1</span>
+    <span class="c1">#     &lt;https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173&gt;`_</span>
+
+    <span class="n">h_e</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">pl_los</span><span class="p">,</span> <span class="n">pl_nlos</span> <span class="o">=</span> <span class="n">cyimt</span><span class="o">.</span><span class="n">urban_macro_losses_cython</span><span class="p">(</span>
+        <span class="n">freq</span><span class="p">,</span> <span class="n">dist_2d</span><span class="p">,</span> <span class="n">h_bs</span><span class="p">,</span> <span class="n">h_ue</span><span class="p">,</span> <span class="n">h_e</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># probability to have a LOS path;</span>
+    <span class="c1"># see 3GPP TR 38.901, Table 7.4.2</span>
+    <span class="n">_x</span> <span class="o">=</span> <span class="mi">18</span> <span class="o">/</span> <span class="n">dist_2d</span>
+    <span class="n">los_prob</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="c1"># for h_e &gt; 13 m, a correction factor would be necessary!!!</span>
+        <span class="n">_x</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">18</span> <span class="o">/</span> <span class="mi">63</span> <span class="o">/</span> <span class="n">_x</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">_x</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="n">los_prob</span><span class="p">[</span><span class="n">dist_2d</span> <span class="o">&lt;</span> <span class="mi">18</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">los_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">los_prob</span><span class="p">,</span> <span class="n">pl_los</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pl_los</span><span class="p">,</span> <span class="n">pl_nlos</span><span class="p">,</span> <span class="n">los_prob</span></div>
+
+
+<div class="viewcode-block" id="imt_urban_micro_losses"><a class="viewcode-back" href="../../../api/pycraf.pathprof.imt_urban_micro_losses.html#pycraf.pathprof.imt_urban_micro_losses">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">GHz</span><span class="p">),</span>
+    <span class="n">dist_2d</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">h_bs</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>  <span class="c1"># according to 3GPP TR 38.901 only 10 m allowed!?</span>
+    <span class="n">h_ue</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">22.5</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">imt_urban_micro_losses</span><span class="p">(</span>
+        <span class="n">freq</span><span class="p">,</span>
+        <span class="n">dist_2d</span><span class="p">,</span>
+        <span class="n">h_bs</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">h_ue</span><span class="o">=</span><span class="mf">1.5</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">,</span>
+        <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate los/non-los propagation losses Rural-Macro IMT scenario.</span>
+
+<span class="sd">    The computation is in accordance with `3GPP TR 38.901 Table 7.4.1-1</span>
+<span class="sd">    &lt;https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173&gt;`_</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    freq : `~astropy.units.Quantity`</span>
+<span class="sd">        Frequency of radiation [GHz]</span>
+<span class="sd">    dist_2d : `~astropy.units.Quantity`</span>
+<span class="sd">        Distance on the ground between BS and UE device [m]</span>
+<span class="sd">        Note: Well-defined only for distances between 10 m and 5 km.</span>
+<span class="sd">    h_bs : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        Basestation height [m] (Default: 35 m)</span>
+<span class="sd">    h_ue : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        User equipment height [m] (Default: 1.5 m)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    PL_los : `~astropy.units.Quantity`</span>
+<span class="sd">        Path loss for line-of-sight cases [dB]</span>
+<span class="sd">    PL_nlos : `~astropy.units.Quantity`</span>
+<span class="sd">        Path loss for non-line-of-sight cases [dB]</span>
+<span class="sd">    los_prob : `~astropy.units.Quantity`</span>
+<span class="sd">        Probability for a path to be line-of-sight. [dimless]</span>
+<span class="sd">        (see Notes and Examples)</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - In statistical simulations, the LoS and Non-LoS cases occur with</span>
+<span class="sd">      certain probabilities. For sampling of path losses the return</span>
+<span class="sd">      parameter `los_prob` can be used, which accounts for the likelihoods</span>
+<span class="sd">      according to `3GPP TR 38.901 Table 7.4.2-1</span>
+<span class="sd">      &lt;https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173&gt;`_</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    A typical usage, which also accounts for the line-of-sight probabilities,</span>
+<span class="sd">    would be::</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from pycraf import conversions as cnv</span>
+<span class="sd">        &gt;&gt;&gt; from pycraf import pathprof</span>
+<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
+<span class="sd">        &gt;&gt;&gt; from astropy.utils.misc import NumpyRNGContext</span>
+
+<span class="sd">        &gt;&gt;&gt; freq = 1 * u.GHz</span>
+<span class="sd">        &gt;&gt;&gt; h_bs, h_ue = 10 * u.m, 1.5 * u.m</span>
+<span class="sd">        &gt;&gt;&gt; distances = [5, 20, 1000, 20000] * u.m  # 2D distances</span>
+<span class="sd">        &gt;&gt;&gt; # Note: too small or large distances will lead to NaN values</span>
+
+<span class="sd">        &gt;&gt;&gt; PL_los, PL_nlos, los_prob = pathprof.imt_urban_micro_losses(</span>
+<span class="sd">        ...     freq, distances, h_bs=h_bs, h_ue=h_ue</span>
+<span class="sd">        ...     )</span>
+<span class="sd">        &gt;&gt;&gt; PL_los  # doctest: +FLOAT_CMP</span>
+<span class="sd">        &lt;Decibel [         nan,  60.47880565, 118.53377126,          nan] dB&gt;</span>
+<span class="sd">        &gt;&gt;&gt; PL_nlos  # doctest: +FLOAT_CMP</span>
+<span class="sd">        &lt;Decibel [         nan,  69.59913521, 128.3005538 ,          nan] dB&gt;</span>
+<span class="sd">        &gt;&gt;&gt; los_prob  # doctest: +FLOAT_CMP</span>
+<span class="sd">        &lt;Quantity [1.00000000e+00, 9.57375342e-01, 1.80000000e-02, 9.00000000e-04]&gt;</span>
+
+<span class="sd">        &gt;&gt;&gt; # randomly assign LOS or Non-LOS type to UE (according to above prob.)</span>
+<span class="sd">        &gt;&gt;&gt; with NumpyRNGContext(0):</span>
+<span class="sd">        ...     los_type = np.random.uniform(0, 1, distances.size) &lt; los_prob</span>
+<span class="sd">        &gt;&gt;&gt; # note: los_type == True : LOS</span>
+<span class="sd">        &gt;&gt;&gt; #       los_type == False: Non-LOS</span>
+<span class="sd">        &gt;&gt;&gt; los_type</span>
+<span class="sd">        array([ True,  True, False, False])</span>
+<span class="sd">        &gt;&gt;&gt; PL = np.where(</span>
+<span class="sd">        ...     los_type, PL_los.to_value(cnv.dB), PL_nlos.to_value(cnv.dB)</span>
+<span class="sd">        ...     ) * cnv.dB</span>
+<span class="sd">        &gt;&gt;&gt; PL  # doctest: +FLOAT_CMP</span>
+<span class="sd">        &lt;Decibel [         nan,  60.47880565, 128.3005538 ,          nan] dB&gt;</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">pl_los</span><span class="p">,</span> <span class="n">pl_nlos</span> <span class="o">=</span> <span class="n">cyimt</span><span class="o">.</span><span class="n">urban_micro_losses_cython</span><span class="p">(</span>
+        <span class="n">freq</span><span class="p">,</span> <span class="n">dist_2d</span><span class="p">,</span> <span class="n">h_bs</span><span class="p">,</span> <span class="n">h_ue</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># probability to have a LOS path;</span>
+    <span class="c1"># see 3GPP TR 38.901, Table 7.4.2</span>
+    <span class="n">_x</span> <span class="o">=</span> <span class="mi">18</span> <span class="o">/</span> <span class="n">dist_2d</span>
+    <span class="n">los_prob</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">_x</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">/</span> <span class="n">_x</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">_x</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="n">los_prob</span><span class="p">[</span><span class="n">dist_2d</span> <span class="o">&lt;</span> <span class="mi">18</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">los_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">los_prob</span><span class="p">,</span> <span class="n">pl_los</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pl_los</span><span class="p">,</span> <span class="n">pl_nlos</span><span class="p">,</span> <span class="n">los_prob</span></div>
+
+
+<div class="viewcode-block" id="P_pusch"><a class="viewcode-back" href="../../../api/pycraf.pathprof.P_pusch.html#pycraf.pathprof.P_pusch">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">P_cmax</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBm</span><span class="p">),</span>  <span class="c1"># range pretty large, but what is realistic?</span>
+    <span class="n">P_0_pusch</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">200</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBm</span><span class="p">),</span>  <span class="c1"># dito</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span>
+    <span class="n">PL</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dBm</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">P_pusch</span><span class="p">(</span><span class="n">P_cmax</span><span class="p">,</span> <span class="n">M_pusch</span><span class="p">,</span> <span class="n">P_0_pusch</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">PL</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate power output level after UE power control.</span>
+
+<span class="sd">    See `ITU-R Rec. M.2101-0 &lt;https://www.itu.int/rec/R-REC-M.2101/en&gt;`_</span>
+<span class="sd">    Section 4.1.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    P_cmax : `~astropy.units.Quantity`</span>
+<span class="sd">        Maximum transmit power [dBm]</span>
+<span class="sd">    M_pusch : `numpy.ndarray`, int</span>
+<span class="sd">        Number of allocated resource blocks (RBs)</span>
+
+<span class="sd">        Is this the bandwidth per carrier divided by the RB bandwidth (</span>
+<span class="sd">        typically 180 kHz) and number of UE devices associated to each</span>
+<span class="sd">        carrier?</span>
+<span class="sd">    P_0_pusch : `numpy.ndarray`</span>
+<span class="sd">        Initial receive target UE power level per RB [dBm]</span>
+<span class="sd">    alpha : `~astropy.units.Quantity`</span>
+<span class="sd">        Balancing factor for UEs with bad channel and UEs with good channel</span>
+<span class="sd">    PL : `~astropy.units.Quantity`</span>
+<span class="sd">        Path loss between UE and its associated BS [dB]</span>
+<span class="sd">        One should use one of the functions</span>
+<span class="sd">        `~pathprof.imt_rural_macro_losses`,</span>
+<span class="sd">        `~pathprof.imt_urban_macro_losses`, or</span>
+<span class="sd">        `~pathprof.imt_urban_micro_losses` to determine PL for the required</span>
+<span class="sd">        scenario.</span>
+
+<span class="sd">        Note: Antenna gains should be included, so this is rather the</span>
+<span class="sd">        coupling loss than the path loss, unlike what is stated in</span>
+<span class="sd">        `ITU-R Rec. M.2101-0 &lt;https://www.itu.int/rec/R-REC-M.2101/en&gt;`_.</span>
+<span class="sd">        ``</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    P_pusch : `~astropy.units.Quantity`</span>
+<span class="sd">        Transmit power of the terminal [dBm]</span>
+
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    A typical usage would be::</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from pycraf import conversions as cnv</span>
+<span class="sd">        &gt;&gt;&gt; from pycraf import pathprof</span>
+<span class="sd">        &gt;&gt;&gt; from astropy import units as u</span>
+<span class="sd">        &gt;&gt;&gt; from astropy.utils.misc import NumpyRNGContext</span>
+
+<span class="sd">        &gt;&gt;&gt; freq = 6.65 * u.GHz</span>
+<span class="sd">        &gt;&gt;&gt; h_bs, h_ue = 10 * u.m, 1.5 * u.m</span>
+<span class="sd">        &gt;&gt;&gt; distances = [20, 100, 500, 1000] * u.m  # 2D distances</span>
+
+<span class="sd">        &gt;&gt;&gt; PL_los, PL_nlos, los_prob = pathprof.imt_urban_micro_losses(</span>
+<span class="sd">        ...     freq, distances, h_bs=h_bs, h_ue=h_ue</span>
+<span class="sd">        ...     )</span>
+
+<span class="sd">        &gt;&gt;&gt; # randomly assign LOS or Non-LOS type to UE (according to above prob.)</span>
+<span class="sd">        &gt;&gt;&gt; with NumpyRNGContext(0):</span>
+<span class="sd">        ...     los_type = np.random.uniform(0, 1, distances.size) &lt; los_prob</span>
+<span class="sd">        &gt;&gt;&gt; # note: los_type == True : LOS</span>
+<span class="sd">        &gt;&gt;&gt; #       los_type == False: Non-LOS</span>
+<span class="sd">        &gt;&gt;&gt; PL = np.where(</span>
+<span class="sd">        ...     los_type, PL_los.to_value(cnv.dB), PL_nlos.to_value(cnv.dB)</span>
+<span class="sd">        ...     ) * cnv.dB</span>
+<span class="sd">        &gt;&gt;&gt; PL  # doctest: +FLOAT_CMP</span>
+<span class="sd">        &lt;Decibel [ 76.93523856, 110.58128371, 135.20195715, 145.82665484] dB&gt;</span>
+
+<span class="sd">        &gt;&gt;&gt; # Assume some antenna gains:</span>
+<span class="sd">        &gt;&gt;&gt; G_bs, G_ue = 20 * cnv.dBi, 5 * cnv.dBi</span>
+<span class="sd">        &gt;&gt;&gt; CL = (</span>
+<span class="sd">        ...     PL.to_value(cnv.dB) -</span>
+<span class="sd">        ...     G_bs.to_value(cnv.dBi) -</span>
+<span class="sd">        ...     G_ue.to_value(cnv.dBi)</span>
+<span class="sd">        ...     ) * cnv.dB</span>
+
+
+<span class="sd">        &gt;&gt;&gt; bw_carrier = 100 * u.MHz</span>
+<span class="sd">        &gt;&gt;&gt; bw_rb = 180 * u.kHz  # resource block bandwidth</span>
+<span class="sd">        &gt;&gt;&gt; num_ue = 3  # 3 UEs per BS sector and carrier</span>
+<span class="sd">        &gt;&gt;&gt; M_pusch = int(bw_carrier / bw_rb / num_ue)</span>
+<span class="sd">        &gt;&gt;&gt; M_pusch</span>
+<span class="sd">        185</span>
+
+<span class="sd">        &gt;&gt;&gt; P_cmax = 23 * cnv.dBm</span>
+<span class="sd">        &gt;&gt;&gt; P_0_pusch = -95.5 * cnv.dBm</span>
+<span class="sd">        &gt;&gt;&gt; alpha = 0.8 * cnv.dimless</span>
+
+<span class="sd">        &gt;&gt;&gt; P_pusch = pathprof.P_pusch(</span>
+<span class="sd">        ...     P_cmax, M_pusch, P_0_pusch, alpha, CL</span>
+<span class="sd">        ...     )</span>
+<span class="sd">        &gt;&gt;&gt; P_pusch.to(cnv.dBm)</span>
+<span class="sd">        &lt;Decibel [-31.28009187,  -4.36325575,  15.333283  ,  23.          ] dB(mW)&gt;</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">P_pusch</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">M_pusch</span><span class="p">)</span> <span class="o">+</span> <span class="n">P_0_pusch</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">PL</span>
+    <span class="n">P_pusch</span><span class="p">[</span><span class="n">P_pusch</span> <span class="o">&gt;</span> <span class="n">P_cmax</span><span class="p">]</span> <span class="o">=</span> <span class="n">P_cmax</span>
+
+    <span class="k">return</span> <span class="n">P_pusch</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This not a standalone python program! Use as module.&#39;</span><span class="p">)</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right"> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2021, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
+    Last built 04 Aug 2021. <br/>
+  </p>
+</footer>
+  </body>
+</html>

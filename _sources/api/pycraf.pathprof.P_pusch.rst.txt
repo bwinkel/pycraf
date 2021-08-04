@@ -1,0 +1,6 @@
+P_pusch
+=======
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: P_pusch

@@ -120,6 +120,7 @@ output). One can specifically ask for the original units by doing::
 
     >>> import pycraf.geospatial as geo
     >>> import astropy.units as u
+    >>> from astropy.units.imperial import ft
     >>> import pyproj
 
     >>> proj_wgs84 = pyproj.Proj('+init=epsg:4326')
@@ -146,11 +147,11 @@ because we can use the `~astropy.units` conversion::
     >>> x, y  # doctest: +FLOAT_CMP
     (<Quantity 925806.5486332772 m>, <Quantity 216168.1432314818 m>)
 
-    >>> x.to(u.imperial.ft), y.to(u.imperial.ft)  # doctest: +FLOAT_CMP
+    >>> x.to(ft), y.to(ft)  # doctest: +FLOAT_CMP
     (<Quantity 3037416.9849743457 ft>, <Quantity 709211.6499186204 ft>)
 
     >>> transform = geo.transform_factory(3452, 4326)
-    >>> transform(3037416.985 * u.imperial.ft, 709211.650 * u.imperial.ft)  # doctest: +FLOAT_CMP
+    >>> transform(3037416.985 * ft, 709211.650 * ft)  # doctest: +FLOAT_CMP
     (<Quantity -92.10581908573734 deg>, <Quantity 30.447921938477027 deg>)
 
 Unfortunately, there seems to be no way to ask `pyproj` about which

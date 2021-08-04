@@ -1,0 +1,6 @@
+UE_MIN_MAX_DISTANCES
+====================
+
+.. currentmodule:: pycraf.pathprof
+
+.. autodata:: UE_MIN_MAX_DISTANCES

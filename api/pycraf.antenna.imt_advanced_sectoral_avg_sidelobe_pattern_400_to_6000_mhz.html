@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz &#8212; pycraf v1.1.1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz" href="pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz.html" />
+    <link rel="prev" title="imt2020_single_element_pattern" href="pycraf.antenna.imt2020_single_element_pattern.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz.html" title="imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="pycraf.antenna.imt2020_single_element_pattern.html" title="imt2020_single_element_pattern">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v1.1.1</a>
+	 &#187;
+      </li>
+      <li><a href="../antenna/index.html" accesskey="U">Antenna patterns (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.antenna</span></code>)</a> &#187;</li>
+      
+      <li>imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="imt-advanced-sectoral-avg-sidelobe-pattern-400-to-6000-mhz">
+<h1>imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz<a class="headerlink" href="#imt-advanced-sectoral-avg-sidelobe-pattern-400-to-6000-mhz" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="pycraf.antenna.imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz">
+<span class="sig-prename descclassname"><span class="pre">pycraf.antenna.</span></span><span class="sig-name descname"><span class="pre">imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">azim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elev</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi_3db</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_3db</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tilt_m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tilt_e</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/antenna/imt.html#imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.1.1/pycraf/antenna/imt.py#L392" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.antenna.imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz" title="Permalink to this definition">¶</a></dt>
+<dd><p>IMT advanced (LTE) antenna pattern (sectoral, peak side-lobe)
+for the frequency range 400 MHz to 6 GHz according to
+<a class="reference external" href="https://www.itu.int/rec/R-REC-F.1336-5-201901-I/en">ITU-R Rec F.1336-5</a>
+Section 3.1.2.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>azim, elev</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Azimuth/Elevation [deg]</p>
+</dd>
+<dt><strong>G0</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Antenna maximum gain [dBi]</p>
+</dd>
+<dt><strong>phi_3db, theta_3db</strong><span class="classifier">float</span></dt><dd><p>3-dB beamwidth in the azimuth/elevation plane [degrees]</p>
+</dd>
+<dt><strong>k_a</strong><span class="classifier">float</span></dt><dd><p>Parameter which accomplishes the relative minimum gain for
+average side-lobe patterns [dimless]</p>
+</dd>
+<dt><strong>k_h</strong><span class="classifier">float</span></dt><dd><p>Azimuth pattern adjustment factor based on leaked power
+(<span class="math notranslate nohighlight">\(0 \leq k_h \leq 1\)</span>) [dimless]</p>
+</dd>
+<dt><strong>k_v</strong><span class="classifier">float</span></dt><dd><p>Elevation pattern adjustment factor based on leaked power
+(<span class="math notranslate nohighlight">\(0 \leq k_v \leq 1\)</span>) [dimless]</p>
+</dd>
+<dt><strong>tilt_m</strong><span class="classifier">float</span></dt><dd><p>Mechanical tilt angle (downwards) [deg]</p>
+</dd>
+<dt><strong>tilt_e</strong><span class="classifier">float</span></dt><dd><p>Electrical tilt angle (downwards) [deg]</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>G</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Antenna pattern [dB]</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>For typical values of <span class="math notranslate nohighlight">\(k_p\)</span>, <span class="math notranslate nohighlight">\(k_h\)</span>, and <span class="math notranslate nohighlight">\(k_v\)</span> see
+<a class="reference external" href="https://www.itu.int/rec/R-REC-F.1336-4-201402-I/en">ITU-R Rec F.1336-4</a>
+Sections 3.1.1.1-3.</p>
+<p>For cases involving sectoral antennas with <span class="math notranslate nohighlight">\(\varphi_\mathrm{3dB} \lesssim 120^\circ\)</span> the following
+formula can be used to calculate <span class="math notranslate nohighlight">\(\vartheta_\mathrm{3dB}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\vartheta_\mathrm{3dB}=\frac{31000\times10^{-0.1G_0}}{\varphi_\mathrm{3dB}}\]</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.1/docs/api/pycraf.antenna.imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz.rst">Edit This Page on Github</a> &nbsp;
+    <a href="../_sources/api/pycraf.antenna.imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2021, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
+    Last built 04 Aug 2021. <br/>
+  </p>
+</footer>
+  </body>
+</html>

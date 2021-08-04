@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>P_pusch &#8212; pycraf v1.1.1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="annual_timepercent_from_worst_month" href="pycraf.pathprof.annual_timepercent_from_worst_month.html" />
+    <link rel="prev" title="Path attenuation, terrain data, and geodesics (pycraf.pathprof)" href="../pathprof/index.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="pycraf.pathprof.annual_timepercent_from_worst_month.html" title="annual_timepercent_from_worst_month">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="../pathprof/index.html" title="Path attenuation, terrain data, and geodesics (pycraf.pathprof)">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v1.1.1</a>
+	 &#187;
+      </li>
+      <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
+      
+      <li>P_pusch</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="p-pusch">
+<h1>P_pusch<a class="headerlink" href="#p-pusch" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="pycraf.pathprof.P_pusch">
+<span class="sig-prename descclassname"><span class="pre">pycraf.pathprof.</span></span><span class="sig-name descname"><span class="pre">P_pusch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P_cmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M_pusch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P_0_pusch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PL</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/imt.html#P_pusch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.1.1/pycraf/pathprof/imt.py#L510" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.pathprof.P_pusch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate power output level after UE power control.</p>
+<p>See <a class="reference external" href="https://www.itu.int/rec/R-REC-M.2101/en">ITU-R Rec. M.2101-0</a>
+Section 4.1.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>P_cmax</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Maximum transmit power [dBm]</p>
+</dd>
+<dt><strong>M_pusch</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, int</span></dt><dd><p>Number of allocated resource blocks (RBs)</p>
+<p>Is this the bandwidth per carrier divided by the RB bandwidth (
+typically 180 kHz) and number of UE devices associated to each
+carrier?</p>
+</dd>
+<dt><strong>P_0_pusch</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></span></dt><dd><p>Initial receive target UE power level per RB [dBm]</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Balancing factor for UEs with bad channel and UEs with good channel</p>
+</dd>
+<dt><strong>PL</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Path loss between UE and its associated BS [dB]
+One should use one of the functions
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">imt_rural_macro_losses</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">imt_urban_macro_losses</span></code>, or
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">imt_urban_micro_losses</span></code> to determine PL for the required
+scenario.</p>
+<p>Note: Antenna gains should be included, so this is rather the
+coupling loss than the path loss, unlike what is stated in
+<a class="reference external" href="https://www.itu.int/rec/R-REC-M.2101/en">ITU-R Rec. M.2101-0</a>.
+``</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>P_pusch</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Transmit power of the terminal [dBm]</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>A typical usage would be:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">pathprof</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy.utils.misc</span> <span class="kn">import</span> <span class="n">NumpyRNGContext</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">freq</span> <span class="o">=</span> <span class="mf">6.65</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">GHz</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h_bs</span><span class="p">,</span> <span class="n">h_ue</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">distances</span> <span class="o">=</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>  <span class="c1"># 2D distances</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PL_los</span><span class="p">,</span> <span class="n">PL_nlos</span><span class="p">,</span> <span class="n">los_prob</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">imt_urban_micro_losses</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">freq</span><span class="p">,</span> <span class="n">distances</span><span class="p">,</span> <span class="n">h_bs</span><span class="o">=</span><span class="n">h_bs</span><span class="p">,</span> <span class="n">h_ue</span><span class="o">=</span><span class="n">h_ue</span>
+<span class="gp">... </span>    <span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># randomly assign LOS or Non-LOS type to UE (according to above prob.)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">NumpyRNGContext</span><span class="p">(</span><span class="mi">0</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">los_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">distances</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">los_prob</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># note: los_type == True : LOS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#       los_type == False: Non-LOS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">los_type</span><span class="p">,</span> <span class="n">PL_los</span><span class="o">.</span><span class="n">to_value</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">),</span> <span class="n">PL_nlos</span><span class="o">.</span><span class="n">to_value</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="p">)</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PL</span>  
+<span class="go">&lt;Decibel [ 76.93523856, 110.58128371, 135.20195715, 145.82665484] dB&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Assume some antenna gains:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G_bs</span><span class="p">,</span> <span class="n">G_ue</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CL</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">PL</span><span class="o">.</span><span class="n">to_value</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">)</span> <span class="o">-</span>
+<span class="gp">... </span>    <span class="n">G_bs</span><span class="o">.</span><span class="n">to_value</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span><span class="p">)</span> <span class="o">-</span>
+<span class="gp">... </span>    <span class="n">G_ue</span><span class="o">.</span><span class="n">to_value</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dBi</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="p">)</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bw_carrier</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">MHz</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bw_rb</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">kHz</span>  <span class="c1"># resource block bandwidth</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">num_ue</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># 3 UEs per BS sector and carrier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M_pusch</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bw_carrier</span> <span class="o">/</span> <span class="n">bw_rb</span> <span class="o">/</span> <span class="n">num_ue</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M_pusch</span>
+<span class="go">185</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_cmax</span> <span class="o">=</span> <span class="mi">23</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_0_pusch</span> <span class="o">=</span> <span class="o">-</span><span class="mf">95.5</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.8</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_pusch</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">P_pusch</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">P_cmax</span><span class="p">,</span> <span class="n">M_pusch</span><span class="p">,</span> <span class="n">P_0_pusch</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">CL</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_pusch</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dBm</span><span class="p">)</span>
+<span class="go">&lt;Decibel [-31.28009187,  -4.36325575,  15.333283  ,  23.          ] dB(mW)&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">P_pusch</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.1/docs/api/pycraf.pathprof.P_pusch.rst">Edit This Page on Github</a> &nbsp;
+    <a href="../_sources/api/pycraf.pathprof.P_pusch.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2021, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
+    Last built 04 Aug 2021. <br/>
+  </p>
+</footer>
+  </body>
+</html>

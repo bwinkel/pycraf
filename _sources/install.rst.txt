@@ -7,14 +7,14 @@ Requirements
 
 pycraf has the following strict requirements:
 
-- `Python <http://www.python.org/>`__ 3.6 or later
+- `Python <http://www.python.org/>`__ 3.7 or later
 
 - `setuptools <https://pythonhosted.org/setuptools/>`__: Used for the package
   installation.
 
 - `Cython <http://cython.org/>`__ 0.29 or later
 
-- `NumPy <http://www.numpy.org/>`__ 1.14 or later
+- `NumPy <http://www.numpy.org/>`__ 1.14.5 or later
 
 - `SciPy <https://scipy.org/>`__: 0.19 or later
 
@@ -25,7 +25,7 @@ pycraf has the following strict requirements:
 
 There are a few optional packages, which are necessary for some functionality:
 
-- `matplotlib <http://matplotlib.org/>`__ 1.5 or later: To provide plotting
+- `matplotlib <http://matplotlib.org/>`__ 3.0 or later: To provide plotting
   functionality that `~pycraf.pathprof` enhances.
 
 - `pyproj <https://pypi.python.org/pypi/pyproj>`__ 2.0 or later: This is a

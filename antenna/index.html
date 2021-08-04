@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Antenna patterns (pycraf.antenna) &#8212; pycraf v1.1.0</title>
+    <title>Antenna patterns (pycraf.antenna) &#8212; pycraf v1.1.1</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -26,7 +26,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="fl_G_max_from_hpbw" href="../api/pycraf.antenna.fl_G_max_from_hpbw.html" />
-    <link rel="prev" title="R_E" href="../api/pycraf.pathprof.R_E.html" />
+    <link rel="prev" title="UE_MIN_MAX_DISTANCES" href="../api/pycraf.pathprof.UE_MIN_MAX_DISTANCES.html" />
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
 
   </head><body>
@@ -59,13 +59,13 @@
 	</a>
       </li>
       <li class="right">
-	<a href="../api/pycraf.pathprof.R_E.html" title="R_E">
+	<a href="../api/pycraf.pathprof.UE_MIN_MAX_DISTANCES.html" title="UE_MIN_MAX_DISTANCES">
 	  &laquo; previous
 	</a>
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.1.0</a>
+	<a href="../index.html">pycraf v1.1.1</a>
 	 &#187;
       </li>
       
@@ -92,7 +92,7 @@ studies they are usually sufficient.</p>
 <section id="antenna-patterns-for-fixed-and-mobile-service-itu-r-rec-f-1336">
 <h3>Antenna patterns for fixed and mobile service (ITU-R Rec. F.1336)<a class="headerlink" href="#antenna-patterns-for-fixed-and-mobile-service-itu-r-rec-f-1336" title="Permalink to this headline">¶</a></h3>
 <p>For fixed link and mobile communications (IMT), several antenna patterns are
-provided in <a class="reference external" href="https://www.itu.int/rec/R-REC-F.1336-4-201402-I/en">ITU-R Rec F.1336-4</a>.</p>
+provided in <a class="reference external" href="https://www.itu.int/rec/R-REC-F.1336-5-201901-I/en">ITU-R Rec F.1336-5</a>.</p>
 <p>Below, you can find a typical use case:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -141,9 +141,10 @@ provided in <a class="reference external" href="https://www.itu.int/rec/R-REC-F.
 tilt angles.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>At the moment only the sectoral peak-side lobe pattern for the frequency
-range between 400 MHz and 6 GHz is provided. This is the one, which can
-be used for IMT-advanced (LTE) basestations. Other patterns will follow.</p>
+<p>At the moment only the sectoral peak- and average side lobe pattern for
+the frequency range between 400 MHz and 6 GHz are provided. This is the
+one, which can be used for IMT-advanced (LTE) basestations. Other
+patterns will follow.</p>
 </div>
 </section>
 <section id="wrc-19-agenda-item-1-13-imt2020">
@@ -377,11 +378,15 @@ IMT.MODEL document (<a class="reference external" href="https://www.itu.int/md/R
 <td><p><p>Single antenna element’s pattern according to <a class="reference external" href="https://www.itu.int/md/R15-TG5.1-C-0036">IMT.MODEL</a> document.</p>
 </p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz.html#pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz" title="pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz</span></code></a>(…)</p></td>
-<td><p><p>IMT advanced (LTE) antenna pattern (sectoral, peak side-lobe) for the frequency range 400 MHz to 6 GHz according to <a class="reference external" href="https://www.itu.int/rec/R-REC-F.1336-4-201402-I/en">ITU-R Rec F.1336-4</a> Section 3.1.1.</p>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.antenna.imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz.html#pycraf.antenna.imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz" title="pycraf.antenna.imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz</span></code></a>(…)</p></td>
+<td><p><p>IMT advanced (LTE) antenna pattern (sectoral, peak side-lobe) for the frequency range 400 MHz to 6 GHz according to <a class="reference external" href="https://www.itu.int/rec/R-REC-F.1336-5-201901-I/en">ITU-R Rec F.1336-5</a> Section 3.1.2.</p>
 </p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.antenna.ras_pattern.html#pycraf.antenna.ras_pattern" title="pycraf.antenna.ras_pattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ras_pattern</span></code></a>(phi, diameter, wavelength[, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz.html#pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz" title="pycraf.antenna.imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz</span></code></a>(…)</p></td>
+<td><p><p>IMT advanced (LTE) antenna pattern (sectoral, peak side-lobe) for the frequency range 400 MHz to 6 GHz according to <a class="reference external" href="https://www.itu.int/rec/R-REC-F.1336-5-201901-I/en">ITU-R Rec F.1336-5</a> Section 3.1.1.</p>
+</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.antenna.ras_pattern.html#pycraf.antenna.ras_pattern" title="pycraf.antenna.ras_pattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ras_pattern</span></code></a>(phi, diameter, wavelength[, …])</p></td>
 <td><p>Antenna gain as a function of angular distance after <a class="reference external" href="https://www.itu.int/rec/R-REC-RA.1631-0-200305-I/en">ITU-R Rec RA.1631</a>.</p></td>
 </tr>
 </tbody>
@@ -427,14 +432,14 @@ IMT.MODEL document (<a class="reference external" href="https://www.itu.int/md/R
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.0/docs/antenna/index.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.1/docs/antenna/index.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/antenna/index.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2021, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.3. &nbsp;
-    Last built 07 Jul 2021. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
+    Last built 04 Aug 2021. <br/>
   </p>
 </footer>
   </body>

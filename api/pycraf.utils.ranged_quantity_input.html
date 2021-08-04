@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>ranged_quantity_input &#8212; pycraf v1.1.0</title>
+    <title>ranged_quantity_input &#8212; pycraf v1.1.1</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -65,7 +65,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.1.0</a>
+	<a href="../index.html">pycraf v1.1.1</a>
 	 &#187;
       </li>
       <li><a href="../utils/index.html" accesskey="U">Utilities (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.utils</span></code>)</a> &#187;</li>
@@ -84,16 +84,16 @@
 <h1>ranged_quantity_input<a class="headerlink" href="#ranged-quantity-input" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pycraf.utils.ranged_quantity_input">
-<span class="sig-prename descclassname"><span class="pre">pycraf.utils.</span></span><span class="sig-name descname"><span class="pre">ranged_quantity_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.1.0/pycraf/utils/decorators.py#L17" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.utils.ranged_quantity_input" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pycraf.utils.</span></span><span class="sig-name descname"><span class="pre">ranged_quantity_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.1.1/pycraf/utils/decorators.py#L17" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.utils.ranged_quantity_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>A decorator for validating the units of arguments to functions.</p>
 <p>This decorator was adapted from Astropy’s
-<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.quantity_input.html#astropy.units.quantity_input" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quantity_input</span></code></a>,
+<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.quantity_input.html#astropy.units.quantity_input" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quantity_input</span></code></a>,
 but adds range checking and the possibilities to strip
 the units before feeding into the decorated function.
 It also allows to apply a new unit to the returned value
-(<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.quantity_input.html#astropy.units.quantity_input" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quantity_input</span></code></a> only does this in conjuction
+(<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.quantity_input.html#astropy.units.quantity_input" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quantity_input</span></code></a> only does this in conjuction
 with type annotations).</p>
-<p>A <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.UnitsError.html#astropy.units.UnitsError" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UnitsError</span></code></a> will be raised if the unit
+<p>A <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.UnitsError.html#astropy.units.UnitsError" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UnitsError</span></code></a> will be raised if the unit
 attribute of the argument is not equivalent to the unit
 specified to the decorator or in the annotation. If the
 argument has no unit attribute, i.e. it is not a Quantity
@@ -123,7 +123,7 @@ and is in the range between zero and one meters; and that
 to parameters that are “registered” in the decorator,
 see examples. (default: False)</p>
 </dd>
-<dt><strong>output_unit</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Unit.html#astropy.units.Unit" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Unit</span></code></a> or tuple of <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Unit.html#astropy.units.Unit" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Unit</span></code></a>, optional</span></dt><dd><p>Add units to the return value(s) of the decorated function.
+<dt><strong>output_unit</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Unit.html#astropy.units.Unit" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Unit</span></code></a> or tuple of <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Unit.html#astropy.units.Unit" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Unit</span></code></a>, optional</span></dt><dd><p>Add units to the return value(s) of the decorated function.
 Note that internally the given units are <em>multiplied</em> with
 the return values, which means you should only use this
 if you have stripped the units from the input (or otherwise
@@ -145,7 +145,7 @@ made sure that the return values are unit-less).</p>
 function is not supported (i.e. *arg or **kwargs).</p>
 <p class="rubric">Examples</p>
 <p>In the most basic form, <a class="reference internal" href="#pycraf.utils.ranged_quantity_input" title="pycraf.utils.ranged_quantity_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ranged_quantity_input</span></code></a>
-behaves like <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.quantity_input.html#astropy.units.quantity_input" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quantity_input</span></code></a>, but adds
+behaves like <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.quantity_input.html#astropy.units.quantity_input" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quantity_input</span></code></a>, but adds
 range checking:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf.utils</span> <span class="kn">import</span> <span class="n">ranged_quantity_input</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
@@ -281,14 +281,14 @@ than <a class="reference external" href="https://docs.python.org/3/library/const
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.0/docs/api/pycraf.utils.ranged_quantity_input.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.1/docs/api/pycraf.utils.ranged_quantity_input.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.utils.ranged_quantity_input.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2021, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.3. &nbsp;
-    Last built 07 Jul 2021. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
+    Last built 04 Aug 2021. <br/>
   </p>
 </footer>
   </body>

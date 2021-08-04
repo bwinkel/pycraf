@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>imt_urban_micro_losses &#8212; pycraf v1.1.1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="landcover_to_p452_clutter_zones" href="pycraf.pathprof.landcover_to_p452_clutter_zones.html" />
+    <link rel="prev" title="imt_urban_macro_losses" href="pycraf.pathprof.imt_urban_macro_losses.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="pycraf.pathprof.landcover_to_p452_clutter_zones.html" title="landcover_to_p452_clutter_zones">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="pycraf.pathprof.imt_urban_macro_losses.html" title="imt_urban_macro_losses">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v1.1.1</a>
+	 &#187;
+      </li>
+      <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
+      
+      <li>imt_urban_micro_losses</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="imt-urban-micro-losses">
+<h1>imt_urban_micro_losses<a class="headerlink" href="#imt-urban-micro-losses" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="pycraf.pathprof.imt_urban_micro_losses">
+<span class="sig-prename descclassname"><span class="pre">pycraf.pathprof.</span></span><span class="sig-name descname"><span class="pre">imt_urban_micro_losses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">freq</span></em>, <em class="sig-param"><span class="pre">dist_2d</span></em>, <em class="sig-param"><span class="pre">h_bs=&lt;Quantity</span> <span class="pre">10.</span> <span class="pre">m&gt;</span></em>, <em class="sig-param"><span class="pre">h_ue=&lt;Quantity</span> <span class="pre">1.5</span> <span class="pre">m&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/imt.html#imt_urban_micro_losses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.1.1/pycraf/pathprof/imt.py#L402" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.pathprof.imt_urban_micro_losses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate los/non-los propagation losses Rural-Macro IMT scenario.</p>
+<p>The computation is in accordance with <a class="reference external" href="https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173">3GPP TR 38.901 Table 7.4.1-1</a></p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>freq</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Frequency of radiation [GHz]</p>
+</dd>
+<dt><strong>dist_2d</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Distance on the ground between BS and UE device [m]
+Note: Well-defined only for distances between 10 m and 5 km.</p>
+</dd>
+<dt><strong>h_bs</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Basestation height [m] (Default: 35 m)</p>
+</dd>
+<dt><strong>h_ue</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>User equipment height [m] (Default: 1.5 m)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>PL_los</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Path loss for line-of-sight cases [dB]</p>
+</dd>
+<dt><strong>PL_nlos</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Path loss for non-line-of-sight cases [dB]</p>
+</dd>
+<dt><strong>los_prob</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Probability for a path to be line-of-sight. [dimless]
+(see Notes and Examples)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>In statistical simulations, the LoS and Non-LoS cases occur with
+certain probabilities. For sampling of path losses the return
+parameter <code class="xref py py-obj docutils literal notranslate"><span class="pre">los_prob</span></code> can be used, which accounts for the likelihoods
+according to <a class="reference external" href="https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173">3GPP TR 38.901 Table 7.4.2-1</a></p></li>
+</ul>
+<p class="rubric">Examples</p>
+<p>A typical usage, which also accounts for the line-of-sight probabilities,
+would be:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">pathprof</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy.utils.misc</span> <span class="kn">import</span> <span class="n">NumpyRNGContext</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">freq</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">GHz</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h_bs</span><span class="p">,</span> <span class="n">h_ue</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">distances</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">20000</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>  <span class="c1"># 2D distances</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Note: too small or large distances will lead to NaN values</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PL_los</span><span class="p">,</span> <span class="n">PL_nlos</span><span class="p">,</span> <span class="n">los_prob</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">imt_urban_micro_losses</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">freq</span><span class="p">,</span> <span class="n">distances</span><span class="p">,</span> <span class="n">h_bs</span><span class="o">=</span><span class="n">h_bs</span><span class="p">,</span> <span class="n">h_ue</span><span class="o">=</span><span class="n">h_ue</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PL_los</span>  
+<span class="go">&lt;Decibel [         nan,  60.47880565, 118.53377126,          nan] dB&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PL_nlos</span>  
+<span class="go">&lt;Decibel [         nan,  69.59913521, 128.3005538 ,          nan] dB&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">los_prob</span>  
+<span class="go">&lt;Quantity [1.00000000e+00, 9.57375342e-01, 1.80000000e-02, 9.00000000e-04]&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># randomly assign LOS or Non-LOS type to UE (according to above prob.)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">NumpyRNGContext</span><span class="p">(</span><span class="mi">0</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">los_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">distances</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">los_prob</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># note: los_type == True : LOS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#       los_type == False: Non-LOS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">los_type</span>
+<span class="go">array([ True,  True, False, False])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">los_type</span><span class="p">,</span> <span class="n">PL_los</span><span class="o">.</span><span class="n">to_value</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">),</span> <span class="n">PL_nlos</span><span class="o">.</span><span class="n">to_value</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="p">)</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PL</span>  
+<span class="go">&lt;Decibel [         nan,  60.47880565, 128.3005538 ,          nan] dB&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">imt_urban_micro_losses</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.1/docs/api/pycraf.pathprof.imt_urban_micro_losses.rst">Edit This Page on Github</a> &nbsp;
+    <a href="../_sources/api/pycraf.pathprof.imt_urban_micro_losses.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2021, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
+    Last built 04 Aug 2021. <br/>
+  </p>
+</footer>
+  </body>
+</html>
