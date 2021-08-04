@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>raytrace_path &#8212; pycraf v1.1.0</title>
+    <title>raytrace_path &#8212; pycraf v1.1.1dev422</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -65,7 +65,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.1.0</a>
+	<a href="../index.html">pycraf v1.1.1dev422</a>
 	 &#187;
       </li>
       <li><a href="../atm/index.html" accesskey="U">Atmospheric models (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.atm</span></code>)</a> &#187;</li>
@@ -84,7 +84,7 @@
 <h1>raytrace_path<a class="headerlink" href="#raytrace-path" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pycraf.atm.raytrace_path">
-<span class="sig-prename descclassname"><span class="pre">pycraf.atm.</span></span><span class="sig-name descname"><span class="pre">raytrace_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">elevation</span></em>, <em class="sig-param"><span class="pre">obs_alt</span></em>, <em class="sig-param"><span class="pre">atm_layers_cache</span></em>, <em class="sig-param"><span class="pre">max_arc_length=&lt;Quantity</span> <span class="pre">180.</span> <span class="pre">deg&gt;</span></em>, <em class="sig-param"><span class="pre">max_path_length=&lt;Quantity</span> <span class="pre">1000.</span> <span class="pre">km&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#raytrace_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.1.0/pycraf/atm/atm.py#L1883" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.atm.raytrace_path" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pycraf.atm.</span></span><span class="sig-name descname"><span class="pre">raytrace_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">elevation</span></em>, <em class="sig-param"><span class="pre">obs_alt</span></em>, <em class="sig-param"><span class="pre">atm_layers_cache</span></em>, <em class="sig-param"><span class="pre">max_arc_length=&lt;Quantity</span> <span class="pre">180.</span> <span class="pre">deg&gt;</span></em>, <em class="sig-param"><span class="pre">max_path_length=&lt;Quantity</span> <span class="pre">1000.</span> <span class="pre">km&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#raytrace_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L1883" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.atm.raytrace_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the propagation path geometry through atmosphere by ray-tracing.</p>
 <p>For several tasks related to the <a class="reference internal" href="../atm/index.html#module-pycraf.atm" title="pycraf.atm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atm</span></code></a> sub-package, it is
 necessary to determine the exact path geometry of a propagating ray
@@ -96,17 +96,17 @@ multiplied with the specific attenuation of the layers.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>elevation</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>(Apparent) elevation of source/target as seen from observer [deg]</p>
+<dt><strong>elevation</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>(Apparent) elevation of source/target as seen from observer [deg]</p>
 </dd>
-<dt><strong>obs_alt</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Height of observer above sea-level [km]</p>
+<dt><strong>obs_alt</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Height of observer above sea-level [km]</p>
 </dd>
 <dt><strong>atm_layers_cache</strong><span class="classifier">dict</span></dt><dd><p>Pre-computed physical parameters for each atmopheric layer as
 returned by the <a class="reference internal" href="pycraf.atm.atm_layers.html#pycraf.atm.atm_layers" title="pycraf.atm.atm_layers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atm_layers</span></code></a> function.</p>
 </dd>
-<dt><strong>max_path_length</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Maximal length of path before stopping the ray-tracing [km]</p>
+<dt><strong>max_path_length</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Maximal length of path before stopping the ray-tracing [km]</p>
 <p>(default: 1000 km; useful for terrestrial paths)</p>
 </dd>
-<dt><strong>max_arc_length</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Maximal arc-length (true angular distance between observer and source/
+<dt><strong>max_arc_length</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Maximal arc-length (true angular distance between observer and source/
 target) of path before stopping ray-tracing [deg]</p>
 <p>(default: 180 deg; useful for terrestrial paths)</p>
 </dd>
@@ -161,7 +161,7 @@ point) of current step.</p>
 </li>
 </ul>
 </dd>
-<dt><strong>refraction</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Refraction angle (i.e., the total “bending” angle of the ray) [deg]</p>
+<dt><strong>refraction</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, scalar</span></dt><dd><p>Refraction angle (i.e., the total “bending” angle of the ray) [deg]</p>
 </dd>
 <dt><strong>is_space_path</strong><span class="classifier">bool</span></dt><dd><p>Whether the paths ends outside of Earth’s atmosphere (in
 terms of the atmospheric profile function used).</p>
@@ -198,14 +198,14 @@ indices start from zero, while the layer indices start from one.</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.0/docs/api/pycraf.atm.raytrace_path.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/master/docs/api/pycraf.atm.raytrace_path.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.atm.raytrace_path.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2021, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.3. &nbsp;
-    Last built 07 Jul 2021. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
+    Last built 04 Aug 2021. <br/>
   </p>
 </footer>
   </body>

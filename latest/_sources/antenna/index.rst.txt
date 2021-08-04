@@ -19,7 +19,7 @@ Using `pycraf.antenna`
 Antenna patterns for fixed and mobile service (ITU-R Rec. F.1336)
 -----------------------------------------------------------------
 For fixed link and mobile communications (IMT), several antenna patterns are
-provided in `ITU-R Rec F.1336-4 <https://www.itu.int/rec/R-REC-F.1336-4-201402-I/en>`_.
+provided in `ITU-R Rec F.1336-5 <https://www.itu.int/rec/R-REC-F.1336-5-201901-I/en>`_.
 
 Below, you can find a typical use case:
 
@@ -69,9 +69,10 @@ tilt angles.
 
 .. note::
 
-    At the moment only the sectoral peak-side lobe pattern for the frequency
-    range between 400 MHz and 6 GHz is provided. This is the one, which can
-    be used for IMT-advanced (LTE) basestations. Other patterns will follow.
+    At the moment only the sectoral peak- and average side lobe pattern for
+    the frequency range between 400 MHz and 6 GHz are provided. This is the
+    one, which can be used for IMT-advanced (LTE) basestations. Other
+    patterns will follow.
 
 WRC-19 Agenda Item 1.13, IMT2020
 --------------------------------

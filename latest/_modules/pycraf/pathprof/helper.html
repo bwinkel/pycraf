@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pycraf.pathprof.helper &#8212; pycraf v1.1.0</title>
+    <title>pycraf.pathprof.helper &#8212; pycraf v1.1.1dev422</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -51,7 +51,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v1.1.0</a>
+	<a href="../../../index.html">pycraf v1.1.1dev422</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -555,7 +555,7 @@
 <span class="sd">        &gt;&gt;&gt; terrain_cmap, terrain_norm = terrain_cmap_factory(vmax=vmax)  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; plt.imshow(  # doctest: +SKIP</span>
 <span class="sd">        ...     heights, cmap=terrain_cmap, norm=terrain_norm,</span>
-<span class="sd">        ...     vmin=vmin, vmax=vmax</span>
+<span class="sd">        ...     # vmin=vmin, vmax=vmax  # deprecated in newer matplotlib versions</span>
 <span class="sd">        ...     )</span>
 
 <span class="sd">    Parameters</span>
@@ -563,8 +563,9 @@
 <span class="sd">    sealevel : float</span>
 <span class="sd">        The sealevel value.</span>
 <span class="sd">    vmax : float</span>
-<span class="sd">        Maximum height to cover in the colormap</span>
-<span class="sd">        (one should call plt.imshow with the same vmax option!)</span>
+<span class="sd">        Maximum height to cover in the colormap (Default: 1200)</span>
+<span class="sd">        (in older matplotlib versions, one should call plt.imshow with the</span>
+<span class="sd">        same `vmax` option, and `vmin=-20`!)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -617,8 +618,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2021, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.3. &nbsp;
-    Last built 07 Jul 2021. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
+    Last built 04 Aug 2021. <br/>
   </p>
 </footer>
   </body>

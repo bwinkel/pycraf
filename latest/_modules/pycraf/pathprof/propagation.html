@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pycraf.pathprof.propagation &#8212; pycraf v1.1.0</title>
+    <title>pycraf.pathprof.propagation &#8212; pycraf v1.1.1dev422</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -51,7 +51,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v1.1.0</a>
+	<a href="../../../index.html">pycraf v1.1.1dev422</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -92,7 +92,7 @@
     <span class="s1">&#39;PathProp&#39;</span><span class="p">,</span>
     <span class="s1">&#39;loss_freespace&#39;</span><span class="p">,</span> <span class="s1">&#39;loss_troposcatter&#39;</span><span class="p">,</span> <span class="s1">&#39;loss_ducting&#39;</span><span class="p">,</span>
     <span class="s1">&#39;loss_diffraction&#39;</span><span class="p">,</span> <span class="s1">&#39;loss_complete&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;clutter_correction&#39;</span><span class="p">,</span> <span class="s1">&#39;clutter_imt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;clutter_correction&#39;</span><span class="p">,</span>
     <span class="s1">&#39;height_map_data&#39;</span><span class="p">,</span> <span class="s1">&#39;atten_map_fast&#39;</span><span class="p">,</span>
     <span class="s1">&#39;height_path_data&#39;</span><span class="p">,</span> <span class="s1">&#39;height_path_data_generic&#39;</span><span class="p">,</span> <span class="s1">&#39;atten_path_fast&#39;</span><span class="p">,</span>
     <span class="s1">&#39;losses_complete&#39;</span><span class="p">,</span>
@@ -540,132 +540,6 @@
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">return</span> <span class="n">cyprop</span><span class="o">.</span><span class="n">clutter_correction_cython</span><span class="p">(</span><span class="n">h_g</span><span class="p">,</span> <span class="n">zone</span><span class="p">,</span> <span class="n">freq</span><span class="p">)</span></div>
-
-
-<span class="k">def</span> <span class="nf">_Qinv</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="c1"># Note, this is *not* identical to cyprop._I_helper</span>
-    <span class="c1"># only good between 1.e-6 and 0.5</span>
-    <span class="c1"># See R-Rec P.1546</span>
-
-    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mf">0.5</span>
-    <span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
-
-    <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-    <span class="n">Z</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="p">(</span>
-            <span class="p">((</span><span class="mf">0.010328</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">0.802853</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="mf">2.515516698</span>
-            <span class="p">)</span> <span class="o">/</span>
-        <span class="p">(</span>
-            <span class="p">((</span><span class="mf">0.001308</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">0.189269</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">1.432788</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">1.</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-
-    <span class="n">Q</span> <span class="o">=</span> <span class="n">T</span> <span class="o">-</span> <span class="n">Z</span>
-    <span class="n">Q</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-    <span class="k">return</span> <span class="n">Q</span>
-
-
-<span class="c1"># def Qinv(x):</span>
-<span class="c1">#     # larger x range than the approximation given in P.1546?</span>
-<span class="c1">#     # definitely much slower</span>
-
-<span class="c1">#     from scipy.stats import norm as qnorm</span>
-
-<span class="c1">#     x = np.atleast_1d(x).copy()</span>
-
-<span class="c1">#     mask = x &gt; 0.5</span>
-<span class="c1">#     x[mask] = 1 - x[mask]</span>
-
-<span class="c1">#     Q = -qnorm.ppf(x, 0)</span>
-<span class="c1">#     Q[mask] *= -1</span>
-
-<span class="c1">#     return Q</span>
-
-
-<span class="k">def</span> <span class="nf">_clutter_imt</span><span class="p">(</span>
-        <span class="n">freq</span><span class="p">,</span>
-        <span class="n">dist</span><span class="p">,</span>
-        <span class="n">location_percent</span><span class="p">,</span>
-        <span class="n">num_end_points</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="p">):</span>
-
-    <span class="k">assert</span> <span class="n">num_end_points</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
-
-    <span class="n">L_l</span> <span class="o">=</span> <span class="mf">23.5</span> <span class="o">+</span> <span class="mf">9.6</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
-    <span class="n">L_s</span> <span class="o">=</span> <span class="mf">32.98</span> <span class="o">+</span> <span class="mf">23.9</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span> <span class="o">+</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
-
-    <span class="n">L_clutter</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span> <span class="o">*</span> <span class="n">L_l</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span> <span class="o">*</span> <span class="n">L_s</span><span class="p">)</span>
-        <span class="p">)</span> <span class="o">-</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">_Qinv</span><span class="p">(</span><span class="n">location_percent</span> <span class="o">/</span> <span class="mf">100.</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">num_end_points</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">L_clutter</span> <span class="o">*=</span> <span class="mi">2</span>
-
-    <span class="k">return</span> <span class="n">L_clutter</span>
-
-
-<div class="viewcode-block" id="clutter_imt"><a class="viewcode-back" href="../../../api/pycraf.pathprof.clutter_imt.html#pycraf.pathprof.clutter_imt">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
-    <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">GHz</span><span class="p">),</span>
-    <span class="n">dist</span><span class="o">=</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
-    <span class="n">location_percent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
-    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
-    <span class="p">)</span>
-<span class="k">def</span> <span class="nf">clutter_imt</span><span class="p">(</span>
-        <span class="n">freq</span><span class="p">,</span>
-        <span class="n">dist</span><span class="p">,</span>
-        <span class="n">location_percent</span><span class="p">,</span>
-        <span class="n">num_end_points</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Calculate the Clutter loss according to IMT.CLUTTER document (method 2).</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    freq : `~astropy.units.Quantity`</span>
-<span class="sd">        Frequency of radiation [GHz]</span>
-<span class="sd">    dist : `~astropy.units.Quantity`</span>
-<span class="sd">        Distance between Tx/Rx antennas [km]</span>
-
-<span class="sd">        Minimal distance must be 0.25 km (single endpoint clutter) or 1 km</span>
-<span class="sd">        (if both endpoints are to be corrected for clutter)</span>
-<span class="sd">    location_percent : `~astropy.units.Quantity`</span>
-<span class="sd">        Percentage of locations for which the clutter loss `L_clutter`</span>
-<span class="sd">        (calculated with this function) will not be exceeded [%]</span>
-<span class="sd">    num_end_points : int, optional</span>
-<span class="sd">        number of endpoints affected by clutter, allowed values: 1, 2</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    L_clutter : `~astropy.units.Quantity`</span>
-<span class="sd">        Clutter loss [dB]</span>
-
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    - The algorithm is independent of effective antenna height (w.r.t.</span>
-<span class="sd">      clutter height), i.e., it doesn&#39;t distinguish between terminals which</span>
-<span class="sd">      are close to the ground and those closer to the top of the building.</span>
-<span class="sd">      However, the model is only appropriate if the terminal is &quot;in the</span>
-<span class="sd">      clutter&quot;, below the rooftops.</span>
-<span class="sd">    - The result of this function is to be understood as a cumulative</span>
-<span class="sd">      value. For example, if `location_percent = 2%`, it means that for</span>
-<span class="sd">      2% of all possible locations, the clutter loss will not exceed the</span>
-<span class="sd">      returned `L_clutter` value, for the remaining 98% of locations it</span>
-<span class="sd">      will therefore be lower than `L_clutter`. The smaller `location_percent`,</span>
-<span class="sd">      the smaller the returned `L_clutter`, i.e., low clutter attenuations</span>
-<span class="sd">      are more unlikely.</span>
-<span class="sd">    - This model was proposed by ITU study group SG 3 to replace</span>
-<span class="sd">      `~pycraf.pathprof.clutter_correction` for IMT 5G studies (especially,</span>
-<span class="sd">      at higher frequencies, where multipath effects play a role in</span>
-<span class="sd">      urban and suburban areas).</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-
-    <span class="k">return</span> <span class="n">_clutter_imt</span><span class="p">(</span>
-        <span class="n">freq</span><span class="p">,</span>
-        <span class="n">dist</span><span class="p">,</span>
-        <span class="n">location_percent</span><span class="p">,</span>
-        <span class="n">num_end_points</span><span class="o">=</span><span class="n">num_end_points</span><span class="p">,</span>
-        <span class="p">)</span></div>
 
 
 <span class="c1"># TODO: do we want to convert output dictionary arrays to quantities?</span>
@@ -1804,8 +1678,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2021, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.0.3. &nbsp;
-    Last built 07 Jul 2021. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
+    Last built 04 Aug 2021. <br/>
   </p>
 </footer>
   </body>

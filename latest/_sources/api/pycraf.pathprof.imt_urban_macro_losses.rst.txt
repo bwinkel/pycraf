@@ -1,0 +1,6 @@
+imt_urban_macro_losses
+======================
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: imt_urban_macro_losses
