@@ -229,6 +229,7 @@ def imt_rural_macro_losses(
     would be::
 
         >>> import numpy as np
+        >>> from pycraf import conversions as cnv
         >>> from pycraf import pathprof
         >>> from astropy import units as u
         >>> from astropy.utils.misc import NumpyRNGContext
@@ -255,7 +256,9 @@ def imt_rural_macro_losses(
         >>> #       los_type == False: Non-LOS
         >>> los_type
         array([ True,  True, False, False])
-        >>> PL = np.where(los_type, PL_los, PL_nlos)
+        >>> PL = np.where(
+        ...     los_type, PL_los.to_value(cnv.dB), PL_nlos.to_value(cnv.dB)
+        ...     ) * cnv.dB
         >>> PL  # doctest: +FLOAT_CMP
         <Decibel [         nan,  64.38071083, 119.54294519,          nan] dB>
 
@@ -337,6 +340,7 @@ def imt_urban_macro_losses(
     would be::
 
         >>> import numpy as np
+        >>> from pycraf import conversions as cnv
         >>> from pycraf import pathprof
         >>> from astropy import units as u
         >>> from astropy.utils.misc import NumpyRNGContext
@@ -363,7 +367,9 @@ def imt_urban_macro_losses(
         >>> #       los_type == False: Non-LOS
         >>> los_type
         array([ True,  True, False, False])
-        >>> PL = np.where(los_type, PL_los, PL_nlos)
+        >>> PL = np.where(
+        ...     los_type, PL_los.to_value(cnv.dB), PL_nlos.to_value(cnv.dB)
+        ...     ) * cnv.dB
         >>> PL  # doctest: +FLOAT_CMP
         <Decibel [         nan,  60.76626079, 130.78468516,          nan] dB>
 
@@ -450,6 +456,7 @@ def imt_urban_micro_losses(
     would be::
 
         >>> import numpy as np
+        >>> from pycraf import conversions as cnv
         >>> from pycraf import pathprof
         >>> from astropy import units as u
         >>> from astropy.utils.misc import NumpyRNGContext
@@ -476,7 +483,9 @@ def imt_urban_micro_losses(
         >>> #       los_type == False: Non-LOS
         >>> los_type
         array([ True,  True, False, False])
-        >>> PL = np.where(los_type, PL_los, PL_nlos)
+        >>> PL = np.where(
+        ...     los_type, PL_los.to_value(cnv.dB), PL_nlos.to_value(cnv.dB)
+        ...     ) * cnv.dB
         >>> PL  # doctest: +FLOAT_CMP
         <Decibel [         nan,  60.47880565, 128.3005538 ,          nan] dB>
 
@@ -571,7 +580,9 @@ def P_pusch(P_cmax, M_pusch, P_0_pusch, alpha, PL):
         ...     los_type = np.random.uniform(0, 1, distances.size) < los_prob
         >>> # note: los_type == True : LOS
         >>> #       los_type == False: Non-LOS
-        >>> PL = np.where(los_type, PL_los, PL_nlos)
+        >>> PL = np.where(
+        ...     los_type, PL_los.to_value(cnv.dB), PL_nlos.to_value(cnv.dB)
+        ...     ) * cnv.dB
         >>> PL  # doctest: +FLOAT_CMP
         <Decibel [ 76.93523856, 110.58128371, 135.20195715, 145.82665484] dB>
 
