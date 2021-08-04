@@ -381,7 +381,7 @@ cdef float64_t  _G_hr(
         return G
 
 
-cdef float64_t  _G_vr(
+cdef float64_t  _G_vr_peak(
         float64_t x_v, float64_t k_v, float64_t k_p,
         float64_t theta_3db, float64_t G180
         ) nogil:
@@ -403,6 +403,33 @@ cdef float64_t  _G_vr(
         return -12 + 10 * log10(x_v ** -1.5 + k_v)
     elif 4 <= x_v and x_v < 90 / theta_3db:
         return -lambda_kv - C * log10(x_v)
+    else:
+        # x_v == 90 / theta_3db
+        return G180
+
+
+cdef float64_t  _G_vr_avg(
+        float64_t x_v, float64_t k_v, float64_t k_a,
+        float64_t theta_3db, float64_t G180
+        ) nogil:
+
+    cdef:
+
+        float64_t x_k = sqrt(1.33 - 0.33 * k_v)
+        float64_t C = (
+            10 * log10(
+                (180. / theta_3db) ** 1.5 * (4 ** -1.5 + k_v) / (1 + 8 * k_a)
+                ) /
+            log10(22.5 / theta_3db)
+            )
+        float64_t lambda_kv = 12 - C * log10(4.) - 10 * log10(4 ** -1.5 + k_v)
+
+    if x_v < x_k:
+        return -12 * x_v ** 2
+    elif x_k <= x_v and x_v < 4:
+        return -15 + 10 * log10(x_v ** -1.5 + k_v)
+    elif 4 <= x_v and x_v < 90 / theta_3db:
+        return -lambda_kv - 3 - C * log10(x_v)
     else:
         # x_v == 90 / theta_3db
         return G180
@@ -477,7 +504,7 @@ cdef float64_t _imt_advanced_sectoral_peak_sidelobe_pattern(
     return (
         G0 +
         _G_hr(x_h, k_h, G180) +
-        R * _G_vr(x_v, k_v, k_p, theta_3db, G180)
+        R * _G_vr_peak(x_v, k_v, k_p, theta_3db, G180)
         )
 
 
@@ -551,6 +578,155 @@ def imt_advanced_sectoral_peak_sidelobe_pattern_cython(
                 _azim[i], _elev[i],
                 _G0[i], _phi_3db[i], _theta_3db[i],
                 _k_p[i], _k_h[i], _k_v[i],
+                _tilt_m[i], _tilt_e[i],
+                )
+
+    return it.operands[10]
+
+
+cdef float64_t _imt_advanced_sectoral_avg_sidelobe_pattern(
+        float64_t azim, float64_t elev,
+        float64_t G0, float64_t phi_3db, float64_t theta_3db,
+        float64_t k_a, float64_t k_h, float64_t k_v,
+        float64_t tilt_m, float64_t tilt_e,
+        ) nogil:
+
+    cdef:
+
+        float64_t beta = 0.
+        float64_t tmp = 0.
+
+        float64_t azim_rot = 0.
+        float64_t elev_rot = 0.
+
+        float64_t x_h = 0.
+        float64_t x_v = 0.
+
+        float64_t G180 = 0.
+        float64_t R = 0.
+
+    if tilt_m != 0.:
+
+        azim *= DEG2RAD
+        elev *= DEG2RAD
+        beta = tilt_m * DEG2RAD
+
+        elev_rot = asin(
+            sin(elev) * cos(beta) +
+            cos(elev) * cos(azim) * sin(beta)
+            )
+
+        tmp = (
+            -sin(elev) * sin(beta) +
+            cos(elev) * cos(azim) * cos(beta)
+            ) / cos(elev_rot)
+        if tmp > 1.:
+            tmp = 1.
+        if tmp < -1.:
+            tmp = -1.
+
+        azim_rot = acos(tmp)
+
+        azim = RAD2DEG * azim_rot
+        elev = RAD2DEG * elev_rot
+
+    if tilt_e != 0.:
+
+        tmp = elev + tilt_e
+        if tmp >= 0.:
+            elev_rot = 90 * tmp / (90 + tilt_e)
+        else:
+            elev_rot = 90 * tmp / (90 - tilt_e)
+
+        elev = elev_rot
+
+    G180 = -15 + 10 * log10(1 + 8 * k_a) - 15 * log10(180. / theta_3db)
+
+    x_h = fabs(azim) / phi_3db
+    x_v = fabs(elev) / theta_3db
+
+    R = (
+        (_G_hr(x_h, k_h, G180) - _G_hr(180. / phi_3db, k_h, G180)) /
+        (_G_hr(0., k_h, G180) - _G_hr(180. / phi_3db, k_h, G180))
+        )
+
+    return (
+        G0 +
+        _G_hr(x_h, k_h, G180) +
+        R * _G_vr_avg(x_v, k_v, k_a, theta_3db, G180)
+        )
+
+
+def imt_advanced_sectoral_avg_sidelobe_pattern_cython(
+        azim, elev,
+        G0, phi_3db, theta_3db,
+        k_a, k_h, k_v,
+        tilt_m, tilt_e,
+        gain=None,
+        ):
+    '''
+    Parallelized IMT advanced (LTE) antenna pattern (sectoral, avg side-lobe)
+    '''
+
+    cdef:
+
+        np.ndarray[float64_t] _azim, _elev
+        np.ndarray[float64_t] _G0, _phi_3db, _theta_3db
+        np.ndarray[float64_t] _k_a, _k_h, _k_v
+        np.ndarray[float64_t] _tilt_m, _tilt_e
+        np.ndarray[float64_t] _gain
+
+        int i, size
+
+    it = np.nditer(
+        [
+            azim, elev,
+            G0, phi_3db, theta_3db,
+            k_a, k_h, k_v,
+            tilt_m, tilt_e,
+            gain
+            ],
+        flags=['external_loop', 'buffered', 'delay_bufalloc'],
+        op_flags=[
+            ['readonly'], ['readonly'], ['readonly'], ['readonly'],
+            ['readonly'], ['readonly'], ['readonly'], ['readonly'],
+            ['readonly'], ['readonly'],
+            ['readwrite', 'allocate'],
+            ],
+        op_dtypes=[
+            FLOAT64, FLOAT64, FLOAT64, FLOAT64,
+            FLOAT64, FLOAT64, FLOAT64, FLOAT64,
+            FLOAT64, FLOAT64,
+            FLOAT64,
+            ]
+        )
+
+    # it would be better to use the context manager but
+    # "with it:" requires numpy >= 1.14
+
+    it.reset()
+
+    for itup in it:
+        _azim = itup[0]
+        _elev = itup[1]
+        _G0 = itup[2]
+        _phi_3db = itup[3]
+        _theta_3db = itup[4]
+        _k_a = itup[5]
+        _k_h = itup[6]
+        _k_v = itup[7]
+        _tilt_m = itup[8]
+        _tilt_e = itup[9]
+        _gain = itup[10]
+
+        size = _gain.shape[0]
+
+        for i in prange(size, nogil=True):
+
+            _gain[i] = _imt_advanced_sectoral_avg_sidelobe_pattern(
+                _azim[i], _elev[i],
+                _G0[i], _phi_3db[i], _theta_3db[i],
+                _k_a[i], _k_h[i], _k_v[i],
                 _tilt_m[i], _tilt_e[i],
                 )
 

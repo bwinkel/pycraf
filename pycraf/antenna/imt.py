@@ -10,6 +10,7 @@ import numpy as np
 from .cyantenna import imt2020_single_element_pattern_cython
 from .cyantenna import imt2020_composite_pattern_cython
 from .cyantenna import imt_advanced_sectoral_peak_sidelobe_pattern_cython
+from .cyantenna import imt_advanced_sectoral_avg_sidelobe_pattern_cython
 from .. import conversions as cnv
 from .. import utils
 
@@ -17,6 +18,7 @@ from .. import utils
 __all__ = [
     'imt2020_single_element_pattern', 'imt2020_composite_pattern',
     'imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz',
+    'imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz',
     ]
 
 
@@ -334,7 +336,7 @@ def imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz(
     '''
     IMT advanced (LTE) antenna pattern (sectoral, peak side-lobe)
     for the frequency range 400 MHz to 6 GHz according to
-    `ITU-R Rec F.1336-4 <https://www.itu.int/rec/R-REC-F.1336-4-201402-I/en>`_
+    `ITU-R Rec F.1336-5 <https://www.itu.int/rec/R-REC-F.1336-5-201901-I/en>`_
     Section 3.1.1.
 
     Parameters
@@ -367,7 +369,7 @@ def imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz(
     Notes
     -----
     For typical values of :math:`k_p`, :math:`k_h`, and :math:`k_v` see
-    `ITU-R Rec F.1336-4 <https://www.itu.int/rec/R-REC-F.1336-4-201402-I/en>`_
+    `ITU-R Rec F.1336-5 <https://www.itu.int/rec/R-REC-F.1336-5-201901-I/en>`_
     Sections 3.1.1.1-3.
 
     For cases involving sectoral antennas with :math:`\\varphi_\\mathrm{3dB} \\lesssim 120^\\circ` the following
@@ -383,6 +385,81 @@ def imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz(
         azim, elev,
         G0, phi_3db, theta_3db,
         k_p, k_h, k_v,
+        tilt_m, tilt_e,
+        )
+
+
+@utils.ranged_quantity_input(
+    azim=(-180, 180, apu.deg),
+    elev=(-90, 90, apu.deg),
+    G0=(None, None, cnv.dB),
+    phi_3db=(0, None, apu.deg),
+    theta_3db=(0, None, apu.deg),
+    k_a=(0, None, cnv.dimless),
+    k_h=(0, None, cnv.dimless),
+    k_v=(0, None, cnv.dimless),
+    tilt_m=(-90, 90, apu.deg),
+    tilt_e=(-90, 90, apu.deg),
+    strip_input_units=True, output_unit=cnv.dB
+    )
+def imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz(
+        azim, elev,
+        G0, phi_3db, theta_3db,
+        k_a, k_h, k_v,
+        tilt_m=0., tilt_e=0.,
+        ):
+    '''
+    IMT advanced (LTE) antenna pattern (sectoral, peak side-lobe)
+    for the frequency range 400 MHz to 6 GHz according to
+    `ITU-R Rec F.1336-5 <https://www.itu.int/rec/R-REC-F.1336-5-201901-I/en>`_
+    Section 3.1.2.
+
+    Parameters
+    ----------
+    azim, elev : `~astropy.units.Quantity`
+        Azimuth/Elevation [deg]
+    G0 : `~astropy.units.Quantity`
+        Antenna maximum gain [dBi]
+    phi_3db, theta_3db : float
+        3-dB beamwidth in the azimuth/elevation plane [degrees]
+    k_a : float
+        Parameter which accomplishes the relative minimum gain for
+        average side-lobe patterns [dimless]
+    k_h : float
+        Azimuth pattern adjustment factor based on leaked power
+        (:math:`0 \leq k_h \leq 1`) [dimless]
+    k_v : float
+        Elevation pattern adjustment factor based on leaked power
+        (:math:`0 \leq k_v \leq 1`) [dimless]
+    tilt_m : float
+        Mechanical tilt angle (downwards) [deg]
+    tilt_e : float
+        Electrical tilt angle (downwards) [deg]
+
+    Returns
+    -------
+    G : `~astropy.units.Quantity`
+        Antenna pattern [dB]
+
+    Notes
+    -----
+    For typical values of :math:`k_p`, :math:`k_h`, and :math:`k_v` see
+    `ITU-R Rec F.1336-4 <https://www.itu.int/rec/R-REC-F.1336-4-201402-I/en>`_
+    Sections 3.1.1.1-3.
+
+    For cases involving sectoral antennas with :math:`\\varphi_\\mathrm{3dB} \\lesssim 120^\\circ` the following
+    formula can be used to calculate :math:`\\vartheta_\\mathrm{3dB}`:
+
+    .. math::
+
+        \\vartheta_\\mathrm{3dB}=\\frac{31000\\times10^{-0.1G_0}}{\\varphi_\\mathrm{3dB}}
+
+    '''
+
+    return imt_advanced_sectoral_avg_sidelobe_pattern_cython(
+        azim, elev,
+        G0, phi_3db, theta_3db,
+        k_a, k_h, k_v,
         tilt_m, tilt_e,
         )
 

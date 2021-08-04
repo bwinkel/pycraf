@@ -22,7 +22,7 @@ __all__ = [
     'PathProp',
     'loss_freespace', 'loss_troposcatter', 'loss_ducting',
     'loss_diffraction', 'loss_complete',
-    'clutter_correction', 'clutter_imt',
+    'clutter_correction',
     'height_map_data', 'atten_map_fast',
     'height_path_data', 'height_path_data_generic', 'atten_path_fast',
     'losses_complete',
@@ -470,132 +470,6 @@ def clutter_correction(
     '''
 
     return cyprop.clutter_correction_cython(h_g, zone, freq)
-
-
-def _Qinv(x):
-    # Note, this is *not* identical to cyprop._I_helper
-    # only good between 1.e-6 and 0.5
-    # See R-Rec P.1546
-
-    x = np.atleast_1d(x).copy()
-    mask = x > 0.5
-    x[mask] = 1 - x[mask]
-
-    T = np.sqrt(-2 * np.log(x))
-    Z = (
-        (
-            ((0.010328 * T + 0.802853) * T) + 2.515516698
-            ) /
-        (
-            ((0.001308 * T + 0.189269) * T + 1.432788) * T + 1.
-            )
-        )
-
-    Q = T - Z
-    Q[mask] *= -1
-    return Q
-
-
-# def Qinv(x):
-#     # larger x range than the approximation given in P.1546?
-#     # definitely much slower
-
-#     from scipy.stats import norm as qnorm
-
-#     x = np.atleast_1d(x).copy()
-
-#     mask = x > 0.5
-#     x[mask] = 1 - x[mask]
-
-#     Q = -qnorm.ppf(x, 0)
-#     Q[mask] *= -1
-
-#     return Q
-
-
-def _clutter_imt(
-        freq,
-        dist,
-        location_percent,
-        num_end_points=1,
-        ):
-
-    assert num_end_points in [1, 2]
-
-    L_l = 23.5 + 9.6 * np.log10(freq)
-    L_s = 32.98 + 23.9 * np.log10(dist) + 3.0 * np.log10(freq)
-
-    L_clutter = -5 * np.log10(
-        np.power(10, -0.2 * L_l) + np.power(10, -0.2 * L_s)
-        ) - 6 * _Qinv(location_percent / 100.)
-
-    if num_end_points == 2:
-        L_clutter *= 2
-
-    return L_clutter
-
-
-@utils.ranged_quantity_input(
-    freq=(2, 67, apu.GHz),
-    dist=(0.25, None, apu.km),
-    location_percent=(0, 100, apu.percent),
-    strip_input_units=True, output_unit=cnv.dB
-    )
-def clutter_imt(
-        freq,
-        dist,
-        location_percent,
-        num_end_points=1,
-        ):
-    '''
-    Calculate the Clutter loss according to IMT.CLUTTER document (method 2).
-
-    Parameters
-    ----------
-    freq : `~astropy.units.Quantity`
-        Frequency of radiation [GHz]
-    dist : `~astropy.units.Quantity`
-        Distance between Tx/Rx antennas [km]
-
-        Minimal distance must be 0.25 km (single endpoint clutter) or 1 km
-        (if both endpoints are to be corrected for clutter)
-    location_percent : `~astropy.units.Quantity`
-        Percentage of locations for which the clutter loss `L_clutter`
-        (calculated with this function) will not be exceeded [%]
-    num_end_points : int, optional
-        number of endpoints affected by clutter, allowed values: 1, 2
-
-    Returns
-    -------
-    L_clutter : `~astropy.units.Quantity`
-        Clutter loss [dB]
-
-    Notes
-    -----
-    - The algorithm is independent of effective antenna height (w.r.t.
-      clutter height), i.e., it doesn't distinguish between terminals which
-      are close to the ground and those closer to the top of the building.
-      However, the model is only appropriate if the terminal is "in the
-      clutter", below the rooftops.
-    - The result of this function is to be understood as a cumulative
-      value. For example, if `location_percent = 2%`, it means that for
-      2% of all possible locations, the clutter loss will not exceed the
-      returned `L_clutter` value, for the remaining 98% of locations it
-      will therefore be lower than `L_clutter`. The smaller `location_percent`,
-      the smaller the returned `L_clutter`, i.e., low clutter attenuations
-      are more unlikely.
-    - This model was proposed by ITU study group SG 3 to replace
-      `~pycraf.pathprof.clutter_correction` for IMT 5G studies (especially,
-      at higher frequencies, where multipath effects play a role in
-      urban and suburban areas).
-    '''
-
-    return _clutter_imt(
-        freq,
-        dist,
-        location_percent,
-        num_end_points=num_end_points,
-        )
 
 
 # TODO: do we want to convert output dictionary arrays to quantities?
