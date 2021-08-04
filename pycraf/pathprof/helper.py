@@ -485,7 +485,7 @@ def terrain_cmap_factory(sealevel=0.5, vmax=1200):
         >>> terrain_cmap, terrain_norm = terrain_cmap_factory(vmax=vmax)  # doctest: +SKIP
         >>> plt.imshow(  # doctest: +SKIP
         ...     heights, cmap=terrain_cmap, norm=terrain_norm,
-        ...     vmin=vmin, vmax=vmax
+        ...     # vmin=vmin, vmax=vmax  # deprecated in newer matplotlib versions
         ...     )
 
     Parameters
@@ -493,8 +493,9 @@ def terrain_cmap_factory(sealevel=0.5, vmax=1200):
     sealevel : float
         The sealevel value.
     vmax : float
-        Maximum height to cover in the colormap
-        (one should call plt.imshow with the same vmax option!)
+        Maximum height to cover in the colormap (Default: 1200)
+        (in older matplotlib versions, one should call plt.imshow with the
+        same `vmax` option, and `vmin=-20`!)
 
     Returns
     -------
