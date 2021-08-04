@@ -67,7 +67,7 @@ jobs:
         # see pip-requirements-dev
         imageName: 'ubuntu-latest'
         python.version: '3.7'
-        py_whl: 37
+        py_whl: cp37-
         numpy.version: '1.14.5'
         astropy.version: '3'
         # docs should only be published by one thread, as they are version-
@@ -75,7 +75,7 @@ jobs:
       linux38:
         imageName: 'ubuntu-latest'
         python.version: '3.8'
-        py_whl: 38
+        py_whl: cp38-
         # numpy.version: '1.17.4'
         numpy.version: '1.18.1'
         astropy.version: '4'
@@ -95,7 +95,7 @@ jobs:
       linux39:
         imageName: 'ubuntu-latest'
         python.version: '3.9'
-        py_whl: 39
+        py_whl: cp39-
         numpy.version: '1.20.0'
         astropy.version: '4'
         pyproj.version: '>=2.2'
