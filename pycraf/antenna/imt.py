@@ -9,6 +9,7 @@ from astropy import units as apu
 import numpy as np
 from .cyantenna import imt2020_single_element_pattern_cython
 from .cyantenna import imt2020_composite_pattern_cython
+from .cyantenna import imt2020_composite_pattern_extended_cython
 from .cyantenna import imt_advanced_sectoral_peak_sidelobe_pattern_cython
 from .cyantenna import imt_advanced_sectoral_avg_sidelobe_pattern_cython
 from .. import conversions as cnv
@@ -16,7 +17,8 @@ from .. import utils
 
 
 __all__ = [
-    'imt2020_single_element_pattern', 'imt2020_composite_pattern',
+    'imt2020_single_element_pattern',
+    'imt2020_composite_pattern', 'imt2020_composite_pattern_extended',
     'imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz',
     'imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz',
     ]
@@ -162,8 +164,8 @@ def imt2020_composite_pattern(
         k=12.,
         ):
     '''
-    Composite (array) antenna pattern according to `IMT.MODEL
-    <https://www.itu.int/md/R15-TG5.1-C-0036>`_ document.
+    Composite (array) antenna pattern according to `Rec. ITU-R M.2101-0
+    <https://www.itu.int/rec/R-REC-M.2101/en>`_.
 
     Parameters
     ----------
@@ -215,6 +217,111 @@ def imt2020_composite_pattern(
         phi_3db, theta_3db,
         d_H, d_V,
         N_H, N_V,
+        rho,
+        k=k,
+        )
+
+
+@utils.ranged_quantity_input(
+    azim=(-180, 180, apu.deg),
+    elev=(-90, 90, apu.deg),
+    azim_i=(-180, 180, apu.deg),
+    elev_i=(-90, 90, apu.deg),
+    G_Emax=(None, None, cnv.dB),
+    A_m=(0, None, cnv.dB),
+    SLA_nu=(0, None, cnv.dB),
+    phi_3db=(0, None, apu.deg),
+    theta_3db=(0, None, apu.deg),
+    d_H=(0, None, cnv.dimless),
+    d_V=(0, None, cnv.dimless),
+    d_V_sub=(0, None, cnv.dimless),
+    theta_subtilt=(-90, 90, apu.deg),
+    rho=(0, 1, cnv.dimless),
+    strip_input_units=True, output_unit=cnv.dB
+    )
+def imt2020_composite_pattern_extended(
+        azim, elev,
+        azim_i, elev_i,
+        G_Emax,
+        A_m, SLA_nu,
+        phi_3db, theta_3db,
+        d_H, d_V, d_V_sub,
+        N_H, N_V, M_sub,
+        theta_subtilt,
+        rho=1 * cnv.dimless,
+        k=12.,
+        ):
+    '''
+    Extended composite (array) antenna pattern according to `R19-WP5D-C-0716
+    <https://www.itu.int/dms_ties/itu-r/md/19/wp5d/c/R19-WP5D-C-0716!H4-N4.04!MSW-E.docx>`_ document, which is an extension
+    of the composite pattern introduced in `Rec. ITU-R M.2101-0
+    <https://www.itu.int/rec/R-REC-M.2101/en>`_.
+
+    This allows for sub-arrays, with pre-configured electronic phasing, which
+    are usually used for electronic downtilt.
+
+    Parameters
+    ----------
+    azim, elev : `~astropy.units.Quantity`
+        Azimuth/Elevation [deg]
+    azim_i, elev_i : `~astropy.units.Quantity`
+        Azimuthal/Elevational pointing of beam `i` [deg]
+    G_Emax : `~astropy.units.Quantity`
+        Single element maximum gain [dBi]
+    A_m, SLA_nu : `~astropy.units.Quantity`
+        Front-to-back ratio (horizontal/vertical) [dB]
+    phi_3db, theta_3db : `~astropy.units.Quantity`
+        Horizontal/Vertical 3dB beam width of single element [deg]
+    d_H, d_V : `~astropy.units.Quantity`
+        Horizontal/Vertical separation of sub-arrays in units of wavelength
+        [dimless]
+    d_V_sub : `~astropy.units.Quantity`
+        Vertical separation of beams in sub-arrays in units of wavelength
+        [dimless]
+    N_H, N_V : int
+        Horizontal/Vertical number of sub-arrays
+    M_sub : int
+        Number of single antenna elements in each sub-array
+    theta_subtilt : `~astropy.units.Quantity`
+        Pre-configured electronic downtilt for the sub-arrays [deg]
+    rho : `~astropy.units.Quantity`, optional
+        Correlation level (see 3GPP TR 37.840, 5.4.4.1.4, default: 1) [dimless]
+    k : float, optional
+        Multiplication factor, can be used to get better match to
+        measured antenna patters (default: 12). See `WP5D-C-0936`
+
+    Returns
+    -------
+    A_A : `~astropy.units.Quantity`
+        Composite (array) antenna pattern of beam `i` [dB]
+
+    Notes
+    -----
+    Further information can be found in 3GPP TR 37.840 Section 5.4.4.
+
+    According to document `WP5D-C-0936 <https://www.itu.int/md/R15-WP5D-C-0936/en>`_
+    the AAS pattern can still be subject to quite effective beamforming
+    in the spurious domain. For such cases, one can simply change the
+    `d_H` and `d_V` to fit to the out-of-band frequency, i.e.,
+    `d_oob = f_oob / f * d`. For example, if `f = 26 GHz`,
+    `f_oob = 23.8 GHz`, and `d = 0.5` then `d_oob = 0.46`.
+    However, to match measurements, also a different `k`-factor should
+    be used, i.e., 8 instead of 12.
+
+    The pre-configured electronic phasing of the sub-arrays can lead to
+    less optimal results for the pattern quality if the `theta_Etilt`
+    (`=-elev_i`) parameter doesn't match `theta_subarray`.
+    '''
+
+    return imt2020_composite_pattern_extended_cython(
+        azim, elev,
+        azim_i, elev_i,
+        G_Emax,
+        A_m, SLA_nu,
+        phi_3db, theta_3db,
+        d_H, d_V, d_V_sub,
+        N_H, N_V, M_sub,
+        theta_subtilt,
         rho,
         k=k,
         )

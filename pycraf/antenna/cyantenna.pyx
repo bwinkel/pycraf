@@ -362,6 +362,165 @@ def imt2020_composite_pattern_cython(
     return A_E + 10 * np.log10(1 + rho * (it.operands[7] - 1))
 
 
+def imt2020_composite_pattern_extended_cython(
+        azim, elev,
+        azim_i, elev_i,
+        G_Emax,
+        A_m, SLA_nu,
+        phi_3db, theta_3db,
+        d_H, d_V, d_V_sub,
+        N_H, N_V, M_sub,
+        theta_subtilt,
+        rho,
+        k=12.,
+        gain_sub=None, gain=None,
+        ):
+    '''
+    Parallelized IMT-2020 composite pattern (extended version).
+
+    Extended version allows for subarrays with fixed electronic downtilt.
+    '''
+
+    cdef:
+
+        # the memory view leads to an error:
+        # ValueError: buffer source array is read-only
+        # but new cython version should support it!?
+        # double [::] _lon1_rad, _lat1_rad, _lon2_rad, _lat2_rad
+        # double [::] _out_ang_dist
+        np.ndarray[float64_t] _A_E
+        np.ndarray[uint16_t] _N_H, _N_V, _M_sub
+        np.ndarray[float64_t] _dV_cos_theta, _dH_sin_theta_sin_phi
+        np.ndarray[float64_t] _dV_sin_theta_i, _dH_cos_theta_i_sin_phi_i
+        np.ndarray[float64_t] _dV_sub_cos_theta, _dV_sub_sin_theta_subtilt
+        np.ndarray[float64_t] _gain_sub, _gain
+        float64_t _exp_arg, _gain_re, _gain_im
+
+        int i, size, m, n
+
+    # pre-compute some quantities
+
+    A_E = imt2020_single_element_pattern_cython(
+        azim, elev,
+        G_Emax,
+        A_m, SLA_nu,
+        phi_3db, theta_3db,
+        k=k,
+        )
+
+    phi = azim
+    theta = 90. - elev
+    phi_i = azim_i
+    theta_i = -elev_i  # sic! (tilt angle in imt.model is -elevation)
+
+    dV_cos_theta = d_V * np.cos(np.radians(theta))
+    dH_sin_theta_sin_phi = (
+        d_H * np.sin(np.radians(theta)) * np.sin(np.radians(phi))
+        )
+
+    dV_sin_theta_i = d_V * np.sin(np.radians(theta_i))
+    dH_cos_theta_i_sin_phi_i = (
+        d_H * np.cos(np.radians(theta_i)) * np.sin(np.radians(phi_i))
+        )
+
+    dV_sub_cos_theta = d_V_sub * np.cos(np.radians(theta))
+    dV_sub_sin_theta_subtilt = d_V_sub * np.sin(np.radians(theta_subtilt))
+
+    it = np.nditer(
+        [
+            A_E,
+            dV_cos_theta, dH_sin_theta_sin_phi,
+            dV_sin_theta_i, dH_cos_theta_i_sin_phi_i,
+            dV_sub_cos_theta, dV_sub_sin_theta_subtilt,
+            N_H, N_V, M_sub,
+            gain_sub, gain,
+            ],
+        flags=['external_loop', 'buffered', 'delay_bufalloc'],
+        op_flags=[
+            ['readonly'], ['readonly'], ['readonly'], ['readonly'],
+            ['readonly'], ['readonly'], ['readonly'], ['readonly'],
+            ['readonly'], ['readonly'],
+            ['readwrite', 'allocate'], ['readwrite', 'allocate'],
+            ],
+        op_dtypes=[
+            FLOAT64,
+            FLOAT64, FLOAT64, FLOAT64, FLOAT64, FLOAT64, FLOAT64,
+            UINT16, UINT16, UINT16,
+            FLOAT64, FLOAT64,
+            ]
+        )
+
+    # it would be better to use the context manager but
+    # "with it:" requires numpy >= 1.14
+
+    it.reset()
+
+    for itup in it:
+
+        _A_E = itup[0]
+        _dV_cos_theta = itup[1]
+        _dH_sin_theta_sin_phi = itup[2]
+        _dV_sin_theta_i = itup[3]
+        _dH_cos_theta_i_sin_phi_i = itup[4]
+        _dV_sub_cos_theta = itup[5]
+        _dV_sub_sin_theta_subtilt = itup[6]
+        _N_H = itup[7]
+        _N_V = itup[8]
+        _M_sub = itup[9]
+        _gain_sub = itup[10]
+        _gain = itup[11]
+
+        size = _gain.shape[0]
+
+        for i in prange(size, nogil=True):
+
+            _gain_re = 0.
+            _gain_im = 0.
+            for m in range(_M_sub[i]):
+
+                _exp_arg = 2. * M_PI * (
+                    m * _dV_sub_cos_theta[i] +
+                    m * _dV_sub_sin_theta_subtilt[i]
+                    )
+
+                # Note: inplace operator doesn't work; otherwise, Cython
+                # will assume that "_gain_re" is a shared reduction
+                # variable inside of the prange() loop.
+                _gain_re = _gain_re + cos(_exp_arg)
+                _gain_im = _gain_im + sin(_exp_arg)
+
+            _gain_sub[i] = (
+                (_gain_re ** 2 + _gain_im ** 2) / (_M_sub[i])
+                )
+
+        for i in prange(size, nogil=True):
+
+            _gain_re = 0.
+            _gain_im = 0.
+            for m in range(_N_H[i]):
+
+                for n in range(_N_V[i]):
+                    _exp_arg = 2. * M_PI * (
+                        n * _dV_cos_theta[i] +
+                        m * _dH_sin_theta_sin_phi[i] +
+                        n * _dV_sin_theta_i[i] -
+                        m * _dH_cos_theta_i_sin_phi_i[i]
+                        )
+                    # Note: inplace operator doesn't work; otherwise, Cython
+                    # will assume that "_gain_re" is a shared reduction
+                    # variable inside of the prange() loop.
+                    _gain_re = _gain_re + cos(_exp_arg)
+                    _gain_im = _gain_im + sin(_exp_arg)
+
+            _gain[i] = (
+                (_gain_re ** 2 + _gain_im ** 2) / (_N_H[i] * _N_V[i])
+                )
+
+    return A_E + 10 * np.log10(
+        1 + rho * (it.operands[10] * it.operands[11] - 1)
+        )
+
+
 cdef float64_t  _G_hr(
         float64_t x_h, float64_t k_h, float64_t G180
         ) nogil:

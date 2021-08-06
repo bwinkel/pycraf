@@ -148,6 +148,7 @@ def test_imt2020_composite_pattern():
         (0, None, apu.deg),
         (0, None, cnv.dimless),
         (0, None, cnv.dimless),
+        (0, None, cnv.dimless),
         ]
 
     # not working:
@@ -360,6 +361,188 @@ def test_imt2020_composite_pattern_broadcast():
               [-28.71824852, -37.04101841]],
              [[-28.44916415, -59.40530382],
               [-49.57151146, -78.55749812]]]
+            ] * cnv.dB,
+        atol=1.e-4 * cnv.dB,  # rtol=1.e-4,
+        )
+
+
+def test_imt2020_composite_pattern_extended():
+
+    args_list = [
+        (-180, 180, apu.deg),
+        (-90, 90, apu.deg),
+        (-180, 180, apu.deg),
+        (-90, 90, apu.deg),
+        (None, None, cnv.dB),
+        (0, None, cnv.dB),
+        (0, None, cnv.dB),
+        (0, None, apu.deg),
+        (0, None, apu.deg),
+        (0, None, cnv.dimless),
+        (0, None, cnv.dimless),
+        (0, None, cnv.dimless),
+        (-90, 90, apu.deg),
+        (0, None, cnv.dimless),
+        ]
+
+    # not working:
+    # check_astro_quantities(imt.imt2020_composite_pattern, args_list)
+
+    azims = np.linspace(-170, 170, 7) * apu.deg
+    elevs = np.linspace(-65, 65, 4) * apu.deg
+
+    # BS (outdoor) according to IMT.PARAMETER table 10 (multipage!)
+    G_Emax = 5 * cnv.dB
+    A_m, SLA_nu = 30. * cnv.dB, 30. * cnv.dB
+    azim_3db, elev_3db = 65. * apu.deg, 65. * apu.deg
+
+    d_H, d_V = 0.5 * cnv.dimless, 1.5 * cnv.dimless
+    N_H, N_V = 8, 4
+
+    d_V_sub = 0.5 * cnv.dimless
+    M_sub = 4
+    theta_subtilt = -10 * apu.deg
+
+    azim_i, elev_j = 0 * apu.deg, 0 * apu.deg
+
+    gains_array = imt.imt2020_composite_pattern_extended(
+        azims[:, np.newaxis], elevs[np.newaxis],
+        azim_i, elev_j,
+        G_Emax,
+        A_m, SLA_nu,
+        azim_3db, elev_3db,
+        d_H, d_V, d_V_sub,
+        N_H, N_V, M_sub,
+        theta_subtilt,
+        )
+
+    print(gains_array)
+    assert_quantity_allclose(
+        gains_array,
+        [
+            [-34.82935984, -47.98405991, -29.07492818, -27.81233515],
+            [-46.91527776, -59.14997274, -40.24084101, -39.89825308],
+            [-37.52620287, -48.68868444, -29.77955271, -30.50917819],
+            [-15.58051438, -12.32830782, 6.58082391, -8.56348970],
+            [-37.52620287, -48.68868444, -29.77955271, -30.50917819],
+            [-46.91527776, -59.14997274, -40.24084101, -39.89825308],
+            [-34.82935984, -47.98405991, -29.07492818, -27.81233515],
+            ] * cnv.dB,
+        atol=1.e-4 * cnv.dB,  # rtol=1.e-4,
+        )
+
+    azim_i, elev_j = -30 * apu.deg, -15 * apu.deg
+
+    gains_array = imt.imt2020_composite_pattern_extended(
+        azims[:, np.newaxis], elevs[np.newaxis],
+        azim_i, elev_j,
+        G_Emax,
+        A_m, SLA_nu,
+        azim_3db, elev_3db,
+        d_H, d_V, d_V_sub,
+        N_H, N_V, M_sub,
+        theta_subtilt,
+        )
+
+    print(gains_array)
+    assert_quantity_allclose(
+        gains_array,
+        [
+            [-36.89672574, -46.04037009, -20.71417237, -69.54070804],
+            [-24.56093497, -45.03472881, -19.70853108, -57.20491726],
+            [-17.75714035, -29.32235728, -3.99615956, -50.40112264],
+            [-32.69353474, -31.75900304, -6.43280531, -65.33751703],
+            [-32.40186624, -48.48575016, -23.15955243, -65.04584854],
+            [-40.31964156, -50.01757604, -24.69137832, -72.96362385],
+            [-41.91880069, -49.04709014, -23.72089241, -74.56278298],
+            ] * cnv.dB,
+        atol=1.e-4 * cnv.dB,  # rtol=1.e-4,
+        )
+
+    # test rho
+    rho = 50 * apu.percent
+
+    gains_array = imt.imt2020_composite_pattern_extended(
+        azims[:, np.newaxis], elevs[np.newaxis],
+        azim_i, elev_j,
+        G_Emax,
+        A_m, SLA_nu,
+        azim_3db, elev_3db,
+        d_H, d_V, d_V_sub,
+        N_H, N_V, M_sub,
+        theta_subtilt,
+        rho,
+        )
+
+    print(gains_array)
+    assert_quantity_allclose(
+        gains_array,
+        [
+            [-27.73837774, -27.97625569, -22.34855893, -28.01014730],
+            [-24.77492125, -27.96742871, -21.59378238, -28.00768682],
+            [-16.86206666, -8.44616510, -4.66404747, -19.12899514],
+            [-9.99860910, 0.65761167, 1.06134421, -10.01029359],
+            [-19.02955849, -8.46373282, -8.39091286, -19.13055992],
+            [-27.88454725, -27.99664332, -24.84294830, -28.01023055],
+            [-27.92289687, -27.99323043, -24.31352423, -28.01025193],
+            ] * cnv.dB,
+        atol=1.e-4 * cnv.dB,  # rtol=1.e-4,
+        )
+
+
+def test_imt2020_composite_pattern_extended_broadcast():
+
+    azims = np.linspace(-50, 50, 3) * apu.deg
+    elevs = np.linspace(-65, 65, 3) * apu.deg
+
+    azim_i, elev_j = [0, -10] * apu.deg, [0, -5] * apu.deg
+
+    G_Emax = 5 * cnv.dB
+    A_m, SLA_nu = 30. * cnv.dB, 30. * cnv.dB
+    azim_3db, elev_3db = 65. * apu.deg, 65. * apu.deg
+
+    d_H, d_V = 0.5 * cnv.dimless, 1.5 * cnv.dimless
+    N_H, N_V = 8, 4
+
+    d_V_sub = 0.5 * cnv.dimless
+    M_sub = 4
+    theta_subtilt = -10 * apu.deg
+
+    gains_array = imt.imt2020_composite_pattern_extended(
+        azims[np.newaxis, :, np.newaxis, np.newaxis],
+        elevs[:, np.newaxis, np.newaxis, np.newaxis],
+        azim_i[np.newaxis, np.newaxis, np.newaxis],
+        elev_j[np.newaxis, np.newaxis, :, np.newaxis],
+        G_Emax,
+        A_m, SLA_nu,
+        azim_3db, elev_3db,
+        d_H, d_V, d_V_sub,
+        N_H, N_V, M_sub,
+        theta_subtilt,
+        )
+
+    print(gains_array)
+    assert_quantity_allclose(
+        gains_array,
+        [
+            [[[-36.43377732, -28.55136779],
+              [-45.07470032, -37.25359595]],
+             [[-15.58051438, -23.98568497],
+              [-24.22143738, -32.54420727]],
+             [[-36.43377732, -67.38991699],
+              [-45.07470032, -74.06068698]]],
+            [[[-14.14769621, 0.38710921],
+              [-18.23662065, -3.67755641]],
+             [[24.38270419, 15.97753361],
+              [20.29377975, 11.97100986]],
+             [[-14.14769621, -3.99699923],
+              [-18.23662065, -8.00947963]]],
+            [[[-29.41675263, -21.5343431 ],
+              [-48.33070189, -40.50959752]],
+             [[-8.563489700, -16.96866028],
+              [-27.47743895, -35.80020884]],
+             [[-29.41675263, -60.37289231],
+              [-48.33070189, -77.31668855]]],
             ] * cnv.dB,
         atol=1.e-4 * cnv.dB,  # rtol=1.e-4,
         )
