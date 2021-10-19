@@ -172,6 +172,7 @@ _tclim_data_p2001 = np.load(get_pkg_data_filename(
     '../itudata/p.2001-3/tropoclim_map.npz'
     ))
 
+# BEWARE: UNLIKE FOR THE OTHER INTERPOLATORS, LONS ARE IN [-180, 180]
 _tropoclim_interpolator = RegularGridInterpolator(
     (_tclim_data_p2001['lons'][0], _tclim_data_p2001['lats'][::-1, 0]),
     _tclim_data_p2001['tropoclim'][::-1].T, method='nearest',
@@ -235,6 +236,47 @@ def _DN_N0_from_map(lon, lat):
     _N0 = _N0_interpolator((lon % 360, lat))
 
     return _DN, _N0
+
+
+def _DN_P2001_from_map(lon, lat):
+
+    dn_median = _dn_median_interpolator((lon % 360, lat))
+    dn_supslope = _dn_supslope_interpolator((lon % 360, lat))
+    dn_subslope = _dn_subslope_interpolator((lon % 360, lat))
+    dn_dz = _dn_dz_interpolator((lon % 360, lat))
+
+    return dn_median, dn_supslope, dn_subslope, dn_dz
+
+
+def _sporadic_E_P2001_from_map(lon, lat, p):
+
+    lon, lat, p = np.broadcast_arrays(lon, lat, p)
+    f_oes1 = np.empty(lon.shape, dtype=np.float64)
+    f_oes2 = np.empty(lon.shape, dtype=np.float64)
+    p1 = np.empty(lon.shape, dtype=np.float64)
+    p2 = np.empty(lon.shape, dtype=np.float64)
+
+    mask01 = p < 0.01
+    mask10 = p > 0.1
+    mask_m = (~mask01) & (~mask10)  # 1% <= p <= 10%
+    f_oes1[mask01] = _foes_01_interpolator((lon % 360, lat))
+    f_oes2[mask01] = _foes_1_interpolator((lon % 360, lat))
+    p1[mask01] = 0.001
+    p2[mask01] = 0.01
+
+    f_oes1[mask_m] = _foes_1_interpolator((lon % 360, lat))
+    f_oes2[mask_m] = _foes_10_interpolator((lon % 360, lat))
+    p1[mask_m] = 0.01
+    p2[mask_m] = 0.1
+
+    f_oes1[mask10] = _foes_10_interpolator((lon % 360, lat))
+    f_oes2[mask10] = _foes_50_interpolator((lon % 360, lat))
+    p1[mask10] = 0.1
+    p2[mask10] = 0.5
+
+    f_oes = f_oes1 + (f_oes2 - f_oes1) * np.log10(p / p1) / np.log10(p2 / p1)
+
+    return f_oes
 
 
 @utils.ranged_quantity_input(

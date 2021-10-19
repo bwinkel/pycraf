@@ -150,15 +150,15 @@ PARAMETERS_BASIC = [
     ('h_mid', '12.6f', 'm', apu.m),  # Ground height at mid point of path
     # Effective transmitter, receiver, heights above smooth surface for
     # anomalous (ducting/layer-reflection) model
-    ('d_tea', '12.6f', 'm', apu.m),
-    ('d_rea', '12.6f', 'm', apu.m),
+    ('h_tea', '12.6f', 'm', apu.m),
+    ('h_rea', '12.6f', 'm', apu.m),
     # Effective transmitter, receiver, heights above smooth surface for
     # diffraction model
-    ('d_tep', '12.6f', 'm', apu.m),
-    ('d_rep', '12.6f', 'm', apu.m),
+    ('h_tep', '12.6f', 'm', apu.m),
+    ('h_rep', '12.6f', 'm', apu.m),
     # Transmitter, receiver, height above mean sea level
-    ('d_ts', '12.6f', 'm', apu.m),
-    ('d_rs', '12.6f', 'm', apu.m),
+    ('h_ts', '12.6f', 'm', apu.m),
+    ('h_rs', '12.6f', 'm', apu.m),
     # Profile indices of transmitter, receiver, horizons
     ('i_lt', '12d', '', cnv.dimless),
     ('i_lr', '12d', '', cnv.dimless),
@@ -193,19 +193,19 @@ PARAMETERS_BASIC = [
     ('N_d65m1', '12.6f', 'dimless', cnv.dimless),
 
     # Troposcatter common volume longitude, latitude
-    ('phi_cve', '12.6f', 'deg', apu.deg),  # longitude
-    ('phi_cvn', '12.6f', 'deg', apu.deg),  # latitude
+    ('lon_cv', '12.6f', 'deg', apu.deg),  # longitude, aka phi_cve
+    ('lat_cv', '12.6f', 'deg', apu.deg),  # latitude, aka phi_cvn
     # Longitude, latitude, of mid-point of path segment from transmitter to
     # the troposcatter common volume
-    ('phi_tcve', '12.6f', 'deg', apu.deg),  # longitude
-    ('phi_tcvn', '12.6f', 'deg', apu.deg),  # latitude
+    ('lon_tcv', '12.6f', 'deg', apu.deg),  # longitude, aka phi_tcve
+    ('lat_tcv', '12.6f', 'deg', apu.deg),  # latitude, aka phi_tcvn
     # Longitude, latitude, of mid-point of path segment from receiver to the
     # troposcatter common volume
-    ('phi_rcve', '12.6f', 'deg', apu.deg),  # longitude
-    ('phi_rcvn', '12.6f', 'deg', apu.deg),  # latitude
+    ('lon_rcv', '12.6f', 'deg', apu.deg),  # longitude, aka phi_rcve
+    ('lat_rcv', '12.6f', 'deg', apu.deg),  # latitude, aka phi_rcvn
     # Path mid-point longitude, latitude
-    ('phi_me', '12.6f', 'deg', apu.deg),  # longitude
-    ('phi_mn', '12.6f', 'deg', apu.deg),  # latitude
+    ('lon_m', '12.6f', 'deg', apu.deg),  # longitude, aka phi_me
+    ('lat_m', '12.6f', 'deg', apu.deg),  # latitude, aka phi_mn
 
     # Angle subtended by d km at centre of spherical Earth
     ('theta_e', '12.6f', 'rad', apu.rad),
@@ -222,6 +222,10 @@ PARAMETERS_BASIC = [
     ('gamma_0', '12.6f', 'dB/km', cnv.dB / apu.km),
     # Fraction of the path over sea
     ('omega', '12.6f', 'percent', apu.percent),
+    # Surface water vapour density at mid point, tx, rx
+    ('rho_m', '12.6f', 'g/m3', apu.g / apu.m ** 3),
+    ('rho_t', '12.6f', 'g/m3', apu.g / apu.m ** 3),
+    ('rho_r', '12.6f', 'g/m3', apu.g / apu.m ** 3),
 
     ]
 
@@ -258,12 +262,12 @@ cdef struct ppstruct:
     double h_lo  # m
     double h_m  # m
     double h_mid  # m
-    double d_tea  # m
-    double d_rea  # m
-    double d_tep  # m
-    double d_rep  # m
-    double d_ts  # m
-    double d_rs  # m
+    double h_tea  # m
+    double h_rea  # m
+    double h_tep  # m
+    double h_rep  # m
+    double h_ts  # m
+    double h_rs  # m
     int i_lt  # '
     int i_lr  # '
     double L_bfs  # dBi
@@ -275,14 +279,14 @@ cdef struct ppstruct:
     double N_d1km50  # 1
     double N_d1kmp  # 1
     double N_d65m1  # 1
-    double phi_cve  # deg
-    double phi_cvn  # deg
-    double phi_tcve  # deg
-    double phi_tcvn  # deg
-    double phi_rcve  # deg
-    double phi_rcvn  # deg
-    double phi_me  # deg
-    double phi_mn  # deg
+    double lon_cv  # deg, aka phi_cve
+    double lat_cv  # deg, aka phi_cve
+    double lon_tcv  # deg, aka phi_tcve
+    double lat_tcv  # deg, aka phi_tcvn
+    double lon_rcv  # deg, aka phi_rcve
+    double lat_rcv  # deg, aka phi_rcvn
+    double lon_m  # deg, aka phi_me
+    double lat_m  # deg, aka phi_mn
     double theta_e  # rad
     double theta_t  # mrad
     double theta_r  # mrad
@@ -290,6 +294,31 @@ cdef struct ppstruct:
     double theta_rpos  # mrad
     double gamma_0  # dB / km
     double omega  # %
+    double rho_m  # g / m3
+    double rho_t  # g / m3
+    double rho_r  # g / m3
+
+    # derived quantities
+    int path_type  # 0 - LOS, 1 - transhoriz
+    double theta_tim  # mrad
+    double theta_rim  # mrad
+    double theta_tr  # mrad
+    double nu_max  # m ???
+    int i_m  # index for nu_max
+    double h_stip  # m
+    double h_srip  # m
+    double lon_25p  # deg, longitude at 25% of distance
+    double lat_25p  # deg, latitude at 25% of distance
+    double lon_75p  # deg, longitude at 75% of distance
+    double lat_75p  # deg, latitude at 75% of distance
+
+    # freqs for sporadic-E basic transmission loss not exceeded for p%
+    double f_oes_m  # MHz, mid-point
+    double f_oes_2h  # MHz, lower of 25% and 75% distance
+
+    # P.2001 is special in the sense, that multiple time_percents
+    # ought to be used for proper MC treatment;
+    double p_sporadic
 
 
 def set_num_threads(int nthreads):
@@ -345,6 +374,12 @@ cdef class _PathProp(object):
             # set terrain heights to zero if desired
             # (only if hprof_xxx set to None aka automatic)
             bint generic_heights=False,
+            # P.2001 is special in the sense, that multiple time_percents
+            # ought to be used for proper MC treatment;
+            # below, these are provided - if set to NaN, use the
+            # "time_percent" as default, however, this should be avoided!
+            # (is OK for single samples, i.e., when no MC is performed)
+            double p_sporadic=np.nan,
             ):
 
         assert time_percent >= 0. and time_percent <= 100.
@@ -428,14 +463,14 @@ cdef class _PathProp(object):
         self._pp.alpha_tr = bearing
         self._pp.alpha_rt = back_bearing
 
-        if d_tm is None:
-            d_tm = distance
-        if d_lm is None:
-            d_lm = distance
-        if d_ct is None:
-            d_ct = 50000.
-        if d_cr is None:
-            d_cr = 50000.
+        # if d_tm is None:
+        #     d_tm = distance
+        # if d_lm is None:
+        #     d_lm = distance
+        # if d_ct is None:
+        #     d_ct = 50000.
+        # if d_cr is None:
+        #     d_cr = 50000.
 
         # TODO: add functionality to produce the following
         # five parameters programmatically (using some kind of Geo-Data)
@@ -447,41 +482,57 @@ cdef class _PathProp(object):
 
         hsize = distances.size
         mid_idx = hsize // 2
-
-        if hprof_dists is None:
-            self._pp.phi_me = lons[mid_idx]
-            self._pp.phi_mn = lats[mid_idx]
-        else:
-
-            cdef double dist, bearing1_rad, bearing2_rad
-            dist, bearing1_rad, bearing2_rad = cygeodesics._inverse(
-                lon_t * DEG2RAD, lat_t * DEG2RAD,
-                lon_r * DEG2RAD, lat_r * DEG2RAD,
-                1.e-12, 50,
-                )
-            self._pp.phi_me, self._pp.phi_mn, bearing2_rad = _direct(
-                    lon_t * DEG2RAD, lat_t * DEG2RAD,
-                    bearing1_rad, dist / 2,
-                    1.e-12, 50, 1
-                    )
-            self._pp.phi_me *= RAD2DEG
-            self._pp.phi_mn *= RAD2DEG
-
-            # self._pp.phi_me = 0.5 * (lon_t + lon_r)
-            # self._pp.phi_mn = 0.5 * (lat_t + lat_r)
-
         # TODO: properly treat even/odd mid_idx
         self._pp.h_mid = heights[mid_idx]
 
+
+        # determine mid-point, as well as d_25 and d_75 lon/lats
+        # if hprof_dists is None:
+        #     self._pp.lon_m = lons[mid_idx]
+        #     self._pp.lat_m = lats[mid_idx]
+        # else:
+
+        cdef double dist, bearing1_rad, bearing2_rad
+        dist, bearing1_rad, bearing2_rad = cygeodesics._inverse(
+            lon_t * DEG2RAD, lat_t * DEG2RAD,
+            lon_r * DEG2RAD, lat_r * DEG2RAD,
+            1.e-12, 50,
+            )
+        self._pp.lon_m, self._pp.lat_m, bearing2_rad = _direct(
+            lon_t * DEG2RAD, lat_t * DEG2RAD,
+            bearing1_rad, 0.5 * dist,
+            1.e-12, 50, 1
+            )
+        self._pp.lon_25p, self._pp.lat_25p, bearing2_rad = _direct(
+            lon_t * DEG2RAD, lat_t * DEG2RAD,
+            bearing1_rad, 0.25 * dist,
+            1.e-12, 50, 1
+            )
+        self._pp.lon_75p, self._pp.lat_75p, bearing2_rad = _direct(
+            lon_t * DEG2RAD, lat_t * DEG2RAD,
+            bearing1_rad, 0.75 * dist,
+            1.e-12, 50, 1
+            )
+        self._pp.lon_m *= RAD2DEG
+        self._pp.lat_m *= RAD2DEG
+        self._pp.lon_25p *= RAD2DEG
+        self._pp.lat_25p *= RAD2DEG
+        self._pp.lon_75p *= RAD2DEG
+        self._pp.lat_75p *= RAD2DEG
+
+
         # TODO: cythonize _radiomet_data_for_pathcenter
         if delta_N is None:
-            N_d1km50, N_d1kmp, N_d65m1 = helper._N_P2001_from_map(
+            _dn_med, _dn_sup, _dn_sub, _dn_dz = helper._DN_P2001_from_map(
                 self._pp.lon_mid, self._pp.lat_mid
                 )
 
-        self._pp.N_d1km50 = N_d1km50
-        self._pp.N_d1kmp = N_d1kmp
-        self._pp.N_d65m1 = N_d65m1
+        self._pp.N_d1km50 = -_dn_med
+        if p < 50:
+            self._pp.N_d1kmp = self._pp.N_d1km50 + _dn_sup * log10(0.02 * p)
+        else:
+            self._pp.N_d1kmp = self._pp.N_d1km50 - _dn_sub * log10(0.02 * p)
+        self._pp.N_d65m1 = _dn_dz
 
         # beta0 = _beta_from_DN_N0(
         #     self._pp.lat_mid,
@@ -490,6 +541,35 @@ cdef class _PathProp(object):
         #     )
 
         # self._pp.beta0 = beta0
+
+        # read surface water vapour density for atmospheric loss calculations
+        # need this for three different positions, Tx, Rx, and mid-point
+        self._pp.rho_m = helper._surfwv_50_interpolator(
+            self._pp.lon_mid % 360, self._pp.lat_mid
+            )
+        self._pp.rho_t = helper._surfwv_50_interpolator(
+            self._pp.lon_t % 360, self._pp.lat_t
+            )
+        self._pp.rho_r = helper._surfwv_50_interpolator(
+            self._pp.lon_r % 360, self._pp.lat_r
+            )
+
+        # read Sporadic E values, for a number of positions (TODO)
+        if np.isnan(p_sporadic):
+            p_sporadic = time_percent
+
+        self._pp.f_oes_m = helper._sporadic_E_P2001_from_map(
+            self._pp.lon_m, self._pp.lat_m, p_sporadic
+            )
+
+        cdef double f_oes_25p, f_oes_75p
+        f_oes_25p = helper._sporadic_E_P2001_from_map(
+            self._pp.lon_25p, self._pp.lat_25p, p_sporadic
+            )
+        f_oes_75p = helper._sporadic_E_P2001_from_map(
+            self._pp.lon_75p, self._pp.lat_75p, p_sporadic
+            )
+        self._pp.f_oes_2h = f_min(f_oes_25p, f_oes_75p)
 
         _process_path(
             &self._pp,
@@ -501,70 +581,70 @@ cdef class _PathProp(object):
             )
 
 
-cdef double _beta_from_DN_N0(
-        double lat_mid, double DN, double N0, double d_tm, double d_lm
-        ) nogil:
+# cdef double _beta_from_DN_N0(
+#         double lat_mid, double DN, double N0, double d_tm, double d_lm
+#         ) nogil:
 
-    cdef:
-        double tau, a, b, mu1, log_mu1, mu4, beta0
+#     cdef:
+#         double tau, a, b, mu1, log_mu1, mu4, beta0
 
-    tau = 1. - exp(-4.12e-4 * cpower(d_lm, 2.41))
-    lat_mid = fabs(lat_mid)
+#     tau = 1. - exp(-4.12e-4 * cpower(d_lm, 2.41))
+#     lat_mid = fabs(lat_mid)
 
-    a = cpower(10, -d_tm / (16. - 6.6 * tau))
-    b = cpower(10, -5 * (0.496 + 0.354 * tau))
-    mu1 = cpower(a + b, 0.2)
-    if mu1 > 1.:
-        mu1 = 1.
-    log_mu1 = log10(mu1)
+#     a = cpower(10, -d_tm / (16. - 6.6 * tau))
+#     b = cpower(10, -5 * (0.496 + 0.354 * tau))
+#     mu1 = cpower(a + b, 0.2)
+#     if mu1 > 1.:
+#         mu1 = 1.
+#     log_mu1 = log10(mu1)
 
-    if lat_mid <= 70.:
-        mu4 = cpower(10, (-0.935 + 0.0176 * lat_mid) * log_mu1)
-    else:
-        mu4 = cpower(10, 0.3 * log_mu1)
+#     if lat_mid <= 70.:
+#         mu4 = cpower(10, (-0.935 + 0.0176 * lat_mid) * log_mu1)
+#     else:
+#         mu4 = cpower(10, 0.3 * log_mu1)
 
-    if lat_mid <= 70.:
-        beta_0 = cpower(10, -0.015 * lat_mid + 1.67) * mu1 * mu4
-    else:
-        beta_0 = 4.17 * mu1 * mu4
+#     if lat_mid <= 70.:
+#         beta_0 = cpower(10, -0.015 * lat_mid + 1.67) * mu1 * mu4
+#     else:
+#         beta_0 = 4.17 * mu1 * mu4
 
-    return beta_0
+#     return beta_0
 
 
-def beta_from_DN_N0(
-        double lat_mid, double DN, double N0, double d_tm, double d_lm
-        ):
-    '''
-    Calculate radiometeorological data, beta0.
+# def beta_from_DN_N0(
+#         double lat_mid, double DN, double N0, double d_tm, double d_lm
+#         ):
+#     '''
+#     Calculate radiometeorological data, beta0.
 
-    Parameters
-    ----------
-    lat - path center coordinates [deg]
-    delta_N - average radio-refractive index lapse-rate through the
-            lowest 1 km of the atmosphere [N-units/km]
-    N_0 - sea-level surface refractivity [N-units]
-    d_tm - longest continuous land (inland + coastal) section of the
-        great-circle path [km]
-    d_lm - longest continuous inland section of the great-circle path [km]
+#     Parameters
+#     ----------
+#     lat - path center coordinates [deg]
+#     delta_N - average radio-refractive index lapse-rate through the
+#             lowest 1 km of the atmosphere [N-units/km]
+#     N_0 - sea-level surface refractivity [N-units]
+#     d_tm - longest continuous land (inland + coastal) section of the
+#         great-circle path [km]
+#     d_lm - longest continuous inland section of the great-circle path [km]
 
-    Returns
-    -------
-    beta_0 - the time percentage for which refractive index lapse-rates
-        exceeding 100 N-units/km can be expected in the first 100 m
-        of the lower atmosphere [%]
+#     Returns
+#     -------
+#     beta_0 - the time percentage for which refractive index lapse-rates
+#         exceeding 100 N-units/km can be expected in the first 100 m
+#         of the lower atmosphere [%]
 
-    Notes
-    -----
-    - ΔN and N_0 can be derived from digitized maps (shipped with P.452).
-    - Radio-climaticzones can be queried from ITU Digitized World Map (IDWM).
-      For many applications, it is probably the case, that only inland
-      zones are present along the path of length d.
-      In this case, set d_tm = d_lm = d.
-    '''
+#     Notes
+#     -----
+#     - ΔN and N_0 can be derived from digitized maps (shipped with P.452).
+#     - Radio-climaticzones can be queried from ITU Digitized World Map (IDWM).
+#       For many applications, it is probably the case, that only inland
+#       zones are present along the path of length d.
+#       In this case, set d_tm = d_lm = d.
+#     '''
 
-    return _beta_from_DN_N0(
-        lat_mid, DN, N0, d_tm, d_lm
-        )
+#     return _beta_from_DN_N0(
+#         lat_mid, DN, N0, d_tm, d_lm
+#         )
 
 
 cdef void _process_path(
@@ -630,74 +710,121 @@ cdef void _process_path(
     # pp.h_te = pp.h_tg + pp.h0 - pp.h_st
     # pp.h_re = pp.h_rg + pp.hn - pp.h_sr
 
-    pp.a_e_50 = 6371. * 157. / (157. - pp.delta_N)
-    pp.a_e_b0 = 6371. * 3.
+    pp.a_e = R_E * 157. / (157. + pp.N_d1km50)
+    pp.c_p = (157. + pp.N_d1kmp) / R_E / 157.
+    if pp.c_p > 1e-6:
+        pp.a_p = 1 / pp.c_p
+    else:
+        pp.a_p = 1e6
+
+    pp.theta_e = pp.distance / pp.a_e
+    # pp.a_e_b0 = R_E * 3.
 
     (
-        pp.path_type_50, pp.d_bp_50, pp.h_bp_50, pp.h_eff_50,
-        pp.nu_bull_50, pp.nu_bull_idx_50,
-        pp.S_tim_50, pp.S_rim_50, pp.S_tr_50
-        ) = _diffraction_helper_v16(
-        pp.a_e_50, pp.distance,
-        distances_view, heights_view,
-        pp.h_ts, pp.h_rs,
-        pp.wavelen,
-        )
-
-    (
-        pp.path_type_b0, pp.d_bp_b0, pp.h_bp_b0, pp.h_eff_b0,
-        pp.nu_bull_b0, pp.nu_bull_idx_b0,
-        pp.S_tim_b0, pp.S_rim_b0, pp.S_tr_b0
-        ) = _diffraction_helper_v16(
-        pp.a_e_b0, pp.distance,
-        distances_view, heights_view,
-        pp.h_ts, pp.h_rs,
-        pp.wavelen,
-        )
-
-    # similarly, we have to repeat the game with heights set to zero
-
-    (
-        pp.path_type_zh_50, pp.d_bp_zh_50, pp.h_bp_zh_50, pp.h_eff_zh_50,
-        pp.nu_bull_zh_50, pp.nu_bull_idx_zh_50,
-        pp.S_tim_zh_50, pp.S_rim_zh_50, pp.S_tr_zh_50
-        ) = _diffraction_helper_v16(
-        pp.a_e_50, pp.distance,
-        distances_view, zheights_view,
-        pp.h_ts - pp.h_std, pp.h_rs - pp.h_srd,
-        pp.wavelen,
-        )
-
-    (
-        pp.path_type_zh_b0, pp.d_bp_zh_b0, pp.h_bp_zh_b0, pp.h_eff_zh_b0,
-        pp.nu_bull_zh_b0, pp.nu_bull_idx_zh_b0,
-        pp.S_tim_zh_b0, pp.S_rim_zh_b0, pp.S_tr_zh_b0
-        ) = _diffraction_helper_v16(
-        pp.a_e_b0, pp.distance,
-        distances_view, zheights_view,
-        pp.h_ts - pp.h_std, pp.h_rs - pp.h_srd,
-        pp.wavelen,
-        )
-
-    # print('_diffraction_helpers', time.time() - _time)
-    # _time = time.time()
-
-    # finally, determine remaining path geometry properties
-    # note, this can depend on the bullington point (index) derived in
-    # _diffraction_helper for 50%
-
-    diff_edge_idx = pp.nu_bull_idx_50
-
-    (
-        pp.path_type, pp.theta_t, pp.theta_r, pp.eps_pt, pp.eps_pr,
-        pp.theta,
-        pp.d_lt, pp.d_lr, pp.h_m
+        pp.path_type,
+        pp.theta_t, pp.theta_r, pp.theta_tim, pp.theta_rim, pp.theta_tr,
+        pp.i_lt, pp.i_lr, pp.d_lt, pp.d_lr, pp.nu_max, pp.i_m
         ) = _path_geometry_helper(
-        pp.a_e_50, pp.distance,
+        pp.wavelen, pp.a_e_50, pp.distance,
         distances_view, heights_view,
-        pp.h_ts, pp.h_rs, pp.h_st,
-        diff_edge_idx, pp.duct_slope,
+        pp.h_ts, pp.h_rs,
         )
+
+    pp.theta_tpos = f_max(pp.theta_t, 0)
+    pp.theta_rpos = f_max(pp.theta_r, 0)
+
+    (
+        pp.h_stip, pp.h_srip, pp.h_tea, pp.h_rea, pp.h_m
+        ) = _smooth_earth_heights_and_terrain_roughness(
+        pp.distance,
+        distances_view, heights_view,
+        pp.h_ts, pp.h_rs,
+        pp.i_lt, pp.i_lr
+        )
+
+    (pp.h_tep, pp.h_rep) = _effective_antenna_heights(
+        pp.distance,
+        distances_view, heights_view,
+        pp.h_ts, pp.h_rs,
+        pp.h_stip, pp.h_srip,
+        )
+
+    (
+        pp.d_tcv, pp.d_rcv, pp.h_cv,
+        pp.lon_cv, pp.lat_cv, pp.lon_tcv, pp.lat_tcv, pp.lon_rcv, pp.lat_rcv
+        ) = _troposcatter_path_segments(
+        pp.distance, pp.a_e,
+        pp.theta_rpos, pp.theta_tpos,
+        pp.theta_e,
+        pp.h_ts, pp.h_rs,
+        pp.lon_t, pp.lat_t, pp.lon_r, pp.lat_r,
+        )
+
+    # (
+    #     pp.path_type_50, pp.d_bp_50, pp.h_bp_50, pp.h_eff_50,
+    #     pp.nu_bull_50, pp.nu_bull_idx_50,
+    #     pp.S_tim_50, pp.S_rim_50, pp.S_tr_50
+    #     ) = _diffraction_helper_v16(
+    #     pp.a_e_50, pp.distance,
+    #     distances_view, heights_view,
+    #     pp.h_ts, pp.h_rs,
+    #     pp.wavelen,
+    #     )
+
+    # (
+    #     pp.path_type_b0, pp.d_bp_b0, pp.h_bp_b0, pp.h_eff_b0,
+    #     pp.nu_bull_b0, pp.nu_bull_idx_b0,
+    #     pp.S_tim_b0, pp.S_rim_b0, pp.S_tr_b0
+    #     ) = _diffraction_helper_v16(
+    #     pp.a_e_b0, pp.distance,
+    #     distances_view, heights_view,
+    #     pp.h_ts, pp.h_rs,
+    #     pp.wavelen,
+    #     )
+
+    # # similarly, we have to repeat the game with heights set to zero
+
+    # (
+    #     pp.path_type_zh_50, pp.d_bp_zh_50, pp.h_bp_zh_50, pp.h_eff_zh_50,
+    #     pp.nu_bull_zh_50, pp.nu_bull_idx_zh_50,
+    #     pp.S_tim_zh_50, pp.S_rim_zh_50, pp.S_tr_zh_50
+    #     ) = _diffraction_helper_v16(
+    #     pp.a_e_50, pp.distance,
+    #     distances_view, zheights_view,
+    #     pp.h_ts - pp.h_std, pp.h_rs - pp.h_srd,
+    #     pp.wavelen,
+    #     )
+
+    # (
+    #     pp.path_type_zh_b0, pp.d_bp_zh_b0, pp.h_bp_zh_b0, pp.h_eff_zh_b0,
+    #     pp.nu_bull_zh_b0, pp.nu_bull_idx_zh_b0,
+    #     pp.S_tim_zh_b0, pp.S_rim_zh_b0, pp.S_tr_zh_b0
+    #     ) = _diffraction_helper_v16(
+    #     pp.a_e_b0, pp.distance,
+    #     distances_view, zheights_view,
+    #     pp.h_ts - pp.h_std, pp.h_rs - pp.h_srd,
+    #     pp.wavelen,
+    #     )
+
+    # # print('_diffraction_helpers', time.time() - _time)
+    # # _time = time.time()
+
+    # # finally, determine remaining path geometry properties
+    # # note, this can depend on the bullington point (index) derived in
+    # # _diffraction_helper for 50%
+
+    # diff_edge_idx = pp.nu_bull_idx_50
+
+    # (
+    #     pp.path_type, pp.theta_t, pp.theta_r, pp.eps_pt, pp.eps_pr,
+    #     pp.theta,
+    #     pp.d_lt, pp.d_lr, pp.h_m
+    #     ) = _path_geometry_helper(
+    #     pp.a_e_50, pp.distance,
+    #     distances_view, heights_view,
+    #     pp.h_ts, pp.h_rs, pp.h_st,
+    #     diff_edge_idx, pp.duct_slope,
+    #     )
 
     # print('_path_geometry_helper', time.time() - _time)
     # _time = time.time()
@@ -705,16 +832,121 @@ cdef void _process_path(
     return
 
 
-cdef (double, double) _smooth_earth_heights(
+cdef (int, double, double, double, double, double, int, int, double, double, double, int) _path_geometry_helper(
+        double wavelen,
+        double a_e,
+        double distance,
+        double[::1] d_v,  # cython view on distance array, aka d_i
+        double[::1] h_v,  # cython view on heights array, aka h_i
+        double h_ts,
+        double h_rs,
+        ) nogil:
+
+    cdef:
+        int i, dsize
+        double d = distance
+        int path_type
+        double theta_i, nu_i
+        double theta_tim = -1.e31, theta_rim = -1.e31
+        double theta_t, theta_r, theta_tr
+        int i_lt, i_lr
+        double d_lt, d_lr
+        double nu_max = -1.e31
+        int i_m_t, i_m_r, i_m
+
+    dsize = d_v.shape[0]
+
+    # Find the highest elevation angle to an intermediate profile point,
+    # relative to the horizontal at the Tx
+    for i in range(1, dsize - 1):
+
+        theta_i = (
+            (h_v[i] - h_ts) / d_v[i] - 500 * d_v[i] / a_e
+            )
+        if theta_i > theta_tim:
+            theta_tim = theta_i
+            i_m_t = i
+
+    theta_tr = (
+        (h_rs - h_ts) / d - 500 * d / a_e
+        )
+
+    if theta_tim < theta_tr:
+        path_type = 0
+    else:
+        path_type = 1
+
+    if path_type == 1:
+        # transhorizon
+
+        # Find the highest elevation angle to an intermediate profile point,
+        # relative to the horizontal at the Tx
+        for i in range(1, dsize - 1):
+
+            theta_i = (
+                (h_v[i] - h_rs) / (d - d_v[i]) - 500 * (d - d_v[i]) / a_e
+                )
+            if theta_i > theta_rim:
+                theta_rim = theta_i
+                i_m_r = i
+
+        d_lt = d_v[i_m_t]
+        d_lr = d - d_v[i_m_r]
+        i_lt = i_m_t
+        i_lr = i_m_r
+        theta_t = theta_tim
+        theta_r = theta_rim
+
+    else:
+        # LOS
+
+        # Find the profile point with the highest diffraction parameter
+        # as seen from Tx
+        for i in range(1, dsize - 1):
+
+            nu_i = (
+                h_v[i] +
+                500 * d_v[i] * (d - d_v[i]) / a_e -
+                h_ts * (d - d_v[i]) + h_rs * d_v[i] / d
+                ) * sqrt(0.002 * d / wavelen / d_v[i] / (d - d_v[i]))
+            if nu_i > nu_max:
+                nu_max = nu_i
+                i_m = i
+
+        d_lt = d_v[i_m]
+        d_lr = d - d_lt
+        i_lt = i_m
+        i_lr = i_m
+
+        theta_t = theta_tr
+        theta_r = -theta_tr - 1000 * d / a_e
+
+    return (
+        path_type,
+        theta_t, theta_r, theta_tim, theta_rim, theta_tr,
+        i_lt, i_lr, d_lt, d_lr, nu_max, i_m
+        )
+
+
+cdef (
+    double, double, double, double, double
+    ) _smooth_earth_heights_and_terrain_roughness(
         double distance,
         double[::1] d_v,
         double[::1] h_v,
+        double h_ts,
+        double h_rs,
+        int i_lt,
+        int i_lr,
         ) nogil:
 
     cdef:
         int i, dsize
         double d = distance, nu_1, nu_2
-        double h_st, h_sr
+        double h_stip, h_srip, h_stipa, h_sripa
+        double m_ses, h_tea, h_rea, _h, h_m = -1.e31
+        double H_i
+
 
     dsize = d_v.shape[0]
 
@@ -728,10 +960,23 @@ cdef (double, double) _smooth_earth_heights(
             h_v[i - 1] * (d_v[i] + 2 * d_v[i - 1])
             )
 
-    h_st = (2 * nu_1 * d - nu_2) / d ** 2
-    h_sr = (nu_2 - nu_1 * d) / d ** 2
+    h_stip = (2 * nu_1 * d - nu_2) / d ** 2
+    h_srip = (nu_2 - nu_1 * d) / d ** 2
 
-    return (h_st, h_sr)
+    h_stipa = f_min(h_stip, h_v[0])
+    h_sripa = f_min(h_srip, h_v[dsize - 1])
+
+    m_ses = (h_sripa - h_stipa) / d
+    h_tea = h_ts - h_stipa  # effective height of Tx above smooth Earth surf
+    h_rea = h_rs - h_sripa  # effective height of Rx above smooth Earth surf
+
+    for i in range(i_lt, i_lr + 1):
+
+        _h = h_v[i] - h_stipa - m_ses * d_v[i]
+        if _h > h_m:
+            h_m = _h  # terrain roughness
+
+    return (h_stip, h_srip, h_tea, h_rea, h_m)
 
 
 cdef (double, double) _effective_antenna_heights(
@@ -739,7 +984,7 @@ cdef (double, double) _effective_antenna_heights(
         double[::1] d_v,
         double[::1] h_v,
         double h_ts, double h_rs,
-        double h_st, double h_sr,
+        double h_stip, double h_srip,
         ) nogil:
 
     cdef:
@@ -749,8 +994,8 @@ cdef (double, double) _effective_antenna_heights(
         double H_i, h_obs = -1.e31, alpha_obt = -1.e31, alpha_obr = -1.e31
         double tmp_alpha_obt, tmp_alpha_obr
 
-        double h_stp, h_srp, g_t, g_r
-        double h_std, h_srd
+        double h_st, h_sr, g_t, g_r
+        double h_tep, h_rep
 
     dsize = d_v.shape[0]
     h0 = h_v[0]
@@ -772,28 +1017,97 @@ cdef (double, double) _effective_antenna_heights(
             alpha_obr = tmp_alpha_obr
 
     if h_obs < 0.:
-        h_stp = h_st
-        h_srp = h_sr
+        h_st = h_stip
+        h_sr = h_srip
     else:
         g_t = alpha_obt / (alpha_obt + alpha_obr)
         g_r = alpha_obr / (alpha_obt + alpha_obr)
 
-        h_stp = h_st - h_obs * g_t
-        h_srp = h_sr - h_obs * g_r
+        h_st = h_stip - h_obs * g_t
+        h_sr = h_srip - h_obs * g_r
 
-    if h_stp > h0:
-        h_std = h0
-    else:
-        h_std = h_stp
+    if h_st > h0:
+        h_st = h0
 
-    if h_srp > hn:
-        h_srd = hn
-    else:
-        h_srd = h_srp
+    if h_sr > hn:
+        h_sr = hn
 
-    return (h_std, h_srd)
+        h_tep = h_ts - h_st
+        h_rep = h_rs - h_sr
+
+    return (h_tep, h_rep)
 
 
+cdef (
+        double, double, double,
+        double, double, double, double, double, double
+        ) _troposcatter_path_segments(
+        double distance, double a_e,
+        double theta_rpos, double theta_tpos,
+        double theta_e,
+        double h_ts, double h_rs,
+        double lon_t, double lat_t, double lon_r, double lat_r,
+        ) nogil:
+
+    cdef:
+        double d = distance, d_tcv, d_rcv, h_cv
+        double _d, _b1, _b2
+        double lon_cv, lat_cv, lon_tcv, lat_tcv, lon_rcv, lat_rcv
+
+    lon_t *= DEG2RAD
+    lat_t *= DEG2RAD
+    lon_r *= DEG2RAD
+    lat_r *= DEG2RAD
+
+    d_tcv = (
+        d * tan(0.001 * theta_rpos + 0.5 * theta_e) - 0.001 * (h_ts - h_rs) /
+        (
+            tan(0.001 * theta_tpos + 0.5 * theta_e) +
+            tan(0.001 * theta_rpos + 0.5 * theta_e)
+            )
+        )
+    if d_tcv < 0.:
+        d_tcv = 0.
+    if d_tcv > d:
+        d_tcv = d
+
+    d_rcv = d - d_tcv
+
+    h_cv = (
+        h_ts + 1000 * d_tcv * tan(0.001 * theta_tpos) +
+        1000 * d_tcv * d_tcv / 2 / a_e
+        )
+
+    _d, _b1, _b2 = cygeodesics._inverse(
+        lon_t, lat_t, lon_r, lat_r, 1.e-12, 50
+        )
+    lon_cv, lat_cv, _b2 = _direct(
+        lon_t, lat_t, _b1, d_tcv, 1.e-12, 50, 1
+        )
+    lon_tcv, lat_tcv, _b2 = _direct(
+        lon_t, lat_t, _b1, 0.5 * d_tcv, 1.e-12, 50, 1
+        )
+    lon_rcv, lat_rcv, _b2 = _direct(
+        lon_t, lat_t, _b1, d - 0.5 * d_rcv, 1.e-12, 50, 1
+        )
+
+    lon_cv *= RAD2DEG
+    lat_cv *= RAD2DEG
+    lon_tcv *= RAD2DEG
+    lat_tcv *= RAD2DEG
+    lon_rcv *= RAD2DEG
+    lat_rcv *= RAD2DEG
+
+    return (
+        d_tcv, d_rcv, h_cv,
+        lon_cv, lat_cv, lon_tcv, lat_tcv, lon_rcv, lat_rcv
+        )
+
+# ---------------------------------------------------------------------
+# ---------------------------------------------------------------------
+# ---------------------------------------------------------------------
+# ---------------------------------------------------------------------
+# ---------------------------------------------------------------------
 cdef (
     int, double, double, double, double, int, double, double, double
     ) _diffraction_helper_v16(
@@ -1059,113 +1373,113 @@ cdef (
             )
 
 
-cdef (int, double, double, double, double, double, double, double, double) _path_geometry_helper(
-        double a_e,
-        double distance,
-        double[::1] d_v,
-        double[::1] h_v,
-        double h_ts, double h_rs, double h_st,
-        int nu_bull_idx, double duct_slope,
-        ) nogil:
+# cdef (int, double, double, double, double, double, double, double, double) _path_geometry_helper(
+#         double a_e,
+#         double distance,
+#         double[::1] d_v,
+#         double[::1] h_v,
+#         double h_ts, double h_rs, double h_st,
+#         int nu_bull_idx, double duct_slope,
+#         ) nogil:
 
-    cdef:
-        int i, dsize
-        double d = distance, m = duct_slope
-        int path_type
+#     cdef:
+#         int i, dsize
+#         double d = distance, m = duct_slope
+#         int path_type
 
-        double theta_i, theta_j, theta_t, theta_r, theta
-        double theta_i_max = -1.e31, theta_j_max = -1.e31, theta_td
-        double eps_pt, eps_pr
+#         double theta_i, theta_j, theta_t, theta_r, theta
+#         double theta_i_max = -1.e31, theta_j_max = -1.e31, theta_td
+#         double eps_pt, eps_pr
 
-        int lt_idx, lr_idx
-        double d_lt, d_lr
+#         int lt_idx, lr_idx
+#         double d_lt, d_lr
 
-        double h_m_i, h_m = -1.e31
+#         double h_m_i, h_m = -1.e31
 
-    dsize = d_v.shape[0]
+#     dsize = d_v.shape[0]
 
-    for i in range(1, dsize - 1):
+#     for i in range(1, dsize - 1):
 
-        theta_i = 1000. * atan(
-            (h_v[i] - h_ts) / 1.e3 / d_v[i] - d_v[i] / 2. / a_e
-            )
-        if theta_i > theta_i_max:
-            theta_i_max = theta_i
-            lt_idx = i
+#         theta_i = 1000. * atan(
+#             (h_v[i] - h_ts) / 1.e3 / d_v[i] - d_v[i] / 2. / a_e
+#             )
+#         if theta_i > theta_i_max:
+#             theta_i_max = theta_i
+#             lt_idx = i
 
-    theta_td = 1000. * atan(
-        (h_rs - h_ts) / 1.e3 / d - d / 2. / a_e
-        )
+#     theta_td = 1000. * atan(
+#         (h_rs - h_ts) / 1.e3 / d - d / 2. / a_e
+#         )
 
-    if theta_i_max > theta_td:
-        path_type = 1
-    else:
-        path_type = 0
+#     if theta_i_max > theta_td:
+#         path_type = 1
+#     else:
+#         path_type = 0
 
-    if path_type == 1:
-        # transhorizon
+#     if path_type == 1:
+#         # transhorizon
 
-        theta_t = theta_i_max
-        d_lt = d_v[lt_idx]
+#         theta_t = theta_i_max
+#         d_lt = d_v[lt_idx]
 
-        for i in range(1, dsize - 1):
-            theta_j = 1000. * atan(
-                (h_v[i] - h_rs) / 1.e3 / (d - d_v[i]) -
-                (d - d_v[i]) / 2. / a_e
-                )
-            if theta_j > theta_j_max:
-                theta_j_max = theta_j
-                lr_idx = i
+#         for i in range(1, dsize - 1):
+#             theta_j = 1000. * atan(
+#                 (h_v[i] - h_rs) / 1.e3 / (d - d_v[i]) -
+#                 (d - d_v[i]) / 2. / a_e
+#                 )
+#             if theta_j > theta_j_max:
+#                 theta_j_max = theta_j
+#                 lr_idx = i
 
-        theta_r = theta_j_max
-        d_lr = d - d_v[lr_idx]
+#         theta_r = theta_j_max
+#         d_lr = d - d_v[lr_idx]
 
-        theta = 1.e3 * d / a_e + theta_t + theta_r
+#         theta = 1.e3 * d / a_e + theta_t + theta_r
 
-        # calculate elevation angles of path
-        eps_pt = theta_t * 1.e-3 * 180. / M_PI
-        eps_pr = theta_r * 1.e-3 * 180. / M_PI
+#         # calculate elevation angles of path
+#         eps_pt = theta_t * 1.e-3 * 180. / M_PI
+#         eps_pr = theta_r * 1.e-3 * 180. / M_PI
 
-        # calc h_m
-        for i in range(lt_idx, lr_idx + 1):
-            h_m_i = h_v[i] - (h_st + m * d_v[i])
+#         # calc h_m
+#         for i in range(lt_idx, lr_idx + 1):
+#             h_m_i = h_v[i] - (h_st + m * d_v[i])
 
-            if h_m_i > h_m:
-                h_m = h_m_i
+#             if h_m_i > h_m:
+#                 h_m = h_m_i
 
-    else:
-        # LOS
+#     else:
+#         # LOS
 
-        theta_t = theta_td
+#         theta_t = theta_td
 
-        theta_r = 1000. * atan(
-            (h_ts - h_rs) / 1.e3 / d - d / 2. / a_e
-            )
+#         theta_r = 1000. * atan(
+#             (h_ts - h_rs) / 1.e3 / d - d / 2. / a_e
+#             )
 
-        theta = 1.e3 * d / a_e + theta_t + theta_r  # is this correct?
+#         theta = 1.e3 * d / a_e + theta_t + theta_r  # is this correct?
 
-        # calculate elevation angles of path
-        eps_pt = (
-            (h_rs - h_ts) * 1.e-3 / d - d / 2. / a_e
-            ) * 180. / M_PI
-        eps_pr = (
-            (h_ts - h_rs) * 1.e-3 / d - d / 2. / a_e
-            ) * 180. / M_PI
+#         # calculate elevation angles of path
+#         eps_pt = (
+#             (h_rs - h_ts) * 1.e-3 / d - d / 2. / a_e
+#             ) * 180. / M_PI
+#         eps_pr = (
+#             (h_ts - h_rs) * 1.e-3 / d - d / 2. / a_e
+#             ) * 180. / M_PI
 
-        # horizon distance for LOS paths has to be set to distance to
-        # Bullington point in diffraction method
-        # assert (nu_bull_idx >= 0) and (nu_bull_idx < dsize)  # TODO
-        d_lt = d_v[nu_bull_idx]
-        d_lr = d - d_v[nu_bull_idx]
+#         # horizon distance for LOS paths has to be set to distance to
+#         # Bullington point in diffraction method
+#         # assert (nu_bull_idx >= 0) and (nu_bull_idx < dsize)  # TODO
+#         d_lt = d_v[nu_bull_idx]
+#         d_lr = d - d_v[nu_bull_idx]
 
-        # calc h_m
-        # it seems, that h_m is calculated just from the profile height
-        # at the Bullington point???
-        h_m = h_v[nu_bull_idx] - (h_st + m * d_v[nu_bull_idx])
+#         # calc h_m
+#         # it seems, that h_m is calculated just from the profile height
+#         # at the Bullington point???
+#         h_m = h_v[nu_bull_idx] - (h_st + m * d_v[nu_bull_idx])
 
-    return (
-        path_type, theta_t, theta_r, eps_pt, eps_pr, theta, d_lt, d_lr, h_m
-        )
+#     return (
+#         path_type, theta_t, theta_r, eps_pt, eps_pr, theta, d_lt, d_lr, h_m
+#         )
 
 
 cdef (double, double, double) _free_space_loss_bfsg(
