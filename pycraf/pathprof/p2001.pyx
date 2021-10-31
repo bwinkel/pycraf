@@ -248,8 +248,9 @@ cdef struct ppstruct:
     double G_r  # dBi
     double a_e  # km
     double A_gsur  # dB / km
-    double A_wrsur  # dB / km
+    double A_osur  # dB / km
     double A_wsur  # dB / km
+    double A_wrsur  # dB / km
     double a_p  # km
     double c_p  # 1 / km
     double distance  # km
@@ -293,8 +294,9 @@ cdef struct ppstruct:
     double theta_tpos  # mrad
     double theta_rpos  # mrad
     double gamma_0  # dB / km
+    double gamma_w  # dB / km
     double omega  # %
-    double rho_m  # g / m3
+    double rho_mid  # g / m3
     double rho_t  # g / m3
     double rho_r  # g / m3
 
@@ -319,6 +321,8 @@ cdef struct ppstruct:
     # P.2001 is special in the sense, that multiple time_percents
     # ought to be used for proper MC treatment;
     double p_sporadic
+
+    double d_fs  # km, helper pythagorean distance between Tx and Rx
 
 
 def set_num_threads(int nthreads):
@@ -544,7 +548,7 @@ cdef class _PathProp(object):
 
         # read surface water vapour density for atmospheric loss calculations
         # need this for three different positions, Tx, Rx, and mid-point
-        self._pp.rho_m = helper._surfwv_50_interpolator(
+        self._pp.rho_mid = helper._surfwv_50_interpolator(
             self._pp.lon_mid % 360, self._pp.lat_mid
             )
         self._pp.rho_t = helper._surfwv_50_interpolator(
@@ -759,6 +763,20 @@ cdef void _process_path(
         pp.h_ts, pp.h_rs,
         pp.lon_t, pp.lat_t, pp.lon_r, pp.lat_r,
         )
+
+    # TODO: the following function should go into its own routine
+    (
+        pp.A_osur, pp.A_wsur, pp.A_wrsur,
+        pp.gamma_0, pp.gamma_w
+        ) = _gaseous_absorption_surface_path(
+        pp.distance, pp.h_mid, pp.freq, pp.rho_sur,
+        pp.h_ts, pp.h_rs,
+        )
+    pp.A_gsur = pp.A_osur + pp.A_wsur
+
+    # helper distance for L_bfs
+    pp.d_fs = sqrt(pp.distance ** 2 + (1e-3 * (pp.h_ts - pp.h_rs)) ** 2)
+
 
     # (
     #     pp.path_type_50, pp.d_bp_50, pp.h_bp_50, pp.h_eff_50,
@@ -1102,6 +1120,250 @@ cdef (
         d_tcv, d_rcv, h_cv,
         lon_cv, lat_cv, lon_tcv, lat_tcv, lon_rcv, lat_rcv
         )
+
+
+cdef (
+        double, double, double,
+        double, double,
+        ) _gaseous_absorption_surface_path(
+        double distance, double h_mid, double freq, double rho_sur,
+        double h_ts, double h_rs,
+        ) nogil:
+
+    cdef:
+
+        double h_sur = h_mid, h_rho
+        double rho_surr, rho_sea
+
+        double A_gsur, A_osur, A_wsur, A_wrsur
+        double gamma_0, gamma_w
+
+    rho_surr = (
+        rho_sur + 0.4 + 0.0003 * h_sur
+        if h_sur <= 2600 else
+        rho_sur + 5 * exp(-h_sur / 1800)
+        )
+
+    # the following is only good up to 54 GHz!
+    # freq in GHz
+    gamma_0 = freq * freq * 1.e-3 * (
+        7.2 / (freq * freq + 0.34) +
+        0.62 / ((54 - freq) ** 1.16 + 0.83)
+        )
+
+    # non-rain conditions
+    rho_sea = rho_sur * exp(h_sur / 2000)
+    eta = 0.955 + 0.006 * rho_sea
+    gamma_w = freq * freq * rho_sea * 1.e-4 * (
+        0.046 + 0.0019 * rho_sea +
+        3.98 * eta / ((f -22.235) ** 2 + 9.42 * eta ** 2) * (
+            1 + ((freq - 22) / (freq + 22)) ** 2
+            )
+        )
+    # rain conditions
+    rho_sea = rho_surr * exp(h_sur / 2000)
+    eta = 0.955 + 0.006 * rho_sea
+    gamma_wr = freq * freq * rho_sea * 1.e-4 * (
+        0.046 + 0.0019 * rho_sea +
+        3.98 * eta / ((f -22.235) ** 2 + 9.42 * eta ** 2) * (
+            1 + ((freq - 22) / (freq + 22)) ** 2
+            )
+        )
+
+    h_rho = 0.5 * (h_ts + h_rs)
+
+    A_osur = gamma_0 * distance * exp(-h_rho / 5000)
+    A_wsur = gamma_w * distance * exp(-h_rho / 2000)
+    A_wrsur = gamma_wr * distance * exp(-h_rho / 2000)
+
+    return A_osur, A_wsur, A_wrsur, gamma_0, gamma_w
+
+
+
+cdef double _spherical_earth_diffraction_first_term_helper(
+        double a_dft,
+        double distance
+        double freq,
+        double eps_r,
+        double sigma,
+        int polarization,  # 0 - horizontal, 1 - vertical
+        double h_te, double h_re,
+        ) nogil:
+
+    cdef:
+        double third = 0.3333333333333333
+        double K, K2, K4, beta
+
+        double X, Y_t, Y_r, F_X, B, G_t, G_r
+        double L_dft
+
+    # horizontal pol:
+    K = 0.036 * (a_dft * freq) ** -third * (
+        (eps_r - 1) ** 2 + (18 * sigma / freq) ** 2
+        ) ** -0.25
+
+    if polarization == 1:
+        K = K * sqrt(eps_r ** 2 + (18 * sigma / freq) ** 2)
+
+    K2 = K * K
+    K4 = K2 * K2
+    beta = (1 + 1.6 * K2 + 0.67 * K4) / (1 + 4.5 * K2 + 1.53 * K4)
+
+    X = 21.88 * beta * (freq ** 2 / a_dft) ** third * distance
+    Y_t = 0.9575 * beta * (freq ** 2 / a_dft) ** third * h_te
+    Y_r = 0.9575 * beta * (freq ** 2 / a_dft) ** third * h_re
+
+    F_X = (
+        11 + 10 * log10(X) - 17.6 * X
+        if X >= 1.6 else
+        -20 * log10(X) - 5.6488 * X ** 1.425
+        )
+
+    B = beta * Y_t
+    G_t = (
+        17.6 * sqrt(B - 1.1) - 5 * log10(B - 1.1) - 8
+        if B > 2 else
+        20 * log10(B + 0.1 * B ** 3)
+        )
+    G_t = f_max(G_t, 2 + 20 * log10(K))
+
+    B = beta * Y_r
+    G_r = (
+        17.6 * sqrt(B - 1.1) - 5 * log10(B - 1.1) - 8
+        if B > 2 else
+        20 * log10(B + 0.1 * B ** 3)
+        )
+    G_r = f_max(G_r, 2 + 20 * log10(K))
+
+    L_dft = -F_X - G_g - G_r
+
+    return L_dft
+
+
+cdef double _spherical_earth_diffraction_first_term(
+        double a_dft,
+        double distance
+        double freq,
+        int polarization,  # 0 - horizontal, 1 - vertical
+        double h_te, double h_re,
+        double eps_r_land, double eps_r_sea,
+        double sigma_land, double sigma_sea,
+        double omega
+        ) nogil:
+
+    cdef:
+        double L_dft_land, L_dft_sea, omega, L_dft
+
+    L_dft_land = _spherical_earth_diffraction_first_term_helper(
+        a_dft, distance freq, eps_r_land, sigma_land, polarization, h_te, h_re,
+        )
+    L_dft_sea = _spherical_earth_diffraction_first_term_helper(
+        a_dft, distance freq, eps_r_sea, sigma_sea, polarization, h_te, h_re,
+        )
+
+    L_dft = omega * L_dft_sea + (1 - omega) * L_dft_land
+
+    return L_dft
+
+
+cdef double _spherical_earth_diffraction(
+        double a_p,
+        double distance,
+        double h_tep, double h_rep,
+        double wavelen,
+        int polarization,  # 0 - horizontal, 1 - vertical
+        double h_te, double h_re,
+        double eps_r_land, double eps_r_sea,
+        double sigma_land, double sigma_sea,
+        double omega
+        ) nogil:
+
+    cdef:
+        double d = distance, d_los, d_1, d_2
+        double b_sph, h_sph, c_sph, m_sph, h_hreq
+        double lam = wavelen, C_e500 = 500. / a_p
+
+        double a_dft, L_dsph, L_dft
+
+    d_los = sqrt(2 * a_p) * (sqrt(0.001 * h_tep) + sqrt(0.001) * h_rep)
+
+    if d >= d_los:
+        a_dft = a_p
+        L_dsph = _spherical_earth_diffraction_first_term(
+            a_dft, distance freq,
+            polarization,
+            h_te, h_re,
+            eps_r_land, eps_r_sea,
+            sigma_land, sigma_sea,
+            omega
+            )  #  == L_dft
+    else:
+        c_sph = (h_tep - h_rep) / (h_tep + h_rep)
+        m_sph = 250 * d * d / a_p / (h_tep + h_rep)
+
+        b_sph = 2 * sqrt((m_sph + 1) / 3 / m_sph) * cos(
+            M_PI / 3 +
+            1 / 3 * acos(3 * c_sph / 2 * sqrt(3 * m_sph / (m_sph + 1) ** 3))
+            )
+
+        d_1 = 0.5 * d * (1 + b_sph)
+        d_2 = d - d_1
+
+        h_sph = (
+            (h_tep - C_e500 * d_1 ** 2) * d_2 +
+            (h_rep - C_e500 * d_2 ** 2) * d_1
+            ) / d
+
+        h_req = 17.456 * sqrt(d_1 * d_2 * lam / d)
+
+        if h_sph > h_req:
+            L_dsph = 0.
+        else:
+            a_dft = 500 * (d / (sqrt(h_tep) + sqrt(h_rep))) ** 2  # == a_em
+            L_dft = L_dsph = _spherical_earth_diffraction_first_term(
+                a_dft, distance freq,
+                polarization,
+                h_te, h_re,
+                eps_r_land, eps_r_sea,
+                sigma_land, sigma_sea,
+                omega
+                )
+            if L_dft < 0.:
+                L_dsph = 0.
+            else:
+                L_dsph = (1 - h_sph / h_req) * L_dft
+
+    return L_dsph
+
+
+
+
+cdef inline double _free_space_loss_bfs(ppstruct pp) nogil:
+
+    return 92.4 + 20 * log10(pp.freq) + 20 * log10(pp.d_fs)
+
+
+# @utils.ranged_quantity_input(
+#     strip_input_units=True, output_unit=(cnv.dB, cnv.dB, cnv.dB)
+#     )
+def free_space_loss_bfs_cython(
+        _PathProp pathprop
+        ):
+    '''
+    Calculate the free space loss, L_bfs, of a propagating radio wave
+    according to ITU-R P.2001-4 Eq. (41-42).
+
+    Parameters
+    ----------
+    pathprop
+
+    Returns
+    -------
+    L_bfs - double
+        L_bfs - Free-space loss [dB]
+    '''
+
+    return _free_space_loss_bfs(pathprop._pp)
 
 # ---------------------------------------------------------------------
 # ---------------------------------------------------------------------
