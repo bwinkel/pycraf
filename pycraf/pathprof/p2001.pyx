@@ -300,13 +300,36 @@ cdef struct ppstruct:
     double rho_t  # g / m3
     double rho_r  # g / m3
 
+    # ##################
     # derived quantities
+    # ##################
+
+    # path geometry
     int path_type  # 0 - LOS, 1 - transhoriz
     double theta_tim  # mrad
     double theta_rim  # mrad
     double theta_tr  # mrad
+
+    # diffraction
     double nu_max  # m ???
     int i_m  # index for nu_max
+    double d_bp  # distance to bullington point (BP)
+    doulbe h_bp  # height of BP
+    doulbe h_eff  # eff. height of BP?
+    double S_tim
+    double S_rim
+    double S_tr
+
+    # diffraction for zero-terrain heights
+    double nu_max0  # m ???
+    int i_m0  # index for nu_max
+    double d_bp0  # distance to bullington point (BP)
+    doulbe h_bp0  # height of BP
+    doulbe h_eff0  # eff. height of BP?
+    double S_tim0
+    double S_rim0
+    double S_tr0
+
     double h_stip  # m
     double h_srip  # m
     double lon_25p  # deg, longitude at 25% of distance
@@ -350,6 +373,17 @@ cdef inline double f_max(double a, double b) nogil:
 cdef inline double f_min(double a, double b) nogil:
 
     return a if a <= b else b
+
+cdef inline double _J_edgeknife(double nu) nogil:
+
+    if nu <= -0.78:
+        return 0.
+    else:
+        return (
+            6.9 + 20 * log10(
+                sqrt((nu - 0.1) ** 2 + 1) + nu - 0.1
+                )
+            )
 
 
 cdef class _PathProp(object):
@@ -777,7 +811,35 @@ cdef void _process_path(
     # helper distance for L_bfs
     pp.d_fs = sqrt(pp.distance ** 2 + (1e-3 * (pp.h_ts - pp.h_rs)) ** 2)
 
+    (
+        pp.path_type, pp.d_bp, pp.h_bp, pp.h_eff,
+        pp.nu_max, pp.i_m,
+        pp.S_tim, pp.S_rim, pp.S_tr
+        ) = _diffraction_bullington(
+        pp.a_e, pp.distance,
+        distances_view, heights_view,
+        pp.h_ts, pp.h_rs,
+        pp.wavelen,
+        )
 
+    # now for smooth Earth (zero terrain heights)
+    (
+        pp.path_type0, pp.d_bp0, pp.h_bp0, pp.h_eff0,
+        pp.nu_max0, pp.i_m0,
+        pp.S_tim0, pp.S_rim0, pp.S_tr0
+        ) = _diffraction_bullington(
+        pp.a_e, pp.distance,
+        distances_view, zheights_view,
+        pp.h_tep, pp.h_rep,
+        pp.wavelen,
+        )
+
+
+    # TODO: move the lines below to an appropriate func
+    cdef double L_dbka = _J_edgeknife(pp.nu_max)
+    cdef double L_dba = L_dbka + (1 - exp(-L_dbka / 6)) * (10 + 0.02 * pp.distance)
+    cdef double L_dbks = _J_edgeknife(pp.nu_max0)
+    cdef double L_dbs = L_dbks + (1 - exp(-L_dbks / 6)) * (10 + 0.02 * pp.distance)
     # (
     #     pp.path_type_50, pp.d_bp_50, pp.h_bp_50, pp.h_eff_50,
     #     pp.nu_bull_50, pp.nu_bull_idx_50,
@@ -1334,6 +1396,108 @@ cdef double _spherical_earth_diffraction(
                 L_dsph = (1 - h_sph / h_req) * L_dft
 
     return L_dsph
+
+
+cdef (
+    int, double, double, double, double, int, double, double, double, double
+    ) _diffraction_bullington(
+        double a_p,
+        double distance,
+        double[::1] d_v,
+        double[::1] h_v,
+        double h_ts, double h_rs,
+        double wavelen,
+        ) nogil:
+
+    cdef:
+        int i, dsize
+        double d = distance, lam = wavelen, C_e500 = 500. / a_p
+        int path_type
+
+        double slope_i, slope_j, S_tim = -1.e31, S_tr, S_rim = -1.e31
+
+        # nu_i == nu_a; nu_bull = nu_a_max (naming different in P452 vs P2001)
+        # for zero terrain heights, nu_i == nu_s; nu_bull = nu_s_max
+        int nu_bull_idx
+        double nu_bull = -1.e31, nu_i
+        double h_eff, h_eff_i
+        double h_bp, d_bp
+        double x, y  # temporary vars
+
+    dsize = d_v.shape[0]
+
+    for i in range(1, dsize - 1):
+
+        slope_i = (
+            h_v[i] + C_e500 * d_v[i] * (d - d_v[i]) - h_ts
+            ) / d_v[i]
+
+        if slope_i > S_tim:
+            S_tim = slope_i
+
+    S_tr = (h_rs - h_ts) / d
+
+    if S_tim < S_tr:
+        path_type = 0
+    else:
+        path_type = 1
+
+    if path_type == 1:
+        # transhorizon
+        # find Bullington point, etc.
+        for i in range(1, dsize - 1):
+            slope_j = (
+                h_v[i] + C_e500 * d_v[i] * (d - d_v[i]) - h_rs
+                ) / (d - d_v[i])
+
+            if slope_j > S_rim:
+                S_rim = slope_j
+
+        d_bp = x = (h_rs - h_ts + S_rim * d) / (S_tim + S_rim)
+        y = a_p + h_ts / 1000 + d_bp * (S_tim / 1000 - d / 2 / a_p)
+        h_bp = 1000 * (sqrt(x ** 2 + y ** 2) - a_p)
+
+        h_eff = (
+            h_ts + S_tim * d_bp -
+            (
+                h_ts * (d - d_bp) + h_rs * d_bp
+                ) / d
+            )
+
+        nu_bull = h_eff * sqrt(
+            0.002 * d / lam / d_bp / (d - d_bp)
+            )  # == nu_b in Eq. 20
+        nu_bull_idx = -1  # dummy value
+
+    else:
+        # LOS
+
+        # find Bullington point, etc.
+
+        S_rim = NAN
+
+        # diffraction parameter
+        for i in range(1, dsize - 1):
+            h_eff_i = (
+                h_v[i] +
+                C_e500 * d_v[i] * (d - d_v[i]) -
+                (h_ts * (d - d_v[i]) + h_rs * d_v[i]) / d
+                )
+            nu_i = h_eff_i * sqrt(
+                0.002 * d / lam / d_v[i] / (d - d_v[i])
+                )
+            if nu_i > nu_bull:
+                nu_bull = nu_i
+                nu_bull_idx = i
+                h_eff = h_eff_i
+
+        d_bp = x = d_v[nu_bull_idx]
+        y = a_p + h_ts / 1000 + d_bp * (S_tr / 1000 - d / 2 / a_p)
+        h_bp = 1000 * (sqrt(x ** 2 + y ** 2) - a_p)
+
+    return (
+        path_type, d_bp, h_bp, h_eff, nu_bull, nu_bull_idx, S_tim, S_rim, S_tr
+        )
 
 
 
