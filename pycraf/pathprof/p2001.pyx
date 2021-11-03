@@ -146,6 +146,7 @@ PARAMETERS_BASIC = [
     ('h_cv', '12.6f', 'm', apu.m),  # Height of troposcatter common volume
     ('h_hi', '12.6f', 'm', apu.m),  # Higher antenna height
     ('h_lo', '12.6f', 'm', apu.m),  # Lower antenna height
+    ('eps_p', '12.6f', 'mrad', apu.mrad)  # positive value of path inclination
     ('h_m', '12.6f', 'm', apu.m),  # Path roughness parameter
     ('h_mid', '12.6f', 'm', apu.m),  # Ground height at mid point of path
     # Effective transmitter, receiver, heights above smooth surface for
@@ -269,8 +270,9 @@ cdef struct ppstruct:
     double h_rep  # m
     double h_ts  # m
     double h_rs  # m
-    int i_lt  # '
-    int i_lr  # '
+    double eps_p  # mrad
+    int i_lt  # 1
+    int i_lr  # 1
     double L_bfs  # dBi
     double L_bm1  # dBi
     double L_bm2  # dBi
@@ -346,6 +348,8 @@ cdef struct ppstruct:
     double p_sporadic
 
     double d_fs  # km, helper pythagorean distance between Tx and Rx
+
+    double Q_0ca  # notional zero-fade annual percentage time
 
 
 def set_num_threads(int nthreads):
@@ -840,6 +844,23 @@ cdef void _process_path(
     cdef double L_dba = L_dbka + (1 - exp(-L_dbka / 6)) * (10 + 0.02 * pp.distance)
     cdef double L_dbks = _J_edgeknife(pp.nu_max0)
     cdef double L_dbs = L_dbks + (1 - exp(-L_dbks / 6)) * (10 + 0.02 * pp.distance)
+
+    # Calculate the notional zero-fade annual percentage time, Q0ca
+    pp.Q_0ca = _multi_path_activity(
+        pp.freq, pp.lat_m,
+        pp.N_d65m1,
+        pp.path_type,
+        pp.distance,
+        pp.eps_p,
+        pp.h_lo,
+        pp.d_lt, pp.d_lr,
+        pp.theta_t, pp.theta_r,
+        pp.i_lt, pp.i_lr,
+        pp.h_ts, pp.h_rs,
+        heights_view,
+        )
+
+
     # (
     #     pp.path_type_50, pp.d_bp_50, pp.h_bp_50, pp.h_eff_50,
     #     pp.nu_bull_50, pp.nu_bull_idx_50,
@@ -1500,11 +1521,124 @@ cdef (
         )
 
 
+cdef double _notional_zero_face_time_percentage(
+        double K, double freq, double lat_m,
+        double d_ca, double eps_ca, double h_ca,
+        )
+
+    cdef:
+
+        double Q
+        double q_w, C_g
+
+    q_w = (
+        K * d_ca ** 3.1 * (1 + eps_ca) ** -1.29 * f ** 0.8 *
+        10 ** (-0.00089 * h_ca)
+        )  # %
+
+    if abs(lat_m) <= 45:
+        C_g = (
+            10.5 - 5.6 * log10(1.1 + abs(cos(2 * DEG2RAD * lat_m)) ** 0.7) -
+            2.8 * log10(d_ca) + 1.7 * log10(1 + eps_ca)
+            )
+    else:
+        C_g = (
+            10.5 - 5.6 * log10(1.1 - abs(cos(2 * DEG2RAD * lat_m)) ** 0.7) -
+            2.8 * log10(d_ca) + 1.7 * log10(1 + eps_ca)
+            )
+
+    if C_g > 10.8:
+        C_g = 10.8
+
+    Q = 10 ** (-0.1 * C_g) * q_w  # %
+
+    return Q
+
+
+cdef double _multi_path_activity(
+        double freq, double lat_m,
+        double N_d65m1,
+        int path_type,
+        double distance,
+        double eps_p,
+        double h_lo,
+        double d_lt, double d_lr,
+        double theta_t, double theta_r,
+        int i_lt, int i_lr,
+        double h_ts, double h_rs,
+        double[::1] h_v,
+        ) nogil:
+
+    cdef:
+        double K
+        double Q_0ca, Q_0cat, Q_0car
+
+    K = 10 ** (-4.6 - 0.0027 * N_d65m1)
+
+    if path_type == 0:
+        # LoS
+        Q_0ca = _notional_zero_face_time_percentage(
+            K, freq, lat_m, distance, eps_p, h_lo
+            )
+
+    elif path_type == 1:
+        # NLoS
+
+        Q_0cat = _notional_zero_face_time_percentage(
+            K, freq, lat_m, d_lt, abs(theta_t), f_min(h_ts, h_v[i_lt])
+            )
+        Q_0car = _notional_zero_face_time_percentage(
+            K, freq, lat_m, d_lr, abs(theta_r), f_min(h_rs, h_v[i_lr])
+            )
+
+        Q_0ca = f_max(Q_0cat, Q_0car)
+
+    return Q_0ca
 
 
 cdef inline double _free_space_loss_bfs(ppstruct pp) nogil:
 
     return 92.4 + 20 * log10(pp.freq) + 20 * log10(pp.d_fs)
+
+
+cdef double _Q_caf(double A, double Q_0ca) nogil:
+
+    cdef:
+        # percentage of the non-rain time a given fade
+        # in dB below the median signal level is exceeded
+        double Q_caf
+        double q_a, q_t, q_e, q_s
+
+    if A >= 0:
+        # signal fading
+        q_t = 3.576 - 1.955 * log10(Q_0ca)
+        q_a = (
+            2 + (1 + 0.3 * 10 ** (-0.05 * A)) * 10 ** (-0.016 * A) * (
+                q_t + 4.3 * (10 ** (-0.05 * A) + A / 800)
+                )
+            )
+        Q_caf = 100 * (1 - exp(-10 ** (-0.05 * q_a * A) * log(2)))  # %
+    else:
+        # signal enhancement
+        q_s = -4.05 - 2.35 * log10(Q_0ca)
+        q_e = (
+            8 + (1 + 0.3 * 10 ** (0.05 * A)) * 10 ** (0.035 * A) * (
+                q_s + 12 * (10 ** (0.05 * A) - A / 800)
+                )
+            )
+        Q_caf = 100 * (1 - exp(-10 ** (0.05 * q_e * A) * log(2)))  # %
+
+    return Q_caf
+
+
+cdef inline double _Q_caf_tropo(double A) nogil:
+
+    cdef:
+        # percentage of the non-rain time a given
+        # fade in dB below the median signal level is exceeded
+        # double Q_caf_tropo
+
+    return (100 if A < 0 else 0)  # %
 
 
 # @utils.ranged_quantity_input(
