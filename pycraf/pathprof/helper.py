@@ -179,6 +179,15 @@ _tropoclim_interpolator = RegularGridInterpolator(
     )
 
 
+_rain_probs = np.genfromtxt(
+    get_pkg_data_filename(
+        '../itudata/p.2001-3/table_c.2.1.txt'
+        ),
+    dtype=(np.int8, np.float64, np.float64),
+    names=True,
+    )
+
+
 @utils.ranged_quantity_input(
     p_w=(0, 100, apu.percent),
     phi=(-90, 90, apu.deg),

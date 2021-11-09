@@ -18,6 +18,7 @@ from libc.math cimport (
     exp, log, log10, sqrt, fabs, M_PI, floor, pow as cpower,
     sin, cos, tan, asin, acos, atan, atan2, tanh
     )
+from .p838 import _rain_coefficients_p838
 import numpy as np
 from astropy import units as apu
 from . import heightprofile
@@ -46,6 +47,9 @@ __all__ = [
 cdef double NAN = np.nan
 cdef double DEG2RAD = M_PI / 180
 cdef double RAD2DEG = 180 / M_PI
+cdef double M_PI2 = 2 * M_PI
+cdef double M_PI_2 = 0.5 * M_PI
+cdef double M_PI_4 = 0.25 * M_PI
 
 
 cdef double c_light = 2.998e8  # m/s, Speed of propagation
@@ -56,52 +60,61 @@ cdef double sigma_land = 0.003  # S/m, Conductivity for land
 cdef double sigma_sea = 5.  # S/m, Conductivity for sea
 
 
-cpdef enum CLUTTER:
-    UNKNOWN = -1
-    SPARSE = 0
-    VILLAGE = 1
-    DECIDIOUS_TREES = 2
-    CONIFEROUS_TREES = 3
-    TROPICAL_FOREST = 4
-    SUBURBAN = 5
-    DENSE_SUBURBAN = 6
-    URBAN = 7
-    DENSE_URBAN = 8
-    HIGH_URBAN = 9
-    INDUSTRIAL_ZONE = 10
+# cpdef enum CLUTTER:
+#     UNKNOWN = -1
+#     SPARSE = 0
+#     VILLAGE = 1
+#     DECIDIOUS_TREES = 2
+#     CONIFEROUS_TREES = 3
+#     TROPICAL_FOREST = 4
+#     SUBURBAN = 5
+#     DENSE_SUBURBAN = 6
+#     URBAN = 7
+#     DENSE_URBAN = 8
+#     HIGH_URBAN = 9
+#     INDUSTRIAL_ZONE = 10
 
-CLUTTER_NAMES = [
-    'UNKNOWN',
-    'SPARSE',
-    'VILLAGE',
-    'DECIDIOUS_TREES',
-    'CONIFEROUS_TREES',
-    'TROPICAL_FOREST',
-    'SUBURBAN',
-    'DENSE_SUBURBAN',
-    'URBAN',
-    'DENSE_URBAN',
-    'HIGH_URBAN',
-    'INDUSTRIAL_ZONE',
-    ]
+# CLUTTER_NAMES = [
+#     'UNKNOWN',
+#     'SPARSE',
+#     'VILLAGE',
+#     'DECIDIOUS_TREES',
+#     'CONIFEROUS_TREES',
+#     'TROPICAL_FOREST',
+#     'SUBURBAN',
+#     'DENSE_SUBURBAN',
+#     'URBAN',
+#     'DENSE_URBAN',
+#     'HIGH_URBAN',
+#     'INDUSTRIAL_ZONE',
+#     ]
 
-CLUTTER_DATA = np.array(
-    [
-        [4., 0.1],
-        [5., 0.07],
-        [15., 0.05],
-        [20., 0.05],
-        [20., 0.03],
-        [9., 0.025],
-        [12., 0.02],
-        [20., 0.02],
-        [25., 0.02],
-        [35., 0.02],
-        [20., 0.05],
-    ],
-    dtype=np.float64)
+# CLUTTER_DATA = np.array(
+#     [
+#         [4., 0.1],
+#         [5., 0.07],
+#         [15., 0.05],
+#         [20., 0.05],
+#         [20., 0.03],
+#         [9., 0.025],
+#         [12., 0.02],
+#         [20., 0.02],
+#         [25., 0.02],
+#         [35., 0.02],
+#         [20., 0.05],
+#     ],
+#     dtype=np.float64)
 
-cdef double[:, ::1] CLUTTER_DATA_V = CLUTTER_DATA
+# cdef double[:, ::1] CLUTTER_DATA_V = CLUTTER_DATA
+
+RAIN_PROB_DATA_IDX = helper._rain_probs['index']
+RAIN_PROB_DATA_REL_HEIGHT = helper._rain_probs['rel_height']
+RAIN_PROB_DATA_PROB = helper._rain_probs['prob']
+
+cdef int[:] RAIN_PROB_DATA_IDX_V = RAIN_PROB_DATA_IDX
+cdef double[:] RAIN_PROB_DATA_REL_HEIGHT_V = RAIN_PROB_DATA_REL_HEIGHT
+cdef double[:] RAIN_PROB_DATA_PROB_V = RAIN_PROB_DATA_PROB
+
 
 PARAMETERS_BASIC = [
     # version is fixed
@@ -351,6 +364,14 @@ cdef struct ppstruct:
 
     double Q_0ca  # notional zero-fade annual percentage time
 
+    # double P_r6_m  # Pr6 value for mid-point
+    # double M_T_m  # M_T value for mid-point
+    # double beta_rain_m  # beta_rain value for mid-point
+    # double h0_m  # mean zero-degree isotherm rain height for mid-point
+
+    double[50] G_m  # helper array for rain fade
+    double[50] P_m  # helper array for rain fade
+    double M  # max index for above helper arrays
 
 def set_num_threads(int nthreads):
     '''
@@ -375,6 +396,14 @@ cdef inline double f_max(double a, double b) nogil:
     return a if a >= b else b
 
 cdef inline double f_min(double a, double b) nogil:
+
+    return a if a <= b else b
+
+cdef inline int i_max(int a, int b) nogil:
+
+    return a if a >= b else b
+
+cdef inline int i_min(int a, int b) nogil:
 
     return a if a <= b else b
 
@@ -1594,6 +1623,216 @@ cdef double _multi_path_activity(
         Q_0ca = f_max(Q_0cat, Q_0car)
 
     return Q_0ca
+
+cdef inline double _Gamma_melting_layer(double delta_h):
+
+    if delta_h > 0.:
+        return 0.
+    elif delta_h < -1200:
+        return 1.
+    else:
+        return (
+            4. * (1. - exp(delta_h / 70.)) ** 2 /
+            (
+                1 +
+                (1. - exp((-delta_h / 600.) ** 2)) ** 2 * (
+                    4. * (1. - exp(delta_h / 70.)) ** 2 - 1.
+                    )
+                )
+            )
+
+
+cdef double _path_avg_multiplier(double h_T, double h_lo, double h_hi):
+
+    cdef:
+
+        size_t s_lo = size_t(0.01 * (h_T - h_lo))
+        size_t s_hi = size_t(0.01 * (h_T - h_hi))
+        size_t s_i
+        double G, double delta_h, double Q
+
+    if s_lo < 0:
+        G = 0.
+    elif s_hi >= 12:
+        G = 1.
+    elif s_lo == s_hi:
+        G = _Gamma_melting_layer(0.5 * (h_lo + h_hi) - h_T)
+    else:
+        G = 0.
+        for s_i in range(i_max(s_hi, 0), i_min(s_lo, 12)):
+            # note in P.2001 the s index is 1 based!
+
+            if s_hi < s_i and s_i < s_lo:
+                delta_h = 100 * (0.5 - (s_i + 1))
+                Q = 100. / (h_hi - h_lo)
+            elif s_i = s_lo:
+                delta_h = 0.5 * (h_lo - h_T - 100 * s_i)
+                Q = (h_T - 100 * s_i - h_lo) / (h_hi - h_lo)
+            elif s_i = s_hi:
+                delta_h = 0.5 * (h_hi - h_T - 100 * (s_i + 1))
+                Q = (h_hi - (h_T - 100 * (s_i + 1))) / (h_hi - h_lo)
+
+            G += Q * _Gamma_melting_layer(delta_h)
+
+        if s_lo >= 12:
+            Q = (h_T - 1200 - h_lo) / (h_hi - h_lo)
+            G += Q
+
+    return G
+
+
+cdef (double, size_t) _accumulate_melting_layer(
+        double h_lo, h_hi,
+        double h_R, double h_rain_lo, double h_rain_hi,
+        double *G_m, double *P_m,
+        ) nogil:
+
+    cdef:
+
+        int[:] idx_v = RAIN_PROB_DATA_IDX_V
+        double[:] rel_h_v = RAIN_PROB_DATA_REL_HEIGHT_V
+        double[:] prob_v = RAIN_PROB_DATA_PROB_V
+
+        size_t m = 0, n
+        double h_T
+        double P = 0., G = 1.
+        double accum_P_G = 0.
+
+    for n in range(49):
+        P_m[n] = 0.
+
+    G_m[0] = 1.
+
+    for n in range(49):
+
+        h_T = h_R + RAIN_PROB_DATA_REL_HEIGHT_V[n]
+
+        if h_T <= h_rain_lo:
+            continue
+
+        if h_T - 1200 < h_rain_hi:
+
+            G_m[m] = G = _path_avg_multiplier(h_T, h_lo, h_hi)
+            P_m[m] = P = prov_v[n]
+            if n < 48:
+                m += 1
+                accum_P_G += G * P
+                G_m[m] = G = 1.
+                P_m[m] = P = 0.
+
+        else:
+
+            G_m[m] = G = 1.
+            P += prov_v[n]
+            P_m[m] = P
+
+    accum_P_G += G * P
+
+    return accum_P_G, m
+
+
+cdef (double, double, int, size_t) _precipitation_fading(
+        double lon, double lat,
+        double h_lo, double h_hi,
+        double freq, int polarization,
+        double q,  # TODO: what is q??? a time percentage?
+        double P_r6, double M_T, double beta_rain, double h0,
+        double h_rain_lo, double h_rain_hi, double d_rain,
+        double *G_m, double *P_m,
+        ) nogil:
+
+    cdef:
+        double h_R, h_Rtop
+        double M_c, M_s
+        double a1, b1, c1
+
+        int path_class  # 0: non-rain path; 1: rain path
+
+        double tau_rad, theta_rad
+        double k_H, k_V, k, a_H, a_V, a
+        double k_mod, a_mod, d_r, d_rmin
+
+        double Q_0ra, F_wfv, Q_tran, R_wvr
+
+        size_t M = 0
+
+    h_R = 360 + 1000 * h0  # masl
+    h_Rtop = h_R + 2400
+
+    path_class = (0 if (P_r6 <= 1e-10 or h_rain_lo >= h_Rtop) else 1)
+
+    if path_class == 0:
+
+        Q_0ra = 0.
+        F_wfv = 0.
+
+    else:
+
+        M_c = beta_rain * M_T
+        M_s = (1 - beta_rain) * M_T
+
+        Q_0ra = P_r6 * (1 - exp(-0.0079 * M_s / P_r6))
+
+        a1 = 1.09
+        b1 = (M_c + M_s) / 21797. / Q_0ra
+        c1 = 26.02 * b1
+
+        Q_tran = Q_0ra * exp(a1 * (2 * b1 - c1) / c1 ** 2)
+
+        tau_rad = (0 if polarization == 0 else M_PI_2)
+        theta_rad = 0.001 * (h_rain_hi - h_rain_lo) / d_rain  # eps_rain
+
+        if freq < 1:
+            k_H, k_V, k, a_H, a_V, a = _rain_coefficients_p838(
+                0., theta_rad, tau_rad
+                )
+            K *= freq
+        else:
+            k_H, k_V, k, a_H, a_V, a = _rain_coefficients_p838(
+                log10(freq), theta_rad, tau_rad
+                )
+
+        d_r = f_min(d_rain, 300)
+        d_rmin = f_max(d_r, 1)
+
+        k_mod = 1.763 ** a * k * (
+            0.6546 * exp(-0.009546 * d_rmin) +
+            0.3499 * exp(-0.001182 * d_rmin)
+            )
+        a_mod = (
+            (0.753 + 0.197 / d_rmin) * a +
+            0.1572 * exp(-0.02268 * d_rmin) -
+            0.1594 * exp(-0.0003617 * d_rmin)
+            )
+
+        R_wvr = 6 * log10(Q_0ra / q) / log10(Q_0ra / Q_tran) - 3.
+        accum_P_G, M = _accumulate_melting_layer(
+            h_lo, h_hi, h_R, h_rain_lo, h_rain_hi, G_m, P_m,
+            )
+        F_wfv = 0.5 * (1 + tanh(R_wvr)) * accum_P_G
+
+    return (path_class, Q_0ra, F_wfv, M)
+
+
+cdef _time_percentage_prec_fade_level_exceeded(
+        double A, int path_class,
+        double *G_m, double *P_m, double M,
+        ):
+
+    cdef:
+
+        double Q_rain
+        size_t m
+
+    if A < 0.:
+        Q_rain = 100.  # %
+    else:
+        if path_class == 0:
+            Q_rain = 0.
+        else:
+            Q_rain = 0.
+            for m in range(0, M):
+                Q_rain += P_m[m] * exp(-) # TODO
 
 
 cdef inline double _free_space_loss_bfs(ppstruct pp) nogil:
