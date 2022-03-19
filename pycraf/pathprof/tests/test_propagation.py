@@ -12,7 +12,7 @@ from functools import partial
 import numpy as np
 from zipfile import ZipFile
 from numpy.testing import assert_equal, assert_allclose
-from astropy.tests.helper import assert_quantity_allclose, remote_data
+from astropy.tests.helper import assert_quantity_allclose  #, remote_data
 from astropy import units as apu
 from astropy.units import Quantity
 from ... import conversions as cnv
@@ -44,13 +44,15 @@ MAP_KEYS = [
     ]
 
 
-@remote_data(source='any')
+@pytest.mark.remote_data
 @pytest.mark.usefixtures('srtm_handler')
 class TestPropagation:
 
     def setup(self):
 
         # TODO: add further test cases
+
+        print(pathprof.srtm.SrtmConf)
 
         self.cases_zip_name = get_pkg_data_filename('cases.zip')
         self.fastmap_zip_name = get_pkg_data_filename('fastmap.zip')
@@ -216,6 +218,8 @@ class TestPropagation:
                 assert_quantity_allclose(pprop._pp[k], pprop_true[k])
 
     def test_freespace_loss(self):
+
+        print(pathprof.srtm.SrtmConf)
 
         for case, pprop in zip(self.cases, self.pprops):
 

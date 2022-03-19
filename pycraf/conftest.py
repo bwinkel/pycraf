@@ -100,8 +100,9 @@ def srtm_temp_dir(tmpdir_factory):
     return str(tdir)
 
 
-@pytest.fixture()
+@pytest.fixture(scope='class')
 def srtm_handler(srtm_temp_dir):
+    print("srtm_handler")
 
     with pathprof.srtm.SrtmConf.set(
             srtm_dir=srtm_temp_dir,

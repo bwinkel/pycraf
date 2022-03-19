@@ -292,7 +292,7 @@ jobs:
   - script: |
       $(conda.activate) pycraf-env
       pip install pytest-azurepipelines
-      python setup.py test --remote-data=any
+      pytest --pyargs pycraf --remote-data=any
     displayName: Testing
 
   # sphinx-build docs docs/_build/html -W -b html

@@ -10,7 +10,7 @@ import pytest
 import re
 import numpy as np
 from numpy.testing import assert_equal, assert_allclose
-from astropy.tests.helper import assert_quantity_allclose, remote_data
+from astropy.tests.helper import assert_quantity_allclose  #, remote_data
 from astropy import units as apu
 from astropy.units import Quantity
 # from astropy.utils.misc import NumpyRNGContext
@@ -122,7 +122,7 @@ def _set_parameters(ui):
     ui.mapResolutionDoubleSpinBox.setValue(3.0)
 
 
-@remote_data(source='any')
+@pytest.mark.remote_data
 @pytest.mark.do_gui_tests
 @pytest.mark.usefixtures('srtm_handler')
 def test_gui_startup_shows_pathgeometry(qtbot):
@@ -146,7 +146,7 @@ def test_gui_startup_shows_pathgeometry(qtbot):
     assert re.sub("\\s*", " ", ltxt) == re.sub("\\s*", " ", LABEL_TEXT)
 
 
-@remote_data(source='any')
+@pytest.mark.remote_data
 @pytest.mark.do_gui_tests
 @pytest.mark.usefixtures('srtm_handler')
 def test_stats_worker(qtbot):
@@ -181,7 +181,7 @@ def test_stats_worker(qtbot):
     # assert myapp.pathprof_results is None
 
 
-@remote_data(source='any')
+@pytest.mark.remote_data
 @pytest.mark.do_gui_tests
 @pytest.mark.usefixtures('srtm_handler')
 def test_pp_worker(qtbot):
@@ -213,7 +213,7 @@ def test_pp_worker(qtbot):
     # assert myapp.pathprof_results is None
 
 
-@remote_data(source='any')
+@pytest.mark.remote_data
 @pytest.mark.do_gui_tests
 @pytest.mark.usefixtures('srtm_handler')
 def test_map_worker(qtbot):
