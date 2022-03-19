@@ -169,6 +169,12 @@ jobs:
       sudo chown -R $USER $CONDA
     displayName: Fix a conda bug on MacOS
     condition: startsWith(variables['Agent.OS'], 'Darwin')
+    
+  - bash: |
+      sudo rm -rf /Library/Developer/CommandLineTools
+      xcode-select --install
+    displayName: Fix problem with MacOS compiler/linker
+    condition: startsWith(variables['Agent.OS'], 'Darwin')
 
   - bash: |
       echo "##vso[task.prependpath]$CONDA/bin"
