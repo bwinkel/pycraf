@@ -81,7 +81,7 @@ def srtm_temp_dir(tmpdir_factory):
     return str(tdir)
 
 
-@pytest.yield_fixture()
+@pytest.fixture()
 def srtm_handler(srtm_temp_dir):
 
     with pathprof.srtm.SrtmConf.set(
