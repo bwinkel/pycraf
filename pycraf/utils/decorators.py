@@ -5,7 +5,8 @@
 
 import numpy as np
 import inspect
-from astropy.utils.decorators import wraps
+# from astropy.utils.decorators import wraps
+from functools import wraps
 from astropy.units.core import UnitsError, add_enabled_equivalencies
 
 
