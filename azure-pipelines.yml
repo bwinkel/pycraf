@@ -248,16 +248,16 @@ jobs:
 
   - script: |
       $(conda.activate) pycraf-env
-      mamba install --yes --quiet --name pycraf-env -c conda-forge clang_osx-64 clangxx_osx-64 llvm-openmp openmp cctools ld64
+      mamba install --yes --quiet --name pycraf-env -c conda-forge clang_osx-64 clangxx_osx-64 llvm-openmp openmp cctools ld64 ta-lib
     displayName: Prepare clang, MacOS
     # condition: and(succeeded(), eq(variables['is.macos'], true))
     condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'), ge(variables['python.version'], 3.8))
 
-  - bash: |
-      sudo rm -rf /Library/Developer/CommandLineTools
-      xcode-select --install
-    displayName: Fix problem with MacOS compiler/linker
-    condition: startsWith(variables['Agent.OS'], 'Darwin')
+  # - bash: |
+  #     sudo rm -rf /Library/Developer/CommandLineTools
+  #     xcode-select --install
+  #   displayName: Fix problem with MacOS compiler/linker
+  #   condition: startsWith(variables['Agent.OS'], 'Darwin')
 
   - script: |
       $(conda.activate) pycraf-env
