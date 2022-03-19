@@ -241,7 +241,7 @@ jobs:
   # error ("ld: library not found for -lSystem") occurs during build
   - script: |
       $(conda.activate) pycraf-env
-      mamba install --yes --quiet --name pycraf-env -c conda-forge clang_osx-64 clangxx_osx-64 llvm-openmp openmp cctools==921 ld64==409.12
+      mamba install --yes --quiet --name pycraf-env -c conda-forge clang_osx-64 clangxx_osx-64 llvm-openmp openmp cctools==921 ld64==409.12 ta-lib
     displayName: Prepare clang, MacOS
     # condition: and(succeeded(), eq(variables['is.macos'], true))
     condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'), lt(variables['python.version'], 3.8))
