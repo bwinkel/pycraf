@@ -101,6 +101,15 @@ jobs:
         pyproj.version: '>=2.2'
         qt.version: '>=5.11'
         pytestqt.version: '>=4'
+      linux310:
+        imageName: 'ubuntu-latest'
+        python.version: '3.10'
+        py_whl: cp310-
+        numpy.version: '1.21.0'
+        astropy.version: '5'
+        pyproj.version: '>=2.2'
+        qt.version: '>=5.11'
+        pytestqt.version: '>=4'
       # mac35:
       #   imageName: 'macos-10.14'
       #   python.version: '3.5'
@@ -112,18 +121,20 @@ jobs:
       #   python.version: '3.6'
       #   numpy.version: '1.13.1'
       #   astropy.version: '3'
-      mac37:
-        imageName: 'macos-10.15'
-        python.version: '3.7'
-        numpy.version: '1.14.5'
-        astropy.version: '3'
+      # None of the mac-os builds work!
+      # (can only rely on conda-forge build system but not test anymore...)
+      # mac37:
+      #   imageName: 'macos-10.15'
+      #   python.version: '3.7'
+      #   numpy.version: '1.14.5'
+      #   astropy.version: '3'
       # mac 3.8 leads to anaconda conflicts
-      mac38:
-        imageName: 'macos-latest'
-        python.version: '3.8'
-        numpy.version: '1.18.1'
-        astropy.version: '4'
-        pyproj.version: '>=2.2'
+      # mac38:
+      #   imageName: 'macos-latest'
+      #   python.version: '3.8'
+      #   numpy.version: '1.18.1'
+      #   astropy.version: '4'
+      #   pyproj.version: '>=2.2'
         # qt.version: '>=5.11'
         # pytestqt.version: '>=4'
       # win35:
