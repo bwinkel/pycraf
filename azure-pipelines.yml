@@ -43,27 +43,24 @@ jobs:
     #   srtmdata: ${{ format('{0}\srtm', variables['Agent.BuildDirectory']) }}
     # srtmdata: ${{ format('{0}/srtm', variables['Agent.BuildDirectory']) }}
     sphinx.version: '>=3.0'
-    pyproj.version: '==1.9.5.1'
-    pytest.version: '<6'
-    doctestplus.version: '<0.6.1'
+    astropy.version: ''
+    pyproj.version: ''
+    pytest.version: ''
+    doctestplus.version: ''
     qt.version: '>=5.9'
     pytestqt.version: '<4'
 
   strategy:
     matrix:
-      # linux35:
-      #   imageName: 'ubuntu-latest'
-      #   python.version: '3.5'
-      #   py_whl: 35
-      #   numpy.version: '1.13.1'
-      #   astropy.version: '2'
-      #   sphinx.version: '<3.0'
       # linux36:
       #   imageName: 'ubuntu-latest'
       #   python.version: '3.6'
       #   py_whl: 36
       #   numpy.version: '1.13.1'
       #   astropy.version: '3'
+      #   pytest.version: '<6'
+      #   doctestplus.version: '<0.6.1'
+      #   pyproj.version: '==1.9.5.1'
       linux37:
         # note: manylinux builds could have different version pins!
         # see pip-requirements-dev
@@ -72,6 +69,10 @@ jobs:
         py_whl: cp37-
         numpy.version: '1.14.5'
         astropy.version: '3'
+        # pyproj.version: '>=2.2,<3'
+        pyproj.version: '==1.9.5.1'
+        pytest.version: '<6'
+        doctestplus.version: '<0.6.1'
         # docs should only be published by one thread, as they are version-
         # independent; and only if on the master branch
       linux38:
@@ -99,10 +100,6 @@ jobs:
         python.version: '3.9'
         py_whl: cp39-
         numpy.version: '1.20.0'
-        astropy.version: '>=5'
-        pyproj.version: '>=2.2'
-        pytest.version: ''
-        doctestplus.version: ''
         qt.version: '>=5.11'
         pytestqt.version: '>=4'
       linux310:
@@ -110,10 +107,6 @@ jobs:
         python.version: '3.10'
         py_whl: cp310-
         numpy.version: '1.22.0'
-        astropy.version: '>=5'
-        pyproj.version: '>=2.2'
-        pytest.version: ''
-        doctestplus.version: ''
         qt.version: '>=5.11'
         pytestqt.version: '>=4'
       # mac35:
@@ -143,22 +136,22 @@ jobs:
       #   pyproj.version: '>=2.2'
         # qt.version: '>=5.11'
         # pytestqt.version: '>=4'
-      # win35:
-      #   imageName: 'vs2017-win2016'
-      #   python.version: '3.5'
-      #   numpy.version: '1.13.1'
-      #   astropy.version: '2'
-      #   sphinx.version: '<3.0'
       # win36:
       #   imageName: 'vs2017-win2016'
       #   python.version: '3.6'
       #   numpy.version: '1.13.1'
       #   astropy.version: '3'
+      #   pytest.version: '<6'
+      #   doctestplus.version: '<0.6.1'
+      #   pyproj.version: '==1.9.5.1'
       win37:
         imageName: 'windows-latest'
         python.version: '3.7'
         numpy.version: '1.14.5'
         astropy.version: '3'
+        pyproj.version: '>=2.2,<3'
+        pytest.version: '<6'
+        doctestplus.version: '<0.6.1'
       win38:
         imageName: 'windows-latest'
         python.version: '3.8'
@@ -172,8 +165,13 @@ jobs:
         imageName: 'windows-latest'
         python.version: '3.9'
         numpy.version: '1.20.0'
-        astropy.version: '5'
-        pyproj.version: '>=2.2'
+        qt.version: '>=5.11'
+        pytestqt.version: '>=4'
+      win310:
+        imageName: 'windows-latest'
+        python.version: '3.10'
+        py_whl: cp310-
+        numpy.version: '1.22.0'
         qt.version: '>=5.11'
         pytestqt.version: '>=4'
 
