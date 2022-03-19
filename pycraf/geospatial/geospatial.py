@@ -328,10 +328,16 @@ def _create_transform(sys1, sys2, code_in='epsg', code_out='epsg'):
         needs_3d = proj1.is_geocent() or proj2.is_geocent()
 
     # see https://github.com/pyproj4/pyproj/issues/538
-    kwargs = {'always_xy': True} if pyproj.__version__ >= '2.2.0' else {}
-    return partial(
-        pyproj.transform, proj1, proj2, **kwargs
-        ), in_islatlon, out_islatlon, needs_3d
+    # also: https://pyproj4.github.io/pyproj/stable/gotchas.html#upgrading-to-pyproj-2-from-pyproj-1
+    if pyproj.__version__ >= '2.2.0':
+        return (
+            pyproj.Transformer.from_crs(proj1.crs, proj2.crs, always_xy=True).transform,
+            in_islatlon, out_islatlon, needs_3d
+            )
+    else:
+        return partial(
+            pyproj.transform, proj1, proj2,
+            ), in_islatlon, out_islatlon, needs_3d
 
 
 @utils.ranged_quantity_input(
