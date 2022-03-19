@@ -143,7 +143,7 @@ def test_gui_startup_shows_pathgeometry(qtbot):
         myapp.timer.start(10)
 
     ltxt = myapp.ui.ppRichTextLabel.text()
-    assert re.sub("\s*", " ", ltxt) == re.sub("\s*", " ", LABEL_TEXT)
+    assert re.sub("\\s*", " ", ltxt) == re.sub("\\s*", " ", LABEL_TEXT)
 
 
 @remote_data(source='any')
