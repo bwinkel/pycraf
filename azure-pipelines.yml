@@ -79,7 +79,7 @@ jobs:
         # numpy.version: '1.17.4'
         numpy.version: '1.18.1'
         astropy.version: '4'
-        pyproj.version: '>=2.2'
+        pyproj.version: '>=2.2,<3'
         # qt.version: '>=5.11'
         # pytestqt.version: '>=4'
         publish.docs: ${{ or(eq(variables['is.master'], true), eq(variables['is.tag'], true)) }}
@@ -97,7 +97,7 @@ jobs:
         python.version: '3.9'
         py_whl: cp39-
         numpy.version: '1.20.0'
-        astropy.version: '4'
+        astropy.version: '5'
         pyproj.version: '>=2.2'
         qt.version: '>=5.11'
         pytestqt.version: '>=4'
@@ -148,14 +148,14 @@ jobs:
         # numpy.version: '1.17.4'
         numpy.version: '1.18.1'
         astropy.version: '4'
-        pyproj.version: '>=2.2'
+        pyproj.version: '>=2.2,<3'
         # qt.version: '>=5.11'
         # pytestqt.version: '>=4'
       win39:
         imageName: 'windows-latest'
         python.version: '3.9'
         numpy.version: '1.20.0'
-        astropy.version: '4'
+        astropy.version: '5'
         pyproj.version: '>=2.2'
         qt.version: '>=5.11'
         pytestqt.version: '>=4'
@@ -331,7 +331,7 @@ jobs:
   # will use system python for upload
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: '3.6'
+      versionSpec: '3.8'
 
   - script: |
       pip install twine
