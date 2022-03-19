@@ -113,7 +113,7 @@ jobs:
       #   numpy.version: '1.13.1'
       #   astropy.version: '3'
       mac37:
-        imageName: 'macos-10.14'
+        imageName: 'macOS-latest'
         python.version: '3.7'
         numpy.version: '1.14.5'
         astropy.version: '3'
@@ -138,12 +138,12 @@ jobs:
       #   numpy.version: '1.13.1'
       #   astropy.version: '3'
       win37:
-        imageName: 'vs2017-win2016'
+        imageName: 'windows-latest'
         python.version: '3.7'
         numpy.version: '1.14.5'
         astropy.version: '3'
       win38:
-        imageName: 'vs2017-win2016'
+        imageName: 'windows-latest'
         python.version: '3.8'
         # numpy.version: '1.17.4'
         numpy.version: '1.18.1'
@@ -152,7 +152,7 @@ jobs:
         # qt.version: '>=5.11'
         # pytestqt.version: '>=4'
       win39:
-        imageName: 'vs2017-win2016'
+        imageName: 'windows-latest'
         python.version: '3.9'
         numpy.version: '1.20.0'
         astropy.version: '4'
