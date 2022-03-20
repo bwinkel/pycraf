@@ -254,7 +254,7 @@ jobs:
   # pip installation)
   - script: |
       $(conda.activate) pycraf-env
-      mamba install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython h5py matplotlib numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pyqt$(qt.version)" "pytest$(pytest.version)" pytest-astropy "pytest-doctestplus$(doctestplus.version)" hypothesis "pytest-qt$(pytestqt.version)" rasterio scipy "sgp4>2" "sphinx$(sphinx.version)" sphinx-astropy twine wheel
+      mamba install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython h5py matplotlib numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pyqt$(qt.version)" "pytest$(pytest.version)" pytest-astropy "pytest-doctestplus$(doctestplus.version)" hypothesis "pytest-qt$(pytestqt.version)" rasterio scipy "sgp4>2" twine wheel
     displayName: Install Anaconda packages
 
   # need to fix cctools and ld64 to slightly older version, otherwise an
@@ -290,14 +290,19 @@ jobs:
   - script: |
       $(conda.activate) pycraf-env
       pip install pytest-azurepipelines
-      pytest --pyargs pycraf --remote-data=any
+      # pytest --pyargs pycraf --remote-data=any
+      pytest -rsx --doctest-rst docs --remote-data=any pycraf
     displayName: Testing
 
   # sphinx-build docs docs/_build/html -W -b html
   # conda install --yes --quiet --name pycraf-env -c conda-forge sphinx-astropy
   - script: |
       $(conda.activate) pycraf-env
-      python setup.py build_docs -v -v -v
+      # python setup.py build_docs -v -v -v
+      # cd docs
+      # make html
+      conda install --yes --quiet --name pycraf-env -c conda-forge "sphinx$(sphinx.version)" sphinx-astropy
+      sphinx-build docs docs/_build/html -W -b html
     displayName: Make docs
     condition: succeeded()
 
@@ -324,7 +329,8 @@ jobs:
       # mkdir -p ./$DOCS_TARGET
       # for some strange reason, the new package versions (astropy?) create
       # the _build/html in docs/docs and not in docs/
-      rsync -av ../docs/docs/_build/html/ ${DOCS_TARGET}/
+      # rsync -av ../docs/docs/_build/html/ ${DOCS_TARGET}/
+      rsync -av ../docs/_build/html/ ${DOCS_TARGET}/
       docs_version=$(python -c "import pycraf; print(pycraf.__version__)")
       git add -A && git commit -m "Update docs for $docs_version ***NO_CI***"
       bash ../retry.sh git push github

@@ -28,6 +28,7 @@
 import datetime
 import os
 import sys
+from importlib import metadata
 
 try:
     from sphinx_astropy.conf.v1 import *  # noqa
@@ -78,7 +79,7 @@ rst_epilog += """
 # -- Project information ------------------------------------------------------
 
 # This does not *have* to match the package name, but typically does
-project = setup_cfg['package_name']
+project = setup_cfg['name']
 author = setup_cfg['author']
 copyright = '{0}, {1}'.format(
     datetime.datetime.now().year, setup_cfg['author'])
@@ -87,14 +88,29 @@ copyright = '{0}, {1}'.format(
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 
-__import__(setup_cfg['package_name'])
-package = sys.modules[setup_cfg['package_name']]
+# __import__(setup_cfg['name'])
+# package = sys.modules[setup_cfg['name']]
 
-# The short X.Y version.
-version = package.__version__.split('-', 1)[0]
+# # The short X.Y version.
+# version = package.__version__.split('-', 1)[0]
+# # The full version, including alpha/beta/rc tags.
+# release = package.__version__
+
+
+# The version info for the project you're documenting, acts as replacement for
+# |version| and |release|, also used in various other places throughout the
+# built documents.
+
 # The full version, including alpha/beta/rc tags.
-release = package.__version__
+release = metadata.version(project)
+# The short X.Y version.
+version = '.'.join(release.split('.')[:2])
 
+# # Only include dev docs in dev version.
+# dev = 'dev' in release
+# if not dev:
+#     exclude_patterns.append('development/*')  # noqa: F405
+#     exclude_patterns.append('testhelpers.rst')  # noqa: F405
 
 # -- Options for HTML output --------------------------------------------------
 
@@ -172,12 +188,12 @@ man_pages = [('index', project.lower(), project + u' Documentation',
 if eval(setup_cfg.get('edit_on_github')):
     extensions += ['sphinx_astropy.ext.edit_on_github']
 
-    versionmod = __import__(setup_cfg['package_name'] + '.version')
+    versionmod = __import__(setup_cfg['name'] + '.version')
     edit_on_github_project = setup_cfg['github_project']
-    if versionmod.version.release:
-        edit_on_github_branch = "v" + versionmod.version.version
-    else:
+    if 'dev' in release:
         edit_on_github_branch = "master"
+    else:
+        edit_on_github_branch = "v" + versionmod.version.version
 
     edit_on_github_source_root = ""
     edit_on_github_doc_root = "docs"

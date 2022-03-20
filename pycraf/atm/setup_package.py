@@ -7,7 +7,9 @@ Allow cythonizing of our pyx files and provide custom compiler options.
 
 import os
 from setuptools.extension import Extension
+# from extension_helpers import add_openmp_flags_if_available
 import platform
+import numpy as np
 # Note: importing numpy from here won't work, see:
 # http://docs.astropy.org/en/stable/development/ccython.html#using-numpy-c-headers
 # import numpy as np
@@ -20,18 +22,22 @@ def get_extensions():
 
     comp_args = {
         'extra_compile_args': ['-O3'],
-        'include_dirs': ['numpy'],
+        'libraries': ['m'],
+        # 'include_dirs': ['numpy'],
+        'include_dirs': [np.get_include()],
         }
 
     if platform.system().lower() == 'windows':
 
         comp_args = {
-            'include_dirs': ['numpy'],
+            # 'include_dirs': ['numpy'],
+            'include_dirs': [np.get_include()],
             }
 
     elif 'darwin' in platform.system().lower():
 
-        comp_args['extra_compile_args'].append('-mmacosx-version-min=10.7')
+        extra_compile_args = ['-O3', '-mmacosx-version-min=10.7']
+        comp_args['extra_compile_args'] = extra_compile_args
 
     ext_module_pathprof_atm_helper = Extension(
         name='pycraf.atm.atm_helper',
