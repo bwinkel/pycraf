@@ -6,15 +6,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>regrid_from_geotiff &#8212; pycraf v1.1.2.dev426</title>
+    <title>regrid_from_geotiff &#8212; pycraf v1.1.2.dev448</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -65,7 +65,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.1.2.dev426</a>
+	<a href="../index.html">pycraf v1.1.2.dev448</a>
 	 &#187;
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
@@ -98,7 +98,7 @@ reproject (or regrid) a GeoTiff raster map to the required positions.</p>
 <dd class="field-odd"><dl>
 <dt><strong>geotiff</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DatasetReader</span></code> instance</span></dt><dd><p>A geotiff raster map opened with the Python package <a class="reference external" href="https://rasterio.readthedocs.io/">Rasterio</a>.</p>
 </dd>
-<dt><strong>lons, lats</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Geographic longitudes/latitudes (WGS84) [deg]</p>
+<dt><strong>lons, lats</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Geographic longitudes/latitudes (WGS84) [deg]</p>
 </dd>
 <dt><strong>band</strong><span class="classifier">int, Optional (default: 1)</span></dt><dd><p>The GeoTiff band to use.</p>
 </dd>
@@ -106,7 +106,7 @@ reproject (or regrid) a GeoTiff raster map to the required positions.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>geo_data_regridded</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>Regridded values of the input raster map on the given longitude and
+<dt><strong>geo_data_regridded</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>Regridded values of the input raster map on the given longitude and
 latitude positions. If the input GeoTiff has more than one band and
 you need to regrid several of the bands, please run the function
 repeatedly, specifying the band parameter.</p>
@@ -116,7 +116,7 @@ repeatedly, specifying the band parameter.</p>
 </dl>
 <p class="rubric">Notes</p>
 <p>If requested geo positions are all to close to the edge of the geotiff
-file, the interpolation can fail (<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/reference/interpolate.html#module-scipy.interpolate" title="(in SciPy v1.7.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate</span></code></a> will raise a
+file, the interpolation can fail (<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/interpolate.html#module-scipy.interpolate" title="(in SciPy v1.8.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate</span></code></a> will raise a
 ValueError in such cases).</p>
 </dd></dl>
 
@@ -145,9 +145,9 @@ ValueError in such cases).</p>
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2021, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
-    Last built 06 Aug 2021. <br/>
+    &copy; Copyright 2022, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.4.0. &nbsp;
+    Last built 20 Mar 2022. <br/>
   </p>
 </footer>
   </body>
