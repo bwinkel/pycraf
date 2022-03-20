@@ -5,7 +5,7 @@ import os
 import pytest
 import numpy as np
 from numpy.testing import assert_equal, assert_allclose
-from astropy.tests.helper import assert_quantity_allclose, remote_data
+from astropy.tests.helper import assert_quantity_allclose  # , remote_data
 from astropy import units as apu
 from ...pathprof import srtm
 from ...utils import check_astro_quantities
@@ -245,7 +245,7 @@ def test_check_availability_pano():
 
 
 @pytest.mark.skip(reason="NASA tiles not available without log-in anymore")
-@remote_data(source='any')
+@pytest.mark.remote_data
 def test_download_nasa(srtm_temp_dir):
 
     ilon, ilat = 6, 50
@@ -263,7 +263,7 @@ def test_download_nasa(srtm_temp_dir):
         assert dl_path.endswith(tile_name)
 
 
-@remote_data(source='any')
+@pytest.mark.remote_data
 def test_download_pano(srtm_temp_dir):
 
     ilon, ilat = 6, 50
@@ -317,7 +317,7 @@ def test_get_hgt_diskpath(srtm_temp_dir):
         os.remove(os.path.join(srtm_temp_dir, 'd2', 'foo.hgt'))
 
 
-@remote_data(source='any')
+@pytest.mark.remote_data
 def test_get_hgt_file_download_never(srtm_temp_dir):
 
     print(srtm.SrtmConf.srtm_dir)
@@ -345,7 +345,7 @@ def test_get_hgt_file_download_never(srtm_temp_dir):
             srtm.get_hgt_file(ilon, ilat)
 
 
-@remote_data(source='any')
+@pytest.mark.remote_data
 def test_get_hgt_file_download_missing(srtm_temp_dir):
 
     print(srtm.SrtmConf.srtm_dir)
@@ -358,7 +358,7 @@ def test_get_hgt_file_download_missing(srtm_temp_dir):
         assert tile_path.endswith(tile_name)
 
 
-@remote_data(source='any')
+@pytest.mark.remote_data
 def test_get_hgt_file_download_always(srtm_temp_dir):
 
     # note, previously, we checked the file's mtime to do this check
@@ -386,7 +386,7 @@ def test_get_hgt_file_download_always(srtm_temp_dir):
     assert dat1 != dat2
 
 
-@remote_data(source='any')
+@pytest.mark.remote_data
 def test_get_tile_data(srtm_temp_dir):
 
     with srtm.SrtmConf.set(srtm_dir=srtm_temp_dir):
@@ -444,7 +444,7 @@ def test_get_tile_warning(srtm_temp_dir):
         assert_allclose(tile, np.zeros((5, 5), dtype=np.float32))
 
 
-@remote_data(source='any')
+@pytest.mark.remote_data
 def test_srtm_height_data_linear(srtm_temp_dir):
 
     args_list = [
@@ -475,7 +475,7 @@ def test_srtm_height_data_linear(srtm_temp_dir):
             ]) * apu.m)
 
 
-@remote_data(source='any')
+@pytest.mark.remote_data
 def test_srtm_height_data_nearest(srtm_temp_dir):
 
     args_list = [
@@ -502,7 +502,7 @@ def test_srtm_height_data_nearest(srtm_temp_dir):
             ]) * apu.m)
 
 
-@remote_data(source='any')
+@pytest.mark.remote_data
 def test_srtm_height_data_spline(srtm_temp_dir):
 
     args_list = [
@@ -540,7 +540,7 @@ def test_srtm_height_data_zero(srtm_temp_dir):
         assert_allclose(heights, np.zeros(5, dtype=np.float32))
 
 
-@remote_data(source='any')
+@pytest.mark.remote_data
 def test_srtm_height_data_broadcasting(srtm_temp_dir):
 
     args_list = [

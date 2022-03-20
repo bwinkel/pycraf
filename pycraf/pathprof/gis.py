@@ -27,7 +27,7 @@ _CORINE_TO_P452_CLASSES_FILE = get_pkg_data_filename(
     )
 CORINE_TO_P452_CLASSES = dict(np.genfromtxt(
     _CORINE_TO_P452_CLASSES_FILE,
-    dtype=np.dtype([('CorineID', np.uint16), ('ClutterName', np.str, 100)]),
+    dtype=np.dtype([('CorineID', np.uint16), ('ClutterName', str, 100)]),
     delimiter=',',
     ))
 
@@ -36,7 +36,7 @@ _IGBP_TO_P452_CLASSES_FILE = get_pkg_data_filename(
     )
 IGBP_TO_P452_CLASSES = dict(np.genfromtxt(
     _IGBP_TO_P452_CLASSES_FILE,
-    dtype=np.dtype([('IGBP_ID', np.uint8), ('ClutterName', np.str, 100)]),
+    dtype=np.dtype([('IGBP_ID', np.uint8), ('ClutterName', str, 100)]),
     delimiter=',',
     ))
 

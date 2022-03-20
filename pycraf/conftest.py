@@ -6,12 +6,13 @@ if astropy_version < '3.0':
     # With older versions of Astropy, we actually need to import the pytest
     # plugins themselves in order to make them discoverable by pytest.
     from astropy.tests.pytest_plugins import *
+    del pytest_report_header
 else:
     # As of Astropy 3.0, the pytest plugins provided by Astropy are
     # automatically made available when Astropy is installed. This means it's
     # not necessary to import them here, but we still need to import global
     # variables that are used for configuration.
-    from astropy.tests.plugins.display import PYTEST_HEADER_MODULES, TESTED_VERSIONS
+    from pytest_astropy_header.display import PYTEST_HEADER_MODULES, TESTED_VERSIONS
 
 from astropy.tests.helper import enable_deprecations_as_exceptions
 
@@ -41,6 +42,21 @@ from astropy.tests.helper import enable_deprecations_as_exceptions
 # Uncomment the following lines to display the version number of the
 # package rather than the version number of Astropy in the top line when
 # running the tests.
+
+# new variant of the above
+# def pytest_configure(config):
+
+#     config.option.astropy_header = True
+
+#     PYTEST_HEADER_MODULES.pop('Pandas', None)
+#     PYTEST_HEADER_MODULES['scikit-image'] = 'skimage'
+
+#     from .version import version, astropy_helpers_version
+#     packagename = os.path.basename(os.path.dirname(__file__))
+#     TESTED_VERSIONS[packagename] = version
+#     TESTED_VERSIONS['astropy_helpers'] = astropy_helpers_version
+
+
 import os
 
 # This is to figure out the package version, rather than
@@ -62,16 +78,15 @@ except NameError:   # Needed to support Astropy <= 1.0.0
 import pytest
 from . import pathprof
 
+# def pytest_addoption(parser):
+#     parser.addoption(
+#         '--do-gui-tests', action='store_true', help='Do GUI tests.'
+#         )
 
-def pytest_addoption(parser):
-    parser.addoption(
-        '--do-gui-tests', action='store_true', help='Do GUI tests.'
-        )
 
-
-def pytest_runtest_setup(item):
-    if 'do_gui_tests' in item.keywords and not item.config.getoption('--do-gui-tests'):
-        pytest.skip('GUI tests are only executed if user provides "--do-gui-tests" command line option')
+# def pytest_runtest_setup(item):
+#     if 'do_gui_tests' in item.keywords and not item.config.getoption('--do-gui-tests'):
+#         pytest.skip('GUI tests are only executed if user provides "--do-gui-tests" command line option')
 
 
 @pytest.fixture(scope='session')
@@ -81,8 +96,9 @@ def srtm_temp_dir(tmpdir_factory):
     return str(tdir)
 
 
-@pytest.yield_fixture()
+@pytest.fixture(scope='class')
 def srtm_handler(srtm_temp_dir):
+    print("srtm_handler")
 
     with pathprof.srtm.SrtmConf.set(
             srtm_dir=srtm_temp_dir,

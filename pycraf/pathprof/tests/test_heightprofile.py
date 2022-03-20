@@ -10,7 +10,7 @@ import pytest
 from functools import partial
 import numpy as np
 from numpy.testing import assert_equal, assert_allclose
-from astropy.tests.helper import assert_quantity_allclose, remote_data
+from astropy.tests.helper import assert_quantity_allclose  #, remote_data
 from astropy import units as apu
 from astropy.units import Quantity
 from ... import pathprof
@@ -21,9 +21,10 @@ from astropy.utils.misc import NumpyRNGContext
 TOL_KWARGS = {'atol': 1.e-4, 'rtol': 1.e-4}
 
 
-@remote_data(source='any')
+@pytest.mark.remote_data
 @pytest.mark.usefixtures('srtm_handler')
-def test_srtm_height_profile(srtm_temp_dir):
+# def test_srtm_height_profile(srtm_temp_dir):
+def test_srtm_height_profile():
 
     lon_t, lat_t = 6.5 * apu.deg, 50.5 * apu.deg
     lon_r, lat_r = 6.52 * apu.deg, 50.52 * apu.deg
@@ -119,7 +120,7 @@ def test_srtm_height_profile_generic():
         )
 
 
-@remote_data(source='any')
+@pytest.mark.remote_data
 @pytest.mark.usefixtures('srtm_handler')
 def test_srtm_height_map():
 
