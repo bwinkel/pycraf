@@ -28,7 +28,7 @@
 import datetime
 import os
 import sys
-from importlib import metadata
+import doctest
 
 try:
     from sphinx_astropy.conf.v1 import *  # noqa
@@ -54,6 +54,14 @@ conf = ConfigParser()
 
 conf.read([os.path.join(os.path.dirname(__file__), '..', 'setup.cfg')])
 setup_cfg = dict(conf.items('metadata'))
+
+
+# Manually register doctest options since matplotlib 3.5 messed up allowing them
+# from pytest-doctestplus
+IGNORE_OUTPUT = doctest.register_optionflag('IGNORE_OUTPUT')
+REMOTE_DATA = doctest.register_optionflag('REMOTE_DATA')
+FLOAT_CMP = doctest.register_optionflag('FLOAT_CMP')
+
 
 # -- General configuration ----------------------------------------------------
 
@@ -88,23 +96,28 @@ copyright = '{0}, {1}'.format(
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 
-# __import__(setup_cfg['name'])
-# package = sys.modules[setup_cfg['name']]
+try:
+    from importlib import metadata
 
-# # The short X.Y version.
-# version = package.__version__.split('-', 1)[0]
-# # The full version, including alpha/beta/rc tags.
-# release = package.__version__
+    # The version info for the project you're documenting, acts as replacement for
+    # |version| and |release|, also used in various other places throughout the
+    # built documents.
 
+    # The full version, including alpha/beta/rc tags.
+    release = metadata.version(project)
+    # The short X.Y version.
+    version = '.'.join(release.split('.')[:2])
 
-# The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
+except ImportError:
 
-# The full version, including alpha/beta/rc tags.
-release = metadata.version(project)
-# The short X.Y version.
-version = '.'.join(release.split('.')[:2])
+    __import__(setup_cfg['name'])
+    package = sys.modules[setup_cfg['name']]
+
+    # The short X.Y version.
+    version = package.__version__.split('-', 1)[0]
+    # The full version, including alpha/beta/rc tags.
+    release = package.__version__
+
 
 # # Only include dev docs in dev version.
 # dev = 'dev' in release

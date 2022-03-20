@@ -18,3 +18,10 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools_scm]
 write_to = "pycraf/version.py"
 
+# [tool.pytest.ini_options]
+# minversion = "6.0"
+# addopts = '-rsx --doctest-rst  --doctest-modules --ignore-glob="*/setup_package.py"'
+# testpaths = [
+#     "pycraf",
+#     "docs",
+# ]

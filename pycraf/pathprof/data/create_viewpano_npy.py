@@ -25,9 +25,9 @@ for l in lines:
         entries.append((zip_file, super_tile, tile))
 
 entries = np.array(entries, dtype=np.dtype([
-    ('zipfile', np.str, 16),
-    ('supertile', np.str, 16),
-    ('tile', np.str, 16)
+    ('zipfile', str, 16),
+    ('supertile', str, 16),
+    ('tile', str, 16)
     ]))
 
 np.save('viewpano', entries)

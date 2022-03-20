@@ -66,3 +66,8 @@ from . import pathprof
 from . import protection
 from . import satellite
 from . import utils
+from .init_testrunner import *
+from .version import version
+
+
+__version__ = version

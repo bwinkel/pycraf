@@ -649,6 +649,11 @@ def transform_factory(sys_in, sys_out, code_in='epsg', code_out='epsg'):
 
     Examples
     --------
+    .. testsetup::
+
+        >>> import numpy as np
+        >>> np.set_printoptions(3)
+
     To define a "Gauss-Kruger Zone 4 (Germany)" to GPS/WGS84 transform::
 
         >>> from pycraf import geospatial
@@ -659,7 +664,7 @@ def transform_factory(sys_in, sys_out, code_in='epsg', code_out='epsg'):
         ...     geospatial.EPSG.WGS84, 31467
         ...     )
         >>> wgs84_to_etrs89(6 * u.deg, 50 * u.deg)  # doctest: +FLOAT_CMP
-        (<Quantity 3285005.65767981 m>, <Quantity 5544721.32224115 m>)
+        (<Quantity 3285005.658 m>, <Quantity 5544721.322 m>)
 
     If an *ESRI* system is desired, either use the integer code and
     set `code_[in,out] = 'esri'`, or use the ESRI enum::
@@ -669,16 +674,20 @@ def transform_factory(sys_in, sys_out, code_in='epsg', code_out='epsg'):
 
         >>> # see http://spatialreference.org/ref/esri/54009/
         >>> wgs84_to_mollweide = geospatial.transform_factory(
-        ...     geospatial.EPSG.WGS84, 54009, code_out='esri'
-        ...     )  # doctest: +SKIP
-        >>> wgs84_to_mollweide(6 * u.deg, 50 * u.deg)  # doctest: +SKIP
-        (<Quantity 456379.9117263066 m>, <Quantity 5873471.95621065 m>)
+        ...     geospatial.EPSG.WGS84, geospatial.ESRI.MOLLWEIDE
+        ...     )
+        >>> wgs84_to_mollweide(6 * u.deg, 50 * u.deg)  # doctest: +FLOAT_CMP
+        (<Quantity 456379.912 m>, <Quantity 5873471.956 m>)
 
         >>> mollweide_to_wgs84 = geospatial.transform_factory(
         ...     geospatial.ESRI.MOLLWEIDE, geospatial.EPSG.WGS84
         ...     )
         >>> mollweide_to_wgs84(456379.912 * u.m, 5873471.956 * u.m)  # doctest: +FLOAT_CMP
-        (<Quantity 6.000000003439825 deg>, <Quantity 49.999999997988475 deg>)
+        (<Quantity 6. deg>, <Quantity 50. deg>)
+
+    .. testcleanup::
+
+        >>> np.set_printoptions()
 
     Notes
     -----

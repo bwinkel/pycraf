@@ -32,6 +32,10 @@ directly with::
     pytest --pyargs pycraf --remote-data=any
     # or individual tests:
     pytest --pyargs pycraf --remote-data=any -k <test_func_name/module_name/etc.>
+    # with docstrings (note: --doctest-modules turns off doctest-plus):
+    pytest --pyargs pycraf --remote-data=any --doctest-modules --ignore-glob="*/setup_package.py"
+    # with doctests (in project dir)
+    pytest -rsx --doctest-rst --remote-data=any docs
 
 For more information, see:
   https://docs.astropy.org/en/latest/development/testguide.html#running-tests
@@ -52,6 +56,8 @@ You can also build the documentation with Sphinx directly using::
     pip install -e .[docs]
     cd docs
     make html
+    # alternatively (in project dir):
+    sphinx-build docs docs/_build/html -W -b html
 For more information, see:
   https://docs.astropy.org/en/latest/install.html#builddocs
 """

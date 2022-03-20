@@ -104,6 +104,7 @@ def srtm_handler(srtm_temp_dir):
             srtm_dir=srtm_temp_dir,
             server='viewpano',
             download='missing',
+            interp='linear',
             ):
 
         yield
