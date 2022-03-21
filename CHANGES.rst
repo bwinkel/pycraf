@@ -1,4 +1,4 @@
-2.0.0 (unreleased)
+2.0.0 (2022-03-21)
 =======================
 
 The new pycraf version 2 is mainly about a new packaging structure
