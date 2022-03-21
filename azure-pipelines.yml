@@ -337,7 +337,7 @@ jobs:
       # sphinx-build docs docs/_build/html -W -b html
       sphinx-build docs docs/_build/html -b html
     displayName: Make docs
-    condition: succeeded()
+    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], 3.8))
 
   - task: DownloadSecureFile@1
     inputs:
