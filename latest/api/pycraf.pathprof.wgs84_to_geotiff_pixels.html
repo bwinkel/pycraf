@@ -4,11 +4,11 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>wgs84_to_geotiff_pixels &#8212; pycraf v1.1.2.dev448</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
+    <title>wgs84_to_geotiff_pixels &#8212; pycraf v1.1.2.dev31+g9cf9ae8d</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
@@ -16,7 +16,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -65,7 +65,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.1.2.dev448</a>
+	<a href="../index.html">pycraf v1.1.2.dev31+g9cf9ae8d</a>
 	 &#187;
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
@@ -83,14 +83,14 @@
   <section id="wgs84-to-geotiff-pixels">
 <h1>wgs84_to_geotiff_pixels<a class="headerlink" href="#wgs84-to-geotiff-pixels" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="pycraf.pathprof.wgs84_to_geotiff_pixels">
-<span class="sig-prename descclassname"><span class="pre">pycraf.pathprof.</span></span><span class="sig-name descname"><span class="pre">wgs84_to_geotiff_pixels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geotiff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lats</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/gis.html#wgs84_to_geotiff_pixels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/gis.py#L172" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.pathprof.wgs84_to_geotiff_pixels" title="Permalink to this definition">¶</a></dt>
+<dt id="pycraf.pathprof.wgs84_to_geotiff_pixels">
+<code class="sig-prename descclassname"><span class="pre">pycraf.pathprof.</span></code><code class="sig-name descname"><span class="pre">wgs84_to_geotiff_pixels</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geotiff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lats</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/gis.html#wgs84_to_geotiff_pixels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/gis.py#L172" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.pathprof.wgs84_to_geotiff_pixels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert WGS84 (longitude, latitude) to pixel space of a GeoTiff.</p>
 <p>This is purely a convenience function, which internally calls <code class="xref py py-obj docutils literal notranslate"><span class="pre">pyproj</span></code>
 with the appropriate CRS of the GeoTiff file. The GeoTiff file must be
 opened with the Python package <a class="reference external" href="https://rasterio.readthedocs.io/">Rasterio</a></p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>geotiff</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DatasetReader</span></code> instance</span></dt><dd><p>A geotiff raster map opened with the Python package <a class="reference external" href="https://rasterio.readthedocs.io/">Rasterio</a>.</p>
 </dd>
@@ -98,7 +98,7 @@ opened with the Python package <a class="reference external" href="https://raste
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
 <dt><strong>xpix, ypix</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> of float64</span></dt><dd><p>Pixel coordinates (floating point!) of the provided geographic
 position(s) in the given GeoTiff raster map.</p>
@@ -134,8 +134,8 @@ position(s) in the given GeoTiff raster map.</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.4.0. &nbsp;
-    Last built 20 Mar 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
   </p>
 </footer>
   </body>

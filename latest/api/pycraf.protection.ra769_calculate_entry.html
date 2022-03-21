@@ -4,11 +4,11 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>ra769_calculate_entry &#8212; pycraf v1.1.2.dev448</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
+    <title>ra769_calculate_entry &#8212; pycraf v1.1.2.dev31+g9cf9ae8d</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
@@ -16,7 +16,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -65,7 +65,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.1.2.dev448</a>
+	<a href="../index.html">pycraf v1.1.2.dev31+g9cf9ae8d</a>
 	 &#187;
       </li>
       <li><a href="../protection/index.html" accesskey="U">Protection levels (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.protection</span></code>)</a> &#187;</li>
@@ -83,13 +83,13 @@
   <section id="ra769-calculate-entry">
 <h1>ra769_calculate_entry<a class="headerlink" href="#ra769-calculate-entry" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="pycraf.protection.ra769_calculate_entry">
-<span class="sig-prename descclassname"><span class="pre">pycraf.protection.</span></span><span class="sig-name descname"><span class="pre">ra769_calculate_entry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bandwidth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_rx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode='continuum'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale='dB'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integ_time=&lt;Quantity</span> <span class="pre">2000.</span> <span class="pre">s&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/protection/ra769.html#ra769_calculate_entry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/protection/ra769.py#L22" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.protection.ra769_calculate_entry" title="Permalink to this definition">¶</a></dt>
+<dt id="pycraf.protection.ra769_calculate_entry">
+<code class="sig-prename descclassname"><span class="pre">pycraf.protection.</span></code><code class="sig-name descname"><span class="pre">ra769_calculate_entry</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">frequency</span></em>, <em class="sig-param"><span class="pre">bandwidth</span></em>, <em class="sig-param"><span class="pre">T_A</span></em>, <em class="sig-param"><span class="pre">T_rx</span></em>, <em class="sig-param"><span class="pre">mode='continuum'</span></em>, <em class="sig-param"><span class="pre">scale='dB'</span></em>, <em class="sig-param"><span class="pre">integ_time=&lt;Quantity</span> <span class="pre">2000.</span> <span class="pre">s&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/protection/ra769.html#ra769_calculate_entry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/protection/ra769.py#L22" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.protection.ra769_calculate_entry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Limits (single entry) for spectral line, continuum, and VLBI observations
 according to
 <a class="reference external" href="https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en">ITU-R Rec RA.769</a>.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>frequency</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Center frequency [Hz]</p>
 </dd>
@@ -112,7 +112,7 @@ limits are based on 1% of the receiver noise plus antenna temperature.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
 <dt><strong>T_rms</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>System noise after integration [K]</p>
 </dd>
@@ -167,8 +167,8 @@ scale to use initially.</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.4.0. &nbsp;
-    Last built 20 Mar 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
   </p>
 </footer>
   </body>

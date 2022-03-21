@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pycraf.geospatial.geospatial &#8212; pycraf v1.1.2.dev448</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/pycraf.css" />
+    <title>pycraf.geospatial.geospatial &#8212; pycraf v1.1.2.dev31+g9cf9ae8d</title>
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
     
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
@@ -51,7 +51,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v1.1.2.dev448</a>
+	<a href="../../../index.html">pycraf v1.1.2.dev31+g9cf9ae8d</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -719,6 +719,11 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+<span class="sd">    .. testsetup::</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; np.set_printoptions(3)</span>
+
 <span class="sd">    To define a &quot;Gauss-Kruger Zone 4 (Germany)&quot; to GPS/WGS84 transform::</span>
 
 <span class="sd">        &gt;&gt;&gt; from pycraf import geospatial</span>
@@ -729,7 +734,7 @@
 <span class="sd">        ...     geospatial.EPSG.WGS84, 31467</span>
 <span class="sd">        ...     )</span>
 <span class="sd">        &gt;&gt;&gt; wgs84_to_etrs89(6 * u.deg, 50 * u.deg)  # doctest: +FLOAT_CMP</span>
-<span class="sd">        (&lt;Quantity 3285005.65767981 m&gt;, &lt;Quantity 5544721.32224115 m&gt;)</span>
+<span class="sd">        (&lt;Quantity 3285005.658 m&gt;, &lt;Quantity 5544721.322 m&gt;)</span>
 
 <span class="sd">    If an *ESRI* system is desired, either use the integer code and</span>
 <span class="sd">    set `code_[in,out] = &#39;esri&#39;`, or use the ESRI enum::</span>
@@ -739,16 +744,20 @@
 
 <span class="sd">        &gt;&gt;&gt; # see http://spatialreference.org/ref/esri/54009/</span>
 <span class="sd">        &gt;&gt;&gt; wgs84_to_mollweide = geospatial.transform_factory(</span>
-<span class="sd">        ...     geospatial.EPSG.WGS84, 54009, code_out=&#39;esri&#39;</span>
-<span class="sd">        ...     )  # doctest: +SKIP</span>
-<span class="sd">        &gt;&gt;&gt; wgs84_to_mollweide(6 * u.deg, 50 * u.deg)  # doctest: +SKIP</span>
-<span class="sd">        (&lt;Quantity 456379.9117263066 m&gt;, &lt;Quantity 5873471.95621065 m&gt;)</span>
+<span class="sd">        ...     geospatial.EPSG.WGS84, geospatial.ESRI.MOLLWEIDE</span>
+<span class="sd">        ...     )</span>
+<span class="sd">        &gt;&gt;&gt; wgs84_to_mollweide(6 * u.deg, 50 * u.deg)  # doctest: +FLOAT_CMP</span>
+<span class="sd">        (&lt;Quantity 456379.912 m&gt;, &lt;Quantity 5873471.956 m&gt;)</span>
 
 <span class="sd">        &gt;&gt;&gt; mollweide_to_wgs84 = geospatial.transform_factory(</span>
 <span class="sd">        ...     geospatial.ESRI.MOLLWEIDE, geospatial.EPSG.WGS84</span>
 <span class="sd">        ...     )</span>
 <span class="sd">        &gt;&gt;&gt; mollweide_to_wgs84(456379.912 * u.m, 5873471.956 * u.m)  # doctest: +FLOAT_CMP</span>
-<span class="sd">        (&lt;Quantity 6.000000003439825 deg&gt;, &lt;Quantity 49.999999997988475 deg&gt;)</span>
+<span class="sd">        (&lt;Quantity 6. deg&gt;, &lt;Quantity 50. deg&gt;)</span>
+
+<span class="sd">    .. testcleanup::</span>
+
+<span class="sd">        &gt;&gt;&gt; np.set_printoptions()</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -869,8 +878,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.4.0. &nbsp;
-    Last built 20 Mar 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
   </p>
 </footer>
   </body>

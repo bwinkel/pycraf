@@ -4,11 +4,11 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>ranged_quantity_input &#8212; pycraf v1.1.2.dev448</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
+    <title>ranged_quantity_input &#8212; pycraf v1.1.2.dev31+g9cf9ae8d</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
@@ -16,7 +16,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -65,7 +65,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.1.2.dev448</a>
+	<a href="../index.html">pycraf v1.1.2.dev31+g9cf9ae8d</a>
 	 &#187;
       </li>
       <li><a href="../utils/index.html" accesskey="U">Utilities (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.utils</span></code>)</a> &#187;</li>
@@ -83,8 +83,8 @@
   <section id="ranged-quantity-input">
 <h1>ranged_quantity_input<a class="headerlink" href="#ranged-quantity-input" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="pycraf.utils.ranged_quantity_input">
-<span class="sig-prename descclassname"><span class="pre">pycraf.utils.</span></span><span class="sig-name descname"><span class="pre">ranged_quantity_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/utils/decorators.py#L18" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.utils.ranged_quantity_input" title="Permalink to this definition">¶</a></dt>
+<dt id="pycraf.utils.ranged_quantity_input">
+<code class="sig-prename descclassname"><span class="pre">pycraf.utils.</span></code><code class="sig-name descname"><span class="pre">ranged_quantity_input</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/utils/decorators.py#L18" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.utils.ranged_quantity_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>A decorator for validating the units of arguments to functions.</p>
 <p>This decorator was adapted from Astropy’s
 <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.quantity_input.html#astropy.units.quantity_input" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quantity_input</span></code></a>,
@@ -101,7 +101,7 @@ object, a <a class="reference external" href="https://docs.python.org/3/library/
 <p>Where an equivalency is specified in the decorator, the
 function will be executed with that equivalency in force.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>func</strong><span class="classifier">function</span></dt><dd><p>The function to decorate.</p>
 </dd>
@@ -133,7 +133,7 @@ made sure that the return values are unit-less).</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>ranged_quantity_input</strong><span class="classifier">function decorator</span></dt><dd><p>Function decorator to check units and value ranges.</p>
 </dd>
@@ -171,7 +171,7 @@ or both bounds, e.g.:</p>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">**</span> <span class="mi">2</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>  
-<span class="go">&lt;Quantity 4.0 m2&gt;</span>
+<span class="go">&lt;Quantity 4. m2&gt;</span>
 </pre></div>
 </div>
 <p>Often one wants to add units support to third-party functions,
@@ -287,8 +287,8 @@ than <a class="reference external" href="https://docs.python.org/3/library/const
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.4.0. &nbsp;
-    Last built 20 Mar 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
   </p>
 </footer>
   </body>

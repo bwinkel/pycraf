@@ -4,11 +4,11 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v1.1.2.dev448</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
+    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v1.1.2.dev31+g9cf9ae8d</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
@@ -16,11 +16,11 @@
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -66,7 +66,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.1.2.dev448</a>
+	<a href="../index.html">pycraf v1.1.2.dev31+g9cf9ae8d</a>
 	 &#187;
       </li>
       
@@ -133,7 +133,7 @@ necessary to determine the effective Earth radii.</p></li>
 <p class="admonition-title">Note</p>
 <p>For most of the functionality in this module, you will need to download
 SRTM tile data; see <a class="reference internal" href="working_with_srtm.html#working-with-srtm"><span class="std std-ref">Working with SRTM data</span></a>.</p>
-</div>
+</aside>
 </section>
 <section id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
@@ -177,7 +177,7 @@ SRTM tile data; see <a class="reference internal" href="working_with_srtm.html#w
 <p class="admonition-title">Note</p>
 <p>If the profile resolution, <code class="xref py py-obj docutils literal notranslate"><span class="pre">hprof_step</span></code> is made large,
 Gaussian smoothing is applied to avoid aliasing effects.</p>
-</div>
+</aside>
 </section>
 <section id="path-attenuation">
 <span id="pathprof-getting-started-path-attenuation"></span><h3>Path attenuation<a class="headerlink" href="#path-attenuation" title="Permalink to this headline">¶</a></h3>
@@ -324,7 +324,7 @@ to produce terrain maps of a region:</p>
 
 <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">170</span>
 <span class="n">terrain_cmap</span><span class="p">,</span> <span class="n">terrain_norm</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">terrain_cmap_factory</span><span class="p">(</span>
-    <span class="n">sealevel</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span>
     <span class="p">)</span>
 <span class="n">_heightmap</span><span class="p">[</span><span class="n">_heightmap</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.51</span>  <span class="c1"># fix for coastal region</span>
 
@@ -335,29 +335,28 @@ to produce terrain maps of a region:</p>
     <span class="n">_heightmap</span><span class="p">,</span>
     <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span>
     <span class="n">cmap</span><span class="o">=</span><span class="n">terrain_cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">terrain_norm</span><span class="p">,</span>
-    <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
     <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">_lons</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">_lons</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">_lats</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">_lats</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
     <span class="p">)</span>
 <span class="n">cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span>
     <span class="n">cim</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cbax</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span>
     <span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">_lons</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">_lons</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="nb">abs</span><span class="p">(</span><span class="n">_lats</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">_lats</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Height (amsl)&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
-<span class="n">cbax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cbax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">get_major_ticks</span><span class="p">():</span>
-    <span class="n">t</span><span class="o">.</span><span class="n">tick1line</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">t</span><span class="o">.</span><span class="n">tick2line</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">t</span><span class="o">.</span><span class="n">label1</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">t</span><span class="o">.</span><span class="n">label2</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">ctics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1150</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+
+<span class="n">ctics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
 <span class="n">cbar</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><span class="n">ctics</span><span class="p">)</span>
 <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.0f}</span><span class="s1"> m&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">ctics</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Height (amsl)&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">cbax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">tick_top</span><span class="p">()</span>
+<span class="n">cbax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">)</span>
+
 <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Longitude [deg]&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Latitude [deg]&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">tick_top</span><span class="p">()</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>(<a class="reference external" href="../pathprof/index-2.png">png</a>, <a class="reference external" href="../pathprof/index-2.svg">svg</a>, <a class="reference external" href="../pathprof/index-2.pdf">pdf</a>)</p>
+<figure class="align-default">
+<img alt="../_images/index-21.png" class="plot-directive" src="../_images/index-21.png" />
+</figure>
 <p>Here, we made use of a special <a class="reference external" href="https://matplotlib.org/stable/index.html#module-matplotlib" title="(in Matplotlib v3.5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matplotlib</span></code></a> colormap, which can be produced
 using <a class="reference internal" href="../api/pycraf.pathprof.terrain_cmap_factory.html#pycraf.pathprof.terrain_cmap_factory" title="pycraf.pathprof.terrain_cmap_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">terrain_cmap_factory</span></code></a>. It returns a <code class="xref py py-obj docutils literal notranslate"><span class="pre">cmap</span></code> and a
 <code class="xref py py-obj docutils literal notranslate"><span class="pre">norm</span></code>, which make it so that blue colors always start below a height of 0 m
@@ -374,7 +373,7 @@ and is used to find the distance and relative bearings between two points
 (P1, and P2) on the Geoid (Earth ellipsoid), or - if P1, the bearing, and
 distance are given -, it finds P2. The geodesics are the equivalent of
 great-circle paths on a sphere, but on the Geoid.</p>
-</div>
+</aside>
 <p>Another useful feature of the Geodesics functionality is that one can query
 the Geographical coordinates of points at a certain distance from a central
 point. On the sphere, they would all be located on a circle, but on Earth
@@ -417,7 +416,7 @@ it’s different:</p>
 distances with the formula for the sphere, there is some deviation
 (from North to South). For many cases where only rough estimates are
 needed it will be sufficient to treat the Geoid as a normal sphere.</p>
-</div>
+</aside>
 </section>
 <section id="producing-maps-of-path-propagation-loss">
 <span id="pathprof-using-attenmaps"></span><h3>Producing maps of path propagation loss<a class="headerlink" href="#producing-maps-of-path-propagation-loss" title="Permalink to this headline">¶</a></h3>
@@ -450,15 +449,18 @@ Therefore, we added a faster alternative, <a class="reference internal" href="..
         <span class="n">cim</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cbax</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span>
         <span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lons</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">lons</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="nb">abs</span><span class="p">(</span><span class="n">lats</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">lats</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-    <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Path propagation loss&#39;</span><span class="p">)</span>
-    <span class="n">ctics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+
+    <span class="n">ctics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
     <span class="n">cbar</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><span class="n">ctics</span><span class="p">)</span>
-    <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.0f}</span><span class="s1"> dB&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">ctics</span><span class="p">))</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.0f}</span><span class="s1"> dB&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">ctics</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Path propagation loss&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">cbax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">tick_top</span><span class="p">()</span>
+    <span class="n">cbax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">cbax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">)</span>
+
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Longitude [deg]&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Latitude [deg]&#39;</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">tick_top</span><span class="p">()</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -595,7 +597,7 @@ the path geometry if one of these parameters changes. Therefore, if the
 broadcast axes for <code class="xref py py-obj docutils literal notranslate"><span class="pre">frequency</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">time_percent</span></code> would have been chosen
 in the opposite manner, the function would run about an order of magnitude
 slower!</p>
-</div>
+</aside>
 </section>
 </section>
 <section id="see-also">
@@ -616,27 +618,23 @@ estimation.</p>
 <section id="functions">
 <h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h4>
 <table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.P_pusch.html#pycraf.pathprof.P_pusch" title="pycraf.pathprof.P_pusch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">P_pusch</span></code></a>(P_cmax, M_pusch, P_0_pusch, alpha, PL)</p></td>
 <td><p>Calculate power output level after UE power control.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.annual_timepercent_from_worst_month.html#pycraf.pathprof.annual_timepercent_from_worst_month" title="pycraf.pathprof.annual_timepercent_from_worst_month"><code class="xref py py-obj docutils literal notranslate"><span class="pre">annual_timepercent_from_worst_month</span></code></a>(p_w, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.annual_timepercent_from_worst_month.html#pycraf.pathprof.annual_timepercent_from_worst_month" title="pycraf.pathprof.annual_timepercent_from_worst_month"><code class="xref py py-obj docutils literal notranslate"><span class="pre">annual_timepercent_from_worst_month</span></code></a>(p_w, …)</p></td>
 <td><p>Calculate annual equivalent time percentage, p, from worst-month time percentage, p_w, according to ITU-R P.452-16 Eq (1).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.atten_map_fast.html#pycraf.pathprof.atten_map_fast" title="pycraf.pathprof.atten_map_fast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_map_fast</span></code></a>(freq, temperature, pressure, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.atten_map_fast.html#pycraf.pathprof.atten_map_fast" title="pycraf.pathprof.atten_map_fast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_map_fast</span></code></a>(freq, temperature, pressure, …)</p></td>
 <td><p>Calculate attenuation maps using a fast method.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.atten_path_fast.html#pycraf.pathprof.atten_path_fast" title="pycraf.pathprof.atten_path_fast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_path_fast</span></code></a>(freq, temperature, pressure, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.atten_path_fast.html#pycraf.pathprof.atten_path_fast" title="pycraf.pathprof.atten_path_fast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_path_fast</span></code></a>(freq, temperature, pressure, …)</p></td>
 <td><p>Calculate attenuation along a path using a parallelized method.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.clutter_correction.html#pycraf.pathprof.clutter_correction" title="pycraf.pathprof.clutter_correction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clutter_correction</span></code></a>(h_g, zone, freq)</p></td>
 <td><p>Calculate the Clutter loss of a propagating radio wave according to ITU-R P.452-16 Eq (57).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.clutter_imt.html#pycraf.pathprof.clutter_imt" title="pycraf.pathprof.clutter_imt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clutter_imt</span></code></a>(freq, dist, location_percent[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.clutter_imt.html#pycraf.pathprof.clutter_imt" title="pycraf.pathprof.clutter_imt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clutter_imt</span></code></a>(freq, dist, location_percent[, …])</p></td>
 <td><p>Calculate the Clutter loss according to IMT.CLUTTER document (method 2).</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.deltaN_N0_from_map.html#pycraf.pathprof.deltaN_N0_from_map" title="pycraf.pathprof.deltaN_N0_from_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deltaN_N0_from_map</span></code></a>(lon, lat)</p></td>
@@ -657,31 +655,31 @@ estimation.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.geoid_area.html#pycraf.pathprof.geoid_area" title="pycraf.pathprof.geoid_area"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geoid_area</span></code></a>(lon1, lon2, lat1, lat2)</p></td>
 <td><p>Calculate WGS84 surface area over interval [lon1, lon2] and [lat1, lat2].</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.geoid_direct.html#pycraf.pathprof.geoid_direct" title="pycraf.pathprof.geoid_direct"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geoid_direct</span></code></a>(lon1, lat1, bearing1, dist[, ...])</p></td>
-<td><p>Solve direct Geodesics problem using Vincenty's formulae.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.geoid_direct.html#pycraf.pathprof.geoid_direct" title="pycraf.pathprof.geoid_direct"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geoid_direct</span></code></a>(lon1, lat1, bearing1, dist[, …])</p></td>
+<td><p>Solve direct Geodesics problem using Vincenty’s formulae.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.geoid_inverse.html#pycraf.pathprof.geoid_inverse" title="pycraf.pathprof.geoid_inverse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geoid_inverse</span></code></a>(lon1, lat1, lon2, lat2[, eps, ...])</p></td>
-<td><p>Solve inverse Geodesics problem using Vincenty's formulae.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.geoid_inverse.html#pycraf.pathprof.geoid_inverse" title="pycraf.pathprof.geoid_inverse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geoid_inverse</span></code></a>(lon1, lat1, lon2, lat2[, eps, …])</p></td>
+<td><p>Solve inverse Geodesics problem using Vincenty’s formulae.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.height_map_data.html#pycraf.pathprof.height_map_data" title="pycraf.pathprof.height_map_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">height_map_data</span></code></a>(lon_t, lat_t, map_size_lon, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.height_map_data.html#pycraf.pathprof.height_map_data" title="pycraf.pathprof.height_map_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">height_map_data</span></code></a>(lon_t, lat_t, map_size_lon, …)</p></td>
 <td><p>Calculate height profiles and auxillary maps needed for <a class="reference internal" href="../api/pycraf.pathprof.atten_map_fast.html#pycraf.pathprof.atten_map_fast" title="pycraf.pathprof.atten_map_fast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_map_fast</span></code></a>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.height_path_data.html#pycraf.pathprof.height_path_data" title="pycraf.pathprof.height_path_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">height_path_data</span></code></a>(lon_t, lat_t, lon_r, lat_r, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.height_path_data.html#pycraf.pathprof.height_path_data" title="pycraf.pathprof.height_path_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">height_path_data</span></code></a>(lon_t, lat_t, lon_r, lat_r, …)</p></td>
 <td><p>Calculate height profile auxillary data needed for <a class="reference internal" href="../api/pycraf.pathprof.atten_path_fast.html#pycraf.pathprof.atten_path_fast" title="pycraf.pathprof.atten_path_fast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_path_fast</span></code></a>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.height_path_data_generic.html#pycraf.pathprof.height_path_data_generic" title="pycraf.pathprof.height_path_data_generic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">height_path_data_generic</span></code></a>(distance, step, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.height_path_data_generic.html#pycraf.pathprof.height_path_data_generic" title="pycraf.pathprof.height_path_data_generic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">height_path_data_generic</span></code></a>(distance, step, …)</p></td>
 <td><p>Calculate height profile auxillary data needed for <a class="reference internal" href="../api/pycraf.pathprof.atten_path_fast.html#pycraf.pathprof.atten_path_fast" title="pycraf.pathprof.atten_path_fast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_path_fast</span></code></a>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.imt_rural_macro_losses.html#pycraf.pathprof.imt_rural_macro_losses" title="pycraf.pathprof.imt_rural_macro_losses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imt_rural_macro_losses</span></code></a>(freq, dist_2d[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.imt_rural_macro_losses.html#pycraf.pathprof.imt_rural_macro_losses" title="pycraf.pathprof.imt_rural_macro_losses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imt_rural_macro_losses</span></code></a>(freq, dist_2d[, …])</p></td>
 <td><p>Calculate los/non-los propagation losses Rural-Macro IMT scenario.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.imt_urban_macro_losses.html#pycraf.pathprof.imt_urban_macro_losses" title="pycraf.pathprof.imt_urban_macro_losses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imt_urban_macro_losses</span></code></a>(freq, dist_2d[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.imt_urban_macro_losses.html#pycraf.pathprof.imt_urban_macro_losses" title="pycraf.pathprof.imt_urban_macro_losses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imt_urban_macro_losses</span></code></a>(freq, dist_2d[, …])</p></td>
 <td><p>Calculate los/non-los propagation losses Rural-Macro IMT scenario.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.imt_urban_micro_losses.html#pycraf.pathprof.imt_urban_micro_losses" title="pycraf.pathprof.imt_urban_micro_losses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imt_urban_micro_losses</span></code></a>(freq, dist_2d[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.imt_urban_micro_losses.html#pycraf.pathprof.imt_urban_micro_losses" title="pycraf.pathprof.imt_urban_micro_losses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imt_urban_micro_losses</span></code></a>(freq, dist_2d[, …])</p></td>
 <td><p>Calculate los/non-los propagation losses Rural-Macro IMT scenario.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.landcover_to_p452_clutter_zones.html#pycraf.pathprof.landcover_to_p452_clutter_zones" title="pycraf.pathprof.landcover_to_p452_clutter_zones"><code class="xref py py-obj docutils literal notranslate"><span class="pre">landcover_to_p452_clutter_zones</span></code></a>(...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.landcover_to_p452_clutter_zones.html#pycraf.pathprof.landcover_to_p452_clutter_zones" title="pycraf.pathprof.landcover_to_p452_clutter_zones"><code class="xref py py-obj docutils literal notranslate"><span class="pre">landcover_to_p452_clutter_zones</span></code></a>(…)</p></td>
 <td><p>Convert a map of landcover class IDs to P.452 clutter types.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.loss_complete.html#pycraf.pathprof.loss_complete" title="pycraf.pathprof.loss_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_complete</span></code></a>(pathprop[, G_t, G_r])</p></td>
@@ -699,13 +697,13 @@ estimation.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.loss_troposcatter.html#pycraf.pathprof.loss_troposcatter" title="pycraf.pathprof.loss_troposcatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_troposcatter</span></code></a>(pathprop[, G_t, G_r])</p></td>
 <td><p>Calculate the tropospheric scatter loss, L_bs, of a propagating radio wave according to ITU-R P.452-16 Eq (45).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.losses_complete.html#pycraf.pathprof.losses_complete" title="pycraf.pathprof.losses_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losses_complete</span></code></a>(freq, temperature, pressure, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.losses_complete.html#pycraf.pathprof.losses_complete" title="pycraf.pathprof.losses_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losses_complete</span></code></a>(freq, temperature, pressure, …)</p></td>
 <td><p>Calculate propagation losses for a fixed path using a parallelized method.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.make_kmz.html#pycraf.pathprof.make_kmz" title="pycraf.pathprof.make_kmz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_kmz</span></code></a>(kmz_filename, atten_map, bbox[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.make_kmz.html#pycraf.pathprof.make_kmz" title="pycraf.pathprof.make_kmz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_kmz</span></code></a>(kmz_filename, atten_map, bbox[, …])</p></td>
 <td><p>Produce kmz file for use in GIS software (e.g., Google Earth).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.radiomet_data_for_pathcenter.html#pycraf.pathprof.radiomet_data_for_pathcenter" title="pycraf.pathprof.radiomet_data_for_pathcenter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">radiomet_data_for_pathcenter</span></code></a>(lon, lat, d_tm, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.radiomet_data_for_pathcenter.html#pycraf.pathprof.radiomet_data_for_pathcenter" title="pycraf.pathprof.radiomet_data_for_pathcenter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">radiomet_data_for_pathcenter</span></code></a>(lon, lat, d_tm, …)</p></td>
 <td><p>Calculate delta_N, beta_0, and N_0 values from digitized maps, according to ITU-R P.452-16 Eq (2-4).</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.regrid_from_geotiff.html#pycraf.pathprof.regrid_from_geotiff" title="pycraf.pathprof.regrid_from_geotiff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regrid_from_geotiff</span></code></a>(geotiff, lons, lats[, band])</p></td>
@@ -715,15 +713,15 @@ estimation.</p>
 <td><p>Change maximum number of threads to use.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_data.html#pycraf.pathprof.srtm_height_data" title="pycraf.pathprof.srtm_height_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_data</span></code></a>(lons, lats)</p></td>
-<td><p>Interpolated SRTM terrain data extracted from &quot;.hgt&quot; files.</p></td>
+<td><p>Interpolated SRTM terrain data extracted from “.hgt” files.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_map.html#pycraf.pathprof.srtm_height_map" title="pycraf.pathprof.srtm_height_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_map</span></code></a>(lon_c, lat_c, map_size_lon, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_map.html#pycraf.pathprof.srtm_height_map" title="pycraf.pathprof.srtm_height_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_map</span></code></a>(lon_c, lat_c, map_size_lon, …)</p></td>
 <td><p>Extract terrain map from SRTM data.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_profile</span></code></a>(lon_t, lat_t, lon_r, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.srtm_height_profile.html#pycraf.pathprof.srtm_height_profile" title="pycraf.pathprof.srtm_height_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">srtm_height_profile</span></code></a>(lon_t, lat_t, lon_r, …)</p></td>
 <td><p>Extract a height profile from SRTM data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.terrain_cmap_factory.html#pycraf.pathprof.terrain_cmap_factory" title="pycraf.pathprof.terrain_cmap_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">terrain_cmap_factory</span></code></a>([sealevel, vmax])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.terrain_cmap_factory.html#pycraf.pathprof.terrain_cmap_factory" title="pycraf.pathprof.terrain_cmap_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">terrain_cmap_factory</span></code></a>([sealevel, vmin, vmax])</p></td>
 <td><p>Produce terrain colormap and norm to be used in plt.imshow.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.wgs84_to_geotiff_pixels.html#pycraf.pathprof.wgs84_to_geotiff_pixels" title="pycraf.pathprof.wgs84_to_geotiff_pixels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wgs84_to_geotiff_pixels</span></code></a>(geotiff, lons, lats)</p></td>
@@ -735,16 +733,12 @@ estimation.</p>
 <section id="classes">
 <h4>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h4>
 <table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CLUTTER</span></code>(value)</p></td>
 <td><p><p>Clutter types are defined according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.452-16-201507-I/en">ITU-R Recommendation P.452-16</a>.</p>
 </p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.PathProp.html#pycraf.pathprof.PathProp" title="pycraf.pathprof.PathProp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PathProp</span></code></a>(freq, temperature, pressure, lon_t, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.PathProp.html#pycraf.pathprof.PathProp" title="pycraf.pathprof.PathProp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PathProp</span></code></a>(freq, temperature, pressure, lon_t, …)</p></td>
 <td><p>Container class that holds all path profile properties.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.SrtmConf.html#pycraf.pathprof.SrtmConf" title="pycraf.pathprof.SrtmConf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SrtmConf</span></code></a>()</p></td>
@@ -768,10 +762,6 @@ estimation.</p>
 <section id="variables">
 <h4>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h4>
 <table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.A_BETA.html#pycraf.pathprof.A_BETA" title="pycraf.pathprof.A_BETA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">A_BETA</span></code></a></p></td>
 <td><p>Effective Earth radius for beta_0 percent</p></td>
@@ -804,12 +794,6 @@ estimation.</p>
 <section id="available-clutter-types-in-rec-itu-r-p-452-16">
 <h3>Available clutter types in Rec. ITU-R P.452-16<a class="headerlink" href="#available-clutter-types-in-rec-itu-r-p-452-16" title="Permalink to this headline">¶</a></h3>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 15%" />
-<col style="width: 59%" />
-<col style="width: 13%" />
-<col style="width: 13%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Value</p></th>
 <th class="head"><p>Alias</p></th>
@@ -889,11 +873,6 @@ Note, that ITU-R also provides clutter information in its
 <a class="reference external" href="https://www.itu.int/pub/R-SOFT-IDWM">ITU Digitized World Map (IDWM) and Subroutine Library (32-bit)</a> but it’s available for (old versions
 of) Windows, only, and comes with a steep price tag.</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 14%" />
-<col style="width: 62%" />
-<col style="width: 24%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Corine ID</p></th>
 <th class="head"><p>Explanation</p></th>
@@ -1080,11 +1059,6 @@ of) Windows, only, and comes with a steep price tag.</p>
 </tbody>
 </table>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 14%" />
-<col style="width: 62%" />
-<col style="width: 24%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>IGBP ID</p></th>
 <th class="head"><p>Explanation</p></th>
@@ -1216,8 +1190,8 @@ of) Windows, only, and comes with a steep price tag.</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.4.0. &nbsp;
-    Last built 20 Mar 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
   </p>
 </footer>
   </body>

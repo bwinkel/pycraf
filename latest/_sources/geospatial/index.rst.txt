@@ -123,20 +123,26 @@ output). One can specifically ask for the original units by doing::
     >>> from astropy.units.imperial import ft
     >>> import pyproj
 
-    >>> proj_wgs84 = pyproj.Proj('+init=epsg:4326')
+    >>> proj_wgs84 = pyproj.Proj('epsg:4326')
     >>> # Louisiana South (ftUS)
-    >>> proj_nad83 = pyproj.Proj('+init=epsg:3452', preserve_units=False)
+    >>> proj_nad83 = pyproj.Proj('epsg:3452', preserve_units=False)
 
-    >>> pyproj.transform(proj_wgs84, proj_nad83, -92.105819, 30.447921)  # doctest: +FLOAT_CMP
+    >>> my_trafo = pyproj.Transformer.from_crs(
+    ...     proj_wgs84.crs, proj_nad83.crs, always_xy=True
+    ...     )
+    >>> my_trafo.transform(-92.105819, 30.447921)  # doctest: +FLOAT_CMP
     (925806.5486332772, 216168.1432314818)
 
 This is the wrong result. But `pyproj.Proj` has an option::
 
-    >>> proj_nad83 = pyproj.Proj('+init=epsg:3452', preserve_units=True)
+    >>> proj_nad83 = pyproj.Proj('epsg:3452', preserve_units=True)
 
 that gives the correct result::
 
-    >>> pyproj.transform(proj_wgs84, proj_nad83, -92.105819, 30.447921)  # doctest: +FLOAT_CMP
+    >>> my_trafo = pyproj.Transformer.from_crs(
+    ...     proj_wgs84.crs, proj_nad83.crs, always_xy=True
+    ...     )
+    >>> my_trafo.transform(-92.105819, 30.447921)  # doctest: +FLOAT_CMP
     (3037416.9849743457, 709211.6499186204)
 
 The `~pycraf.geospatial` sub-package makes life a bit easier,

@@ -7,32 +7,38 @@ Requirements
 
 pycraf has the following strict requirements:
 
-- `Python <http://www.python.org/>`__ 3.7 or later
+- `Python <http://www.python.org/>`__ 3.8 or later
 
 - `setuptools <https://pythonhosted.org/setuptools/>`__: Used for the package
   installation.
 
 - `Cython <http://cython.org/>`__ 0.29 or later
 
-- `NumPy <http://www.numpy.org/>`__ 1.14.5 or later
+- `NumPy <http://www.numpy.org/>`__ 1.18 or later
 
-- `SciPy <https://scipy.org/>`__: 0.19 or later
+- `SciPy <https://scipy.org/>`__: 1.7 or later
 
-- `astropy <http://www.astropy.org/>`__: 3.0 or later
+- `astropy <http://www.astropy.org/>`__: 4.0 or later
 
-- `pytest <https://pypi.python.org/pypi/pytest>`__ 2.6 or later
+- `pytest <https://pypi.python.org/pypi/pytest>`__ 5.4 or later
+-
+- `pytest-remotedata <https://pypi.org/project/pytest-remotedata/>`__ 0.3.3 or later
 
 
 There are a few optional packages, which are necessary for some functionality:
 
-- `matplotlib <http://matplotlib.org/>`__ 3.0 or later: To provide plotting
+- `h5py <https://www.h5py.org/>`__ 3.3 or later: for caching.
+
+- `matplotlib <http://matplotlib.org/>`__ 3.4 or later: To provide plotting
   functionality that `~pycraf.pathprof` enhances.
 
-- `pyproj <https://pypi.python.org/pypi/pyproj>`__ 2.0 or later: This is a
-  requirement for the `~pycraf.geospatial` package.
+- `pyproj <https://pypi.python.org/pypi/pyproj>`__ 2.6 or later: This is a
+  requirement for the `~pycraf.geospatial` sub-package.
 
 - `sgp4 <https://pypi.python.org/pypi/sgp4>`__ 2.0 or later: This is a
-  requirement for the `~pycraf.satellite` package.
+  requirement for the `~pycraf.satellite` sub-package.
+
+- `rasterio <https://pypi.org/project/rasterio/>`__ 1.2 or later: for geotiff reading in ``~pycraf.pathprof` sub-package.
 
 Older versions of these packages may work, but no support will be provided.
 
@@ -53,17 +59,24 @@ After installing Anaconda, one can run the `conda package manager
 
 .. note::
 
+    `pycraf` and many other packages are not in default channel of Anaconda.
+    So you have to use the conda-forge channel.
+
+.. note::
+
     It is always a good idea to keep different projects separated and conda
     allows to easily create virtual environments. To set one up for `pycraf`::
 
-        conda create -n pycraf-env python=3.6 pycraf
+        conda create -n pycraf-env -c conda-forge python=3.9 pycraf
 
     and to use it::
 
         conda activate pycraf-env
 
-    (In conda versions before 4.6, one has to source the activate shell
-    script instead. See `conda manual <https://docs.conda.io/en/latest/>`_.)
+    Ideally, one would install all dependencies together with pycraf::
+
+        conda create -n pycraf-env -c conda-forge python=3.9 astropy cython h5py matplotlib numpy pycraf 'pyproj>=2.6' pytest pytest-remotedata rasterio scipy 'sgp4>2'
+
 
 Using pip
 -------------
@@ -93,8 +106,10 @@ To install pycraf with `pip <http://www.pip-installer.org/en/latest/>`__, simply
     to install the package into your home directory.  You can read more
     about how to do this in the `pip documentation
     <http://www.pip-installer.org/en/1.2.1/other-tools.html#using-pip-with-the-user-scheme>`__.
+    Better would be to use virtual environments, e.g., base on `pipenv
+    <https://pipenv.pypa.io/en/latest/>`__.
 
-    We recommend to use a Python distribution, such as `Anaconda
+    However, we recommend to use a `Anaconda
     <https://www.continuum.io/downloads>`_, especially, if you are on
     :ref:`windows_install`.
 
@@ -106,6 +121,8 @@ To install pycraf with `pip <http://www.pip-installer.org/en/latest/>`__, simply
 Installation from source
 ------------------------
 
+Linux
+~~~~~
 There are two options, if you want to build pycraf from sources. Either, you
 install the tar-ball (`*.tar.gz` file) from `PyPI
 <https://pypi.python.org/pypi/pycraf>`_ and extract it to the directory of
@@ -120,63 +137,51 @@ Then go into the pycraf source directory and run:
 
 .. code-block:: bash
 
-    python setup.py install
+    python -m pip install .
 
 Again, consider the ``--user`` option or even better use a python distribution
 such as `Anaconda <https://www.continuum.io/downloads>`_ to avoid messing up
 the system-wide Python installation.
 
+
 .. note::
 
-    If you use `Anaconda` and want to install the `sgp4` and `pyproj`
-    packages, you'll have to use a different channel
+    On Anaconda, the following would install all packages needed for
+    properly working with the sources::
 
-    .. code-block:: bash
-
-        conda install -c conda-forge sgp4 pyproj
-
+        conda create -n pycraf-dev -c conda-forge python=3.9 astropy cython  h5py matplotlib "numpy==1.20" pip "pyproj>=3" pytest pytest-astropy pytest-doctestplus pytest-remotedata rasterio scipy "sgp4>2" sphinx sphinx-astropy twine wheel
 
 .. _windows_install:
 
-Installation on Windows
------------------------
+Windows
+~~~~~~~
 
-Note that for Windows machines we provide a binary wheel (Python 3.5+ only).
-However, the `pyproj <https://pypi.python.org/pypi/pyproj>`_ package is a
-dependency and unfortunately, the official
-`pyproj <https://pypi.python.org/pypi/pyproj>`__ repository on PyPI contains
-only the sources. You can download a
-suitable wheel from `Christoph Gohlke's package site
-<http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyproj>`__. Then use
-
-.. code-block:: bash
-
-    pip install [path-to-wheel]/pyproj‑*.whl
-
-If you're using `Anaconda <https://www.continuum.io/downloads>`__
-(recommended), it gets much simpler
+If you are desperate, you can install pycraf from source even on Windows.
+You'll need to install a suitable C-compiler; <see here
+<https://wiki.python.org/moin/WindowsCompilers>`__. The pycraf
+package needs Python 3.8 or later, which means VC++ Version 14 or later is
+mandatory. The easiest way to obtain it, is by installing the
+`Build Tools For Visual Studio
+<https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022>`__. Once installed and
+if all dependencies are there, the standard
 
 .. code-block:: bash
 
-    conda install -c conda-forge pyproj
-    pip install pycraf
+    python -m pip install .
+
+should work.
+
 
 .. note::
 
-    If you are desperate, you can install pycraf from source even on Windows.
-    You'll need to install a suitable C-compiler; <see here
-    <https://matthew-brett.github.io/pydagogue/python_msvc.html#visual-studio-versions-used-to-compile-distributed-python-binaries>`__. The pycraf
-    package needs Python 3.5 or later, which means VC++ Version 14 is
-    mandatory. The easiest way to obtain it, is by installing the
-    `Visual C++ 2015 Build Tools
-    <http://landinghub.visualstudio.com/visual-cpp-build-tools>`__ which is
-    "only" 4 GBytes large...
-
+    `pycraf` uses `setuptools-scm` for automatic version numbering
+    (based on the `git` hash). For this, `git` needs to be available in
+    the terminal. (On Anaconda, it can be installed from conda-forge.)
 
 .. _macos_install:
 
-Installation on MacOS
----------------------
+MacOS
+~~~~~
 
 Installation on MacOS can be a bit tricky, because the standard C compiler
 does not support OpenMP. We provide wheels on PyPI, such that you can
@@ -190,10 +195,12 @@ likely get an error message that a library (such as "libgomp") is not
 found, when you import pycraf in Python.
 
 Also, if you want to install from source, you must have a C compiler. There
-are basically two options, using LLVM or the gcc suite.
+are basically two options, using LLVM or the gcc suite. The recipe below
+is likely outdated heavily, but we currently don't have access to a
+MacOS machine. You may be able to adapt (if you're successful, let us know).
 
 LLVM
-~~~~
+^^^^
 
 .. code-block:: bash
 
@@ -207,7 +214,7 @@ LLVM
 Then follow the instructions in :ref:`source_install`.
 
 gcc
-~~~
+^^^
 
 .. code-block:: bash
 
@@ -228,11 +235,13 @@ Then follow the instructions in :ref:`source_install`.
 
 .. note::
 
-    Again, if you're on Anaconda, things get (often) much simpler:
+    Again, if you're on Anaconda, things get (often) much simpler. One
+    only needs to install the conda-forge compiler packages, before
+    pip-installing:
 
      .. code-block:: bash
 
-        conda install -c conda-forge openmp
+        conda install -c conda-forge compilers llvm-openmp
 
 
 .. _testing_installed_pycraf:
@@ -272,17 +281,27 @@ the `pycraf issue tracker <http://github.com/bwinkel/pycraf/issues>`__.
     network traffic.
 
 If you prefer testing on the command line and usually work with the source
-code, you can also do
+code, you can also manually run the tests using `pytest`. Install the
+package with `pip` and then (not within the project directory!):
 
 .. code-block:: bash
 
-    python setup.py test
+    pytest -rsx --ignore-glob="*/setup_package.py" --pyargs pycraf
 
     # to run tests from a sub-package
-    python setup.py test -P conversions
+    pytest -rsx --ignore-glob="*/setup_package.py" --pyargs pycraf -P conversions
+
+    # to run a particular test (uses globbing)
+    pytest -rsx --ignore-glob="*/setup_package.py" --pyargs pycraf -k wgs84
 
     # include tests, which need to download data (will slow down tests)
-    python setup.py test --remote-data=any
+    pytest -rsx --ignore-glob="*/setup_package.py" --pyargs pycraf --remote-data=any
+
+Likewise, to build the docs (inside project directory!):
+
+.. code-block:: bash
+
+    sphinx-build docs docs/_build/html -b html
 
 .. _srtm_data:
 

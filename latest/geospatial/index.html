@@ -4,11 +4,11 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Geographical frames (pycraf.geospatial) &#8212; pycraf v1.1.2.dev448</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
+    <title>Geographical frames (pycraf.geospatial) &#8212; pycraf v1.1.2.dev31+g9cf9ae8d</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
@@ -16,7 +16,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -65,7 +65,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.1.2.dev448</a>
+	<a href="../index.html">pycraf v1.1.2.dev31+g9cf9ae8d</a>
 	 &#187;
       </li>
       
@@ -96,7 +96,7 @@ around the <a class="reference external" href="http://proj4.org/">proj.4</a> sof
 In principle, one could use <code class="xref py py-obj docutils literal notranslate"><span class="pre">pyproj</span></code> directly, but <a class="reference internal" href="#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code></a>
 offers unit checking (by making use of the <a class="reference external" href="https://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a>
 functionality.)</p>
-</div>
+</aside>
 <p>There are thousands of pre-defined frames (which one can work with by simply
 using the correct code, e.g., EPSG or ESRI; <a class="reference external" href="https://en.wikipedia.org/wiki/Spatial_reference_system">see Wikipedia</a>), but the
 underlying <code class="xref py py-obj docutils literal notranslate"><span class="pre">proj4</span></code> library also accepts user-defined frames. For example,
@@ -173,7 +173,7 @@ directly query the EPSG code (if needed):</p>
 <span class="go">349988.58854241937 m 5599125.388981281 m</span>
 </pre></div>
 </div>
-</div>
+</aside>
 <section id="imperial-units">
 <h3>Imperial units<a class="headerlink" href="#imperial-units" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">proj4</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">pyproj</span></code> software packages allow to work with frames that
@@ -186,20 +186,26 @@ output). One can specifically ask for the original units by doing:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy.units.imperial</span> <span class="kn">import</span> <span class="n">ft</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyproj</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">proj_wgs84</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="s1">&#39;+init=epsg:4326&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">proj_wgs84</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="s1">&#39;epsg:4326&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Louisiana South (ftUS)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">proj_nad83</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="s1">&#39;+init=epsg:3452&#39;</span><span class="p">,</span> <span class="n">preserve_units</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">proj_nad83</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="s1">&#39;epsg:3452&#39;</span><span class="p">,</span> <span class="n">preserve_units</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pyproj</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">proj_wgs84</span><span class="p">,</span> <span class="n">proj_nad83</span><span class="p">,</span> <span class="o">-</span><span class="mf">92.105819</span><span class="p">,</span> <span class="mf">30.447921</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_trafo</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Transformer</span><span class="o">.</span><span class="n">from_crs</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">proj_wgs84</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">proj_nad83</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">always_xy</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_trafo</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="o">-</span><span class="mf">92.105819</span><span class="p">,</span> <span class="mf">30.447921</span><span class="p">)</span>  
 <span class="go">(925806.5486332772, 216168.1432314818)</span>
 </pre></div>
 </div>
 <p>This is the wrong result. But <code class="xref py py-obj docutils literal notranslate"><span class="pre">pyproj.Proj</span></code> has an option:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">proj_nad83</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="s1">&#39;+init=epsg:3452&#39;</span><span class="p">,</span> <span class="n">preserve_units</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">proj_nad83</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="s1">&#39;epsg:3452&#39;</span><span class="p">,</span> <span class="n">preserve_units</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>that gives the correct result:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pyproj</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">proj_wgs84</span><span class="p">,</span> <span class="n">proj_nad83</span><span class="p">,</span> <span class="o">-</span><span class="mf">92.105819</span><span class="p">,</span> <span class="mf">30.447921</span><span class="p">)</span>  
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_trafo</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Transformer</span><span class="o">.</span><span class="n">from_crs</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">proj_wgs84</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">proj_nad83</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">always_xy</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_trafo</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="o">-</span><span class="mf">92.105819</span><span class="p">,</span> <span class="mf">30.447921</span><span class="p">)</span>  
 <span class="go">(3037416.9849743457, 709211.6499186204)</span>
 </pre></div>
 </div>
@@ -256,10 +262,6 @@ around the <a class="reference external" href="http://proj4.org/">proj.4</a> sof
 <section id="functions">
 <h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h4>
 <table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.geospatial.epsg_from_utm_zone.html#pycraf.geospatial.epsg_from_utm_zone" title="pycraf.geospatial.epsg_from_utm_zone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epsg_from_utm_zone</span></code></a>(utm_zone)</p></td>
 <td><p>EPSG number for UTM zone code.</p></td>
@@ -273,7 +275,7 @@ around the <a class="reference external" href="http://proj4.org/">proj.4</a> sof
 <tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.geospatial.itrf2008_to_wgs84.html#pycraf.geospatial.itrf2008_to_wgs84" title="pycraf.geospatial.itrf2008_to_wgs84"><code class="xref py py-obj docutils literal notranslate"><span class="pre">itrf2008_to_wgs84</span></code></a>(x, y, z)</p></td>
 <td><p>Convert ITRF2008 coordinates to GPS/WGS84.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.geospatial.transform_factory.html#pycraf.geospatial.transform_factory" title="pycraf.geospatial.transform_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform_factory</span></code></a>(sys_in, sys_out[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.geospatial.transform_factory.html#pycraf.geospatial.transform_factory" title="pycraf.geospatial.transform_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform_factory</span></code></a>(sys_in, sys_out[, …])</p></td>
 <td><p>A factory to produce conversion functions (decorated with <a class="reference internal" href="../api/pycraf.utils.ranged_quantity_input.html#pycraf.utils.ranged_quantity_input" title="pycraf.utils.ranged_quantity_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ranged_quantity_input</span></code></a> for unit handling).</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.geospatial.utm_to_wgs84.html#pycraf.geospatial.utm_to_wgs84" title="pycraf.geospatial.utm_to_wgs84"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utm_to_wgs84</span></code></a>(ulon, ulat, utm_zone)</p></td>
@@ -300,10 +302,6 @@ around the <a class="reference external" href="http://proj4.org/">proj.4</a> sof
 <section id="classes">
 <h4>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h4>
 <table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.geospatial.EPSG.html#pycraf.geospatial.EPSG" title="pycraf.geospatial.EPSG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EPSG</span></code></a>(value)</p></td>
 <td><p>Enum with often used EPSG codes.</p></td>
@@ -359,8 +357,8 @@ around the <a class="reference external" href="http://proj4.org/">proj.4</a> sof
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.4.0. &nbsp;
-    Last built 20 Mar 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
   </p>
 </footer>
   </body>

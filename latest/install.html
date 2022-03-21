@@ -4,11 +4,11 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Installation &#8212; pycraf v1.1.2.dev448</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/pycraf.css" />
+    <title>Installation &#8212; pycraf v1.1.2.dev31+g9cf9ae8d</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css" />
@@ -16,7 +16,7 @@
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
     
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -65,7 +65,7 @@
 	 |
       </li>
       <li>
-	<a href="index.html">pycraf v1.1.2.dev448</a>
+	<a href="index.html">pycraf v1.1.2.dev31+g9cf9ae8d</a>
 	 &#187;
       </li>
       
@@ -85,23 +85,27 @@
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <p>pycraf has the following strict requirements:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="http://www.python.org/">Python</a> 3.7 or later</p></li>
+<li><p><a class="reference external" href="http://www.python.org/">Python</a> 3.8 or later</p></li>
 <li><p><a class="reference external" href="https://pythonhosted.org/setuptools/">setuptools</a>: Used for the package
 installation.</p></li>
 <li><p><a class="reference external" href="http://cython.org/">Cython</a> 0.29 or later</p></li>
-<li><p><a class="reference external" href="http://www.numpy.org/">NumPy</a> 1.14.5 or later</p></li>
-<li><p><a class="reference external" href="https://scipy.org/">SciPy</a>: 0.19 or later</p></li>
-<li><p><a class="reference external" href="http://www.astropy.org/">astropy</a>: 3.0 or later</p></li>
-<li><p><a class="reference external" href="https://pypi.python.org/pypi/pytest">pytest</a> 2.6 or later</p></li>
+<li><p><a class="reference external" href="http://www.numpy.org/">NumPy</a> 1.18 or later</p></li>
+<li><p><a class="reference external" href="https://scipy.org/">SciPy</a>: 1.7 or later</p></li>
+<li><p><a class="reference external" href="http://www.astropy.org/">astropy</a>: 4.0 or later</p></li>
+<li><p><a class="reference external" href="https://pypi.python.org/pypi/pytest">pytest</a> 5.4 or later</p></li>
+<li></li>
+<li><p><a class="reference external" href="https://pypi.org/project/pytest-remotedata/">pytest-remotedata</a> 0.3.3 or later</p></li>
 </ul>
 <p>There are a few optional packages, which are necessary for some functionality:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="http://matplotlib.org/">matplotlib</a> 3.0 or later: To provide plotting
+<li><p><a class="reference external" href="https://www.h5py.org/">h5py</a> 3.3 or later: for caching.</p></li>
+<li><p><a class="reference external" href="http://matplotlib.org/">matplotlib</a> 3.4 or later: To provide plotting
 functionality that <a class="reference internal" href="pathprof/index.html#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pathprof</span></code></a> enhances.</p></li>
-<li><p><a class="reference external" href="https://pypi.python.org/pypi/pyproj">pyproj</a> 2.0 or later: This is a
-requirement for the <a class="reference internal" href="geospatial/index.html#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geospatial</span></code></a> package.</p></li>
+<li><p><a class="reference external" href="https://pypi.python.org/pypi/pyproj">pyproj</a> 2.6 or later: This is a
+requirement for the <a class="reference internal" href="geospatial/index.html#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geospatial</span></code></a> sub-package.</p></li>
 <li><p><a class="reference external" href="https://pypi.python.org/pypi/sgp4">sgp4</a> 2.0 or later: This is a
-requirement for the <a class="reference internal" href="satellite/index.html#module-pycraf.satellite" title="pycraf.satellite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">satellite</span></code></a> package.</p></li>
+requirement for the <a class="reference internal" href="satellite/index.html#module-pycraf.satellite" title="pycraf.satellite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">satellite</span></code></a> sub-package.</p></li>
+<li><p><a class="reference external" href="https://pypi.org/project/rasterio/">rasterio</a> 1.2 or later: for geotiff reading in <a href="#system-message-1"><span class="problematic" id="problematic-1">``</span></a>~pycraf.pathprof` sub-package.</p></li>
 </ul>
 <p>Older versions of these packages may work, but no support will be provided.</p>
 </section>
@@ -118,18 +122,25 @@ a binary package, which is well-tested against all dependency packages.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf</span></code> and many other packages are not in default channel of Anaconda.
+So you have to use the conda-forge channel.</p>
+</aside>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>It is always a good idea to keep different projects separated and conda
 allows to easily create virtual environments. To set one up for <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf</span></code>:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">pycraf</span><span class="o">-</span><span class="n">env</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.6</span> <span class="n">pycraf</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">pycraf</span><span class="o">-</span><span class="n">env</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span> <span class="n">pycraf</span>
 </pre></div>
 </div>
 <p>and to use it:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">activate</span> <span class="n">pycraf</span><span class="o">-</span><span class="n">env</span>
 </pre></div>
 </div>
-<p>(In conda versions before 4.6, one has to source the activate shell
-script instead. See <a class="reference external" href="https://docs.conda.io/en/latest/">conda manual</a>.)</p>
+<p>Ideally, one would install all dependencies together with pycraf:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">pycraf</span><span class="o">-</span><span class="n">env</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span> <span class="n">astropy</span> <span class="n">cython</span> <span class="n">h5py</span> <span class="n">matplotlib</span> <span class="n">numpy</span> <span class="n">pycraf</span> <span class="s1">&#39;pyproj&gt;=2.6&#39;</span> <span class="n">pytest</span> <span class="n">pytest</span><span class="o">-</span><span class="n">remotedata</span> <span class="n">rasterio</span> <span class="n">scipy</span> <span class="s1">&#39;sgp4&gt;2&#39;</span>
+</pre></div>
 </div>
+</aside>
 </section>
 <section id="using-pip">
 <h3>Using pip<a class="headerlink" href="#using-pip" title="Permalink to this headline">¶</a></h3>
@@ -141,28 +152,31 @@ script instead. See <a class="reference external" href="https://docs.conda.io/en
 <p class="admonition-title">Note</p>
 <p>You may need a C compiler (<code class="docutils literal notranslate"><span class="pre">gcc</span></code>) with OpenMP support to be installed
 for the installation to succeed.</p>
-</div>
+</aside>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">--no-deps</span></code> flag if you already have dependency packages
 installed, since otherwise pip will sometimes try to “help” you
 by upgrading your installation, which may not always be desired.</p>
-</div>
+</aside>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If you get a <code class="docutils literal notranslate"><span class="pre">PermissionError</span></code> this means that you do not have the
 required administrative access to install new packages to your Python
 installation.  In this case you may consider using the <code class="docutils literal notranslate"><span class="pre">--user</span></code> option
 to install the package into your home directory.  You can read more
-about how to do this in the <a class="reference external" href="http://www.pip-installer.org/en/1.2.1/other-tools.html#using-pip-with-the-user-scheme">pip documentation</a>.</p>
-<p>We recommend to use a Python distribution, such as <a class="reference external" href="https://www.continuum.io/downloads">Anaconda</a>, especially, if you are on
-<a class="reference internal" href="#windows-install"><span class="std std-ref">Installation on Windows</span></a>.</p>
+about how to do this in the <a class="reference external" href="http://www.pip-installer.org/en/1.2.1/other-tools.html#using-pip-with-the-user-scheme">pip documentation</a>.
+Better would be to use virtual environments, e.g., base on <a class="reference external" href="https://pipenv.pypa.io/en/latest/">pipenv</a>.</p>
+<p>However, we recommend to use a <a class="reference external" href="https://www.continuum.io/downloads">Anaconda</a>, especially, if you are on
+<a class="reference internal" href="#windows-install"><span class="std std-ref">Windows</span></a>.</p>
 <p>Do <strong>not</strong> install pycraf or other third-party packages as
 Administrator/Root unless you are fully aware of the risks.</p>
-</div>
+</aside>
 </section>
 <section id="installation-from-source">
 <span id="source-install"></span><h3>Installation from source<a class="headerlink" href="#installation-from-source" title="Permalink to this headline">¶</a></h3>
+<section id="linux">
+<h4>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h4>
 <p>There are two options, if you want to build pycraf from sources. Either, you
 install the tar-ball (<code class="xref py py-obj docutils literal notranslate"><span class="pre">*.tar.gz</span></code> file) from <a class="reference external" href="https://pypi.python.org/pypi/pycraf">PyPI</a> and extract it to the directory of
 your choice, or, if you always want to stay up-to-date, clone the git
@@ -171,7 +185,7 @@ repository:</p>
 </pre></div>
 </div>
 <p>Then go into the pycraf source directory and run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py install
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m pip install .
 </pre></div>
 </div>
 <p>Again, consider the <code class="docutils literal notranslate"><span class="pre">--user</span></code> option or even better use a python distribution
@@ -179,43 +193,35 @@ such as <a class="reference external" href="https://www.continuum.io/downloads">
 the system-wide Python installation.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If you use <code class="xref py py-obj docutils literal notranslate"><span class="pre">Anaconda</span></code> and want to install the <code class="xref py py-obj docutils literal notranslate"><span class="pre">sgp4</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">pyproj</span></code>
-packages, you’ll have to use a different channel</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda install -c conda-forge sgp4 pyproj
+<p>On Anaconda, the following would install all packages needed for
+properly working with the sources:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">pycraf</span><span class="o">-</span><span class="n">dev</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span> <span class="n">astropy</span> <span class="n">cython</span>  <span class="n">h5py</span> <span class="n">matplotlib</span> <span class="s2">&quot;numpy==1.20&quot;</span> <span class="n">pip</span> <span class="s2">&quot;pyproj&gt;=3&quot;</span> <span class="n">pytest</span> <span class="n">pytest</span><span class="o">-</span><span class="n">astropy</span> <span class="n">pytest</span><span class="o">-</span><span class="n">doctestplus</span> <span class="n">pytest</span><span class="o">-</span><span class="n">remotedata</span> <span class="n">rasterio</span> <span class="n">scipy</span> <span class="s2">&quot;sgp4&gt;2&quot;</span> <span class="n">sphinx</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">astropy</span> <span class="n">twine</span> <span class="n">wheel</span>
 </pre></div>
 </div>
-</div>
+</aside>
 </section>
-<section id="installation-on-windows">
-<span id="windows-install"></span><h3>Installation on Windows<a class="headerlink" href="#installation-on-windows" title="Permalink to this headline">¶</a></h3>
-<p>Note that for Windows machines we provide a binary wheel (Python 3.5+ only).
-However, the <a class="reference external" href="https://pypi.python.org/pypi/pyproj">pyproj</a> package is a
-dependency and unfortunately, the official
-<a class="reference external" href="https://pypi.python.org/pypi/pyproj">pyproj</a> repository on PyPI contains
-only the sources. You can download a
-suitable wheel from <a class="reference external" href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyproj">Christoph Gohlke’s package site</a>. Then use</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install <span class="o">[</span>path-to-wheel<span class="o">]</span>/pyproj‑*.whl
-</pre></div>
-</div>
-<p>If you’re using <a class="reference external" href="https://www.continuum.io/downloads">Anaconda</a>
-(recommended), it gets much simpler</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda install -c conda-forge pyproj
-pip install pycraf
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
+<section id="windows">
+<span id="windows-install"></span><h4>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h4>
 <p>If you are desperate, you can install pycraf from source even on Windows.
 You’ll need to install a suitable C-compiler; &lt;see here
-&lt;<a class="reference external" href="https://matthew-brett.github.io/pydagogue/python_msvc.html#visual-studio-versions-used-to-compile-distributed-python-binaries">https://matthew-brett.github.io/pydagogue/python_msvc.html#visual-studio-versions-used-to-compile-distributed-python-binaries</a>&gt;`__. The pycraf
-package needs Python 3.5 or later, which means VC++ Version 14 is
+&lt;<a class="reference external" href="https://wiki.python.org/moin/WindowsCompilers">https://wiki.python.org/moin/WindowsCompilers</a>&gt;`__. The pycraf
+package needs Python 3.8 or later, which means VC++ Version 14 or later is
 mandatory. The easiest way to obtain it, is by installing the
-<a class="reference external" href="http://landinghub.visualstudio.com/visual-cpp-build-tools">Visual C++ 2015 Build Tools</a> which is
-“only” 4 GBytes large…</p>
+<a class="reference external" href="https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022">Build Tools For Visual Studio</a>. Once installed and
+if all dependencies are there, the standard</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m pip install .
+</pre></div>
 </div>
+<p>should work.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf</span></code> uses <code class="xref py py-obj docutils literal notranslate"><span class="pre">setuptools-scm</span></code> for automatic version numbering
+(based on the <code class="xref py py-obj docutils literal notranslate"><span class="pre">git</span></code> hash). For this, <code class="xref py py-obj docutils literal notranslate"><span class="pre">git</span></code> needs to be available in
+the terminal. (On Anaconda, it can be installed from conda-forge.)</p>
+</aside>
 </section>
-<section id="installation-on-macos">
-<span id="macos-install"></span><h3>Installation on MacOS<a class="headerlink" href="#installation-on-macos" title="Permalink to this headline">¶</a></h3>
+<section id="macos">
+<span id="macos-install"></span><h4>MacOS<a class="headerlink" href="#macos" title="Permalink to this headline">¶</a></h4>
 <p>Installation on MacOS can be a bit tricky, because the standard C compiler
 does not support OpenMP. We provide wheels on PyPI, such that you can</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install pycraf
@@ -225,9 +231,11 @@ does not support OpenMP. We provide wheels on PyPI, such that you can</p>
 likely get an error message that a library (such as “libgomp”) is not
 found, when you import pycraf in Python.</p>
 <p>Also, if you want to install from source, you must have a C compiler. There
-are basically two options, using LLVM or the gcc suite.</p>
+are basically two options, using LLVM or the gcc suite. The recipe below
+is likely outdated heavily, but we currently don’t have access to a
+MacOS machine. You may be able to adapt (if you’re successful, let us know).</p>
 <section id="llvm">
-<h4>LLVM<a class="headerlink" href="#llvm" title="Permalink to this headline">¶</a></h4>
+<h5>LLVM<a class="headerlink" href="#llvm" title="Permalink to this headline">¶</a></h5>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew update
 brew install llvm
 
@@ -239,7 +247,7 @@ brew install llvm
 <p>Then follow the instructions in <a class="reference internal" href="#source-install"><span class="std std-ref">Installation from source</span></a>.</p>
 </section>
 <section id="gcc">
-<h4>gcc<a class="headerlink" href="#gcc" title="Permalink to this headline">¶</a></h4>
+<h5>gcc<a class="headerlink" href="#gcc" title="Permalink to this headline">¶</a></h5>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew install gcc6  <span class="c1"># or gcc7</span>
 brew link --overwrite gcc@6  <span class="c1"># or gcc@7</span>
 </pre></div>
@@ -254,16 +262,19 @@ In such cases it may be necessary to build pycraf from source using
 your own compiler. Sometimes even different compiler versions
 (e.g. gcc 6.3 instead of gcc 6.4) can lead to problems.
 Please write a ticket, if you run into trouble.</p>
-</div>
+</aside>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Again, if you’re on Anaconda, things get (often) much simpler:</p>
+<p>Again, if you’re on Anaconda, things get (often) much simpler. One
+only needs to install the conda-forge compiler packages, before
+pip-installing:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda install -c conda-forge openmp
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda install -c conda-forge compilers llvm-openmp
 </pre></div>
 </div>
 </div></blockquote>
-</div>
+</aside>
+</section>
 </section>
 </section>
 </section>
@@ -286,7 +297,7 @@ the <a class="reference external" href="http://github.com/bwinkel/pycraf/issues"
 <p class="admonition-title">Note</p>
 <p>This way of running the tests may not work if you do it in the
 pycraf source distribution directory.</p>
-</div>
+</aside>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>By default, the <a class="reference external" href="https://docs.python.org/3/library/test.html#module-test" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></a> function will skip over tests that require
@@ -298,16 +309,24 @@ data from the internet. One can include them by:</p>
 <p>This will <em>always</em> download SRTM data (few tiles only) to test the
 auto-download functionality! Do this only, if you can afford the
 network traffic.</p>
-</div>
+</aside>
 <p>If you prefer testing on the command line and usually work with the source
-code, you can also do</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py <span class="nb">test</span>
+code, you can also manually run the tests using <code class="xref py py-obj docutils literal notranslate"><span class="pre">pytest</span></code>. Install the
+package with <code class="xref py py-obj docutils literal notranslate"><span class="pre">pip</span></code> and then (not within the project directory!):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest -rsx --ignore-glob<span class="o">=</span><span class="s2">&quot;*/setup_package.py&quot;</span> --pyargs pycraf
 
 <span class="c1"># to run tests from a sub-package</span>
-python setup.py <span class="nb">test</span> -P conversions
+pytest -rsx --ignore-glob<span class="o">=</span><span class="s2">&quot;*/setup_package.py&quot;</span> --pyargs pycraf -P conversions
+
+<span class="c1"># to run a particular test (uses globbing)</span>
+pytest -rsx --ignore-glob<span class="o">=</span><span class="s2">&quot;*/setup_package.py&quot;</span> --pyargs pycraf -k wgs84
 
 <span class="c1"># include tests, which need to download data (will slow down tests)</span>
-python setup.py <span class="nb">test</span> --remote-data<span class="o">=</span>any
+pytest -rsx --ignore-glob<span class="o">=</span><span class="s2">&quot;*/setup_package.py&quot;</span> --pyargs pycraf --remote-data<span class="o">=</span>any
+</pre></div>
+</div>
+<p>Likewise, to build the docs (inside project directory!):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sphinx-build docs docs/_build/html -b html
 </pre></div>
 </div>
 </section>
@@ -333,11 +352,14 @@ generation. Please see <a class="reference internal" href="pathprof/working_with
 <li><a class="reference internal" href="#installing-pycraf">Installing pycraf</a><ul>
 <li><a class="reference internal" href="#using-anaconda">Using Anaconda</a></li>
 <li><a class="reference internal" href="#using-pip">Using pip</a></li>
-<li><a class="reference internal" href="#installation-from-source">Installation from source</a></li>
-<li><a class="reference internal" href="#installation-on-windows">Installation on Windows</a></li>
-<li><a class="reference internal" href="#installation-on-macos">Installation on MacOS</a><ul>
+<li><a class="reference internal" href="#installation-from-source">Installation from source</a><ul>
+<li><a class="reference internal" href="#linux">Linux</a></li>
+<li><a class="reference internal" href="#windows">Windows</a></li>
+<li><a class="reference internal" href="#macos">MacOS</a><ul>
 <li><a class="reference internal" href="#llvm">LLVM</a></li>
 <li><a class="reference internal" href="#gcc">gcc</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -361,8 +383,8 @@ generation. Please see <a class="reference internal" href="pathprof/working_with
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.4.0. &nbsp;
-    Last built 20 Mar 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
   </p>
 </footer>
   </body>

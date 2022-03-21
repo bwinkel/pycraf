@@ -4,11 +4,11 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Atmospheric models (pycraf.atm) &#8212; pycraf v1.1.2.dev448</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
+    <title>Atmospheric models (pycraf.atm) &#8212; pycraf v1.1.2.dev31+g9cf9ae8d</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
@@ -16,11 +16,11 @@
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -66,7 +66,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.1.2.dev448</a>
+	<a href="../index.html">pycraf v1.1.2.dev31+g9cf9ae8d</a>
 	 &#187;
       </li>
       
@@ -371,7 +371,7 @@ height models, the properties of which are then cached via the
 opacity, <span class="math notranslate nohighlight">\(\tau\)</span> (used in astronomy), use</p>
 <div class="math notranslate nohighlight">
 \[ \begin{align}\begin{aligned}\gamma [\mathrm{dB}] = 10\log_{10} \gamma\\\gamma = 10^{\gamma [\mathrm{dB}] / 10}\\\gamma = e^{-\tau\cdot \mathrm{AM}},~ \mathrm{AM}\approx\frac{1}{\sin\delta}\\\tau = -\frac{1}{\mathrm{AM}}\ln\gamma\end{aligned}\end{align} \]</div>
-</div>
+</aside>
 <p>It is clear, the for very realistic results, one should work with an actual
 height profile valid for the day of observation, such as measured with a radio
 sonde for example.</p>
@@ -451,7 +451,7 @@ useful for terrestrial paths.</p>
 <p>The <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-11-201609-I/en">ITU-R Rec. P.676-11</a> only presents an algorithm for paths with an
 elevation angle larger than zero degrees. For <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf</span></code> the method
 was extended to work properly with negative elevation angles, as well.</p>
-</div>
+</aside>
 <p>A similar function exists, <a class="reference internal" href="../api/pycraf.atm.path_endpoint.html#pycraf.atm.path_endpoint" title="pycraf.atm.path_endpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">path_endpoint</span></code></a>, which only returns
 the parameters of the final point on the ray. For example, one could plot the
 refraction angle as a function of elevation:</p>
@@ -485,7 +485,7 @@ receiver station).</p>
 <p class="admonition-title">Warning</p>
 <p>Unfortunately, a model of atmospheric layers with discrete refractive
 indices leads to some unexpected effects. See the following.</p>
-</div>
+</aside>
 <p>Consider a situation, where multiple rays with slightly different elevation angles are computed:</p>
 <blockquote>
 <div><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obs_alt</span> <span class="o">=</span> <span class="mf">0.1001</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span>
@@ -554,7 +554,7 @@ use for a transmitter-receiver link.</p>
 provided in the <a class="reference external" href="https://github.com/bwinkel/pycraf/blob/master/notebooks/02_atmospheric_attenuation.ipynb">pycraf repository</a> on GitHub. It also
 contains plots of the specialized height profiles, as well as an example
 for the Annex-2 method.</p>
-</div>
+</aside>
 </section>
 </section>
 </section>
@@ -599,10 +599,6 @@ reasons, but this should be considered as deprecated.</p>
 <section id="functions">
 <h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h4>
 <table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.airmass_from_elevation.html#pycraf.atm.airmass_from_elevation" title="pycraf.atm.airmass_from_elevation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">airmass_from_elevation</span></code></a>(elev)</p></td>
 <td><p>Airmass derived from elevation using extrapolation by Maddalena &amp; Johnson.</p></td>
@@ -613,17 +609,17 @@ reasons, but this should be considered as deprecated.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_from_opacity.html#pycraf.atm.atten_from_opacity" title="pycraf.atm.atten_from_opacity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_from_opacity</span></code></a>(tau[, elev])</p></td>
 <td><p>Atmospheric attenuation derived from opacity.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_slant_annex1.html#pycraf.atm.atten_slant_annex1" title="pycraf.atm.atten_slant_annex1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_slant_annex1</span></code></a>(elevation, obs_alt, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_slant_annex1.html#pycraf.atm.atten_slant_annex1" title="pycraf.atm.atten_slant_annex1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_slant_annex1</span></code></a>(elevation, obs_alt, …)</p></td>
 <td><p>Path attenuation for a slant path through full atmosphere according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-11-201609-I/en">ITU-R P.676-11</a> Eq (17-20).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_slant_annex2.html#pycraf.atm.atten_slant_annex2" title="pycraf.atm.atten_slant_annex2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_slant_annex2</span></code></a>(atten_dry, atten_wet, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_slant_annex2.html#pycraf.atm.atten_slant_annex2" title="pycraf.atm.atten_slant_annex2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_slant_annex2</span></code></a>(atten_dry, atten_wet, …)</p></td>
 <td><p>Simple path attenuation for slant path through full atmosphere according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Eq (28).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_specific_annex1.html#pycraf.atm.atten_specific_annex1" title="pycraf.atm.atten_specific_annex1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_specific_annex1</span></code></a>(freq_grid, press_dry, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_specific_annex1.html#pycraf.atm.atten_specific_annex1" title="pycraf.atm.atten_specific_annex1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_specific_annex1</span></code></a>(freq_grid, press_dry, …)</p></td>
 <td><p><p>Specific (one layer) atmospheric attenuation according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-11-201609-I/en">ITU-R P.676-11</a>, Annex 1.</p>
 </p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_specific_annex2.html#pycraf.atm.atten_specific_annex2" title="pycraf.atm.atten_specific_annex2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_specific_annex2</span></code></a>(freq_grid, press, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.atten_specific_annex2.html#pycraf.atm.atten_specific_annex2" title="pycraf.atm.atten_specific_annex2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atten_specific_annex2</span></code></a>(freq_grid, press, …)</p></td>
 <td><p><p>Specific (one layer) atmospheric attenuation based on a simplified algorithm according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Annex 2.1.</p>
 </p></td>
 </tr>
@@ -642,19 +638,19 @@ reasons, but this should be considered as deprecated.</p>
 <td><p><p>Equivalent height for wet air according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Annex 2.2.</p>
 </p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.find_elevation.html#pycraf.atm.find_elevation" title="pycraf.atm.find_elevation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_elevation</span></code></a>(obs_alt, target_alt, ...[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.find_elevation.html#pycraf.atm.find_elevation" title="pycraf.atm.find_elevation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_elevation</span></code></a>(obs_alt, target_alt, …[, …])</p></td>
 <td><p>Finds the optimal path elevation angle from an observer to reach target.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.humidity_from_pressure_water.html#pycraf.atm.humidity_from_pressure_water" title="pycraf.atm.humidity_from_pressure_water"><code class="xref py py-obj docutils literal notranslate"><span class="pre">humidity_from_pressure_water</span></code></a>(temp, press, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.humidity_from_pressure_water.html#pycraf.atm.humidity_from_pressure_water" title="pycraf.atm.humidity_from_pressure_water"><code class="xref py py-obj docutils literal notranslate"><span class="pre">humidity_from_pressure_water</span></code></a>(temp, press, …)</p></td>
 <td><p>Relative humidity according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.453-12-201609-I/en">ITU-R P.453-12</a>.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.opacity_from_atten.html#pycraf.atm.opacity_from_atten" title="pycraf.atm.opacity_from_atten"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opacity_from_atten</span></code></a>(atten[, elev])</p></td>
 <td><p>Atmospheric opacity derived from attenuation.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.path_endpoint.html#pycraf.atm.path_endpoint" title="pycraf.atm.path_endpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">path_endpoint</span></code></a>(elevation, obs_alt, ...[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.path_endpoint.html#pycraf.atm.path_endpoint" title="pycraf.atm.path_endpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">path_endpoint</span></code></a>(elevation, obs_alt, …[, …])</p></td>
 <td><p>Calculate endpoint of propagation path through atmosphere by ray-tracing.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.pressure_water_from_humidity.html#pycraf.atm.pressure_water_from_humidity" title="pycraf.atm.pressure_water_from_humidity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pressure_water_from_humidity</span></code></a>(temp, press, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.pressure_water_from_humidity.html#pycraf.atm.pressure_water_from_humidity" title="pycraf.atm.pressure_water_from_humidity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pressure_water_from_humidity</span></code></a>(temp, press, …)</p></td>
 <td><p><p>Water pressure according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.453-12-201609-I/en">ITU-R P.453-12</a>.</p>
 </p></td>
 </tr>
@@ -685,7 +681,7 @@ reasons, but this should be considered as deprecated.</p>
 <td><p><p>Standard height profiles according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.835-5-201202-I/en">ITU-R P.835-5</a>, Annex 1.</p>
 </p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.raytrace_path.html#pycraf.atm.raytrace_path" title="pycraf.atm.raytrace_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raytrace_path</span></code></a>(elevation, obs_alt, ...[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.atm.raytrace_path.html#pycraf.atm.raytrace_path" title="pycraf.atm.raytrace_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raytrace_path</span></code></a>(elevation, obs_alt, …[, …])</p></td>
 <td><p>Calculate the propagation path geometry through atmosphere by ray-tracing.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.refractive_index.html#pycraf.atm.refractive_index" title="pycraf.atm.refractive_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refractive_index</span></code></a>(temp, press, press_w)</p></td>
@@ -696,7 +692,7 @@ reasons, but this should be considered as deprecated.</p>
 <td><p><p>Water density according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.453-12-201609-I/en">ITU-R P.453-12</a>.</p>
 </p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.saturation_water_pressure.html#pycraf.atm.saturation_water_pressure" title="pycraf.atm.saturation_water_pressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">saturation_water_pressure</span></code></a>(temp, press[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.atm.saturation_water_pressure.html#pycraf.atm.saturation_water_pressure" title="pycraf.atm.saturation_water_pressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">saturation_water_pressure</span></code></a>(temp, press[, …])</p></td>
 <td><p><p>Saturation water pressure according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.453-12-201609-I/en">ITU-R P.453-12</a>.</p>
 </p></td>
 </tr>
@@ -758,8 +754,8 @@ reasons, but this should be considered as deprecated.</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.4.0. &nbsp;
-    Last built 20 Mar 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
   </p>
 </footer>
   </body>
