@@ -25,7 +25,7 @@ variables:
 jobs:
 
 - job:
-  displayName: Job
+  displayName: Conda
 
   variables:
     arch: x86_64
@@ -49,8 +49,8 @@ jobs:
     # doctestplus.version: '<0.6.1'
     pytest.version: ''
     doctestplus.version: ''
-    qt.version: '>=5.9'
-    pytestqt.version: '<4'
+    # qt.version: '>=5.9'
+    # pytestqt.version: '<4'
 
   strategy:
     matrix:
@@ -97,20 +97,18 @@ jobs:
         # independent
         build.tarball: ${{ true }}
         publish.tarball: ${{ eq(variables['is.tag'], true) }}
+        pytest.version: '<6'
+        doctestplus.version: '<0.6.1'
       linux39:
         imageName: 'ubuntu-latest'
         python.version: '3.9'
         py_whl: cp39-
         numpy.version: '1.20.0'
-        qt.version: '>=5.11'
-        pytestqt.version: '>=4'
       linux310:
         imageName: 'ubuntu-latest'
         python.version: '3.10'
         py_whl: cp310-
         numpy.version: '1.22.0'
-        qt.version: '>=5.11'
-        pytestqt.version: '>=4'
       # mac35:
       #   imageName: 'macos-10.14'
       #   python.version: '3.5'
@@ -130,14 +128,20 @@ jobs:
       #   numpy.version: '1.14.5'
       #   astropy.version: '3'
       # mac 3.8 leads to anaconda conflicts
-      # mac38:
-      #   imageName: 'macos-latest'
-      #   python.version: '3.8'
-      #   numpy.version: '1.18.1'
-      #   astropy.version: '4'
-      #   pyproj.version: '>=2.2'
-        # qt.version: '>=5.11'
-        # pytestqt.version: '>=4'
+      mac38:
+        imageName: 'macos-10.15'
+        python.version: '3.8'
+        numpy.version: '1.18.1'
+        astropy.version: '4'
+        pyproj.version: '>=2.2,<3'
+      mac39:
+        imageName: 'macos-10.15'
+        python.version: '3.9'
+        numpy.version: '1.20.0'
+      # mac310:
+      #   imageName: 'macos-10.15'
+      #   python.version: '3.10'
+      #   numpy.version: '1.22.0'
       # win36:
       #   imageName: 'vs2017-win2016'
       #   python.version: '3.6'
@@ -161,21 +165,15 @@ jobs:
         numpy.version: '1.18.1'
         astropy.version: '4'
         pyproj.version: '>=2.2,<3'
-        # qt.version: '>=5.11'
-        # pytestqt.version: '>=4'
       win39:
         imageName: 'windows-latest'
         python.version: '3.9'
         numpy.version: '1.20.0'
-        qt.version: '>=5.11'
-        pytestqt.version: '>=4'
       win310:
         imageName: 'windows-latest'
         python.version: '3.10'
         py_whl: cp310-
         numpy.version: '1.22.0'
-        qt.version: '>=5.11'
-        pytestqt.version: '>=4'
 
   pool:
     vmImage: $(imageName)
@@ -256,7 +254,7 @@ jobs:
   # pip installation)
   - script: |
       $(conda.activate) pycraf-env
-      mamba install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython h5py matplotlib numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pyqt$(qt.version)" "pytest$(pytest.version)" pytest-astropy pytest-azurepipelines "pytest-doctestplus$(doctestplus.version)" hypothesis "pytest-qt$(pytestqt.version)" rasterio scipy "sgp4>2" twine wheel extension-helpers setuptools-scm
+      mamba install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython h5py matplotlib numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pytest$(pytest.version)" pytest-astropy pytest-azurepipelines "pytest-doctestplus$(doctestplus.version)" hypothesis rasterio scipy "sgp4>2" twine wheel extension-helpers setuptools-scm
     displayName: Install Anaconda packages
 
   # need to fix cctools and ld64 to slightly older version, otherwise an
@@ -268,18 +266,25 @@ jobs:
     # condition: and(succeeded(), eq(variables['is.macos'], true))
     condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'), lt(variables['python.version'], 3.8))
 
+  # - script: |
+  #     $(conda.activate) pycraf-env
+  #     mamba install --yes --quiet --name pycraf-env -c conda-forge clang_osx-64 clangxx_osx-64 llvm-openmp openmp cctools ld64 ta-lib
+  #   displayName: Prepare clang, MacOS
+  #   # condition: and(succeeded(), eq(variables['is.macos'], true))
+  #   condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'), ge(variables['python.version'], 3.8))
+
   - script: |
       $(conda.activate) pycraf-env
-      mamba install --yes --quiet --name pycraf-env -c conda-forge clang_osx-64 clangxx_osx-64 llvm-openmp openmp cctools ld64 ta-lib
+      mamba install --yes --quiet --name pycraf-env -c conda-forge compilers llvm-openmp
     displayName: Prepare clang, MacOS
     # condition: and(succeeded(), eq(variables['is.macos'], true))
     condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'), ge(variables['python.version'], 3.8))
 
-  - bash: |
-      sudo rm -rf /Library/Developer/CommandLineTools
-      xcode-select --install
-    displayName: Fix problem with MacOS compiler/linker
-    condition: startsWith(variables['Agent.OS'], 'Darwin')
+  # - bash: |
+  #     sudo rm -rf /Library/Developer/CommandLineTools
+  #     xcode-select --install
+  #   displayName: Fix problem with MacOS compiler/linker
+  #   condition: startsWith(variables['Agent.OS'], 'Darwin')
 
   - script: |
       $(conda.activate) pycraf-env
@@ -311,8 +316,8 @@ jobs:
       # the following only works because of pip install -e
       pytest -rsx --remote-data=any --doctest-plus --doctest-glob="*.rst" --doctest-ignore-import-errors docs
     displayName: Testing docs
-    condition: succeeded()
-    continueOnError: true  # doctesting currently not working
+    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], 3.8))
+    # continueOnError: true  # doctesting currently not working
 
   # - script: |
   #     $(conda.activate) pycraf-env
