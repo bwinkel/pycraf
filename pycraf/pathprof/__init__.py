@@ -46,8 +46,8 @@ _clutter_table = '''
 | 10    | INDUSTRIAL_ZONE   | 20   | 50   |
 +-------+-------------------+------+------+
 
-.. |ha| replace:: :math:`h_\mathrm{a}~[\mathrm{m}]`
-.. |dk| replace:: :math:`d_\mathrm{k}~[\mathrm{m}]`
+.. |ha| replace:: :math:`h_\\mathrm{a}~[\\mathrm{m}]`
+.. |dk| replace:: :math:`d_\\mathrm{k}~[\\mathrm{m}]`
 '''
 
 # enum docstring can't be set within pyx-file. Need to monkey-patch it here.

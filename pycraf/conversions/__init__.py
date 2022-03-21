@@ -28,16 +28,16 @@ u = `astropy.units <http://docs.astropy.org/en/stable/units/index.html>`_
 
 .. |u| replace:: u
 .. |dimless| replace:: :math:`1`
-.. |dB_ic| replace:: :math:`\mathrm{dB},~\mathrm{dBi},~\mathrm{dBc}`
-.. |dBW| replace:: :math:`\mathrm{dB}[\mathrm{W}]`
-.. |dBW_Hz| replace:: :math:`\mathrm{dB}[\mathrm{W} / \mathrm{Hz}]`
-.. |dBW_m2| replace:: :math:`\mathrm{dB}[\mathrm{W} / \mathrm{m}^2]`
-.. |dBW_m2_Hz| replace:: :math:`\mathrm{dB}[\mathrm{W} / \mathrm{m}^2 / \mathrm{Hz}]`
-.. |dBW_Jy_Hz| replace:: :math:`\mathrm{dB}[\mathrm{Jy} \cdot \mathrm{Hz}]`
-.. |dBm| replace:: :math:`\mathrm{dB}[\mathrm{mW}]`
-.. |dBm_MHz| replace:: :math:`\mathrm{dB}[\mathrm{mW} / \mathrm{MHz}]`
-.. |dB_uV_m| replace:: :math:`\mathrm{dB}[\mu\mathrm{V}^2 / \mathrm{m}^2]`
-.. |dB_1_m| replace:: :math:`\mathrm{dB}[1 / \mathrm{m}]`
+.. |dB_ic| replace:: :math:`\\mathrm{dB},~\\mathrm{dBi},~\\mathrm{dBc}`
+.. |dBW| replace:: :math:`\\mathrm{dB}[\\mathrm{W}]`
+.. |dBW_Hz| replace:: :math:`\\mathrm{dB}[\\mathrm{W} / \\mathrm{Hz}]`
+.. |dBW_m2| replace:: :math:`\\mathrm{dB}[\\mathrm{W} / \\mathrm{m}^2]`
+.. |dBW_m2_Hz| replace:: :math:`\\mathrm{dB}[\\mathrm{W} / \\mathrm{m}^2 / \\mathrm{Hz}]`
+.. |dBW_Jy_Hz| replace:: :math:`\\mathrm{dB}[\\mathrm{Jy} \\cdot \\mathrm{Hz}]`
+.. |dBm| replace:: :math:`\\mathrm{dB}[\\mathrm{mW}]`
+.. |dBm_MHz| replace:: :math:`\\mathrm{dB}[\\mathrm{mW} / \\mathrm{MHz}]`
+.. |dB_uV_m| replace:: :math:`\\mathrm{dB}[\\mu\\mathrm{V}^2 / \\mathrm{m}^2]`
+.. |dB_1_m| replace:: :math:`\\mathrm{dB}[1 / \\mathrm{m}]`
 '''
 
 from .conversions import *

@@ -1,5 +1,23 @@
-1.1.2 (unreleased)
+2.0.0 (unreleased)
 =======================
+
+The new pycraf version 2 is mainly about a new packaging structure
+(using pyproject.toml etc.). Furthermore, the graphical user interface
+`pycraf-gui` was moved into a dedicated package. Not every users needs
+the GUI, but it adds heavily to the package dependencies.
+
+New Features
+------------
+pycraf.antenna
+^^^^^^^^^^^^^^
+- Add extended IMT composite array antenna (5G) model [#b31fa7]
+
+Bugfixes
+~~~~~~~~~~
+- Use new `pyproj.Transformer` class in `geospatial` sub-package. [#953427]
+- Use `functools.wraps` instead of the `astropy` `wraps`. This fixes `pycraf`
+  for use with `astropy` version 5. [#683a06]
+- Fix matplotlib error with `terrain_cmap` [#71e284b]
 
 1.1.1 (2021-08-04)
 =======================

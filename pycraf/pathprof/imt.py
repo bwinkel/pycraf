@@ -224,6 +224,10 @@ def imt_rural_macro_losses(
 
     Examples
     --------
+    .. testsetup::
+
+        >>> import numpy as np
+        >>> np.set_printoptions(3)
 
     A typical usage, which also accounts for the line-of-sight probabilities,
     would be::
@@ -243,11 +247,11 @@ def imt_rural_macro_losses(
         ...     freq, distances, h_bs=h_bs, h_ue=h_ue
         ...     )
         >>> PL_los  # doctest: +FLOAT_CMP
-        <Decibel [        nan, 64.38071083, 94.57828524,         nan] dB>
+        <Decibel [        nan, 64.381, 94.578,         nan] dB>
         >>> PL_nlos  # doctest: +FLOAT_CMP
-        <Decibel [         nan,  65.10847815, 119.54294519,          nan] dB>
+        <Decibel [         nan,  65.108, 119.543,          nan] dB>
         >>> los_prob  # doctest: +FLOAT_CMP
-        <Quantity [1.00000000e+00, 9.90049834e-01, 3.71576691e-01, 2.08186856e-09]>
+        <Quantity [1.000e+00, 9.900e-01, 3.716e-01, 2.082e-09]>
 
         >>> # randomly assign LOS or Non-LOS type to UE (according to above prob.)
         >>> with NumpyRNGContext(0):
@@ -260,7 +264,11 @@ def imt_rural_macro_losses(
         ...     los_type, PL_los.to_value(cnv.dB), PL_nlos.to_value(cnv.dB)
         ...     ) * cnv.dB
         >>> PL  # doctest: +FLOAT_CMP
-        <Decibel [         nan,  64.38071083, 119.54294519,          nan] dB>
+        <Decibel [         nan,  64.381, 119.543,          nan] dB>
+
+    .. testcleanup::
+
+        >>> np.set_printoptions()
 
     '''
 
@@ -335,6 +343,10 @@ def imt_urban_macro_losses(
 
     Examples
     --------
+    .. testsetup::
+
+        >>> import numpy as np
+        >>> np.set_printoptions(3)
 
     A typical usage, which also accounts for the line-of-sight probabilities,
     would be::
@@ -354,11 +366,11 @@ def imt_urban_macro_losses(
         ...     freq, distances, h_bs=h_bs, h_ue=h_ue
         ...     )
         >>> PL_los  # doctest: +FLOAT_CMP
-        <Decibel [         nan,  60.76626079, 108.24721393,          nan] dB>
+        <Decibel [         nan,  60.766, 108.247,          nan] dB>
         >>> PL_nlos  # doctest: +FLOAT_CMP
-        <Decibel [         nan,  71.74479418, 130.78468516,          nan] dB>
+        <Decibel [         nan,  71.745, 130.785,          nan] dB>
         >>> los_prob  # doctest: +FLOAT_CMP
-        <Quantity [1.00000000e+00, 9.72799557e-01, 1.80001255e-02, 9.00000000e-04]>
+        <Quantity [1.000e+00, 9.728e-01, 1.800e-02, 9.000e-04]>
 
         >>> # randomly assign LOS or Non-LOS type to UE (according to above prob.)
         >>> with NumpyRNGContext(0):
@@ -371,7 +383,11 @@ def imt_urban_macro_losses(
         ...     los_type, PL_los.to_value(cnv.dB), PL_nlos.to_value(cnv.dB)
         ...     ) * cnv.dB
         >>> PL  # doctest: +FLOAT_CMP
-        <Decibel [         nan,  60.76626079, 130.78468516,          nan] dB>
+        <Decibel [         nan,  60.766, 130.785,          nan] dB>
+
+    .. testcleanup::
+
+        >>> np.set_printoptions()
 
     '''
     # for h_ue > 13 m, need to implement "C" function; then "h_e" is needed!
@@ -451,6 +467,10 @@ def imt_urban_micro_losses(
 
     Examples
     --------
+    .. testsetup::
+
+        >>> import numpy as np
+        >>> np.set_printoptions(3)
 
     A typical usage, which also accounts for the line-of-sight probabilities,
     would be::
@@ -470,11 +490,11 @@ def imt_urban_micro_losses(
         ...     freq, distances, h_bs=h_bs, h_ue=h_ue
         ...     )
         >>> PL_los  # doctest: +FLOAT_CMP
-        <Decibel [         nan,  60.47880565, 118.53377126,          nan] dB>
+        <Decibel [         nan,  60.479, 118.534,          nan] dB>
         >>> PL_nlos  # doctest: +FLOAT_CMP
-        <Decibel [         nan,  69.59913521, 128.3005538 ,          nan] dB>
+        <Decibel [         nan,  69.599, 128.301,          nan] dB>
         >>> los_prob  # doctest: +FLOAT_CMP
-        <Quantity [1.00000000e+00, 9.57375342e-01, 1.80000000e-02, 9.00000000e-04]>
+        <Quantity [1.000e+00, 9.574e-01, 1.800e-02, 9.000e-04]>
 
         >>> # randomly assign LOS or Non-LOS type to UE (according to above prob.)
         >>> with NumpyRNGContext(0):
@@ -487,7 +507,11 @@ def imt_urban_micro_losses(
         ...     los_type, PL_los.to_value(cnv.dB), PL_nlos.to_value(cnv.dB)
         ...     ) * cnv.dB
         >>> PL  # doctest: +FLOAT_CMP
-        <Decibel [         nan,  60.47880565, 128.3005538 ,          nan] dB>
+        <Decibel [         nan,  60.479, 128.301,          nan] dB>
+
+    .. testcleanup::
+
+        >>> np.set_printoptions()
 
     '''
 
@@ -558,6 +582,10 @@ def P_pusch(P_cmax, M_pusch, P_0_pusch, alpha, PL):
 
     Examples
     --------
+    .. testsetup::
+
+        >>> import numpy as np
+        >>> np.set_printoptions(3)
 
     A typical usage would be::
 
@@ -584,7 +612,7 @@ def P_pusch(P_cmax, M_pusch, P_0_pusch, alpha, PL):
         ...     los_type, PL_los.to_value(cnv.dB), PL_nlos.to_value(cnv.dB)
         ...     ) * cnv.dB
         >>> PL  # doctest: +FLOAT_CMP
-        <Decibel [ 76.93523856, 110.58128371, 135.20195715, 145.82665484] dB>
+        <Decibel [ 76.935, 110.581, 135.202, 145.827] dB>
 
         >>> # Assume some antenna gains:
         >>> G_bs, G_ue = 20 * cnv.dBi, 5 * cnv.dBi
@@ -609,8 +637,12 @@ def P_pusch(P_cmax, M_pusch, P_0_pusch, alpha, PL):
         >>> P_pusch = pathprof.P_pusch(
         ...     P_cmax, M_pusch, P_0_pusch, alpha, CL
         ...     )
-        >>> P_pusch.to(cnv.dBm)
-        <Decibel [-31.28009187,  -4.36325575,  15.333283  ,  23.          ] dB(mW)>
+        >>> P_pusch.to(cnv.dBm)  # doctest: +FLOAT_CMP
+        <Decibel [-31.28 ,  -4.363,  15.333,  23.          ] dB(mW)>
+
+    .. testcleanup::
+
+        >>> np.set_printoptions()
 
     '''
 

@@ -459,10 +459,10 @@ def imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz(
         peak side-lobe patterns [dimless]
     k_h : float
         Azimuth pattern adjustment factor based on leaked power
-        (:math:`0 \leq k_h \leq 1`) [dimless]
+        (:math:`0 \\leq k_h \\leq 1`) [dimless]
     k_v : float
         Elevation pattern adjustment factor based on leaked power
-        (:math:`0 \leq k_v \leq 1`) [dimless]
+        (:math:`0 \\leq k_v \\leq 1`) [dimless]
     tilt_m : float
         Mechanical tilt angle (downwards) [deg]
     tilt_e : float
@@ -534,10 +534,10 @@ def imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz(
         average side-lobe patterns [dimless]
     k_h : float
         Azimuth pattern adjustment factor based on leaked power
-        (:math:`0 \leq k_h \leq 1`) [dimless]
+        (:math:`0 \\leq k_h \\leq 1`) [dimless]
     k_v : float
         Elevation pattern adjustment factor based on leaked power
-        (:math:`0 \leq k_v \leq 1`) [dimless]
+        (:math:`0 \\leq k_v \\leq 1`) [dimless]
     tilt_m : float
         Mechanical tilt angle (downwards) [deg]
     tilt_e : float

@@ -429,7 +429,7 @@ def _extract_hgt_coords(hgt_name):
     _codes = {'E': 1, 'W': -1, 'N': 1, 'S': -1}
 
     yc, wy0, xc, wx0 = re.search(
-        ".*([NS])(-?\d*)([EW])(\d*).hgt.*", hgt_name
+        r".*([NS])(-?\d*)([EW])(\d*).hgt.*", hgt_name
         ).groups()
 
     return _codes[xc] * int(wx0), _codes[yc] * int(wy0)

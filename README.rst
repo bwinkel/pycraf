@@ -2,8 +2,9 @@
 pycraf
 ******
 
-- *Version:* 1.1.0
-- *Author:* Benjamin Winkel, Marta Bautista & Federico Di Vruno
+- *Version:* 2.0.0
+- *Authors:* Benjamin Winkel, Marta Bautista, Federico Di Vruno,
+  Gyula I. G. Józsa
 - *User manual:* `stable <https://bwinkel.github.io/pycraf/>`__ |
   `developer <https://bwinkel.github.io/pycraf/latest/>`__
 
@@ -31,22 +32,10 @@ and development is occurring at the
 Project Status
 ==============
 
-.. image:: https://travis-ci.org/bwinkel/pycraf.svg?branch=master
-    :target: https://travis-ci.org/bwinkel/pycraf
-    :alt: Pycrafs's Travis CI Status
+.. image:: https://dev.azure.com/bwinkel78/Benjamin-Winkel-Projects/_apis/build/status/bwinkel.pycraf?repoName=bwinkel%2Fpycraf&branchName=master
+    :target: https://dev.azure.com/bwinkel78/Benjamin-Winkel-Projects/_build?definitionId=2
+    :alt: Pycrafs's CI Status on Azure Pipelines
 
-.. image:: https://ci.appveyor.com/api/projects/status/tj7swn14t6bek3jr?svg=true
-    :target: https://ci.appveyor.com/project/bwinkel/pycraf
-    :alt: Pycrafs's AppVeyor CI Status
-
-.. image:: https://coveralls.io/repos/github/bwinkel/pycraf/badge.svg?branch=master
-    :target: https://coveralls.io/github/bwinkel/pycraf?branch=master
-    :alt: Pycrafs's Coveralls Status
-
-`pycraf` is still in the early-development stage. While much of the
-functionality is already working as intended, the API is not yet stable.
-Nevertheless, we kindly invite you to use and test the library and we are
-grateful for feedback. Note, that work on the documentation is still ongoing.
 
 Features
 ========
@@ -128,18 +117,18 @@ Anaconda/Miniconda, one can use the `conda` package manager to install it::
     conda install pycraf -c conda-forge
 
 Of course, it is always a good idea to do this in its own environment, such
-that you don't mess up with your standard environment::
+that you don't mess up with your standard environment, e.g.::
 
-    conda create -n pycraf-env python=3.6 pycraf
+    conda create -n pycraf-env python=3.9 pycraf
 
-Otherwise, the easiest way to install pycraf is via pip::
+If you don't like Anaconda, the easiest way to install pycraf is via pip::
 
     pip install pycraf
 
 The installation is also possible from source. Download the tar.gz-file,
 extract (or clone from GitHub) and simply execute::
 
-    python setup.py install
+    python -m pip install .
 
 Dependencies
 ------------
@@ -147,20 +136,23 @@ Dependencies
 We kept the dependencies as minimal as possible. The following packages are
 required:
 
-* Python 3.7 or later
+* Python 3.8 or later
 * setuptools
 * cython 0.29 or later
-* numpy 1.14.5 or later
-* astropy 3.0 or later
-* scipy 0.19 or later
-* pytest 2.6 or later
+* numpy 1.18 or later
+* astropy 4.0 or later
+* scipy 1.7 or later
+* pytest 5.4 or later
+* pytest-remotedata 0.3.3 or later
 
 The following packages are optional, and you will need them for certain
 features and to build the docs:
 
-* matplotlib 3.0 or later; for some plot helpers
-* pyproj 2.0 or later; for the `geospatial` subpackage
+* h5py 3.3 or later; for caching
+* matplotlib 3.4 or later; for some plot helpers
+* pyproj 2.6 or later; for the `geospatial` subpackage
 * sgp4 2.0 or later; for the `satellite` subpackage
+* rasterio 1.2 or later; for the `satellite` subpackage
 
 For further details, we refer to the online documention `installation
 instructions <https://bwinkel.github.io/pycraf/install.html>`_. It also

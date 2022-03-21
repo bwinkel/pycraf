@@ -78,7 +78,7 @@ class RangedQuantityInput(object):
         -----
 
         The checking of arguments inside variable arguments to a
-        function is not supported (i.e. \*arg or \**kwargs).
+        function is not supported (i.e. \\*arg or \\**kwargs).
 
         Examples
         --------
@@ -111,7 +111,7 @@ class RangedQuantityInput(object):
             ...     return a ** 2
 
             >>> func(2 * u.m)  # doctest: +FLOAT_CMP
-            <Quantity 4.0 m2>
+            <Quantity 4. m2>
 
         Often one wants to add units support to third-party functions,
         which expect simple types::

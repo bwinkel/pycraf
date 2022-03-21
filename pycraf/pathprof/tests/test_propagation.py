@@ -54,8 +54,8 @@ class TestPropagation:
 
         print(pathprof.srtm.SrtmConf)
 
-        self.cases_zip_name = get_pkg_data_filename('cases.zip')
-        self.fastmap_zip_name = get_pkg_data_filename('fastmap.zip')
+        self.cases_zip_name = get_pkg_data_filename('data/cases.zip')
+        self.fastmap_zip_name = get_pkg_data_filename('data/fastmap.zip')
 
         self.lon_t, self.lat_t = 6.5 * apu.deg, 50.5 * apu.deg
         self.lon_r, self.lat_r = 6.6 * apu.deg, 50.75 * apu.deg
@@ -712,7 +712,7 @@ class TestPropagationGeneric:
 
         # TODO: add further test cases
 
-        self.cases_zip_name = get_pkg_data_filename('cases_generic.zip')
+        self.cases_zip_name = get_pkg_data_filename('data/cases_generic.zip')
 
         self.lon_t, self.lat_t = 6.5 * apu.deg, 50.5 * apu.deg
         self.lon_r, self.lat_r = 6.6 * apu.deg, 50.75 * apu.deg
