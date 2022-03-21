@@ -1,0 +1,6 @@
+imt2020_composite_pattern_extended
+==================================
+
+.. currentmodule:: pycraf.antenna
+
+.. autofunction:: imt2020_composite_pattern_extended

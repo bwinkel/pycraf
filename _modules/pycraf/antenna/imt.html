@@ -5,17 +5,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pycraf.antenna.imt &#8212; pycraf v1.1.1</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/pycraf.css" />
+    <title>pycraf.antenna.imt &#8212; pycraf v2.0.0</title>
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
     
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
@@ -51,7 +51,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v1.1.1</a>
+	<a href="../../../index.html">pycraf v2.0.0</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -79,6 +79,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">.cyantenna</span> <span class="kn">import</span> <span class="n">imt2020_single_element_pattern_cython</span>
 <span class="kn">from</span> <span class="nn">.cyantenna</span> <span class="kn">import</span> <span class="n">imt2020_composite_pattern_cython</span>
+<span class="kn">from</span> <span class="nn">.cyantenna</span> <span class="kn">import</span> <span class="n">imt2020_composite_pattern_extended_cython</span>
 <span class="kn">from</span> <span class="nn">.cyantenna</span> <span class="kn">import</span> <span class="n">imt_advanced_sectoral_peak_sidelobe_pattern_cython</span>
 <span class="kn">from</span> <span class="nn">.cyantenna</span> <span class="kn">import</span> <span class="n">imt_advanced_sectoral_avg_sidelobe_pattern_cython</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
@@ -86,7 +87,8 @@
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;imt2020_single_element_pattern&#39;</span><span class="p">,</span> <span class="s1">&#39;imt2020_composite_pattern&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;imt2020_single_element_pattern&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;imt2020_composite_pattern&#39;</span><span class="p">,</span> <span class="s1">&#39;imt2020_composite_pattern_extended&#39;</span><span class="p">,</span>
     <span class="s1">&#39;imt_advanced_sectoral_peak_sidelobe_pattern_400_to_6000_mhz&#39;</span><span class="p">,</span>
     <span class="s1">&#39;imt_advanced_sectoral_avg_sidelobe_pattern_400_to_6000_mhz&#39;</span><span class="p">,</span>
     <span class="p">]</span>
@@ -232,8 +234,8 @@
         <span class="n">k</span><span class="o">=</span><span class="mf">12.</span><span class="p">,</span>
         <span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Composite (array) antenna pattern according to `IMT.MODEL</span>
-<span class="sd">    &lt;https://www.itu.int/md/R15-TG5.1-C-0036&gt;`_ document.</span>
+<span class="sd">    Composite (array) antenna pattern according to `Rec. ITU-R M.2101-0</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-M.2101/en&gt;`_.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -285,6 +287,111 @@
         <span class="n">phi_3db</span><span class="p">,</span> <span class="n">theta_3db</span><span class="p">,</span>
         <span class="n">d_H</span><span class="p">,</span> <span class="n">d_V</span><span class="p">,</span>
         <span class="n">N_H</span><span class="p">,</span> <span class="n">N_V</span><span class="p">,</span>
+        <span class="n">rho</span><span class="p">,</span>
+        <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="imt2020_composite_pattern_extended"><a class="viewcode-back" href="../../../api/pycraf.antenna.imt2020_composite_pattern_extended.html#pycraf.antenna.imt2020_composite_pattern_extended">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">azim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">elev</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">azim_i</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">elev_i</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">G_Emax</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">),</span>
+    <span class="n">A_m</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">),</span>
+    <span class="n">SLA_nu</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">),</span>
+    <span class="n">phi_3db</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">theta_3db</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">d_H</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span>
+    <span class="n">d_V</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span>
+    <span class="n">d_V_sub</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span>
+    <span class="n">theta_subtilt</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">rho</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">imt2020_composite_pattern_extended</span><span class="p">(</span>
+        <span class="n">azim</span><span class="p">,</span> <span class="n">elev</span><span class="p">,</span>
+        <span class="n">azim_i</span><span class="p">,</span> <span class="n">elev_i</span><span class="p">,</span>
+        <span class="n">G_Emax</span><span class="p">,</span>
+        <span class="n">A_m</span><span class="p">,</span> <span class="n">SLA_nu</span><span class="p">,</span>
+        <span class="n">phi_3db</span><span class="p">,</span> <span class="n">theta_3db</span><span class="p">,</span>
+        <span class="n">d_H</span><span class="p">,</span> <span class="n">d_V</span><span class="p">,</span> <span class="n">d_V_sub</span><span class="p">,</span>
+        <span class="n">N_H</span><span class="p">,</span> <span class="n">N_V</span><span class="p">,</span> <span class="n">M_sub</span><span class="p">,</span>
+        <span class="n">theta_subtilt</span><span class="p">,</span>
+        <span class="n">rho</span><span class="o">=</span><span class="mi">1</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">,</span>
+        <span class="n">k</span><span class="o">=</span><span class="mf">12.</span><span class="p">,</span>
+        <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Extended composite (array) antenna pattern according to `R19-WP5D-C-0716</span>
+<span class="sd">    &lt;https://www.itu.int/dms_ties/itu-r/md/19/wp5d/c/R19-WP5D-C-0716!H4-N4.04!MSW-E.docx&gt;`_ document, which is an extension</span>
+<span class="sd">    of the composite pattern introduced in `Rec. ITU-R M.2101-0</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-M.2101/en&gt;`_.</span>
+
+<span class="sd">    This allows for sub-arrays, with pre-configured electronic phasing, which</span>
+<span class="sd">    are usually used for electronic downtilt.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    azim, elev : `~astropy.units.Quantity`</span>
+<span class="sd">        Azimuth/Elevation [deg]</span>
+<span class="sd">    azim_i, elev_i : `~astropy.units.Quantity`</span>
+<span class="sd">        Azimuthal/Elevational pointing of beam `i` [deg]</span>
+<span class="sd">    G_Emax : `~astropy.units.Quantity`</span>
+<span class="sd">        Single element maximum gain [dBi]</span>
+<span class="sd">    A_m, SLA_nu : `~astropy.units.Quantity`</span>
+<span class="sd">        Front-to-back ratio (horizontal/vertical) [dB]</span>
+<span class="sd">    phi_3db, theta_3db : `~astropy.units.Quantity`</span>
+<span class="sd">        Horizontal/Vertical 3dB beam width of single element [deg]</span>
+<span class="sd">    d_H, d_V : `~astropy.units.Quantity`</span>
+<span class="sd">        Horizontal/Vertical separation of sub-arrays in units of wavelength</span>
+<span class="sd">        [dimless]</span>
+<span class="sd">    d_V_sub : `~astropy.units.Quantity`</span>
+<span class="sd">        Vertical separation of beams in sub-arrays in units of wavelength</span>
+<span class="sd">        [dimless]</span>
+<span class="sd">    N_H, N_V : int</span>
+<span class="sd">        Horizontal/Vertical number of sub-arrays</span>
+<span class="sd">    M_sub : int</span>
+<span class="sd">        Number of single antenna elements in each sub-array</span>
+<span class="sd">    theta_subtilt : `~astropy.units.Quantity`</span>
+<span class="sd">        Pre-configured electronic downtilt for the sub-arrays [deg]</span>
+<span class="sd">    rho : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        Correlation level (see 3GPP TR 37.840, 5.4.4.1.4, default: 1) [dimless]</span>
+<span class="sd">    k : float, optional</span>
+<span class="sd">        Multiplication factor, can be used to get better match to</span>
+<span class="sd">        measured antenna patters (default: 12). See `WP5D-C-0936`</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A_A : `~astropy.units.Quantity`</span>
+<span class="sd">        Composite (array) antenna pattern of beam `i` [dB]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Further information can be found in 3GPP TR 37.840 Section 5.4.4.</span>
+
+<span class="sd">    According to document `WP5D-C-0936 &lt;https://www.itu.int/md/R15-WP5D-C-0936/en&gt;`_</span>
+<span class="sd">    the AAS pattern can still be subject to quite effective beamforming</span>
+<span class="sd">    in the spurious domain. For such cases, one can simply change the</span>
+<span class="sd">    `d_H` and `d_V` to fit to the out-of-band frequency, i.e.,</span>
+<span class="sd">    `d_oob = f_oob / f * d`. For example, if `f = 26 GHz`,</span>
+<span class="sd">    `f_oob = 23.8 GHz`, and `d = 0.5` then `d_oob = 0.46`.</span>
+<span class="sd">    However, to match measurements, also a different `k`-factor should</span>
+<span class="sd">    be used, i.e., 8 instead of 12.</span>
+
+<span class="sd">    The pre-configured electronic phasing of the sub-arrays can lead to</span>
+<span class="sd">    less optimal results for the pattern quality if the `theta_Etilt`</span>
+<span class="sd">    (`=-elev_i`) parameter doesn&#39;t match `theta_subarray`.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">imt2020_composite_pattern_extended_cython</span><span class="p">(</span>
+        <span class="n">azim</span><span class="p">,</span> <span class="n">elev</span><span class="p">,</span>
+        <span class="n">azim_i</span><span class="p">,</span> <span class="n">elev_i</span><span class="p">,</span>
+        <span class="n">G_Emax</span><span class="p">,</span>
+        <span class="n">A_m</span><span class="p">,</span> <span class="n">SLA_nu</span><span class="p">,</span>
+        <span class="n">phi_3db</span><span class="p">,</span> <span class="n">theta_3db</span><span class="p">,</span>
+        <span class="n">d_H</span><span class="p">,</span> <span class="n">d_V</span><span class="p">,</span> <span class="n">d_V_sub</span><span class="p">,</span>
+        <span class="n">N_H</span><span class="p">,</span> <span class="n">N_V</span><span class="p">,</span> <span class="n">M_sub</span><span class="p">,</span>
+        <span class="n">theta_subtilt</span><span class="p">,</span>
         <span class="n">rho</span><span class="p">,</span>
         <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
         <span class="p">)</span></div>
@@ -422,10 +529,10 @@
 <span class="sd">        peak side-lobe patterns [dimless]</span>
 <span class="sd">    k_h : float</span>
 <span class="sd">        Azimuth pattern adjustment factor based on leaked power</span>
-<span class="sd">        (:math:`0 \leq k_h \leq 1`) [dimless]</span>
+<span class="sd">        (:math:`0 \\leq k_h \\leq 1`) [dimless]</span>
 <span class="sd">    k_v : float</span>
 <span class="sd">        Elevation pattern adjustment factor based on leaked power</span>
-<span class="sd">        (:math:`0 \leq k_v \leq 1`) [dimless]</span>
+<span class="sd">        (:math:`0 \\leq k_v \\leq 1`) [dimless]</span>
 <span class="sd">    tilt_m : float</span>
 <span class="sd">        Mechanical tilt angle (downwards) [deg]</span>
 <span class="sd">    tilt_e : float</span>
@@ -497,10 +604,10 @@
 <span class="sd">        average side-lobe patterns [dimless]</span>
 <span class="sd">    k_h : float</span>
 <span class="sd">        Azimuth pattern adjustment factor based on leaked power</span>
-<span class="sd">        (:math:`0 \leq k_h \leq 1`) [dimless]</span>
+<span class="sd">        (:math:`0 \\leq k_h \\leq 1`) [dimless]</span>
 <span class="sd">    k_v : float</span>
 <span class="sd">        Elevation pattern adjustment factor based on leaked power</span>
-<span class="sd">        (:math:`0 \leq k_v \leq 1`) [dimless]</span>
+<span class="sd">        (:math:`0 \\leq k_v \\leq 1`) [dimless]</span>
 <span class="sd">    tilt_m : float</span>
 <span class="sd">        Mechanical tilt angle (downwards) [deg]</span>
 <span class="sd">    tilt_e : float</span>
@@ -554,9 +661,9 @@
   <p class="pull-right"> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2021, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
-    Last built 04 Aug 2021. <br/>
+    &copy; Copyright 2022, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
   </p>
 </footer>
   </body>

@@ -5,17 +5,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pycraf.pathprof.helper &#8212; pycraf v1.1.1</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/pycraf.css" />
+    <title>pycraf.pathprof.helper &#8212; pycraf v2.0.0</title>
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
     
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
@@ -51,7 +51,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v1.1.1</a>
+	<a href="../../../index.html">pycraf v2.0.0</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -542,7 +542,7 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="terrain_cmap_factory"><a class="viewcode-back" href="../../../api/pycraf.pathprof.terrain_cmap_factory.html#pycraf.pathprof.terrain_cmap_factory">[docs]</a><span class="k">def</span> <span class="nf">terrain_cmap_factory</span><span class="p">(</span><span class="n">sealevel</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1200</span><span class="p">):</span>
+<div class="viewcode-block" id="terrain_cmap_factory"><a class="viewcode-back" href="../../../api/pycraf.pathprof.terrain_cmap_factory.html#pycraf.pathprof.terrain_cmap_factory">[docs]</a><span class="k">def</span> <span class="nf">terrain_cmap_factory</span><span class="p">(</span><span class="n">sealevel</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">50</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1200</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Produce terrain colormap and norm to be used in plt.imshow.</span>
 
@@ -552,7 +552,7 @@
 <span class="sd">    A simple use case would look like the following::</span>
 
 <span class="sd">        &gt;&gt;&gt; vmin, vmax = -20, 1200  # doctest: +SKIP</span>
-<span class="sd">        &gt;&gt;&gt; terrain_cmap, terrain_norm = terrain_cmap_factory(vmax=vmax)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; terrain_cmap, terrain_norm = terrain_cmap_factory(vmin=vmin, vmax=vmax)  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; plt.imshow(  # doctest: +SKIP</span>
 <span class="sd">        ...     heights, cmap=terrain_cmap, norm=terrain_norm,</span>
 <span class="sd">        ...     # vmin=vmin, vmax=vmax  # deprecated in newer matplotlib versions</span>
@@ -562,10 +562,9 @@
 <span class="sd">    ----------</span>
 <span class="sd">    sealevel : float</span>
 <span class="sd">        The sealevel value.</span>
-<span class="sd">    vmax : float</span>
-<span class="sd">        Maximum height to cover in the colormap (Default: 1200)</span>
-<span class="sd">        (in older matplotlib versions, one should call plt.imshow with the</span>
-<span class="sd">        same `vmax` option, and `vmin=-20`!)</span>
+<span class="sd">    vmin/vmax : float</span>
+<span class="sd">        Minimum/maximum height to cover in the colormap (Default: -50, 1200)</span>
+<span class="sd">        (sealevel must be between vmin and vmax!)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -584,15 +583,27 @@
             <span class="s1">&#39;The &quot;matplotlib&quot; package is necessary to use this function.&#39;</span>
             <span class="p">)</span>
 
-    <span class="n">colors_undersea</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">terrain</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.17</span><span class="p">,</span> <span class="mi">56</span><span class="p">))</span>
-    <span class="n">colors_land</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">terrain</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">200</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">vmin</span> <span class="o">&lt;</span> <span class="n">sealevel</span><span class="p">,</span> <span class="s1">&#39;&quot;vmin&quot; must be smaller than &quot;sealevel&quot;&#39;</span>
+    <span class="k">assert</span> <span class="n">vmax</span> <span class="o">&gt;</span> <span class="n">sealevel</span><span class="p">,</span> <span class="s1">&#39;&quot;vmax&quot; must be larger than &quot;sealevel&quot;&#39;</span>
+    <span class="n">cbar_ratio</span> <span class="o">=</span> <span class="p">(</span><span class="n">sealevel</span> <span class="o">-</span> <span class="n">vmin</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">vmax</span> <span class="o">-</span> <span class="n">vmin</span><span class="p">)</span>
+    <span class="c1"># combine two color maps; want 256 colors in total</span>
+    <span class="n">sea_steps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="mi">256</span> <span class="o">*</span> <span class="n">cbar_ratio</span><span class="p">)</span>
+    <span class="n">land_steps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="mi">256</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">cbar_ratio</span><span class="p">))</span>
+    <span class="n">colors_undersea</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">terrain</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.17</span><span class="p">,</span> <span class="n">sea_steps</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="n">colors_land</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">terrain</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">land_steps</span><span class="p">)</span>
+        <span class="p">)</span>
 
     <span class="c1"># combine them and build a new colormap</span>
     <span class="n">colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">colors_undersea</span><span class="p">,</span> <span class="n">colors_land</span><span class="p">))</span>
     <span class="n">terrain_cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">LinearSegmentedColormap</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span>
         <span class="s1">&#39;terrain_normed&#39;</span><span class="p">,</span> <span class="n">colors</span>
         <span class="p">)</span>
-    <span class="n">terrain_norm</span> <span class="o">=</span> <span class="n">FixPointNormalize</span><span class="p">(</span><span class="n">sealevel</span><span class="o">=</span><span class="n">sealevel</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+    <span class="n">terrain_norm</span> <span class="o">=</span> <span class="n">FixPointNormalize</span><span class="p">(</span>
+        <span class="n">sealevel</span><span class="o">=</span><span class="n">sealevel</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">col_val</span><span class="o">=</span><span class="n">cbar_ratio</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">terrain_cmap</span><span class="p">,</span> <span class="n">terrain_norm</span></div>
 
@@ -617,9 +628,9 @@
   <p class="pull-right"> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2021, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
-    Last built 04 Aug 2021. <br/>
+    &copy; Copyright 2022, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
   </p>
 </footer>
   </body>

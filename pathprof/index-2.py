@@ -20,7 +20,7 @@ _heightmap = heightmap.to(u.m).value
 
 vmin, vmax = -20, 170
 terrain_cmap, terrain_norm = pathprof.terrain_cmap_factory(
-    sealevel=0.5, vmax=vmax
+    vmin=vmin, vmax=vmax
     )
 _heightmap[_heightmap < 0] = 0.51  # fix for coastal region
 
@@ -31,24 +31,19 @@ cim = ax.imshow(
     _heightmap,
     origin='lower', interpolation='nearest',
     cmap=terrain_cmap, norm=terrain_norm,
-    vmin=vmin, vmax=vmax,
     extent=(_lons[0], _lons[-1], _lats[0], _lats[-1]),
     )
 cbar = fig.colorbar(
     cim, cax=cbax, orientation='horizontal'
     )
 ax.set_aspect(abs(_lons[-1] - _lons[0]) / abs(_lats[-1] - _lats[0]))
-cbar.set_label(r'Height (amsl)', color='k')
-cbax.xaxis.set_label_position('top')
-for t in cbax.xaxis.get_major_ticks():
-    t.tick1line.set_visible(False)
-    t.tick2line.set_visible(True)
-    t.label1.set_visible(False)
-    t.label2.set_visible(True)
-ctics = np.arange(0, 1150, 50)
+
+ctics = np.arange(0, vmax, 50)
 cbar.set_ticks(ctics)
 cbar.ax.set_xticklabels(map('{:.0f} m'.format, ctics), color='k')
+cbar.set_label(r'Height (amsl)', color='k')
+cbax.xaxis.tick_top()
+cbax.xaxis.set_label_position('top')
+
 ax.set_xlabel('Longitude [deg]')
 ax.set_ylabel('Latitude [deg]')
-ax.xaxis.tick_top()
-ax.xaxis.set_label_position('top')

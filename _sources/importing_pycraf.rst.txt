@@ -4,7 +4,7 @@ Importing pycraf and subpackages
 
 Using pycraf in Python is as simple as::
 
-    >>> import pycraf
+    import pycraf
 
 Then one can access the subpackages via::
 

@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>imt2020_composite_pattern_extended &#8212; pycraf v2.0.0</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="imt2020_single_element_pattern" href="pycraf.antenna.imt2020_single_element_pattern.html" />
+    <link rel="prev" title="imt2020_composite_pattern" href="pycraf.antenna.imt2020_composite_pattern.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="pycraf.antenna.imt2020_single_element_pattern.html" title="imt2020_single_element_pattern">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="pycraf.antenna.imt2020_composite_pattern.html" title="imt2020_composite_pattern">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="../index.html">pycraf v2.0.0</a>
+	 &#187;
+      </li>
+      <li><a href="../antenna/index.html" accesskey="U">Antenna patterns (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.antenna</span></code>)</a> &#187;</li>
+      
+      <li>imt2020_composite_pattern_extended</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="imt2020-composite-pattern-extended">
+<h1>imt2020_composite_pattern_extended<a class="headerlink" href="#imt2020-composite-pattern-extended" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="pycraf.antenna.imt2020_composite_pattern_extended">
+<code class="sig-prename descclassname"><span class="pre">pycraf.antenna.</span></code><code class="sig-name descname"><span class="pre">imt2020_composite_pattern_extended</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">azim</span></em>, <em class="sig-param"><span class="pre">elev</span></em>, <em class="sig-param"><span class="pre">azim_i</span></em>, <em class="sig-param"><span class="pre">elev_i</span></em>, <em class="sig-param"><span class="pre">G_Emax</span></em>, <em class="sig-param"><span class="pre">A_m</span></em>, <em class="sig-param"><span class="pre">SLA_nu</span></em>, <em class="sig-param"><span class="pre">phi_3db</span></em>, <em class="sig-param"><span class="pre">theta_3db</span></em>, <em class="sig-param"><span class="pre">d_H</span></em>, <em class="sig-param"><span class="pre">d_V</span></em>, <em class="sig-param"><span class="pre">d_V_sub</span></em>, <em class="sig-param"><span class="pre">N_H</span></em>, <em class="sig-param"><span class="pre">N_V</span></em>, <em class="sig-param"><span class="pre">M_sub</span></em>, <em class="sig-param"><span class="pre">theta_subtilt</span></em>, <em class="sig-param"><span class="pre">rho=&lt;Quantity</span> <span class="pre">1.&gt;</span></em>, <em class="sig-param"><span class="pre">k=12.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/antenna/imt.html#imt2020_composite_pattern_extended"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v2.0.0/pycraf/antenna/imt.py#L225" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.antenna.imt2020_composite_pattern_extended" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extended composite (array) antenna pattern according to <a class="reference external" href="https://www.itu.int/dms_ties/itu-r/md/19/wp5d/c/R19-WP5D-C-0716!H4-N4.04!MSW-E.docx">R19-WP5D-C-0716</a> document, which is an extension
+of the composite pattern introduced in <a class="reference external" href="https://www.itu.int/rec/R-REC-M.2101/en">Rec. ITU-R M.2101-0</a>.</p>
+<p>This allows for sub-arrays, with pre-configured electronic phasing, which
+are usually used for electronic downtilt.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>azim, elev</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Azimuth/Elevation [deg]</p>
+</dd>
+<dt><strong>azim_i, elev_i</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Azimuthal/Elevational pointing of beam <code class="xref py py-obj docutils literal notranslate"><span class="pre">i</span></code> [deg]</p>
+</dd>
+<dt><strong>G_Emax</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Single element maximum gain [dBi]</p>
+</dd>
+<dt><strong>A_m, SLA_nu</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Front-to-back ratio (horizontal/vertical) [dB]</p>
+</dd>
+<dt><strong>phi_3db, theta_3db</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Horizontal/Vertical 3dB beam width of single element [deg]</p>
+</dd>
+<dt><strong>d_H, d_V</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Horizontal/Vertical separation of sub-arrays in units of wavelength
+[dimless]</p>
+</dd>
+<dt><strong>d_V_sub</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Vertical separation of beams in sub-arrays in units of wavelength
+[dimless]</p>
+</dd>
+<dt><strong>N_H, N_V</strong><span class="classifier">int</span></dt><dd><p>Horizontal/Vertical number of sub-arrays</p>
+</dd>
+<dt><strong>M_sub</strong><span class="classifier">int</span></dt><dd><p>Number of single antenna elements in each sub-array</p>
+</dd>
+<dt><strong>theta_subtilt</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Pre-configured electronic downtilt for the sub-arrays [deg]</p>
+</dd>
+<dt><strong>rho</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Correlation level (see 3GPP TR 37.840, 5.4.4.1.4, default: 1) [dimless]</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">float, optional</span></dt><dd><p>Multiplication factor, can be used to get better match to
+measured antenna patters (default: 12). See <code class="xref py py-obj docutils literal notranslate"><span class="pre">WP5D-C-0936</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>A_A</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Composite (array) antenna pattern of beam <code class="xref py py-obj docutils literal notranslate"><span class="pre">i</span></code> [dB]</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Further information can be found in 3GPP TR 37.840 Section 5.4.4.</p>
+<p>According to document <a class="reference external" href="https://www.itu.int/md/R15-WP5D-C-0936/en">WP5D-C-0936</a>
+the AAS pattern can still be subject to quite effective beamforming
+in the spurious domain. For such cases, one can simply change the
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">d_H</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">d_V</span></code> to fit to the out-of-band frequency, i.e.,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">d_oob</span> <span class="pre">=</span> <span class="pre">f_oob</span> <span class="pre">/</span> <span class="pre">f</span> <span class="pre">*</span> <span class="pre">d</span></code>. For example, if <code class="xref py py-obj docutils literal notranslate"><span class="pre">f</span> <span class="pre">=</span> <span class="pre">26</span> <span class="pre">GHz</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">f_oob</span> <span class="pre">=</span> <span class="pre">23.8</span> <span class="pre">GHz</span></code>, and <code class="xref py py-obj docutils literal notranslate"><span class="pre">d</span> <span class="pre">=</span> <span class="pre">0.5</span></code> then <code class="xref py py-obj docutils literal notranslate"><span class="pre">d_oob</span> <span class="pre">=</span> <span class="pre">0.46</span></code>.
+However, to match measurements, also a different <code class="xref py py-obj docutils literal notranslate"><span class="pre">k</span></code>-factor should
+be used, i.e., 8 instead of 12.</p>
+<p>The pre-configured electronic phasing of the sub-arrays can lead to
+less optimal results for the pattern quality if the <code class="xref py py-obj docutils literal notranslate"><span class="pre">theta_Etilt</span></code>
+(<code class="xref py py-obj docutils literal notranslate"><span class="pre">=-elev_i</span></code>) parameter doesn’t match <code class="xref py py-obj docutils literal notranslate"><span class="pre">theta_subarray</span></code>.</p>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">imt2020_composite_pattern_extended</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="https://github.com/bwinkel/pycraf/tree/v2.0.0/docs/api/pycraf.antenna.imt2020_composite_pattern_extended.rst">Edit This Page on Github</a> &nbsp;
+    <a href="../_sources/api/pycraf.antenna.imt2020_composite_pattern_extended.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2022, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
+  </p>
+</footer>
+  </body>
+</html>

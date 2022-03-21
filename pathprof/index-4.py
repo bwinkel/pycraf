@@ -20,15 +20,18 @@ def plot_atten_map(lons, lats, total_atten):
         cim, cax=cbax, orientation='horizontal'
         )
     ax.set_aspect(abs(lons[-1] - lons[0]) / abs(lats[-1] - lats[0]))
-    cbar.set_label(r'Path propagation loss')
-    ctics = np.arange(30, 200, 30)
+
+    ctics = np.arange(0, vmax, 30)
     cbar.set_ticks(ctics)
-    cbar.ax.set_xticklabels(map('{:.0f} dB'.format, ctics))
+    cbar.ax.set_xticklabels(map('{:.0f} dB'.format, ctics), color='w')
+    cbar.set_label(r'Path propagation loss', color='w')
+    cbax.xaxis.tick_top()
+    cbax.tick_params(axis='x', colors='w')
+    cbax.xaxis.set_label_position('top')
+
     ax.set_xlabel('Longitude [deg]')
     ax.set_ylabel('Latitude [deg]')
 
-    ax.xaxis.tick_top()
-    ax.xaxis.set_label_position('top')
     plt.show()
 
 

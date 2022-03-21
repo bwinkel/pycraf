@@ -5,17 +5,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pycraf.pathprof.imt &#8212; pycraf v1.1.1</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/pycraf.css" />
+    <title>pycraf.pathprof.imt &#8212; pycraf v2.0.0</title>
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
     
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
@@ -51,7 +51,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v1.1.1</a>
+	<a href="../../../index.html">pycraf v2.0.0</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -294,6 +294,10 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+<span class="sd">    .. testsetup::</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; np.set_printoptions(3)</span>
 
 <span class="sd">    A typical usage, which also accounts for the line-of-sight probabilities,</span>
 <span class="sd">    would be::</span>
@@ -313,11 +317,11 @@
 <span class="sd">        ...     freq, distances, h_bs=h_bs, h_ue=h_ue</span>
 <span class="sd">        ...     )</span>
 <span class="sd">        &gt;&gt;&gt; PL_los  # doctest: +FLOAT_CMP</span>
-<span class="sd">        &lt;Decibel [        nan, 64.38071083, 94.57828524,         nan] dB&gt;</span>
+<span class="sd">        &lt;Decibel [        nan, 64.381, 94.578,         nan] dB&gt;</span>
 <span class="sd">        &gt;&gt;&gt; PL_nlos  # doctest: +FLOAT_CMP</span>
-<span class="sd">        &lt;Decibel [         nan,  65.10847815, 119.54294519,          nan] dB&gt;</span>
+<span class="sd">        &lt;Decibel [         nan,  65.108, 119.543,          nan] dB&gt;</span>
 <span class="sd">        &gt;&gt;&gt; los_prob  # doctest: +FLOAT_CMP</span>
-<span class="sd">        &lt;Quantity [1.00000000e+00, 9.90049834e-01, 3.71576691e-01, 2.08186856e-09]&gt;</span>
+<span class="sd">        &lt;Quantity [1.000e+00, 9.900e-01, 3.716e-01, 2.082e-09]&gt;</span>
 
 <span class="sd">        &gt;&gt;&gt; # randomly assign LOS or Non-LOS type to UE (according to above prob.)</span>
 <span class="sd">        &gt;&gt;&gt; with NumpyRNGContext(0):</span>
@@ -330,7 +334,11 @@
 <span class="sd">        ...     los_type, PL_los.to_value(cnv.dB), PL_nlos.to_value(cnv.dB)</span>
 <span class="sd">        ...     ) * cnv.dB</span>
 <span class="sd">        &gt;&gt;&gt; PL  # doctest: +FLOAT_CMP</span>
-<span class="sd">        &lt;Decibel [         nan,  64.38071083, 119.54294519,          nan] dB&gt;</span>
+<span class="sd">        &lt;Decibel [         nan,  64.381, 119.543,          nan] dB&gt;</span>
+
+<span class="sd">    .. testcleanup::</span>
+
+<span class="sd">        &gt;&gt;&gt; np.set_printoptions()</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
 
@@ -405,6 +413,10 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+<span class="sd">    .. testsetup::</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; np.set_printoptions(3)</span>
 
 <span class="sd">    A typical usage, which also accounts for the line-of-sight probabilities,</span>
 <span class="sd">    would be::</span>
@@ -424,11 +436,11 @@
 <span class="sd">        ...     freq, distances, h_bs=h_bs, h_ue=h_ue</span>
 <span class="sd">        ...     )</span>
 <span class="sd">        &gt;&gt;&gt; PL_los  # doctest: +FLOAT_CMP</span>
-<span class="sd">        &lt;Decibel [         nan,  60.76626079, 108.24721393,          nan] dB&gt;</span>
+<span class="sd">        &lt;Decibel [         nan,  60.766, 108.247,          nan] dB&gt;</span>
 <span class="sd">        &gt;&gt;&gt; PL_nlos  # doctest: +FLOAT_CMP</span>
-<span class="sd">        &lt;Decibel [         nan,  71.74479418, 130.78468516,          nan] dB&gt;</span>
+<span class="sd">        &lt;Decibel [         nan,  71.745, 130.785,          nan] dB&gt;</span>
 <span class="sd">        &gt;&gt;&gt; los_prob  # doctest: +FLOAT_CMP</span>
-<span class="sd">        &lt;Quantity [1.00000000e+00, 9.72799557e-01, 1.80001255e-02, 9.00000000e-04]&gt;</span>
+<span class="sd">        &lt;Quantity [1.000e+00, 9.728e-01, 1.800e-02, 9.000e-04]&gt;</span>
 
 <span class="sd">        &gt;&gt;&gt; # randomly assign LOS or Non-LOS type to UE (according to above prob.)</span>
 <span class="sd">        &gt;&gt;&gt; with NumpyRNGContext(0):</span>
@@ -441,7 +453,11 @@
 <span class="sd">        ...     los_type, PL_los.to_value(cnv.dB), PL_nlos.to_value(cnv.dB)</span>
 <span class="sd">        ...     ) * cnv.dB</span>
 <span class="sd">        &gt;&gt;&gt; PL  # doctest: +FLOAT_CMP</span>
-<span class="sd">        &lt;Decibel [         nan,  60.76626079, 130.78468516,          nan] dB&gt;</span>
+<span class="sd">        &lt;Decibel [         nan,  60.766, 130.785,          nan] dB&gt;</span>
+
+<span class="sd">    .. testcleanup::</span>
+
+<span class="sd">        &gt;&gt;&gt; np.set_printoptions()</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="c1"># for h_ue &gt; 13 m, need to implement &quot;C&quot; function; then &quot;h_e&quot; is needed!</span>
@@ -521,6 +537,10 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+<span class="sd">    .. testsetup::</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; np.set_printoptions(3)</span>
 
 <span class="sd">    A typical usage, which also accounts for the line-of-sight probabilities,</span>
 <span class="sd">    would be::</span>
@@ -540,11 +560,11 @@
 <span class="sd">        ...     freq, distances, h_bs=h_bs, h_ue=h_ue</span>
 <span class="sd">        ...     )</span>
 <span class="sd">        &gt;&gt;&gt; PL_los  # doctest: +FLOAT_CMP</span>
-<span class="sd">        &lt;Decibel [         nan,  60.47880565, 118.53377126,          nan] dB&gt;</span>
+<span class="sd">        &lt;Decibel [         nan,  60.479, 118.534,          nan] dB&gt;</span>
 <span class="sd">        &gt;&gt;&gt; PL_nlos  # doctest: +FLOAT_CMP</span>
-<span class="sd">        &lt;Decibel [         nan,  69.59913521, 128.3005538 ,          nan] dB&gt;</span>
+<span class="sd">        &lt;Decibel [         nan,  69.599, 128.301,          nan] dB&gt;</span>
 <span class="sd">        &gt;&gt;&gt; los_prob  # doctest: +FLOAT_CMP</span>
-<span class="sd">        &lt;Quantity [1.00000000e+00, 9.57375342e-01, 1.80000000e-02, 9.00000000e-04]&gt;</span>
+<span class="sd">        &lt;Quantity [1.000e+00, 9.574e-01, 1.800e-02, 9.000e-04]&gt;</span>
 
 <span class="sd">        &gt;&gt;&gt; # randomly assign LOS or Non-LOS type to UE (according to above prob.)</span>
 <span class="sd">        &gt;&gt;&gt; with NumpyRNGContext(0):</span>
@@ -557,7 +577,11 @@
 <span class="sd">        ...     los_type, PL_los.to_value(cnv.dB), PL_nlos.to_value(cnv.dB)</span>
 <span class="sd">        ...     ) * cnv.dB</span>
 <span class="sd">        &gt;&gt;&gt; PL  # doctest: +FLOAT_CMP</span>
-<span class="sd">        &lt;Decibel [         nan,  60.47880565, 128.3005538 ,          nan] dB&gt;</span>
+<span class="sd">        &lt;Decibel [         nan,  60.479, 128.301,          nan] dB&gt;</span>
+
+<span class="sd">    .. testcleanup::</span>
+
+<span class="sd">        &gt;&gt;&gt; np.set_printoptions()</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
 
@@ -628,6 +652,10 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+<span class="sd">    .. testsetup::</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; np.set_printoptions(3)</span>
 
 <span class="sd">    A typical usage would be::</span>
 
@@ -654,7 +682,7 @@
 <span class="sd">        ...     los_type, PL_los.to_value(cnv.dB), PL_nlos.to_value(cnv.dB)</span>
 <span class="sd">        ...     ) * cnv.dB</span>
 <span class="sd">        &gt;&gt;&gt; PL  # doctest: +FLOAT_CMP</span>
-<span class="sd">        &lt;Decibel [ 76.93523856, 110.58128371, 135.20195715, 145.82665484] dB&gt;</span>
+<span class="sd">        &lt;Decibel [ 76.935, 110.581, 135.202, 145.827] dB&gt;</span>
 
 <span class="sd">        &gt;&gt;&gt; # Assume some antenna gains:</span>
 <span class="sd">        &gt;&gt;&gt; G_bs, G_ue = 20 * cnv.dBi, 5 * cnv.dBi</span>
@@ -679,8 +707,12 @@
 <span class="sd">        &gt;&gt;&gt; P_pusch = pathprof.P_pusch(</span>
 <span class="sd">        ...     P_cmax, M_pusch, P_0_pusch, alpha, CL</span>
 <span class="sd">        ...     )</span>
-<span class="sd">        &gt;&gt;&gt; P_pusch.to(cnv.dBm)</span>
-<span class="sd">        &lt;Decibel [-31.28009187,  -4.36325575,  15.333283  ,  23.          ] dB(mW)&gt;</span>
+<span class="sd">        &gt;&gt;&gt; P_pusch.to(cnv.dBm)  # doctest: +FLOAT_CMP</span>
+<span class="sd">        &lt;Decibel [-31.28 ,  -4.363,  15.333,  23.          ] dB(mW)&gt;</span>
+
+<span class="sd">    .. testcleanup::</span>
+
+<span class="sd">        &gt;&gt;&gt; np.set_printoptions()</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
 
@@ -710,9 +742,9 @@
   <p class="pull-right"> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2021, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
-    Last built 04 Aug 2021. <br/>
+    &copy; Copyright 2022, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
   </p>
 </footer>
   </body>

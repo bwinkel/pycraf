@@ -4,19 +4,19 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>atten_from_opacity &#8212; pycraf v1.1.1</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
+    <title>atten_from_opacity &#8212; pycraf v2.0.0</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -65,7 +65,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.1.1</a>
+	<a href="../index.html">pycraf v2.0.0</a>
 	 &#187;
       </li>
       <li><a href="../atm/index.html" accesskey="U">Atmospheric models (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.atm</span></code>)</a> &#187;</li>
@@ -83,24 +83,24 @@
   <section id="atten-from-opacity">
 <h1>atten_from_opacity<a class="headerlink" href="#atten-from-opacity" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="pycraf.atm.atten_from_opacity">
-<span class="sig-prename descclassname"><span class="pre">pycraf.atm.</span></span><span class="sig-name descname"><span class="pre">atten_from_opacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#atten_from_opacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.1.1/pycraf/atm/atm.py#L267" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.atm.atten_from_opacity" title="Permalink to this definition">¶</a></dt>
+<dt id="pycraf.atm.atten_from_opacity">
+<code class="sig-prename descclassname"><span class="pre">pycraf.atm.</span></code><code class="sig-name descname"><span class="pre">atten_from_opacity</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#atten_from_opacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v2.0.0/pycraf/atm/atm.py#L267" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.atm.atten_from_opacity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Atmospheric attenuation derived from opacity.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>tau</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Atmospheric opacity [dimless aka neper]</p>
+<dt><strong>tau</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Atmospheric opacity [dimless aka neper]</p>
 </dd>
-<dt><strong>elev</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Elevation [deg]
+<dt><strong>elev</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>Elevation [deg]
 If not None, this is used to correct for the Airmass
 (via <a class="reference internal" href="pycraf.atm.airmass_from_elevation.html#pycraf.atm.airmass_from_elevation" title="pycraf.atm.airmass_from_elevation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">airmass_from_elevation</span></code></a>; AM = 1 / sin(elev)),
 which means that the input opacity is treated as zenith opacity.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
-<dt><strong>atten</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Atmospheric attenuation [dB or dimless]</p>
+<dt><strong>atten</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Atmospheric attenuation [dB or dimless]</p>
 </dd>
 </dl>
 </dd>
@@ -127,14 +127,14 @@ which means that the input opacity is treated as zenith opacity.</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.1/docs/api/pycraf.atm.atten_from_opacity.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v2.0.0/docs/api/pycraf.atm.atten_from_opacity.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.atm.atten_from_opacity.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2021, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
-    Last built 04 Aug 2021. <br/>
+    &copy; Copyright 2022, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
   </p>
 </footer>
   </body>

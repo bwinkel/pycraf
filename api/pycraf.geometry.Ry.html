@@ -4,19 +4,19 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Ry &#8212; pycraf v1.1.1</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
+    <title>Ry &#8212; pycraf v2.0.0</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -65,7 +65,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.1.1</a>
+	<a href="../index.html">pycraf v2.0.0</a>
 	 &#187;
       </li>
       <li><a href="../geometry/index.html" accesskey="U">Geometry helpers (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geometry</span></code>)</a> &#187;</li>
@@ -83,27 +83,27 @@
   <section id="ry">
 <h1>Ry<a class="headerlink" href="#ry" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="pycraf.geometry.Ry">
-<span class="sig-prename descclassname"><span class="pre">pycraf.geometry.</span></span><span class="sig-name descname"><span class="pre">Ry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geometry/geometry.html#Ry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.1.1/pycraf/geometry/geometry.py#L278" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.geometry.Ry" title="Permalink to this definition">¶</a></dt>
+<dt id="pycraf.geometry.Ry">
+<code class="sig-prename descclassname"><span class="pre">pycraf.geometry.</span></code><code class="sig-name descname"><span class="pre">Ry</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geometry/geometry.html#Ry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v2.0.0/pycraf/geometry/geometry.py#L278" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.geometry.Ry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct rotation matrix about y-axis.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>angle</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Rotation angle [deg]</p>
+<dt><strong>angle</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Rotation angle [deg]</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
-<dt><strong>Ry</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt><dd><p>Rotation matrix [no units!]</p>
+<dt><strong>Ry</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.22)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt><dd><p>Rotation matrix [no units!]</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
 <p>Broadcasting is supported. Rotation matrices can be (matrix-multiplied)
-with <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dot.html#numpy.dot" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dot</span></code></a>, however, if you want to multiply stacks of matrices
-use the new <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.matmul.html#numpy.matmul" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matmul</span></code></a> function.</p>
+with <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dot.html#numpy.dot" title="(in NumPy v1.22)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dot</span></code></a>, however, if you want to multiply stacks of matrices
+use the new <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.matmul.html#numpy.matmul" title="(in NumPy v1.22)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matmul</span></code></a> function.</p>
 </dd></dl>
 
 </section>
@@ -126,14 +126,14 @@ use the new <a class="reference external" href="https://numpy.org/doc/stable/ref
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.1/docs/api/pycraf.geometry.Ry.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v2.0.0/docs/api/pycraf.geometry.Ry.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.geometry.Ry.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2021, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
-    Last built 04 Aug 2021. <br/>
+    &copy; Copyright 2022, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
   </p>
 </footer>
   </body>

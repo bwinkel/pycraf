@@ -4,19 +4,19 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Working with SRTM data &#8212; pycraf v1.1.1</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
+    <title>Working with SRTM data &#8212; pycraf v2.0.0</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -65,7 +65,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.1.1</a>
+	<a href="../index.html">pycraf v2.0.0</a>
 	 &#187;
       </li>
       
@@ -112,7 +112,7 @@ and an unofficial version by <a class="reference external" href="http://viewfind
 commercial use unless you get explicit permission to do so.
 For research or private use you may have to properly acknowledge
 the source of the data. Please check the web sites for more information!</p>
-</div>
+</aside>
 </section>
 <section id="configuring-pycraf-to-use-srtm-data">
 <h2>Configuring pycraf to use SRTM data<a class="headerlink" href="#configuring-pycraf-to-use-srtm-data" title="Permalink to this headline">¶</a></h2>
@@ -127,7 +127,7 @@ explained in the following.</p>
 is started) and having <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf</span></code> look for them there seems handy, but it
 can be slow if many other sub-directories are present as <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf</span></code> will
 recursively search for <em>.hgt</em> files.</p>
-</div>
+</aside>
 <section id="using-srtmdata-environment-variable">
 <h3>Using <code class="xref py py-obj docutils literal notranslate"><span class="pre">SRTMDATA</span></code> environment variable<a class="headerlink" href="#using-srtmdata-environment-variable" title="Permalink to this headline">¶</a></h3>
 <p>If you have downloaded some (or even all) tiles into a directory, you can let
@@ -182,7 +182,7 @@ For the time being, the default server (and only server) will thus be
 <code class="xref py py-obj docutils literal notranslate"><span class="pre">viewpano</span></code>.
 If you prefer to use NASA tiles (over viewpano), please use their
 services, e.g., the <code class="xref py py-obj docutils literal notranslate"><span class="pre">Land</span> <span class="pre">Processes</span> <span class="pre">Distributed</span> <span class="pre">Active</span> <span class="pre">Archive</span> <span class="pre">Center</span></code>.</p>
-</div>
+</aside>
 <p>Of course, one can set several of these options simultaneously:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
        <span class="n">srtm_dir</span><span class="o">=</span><span class="s1">&#39;/path/to/srtmdir&#39;</span><span class="p">,</span>
@@ -196,14 +196,14 @@ services, e.g., the <code class="xref py py-obj docutils literal notranslate"><s
 The default method uses bi-linear interpolation (<code class="xref py py-obj docutils literal notranslate"><span class="pre">interp='linear'</span></code>). One
 can also have nearest-neighbor (<code class="xref py py-obj docutils literal notranslate"><span class="pre">interp='nearest'</span></code>) or spline
 (<code class="xref py py-obj docutils literal notranslate"><span class="pre">interp='spline'</span></code>) interpolation. The two former internally use
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/reference/generated/scipy.interpolate.RegularGridInterpolator.html#scipy.interpolate.RegularGridInterpolator" title="(in SciPy v1.7.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RegularGridInterpolator</span></code></a>, the latter employs
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.7.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectBivariateSpline</span></code></a> that also allows custom
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html#scipy.interpolate.RegularGridInterpolator" title="(in SciPy v1.8.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RegularGridInterpolator</span></code></a>, the latter employs
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.8.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectBivariateSpline</span></code></a> that also allows custom
 spline degrees (<code class="xref py py-obj docutils literal notranslate"><span class="pre">kx</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">ky</span></code>) and smoothing factor (<code class="xref py py-obj docutils literal notranslate"><span class="pre">s</span></code>).
 To change these use:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">interp</span><span class="o">=</span><span class="s1">&#39;spline&#39;</span><span class="p">,</span> <span class="n">spline_opts</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>  
 </pre></div>
 </div>
-<p>We refer to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.7.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectBivariateSpline</span></code></a> description for
+<p>We refer to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.8.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectBivariateSpline</span></code></a> description for
 further information.</p>
 </section>
 </section>
@@ -245,14 +245,14 @@ further information.</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.1/docs/pathprof/working_with_srtm.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v2.0.0/docs/pathprof/working_with_srtm.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/pathprof/working_with_srtm.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2021, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
-    Last built 04 Aug 2021. <br/>
+    &copy; Copyright 2022, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
   </p>
 </footer>
   </body>

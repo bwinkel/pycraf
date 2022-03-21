@@ -4,19 +4,19 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>transform_factory &#8212; pycraf v1.1.1</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
+    <title>transform_factory &#8212; pycraf v2.0.0</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -65,7 +65,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.1.1</a>
+	<a href="../index.html">pycraf v2.0.0</a>
 	 &#187;
       </li>
       <li><a href="../geospatial/index.html" accesskey="U">Geographical frames (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code>)</a> &#187;</li>
@@ -83,8 +83,8 @@
   <section id="transform-factory">
 <h1>transform_factory<a class="headerlink" href="#transform-factory" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="pycraf.geospatial.transform_factory">
-<span class="sig-prename descclassname"><span class="pre">pycraf.geospatial.</span></span><span class="sig-name descname"><span class="pre">transform_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sys_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sys_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'epsg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'epsg'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#transform_factory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v1.1.1/pycraf/geospatial/geospatial.py#L585" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.geospatial.transform_factory" title="Permalink to this definition">¶</a></dt>
+<dt id="pycraf.geospatial.transform_factory">
+<code class="sig-prename descclassname"><span class="pre">pycraf.geospatial.</span></code><code class="sig-name descname"><span class="pre">transform_factory</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sys_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sys_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'epsg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'epsg'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geospatial/geospatial.html#transform_factory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v2.0.0/pycraf/geospatial/geospatial.py#L591" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.geospatial.transform_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>A factory to produce conversion functions (decorated with
 <a class="reference internal" href="pycraf.utils.ranged_quantity_input.html#pycraf.utils.ranged_quantity_input" title="pycraf.utils.ranged_quantity_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ranged_quantity_input</span></code></a> for unit handling).</p>
 <p>The returned function will automatically have the correct
@@ -115,7 +115,7 @@ a so-called <em>EPSG</em> code, e.g. <code class="xref py py-obj docutils litera
 The website <a class="reference external" href="http://spatialreference.org/">spatialreference.org</a> is very useful to find
 information on <em>EPSG</em> codes.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>sys_in, sys_out</strong><span class="classifier">str, int, EPSG, ESRI</span></dt><dd><p>Input and output projection for the desired coordinate
 transformation. If a string, this is directly fed into the
@@ -133,7 +133,7 @@ as <em>EPSG</em> or <em>ESRI</em> code. (default: ‘epsg’)</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>transform_func</strong><span class="classifier">Function</span></dt><dd><p>Transform function with unit decorator
 (<a class="reference internal" href="pycraf.utils.ranged_quantity_input.html#pycraf.utils.ranged_quantity_input" title="pycraf.utils.ranged_quantity_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ranged_quantity_input</span></code></a>).</p>
@@ -149,7 +149,7 @@ Per default, <code class="xref py py-obj docutils literal notranslate"><span cla
 The <a class="reference internal" href="pycraf.utils.ranged_quantity_input.html#pycraf.utils.ranged_quantity_input" title="pycraf.utils.ranged_quantity_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ranged_quantity_input</span></code></a> will automatically
 convert your inputs to the correct unit (i.e., ‘m’ for distances),
 but the outputs will always be in meters (or degrees).
-Use <a class="reference external" href="https://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v4.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> functions to convert to something else
+Use <a class="reference external" href="https://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> functions to convert to something else
 such as ‘ft’ if desired.</p></li>
 </ul>
 <p class="rubric">Examples</p>
@@ -162,7 +162,7 @@ such as ‘ft’ if desired.</p></li>
 <span class="gp">... </span>    <span class="n">geospatial</span><span class="o">.</span><span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">,</span> <span class="mi">31467</span>
 <span class="gp">... </span>    <span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wgs84_to_etrs89</span><span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mi">50</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">)</span>  
-<span class="go">(&lt;Quantity 3285005.65767981 m&gt;, &lt;Quantity 5544721.32224115 m&gt;)</span>
+<span class="go">(&lt;Quantity 3285005.658 m&gt;, &lt;Quantity 5544721.322 m&gt;)</span>
 </pre></div>
 </div>
 <p>If an <em>ESRI</em> system is desired, either use the integer code and
@@ -172,16 +172,16 @@ set <code class="xref py py-obj docutils literal notranslate"><span class="pre">
 
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># see http://spatialreference.org/ref/esri/54009/</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wgs84_to_mollweide</span> <span class="o">=</span> <span class="n">geospatial</span><span class="o">.</span><span class="n">transform_factory</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">geospatial</span><span class="o">.</span><span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">,</span> <span class="mi">54009</span><span class="p">,</span> <span class="n">code_out</span><span class="o">=</span><span class="s1">&#39;esri&#39;</span>
-<span class="gp">... </span>    <span class="p">)</span>  
+<span class="gp">... </span>    <span class="n">geospatial</span><span class="o">.</span><span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span><span class="p">,</span> <span class="n">geospatial</span><span class="o">.</span><span class="n">ESRI</span><span class="o">.</span><span class="n">MOLLWEIDE</span>
+<span class="gp">... </span>    <span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wgs84_to_mollweide</span><span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mi">50</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">)</span>  
-<span class="go">(&lt;Quantity 456379.9117263066 m&gt;, &lt;Quantity 5873471.95621065 m&gt;)</span>
+<span class="go">(&lt;Quantity 456379.912 m&gt;, &lt;Quantity 5873471.956 m&gt;)</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mollweide_to_wgs84</span> <span class="o">=</span> <span class="n">geospatial</span><span class="o">.</span><span class="n">transform_factory</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">geospatial</span><span class="o">.</span><span class="n">ESRI</span><span class="o">.</span><span class="n">MOLLWEIDE</span><span class="p">,</span> <span class="n">geospatial</span><span class="o">.</span><span class="n">EPSG</span><span class="o">.</span><span class="n">WGS84</span>
 <span class="gp">... </span>    <span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mollweide_to_wgs84</span><span class="p">(</span><span class="mf">456379.912</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mf">5873471.956</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>  
-<span class="go">(&lt;Quantity 6.000000003439825 deg&gt;, &lt;Quantity 49.999999997988475 deg&gt;)</span>
+<span class="go">(&lt;Quantity 6. deg&gt;, &lt;Quantity 50. deg&gt;)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -206,14 +206,14 @@ set <code class="xref py py-obj docutils literal notranslate"><span class="pre">
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.1/docs/api/pycraf.geospatial.transform_factory.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v2.0.0/docs/api/pycraf.geospatial.transform_factory.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.geospatial.transform_factory.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2021, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
-    Last built 04 Aug 2021. <br/>
+    &copy; Copyright 2022, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
   </p>
 </footer>
   </body>

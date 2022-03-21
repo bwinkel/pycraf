@@ -4,23 +4,23 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Geometry helpers (pycraf.geometry) &#8212; pycraf v1.1.1</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
+    <title>Geometry helpers (pycraf.geometry) &#8212; pycraf v2.0.0</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -66,7 +66,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v1.1.1</a>
+	<a href="../index.html">pycraf v2.0.0</a>
 	 &#187;
       </li>
       
@@ -112,7 +112,7 @@ functions <a class="reference internal" href="../api/pycraf.geometry.cart_to_sph
 <p>In contrast to the often-used mathematical convention, pycraf does not
 work with the zenith distances but height above the horizon (i.e.,
 elevation).</p>
-</div>
+</aside>
 <p>Very useful are the two functions <a class="reference internal" href="../api/pycraf.geometry.true_angular_distance.html#pycraf.geometry.true_angular_distance" title="pycraf.geometry.true_angular_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">true_angular_distance</span></code></a>
 and <a class="reference internal" href="../api/pycraf.geometry.great_circle_bearing.html#pycraf.geometry.great_circle_bearing" title="pycraf.geometry.great_circle_bearing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">great_circle_bearing</span></code></a>, which allow to determine
 the true angular separation between two points on the sphere and the
@@ -129,7 +129,7 @@ bearing of a point on the sphere w.r.t. another point:</p>
 <p class="admonition-title">Warning</p>
 <p>If you need angular distances/bearings on the Geoid with high accuracy
 use the Geodesics methods in the <a class="reference internal" href="../pathprof/index.html#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pathprof</span></code></a> subpackage.</p>
-</div>
+</aside>
 </section>
 <section id="rotation-matrices">
 <h3>Rotation matrices<a class="headerlink" href="#rotation-matrices" title="Permalink to this headline">¶</a></h3>
@@ -163,13 +163,13 @@ total there are 24 different possibilities). Apart from the ‘xyz’ order,
 a common scheme is ‘zxz’, i.e.,
 <span class="math notranslate nohighlight">\(R=R_z(\alpha_3)R_x(\alpha_2)R_z(\alpha_1)\)</span>.
 The rotation angles are often called Euler angles.</p>
-</div>
+</aside>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The right-most matrix is applied first, but since rotation matrices are
 associative one can just calculate the matrix multiplication (in any
 order) and apply the result to the target vector.</p>
-</div>
+</aside>
 <p>Example:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">multiply_matrices</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">geometry</span><span class="o">.</span><span class="n">Rz</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
@@ -221,10 +221,6 @@ is not unique!</p>
 <section id="functions">
 <h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h4>
 <table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.geometry.Rx.html#pycraf.geometry.Rx" title="pycraf.geometry.Rx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Rx</span></code></a>(angle)</p></td>
 <td><p>Construct rotation matrix about x-axis.</p></td>
@@ -300,14 +296,14 @@ is not unique!</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/v1.1.1/docs/geometry/index.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v2.0.0/docs/geometry/index.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/geometry/index.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2021, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
-    Last built 04 Aug 2021. <br/>
+    &copy; Copyright 2022, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
   </p>
 </footer>
   </body>

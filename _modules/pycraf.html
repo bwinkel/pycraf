@@ -5,17 +5,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pycraf &#8212; pycraf v1.1.1</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
+    <title>pycraf &#8212; pycraf v2.0.0</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -51,7 +51,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../index.html">pycraf v1.1.1</a>
+	<a href="../index.html">pycraf v2.0.0</a>
 	 &#187;
       </li>
       <li><a href="index.html" accesskey="U">Module code</a> &#187;</li>
@@ -77,7 +77,7 @@
 <span class="c1"># Packages may add whatever they like to this file, but</span>
 <span class="c1"># should keep this content at the top.</span>
 <span class="c1"># ----------------------------------------------------------------------------</span>
-<span class="kn">from</span> <span class="nn">._astropy_init</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="c1"># from ._astropy_init import *</span>
 <span class="c1"># ----------------------------------------------------------------------------</span>
 
 <span class="c1"># Enforce Python version check during package import.</span>
@@ -93,7 +93,7 @@
     <span class="k">raise</span> <span class="n">UnsupportedPythonError</span><span class="p">(</span><span class="s2">&quot;pycraf does not support Python &lt; </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">__minimum_python_version__</span><span class="p">))</span>
 
 
-<span class="k">if</span> <span class="ow">not</span> <span class="n">_ASTROPY_SETUP_</span><span class="p">:</span>
+<span class="c1"># if not _ASTROPY_SETUP_:</span>
     <span class="c1"># For egg_info test builds to pass, put package imports here.</span>
 
     <span class="c1"># from .example_mod import *</span>
@@ -125,16 +125,21 @@
 
     <span class="c1">#             raise e</span>
 
-    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">antenna</span>
-    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">atm</span>
-    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">conversions</span>
-    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">geometry</span>
-    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">geospatial</span>
-    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">mc</span>
-    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">pathprof</span>
-    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">protection</span>
-    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">satellite</span>
-    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">antenna</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">atm</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">conversions</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">geometry</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">geospatial</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">pathprof</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">protection</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">satellite</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">.init_testrunner</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.version</span> <span class="kn">import</span> <span class="n">version</span>
+
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="n">version</span>
 </pre></div>
 
             <div class="clearer"></div>
@@ -153,9 +158,9 @@
   <p class="pull-right"> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2021, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.1.2. &nbsp;
-    Last built 04 Aug 2021. <br/>
+    &copy; Copyright 2022, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 21 Mar 2022. <br/>
   </p>
 </footer>
   </body>
