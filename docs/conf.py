@@ -104,23 +104,21 @@ try:
     # built documents.
 
     # The full version, including alpha/beta/rc tags.
-    release = metadata.version(project)
-    # The short X.Y version.
-    version = '.'.join(release.split('.')[:2])
+    long_version = metadata.version(project)
 
 except ImportError:
 
     __import__(setup_cfg['name'])
     package = sys.modules[setup_cfg['name']]
 
-    # The short X.Y version.
-    version = package.__version__.split('-', 1)[0]
     # The full version, including alpha/beta/rc tags.
-    release = package.__version__
+    long_version = package.__version__
 
+# The short X.Y.Z version.
+short_version = '.'.join(long_version.split('.')[:3])
 
 # # Only include dev docs in dev version.
-# dev = 'dev' in release
+# dev = 'dev' in long_version
 # if not dev:
 #     exclude_patterns.append('development/*')  # noqa: F405
 #     exclude_patterns.append('testhelpers.rst')  # noqa: F405
@@ -174,7 +172,7 @@ html_theme_options = {
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = '{0} v{1}'.format(project, release)
+html_title = '{0} v{1}'.format(project, long_version)
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = project + 'doc'
@@ -201,12 +199,12 @@ man_pages = [('index', project.lower(), project + u' Documentation',
 if eval(setup_cfg.get('edit_on_github')):
     extensions += ['sphinx_astropy.ext.edit_on_github']
 
-    versionmod = __import__(setup_cfg['name'] + '.version')
+    # versionmod = __import__(setup_cfg['name'] + '.version')
     edit_on_github_project = setup_cfg['github_project']
-    if 'dev' in release:
+    if 'dev' in long_version:
         edit_on_github_branch = "master"
     else:
-        edit_on_github_branch = "v" + versionmod.version.version
+        edit_on_github_branch = "v" + short_version
 
     edit_on_github_source_root = ""
     edit_on_github_doc_root = "docs"
