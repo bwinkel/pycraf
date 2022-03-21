@@ -472,7 +472,7 @@ class FixPointNormalize(Normalize):
         return np.ma.masked_array(np.interp(value, x, y))
 
 
-def terrain_cmap_factory(sealevel=0.5, vmax=1200):
+def terrain_cmap_factory(sealevel=0.5, vmin=-50, vmax=1200):
     '''
     Produce terrain colormap and norm to be used in plt.imshow.
 
@@ -482,7 +482,7 @@ def terrain_cmap_factory(sealevel=0.5, vmax=1200):
     A simple use case would look like the following::
 
         >>> vmin, vmax = -20, 1200  # doctest: +SKIP
-        >>> terrain_cmap, terrain_norm = terrain_cmap_factory(vmax=vmax)  # doctest: +SKIP
+        >>> terrain_cmap, terrain_norm = terrain_cmap_factory(vmin=vmin, vmax=vmax)  # doctest: +SKIP
         >>> plt.imshow(  # doctest: +SKIP
         ...     heights, cmap=terrain_cmap, norm=terrain_norm,
         ...     # vmin=vmin, vmax=vmax  # deprecated in newer matplotlib versions
@@ -492,10 +492,9 @@ def terrain_cmap_factory(sealevel=0.5, vmax=1200):
     ----------
     sealevel : float
         The sealevel value.
-    vmax : float
-        Maximum height to cover in the colormap (Default: 1200)
-        (in older matplotlib versions, one should call plt.imshow with the
-        same `vmax` option, and `vmin=-20`!)
+    vmin/vmax : float
+        Minimum/maximum height to cover in the colormap (Default: -50, 1200)
+        (sealevel must be between vmin and vmax!)
 
     Returns
     -------
@@ -514,15 +513,27 @@ def terrain_cmap_factory(sealevel=0.5, vmax=1200):
             'The "matplotlib" package is necessary to use this function.'
             )
 
-    colors_undersea = matplotlib.pyplot.cm.terrain(np.linspace(0, 0.17, 56))
-    colors_land = matplotlib.pyplot.cm.terrain(np.linspace(0.25, 1, 200))
+    assert vmin < sealevel, '"vmin" must be smaller than "sealevel"'
+    assert vmax > sealevel, '"vmax" must be larger than "sealevel"'
+    cbar_ratio = (sealevel - vmin) / (vmax - vmin)
+    # combine two color maps; want 256 colors in total
+    sea_steps = np.int32(256 * cbar_ratio)
+    land_steps = np.int32(256 * (1 - cbar_ratio))
+    colors_undersea = matplotlib.pyplot.cm.terrain(
+        np.linspace(0, 0.17, sea_steps)
+        )
+    colors_land = matplotlib.pyplot.cm.terrain(
+        np.linspace(0.25, 1, land_steps)
+        )
 
     # combine them and build a new colormap
     colors = np.vstack((colors_undersea, colors_land))
     terrain_cmap = matplotlib.colors.LinearSegmentedColormap.from_list(
         'terrain_normed', colors
         )
-    terrain_norm = FixPointNormalize(sealevel=sealevel, vmax=vmax)
+    terrain_norm = FixPointNormalize(
+        sealevel=sealevel, vmin=vmin, vmax=vmax, col_val=cbar_ratio
+        )
 
     return terrain_cmap, terrain_norm
 
