@@ -55,9 +55,12 @@ If you don't already have tox installed, you can install it with:
 You can also build the documentation with Sphinx directly using::
     pip install -e .[docs]
     cd docs
+    # make clean  # to rebuild everything
     make html
     # alternatively (in project dir):
-    sphinx-build docs docs/_build/html -W -b html
+    sphinx-build docs docs/_build/html -b html
+    sphinx-build docs docs/_build/html -b html -W  # fail on warnings
+
 For more information, see:
   https://docs.astropy.org/en/latest/install.html#builddocs
 """

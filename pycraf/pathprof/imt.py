@@ -10,6 +10,7 @@ from astropy import units as apu
 import numpy as np
 
 from . import cyimt
+from .helper import _Qinv
 from .. import conversions as cnv
 from .. import utils
 # import ipdb
@@ -37,47 +38,6 @@ UE_MIN_MAX_DISTANCES = {
 # Note, we have to curry the quantities here, because Cython produces
 # "built-in" functions that don't provide a signature (such that
 # ranged_quantity_input fails)
-
-
-def _Qinv(x):
-    # Note, this is *not* identical to cyprop._I_helper
-    # only good between 1.e-6 and 0.5
-    # See R-Rec P.1546
-
-    x = np.atleast_1d(x).copy()
-    mask = x > 0.5
-    x[mask] = 1 - x[mask]
-
-    T = np.sqrt(-2 * np.log(x))
-    Z = (
-        (
-            ((0.010328 * T + 0.802853) * T) + 2.515516698
-            ) /
-        (
-            ((0.001308 * T + 0.189269) * T + 1.432788) * T + 1.
-            )
-        )
-
-    Q = T - Z
-    Q[mask] *= -1
-    return Q
-
-
-# def Qinv(x):
-#     # larger x range than the approximation given in P.1546?
-#     # definitely much slower
-
-#     from scipy.stats import norm as qnorm
-
-#     x = np.atleast_1d(x).copy()
-
-#     mask = x > 0.5
-#     x[mask] = 1 - x[mask]
-
-#     Q = -qnorm.ppf(x, 0)
-#     Q[mask] *= -1
-
-#     return Q
 
 
 def _clutter_imt(
