@@ -185,18 +185,19 @@ jobs:
     displayName: Fix a conda bug on MacOS
     condition: startsWith(variables['Agent.OS'], 'Darwin')
 
+  # see https://github.com/mamba-org/mamba/issues/488
+  # and https://github.com/MPAS-Dev/compass/pull/320
+  - bash: |
+      rm /usr/share/miniconda/pkgs/cache/*.json
+    displayName: Fix a conda bug on Linux
+    condition: startsWith(variables['Agent.OS'], 'Linux')
+
   - bash: |
       echo "##vso[task.prependpath]$CONDA/bin"
       echo "##vso[task.setvariable variable=conda.activate]source activate"
       echo "##vso[task.setvariable variable=srtmdata]$(Agent.BuildDirectory)/srtm"
     displayName: Add conda to PATH, Linux/MacOS
     condition: not(startsWith(variables['Agent.OS'], 'Windows'))
-
-  - bash: |
-      echo "##vso[task.setvariable variable=display]:99.0"
-      /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1920x1200x24 -ac +extension GLX +render -noreset
-    displayName: Activate display, Linux
-    condition: startsWith(variables['Agent.OS'], 'Linux')
 
   - bash: |
       echo "##vso[task.prependpath]/usr/bin"
