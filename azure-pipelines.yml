@@ -51,6 +51,7 @@ jobs:
     doctestplus.version: ''
     # qt.version: '>=5.9'
     # pytestqt.version: '<4'
+    extra.packages: ''
 
   strategy:
     matrix:
@@ -99,6 +100,7 @@ jobs:
         publish.tarball: ${{ eq(variables['is.tag'], true) }}
         pytest.version: '<6'
         doctestplus.version: '<0.6.1'
+        extra.packages: 'sysroot_linux-64 "jinja2<3.1"'
       linux39:
         imageName: 'ubuntu-latest'
         python.version: '3.9'
@@ -255,8 +257,14 @@ jobs:
   # pip installation)
   - script: |
       $(conda.activate) pycraf-env
-      mamba install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython h5py matplotlib numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pytest$(pytest.version)" pytest-astropy pytest-azurepipelines "pytest-doctestplus$(doctestplus.version)" hypothesis rasterio scipy "sgp4>2" twine wheel extension-helpers setuptools-scm
+      mamba install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython h5py matplotlib numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pytest$(pytest.version)" pytest-astropy pytest-azurepipelines "pytest-doctestplus$(doctestplus.version)" hypothesis rasterio scipy "sgp4>2" twine wheel extension-helpers setuptools-scm $(extra.packages)
     displayName: Install Anaconda packages
+
+  # see Issue #55
+  - bash: |
+      rm /usr/share/miniconda/envs/pycraf-env/x86_64-conda-linux-gnu/sysroot/lib64/librt.so.1
+    displayName: Fix another conda bug on Linux
+    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], 3.8))
 
   # need to fix cctools and ld64 to slightly older version, otherwise an
   # error ("ld: library not found for -lSystem") occurs during build
@@ -287,9 +295,10 @@ jobs:
   #   displayName: Fix problem with MacOS compiler/linker
   #   condition: startsWith(variables['Agent.OS'], 'Darwin')
 
+  # see Issue #55
   - script: |
       $(conda.activate) pycraf-env
-      pip install -e .
+      python -m pip install --no-build-isolation --no-deps -v -v -v -e .
     displayName: Building
 
   # pytest -rsx --doctest-rst docs pycraf
