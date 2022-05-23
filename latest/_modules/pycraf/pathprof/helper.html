@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pycraf.pathprof.helper &#8212; pycraf v2.0.1.dev1+gb05d987c</title>
+    <title>pycraf.pathprof.helper &#8212; pycraf v2.0.1.dev5+gd9fd58a1</title>
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -51,7 +51,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v2.0.1.dev1+gb05d987c</a>
+	<a href="../../../index.html">pycraf v2.0.1.dev5+gd9fd58a1</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -608,6 +608,48 @@
     <span class="k">return</span> <span class="n">terrain_cmap</span><span class="p">,</span> <span class="n">terrain_norm</span></div>
 
 
+<span class="k">def</span> <span class="nf">_Qinv</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="c1"># Note, this seems to be identical to cyprop._I_helper</span>
+    <span class="c1"># only good between 1.e-6 and 0.5</span>
+    <span class="c1"># See R-Rec P.1546</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mf">0.5</span>
+    <span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+    <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span>
+            <span class="p">((</span><span class="mf">0.010328</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">0.802853</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="mf">2.515516698</span>
+            <span class="p">)</span> <span class="o">/</span>
+        <span class="p">(</span>
+            <span class="p">((</span><span class="mf">0.001308</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">0.189269</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">1.432788</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mf">1.</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">T</span> <span class="o">-</span> <span class="n">Z</span>
+    <span class="n">Q</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">return</span> <span class="n">Q</span>
+
+
+<span class="c1"># def Qinv(x):</span>
+<span class="c1">#     # larger x range than the approximation given in P.1546?</span>
+<span class="c1">#     # definitely much slower</span>
+
+<span class="c1">#     from scipy.stats import norm as qnorm</span>
+
+<span class="c1">#     x = np.atleast_1d(x).copy()</span>
+
+<span class="c1">#     mask = x &gt; 0.5</span>
+<span class="c1">#     x[mask] = 1 - x[mask]</span>
+
+<span class="c1">#     Q = -qnorm.ppf(x, 0)</span>
+<span class="c1">#     Q[mask] *= -1</span>
+
+<span class="c1">#     return Q</span>
+
+
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This not a standalone python program! Use as module.&#39;</span><span class="p">)</span>
 </pre></div>
@@ -630,7 +672,7 @@
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
-    Last built 21 Mar 2022. <br/>
+    Last built 23 May 2022. <br/>
   </p>
 </footer>
   </body>

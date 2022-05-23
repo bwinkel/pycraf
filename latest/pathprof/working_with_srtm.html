@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Working with SRTM data &#8212; pycraf v2.0.1.dev1+gb05d987c</title>
+    <title>Working with SRTM data &#8212; pycraf v2.0.1.dev5+gd9fd58a1</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -65,7 +65,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v2.0.1.dev1+gb05d987c</a>
+	<a href="../index.html">pycraf v2.0.1.dev5+gd9fd58a1</a>
 	 &#187;
       </li>
       
@@ -196,14 +196,14 @@ services, e.g., the <code class="xref py py-obj docutils literal notranslate"><s
 The default method uses bi-linear interpolation (<code class="xref py py-obj docutils literal notranslate"><span class="pre">interp='linear'</span></code>). One
 can also have nearest-neighbor (<code class="xref py py-obj docutils literal notranslate"><span class="pre">interp='nearest'</span></code>) or spline
 (<code class="xref py py-obj docutils literal notranslate"><span class="pre">interp='spline'</span></code>) interpolation. The two former internally use
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html#scipy.interpolate.RegularGridInterpolator" title="(in SciPy v1.8.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RegularGridInterpolator</span></code></a>, the latter employs
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.8.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectBivariateSpline</span></code></a> that also allows custom
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RegularGridInterpolator.html#scipy.interpolate.RegularGridInterpolator" title="(in SciPy v1.8.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RegularGridInterpolator</span></code></a>, the latter employs
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.8.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectBivariateSpline</span></code></a> that also allows custom
 spline degrees (<code class="xref py py-obj docutils literal notranslate"><span class="pre">kx</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">ky</span></code>) and smoothing factor (<code class="xref py py-obj docutils literal notranslate"><span class="pre">s</span></code>).
 To change these use:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">interp</span><span class="o">=</span><span class="s1">&#39;spline&#39;</span><span class="p">,</span> <span class="n">spline_opts</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>  
 </pre></div>
 </div>
-<p>We refer to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.8.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectBivariateSpline</span></code></a> description for
+<p>We refer to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html#scipy.interpolate.RectBivariateSpline" title="(in SciPy v1.8.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectBivariateSpline</span></code></a> description for
 further information.</p>
 </section>
 </section>
@@ -252,7 +252,7 @@ further information.</p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
-    Last built 21 Mar 2022. <br/>
+    Last built 23 May 2022. <br/>
   </p>
 </footer>
   </body>

@@ -1,0 +1,19 @@
+BuildingType
+============
+
+.. currentmodule:: pycraf.pathprof
+
+.. autoclass:: BuildingType
+   :show-inheritance:
+
+   .. rubric:: Attributes Summary
+
+   .. autosummary::
+
+      ~BuildingType.THERM_EFF
+      ~BuildingType.TRADITIONAL
+
+   .. rubric:: Attributes Documentation
+
+   .. autoattribute:: THERM_EFF
+   .. autoattribute:: TRADITIONAL

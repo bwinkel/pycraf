@@ -1,0 +1,313 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pycraf.pathprof.bel &#8212; pycraf v2.0.1.dev5+gd9fd58a1</title>
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
+    
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../../../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
+  <ul>
+    
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../../../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../../../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li>
+	<a href="../../../index.html">pycraf v2.0.1.dev5+gd9fd58a1</a>
+	 &#187;
+      </li>
+      <li><a href="../../index.html" >Module code</a> &#187;</li>
+      <li><a href="../../pycraf.html" accesskey="U">pycraf</a> &#187;</li>
+      
+       
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pycraf.pathprof.bel</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">absolute_import</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+    <span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.helper</span> <span class="kn">import</span> <span class="n">_Qinv</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="c1"># import ipdb</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;building_entry_loss&#39;</span><span class="p">,</span> <span class="s1">&#39;BuildingType&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+
+<div class="viewcode-block" id="BuildingType"><a class="viewcode-back" href="../../../api/pycraf.pathprof.BuildingType.html#pycraf.pathprof.BuildingType">[docs]</a><span class="k">class</span> <span class="nc">BuildingType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">TRADITIONAL</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># P.2109 &quot;Traditional&quot;</span>
+    <span class="n">THERM_EFF</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># P.2109 &quot;Thermally efficient&quot;</span></div>
+
+
+<span class="n">_BEL_COEFFS</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;_BEL_COEFFS&#39;</span><span class="p">,</span> <span class="s1">&#39;r s t u v w x y z&#39;</span><span class="p">)</span>
+<span class="n">_TRAD_COEFFS</span> <span class="o">=</span> <span class="n">_BEL_COEFFS</span><span class="p">(</span>
+    <span class="mf">12.64</span><span class="p">,</span> <span class="mf">3.72</span><span class="p">,</span> <span class="mf">0.96</span><span class="p">,</span> <span class="mf">9.6</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">9.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="n">_THERM_EFF_COEFFS</span> <span class="o">=</span> <span class="n">_BEL_COEFFS</span><span class="p">(</span>
+    <span class="mf">28.19</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.00</span><span class="p">,</span> <span class="mf">8.48</span><span class="p">,</span> <span class="mf">13.5</span><span class="p">,</span> <span class="mf">3.8</span><span class="p">,</span> <span class="mf">27.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.9</span><span class="p">,</span> <span class="mf">9.4</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.1</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_building_entry_loss_p2109</span><span class="p">(</span>
+        <span class="n">freq_ghz</span><span class="p">,</span>
+        <span class="n">theta_deg</span><span class="p">,</span>
+        <span class="n">prob</span><span class="p">,</span>
+        <span class="n">building_type</span><span class="p">,</span>
+        <span class="p">):</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">building_type</span><span class="p">,</span> <span class="n">BuildingType</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;building_type must be a &quot;BuildingType&quot;&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">building_type</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">BuildingType</span><span class="o">.</span><span class="n">TRADITIONAL</span><span class="p">,</span> <span class="n">BuildingType</span><span class="o">.</span><span class="n">THERM_EFF</span>
+            <span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;building_type must be a either &#39;</span>
+            <span class="s1">&#39;&quot;BuildingType.TRADITIONAL&quot; or &quot;BuildingType.THERM_EFF&quot;&#39;</span>
+            <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">building_type</span> <span class="o">==</span> <span class="n">BuildingType</span><span class="o">.</span><span class="n">TRADITIONAL</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">_TRAD_COEFFS</span>
+    <span class="k">elif</span> <span class="n">building_type</span> <span class="o">==</span> <span class="n">BuildingType</span><span class="o">.</span><span class="n">THERM_EFF</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">_THERM_EFF_COEFFS</span>
+
+    <span class="n">logf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">freq_ghz</span><span class="p">)</span>
+    <span class="n">qinv</span> <span class="o">=</span> <span class="n">_Qinv</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">prob</span><span class="p">)</span>
+
+    <span class="n">L_h</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">r</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">s</span> <span class="o">*</span> <span class="n">logf</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">t</span> <span class="o">*</span> <span class="n">logf</span> <span class="o">*</span> <span class="n">logf</span>
+    <span class="n">L_e</span> <span class="o">=</span> <span class="mf">0.212</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">theta_deg</span><span class="p">)</span>
+
+    <span class="n">C</span> <span class="o">=</span> <span class="o">-</span><span class="mf">3.</span>
+    <span class="n">mu1</span> <span class="o">=</span> <span class="n">L_h</span> <span class="o">+</span> <span class="n">L_e</span>
+    <span class="n">mu2</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">w</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">logf</span>
+    <span class="n">sig1</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">u</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">v</span> <span class="o">*</span> <span class="n">logf</span>
+    <span class="n">sig2</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">z</span> <span class="o">*</span> <span class="n">logf</span>
+
+    <span class="n">A</span> <span class="o">=</span> <span class="n">qinv</span> <span class="o">*</span> <span class="n">sig1</span> <span class="o">+</span> <span class="n">mu1</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">qinv</span> <span class="o">*</span> <span class="n">sig2</span> <span class="o">+</span> <span class="n">mu2</span>
+
+    <span class="n">L_bel</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">A</span><span class="p">)</span> <span class="o">+</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">B</span><span class="p">)</span> <span class="o">+</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">C</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">L_bel</span>
+
+
+<div class="viewcode-block" id="building_entry_loss"><a class="viewcode-back" href="../../../api/pycraf.pathprof.building_entry_loss.html#pycraf.pathprof.building_entry_loss">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+    <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="mf">0.08</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">GHz</span><span class="p">),</span>
+    <span class="n">theta</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">prob</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span>
+    <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
+    <span class="p">)</span>
+<span class="k">def</span> <span class="nf">building_entry_loss</span><span class="p">(</span>
+        <span class="n">freq</span><span class="p">,</span>
+        <span class="n">theta</span><span class="p">,</span>
+        <span class="n">prob</span><span class="p">,</span>
+        <span class="n">building_type</span><span class="p">,</span>
+        <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate building entry loss (BEL) according to `Rec. ITU-R P.2109-1</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.2109-1-201908-I/en&gt;`_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    freq : `~astropy.units.Quantity`</span>
+<span class="sd">        Frequency of radiation [GHz]</span>
+<span class="sd">    theta : `~astropy.units.Quantity`</span>
+<span class="sd">        Path elevation angle (w.r.t. horizon) [deg]</span>
+
+<span class="sd">        The minimal loss happens at zero horizontal incidence (0 deg)</span>
+<span class="sd">    prob : `~astropy.units.Quantity`</span>
+<span class="sd">        Probability that loss is not exceeded [%]</span>
+<span class="sd">    building_type : BuildingType enum</span>
+<span class="sd">        Building type,</span>
+<span class="sd">        allowed values: &quot;BuildingType.TRADITIONAL&quot; or &quot;BuildingType.THERM_EFF&quot;</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    L_bel : `~astropy.units.Quantity`</span>
+<span class="sd">        Building entry loss [dB]</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    With the following, one can create the Figures in `Rec. ITU-R P.2109-1</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.2109-1-201908-I/en&gt;`_.</span>
+
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :include-source:</span>
+
+<span class="sd">        import matplotlib.pyplot as plt</span>
+<span class="sd">        from pycraf import conversions as cnv</span>
+<span class="sd">        from pycraf import pathprof</span>
+<span class="sd">        from astropy import units as u</span>
+
+<span class="sd">        freq = np.logspace(-1, 2, 100) * u.GHz</span>
+<span class="sd">        theta = 0 * u.deg</span>
+<span class="sd">        prob = 0.5 * cnv.dimless</span>
+
+<span class="sd">        plt.figure(figsize=(8, 6))</span>
+
+<span class="sd">        for btype in [</span>
+<span class="sd">                pathprof.BuildingType.TRADITIONAL,</span>
+<span class="sd">                pathprof.BuildingType.THERM_EFF</span>
+<span class="sd">                ]:</span>
+
+<span class="sd">            L_bel = pathprof.building_entry_loss(freq, theta, prob, btype)</span>
+
+<span class="sd">            plt.semilogx(freq, L_bel, &#39;-&#39;, label=str(btype))</span>
+
+<span class="sd">        plt.xlabel(&#39;Frequency [GHz]&#39;)</span>
+<span class="sd">        plt.ylabel(&#39;BEL [dB]&#39;)</span>
+<span class="sd">        plt.xlim((0.1, 100))</span>
+<span class="sd">        plt.ylim((10, 60))</span>
+<span class="sd">        plt.legend(*plt.gca().get_legend_handles_labels())</span>
+<span class="sd">        plt.title(&#39;Median BEL at horizontal incidence&#39;)</span>
+<span class="sd">        plt.grid()</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :include-source:</span>
+
+<span class="sd">        import matplotlib.pyplot as plt</span>
+<span class="sd">        from pycraf import conversions as cnv</span>
+<span class="sd">        from pycraf import pathprof</span>
+<span class="sd">        from astropy import units as u</span>
+
+<span class="sd">        freqs = [0.1, 1, 10, 100] * u.GHz</span>
+<span class="sd">        colors = [&#39;k&#39;, &#39;r&#39;, &#39;g&#39;, &#39;b&#39;]</span>
+<span class="sd">        theta = 0 * u.deg</span>
+<span class="sd">        prob = np.linspace(1e-6, 1 - 1e-6, 200) * cnv.dimless</span>
+
+<span class="sd">        plt.figure(figsize=(8, 6))</span>
+
+<span class="sd">        for freq, color in zip(freqs, colors):</span>
+
+<span class="sd">            for btype, ls in zip([</span>
+<span class="sd">                    pathprof.BuildingType.TRADITIONAL,</span>
+<span class="sd">                    pathprof.BuildingType.THERM_EFF</span>
+<span class="sd">                    ], [&#39;--&#39;, &#39;:&#39;]):</span>
+
+<span class="sd">                L_bel = pathprof.building_entry_loss(freq, theta, prob, btype)</span>
+
+<span class="sd">                plt.plot(L_bel, prob, ls, color=color)</span>
+
+<span class="sd">            # labels</span>
+<span class="sd">            plt.plot([], [], &#39;-&#39;, color=color, label=str(freq))</span>
+
+<span class="sd">        plt.xlabel(&#39;BEL [dB]&#39;)</span>
+<span class="sd">        plt.ylabel(&#39;Probability&#39;)</span>
+<span class="sd">        plt.xlim((-20, 140))</span>
+<span class="sd">        plt.ylim((0, 1))</span>
+<span class="sd">        plt.legend(*plt.gca().get_legend_handles_labels())</span>
+<span class="sd">        plt.title(&#39;BEL (dashed: Traditional, dotted: Thermally inefficient&#39;)</span>
+<span class="sd">        plt.grid()</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - The result of this function is to be understood as a cumulative</span>
+<span class="sd">      value. For example, if `prob = 2%`, it means that for</span>
+<span class="sd">      2% of all possible outcomes, the loss will not exceed the</span>
+<span class="sd">      returned `L_bel` value, for the remaining 98% of locations it</span>
+<span class="sd">      will therefore be lower than `L_bel`. The smaller `prob`,</span>
+<span class="sd">      the smaller the returned `L_bel`, i.e., low BELs</span>
+<span class="sd">      are more unlikely.</span>
+
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">_building_entry_loss_p2109</span><span class="p">(</span>
+        <span class="n">freq</span><span class="p">,</span>
+        <span class="n">theta</span><span class="p">,</span>
+        <span class="n">prob</span><span class="p">,</span>
+        <span class="n">building_type</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This not a standalone python program! Use as module.&#39;</span><span class="p">)</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right"> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2022, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
+    Last built 23 May 2022. <br/>
+  </p>
+</footer>
+  </body>
+</html>
