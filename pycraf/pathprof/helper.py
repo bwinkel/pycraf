@@ -538,5 +538,47 @@ def terrain_cmap_factory(sealevel=0.5, vmin=-50, vmax=1200):
     return terrain_cmap, terrain_norm
 
 
+def _Qinv(x):
+    # Note, this seems to be identical to cyprop._I_helper
+    # only good between 1.e-6 and 0.5
+    # See R-Rec P.1546
+
+    x = np.atleast_1d(x).copy()
+    mask = x > 0.5
+    x[mask] = 1 - x[mask]
+
+    T = np.sqrt(-2 * np.log(x))
+    Z = (
+        (
+            ((0.010328 * T + 0.802853) * T) + 2.515516698
+            ) /
+        (
+            ((0.001308 * T + 0.189269) * T + 1.432788) * T + 1.
+            )
+        )
+
+    Q = T - Z
+    Q[mask] *= -1
+    return Q
+
+
+# def Qinv(x):
+#     # larger x range than the approximation given in P.1546?
+#     # definitely much slower
+
+#     from scipy.stats import norm as qnorm
+
+#     x = np.atleast_1d(x).copy()
+
+#     mask = x > 0.5
+#     x[mask] = 1 - x[mask]
+
+#     Q = -qnorm.ppf(x, 0)
+#     Q[mask] *= -1
+
+#     return Q
+
+
+
 if __name__ == '__main__':
     print('This not a standalone python program! Use as module.')
