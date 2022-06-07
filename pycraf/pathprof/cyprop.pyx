@@ -1972,8 +1972,34 @@ cdef double _clutter_correction(
     return A_h
 
 
+# def clutter_correction_cython(
+#         double h_g, int zone, double freq
+#         ):
+#     '''
+#     Calculate the Clutter loss of a propagating radio
+#     wave according to ITU-R P.452-16 Eq. (57).
+
+#     Parameters
+#     ----------
+#     h_g - height above ground [m]
+#     zone - Clutter category (see CLUTTER enum)
+#     freq - frequency [GHz]
+
+#     Returns
+#     -------
+#     A_h - Clutter correction to path attenuation [dB]
+
+#     Notes
+#     -----
+#     - Path profile parameters (PathProps object) can be derived using the
+#         [TODO]
+#     '''
+
+#     return _clutter_correction(h_g, zone, freq)
+
+
 def clutter_correction_cython(
-        double h_g, int zone, double freq
+        h_g, zone, freq, out_A_h=None
         ):
     '''
     Calculate the Clutter loss of a propagating radio
@@ -1995,7 +2021,53 @@ def clutter_correction_cython(
         [TODO]
     '''
 
-    return _clutter_correction(h_g, zone, freq)
+    cdef:
+
+        # the memory view leads to an error:
+        # ValueError: buffer source array is read-only
+        # but new cython version should support it!?
+        # double [::] _lon1_rad, _lat1_rad, _lon2_rad, _lat2_rad
+        # double [::] _out_dist, _out_bearing1, _out_bearing2
+        np.ndarray[double] _h_g, _freq
+        np.ndarray[int] _zone
+        np.ndarray[double] _out_A_h
+
+        int i, size
+
+    it = np.nditer(
+        [
+            h_g, np.ascontiguousarray(zone, dtype=np.int32), freq,
+            out_A_h
+            ],
+        flags=['external_loop', 'buffered', 'delay_bufalloc'],
+        op_flags=[
+            ['readonly'], ['readonly'], ['readonly'],
+            ['readwrite', 'allocate'],
+            ],
+        op_dtypes=[
+            'float64', 'int32', 'float64',
+            'float64',
+            ]
+        )
+
+    # it would be better to use the context manager but
+    # "with it:" requires numpy >= 1.14
+
+    it.reset()
+
+    for itup in it:
+        _h_g = itup[0]
+        _zone = itup[1]
+        _freq = itup[2]
+        _out_A_h = itup[3]
+
+        size = _h_g.shape[0]
+
+        for i in prange(size, nogil=True):
+
+            _out_A_h[i] = _clutter_correction(_h_g[i], _zone[i], _freq[i])
+
+    return it.operands[3]
 
 
 # ############################################################################

@@ -91,6 +91,7 @@ first is via concatenation, :math:`R=R_z(\alpha_3)R_y(\alpha_2)R_x(\alpha_1)`, o
     \end{bmatrix}
 
 .. note::
+
     One can also use other combinations of the basic rotation matrices (in
     total there are 24 different possibilities). Apart from the 'xyz' order,
     a common scheme is 'zxz', i.e.,
@@ -98,6 +99,7 @@ first is via concatenation, :math:`R=R_z(\alpha_3)R_y(\alpha_2)R_x(\alpha_1)`, o
     The rotation angles are often called Euler angles.
 
 .. note::
+
     The right-most matrix is applied first, but since rotation matrices are
     associative one can just calculate the matrix multiplication (in any
     order) and apply the result to the target vector.

@@ -95,8 +95,10 @@ def building_entry_loss(
         building_type,
         ):
     '''
-    Calculate building entry loss (BEL) according to `Rec. ITU-R P.2109-1
-    <https://www.itu.int/rec/R-REC-P.2109-1-201908-I/en>`_.
+    Calculate building entry loss (BEL).
+
+    The BEL model is according to `Rec. ITU-R P.2109-1
+    <https://www.itu.int/rec/R-REC-P.2109-1-201908-I/en>`__.
 
     Parameters
     ----------
@@ -104,13 +106,12 @@ def building_entry_loss(
         Frequency of radiation [GHz]
     theta : `~astropy.units.Quantity`
         Path elevation angle (w.r.t. horizon) [deg]
-
         The minimal loss happens at zero horizontal incidence (0 deg)
     prob : `~astropy.units.Quantity`
         Probability that loss is not exceeded [%]
     building_type : BuildingType enum
-        Building type,
-        allowed values: "BuildingType.TRADITIONAL" or "BuildingType.THERM_EFF"
+        Building type
+        allowed values: `BuildingType.TRADITIONAL` or `BuildingType.THERM_EFF`
 
     Returns
     -------
@@ -119,10 +120,8 @@ def building_entry_loss(
 
     Examples
     --------
-
     With the following, one can create the Figures in `Rec. ITU-R P.2109-1
-    <https://www.itu.int/rec/R-REC-P.2109-1-201908-I/en>`_.
-
+    <https://www.itu.int/rec/R-REC-P.2109-1-201908-I/en>`__.
 
     .. plot::
         :include-source:
@@ -192,7 +191,6 @@ def building_entry_loss(
         plt.title('BEL (dashed: Traditional, dotted: Thermally inefficient')
         plt.grid()
 
-
     Notes
     -----
     - The result of this function is to be understood as a cumulative
@@ -202,8 +200,6 @@ def building_entry_loss(
       will therefore be lower than `L_bel`. The smaller `prob`,
       the smaller the returned `L_bel`, i.e., low BELs
       are more unlikely.
-
-
     '''
 
     return _building_entry_loss_p2109(

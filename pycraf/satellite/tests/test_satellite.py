@@ -9,7 +9,7 @@
 import pytest
 import numpy as np
 from numpy.testing import assert_equal, assert_allclose
-from astropy.tests.helper import assert_quantity_allclose, remote_data
+from astropy.tests.helper import assert_quantity_allclose
 from astropy import units as apu
 from astropy.units import Quantity
 from astropy.coordinates import EarthLocation

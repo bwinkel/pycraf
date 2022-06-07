@@ -531,7 +531,6 @@ def P_pusch(P_cmax, M_pusch, P_0_pusch, alpha, PL):
         Note: Antenna gains should be included, so this is rather the
         coupling loss than the path loss, unlike what is stated in
         `ITU-R Rec. M.2101-0 <https://www.itu.int/rec/R-REC-M.2101/en>`_.
-        ``
 
     Returns
     -------

@@ -136,6 +136,7 @@ def airmass_from_elevation(elev):
                 \\sin\\left(\\mathrm{El} + \\frac{5.18}{\\mathrm{El} + 3.35}\\right)}\\qquad\\mathrm{for~}\\mathrm{El}<32\\\\
             \\frac{1}{\\sin\\mathrm{El}}\\qquad\\mathrm{for~}\\mathrm{El}\\geq32
             \\end{cases}
+
     '''
 
     return _airmass_from_elevation(elev)
@@ -210,6 +211,7 @@ def elevation_from_airmass(airmass):
     .. math::
 
         B \\equiv \\sin^{-1}\\left(\\frac{1.0140}{\\mathrm{AM} + 0.02344}\\right)
+
     '''
 
     return _elevation_from_airmass(airmass)
