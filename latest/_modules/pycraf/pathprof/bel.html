@@ -1,23 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pycraf.pathprof.bel &#8212; pycraf v2.0.1.dev10+g76ae9707</title>
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
+    <title>pycraf.pathprof.bel &#8212; pycraf v2.0.1.dev17+g41423332</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/sidebar.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
@@ -51,7 +48,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v2.0.1.dev10+g76ae9707</a>
+	<a href="../../../index.html">pycraf v2.0.1.dev17+g41423332</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -165,8 +162,10 @@
         <span class="n">building_type</span><span class="p">,</span>
         <span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Calculate building entry loss (BEL) according to `Rec. ITU-R P.2109-1</span>
-<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.2109-1-201908-I/en&gt;`_.</span>
+<span class="sd">    Calculate building entry loss (BEL).</span>
+
+<span class="sd">    The BEL model is according to `Rec. ITU-R P.2109-1</span>
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.2109-1-201908-I/en&gt;`__.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -174,13 +173,12 @@
 <span class="sd">        Frequency of radiation [GHz]</span>
 <span class="sd">    theta : `~astropy.units.Quantity`</span>
 <span class="sd">        Path elevation angle (w.r.t. horizon) [deg]</span>
-
 <span class="sd">        The minimal loss happens at zero horizontal incidence (0 deg)</span>
 <span class="sd">    prob : `~astropy.units.Quantity`</span>
 <span class="sd">        Probability that loss is not exceeded [%]</span>
 <span class="sd">    building_type : BuildingType enum</span>
-<span class="sd">        Building type,</span>
-<span class="sd">        allowed values: &quot;BuildingType.TRADITIONAL&quot; or &quot;BuildingType.THERM_EFF&quot;</span>
+<span class="sd">        Building type</span>
+<span class="sd">        allowed values: `BuildingType.TRADITIONAL` or `BuildingType.THERM_EFF`</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -189,10 +187,8 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-
 <span class="sd">    With the following, one can create the Figures in `Rec. ITU-R P.2109-1</span>
-<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.2109-1-201908-I/en&gt;`_.</span>
-
+<span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.2109-1-201908-I/en&gt;`__.</span>
 
 <span class="sd">    .. plot::</span>
 <span class="sd">        :include-source:</span>
@@ -262,7 +258,6 @@
 <span class="sd">        plt.title(&#39;BEL (dashed: Traditional, dotted: Thermally inefficient&#39;)</span>
 <span class="sd">        plt.grid()</span>
 
-
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    - The result of this function is to be understood as a cumulative</span>
@@ -272,8 +267,6 @@
 <span class="sd">      will therefore be lower than `L_bel`. The smaller `prob`,</span>
 <span class="sd">      the smaller the returned `L_bel`, i.e., low BELs</span>
 <span class="sd">      are more unlikely.</span>
-
-
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">return</span> <span class="n">_building_entry_loss_p2109</span><span class="p">(</span>
@@ -305,8 +298,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
-    Last built 23 May 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.0.1. &nbsp;
+    Last built 07 Jun 2022. <br/>
   </p>
 </footer>
   </body>

@@ -1,24 +1,21 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>equivalent_height_dry &#8212; pycraf v2.0.1.dev10+g76ae9707</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <title>equivalent_height_dry &#8212; pycraf v2.0.1.dev17+g41423332</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
@@ -65,7 +62,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v2.0.1.dev10+g76ae9707</a>
+	<a href="../index.html">pycraf v2.0.1.dev17+g41423332</a>
 	 &#187;
       </li>
       <li><a href="../atm/index.html" accesskey="U">Atmospheric models (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.atm</span></code>)</a> &#187;</li>
@@ -81,23 +78,23 @@
           <div class="body" role="main">
             
   <section id="equivalent-height-dry">
-<h1>equivalent_height_dry<a class="headerlink" href="#equivalent-height-dry" title="Permalink to this headline">¶</a></h1>
+<h1>equivalent_height_dry<a class="headerlink" href="#equivalent-height-dry" title="Permalink to this heading">¶</a></h1>
 <dl class="py function">
-<dt id="pycraf.atm.equivalent_height_dry">
-<code class="sig-prename descclassname"><span class="pre">pycraf.atm.</span></code><code class="sig-name descname"><span class="pre">equivalent_height_dry</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freq_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">press</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#equivalent_height_dry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L2622" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.atm.equivalent_height_dry" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pycraf.atm.equivalent_height_dry">
+<span class="sig-prename descclassname"><span class="pre">pycraf.atm.</span></span><span class="sig-name descname"><span class="pre">equivalent_height_dry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freq_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">press</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/atm/atm.html#equivalent_height_dry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/atm/atm.py#L2624" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.atm.equivalent_height_dry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Equivalent height for dry air according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.676-10-201309-S/en">ITU-R P.676-10</a>, Annex 2.2.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>freq_grid</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Frequenciesat which to calculate line-width shapes [GHz]</p>
+<dt><strong>freq_grid</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Frequenciesat which to calculate line-width shapes [GHz]</p>
 </dd>
-<dt><strong>press</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Total air pressure (dry + wet) [hPa]</p>
+<dt><strong>press</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Total air pressure (dry + wet) [hPa]</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
-<dt><strong>h_dry</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Equivalent height for dry air [km]</p>
+<dt><strong>h_dry</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Equivalent height for dry air [km]</p>
 </dd>
 </dl>
 </dd>
@@ -130,8 +127,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
-    Last built 23 May 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.0.1. &nbsp;
+    Last built 07 Jun 2022. <br/>
   </p>
 </footer>
   </body>

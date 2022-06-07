@@ -1,24 +1,21 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Geographical frames (pycraf.geospatial) &#8212; pycraf v2.0.1.dev10+g76ae9707</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <title>Geographical frames (pycraf.geospatial) &#8212; pycraf v2.0.1.dev17+g41423332</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
@@ -65,7 +62,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v2.0.1.dev10+g76ae9707</a>
+	<a href="../index.html">pycraf v2.0.1.dev17+g41423332</a>
 	 &#187;
       </li>
       
@@ -80,9 +77,9 @@
           <div class="body" role="main">
             
   <section id="geographical-frames-pycraf-geospatial">
-<h1>Geographical frames (<a class="reference internal" href="#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code></a>)<a class="headerlink" href="#geographical-frames-pycraf-geospatial" title="Permalink to this headline">¶</a></h1>
+<h1>Geographical frames (<a class="reference internal" href="#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code></a>)<a class="headerlink" href="#geographical-frames-pycraf-geospatial" title="Permalink to this heading">¶</a></h1>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
 <p>GIS software often works with coordinate frames other than GPS/WGS84.
 Therefore, the <a class="reference internal" href="#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geospatial</span></code></a> sub-package offers routines
 to convert between different geographical projections/frames.
@@ -94,9 +91,9 @@ based on EPSG/ESRI codes or <code class="xref py py-obj docutils literal notrans
 <p>Internally, the <a class="reference internal" href="#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code></a> module uses the <a class="reference external" href="https://pypi.python.org/pypi/pyproj">pyproj</a> package, which itself is a wrapper
 around the <a class="reference external" href="http://proj4.org/">proj.4</a> software for the transformation.
 In principle, one could use <code class="xref py py-obj docutils literal notranslate"><span class="pre">pyproj</span></code> directly, but <a class="reference internal" href="#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code></a>
-offers unit checking (by making use of the <a class="reference external" href="https://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a>
+offers unit checking (by making use of the <a class="reference external" href="https://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a>
 functionality.)</p>
-</aside>
+</div>
 <p>There are thousands of pre-defined frames (which one can work with by simply
 using the correct code, e.g., EPSG or ESRI; <a class="reference external" href="https://en.wikipedia.org/wiki/Spatial_reference_system">see Wikipedia</a>), but the
 underlying <code class="xref py py-obj docutils literal notranslate"><span class="pre">proj4</span></code> library also accepts user-defined frames. For example,
@@ -107,7 +104,7 @@ the ETRS89 frame is defined with the following:</p>
 </div>
 </section>
 <section id="using-pycraf-geospatial">
-<h2>Using <a class="reference internal" href="#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code></a><a class="headerlink" href="#using-pycraf-geospatial" title="Permalink to this headline">¶</a></h2>
+<h2>Using <a class="reference internal" href="#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code></a><a class="headerlink" href="#using-pycraf-geospatial" title="Permalink to this heading">¶</a></h2>
 <p>The provided functions are just a thin wrapper around <code class="xref py py-obj docutils literal notranslate"><span class="pre">pyproj</span></code>, mostly
 improving convenience for the user:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycraf.geospatial</span> <span class="k">as</span> <span class="nn">geo</span>
@@ -173,9 +170,9 @@ directly query the EPSG code (if needed):</p>
 <span class="go">349988.58854241937 m 5599125.388981281 m</span>
 </pre></div>
 </div>
-</aside>
+</div>
 <section id="imperial-units">
-<h3>Imperial units<a class="headerlink" href="#imperial-units" title="Permalink to this headline">¶</a></h3>
+<h3>Imperial units<a class="headerlink" href="#imperial-units" title="Permalink to this heading">¶</a></h3>
 <p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">proj4</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">pyproj</span></code> software packages allow to work with frames that
 are historical or of regional interest, only. Some of these don’t work
 with units of Meters, but feet, etc. Per default, <code class="xref py py-obj docutils literal notranslate"><span class="pre">pyproj</span></code> (versions prior
@@ -210,7 +207,7 @@ output). One can specifically ask for the original units by doing:</p>
 </pre></div>
 </div>
 <p>The <a class="reference internal" href="#module-pycraf.geospatial" title="pycraf.geospatial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geospatial</span></code></a> sub-package makes life a bit easier,
-because we can use the <a class="reference external" href="https://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> conversion:</p>
+because we can use the <a class="reference external" href="https://docs.astropy.org/en/stable/units/index.html#module-astropy.units" title="(in Astropy v5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> conversion:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">transform_factory</span><span class="p">(</span><span class="mi">4326</span><span class="p">,</span> <span class="mi">3452</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="o">-</span><span class="mf">92.105819</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">30.447921</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span>  
@@ -229,7 +226,7 @@ original unit is tied to an EPSG code (although it internally must
 know it, otherwise, it wouldn’t work correctly).</p>
 </section>
 <section id="geocentric-systems">
-<h3>Geocentric systems<a class="headerlink" href="#geocentric-systems" title="Permalink to this headline">¶</a></h3>
+<h3>Geocentric systems<a class="headerlink" href="#geocentric-systems" title="Permalink to this heading">¶</a></h3>
 <p>Some frames are Geocentric systems that work with <code class="xref py py-obj docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code> coordinates.
 One important example is ITRF:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">geo</span><span class="o">.</span><span class="n">wgs84_to_itrf2005</span><span class="p">(</span><span class="n">rt_lon</span><span class="p">,</span> <span class="n">rt_lat</span><span class="p">,</span> <span class="mi">300</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>  
@@ -241,7 +238,7 @@ One important example is ITRF:</p>
 </section>
 </section>
 <section id="see-also">
-<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">Astropy Units and Quantities package</a>, which is used extensively in pycraf.</p></li>
 <li><p><a class="reference external" href="http://proj4.org/">proj.4</a></p></li>
@@ -252,16 +249,16 @@ One important example is ITRF:</p>
 </ul>
 </section>
 <section id="reference-api">
-<h2>Reference/API<a class="headerlink" href="#reference-api" title="Permalink to this headline">¶</a></h2>
+<h2>Reference/API<a class="headerlink" href="#reference-api" title="Permalink to this heading">¶</a></h2>
 <section id="module-pycraf.geospatial">
-<span id="pycraf-geospatial-package"></span><h3>pycraf.geospatial Package<a class="headerlink" href="#module-pycraf.geospatial" title="Permalink to this headline">¶</a></h3>
+<span id="pycraf-geospatial-package"></span><h3>pycraf.geospatial Package<a class="headerlink" href="#module-pycraf.geospatial" title="Permalink to this heading">¶</a></h3>
 <p>This subpackage contains a couple of functions to convert coordinates
 between typical GIS frames, such as GPS (WGS84), UTM, and ETRS89. The
 underlying transformations are based on the <a class="reference external" href="https://pypi.python.org/pypi/pyproj">pyproj</a> package, which itself is a wrapper
 around the <a class="reference external" href="http://proj4.org/">proj.4</a> software.</p>
 <section id="functions">
-<h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h4>
-<table class="longtable docutils align-default">
+<h4>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">¶</a></h4>
+<table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.geospatial.epsg_from_utm_zone.html#pycraf.geospatial.epsg_from_utm_zone" title="pycraf.geospatial.epsg_from_utm_zone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epsg_from_utm_zone</span></code></a>(utm_zone)</p></td>
 <td><p>EPSG number for UTM zone code.</p></td>
@@ -275,7 +272,7 @@ around the <a class="reference external" href="http://proj4.org/">proj.4</a> sof
 <tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.geospatial.itrf2008_to_wgs84.html#pycraf.geospatial.itrf2008_to_wgs84" title="pycraf.geospatial.itrf2008_to_wgs84"><code class="xref py py-obj docutils literal notranslate"><span class="pre">itrf2008_to_wgs84</span></code></a>(x, y, z)</p></td>
 <td><p>Convert ITRF2008 coordinates to GPS/WGS84.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.geospatial.transform_factory.html#pycraf.geospatial.transform_factory" title="pycraf.geospatial.transform_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform_factory</span></code></a>(sys_in, sys_out[, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.geospatial.transform_factory.html#pycraf.geospatial.transform_factory" title="pycraf.geospatial.transform_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform_factory</span></code></a>(sys_in, sys_out[, ...])</p></td>
 <td><p>A factory to produce conversion functions (decorated with <a class="reference internal" href="../api/pycraf.utils.ranged_quantity_input.html#pycraf.utils.ranged_quantity_input" title="pycraf.utils.ranged_quantity_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ranged_quantity_input</span></code></a> for unit handling).</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.geospatial.utm_to_wgs84.html#pycraf.geospatial.utm_to_wgs84" title="pycraf.geospatial.utm_to_wgs84"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utm_to_wgs84</span></code></a>(ulon, ulat, utm_zone)</p></td>
@@ -300,8 +297,8 @@ around the <a class="reference external" href="http://proj4.org/">proj.4</a> sof
 </table>
 </section>
 <section id="classes">
-<h4>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h4>
-<table class="longtable docutils align-default">
+<h4>Classes<a class="headerlink" href="#classes" title="Permalink to this heading">¶</a></h4>
+<table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.geospatial.EPSG.html#pycraf.geospatial.EPSG" title="pycraf.geospatial.EPSG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EPSG</span></code></a>(value)</p></td>
 <td><p>Enum with often used EPSG codes.</p></td>
@@ -357,8 +354,8 @@ around the <a class="reference external" href="http://proj4.org/">proj.4</a> sof
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
-    Last built 23 May 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.0.1. &nbsp;
+    Last built 07 Jun 2022. <br/>
   </p>
 </footer>
   </body>

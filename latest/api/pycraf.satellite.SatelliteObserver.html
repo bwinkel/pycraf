@@ -1,24 +1,21 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>SatelliteObserver &#8212; pycraf v2.0.1.dev10+g76ae9707</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <title>SatelliteObserver &#8212; pycraf v2.0.1.dev17+g41423332</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
@@ -65,7 +62,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v2.0.1.dev10+g76ae9707</a>
+	<a href="../index.html">pycraf v2.0.1.dev17+g41423332</a>
 	 &#187;
       </li>
       <li><a href="../satellite/index.html" accesskey="U">Satellites (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.satellite</span></code>)</a> &#187;</li>
@@ -81,18 +78,18 @@
           <div class="body" role="main">
             
   <section id="satelliteobserver">
-<h1>SatelliteObserver<a class="headerlink" href="#satelliteobserver" title="Permalink to this headline">¶</a></h1>
+<h1>SatelliteObserver<a class="headerlink" href="#satelliteobserver" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
-<dt id="pycraf.satellite.SatelliteObserver">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pycraf.satellite.</span></code><code class="sig-name descname"><span class="pre">SatelliteObserver</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_location</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/satellite/satellite.html#SatelliteObserver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/satellite/satellite.py#L109" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.satellite.SatelliteObserver" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pycraf.satellite.SatelliteObserver">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycraf.satellite.</span></span><span class="sig-name descname"><span class="pre">SatelliteObserver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_location</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/satellite/satellite.html#SatelliteObserver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/satellite/satellite.py#L109" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.satellite.SatelliteObserver" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Calculate position of a satellite relative to an observer on Earth.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>obs_location</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.EarthLocation.html#astropy.coordinates.EarthLocation" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EarthLocation</span></code></a> or tuple</span></dt><dd><p>Location of observer.</p>
+<dt><strong>obs_location</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.EarthLocation.html#astropy.coordinates.EarthLocation" title="(in Astropy v5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EarthLocation</span></code></a> or tuple</span></dt><dd><p>Location of observer.</p>
 <p>This must be in a form that can be casted to
-<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.EarthLocation.html#astropy.coordinates.EarthLocation" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EarthLocation</span></code></a>.</p>
+<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.EarthLocation.html#astropy.coordinates.EarthLocation" title="(in Astropy v5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EarthLocation</span></code></a>.</p>
 </dd>
 </dl>
 </dd>
@@ -103,7 +100,7 @@
 </dd>
 </dl>
 <p class="rubric">Methods Summary</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pycraf.satellite.SatelliteObserver.azel_from_sat" title="pycraf.satellite.SatelliteObserver.azel_from_sat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">azel_from_sat</span></code></a>(satellite_or_tle, obstime)</p></td>
 <td><p><dl class="field-list simple">
@@ -116,14 +113,14 @@
 </table>
 <p class="rubric">Methods Documentation</p>
 <dl class="py method">
-<dt id="pycraf.satellite.SatelliteObserver.azel_from_sat">
-<code class="sig-name descname"><span class="pre">azel_from_sat</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">satellite_or_tle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obstime</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/satellite/satellite.html#SatelliteObserver.azel_from_sat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/satellite/satellite.py#L252" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.satellite.SatelliteObserver.azel_from_sat" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pycraf.satellite.SatelliteObserver.azel_from_sat">
+<span class="sig-name descname"><span class="pre">azel_from_sat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">satellite_or_tle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obstime</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/satellite/satellite.html#SatelliteObserver.azel_from_sat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/satellite/satellite.py#L252" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.satellite.SatelliteObserver.azel_from_sat" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>satellite_or_tle</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sgp4.io.Satellite</span></code> instance or TLE 3-line string</span></dt><dd><p>Satellite object or TLE</p>
 </dd>
-<dt><strong>obstime</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.time.Time.html#astropy.time.Time" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Time</span></code></a></span></dt><dd><p>Time of observation</p>
+<dt><strong>obstime</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.time.Time.html#astropy.time.Time" title="(in Astropy v5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Time</span></code></a></span></dt><dd><p>Time of observation</p>
 </dd>
 </dl>
 </dd>
@@ -173,8 +170,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
-    Last built 23 May 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.0.1. &nbsp;
+    Last built 07 Jun 2022. <br/>
   </p>
 </footer>
   </body>
