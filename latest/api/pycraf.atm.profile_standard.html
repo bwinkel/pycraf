@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>profile_standard &#8212; pycraf v2.0.1.dev17+g41423332</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
@@ -17,6 +17,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -112,7 +113,7 @@
 <p class="rubric">Notes</p>
 <p>For convenience, derived quantities like water density/pressure
 and refraction indices are also returned.</p>
-<p>The return value is actually a <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.namedtuple" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">namedtuple</span></code></a>, so it is
+<p>The return value is actually a <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.namedtuple" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">namedtuple</span></code></a>, so it is
 possible to do the following:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">atm</span>
@@ -147,7 +148,10 @@ possible to do the following:</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
 <ul>
-<li><a class="reference internal" href="#">profile_standard</a></li>
+<li><a class="reference internal" href="#">profile_standard</a><ul>
+<li><a class="reference internal" href="#pycraf.atm.profile_standard"><code class="docutils literal notranslate"><span class="pre">profile_standard()</span></code></a></li>
+</ul>
+</li>
 </ul>
 
 
@@ -163,8 +167,8 @@ possible to do the following:</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.0.1. &nbsp;
-    Last built 07 Jun 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.3.0. &nbsp;
+    Last built 17 Nov 2022. <br/>
   </p>
 </footer>
   </body>

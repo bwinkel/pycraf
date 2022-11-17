@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>MultiState &#8212; pycraf v2.0.1.dev17+g41423332</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
@@ -17,6 +17,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -82,7 +83,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="pycraf.utils.MultiState">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycraf.utils.</span></span><span class="sig-name descname"><span class="pre">MultiState</span></span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/utils/multistate.py#L56" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.utils.MultiState" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Multi state subclasses are used to manage global items.</p>
 <p><a class="reference internal" href="#pycraf.utils.MultiState" title="pycraf.utils.MultiState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiState</span></code></a> is a so-called Singleton, which means that no instances
 can be created. This way, it is guaranteed that only one <a class="reference internal" href="#pycraf.utils.MultiState" title="pycraf.utils.MultiState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiState</span></code></a>
@@ -242,7 +243,15 @@ take care of by the <a class="reference internal" href="#pycraf.utils.MultiState
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
 <ul>
-<li><a class="reference internal" href="#">MultiState</a></li>
+<li><a class="reference internal" href="#">MultiState</a><ul>
+<li><a class="reference internal" href="#pycraf.utils.MultiState"><code class="docutils literal notranslate"><span class="pre">MultiState</span></code></a><ul>
+<li><a class="reference internal" href="#pycraf.utils.MultiState.hook"><code class="docutils literal notranslate"><span class="pre">MultiState.hook()</span></code></a></li>
+<li><a class="reference internal" href="#pycraf.utils.MultiState.set"><code class="docutils literal notranslate"><span class="pre">MultiState.set()</span></code></a></li>
+<li><a class="reference internal" href="#pycraf.utils.MultiState.validate"><code class="docutils literal notranslate"><span class="pre">MultiState.validate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
 
@@ -258,8 +267,8 @@ take care of by the <a class="reference internal" href="#pycraf.utils.MultiState
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.0.1. &nbsp;
-    Last built 07 Jun 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.3.0. &nbsp;
+    Last built 17 Nov 2022. <br/>
   </p>
 </footer>
   </body>

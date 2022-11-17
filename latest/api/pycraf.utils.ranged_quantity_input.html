@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>ranged_quantity_input &#8212; pycraf v2.0.1.dev17+g41423332</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
@@ -17,6 +17,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -94,7 +95,7 @@ with type annotations).</p>
 attribute of the argument is not equivalent to the unit
 specified to the decorator or in the annotation. If the
 argument has no unit attribute, i.e. it is not a Quantity
-object, a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ValueError</span></code></a> will be raised.</p>
+object, a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ValueError</span></code></a> will be raised.</p>
 <p>Where an equivalency is specified in the decorator, the
 function will be executed with that equivalency in force.</p>
 <dl class="field-list">
@@ -126,7 +127,7 @@ the return values, which means you should only use this
 if you have stripped the units from the input (or otherwise
 made sure that the return values are unit-less).</p>
 </dd>
-<dt><strong>allow_none</strong><span class="classifier">bool, optional</span></dt><dd><p>Allow to use <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a> as default value; see examples.</p>
+<dt><strong>allow_none</strong><span class="classifier">bool, optional</span></dt><dd><p>Allow to use <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a> as default value; see examples.</p>
 </dd>
 </dl>
 </dd>
@@ -223,8 +224,8 @@ of output units.</p>
 <span class="go">&lt;Quantity 0.25 m2&gt;</span>
 </pre></div>
 </div>
-<p>However, sometimes one wants to use <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a> as default, which will
-fail, because <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a> has no unit:</p>
+<p>However, sometimes one wants to use <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a> as default, which will
+fail, because <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a> has no unit:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@ranged_quantity_input</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">))</span>
 <span class="gp">... </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">**</span> <span class="mi">2</span>
@@ -248,7 +249,7 @@ fail, because <a class="reference external" href="https://docs.python.org/3/libr
 </pre></div>
 </div>
 <p>and of course, the unit check still works,  if a something other
-than <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a> is provided:</p>
+than <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a> is provided:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
 <span class="gt">Traceback (most recent call last):</span>
 <span class="c">...</span>
@@ -268,7 +269,10 @@ than <a class="reference external" href="https://docs.python.org/3/library/const
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
 <ul>
-<li><a class="reference internal" href="#">ranged_quantity_input</a></li>
+<li><a class="reference internal" href="#">ranged_quantity_input</a><ul>
+<li><a class="reference internal" href="#pycraf.utils.ranged_quantity_input"><code class="docutils literal notranslate"><span class="pre">ranged_quantity_input()</span></code></a></li>
+</ul>
+</li>
 </ul>
 
 
@@ -284,8 +288,8 @@ than <a class="reference external" href="https://docs.python.org/3/library/const
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.0.1. &nbsp;
-    Last built 07 Jun 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.3.0. &nbsp;
+    Last built 17 Nov 2022. <br/>
   </p>
 </footer>
   </body>

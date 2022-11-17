@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>landcover_to_p452_clutter_zones &#8212; pycraf v2.0.1.dev17+g41423332</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
@@ -17,6 +17,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -96,11 +97,11 @@ may need to increase the input map values by One in such cases.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>landcover_map</strong><span class="classifier">2D <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> (usually integer type)</span></dt><dd><p>Map of land cover types (e.g. from Corine land cover survey). Data
+<dt><strong>landcover_map</strong><span class="classifier">2D <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> (usually integer type)</span></dt><dd><p>Map of land cover types (e.g. from Corine land cover survey). Data
 type will usually be some Integer type and must contain land cover
 class IDs (see e.g. Notes below).</p>
 </dd>
-<dt><strong>conversion_table</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>A dictionary with a mapping (conversion) from the land cover ID to
+<dt><strong>conversion_table</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>A dictionary with a mapping (conversion) from the land cover ID to
 the P.452 clutter zone type. Two mappings are pre-defined in
 <a class="reference internal" href="../pathprof/index.html#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pathprof</span></code></a>, the <a class="reference internal" href="pycraf.pathprof.CORINE_TO_P452_CLASSES.html#pycraf.pathprof.CORINE_TO_P452_CLASSES" title="pycraf.pathprof.CORINE_TO_P452_CLASSES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CORINE_TO_P452_CLASSES</span></code></a> and
 the <a class="reference internal" href="pycraf.pathprof.IGBP_TO_P452_CLASSES.html#pycraf.pathprof.IGBP_TO_P452_CLASSES" title="pycraf.pathprof.IGBP_TO_P452_CLASSES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IGBP_TO_P452_CLASSES</span></code></a>.</p>
@@ -109,7 +110,7 @@ the <a class="reference internal" href="pycraf.pathprof.IGBP_TO_P452_CLASSES.htm
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
-<dt><strong>p452_clutter_zones_map</strong><span class="classifier">2D <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> of int8</span></dt><dd><p>Map of P.452 clutter zone types derived from the provided dictionary
+<dt><strong>p452_clutter_zones_map</strong><span class="classifier">2D <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> of int8</span></dt><dd><p>Map of P.452 clutter zone types derived from the provided dictionary
 with the landcover class IDs.</p>
 </dd>
 </dl>
@@ -200,7 +201,10 @@ with the landcover class IDs.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
 <ul>
-<li><a class="reference internal" href="#">landcover_to_p452_clutter_zones</a></li>
+<li><a class="reference internal" href="#">landcover_to_p452_clutter_zones</a><ul>
+<li><a class="reference internal" href="#pycraf.pathprof.landcover_to_p452_clutter_zones"><code class="docutils literal notranslate"><span class="pre">landcover_to_p452_clutter_zones()</span></code></a></li>
+</ul>
+</li>
 </ul>
 
 
@@ -216,8 +220,8 @@ with the landcover class IDs.</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.0.1. &nbsp;
-    Last built 07 Jun 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.3.0. &nbsp;
+    Last built 17 Nov 2022. <br/>
   </p>
 </footer>
   </body>

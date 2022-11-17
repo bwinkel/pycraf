@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>P_pusch &#8212; pycraf v2.0.1.dev17+g41423332</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
@@ -17,6 +17,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -90,12 +91,12 @@ Section 4.1.</p>
 <dd class="field-odd"><dl>
 <dt><strong>P_cmax</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Maximum transmit power [dBm]</p>
 </dd>
-<dt><strong>M_pusch</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, int</span></dt><dd><p>Number of allocated resource blocks (RBs)</p>
+<dt><strong>M_pusch</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, int</span></dt><dd><p>Number of allocated resource blocks (RBs)</p>
 <p>Is this the bandwidth per carrier divided by the RB bandwidth (
 typically 180 kHz) and number of UE devices associated to each
 carrier?</p>
 </dd>
-<dt><strong>P_0_pusch</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></span></dt><dd><p>Initial receive target UE power level per RB [dBm]</p>
+<dt><strong>P_0_pusch</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></span></dt><dd><p>Initial receive target UE power level per RB [dBm]</p>
 </dd>
 <dt><strong>alpha</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a></span></dt><dd><p>Balancing factor for UEs with bad channel and UEs with good channel</p>
 </dd>
@@ -183,7 +184,10 @@ coupling loss than the path loss, unlike what is stated in
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
 <ul>
-<li><a class="reference internal" href="#">P_pusch</a></li>
+<li><a class="reference internal" href="#">P_pusch</a><ul>
+<li><a class="reference internal" href="#pycraf.pathprof.P_pusch"><code class="docutils literal notranslate"><span class="pre">P_pusch()</span></code></a></li>
+</ul>
+</li>
 </ul>
 
 
@@ -199,8 +203,8 @@ coupling loss than the path loss, unlike what is stated in
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.0.1. &nbsp;
-    Last built 07 Jun 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.3.0. &nbsp;
+    Last built 17 Nov 2022. <br/>
   </p>
 </footer>
   </body>
