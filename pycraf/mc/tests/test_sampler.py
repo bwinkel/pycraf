@@ -17,7 +17,7 @@ TOL_KWARGS = {'atol': 1.e-4, 'rtol': 1.e-4}
 
 class TestHistogramSamper():
 
-    def setup(self):
+    def setup_method(self):
 
         with NumpyRNGContext(1):
             self.x = np.random.normal(0, 1, 1000)

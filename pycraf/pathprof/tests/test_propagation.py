@@ -48,7 +48,7 @@ MAP_KEYS = [
 @pytest.mark.usefixtures('srtm_handler')
 class TestPropagation:
 
-    def setup(self):
+    def setup_method(self):
 
         # TODO: add further test cases
 
@@ -186,7 +186,7 @@ class TestPropagation:
             # with open('/tmp/' + loss_name, 'w') as f:
             #     json.dump(losses, f)
 
-    def teardown(self):
+    def teardown_method(self):
 
         pass
 
@@ -708,7 +708,7 @@ class TestPropagation:
 # repeat tests with flat-terrain (avoids downloading data)
 class TestPropagationGeneric:
 
-    def setup(self):
+    def setup_method(self):
 
         # TODO: add further test cases
 
@@ -842,7 +842,7 @@ class TestPropagationGeneric:
             # with open('/tmp/' + loss_name, 'w') as f:
             #     json.dump(losses, f)
 
-    def teardown(self):
+    def teardown_method(self):
 
         pass
 

@@ -8,7 +8,7 @@ from ...utils import MultiState
 
 class TestMultiState:
 
-    def setup(self):
+    def setup_method(self):
 
         class MyState(MultiState):
 
