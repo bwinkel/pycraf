@@ -228,6 +228,7 @@ cdef struct ppstruct:
     double time_percent  # percent
     double beta0  # percent
     double omega  # percent
+    double base_water_density  # g / m^3
     double lon_t  # deg
     double lat_t  # deg
     double lon_r  # deg
@@ -400,6 +401,7 @@ cdef class _PathProp(object):
             # set terrain heights to zero if desired
             # (only if hprof_xxx set to None aka automatic)
             bint generic_heights=False,
+            double base_water_density=7.5,  # g/m^3
             ):
 
         assert time_percent <= 50.
@@ -493,6 +495,10 @@ cdef class _PathProp(object):
         # TODO: add functionality to produce the following
         # five parameters programmatically (using some kind of Geo-Data)
         self._pp.omega = omega
+        # changing base water density (default: 7.5) is violating P.452
+        # it might be OK for extra-ordinarily dry places
+        # the normal formula is h2o = 7.5 + 2.5 * omega [g/m^3]
+        self._pp.base_water_density = base_water_density
         self._pp.d_tm = d_tm
         self._pp.d_lm = d_lm
         self._pp.d_ct = d_ct
@@ -1230,7 +1236,7 @@ cdef (double, double, double) _free_space_loss_bfsg(
 
         double A_g, L_bfsg, E_sp, E_sbeta
 
-    rho_water = 7.5 + 2.5 * pp.omega / 100.
+    rho_water = pp.base_water_density + 2.5 * pp.omega / 100.
     atten_dB = _specific_attenuation_annex2(
         pp.freq, pp.pressure, rho_water, pp.temperature
         )
@@ -1362,7 +1368,7 @@ cdef double _ducting_loss_ba(
 
         double gamma_d, tau, eps, alpha, beta, mu_2, mu_3, d_I, Gamma
 
-    rho_water = 7.5 + 2.5 * pp.omega / 100.
+    rho_water = pp.base_water_density + 2.5 * pp.omega / 100.
     atten_dB = _specific_attenuation_annex2(
         pp.freq, pp.pressure, rho_water, pp.temperature
         )
@@ -2544,6 +2550,7 @@ def atten_map_fast_cython(
         object hprof_data not None,  # dict_like
         int polarization=0,
         int version=16,
+        double base_water_density=7.5,  # g/m^3
         ):
     '''
     Calculate attenuation maps using a fast method.
@@ -2568,6 +2575,9 @@ def atten_map_fast_cython(
         Allowed values are: 0 - horizontal, 1 - vertical
     version : int, optional
         ITU-R Rec. P.452 version. Allowed values are: 14, 16
+    base_water_density : double, optional
+        Set base water level density (default: 7.5 g / m^3)
+        See Rec. ITU-R P.452, Eq. (9a)
 
     Returns
     -------
@@ -2692,6 +2702,7 @@ def atten_map_fast_cython(
         # TODO: add functionality to produce the following
         # five parameters programmatically (using some kind of Geo-Data)
         pp.polarization = polarization
+        pp.base_water_density = base_water_density
 
         for yi in prange(ylen, schedule='guided', chunksize=10):
 
@@ -2776,6 +2787,7 @@ def atten_path_fast_cython(
         object hprof_data not None,  # dict_like
         int polarization=0,
         int version=16,
+        double base_water_density=7.5,  # g/m^3
         ):
 
     '''
@@ -2801,6 +2813,9 @@ def atten_path_fast_cython(
         Allowed values are: 0 - horizontal, 1 - vertical
     version : int, optional
         ITU-R Rec. P.452 version. Allowed values are: 14, 16
+    base_water_density : double, optional
+        Set base water level density (default: 7.5 g / m^3)
+        See Rec. ITU-R P.452, Eq. (9a)
 
     Returns
     -------
@@ -2911,6 +2926,7 @@ def atten_path_fast_cython(
         pp.hprof_step = 30.  # dummy
         pp.time_percent = time_percent
         pp.polarization = polarization
+        pp.base_water_density = base_water_density
 
         # for algorithmic reasons, it is not possible to calculated the
         # attens for the first 5 or so steps; start at index 6
@@ -2992,6 +3008,7 @@ def losses_complete_cython(
         hprof_heights=None,
         hprof_bearing=None, hprof_backbearing=None,
         generic_heights=False,
+        double base_water_density=7.5,  # g/m^3
         ):
 
     cdef:
@@ -3202,6 +3219,7 @@ def losses_complete_cython(
             pp.alpha_rt = back_bearing
             pp.delta_N = _delta_N
             pp.N0 = _N0
+            pp.base_water_density = base_water_density
 
             size = _freq.shape[0]
 

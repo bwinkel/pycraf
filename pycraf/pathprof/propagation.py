@@ -104,6 +104,10 @@ class PathProp(cyprop._PathProp):
         The option is only meaningful, if the hprof_xxx parameters are set
         to `None` (which means automatic querying of the profiles).
         (Default: False)
+    base_water_density : `~astropy.units.Quantity`, optional
+        For atmospheric attenuation, the water vapor content plays a role.
+        In Rec. ITU-R P.452, Eq. (9a), the water content is variable (depending on the fraction of the path over the water). However, the base level is set to :math:`7.5~\\mathrm{g}/\\mathrm{m}^3`. For extraordinarily dry places, which are often used for radio astronomy, this value can be too high.
+        (Default: 7.5 g / m^3)
 
     Returns
     -------
@@ -174,6 +178,7 @@ class PathProp(cyprop._PathProp):
         hprof_heights=(None, None, apu.m),
         hprof_bearing=(None, None, apu.deg),
         hprof_backbearing=(None, None, apu.deg),
+        base_water_density=(0.5, 100, apu.g / apu.m ** 3),
         strip_input_units=True, allow_none=True, output_unit=None
         )
     def __init__(
@@ -197,7 +202,8 @@ class PathProp(cyprop._PathProp):
             # override if you don't want builtin method:
             hprof_dists=None, hprof_heights=None,
             hprof_bearing=None, hprof_backbearing=None,
-            generic_heights=False
+            generic_heights=False,
+            base_water_density=7.5 * apu.g / apu.m ** 3
             ):
 
         super().__init__(
@@ -221,6 +227,7 @@ class PathProp(cyprop._PathProp):
             hprof_bearing=hprof_bearing,
             hprof_backbearing=hprof_backbearing,
             generic_heights=generic_heights,
+            base_water_density=base_water_density,
             )
 
         self.__params = list(cyprop.PARAMETERS_BASIC)  # make a copy
@@ -738,6 +745,7 @@ def height_map_data(
     h_tg=(None, None, apu.m),
     h_rg=(None, None, apu.m),
     timepercent=(0, 50, apu.percent),
+    base_water_density=(0.5, 100, apu.g / apu.m ** 3),
     strip_input_units=True,
     )
 def atten_map_fast(
@@ -749,6 +757,7 @@ def atten_map_fast(
         hprof_data,  # dict_like
         polarization=0,
         version=16,
+        base_water_density=7.5 * apu.g / apu.m ** 3,
         ):
     '''
     Calculate attenuation maps using a fast method.
@@ -774,6 +783,10 @@ def atten_map_fast(
         Allowed values are: 0 - horizontal, 1 - vertical
     version : int, optional
         ITU-R Rec. P.452 version. Allowed values are: 14, 16
+    base_water_density : `~astropy.units.Quantity`, optional
+        For atmospheric attenuation, the water vapor content plays a role.
+        In Rec. ITU-R P.452, Eq. (9a), the water content is variable (depending on the fraction of the path over the water). However, the base level is set to :math:`7.5~\\mathrm{g}/\\mathrm{m}^3`. For extraordinarily dry places, which are often used for radio astronomy, this value can be too high.
+        (Default: 7.5 g / m^3)
 
     Returns
     -------
@@ -825,6 +838,7 @@ def atten_map_fast(
         hprof_data,  # dict_like
         polarization=polarization,
         version=version,
+        base_water_density=base_water_density,
         )
 
     return {
@@ -1170,6 +1184,7 @@ def height_path_data_generic(
     h_tg=(None, None, apu.m),
     h_rg=(None, None, apu.m),
     timepercent=(0, 50, apu.percent),
+    base_water_density=(0.5, 100, apu.g / apu.m ** 3),
     strip_input_units=True,
     )
 def atten_path_fast(
@@ -1181,6 +1196,7 @@ def atten_path_fast(
         hprof_data,  # dict_like
         polarization=0,
         version=16,
+        base_water_density=7.5 * apu.g / apu.m ** 3,
         ):
     '''
     Calculate attenuation along a path using a parallelized method.
@@ -1206,6 +1222,10 @@ def atten_path_fast(
         Allowed values are: 0 - horizontal, 1 - vertical
     version : int, optional
         ITU-R Rec. P.452 version. Allowed values are: 14, 16
+    base_water_density : `~astropy.units.Quantity`, optional
+        For atmospheric attenuation, the water vapor content plays a role.
+        In Rec. ITU-R P.452, Eq. (9a), the water content is variable (depending on the fraction of the path over the water). However, the base level is set to :math:`7.5~\\mathrm{g}/\\mathrm{m}^3`. For extraordinarily dry places, which are often used for radio astronomy, this value can be too high.
+        (Default: 7.5 g / m^3)
 
     Returns
     -------
@@ -1309,6 +1329,7 @@ def atten_path_fast(
         hprof_data,  # dict_like
         polarization=polarization,
         version=version,
+        base_water_density=base_water_density,
         )
 
     return {
@@ -1351,6 +1372,7 @@ def atten_path_fast(
     hprof_heights=(None, None, apu.m),
     hprof_bearing=(None, None, apu.deg),
     hprof_backbearing=(None, None, apu.deg),
+    base_water_density=(0.5, 100, apu.g / apu.m ** 3),
     strip_input_units=True, allow_none=True, output_unit=None
     )
 def losses_complete(
@@ -1375,6 +1397,7 @@ def losses_complete(
         hprof_dists=None, hprof_heights=None,
         hprof_bearing=None, hprof_backbearing=None,
         generic_heights=False,
+        base_water_density=7.5 * apu.g / apu.m ** 3,
         ):
     '''
     Calculate propagation losses for a fixed path using a parallelized method.
@@ -1455,6 +1478,10 @@ def losses_complete(
         The option is only meaningful, if the hprof_xxx parameters are set
         to `None` (which means automatic querying of the profiles).
         (Default: False)
+    base_water_density : `~astropy.units.Quantity`, optional
+        For atmospheric attenuation, the water vapor content plays a role.
+        In Rec. ITU-R P.452, Eq. (9a), the water content is variable (depending on the fraction of the path over the water). However, the base level is set to :math:`7.5~\\mathrm{g}/\\mathrm{m}^3`. For extraordinarily dry places, which are often used for radio astronomy, this value can be too high.
+        (Default: 7.5 g / m^3)
 
     Returns
     -------
@@ -1571,6 +1598,7 @@ def losses_complete(
         hprof_bearing=hprof_bearing,
         hprof_backbearing=hprof_backbearing,
         generic_heights=generic_heights,
+        base_water_density=base_water_density,
         )
     return {
         'L_b0p': res[0] * cnv.dB,

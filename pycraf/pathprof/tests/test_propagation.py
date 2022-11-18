@@ -125,13 +125,13 @@ class TestPropagation:
             # Warning: if uncommenting, the test cases will be overwritten
             # do this only, if you need to update the json files
             # (make sure, that results are correct!)
-            # zip-file approach not working???
-            # with ZipFile('/tmp/cases.zip') as myzip:
-            #     pprop_name = self.pprop_template.format(
-            #         freq, h_tg, h_rg, time_percent, version
-            #         )
-            #     with myzip.open(pprop_name, 'w') as f:
-            #         json.dump(pprop._pp, f)
+            # # zip-file approach not working???
+            # # with ZipFile('/tmp/cases.zip') as myzip:
+            # #     pprop_name = self.pprop_template.format(
+            # #         freq, h_tg, h_rg, time_percent, version
+            # #         )
+            # #     with myzip.open(pprop_name, 'w') as f:
+            # #         json.dump(pprop._pp, f)
             # pprop_name = self.pprop_template.format(
             #     freq, h_tg, h_rg, time_percent, version
             #     )
@@ -781,13 +781,13 @@ class TestPropagationGeneric:
             # Warning: if uncommenting, the test cases will be overwritten
             # do this only, if you need to update the json files
             # (make sure, that results are correct!)
-            # zip-file approach not working???
-            # with ZipFile('/tmp/cases.zip') as myzip:
-            #     pprop_name = self.pprop_template.format(
-            #         freq, h_tg, h_rg, time_percent, version
-            #         )
-            #     with myzip.open(pprop_name, 'w') as f:
-            #         json.dump(pprop._pp, f)
+            # # zip-file approach not working???
+            # # with ZipFile('/tmp/cases.zip') as myzip:
+            # #     pprop_name = self.pprop_template.format(
+            # #         freq, h_tg, h_rg, time_percent, version
+            # #         )
+            # #     with myzip.open(pprop_name, 'w') as f:
+            # #         json.dump(pprop._pp, f)
             # pprop_name = self.pprop_template.format(
             #     freq, h_tg, h_rg, time_percent, version
             #     )
@@ -1147,3 +1147,45 @@ def test_clutter_correction():
             loss,
             )
 
+def test_base_water_density():
+
+    hprof_step = 100 * apu.m
+    lon_mid, lat_mid = 6 * apu.deg, 50 * apu.deg
+    lon_t = lon_mid - 0.5 * apu.deg
+    lon_r = lon_mid + 0.5 * apu.deg
+
+    freq = 10. * apu.GHz
+    temperature = 290. * apu.K
+    pressure = 1013. * apu.hPa
+    h_tg, h_rg = 5. * apu.m, 50. * apu.m
+    time_percent = 2. * apu.percent
+
+    args = (
+        freq,
+        temperature, pressure,
+        lon_t, lat_mid,
+        lon_r, lat_mid,
+        h_tg, h_rg,
+        hprof_step,
+        time_percent,
+        )
+    pprop_default = pathprof.PathProp(*args)
+    pprop_dry = pathprof.PathProp(
+        *args, base_water_density=4 * apu.g / apu.m ** 3
+        )
+    pprop_wet = pathprof.PathProp(
+        *args, base_water_density=40 * apu.g / apu.m ** 3
+        )
+
+    los_loss_default = pathprof.loss_freespace(pprop_default)[0]
+    print(los_loss_default)
+
+    los_loss_dry = pathprof.loss_freespace(pprop_dry)[0]
+    print(los_loss_dry)
+
+    los_loss_wet = pathprof.loss_freespace(pprop_wet)[0]
+    print(los_loss_wet)
+
+    assert_quantity_allclose(los_loss_default, 150.63684327 * cnv.dB)
+    assert_quantity_allclose(los_loss_dry, 150.39847668 * cnv.dB)
+    assert_quantity_allclose(los_loss_wet, 154.51080101 * cnv.dB)
