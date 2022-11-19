@@ -6,11 +6,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>atten_map_fast &#8212; pycraf v2.0.1.dev17+g41423332</title>
+    <title>atten_map_fast &#8212; pycraf v2.0.1.dev23+g8369762e</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -18,6 +17,7 @@
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -63,7 +63,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v2.0.1.dev17+g41423332</a>
+	<a href="../index.html">pycraf v2.0.1.dev23+g8369762e</a>
 	 &#187;
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
@@ -82,7 +82,7 @@
 <h1>atten_map_fast<a class="headerlink" href="#atten-map-fast" title="Permalink to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pycraf.pathprof.atten_map_fast">
-<span class="sig-prename descclassname"><span class="pre">pycraf.pathprof.</span></span><span class="sig-name descname"><span class="pre">atten_map_fast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_tg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_rg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timepercent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hprof_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polarization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#atten_map_fast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L734" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.pathprof.atten_map_fast" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pycraf.pathprof.</span></span><span class="sig-name descname"><span class="pre">atten_map_fast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_tg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_rg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timepercent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hprof_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polarization=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version=16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_water_density=&lt;Quantity</span> <span class="pre">7.5</span> <span class="pre">g</span> <span class="pre">/</span> <span class="pre">m3&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#atten_map_fast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L741" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.pathprof.atten_map_fast" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate attenuation maps using a fast method.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -105,6 +105,10 @@ of dimension <code class="xref py py-obj docutils literal notranslate"><span cla
 Allowed values are: 0 - horizontal, 1 - vertical</p>
 </dd>
 <dt><strong>version</strong><span class="classifier">int, optional</span></dt><dd><p>ITU-R Rec. P.452 version. Allowed values are: 14, 16</p>
+</dd>
+<dt><strong>base_water_density</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>For atmospheric attenuation, the water vapor content plays a role.
+In Rec. ITU-R P.452, Eq. (9a), the water content is variable (depending on the fraction of the path over the water). However, the base level is set to <span class="math notranslate nohighlight">\(7.5~\mathrm{g}/\mathrm{m}^3\)</span>. For extraordinarily dry places, which are often used for radio astronomy, this value can be too high.
+(Default: 7.5 g / m^3)</p>
 </dd>
 </dl>
 </dd>
@@ -179,7 +183,7 @@ dictionary.</p></li>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.3.0. &nbsp;
-    Last built 17 Nov 2022. <br/>
+    Last built 19 Nov 2022. <br/>
   </p>
 </footer>
   </body>

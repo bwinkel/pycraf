@@ -6,11 +6,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>PathProp &#8212; pycraf v2.0.1.dev17+g41423332</title>
+    <title>PathProp &#8212; pycraf v2.0.1.dev23+g8369762e</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -18,6 +17,7 @@
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -63,7 +63,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v2.0.1.dev17+g41423332</a>
+	<a href="../index.html">pycraf v2.0.1.dev23+g8369762e</a>
 	 &#187;
       </li>
       <li><a href="../pathprof/index.html" accesskey="U">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a> &#187;</li>
@@ -82,7 +82,7 @@
 <h1>PathProp<a class="headerlink" href="#pathprop" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pycraf.pathprof.PathProp">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycraf.pathprof.</span></span><span class="sig-name descname"><span class="pre">PathProp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_tg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_rg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hprof_step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timepercent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega=&lt;Quantity</span> <span class="pre">0.</span> <span class="pre">%&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_tm=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_lm=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_ct=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_cr=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_t=CLUTTER.UNKNOWN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_r=CLUTTER.UNKNOWN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polarization=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version=16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_N=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N0=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hprof_dists=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hprof_heights=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hprof_bearing=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hprof_backbearing=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generic_heights=False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#PathProp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L38" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.pathprof.PathProp" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycraf.pathprof.</span></span><span class="sig-name descname"><span class="pre">PathProp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_tg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_rg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hprof_step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timepercent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega=&lt;Quantity</span> <span class="pre">0.</span> <span class="pre">%&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_tm=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_lm=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_ct=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_cr=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_t=CLUTTER.UNKNOWN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_r=CLUTTER.UNKNOWN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polarization=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version=16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_N=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N0=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hprof_dists=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hprof_heights=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hprof_bearing=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hprof_backbearing=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generic_heights=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_water_density=&lt;Quantity</span> <span class="pre">7.5</span> <span class="pre">g</span> <span class="pre">/</span> <span class="pre">m3&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/pathprof/propagation.html#PathProp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/pathprof/propagation.py#L38" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.pathprof.PathProp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_PathProp</span></code></p>
 <p>Container class that holds all path profile properties.</p>
 <dl class="field-list">
@@ -150,6 +150,10 @@ This can be useful for generic (aka flat-Earth) computations.
 The option is only meaningful, if the hprof_xxx parameters are set
 to <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a> (which means automatic querying of the profiles).
 (Default: False)</p>
+</dd>
+<dt><strong>base_water_density</strong><span class="classifier"><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, optional</span></dt><dd><p>For atmospheric attenuation, the water vapor content plays a role.
+In Rec. ITU-R P.452, Eq. (9a), the water content is variable (depending on the fraction of the path over the water). However, the base level is set to <span class="math notranslate nohighlight">\(7.5~\mathrm{g}/\mathrm{m}^3\)</span>. For extraordinarily dry places, which are often used for radio astronomy, this value can be too high.
+(Default: 7.5 g / m^3)</p>
 </dd>
 </dl>
 </dd>
@@ -227,7 +231,7 @@ For details see <a class="reference internal" href="../pathprof/working_with_srt
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
     Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.3.0. &nbsp;
-    Last built 17 Nov 2022. <br/>
+    Last built 19 Nov 2022. <br/>
   </p>
 </footer>
   </body>
