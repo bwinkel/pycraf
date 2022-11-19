@@ -38,7 +38,7 @@ There are a few optional packages, which are necessary for some functionality:
 - `sgp4 <https://pypi.python.org/pypi/sgp4>`__ 2.0 or later: This is a
   requirement for the `~pycraf.satellite` sub-package.
 
-- `rasterio <https://pypi.org/project/rasterio/>`__ 1.2 or later: for geotiff reading in ``~pycraf.pathprof` sub-package.
+- `rasterio <https://pypi.org/project/rasterio/>`__ 1.2 or later: for geotiff reading in `~pycraf.pathprof` sub-package.
 
 Older versions of these packages may work, but no support will be provided.
 

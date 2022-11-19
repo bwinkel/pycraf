@@ -1,25 +1,22 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>multiply_matrices &#8212; pycraf v2.0.0</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <title>multiply_matrices &#8212; pycraf v2.0.1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -65,7 +62,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v2.0.0</a>
+	<a href="../index.html">pycraf v2.0.1</a>
 	 &#187;
       </li>
       <li><a href="../geometry/index.html" accesskey="U">Geometry helpers (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geometry</span></code>)</a> &#187;</li>
@@ -81,15 +78,15 @@
           <div class="body" role="main">
             
   <section id="multiply-matrices">
-<h1>multiply_matrices<a class="headerlink" href="#multiply-matrices" title="Permalink to this headline">¶</a></h1>
+<h1>multiply_matrices<a class="headerlink" href="#multiply-matrices" title="Permalink to this heading">¶</a></h1>
 <dl class="py function">
-<dt id="pycraf.geometry.multiply_matrices">
-<code class="sig-prename descclassname"><span class="pre">pycraf.geometry.</span></code><code class="sig-name descname"><span class="pre">multiply_matrices</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">matrices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geometry/geometry.html#multiply_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v2.0.0/pycraf/geometry/geometry.py#L334" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.geometry.multiply_matrices" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pycraf.geometry.multiply_matrices">
+<span class="sig-prename descclassname"><span class="pre">pycraf.geometry.</span></span><span class="sig-name descname"><span class="pre">multiply_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">matrices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geometry/geometry.html#multiply_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/v2.0.1/pycraf/geometry/geometry.py#L334" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.geometry.multiply_matrices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Matrix-multiply the matrices in the given list.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>matrices</strong><span class="classifier">list of <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.22)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt><dd><p>List of (stacks of) rotation matrices. The order of the
+<dt><strong>matrices</strong><span class="classifier">list of <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.23)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt><dd><p>List of (stacks of) rotation matrices. The order of the
 multiplication is <code class="xref py py-obj docutils literal notranslate"><span class="pre">R</span> <span class="pre">=</span> <span class="pre">R1.R2.R3</span></code>, if <code class="xref py py-obj docutils literal notranslate"><span class="pre">*matrices</span> <span class="pre">=</span> <span class="pre">(R1,</span> <span class="pre">R2,</span> <span class="pre">R3)</span></code>.
 (This means, that <code class="xref py py-obj docutils literal notranslate"><span class="pre">R3</span></code> is applied first.)</p>
 </dd>
@@ -97,7 +94,7 @@ multiplication is <code class="xref py py-obj docutils literal notranslate"><spa
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
-<dt><strong>R</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.22)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt><dd><p>Resulting rotation matrix [no units!]</p>
+<dt><strong>R</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.23)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt><dd><p>Resulting rotation matrix [no units!]</p>
 </dd>
 </dl>
 </dd>
@@ -118,7 +115,10 @@ internally).</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
 <ul>
-<li><a class="reference internal" href="#">multiply_matrices</a></li>
+<li><a class="reference internal" href="#">multiply_matrices</a><ul>
+<li><a class="reference internal" href="#pycraf.geometry.multiply_matrices"><code class="docutils literal notranslate"><span class="pre">multiply_matrices()</span></code></a></li>
+</ul>
+</li>
 </ul>
 
 
@@ -128,14 +128,14 @@ internally).</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/v2.0.0/docs/api/pycraf.geometry.multiply_matrices.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v2.0.1/docs/api/pycraf.geometry.multiply_matrices.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/api/pycraf.geometry.multiply_matrices.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
-    Last built 21 Mar 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.3.0. &nbsp;
+    Last built 19 Nov 2022. <br/>
   </p>
 </footer>
   </body>

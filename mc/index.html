@@ -1,25 +1,22 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Monte-Carlo helpers (pycraf.mc) &#8212; pycraf v2.0.0</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pycraf.css" type="text/css" />
+    <title>Monte-Carlo helpers (pycraf.mc) &#8212; pycraf v2.0.1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
@@ -65,7 +62,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v2.0.0</a>
+	<a href="../index.html">pycraf v2.0.1</a>
 	 &#187;
       </li>
       
@@ -80,27 +77,27 @@
           <div class="body" role="main">
             
   <section id="monte-carlo-helpers-pycraf-mc">
-<h1>Monte-Carlo helpers (<a class="reference internal" href="#module-pycraf.mc" title="pycraf.mc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.mc</span></code></a>)<a class="headerlink" href="#monte-carlo-helpers-pycraf-mc" title="Permalink to this headline">¶</a></h1>
+<h1>Monte-Carlo helpers (<a class="reference internal" href="#module-pycraf.mc" title="pycraf.mc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.mc</span></code></a>)<a class="headerlink" href="#monte-carlo-helpers-pycraf-mc" title="Permalink to this heading">¶</a></h1>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
 <p>The <a class="reference internal" href="#module-pycraf.mc" title="pycraf.mc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mc</span></code></a> subpackage</p>
 </section>
 <section id="see-also">
-<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://jakevdp.github.io/blog/2013/12/01/kernel-density-estimation/">Kernel density estimation (KDE)</a>, blog by Jake Vanderplas.</p></li>
 <li><p><a class="reference external" href="https://docs.scipy.org/doc/scipy-0.15.1/reference/generated/scipy.stats.gaussian_kde.html#scipy.stats.gaussian_kde">Scipy gaussian_kde</a></p></li>
 </ul>
 </section>
 <section id="reference-api">
-<h2>Reference/API<a class="headerlink" href="#reference-api" title="Permalink to this headline">¶</a></h2>
+<h2>Reference/API<a class="headerlink" href="#reference-api" title="Permalink to this heading">¶</a></h2>
 <section id="module-pycraf.mc">
-<span id="pycraf-mc-package"></span><h3>pycraf.mc Package<a class="headerlink" href="#module-pycraf.mc" title="Permalink to this headline">¶</a></h3>
+<span id="pycraf-mc-package"></span><h3>pycraf.mc Package<a class="headerlink" href="#module-pycraf.mc" title="Permalink to this heading">¶</a></h3>
 <p>This subpackage contains various little convenience functions to
 help with Monte-Carlo type compatiblity studies.</p>
 <section id="classes">
-<h4>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h4>
-<table class="longtable docutils align-default">
+<h4>Classes<a class="headerlink" href="#classes" title="Permalink to this heading">¶</a></h4>
+<table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.mc.HistogramSampler.html#pycraf.mc.HistogramSampler" title="pycraf.mc.HistogramSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HistogramSampler</span></code></a>(histvals)</p></td>
 <td><p>Sampler to get random values obeying a discrete(!) density distribution.</p></td>
@@ -141,14 +138,14 @@ help with Monte-Carlo type compatiblity studies.</p>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/v2.0.0/docs/mc/index.rst">Edit This Page on Github</a> &nbsp;
+    <a href="https://github.com/bwinkel/pycraf/tree/v2.0.1/docs/mc/index.rst">Edit This Page on Github</a> &nbsp;
     <a href="../_sources/mc/index.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
-    Last built 21 Mar 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.3.0. &nbsp;
+    Last built 19 Nov 2022. <br/>
   </p>
 </footer>
   </body>

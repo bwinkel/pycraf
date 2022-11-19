@@ -53,6 +53,7 @@ store the tiles in a custom (system-wide) directory, there are two options,
 explained in the following.
 
 .. warning::
+
     Placing the *.hgt* files in the current work directory (where Python
     is started) and having `pycraf` look for them there seems handy, but it
     can be slow if many other sub-directories are present as `pycraf` will
@@ -111,6 +112,7 @@ tiles from `viewfinderpanoramas.org
     >>> SrtmConf.set(server='viewpano')  # doctest: +IGNORE_OUTPUT
 
 .. note::
+
   Note: As of Spring 2021, NASA decided to put all SRTM data products
   behind a log-in page, such that automatic download ceases to work.
   For the time being, the default server (and only server) will thus be

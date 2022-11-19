@@ -437,6 +437,7 @@ receiver station).
 Caustics
 ^^^^^^^^
 .. warning::
+
     Unfortunately, a model of atmospheric layers with discrete refractive
     indices leads to some unexpected effects. See the following.
 

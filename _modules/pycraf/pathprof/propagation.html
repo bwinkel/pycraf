@@ -1,24 +1,21 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pycraf.pathprof.propagation &#8212; pycraf v2.0.0</title>
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pycraf.css" type="text/css" />
+    <title>pycraf.pathprof.propagation &#8212; pycraf v2.0.1</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pycraf.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../../../_static/sidebar.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
@@ -51,7 +48,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v2.0.0</a>
+	<a href="../../../index.html">pycraf v2.0.1</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -174,6 +171,10 @@
 <span class="sd">        The option is only meaningful, if the hprof_xxx parameters are set</span>
 <span class="sd">        to `None` (which means automatic querying of the profiles).</span>
 <span class="sd">        (Default: False)</span>
+<span class="sd">    base_water_density : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        For atmospheric attenuation, the water vapor content plays a role.</span>
+<span class="sd">        In Rec. ITU-R P.452, Eq. (9a), the water content is variable (depending on the fraction of the path over the water). However, the base level is set to :math:`7.5~\\mathrm{g}/\\mathrm{m}^3`. For extraordinarily dry places, which are often used for radio astronomy, this value can be too high.</span>
+<span class="sd">        (Default: 7.5 g / m^3)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -244,6 +245,7 @@
         <span class="n">hprof_heights</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
         <span class="n">hprof_bearing</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
         <span class="n">hprof_backbearing</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+        <span class="n">base_water_density</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span><span class="p">),</span>
         <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="kc">None</span>
         <span class="p">)</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -267,7 +269,8 @@
             <span class="c1"># override if you don&#39;t want builtin method:</span>
             <span class="n">hprof_dists</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hprof_heights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">hprof_bearing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hprof_backbearing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">generic_heights</span><span class="o">=</span><span class="kc">False</span>
+            <span class="n">generic_heights</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">base_water_density</span><span class="o">=</span><span class="mf">7.5</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span>
             <span class="p">):</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -291,6 +294,7 @@
             <span class="n">hprof_bearing</span><span class="o">=</span><span class="n">hprof_bearing</span><span class="p">,</span>
             <span class="n">hprof_backbearing</span><span class="o">=</span><span class="n">hprof_backbearing</span><span class="p">,</span>
             <span class="n">generic_heights</span><span class="o">=</span><span class="n">generic_heights</span><span class="p">,</span>
+            <span class="n">base_water_density</span><span class="o">=</span><span class="n">base_water_density</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cyprop</span><span class="o">.</span><span class="n">PARAMETERS_BASIC</span><span class="p">)</span>  <span class="c1"># make a copy</span>
@@ -808,6 +812,7 @@
     <span class="n">h_tg</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
     <span class="n">h_rg</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
     <span class="n">timepercent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
+    <span class="n">base_water_density</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">atten_map_fast</span><span class="p">(</span>
@@ -819,6 +824,7 @@
         <span class="n">hprof_data</span><span class="p">,</span>  <span class="c1"># dict_like</span>
         <span class="n">polarization</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">version</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+        <span class="n">base_water_density</span><span class="o">=</span><span class="mf">7.5</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span><span class="p">,</span>
         <span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate attenuation maps using a fast method.</span>
@@ -844,6 +850,10 @@
 <span class="sd">        Allowed values are: 0 - horizontal, 1 - vertical</span>
 <span class="sd">    version : int, optional</span>
 <span class="sd">        ITU-R Rec. P.452 version. Allowed values are: 14, 16</span>
+<span class="sd">    base_water_density : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        For atmospheric attenuation, the water vapor content plays a role.</span>
+<span class="sd">        In Rec. ITU-R P.452, Eq. (9a), the water content is variable (depending on the fraction of the path over the water). However, the base level is set to :math:`7.5~\\mathrm{g}/\\mathrm{m}^3`. For extraordinarily dry places, which are often used for radio astronomy, this value can be too high.</span>
+<span class="sd">        (Default: 7.5 g / m^3)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -895,6 +905,7 @@
         <span class="n">hprof_data</span><span class="p">,</span>  <span class="c1"># dict_like</span>
         <span class="n">polarization</span><span class="o">=</span><span class="n">polarization</span><span class="p">,</span>
         <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+        <span class="n">base_water_density</span><span class="o">=</span><span class="n">base_water_density</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="p">{</span>
@@ -1240,6 +1251,7 @@
     <span class="n">h_tg</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
     <span class="n">h_rg</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
     <span class="n">timepercent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
+    <span class="n">base_water_density</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">atten_path_fast</span><span class="p">(</span>
@@ -1251,6 +1263,7 @@
         <span class="n">hprof_data</span><span class="p">,</span>  <span class="c1"># dict_like</span>
         <span class="n">polarization</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">version</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+        <span class="n">base_water_density</span><span class="o">=</span><span class="mf">7.5</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span><span class="p">,</span>
         <span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate attenuation along a path using a parallelized method.</span>
@@ -1276,6 +1289,10 @@
 <span class="sd">        Allowed values are: 0 - horizontal, 1 - vertical</span>
 <span class="sd">    version : int, optional</span>
 <span class="sd">        ITU-R Rec. P.452 version. Allowed values are: 14, 16</span>
+<span class="sd">    base_water_density : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        For atmospheric attenuation, the water vapor content plays a role.</span>
+<span class="sd">        In Rec. ITU-R P.452, Eq. (9a), the water content is variable (depending on the fraction of the path over the water). However, the base level is set to :math:`7.5~\\mathrm{g}/\\mathrm{m}^3`. For extraordinarily dry places, which are often used for radio astronomy, this value can be too high.</span>
+<span class="sd">        (Default: 7.5 g / m^3)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1379,6 +1396,7 @@
         <span class="n">hprof_data</span><span class="p">,</span>  <span class="c1"># dict_like</span>
         <span class="n">polarization</span><span class="o">=</span><span class="n">polarization</span><span class="p">,</span>
         <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+        <span class="n">base_water_density</span><span class="o">=</span><span class="n">base_water_density</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="p">{</span>
@@ -1421,6 +1439,7 @@
     <span class="n">hprof_heights</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span><span class="p">),</span>
     <span class="n">hprof_bearing</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">hprof_backbearing</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
+    <span class="n">base_water_density</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">losses_complete</span><span class="p">(</span>
@@ -1445,6 +1464,7 @@
         <span class="n">hprof_dists</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hprof_heights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">hprof_bearing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hprof_backbearing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">generic_heights</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">base_water_density</span><span class="o">=</span><span class="mf">7.5</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span><span class="p">,</span>
         <span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate propagation losses for a fixed path using a parallelized method.</span>
@@ -1525,6 +1545,10 @@
 <span class="sd">        The option is only meaningful, if the hprof_xxx parameters are set</span>
 <span class="sd">        to `None` (which means automatic querying of the profiles).</span>
 <span class="sd">        (Default: False)</span>
+<span class="sd">    base_water_density : `~astropy.units.Quantity`, optional</span>
+<span class="sd">        For atmospheric attenuation, the water vapor content plays a role.</span>
+<span class="sd">        In Rec. ITU-R P.452, Eq. (9a), the water content is variable (depending on the fraction of the path over the water). However, the base level is set to :math:`7.5~\\mathrm{g}/\\mathrm{m}^3`. For extraordinarily dry places, which are often used for radio astronomy, this value can be too high.</span>
+<span class="sd">        (Default: 7.5 g / m^3)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1641,6 +1665,7 @@
         <span class="n">hprof_bearing</span><span class="o">=</span><span class="n">hprof_bearing</span><span class="p">,</span>
         <span class="n">hprof_backbearing</span><span class="o">=</span><span class="n">hprof_backbearing</span><span class="p">,</span>
         <span class="n">generic_heights</span><span class="o">=</span><span class="n">generic_heights</span><span class="p">,</span>
+        <span class="n">base_water_density</span><span class="o">=</span><span class="n">base_water_density</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span>
         <span class="s1">&#39;L_b0p&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span>
@@ -1678,8 +1703,8 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.5.3. &nbsp;
-    Last built 21 Mar 2022. <br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.3.0. &nbsp;
+    Last built 19 Nov 2022. <br/>
   </p>
 </footer>
   </body>

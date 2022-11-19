@@ -1,0 +1,6 @@
+building_entry_loss
+===================
+
+.. currentmodule:: pycraf.pathprof
+
+.. autofunction:: building_entry_loss
