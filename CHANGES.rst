@@ -1,3 +1,20 @@
+2.0.1 (2022-11-19)
+=======================
+
+New Features
+------------
+pycraf.pathprof
+^^^^^^^^^^^^^^
+- Add building entry loss model (Rec. ITU-R P.2109) [#d9fd58]
+- Allow numpy broadcasting for clutter-correction function [#a2984e]
+  and improve its speed via OpenMP [#414233]
+- Add option to P.452 functions to change base water density of
+  atmosphere [#57, #633c8c]
+
+Documentation
+-------------
+- Improve the "conversions" Jupyter notebook [#76ae97]
+
 2.0.0 (2022-03-21)
 =======================
 
