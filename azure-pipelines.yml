@@ -55,29 +55,6 @@ jobs:
 
   strategy:
     matrix:
-      # linux36:
-      #   imageName: 'ubuntu-latest'
-      #   python.version: '3.6'
-      #   py_whl: 36
-      #   numpy.version: '1.13.1'
-      #   astropy.version: '3'
-      #   pytest.version: '<6'
-      #   doctestplus.version: '<0.6.1'
-      #   pyproj.version: '==1.9.5.1'
-      # linux37:
-      #   # note: manylinux builds could have different version pins!
-      #   # see pip-requirements-dev
-      #   imageName: 'ubuntu-latest'
-      #   python.version: '3.7'
-      #   py_whl: cp37-
-      #   numpy.version: '1.14.5'
-      #   astropy.version: '3'
-      #   # pyproj.version: '>=2.2,<3'
-      #   pyproj.version: '==1.9.5.1'
-      #   pytest.version: '<6'
-      #   doctestplus.version: '<0.6.1'
-        # docs should only be published by one thread, as they are version-
-        # independent; and only if on the master branch
       linux38:
         imageName: 'ubuntu-latest'
         python.version: '3.8'
@@ -95,41 +72,29 @@ jobs:
         imageName: 'ubuntu-latest'
         python.version: '3.9'
         py_whl: cp39-
-        numpy.version: '1.20.0'
+        numpy.version: '1.20.3'
+        # tarball should only be published by one thread, as it is version-
+        # independent
+        build.tarball: ${{ true }}
+        publish.tarball: ${{ eq(variables['is.tag'], true) }}
+        # extra.packages: 'sysroot_linux-64'
+      linux310:
+        imageName: 'ubuntu-latest'
+        python.version: '3.10'
+        py_whl: cp310-
+        # numpy.version: '1.21.3'  # leads to conflicts with gdal
+        numpy.version: '1.21.6'
         publish.docs: ${{ or(eq(variables['is.master'], true), eq(variables['is.tag'], true)) }}
         # publish.docs: ${{ true }}
         ${{ if eq(variables['is.tag'], true) }}:
           docs.target: '.'
         ${{ if eq(variables['is.tag'], false) }}:
           docs.target: 'latest'
-        # tarball should only be published by one thread, as it is version-
-        # independent
-        build.tarball: ${{ true }}
-        publish.tarball: ${{ eq(variables['is.tag'], true) }}
-      linux310:
+      linux311:
         imageName: 'ubuntu-latest'
-        python.version: '3.10'
-        py_whl: cp310-
-        numpy.version: '1.22.0'
-      # mac35:
-      #   imageName: 'macos-10.14'
-      #   python.version: '3.5'
-      #   numpy.version: '1.13.1'
-      #   astropy.version: '2'
-      #   sphinx.version: '<3.0'
-      # mac36:
-      #   imageName: 'macos-10.14'
-      #   python.version: '3.6'
-      #   numpy.version: '1.13.1'
-      #   astropy.version: '3'
-      # None of the mac-os builds work!
-      # (can only rely on conda-forge build system but not test anymore...)
-      # mac37:
-      #   imageName: 'macos-10.15'
-      #   python.version: '3.7'
-      #   numpy.version: '1.14.5'
-      #   astropy.version: '3'
-      # mac 3.8 leads to anaconda conflicts
+        python.version: '3.11'
+        py_whl: cp311-
+        numpy.version: '1.23.4'
       mac38:
         imageName: 'macos-latest'
         python.version: '3.8'
@@ -139,31 +104,15 @@ jobs:
       mac39:
         imageName: 'macos-latest'
         python.version: '3.9'
-        numpy.version: '1.20.0'
+        numpy.version: '1.20.3'
       mac310:
         imageName: 'macos-latest'
         python.version: '3.10'
-        numpy.version: '1.22.0'
-      # mac310:
-      #   imageName: 'macos-10.15'
-      #   python.version: '3.10'
-      #   numpy.version: '1.22.0'
-      # win36:
-      #   imageName: 'vs2017-win2016'
-      #   python.version: '3.6'
-      #   numpy.version: '1.13.1'
-      #   astropy.version: '3'
-      #   pytest.version: '<6'
-      #   doctestplus.version: '<0.6.1'
-      #   pyproj.version: '==1.9.5.1'
-      # win37:
-      #   imageName: 'windows-latest'
-      #   python.version: '3.7'
-      #   numpy.version: '1.14.5'
-      #   astropy.version: '3'
-      #   pyproj.version: '>=2.2,<3'
-      #   pytest.version: '<6'
-      #   doctestplus.version: '<0.6.1'
+        numpy.version: '1.21.6'
+      mac311:
+        imageName: 'macos-latest'
+        python.version: '3.11'
+        numpy.version: '1.23.4'
       win38:
         imageName: 'windows-latest'
         python.version: '3.8'
@@ -174,12 +123,15 @@ jobs:
       win39:
         imageName: 'windows-latest'
         python.version: '3.9'
-        numpy.version: '1.20.0'
+        numpy.version: '1.20.3'
       win310:
         imageName: 'windows-latest'
         python.version: '3.10'
-        py_whl: cp310-
-        numpy.version: '1.22.0'
+        numpy.version: '1.21.6'
+      win311:
+        imageName: 'windows-latest'
+        python.version: '3.11'
+        numpy.version: '1.23.4'
 
   pool:
     vmImage: $(imageName)
@@ -335,7 +287,7 @@ jobs:
       # pytest -rsx --pyargs pycraf --remote-data=any --doctest-modules --ignore-glob="*/setup_package.py"
       # --doctest-rst not recommended, use --doctest-glob instead
       # the following only works because of pip install -e
-      pytest -rsx --remote-data=any --ignore-glob="*/setup_package.py" pycraf
+      python -m pytest -rsx --remote-data=any --ignore-glob="*/setup_package.py" pycraf
     displayName: Testing package
     condition: succeeded()
 
@@ -346,9 +298,12 @@ jobs:
       $(conda.activate) pycraf-env
       # --doctest-rst not recommended, use --doctest-glob instead
       # the following only works because of pip install -e
-      pytest -rsx --remote-data=any --doctest-plus --doctest-glob="*.rst" --doctest-ignore-import-errors docs
+      cd docs
+      python -m pytest -rsx --remote-data=any --doctest-plus --doctest-glob="*.rst" --doctest-ignore-import-errors
     displayName: Testing docs
-    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], 3.8))
+    # condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], '3.10'))
+    # condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'))
+    condition: succeeded()
     # continueOnError: true  # doctesting currently not working
 
   # - script: |
@@ -406,7 +361,7 @@ jobs:
 
   - task: TwineAuthenticate@1
     inputs:
-      pythonUploadServiceConnection: pypi
+      pythonUploadServiceConnection: pypi_pycraf
     displayName: 'Twine Authenticate'
 
   - bash: |
@@ -421,7 +376,8 @@ jobs:
 
   - script: |
       $(conda.activate) pycraf-env
-      python setup.py bdist_wheel
+      # python setup.py bdist_wheel
+      python -m build --wheel
     displayName: Build wheels, MacOS/Windows
     condition: and(succeeded(), not(startsWith(variables['Agent.OS'], 'Linux')))
 
@@ -430,19 +386,19 @@ jobs:
   # will use system python for upload
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: '3.8'
+      versionSpec: '3.9'
 
   - script: |
       pip install twine
       ls dist/*.whl
-      python -m twine upload -r "pypi" --config-file $(PYPIRC_PATH) dist/*.whl
+      python -m twine upload -r "pypi_pycraf" --config-file $(PYPIRC_PATH) dist/*.whl
     displayName: Upload wheels, Linux/MacOS
     condition: and(succeeded(), eq(variables['publish.wheels'], true), not(startsWith(variables['Agent.OS'], 'Windows')))
 
   - script: |
       pip install twine
       ls dist/*.whl
-      python -m twine upload -r "pypi" --config-file %PYPIRC_PATH% dist/*.whl
+      python -m twine upload -r "pypi_pycraf" --config-file %PYPIRC_PATH% dist/*.whl
     displayName: Upload wheels, Windows
     condition: and(succeeded(), eq(variables['publish.wheels'], true), startsWith(variables['Agent.OS'], 'Windows'))
 
@@ -460,7 +416,7 @@ jobs:
   - script: |
       $(conda.activate) pycraf-env
       ls dist/*.tar.gz
-      python -m twine upload -r "pypi" --config-file $(PYPIRC_PATH) dist/*.tar.gz
+      python -m twine upload -r "pypi_pycraf" --config-file $(PYPIRC_PATH) dist/*.tar.gz
     displayName: Upload tarball
     condition: and(succeeded(), eq(variables['publish.tarball'], true))
 

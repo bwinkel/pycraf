@@ -28,14 +28,16 @@ If you don't already have tox installed, you can install it with:
     pip install tox
 If you only want to run part of the test suite, you can also use pytest
 directly with::
-    pip install -e .[test]
-    pytest --pyargs pycraf --remote-data=any
+    python -m pip install --no-build-isolation --no-deps -v -v -v -e .
+    python -m pytest -rsx --remote-data=any --ignore-glob="*/setup_package.py" pycraf
     # or individual tests:
-    pytest --pyargs pycraf --remote-data=any -k <test_func_name/module_name/etc.>
+    python -m pytest -rsx --remote-data=any --ignore-glob="*/setup_package.py" pycraf -k <test_func_name/module_name/etc.>
     # with docstrings (note: --doctest-modules turns off doctest-plus):
-    pytest --pyargs pycraf --remote-data=any --doctest-modules --ignore-glob="*/setup_package.py"
+    # python -m pytest --pyargs pycraf --remote-data=any --doctest-modules --ignore-glob="*/setup_package.py"
     # with doctests (in project dir)
-    pytest -rsx --doctest-rst --remote-data=any docs
+    # --doctest-rst not recommended, use --doctest-glob instead
+    # python -m pytest -rsx --doctest-rst --remote-data=any docs
+    python -m pytest -rsx --remote-data=any --doctest-plus --doctest-glob="*.rst" --doctest-ignore-import-errors docs
 
 For more information, see:
   https://docs.astropy.org/en/latest/development/testguide.html#running-tests
@@ -53,7 +55,7 @@ Note: building the documentation is no longer done using
 If you don't already have tox installed, you can install it with:
     pip install tox
 You can also build the documentation with Sphinx directly using::
-    pip install -e .[docs]
+    python -m pip install --no-build-isolation --no-deps -v -v -v -e .
     cd docs
     # make clean  # to rebuild everything
     make html
@@ -78,6 +80,7 @@ from extension_helpers import get_extensions  # noqa
 # import numpy as np
 # np.import_array()
 
+# print(f"INSTALLING WITH NUMPY {np.__version__}")
 setup(ext_modules=get_extensions())
 
 
