@@ -88,6 +88,14 @@ jobs:
         pyproj.version: '>=2.2,<3'
         # qt.version: '>=5.11'
         # pytestqt.version: '>=4'
+        pytest.version: '<6'
+        doctestplus.version: '<0.6.1'
+        extra.packages: 'sysroot_linux-64 "jinja2<3.1"'
+      linux39:
+        imageName: 'ubuntu-latest'
+        python.version: '3.9'
+        py_whl: cp39-
+        numpy.version: '1.20.0'
         publish.docs: ${{ or(eq(variables['is.master'], true), eq(variables['is.tag'], true)) }}
         # publish.docs: ${{ true }}
         ${{ if eq(variables['is.tag'], true) }}:
@@ -98,14 +106,6 @@ jobs:
         # independent
         build.tarball: ${{ true }}
         publish.tarball: ${{ eq(variables['is.tag'], true) }}
-        pytest.version: '<6'
-        doctestplus.version: '<0.6.1'
-        extra.packages: 'sysroot_linux-64 "jinja2<3.1"'
-      linux39:
-        imageName: 'ubuntu-latest'
-        python.version: '3.9'
-        py_whl: cp39-
-        numpy.version: '1.20.0'
       linux310:
         imageName: 'ubuntu-latest'
         python.version: '3.10'
@@ -131,15 +131,19 @@ jobs:
       #   astropy.version: '3'
       # mac 3.8 leads to anaconda conflicts
       mac38:
-        imageName: 'macos-10.15'
+        imageName: 'macos-latest'
         python.version: '3.8'
         numpy.version: '1.18.1'
-        astropy.version: '4'
+        astropy.version: '5'
         pyproj.version: '>=2.2,<3'
       mac39:
-        imageName: 'macos-10.15'
+        imageName: 'macos-latest'
         python.version: '3.9'
         numpy.version: '1.20.0'
+      mac310:
+        imageName: 'macos-latest'
+        python.version: '3.10'
+        numpy.version: '1.22.0'
       # mac310:
       #   imageName: 'macos-10.15'
       #   python.version: '3.10'
@@ -203,6 +207,7 @@ jobs:
 
   - bash: |
       echo "##vso[task.prependpath]/usr/bin"
+      echo "##vso[task.setvariable variable=SETUPTOOLS_ENABLE_FEATURES]legacy-editable"
     displayName: Bugfix MacOS command line interface
     condition: startsWith(variables['Agent.OS'], 'Darwin')
 
@@ -213,6 +218,11 @@ jobs:
       echo "##vso[task.setvariable variable=srtmdata]$(Agent.BuildDirectory)\srtm"
     displayName: Add conda to PATH, Windows
     condition: startsWith(variables['Agent.OS'], 'Windows')
+
+  - script: |
+      set -x
+    displayName: Verbosity on Linux/MacOS
+    condition: not(startsWith(variables['Agent.OS'], 'Windows'))
 
   - script: |
       echo on
@@ -257,8 +267,13 @@ jobs:
   # pip installation)
   - script: |
       $(conda.activate) pycraf-env
-      mamba install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython h5py matplotlib numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pytest$(pytest.version)" pytest-astropy pytest-azurepipelines "pytest-doctestplus$(doctestplus.version)" pytest-remotedata hypothesis rasterio scipy "sgp4>2" twine wheel extension-helpers setuptools-scm $(extra.packages)
+      mamba install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython "h5py>=3.6" matplotlib numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pytest$(pytest.version)" pytest-astropy pytest-azurepipelines "pytest-doctestplus$(doctestplus.version)" pytest-remotedata hypothesis rasterio scipy "sgp4>2" twine wheel extension-helpers setuptools-scm $(extra.packages) build
     displayName: Install Anaconda packages
+
+  # IMPORTANT:
+  # condition: and(succeeded(), ge(variables['python.version'], 3.8))
+  # will be false for python 3.10
+  # TODO: Use and(succeeded(), in(variables['python.version'], '3.8', 3.9', '3.10'))
 
   # see Issue #55
   - bash: |
@@ -266,14 +281,14 @@ jobs:
     displayName: Fix another conda bug on Linux
     condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], 3.8))
 
-  # need to fix cctools and ld64 to slightly older version, otherwise an
-  # error ("ld: library not found for -lSystem") occurs during build
-  - script: |
-      $(conda.activate) pycraf-env
-      mamba install --yes --quiet --name pycraf-env -c conda-forge clang_osx-64 clangxx_osx-64 llvm-openmp openmp cctools==921 ld64==409.12 ta-lib
-    displayName: Prepare clang, MacOS
-    # condition: and(succeeded(), eq(variables['is.macos'], true))
-    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'), lt(variables['python.version'], 3.8))
+  # # need to fix cctools and ld64 to slightly older version, otherwise an
+  # # error ("ld: library not found for -lSystem") occurs during build
+  # - script: |
+  #     $(conda.activate) pycraf-env
+  #     mamba install --yes --quiet --name pycraf-env -c conda-forge clang_osx-64 clangxx_osx-64 llvm-openmp openmp cctools==921 ld64==409.12 ta-lib
+  #   displayName: Prepare clang, MacOS
+  #   # condition: and(succeeded(), eq(variables['is.macos'], true))
+  #   condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'), lt(variables['python.version'], 3.8))
 
   # - script: |
   #     $(conda.activate) pycraf-env
@@ -284,10 +299,17 @@ jobs:
 
   - script: |
       $(conda.activate) pycraf-env
-      mamba install --yes --quiet --name pycraf-env -c conda-forge compilers llvm-openmp
+      mamba install --yes --quiet --name pycraf-env -c conda-forge compilers llvm-openmp clang_osx-64 clangxx_osx-64
     displayName: Prepare clang, MacOS
     # condition: and(succeeded(), eq(variables['is.macos'], true))
-    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'), ge(variables['python.version'], 3.8))
+    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'))
+
+  # - script: |
+  #     $(conda.activate) pycraf-env
+  #     mamba install --yes --quiet --name pycraf-env -c conda-forge "clang_osx-64>=14" "clangxx_osx-64>=14" llvm-openmp openmp cctools ld64 ta-lib
+  #   displayName: Prepare clang, MacOS
+  #   # condition: and(succeeded(), eq(variables['is.macos'], true))
+  #   condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'), eq(variables['python.version'], '3.10'))
 
   # - bash: |
   #     sudo rm -rf /Library/Developer/CommandLineTools
@@ -426,7 +448,12 @@ jobs:
 
   - script: |
       $(conda.activate) pycraf-env
-      python setup.py sdist
+      # python setup.py sdist
+      # there is a stray egg-info directory (from the docker run?)
+      # which leads to an access error, as it is by root; need to delete it
+      # ls -la *.egg-info
+      sudo rm -rfv *.egg-info
+      python -m build --sdist
     displayName: Build tarball
     condition: and(succeeded(), eq(variables['build.tarball'], true))
 

@@ -19,11 +19,11 @@ from ...utils import check_astro_quantities
 
 class TestConversions:
 
-    def setup(self):
+    def setup_method(self):
 
         pass
 
-    def teardown(self):
+    def teardown_method(self):
 
         pass
 

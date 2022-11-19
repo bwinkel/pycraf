@@ -24,11 +24,11 @@ TOL_KWARGS = {'atol': 1.e-4, 'rtol': 1.e-4}
 
 class TestHelper:
 
-    def setup(self):
+    def setup_method(self):
 
         pass
 
-    def teardown(self):
+    def teardown_method(self):
 
         pass
 

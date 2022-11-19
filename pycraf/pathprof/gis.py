@@ -214,8 +214,10 @@ def wgs84_to_geotiff_pixels(geotiff, lons, lats):
     lons, lats = np.broadcast_arrays(
         lons, lats
         ) * u.deg
+    #raise Exception(geotiff.crs.to_proj4())
+    init_str = geotiff.crs.to_proj4().replace('+init=', '')
     wgs84_to_crs_world = geospatial.transform_factory(
-        geospatial.EPSG.WGS84, geotiff.crs.to_proj4()
+        geospatial.EPSG.WGS84, init_str
         )
     wx, wy = wgs84_to_crs_world(lons, lats)
     px, py = (~geotiff.transform) * np.array([

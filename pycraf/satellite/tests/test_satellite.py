@@ -31,12 +31,12 @@ TLE_ERR = '''ISS (ZARYA)
 
 class TestSatelliteObserver:
 
-    def setup(self):
+    def setup_method(self):
 
         self.location = EarthLocation(6.88375, 50.525, 366.)
         self.so = satellite.SatelliteObserver(self.location)
 
-    def teardown(self):
+    def teardown_method(self):
 
         pass
 

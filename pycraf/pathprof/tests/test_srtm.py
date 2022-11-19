@@ -16,7 +16,7 @@ TOL_KWARGS = {'atol': 1.e-4, 'rtol': 1.e-4}
 
 class TestSrtmConf:
 
-    def setup(self):
+    def setup_method(self):
 
         srtm.SrtmConf.set(
             srtm_dir=os.environ.get('SRTMDATA', '.'),
