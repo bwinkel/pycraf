@@ -97,32 +97,42 @@ copyright = '{0}, {1}'.format(
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 
-try:
-    from importlib import metadata
+# try:
+#     from importlib import metadata
 
-    # The version info for the project you're documenting, acts as replacement for
-    # |version| and |release|, also used in various other places throughout the
-    # built documents.
+#     # The version info for the project you're documenting, acts as replacement for
+#     # |version| and |release|, also used in various other places throughout the
+#     # built documents.
 
-    # The full version, including alpha/beta/rc tags.
-    long_version = metadata.version(project)
+#     # The full version, including alpha/beta/rc tags.
+#     long_version = metadata.version(project)
 
-except ImportError:
+# except ImportError:
 
-    __import__(setup_cfg['name'])
-    package = sys.modules[setup_cfg['name']]
+#     __import__(setup_cfg['name'])
+#     package = sys.modules[setup_cfg['name']]
 
-    # The full version, including alpha/beta/rc tags.
-    long_version = package.__version__
+#     # The full version, including alpha/beta/rc tags.
+#     long_version = package.__version__
 
-# The short X.Y.Z version.
-short_version = '.'.join(long_version.split('.')[:3])
+# # The short X.Y.Z version.
+# short_version = '.'.join(long_version.split('.')[:3])
 
 # # Only include dev docs in dev version.
 # dev = 'dev' in long_version
 # if not dev:
 #     exclude_patterns.append('development/*')  # noqa: F405
 #     exclude_patterns.append('testhelpers.rst')  # noqa: F405
+
+
+__import__(setup_cfg['package_name'])
+package = sys.modules[setup_cfg['package_name']]
+
+# The short X.Y version.
+version = package.__version__.split('+', 1)[0]
+# The full version, including alpha/beta/rc tags.
+release = package.__version__
+
 
 # -- Options for HTML output --------------------------------------------------
 

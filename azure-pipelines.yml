@@ -298,7 +298,7 @@ jobs:
       $(conda.activate) pycraf-env
       # --doctest-rst not recommended, use --doctest-glob instead
       # the following only works because of pip install -e
-      cd docs
+      # cd docs
       python -m pytest -rsx --remote-data=any --doctest-plus --doctest-glob="*.rst" --doctest-ignore-import-errors
     displayName: Testing docs
     # condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], '3.10'))

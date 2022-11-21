@@ -24,7 +24,7 @@ Getting Started
    install
    importing_pycraf
    Tutorials <http://nbviewer.jupyter.org/github/bwinkel/pycraf/blob/master/notebooks/>
-   pathprof/working_with_srtm
+   working_with_srtm
 
 ******************
 User Documentation
@@ -36,17 +36,17 @@ Available modules
 .. toctree::
    :maxdepth: 1
 
-   conversions/index
-   atm/index
-   pathprof/index
-   antenna/index
-   protection/index
-   geospatial/index
-   satellite/index
-   geometry/index
-   mc/index
-   utils/index
-   gui/index
+   conversions
+   atm
+   pathprof
+   antenna
+   protection
+   geospatial
+   satellite
+   geometry
+   mc
+   utils
+   gui
 
 .. automodapi:: pycraf
     :no-heading:
