@@ -406,7 +406,7 @@ jobs:
 
   - task: TwineAuthenticate@1
     inputs:
-      pythonUploadServiceConnection: pypi
+      pythonUploadServiceConnection: pypi_pycraf
     displayName: 'Twine Authenticate'
 
   - bash: |
@@ -435,14 +435,14 @@ jobs:
   - script: |
       pip install twine
       ls dist/*.whl
-      python -m twine upload -r "pypi" --config-file $(PYPIRC_PATH) dist/*.whl
+      python -m twine upload -r "pypi_pycraf" --config-file $(PYPIRC_PATH) dist/*.whl
     displayName: Upload wheels, Linux/MacOS
     condition: and(succeeded(), eq(variables['publish.wheels'], true), not(startsWith(variables['Agent.OS'], 'Windows')))
 
   - script: |
       pip install twine
       ls dist/*.whl
-      python -m twine upload -r "pypi" --config-file %PYPIRC_PATH% dist/*.whl
+      python -m twine upload -r "pypi_pycraf" --config-file %PYPIRC_PATH% dist/*.whl
     displayName: Upload wheels, Windows
     condition: and(succeeded(), eq(variables['publish.wheels'], true), startsWith(variables['Agent.OS'], 'Windows'))
 
@@ -460,7 +460,7 @@ jobs:
   - script: |
       $(conda.activate) pycraf-env
       ls dist/*.tar.gz
-      python -m twine upload -r "pypi" --config-file $(PYPIRC_PATH) dist/*.tar.gz
+      python -m twine upload -r "pypi_pycraf" --config-file $(PYPIRC_PATH) dist/*.tar.gz
     displayName: Upload tarball
     condition: and(succeeded(), eq(variables['publish.tarball'], true))
 
