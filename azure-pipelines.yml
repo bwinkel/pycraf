@@ -15,9 +15,6 @@ variables:
   publish.wheels: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}
   is.master: ${{ startsWith(variables['Build.SourceBranch'], 'refs/heads/master') }}
   is.pullrequest: ${{ startsWith(variables['Build.Reason'], 'PullRequest') }}
-  # is.tag: ${{ true }}
-  # why is the following not working? --> because Agent.OS is not available
-  # at compile time (would be necessary for template expressions to work)
   is.linux: ${{ startsWith(variables['Agent.OS'], 'Linux') }}
   is.macos: ${{ startsWith(variables['Agent.OS'], 'Darwin') }}
   is.win: ${{ startsWith(variables['Agent.OS'], 'Windows') }}
@@ -31,73 +28,35 @@ jobs:
     arch: x86_64
     plat: manylinux2010_x86_64
     image: quay.io/pypa/manylinux2010_x86_64
-    # plat: manylinux2014_x86_64
-    # image: quay.io/pypa/manylinux2014_x86_64
-    # for very old systems, the following would also be an alternative:
-    # plat: manylinux1_x86_64
-    # image: skhep/manylinuxgcc-x86_64
     python.architecture: x64
-    # ${{ if not(startsWith(variables['Agent.OS'], 'Windows')) }}:
-    #   srtmdata: ${{ format('{0}/srtm', variables['Agent.BuildDirectory']) }}
-    # ${{ if startsWith(variables['Agent.OS'], 'Windows') }}:
-    #   srtmdata: ${{ format('{0}\srtm', variables['Agent.BuildDirectory']) }}
-    # srtmdata: ${{ format('{0}/srtm', variables['Agent.BuildDirectory']) }}
     sphinx.version: '>=3.0'
     astropy.version: ''
     pyproj.version: ''
-    # pytest.version: '<6'
-    # doctestplus.version: '<0.6.1'
     pytest.version: ''
     doctestplus.version: ''
-    # qt.version: '>=5.9'
-    # pytestqt.version: '<4'
     extra.packages: ''
 
   strategy:
     matrix:
-      # linux36:
-      #   imageName: 'ubuntu-latest'
-      #   python.version: '3.6'
-      #   py_whl: 36
-      #   numpy.version: '1.13.1'
-      #   astropy.version: '3'
-      #   pytest.version: '<6'
-      #   doctestplus.version: '<0.6.1'
-      #   pyproj.version: '==1.9.5.1'
-      # linux37:
-      #   # note: manylinux builds could have different version pins!
-      #   # see pip-requirements-dev
-      #   imageName: 'ubuntu-latest'
-      #   python.version: '3.7'
-      #   py_whl: cp37-
-      #   numpy.version: '1.14.5'
-      #   astropy.version: '3'
-      #   # pyproj.version: '>=2.2,<3'
-      #   pyproj.version: '==1.9.5.1'
-      #   pytest.version: '<6'
-      #   doctestplus.version: '<0.6.1'
-        # docs should only be published by one thread, as they are version-
-        # independent; and only if on the master branch
       linux38:
         imageName: 'ubuntu-latest'
         python.version: '3.8'
         py_whl: cp38-
-        # numpy.version: '1.17.4'
         numpy.version: '1.18.1'
         astropy.version: '4'
         pyproj.version: '>=2.2,<3'
-        # qt.version: '>=5.11'
-        # pytestqt.version: '>=4'
-        pytest.version: '<6'
-        doctestplus.version: '<0.6.1'
-        extra.packages: 'sysroot_linux-64 "jinja2<3.1"'
+        extra.packages: 'sysroot_linux-64'  #  "jinja2<3.1"
       linux39:
         imageName: 'ubuntu-latest'
         python.version: '3.9'
         py_whl: cp39-
-        numpy.version: '1.20.0'
+        numpy.version: '1.20.3'
+      linux310:
+        imageName: 'ubuntu-latest'
+        python.version: '3.10'
+        py_whl: cp310-
+        numpy.version: '1.21.6'
         publish.docs: ${{ or(eq(variables['is.master'], true), eq(variables['is.tag'], true)) }}
-        # publish.docs: ${{ true }}
         ${{ if eq(variables['is.tag'], true) }}:
           docs.target: '.'
         ${{ if eq(variables['is.tag'], false) }}:
@@ -106,42 +65,47 @@ jobs:
         # independent
         build.tarball: ${{ true }}
         publish.tarball: ${{ eq(variables['is.tag'], true) }}
-        extra.packages: 'sysroot_linux-64 "jinja2<3.1"'
-      linux310:
+      linux311:
         imageName: 'ubuntu-latest'
+        python.version: '3.11'
+        py_whl: cp311-
+        numpy.version: '1.23.4'
+      mac38:
+        imageName: 'macos-latest'
+        python.version: '3.8'
+        numpy.version: '1.18.1'
+        astropy.version: '5'
+        pyproj.version: '>=2.2,<3'
+      mac39:
+        imageName: 'macos-latest'
+        python.version: '3.9'
+        numpy.version: '1.20.3'
+      mac310:
+        imageName: 'macos-latest'
         python.version: '3.10'
-        py_whl: cp310-
-        numpy.version: '1.22.0'
-      # mac38:
-      #   imageName: 'macos-latest'
-      #   python.version: '3.8'
-      #   numpy.version: '1.18.1'
-      #   astropy.version: '5'
-      #   pyproj.version: '>=2.2,<3'
-      # mac39:
-      #   imageName: 'macos-latest'
-      #   python.version: '3.9'
-      #   numpy.version: '1.20.0'
-      # mac310:
-      #   imageName: 'macos-latest'
-      #   python.version: '3.10'
-      #   numpy.version: '1.22.0'
-      # win38:
-      #   imageName: 'windows-latest'
-      #   python.version: '3.8'
-      #   # numpy.version: '1.17.4'
-      #   numpy.version: '1.18.1'
-      #   astropy.version: '4'
-      #   pyproj.version: '>=2.2,<3'
-      # win39:
-      #   imageName: 'windows-latest'
-      #   python.version: '3.9'
-      #   numpy.version: '1.20.0'
-      # win310:
-      #   imageName: 'windows-latest'
-      #   python.version: '3.10'
-      #   py_whl: cp310-
-      #   numpy.version: '1.22.0'
+        numpy.version: '1.21.6'
+      mac311:
+        imageName: 'macos-latest'
+        python.version: '3.11'
+        numpy.version: '1.23.4'
+      win38:
+        imageName: 'windows-latest'
+        python.version: '3.8'
+        numpy.version: '1.18.1'
+        astropy.version: '4'
+        pyproj.version: '>=2.2,<3'
+      win39:
+        imageName: 'windows-latest'
+        python.version: '3.9'
+        numpy.version: '1.20.3'
+      win310:
+        imageName: 'windows-latest'
+        python.version: '3.10'
+        numpy.version: '1.21.6'
+      win311:
+        imageName: 'windows-latest'
+        python.version: '3.11'
+        numpy.version: '1.23.4'
 
   pool:
     vmImage: $(imageName)
@@ -173,7 +137,6 @@ jobs:
     displayName: Bugfix MacOS command line interface
     condition: startsWith(variables['Agent.OS'], 'Darwin')
 
-  # echo "##vso[task.setvariable variable=conda.activate]call $env:CONDA\Scripts\activate.bat"
   - powershell: |
       Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
       echo "##vso[task.setvariable variable=conda.activate]call activate.bat"
@@ -227,17 +190,10 @@ jobs:
   # installed already, but on PRs building wheels and the tarball still fails
   # for some reason!? therefore, we add it here (should also be faster than
   # pip installation)
-  # "pytest-doctestplus$(doctestplus.version)"
   - script: |
       $(conda.activate) pycraf-env
-      mamba install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython "h5py>=3.6" matplotlib numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pytest$(pytest.version)" pytest-astropy pytest-azurepipelines pytest-remotedata hypothesis rasterio scipy "sgp4>2" twine wheel extension-helpers setuptools-scm $(extra.packages) build
+      mamba install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython "h5py>=3.6" matplotlib-base numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pytest$(pytest.version)" pytest-astropy pytest-doctestplus pytest-remotedata hypothesis rasterio scipy "sgp4>2" twine wheel extension-helpers setuptools-scm $(extra.packages) build
     displayName: Install Anaconda packages
-
-  - bash: |
-      $(conda.activate) pycraf-env
-      python -m pip install --no-build-isolation --no-deps 'pytest-doctestplus @ git+https://github.com/astropy/pytest-doctestplus@fe73a1717b30acc0e8cf1af2538dd5df49f4d008'
-    displayName: Install doctestplus from source
-    condition: succeeded()
 
   # IMPORTANT:
   # condition: and(succeeded(), ge(variables['python.version'], 3.8))
@@ -250,41 +206,11 @@ jobs:
     displayName: Fix another conda bug on Linux
     condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], 3.8))
 
-  # # need to fix cctools and ld64 to slightly older version, otherwise an
-  # # error ("ld: library not found for -lSystem") occurs during build
-  # - script: |
-  #     $(conda.activate) pycraf-env
-  #     mamba install --yes --quiet --name pycraf-env -c conda-forge clang_osx-64 clangxx_osx-64 llvm-openmp openmp cctools==921 ld64==409.12 ta-lib
-  #   displayName: Prepare clang, MacOS
-  #   # condition: and(succeeded(), eq(variables['is.macos'], true))
-  #   condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'), lt(variables['python.version'], 3.8))
-
-  # - script: |
-  #     $(conda.activate) pycraf-env
-  #     mamba install --yes --quiet --name pycraf-env -c conda-forge clang_osx-64 clangxx_osx-64 llvm-openmp openmp cctools ld64 ta-lib
-  #   displayName: Prepare clang, MacOS
-  #   # condition: and(succeeded(), eq(variables['is.macos'], true))
-  #   condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'), ge(variables['python.version'], 3.8))
-
   - script: |
       $(conda.activate) pycraf-env
       mamba install --yes --quiet --name pycraf-env -c conda-forge compilers llvm-openmp clang_osx-64 clangxx_osx-64
     displayName: Prepare clang, MacOS
-    # condition: and(succeeded(), eq(variables['is.macos'], true))
     condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'))
-
-  # - script: |
-  #     $(conda.activate) pycraf-env
-  #     mamba install --yes --quiet --name pycraf-env -c conda-forge "clang_osx-64>=14" "clangxx_osx-64>=14" llvm-openmp openmp cctools ld64 ta-lib
-  #   displayName: Prepare clang, MacOS
-  #   # condition: and(succeeded(), eq(variables['is.macos'], true))
-  #   condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'), eq(variables['python.version'], '3.10'))
-
-  # - bash: |
-  #     sudo rm -rf /Library/Developer/CommandLineTools
-  #     xcode-select --install
-  #   displayName: Fix problem with MacOS compiler/linker
-  #   condition: startsWith(variables['Agent.OS'], 'Darwin')
 
   # see Issue #55
   - script: |
@@ -292,61 +218,35 @@ jobs:
       python -m pip install --no-build-isolation --no-deps -v -v -v -e .
     displayName: Building
 
-  # pytest -rsx --doctest-rst docs pycraf
-  # If GUI tests are desired:
-  # python setup.py test --remote-data=any -a --do-gui-tests
+  # --doctest-rst not recommended, use --doctest-glob instead
+  # the following only works because of pip install -e
   - script: |
       $(conda.activate) pycraf-env
-      # pip install pytest-azurepipelines
-      # pytest --pyargs pycraf --remote-data=any
-      # note --doctest-modules disables doctestplus plugin!
-      # (but is necessary to run docstring tests for package modules)
-      # pytest -rsx --pyargs pycraf --remote-data=any --doctest-modules --ignore-glob="*/setup_package.py"
-      # --doctest-rst not recommended, use --doctest-glob instead
-      # the following only works because of pip install -e
-      pytest -rsx --remote-data=any --ignore-glob="*/setup_package.py" pycraf
+      python -m pytest -rsx --remote-data=any --ignore-glob="*/setup_package.py" pycraf
     displayName: Testing package
     condition: succeeded()
 
-  # pytest -rsx --doctest-rst docs pycraf
-  # If GUI tests are desired:
-  # python setup.py test --remote-data=any -a --do-gui-tests
+  # --doctest-rst not recommended, use --doctest-glob instead
+  # the following only works because of pip install -e
   - script: |
       $(conda.activate) pycraf-env
-      # --doctest-rst not recommended, use --doctest-glob instead
-      # the following only works because of pip install -e
-      pytest -rsx --remote-data=any --doctest-plus --doctest-glob="*.rst" --doctest-ignore-import-errors docs
+      python -m pytest -rsx --remote-data=any --doctest-plus --doctest-glob="*.rst" --doctest-ignore-import-errors docs
     displayName: Testing docs
-    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], 3.8))
-    # continueOnError: true  # doctesting currently not working
+    condition: succeeded()
 
-  # - script: |
-  #     $(conda.activate) pycraf-env
-  #     # pytest -rsx --doctest-rst --remote-data=any docs
-  #     pytest -rsx --doctest-glob="*.rst" --remote-data=any docs
-  #   displayName: Testing docs
-  #   condition: succeeded()
-
-  # sphinx-build docs docs/_build/html -W -b html
-  # conda install --yes --quiet --name pycraf-env -c conda-forge sphinx-astropy
   - script: |
       $(conda.activate) pycraf-env
-      # python setup.py build_docs -v -v -v
-      # cd docs
-      # make html
       conda install --yes --quiet --name pycraf-env -c conda-forge "sphinx$(sphinx.version)" sphinx-astropy
-      # sphinx-build docs docs/_build/html -W -b html
       cd docs
       sphinx-build . _build/html -b html
     displayName: Make docs
-    # condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], 3.8))
-    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'))
+    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], '3.10'))
+    # condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'))
 
   - task: DownloadSecureFile@1
     inputs:
       secureFile: ghpages_deploykey_azure
     displayName: 'Get the deploy key'
-    # condition: and(succeeded(), eq(variables['publish.docs'], true))
     condition: and(succeeded(), eq(variables['publish.docs'], true))
 
   - bash: |
@@ -362,10 +262,6 @@ jobs:
       git remote add github git@github.com:bwinkel/pycraf.git
       git fetch github gh-pages
       git checkout --track github/gh-pages
-      # mkdir -p ./$DOCS_TARGET
-      # for some strange reason, the new package versions (astropy?) create
-      # the _build/html in docs/docs and not in docs/
-      # rsync -av ../docs/docs/_build/html/ ${DOCS_TARGET}/
       rsync -av ../docs/_build/html/ ${DOCS_TARGET}/
       docs_version=$(python -c "import pycraf; print(pycraf.__version__)")
       git add -A && git commit -m "Update docs for $docs_version ***NO_CI***"
@@ -390,16 +286,13 @@ jobs:
 
   - script: |
       $(conda.activate) pycraf-env
-      python setup.py bdist_wheel
+      python -m build --wheel
     displayName: Build wheels, MacOS/Windows
     condition: and(succeeded(), not(startsWith(variables['Agent.OS'], 'Linux')))
 
-  # twine upload with python 3.5 doesn't work?
-  # (pkg_resources.DistributionNotFound: The 'readme-renderer>=21.0' distribution was not found)
-  # will use system python for upload
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: '3.8'
+      versionSpec: '3.9'
 
   - script: |
       pip install twine
@@ -417,10 +310,8 @@ jobs:
 
   - script: |
       $(conda.activate) pycraf-env
-      # python setup.py sdist
       # there is a stray egg-info directory (from the docker run?)
       # which leads to an access error, as it is by root; need to delete it
-      # ls -la *.egg-info
       sudo rm -rfv *.egg-info
       python -m build --sdist
     displayName: Build tarball
