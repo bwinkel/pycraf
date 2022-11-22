@@ -217,9 +217,10 @@ jobs:
   # installed already, but on PRs building wheels and the tarball still fails
   # for some reason!? therefore, we add it here (should also be faster than
   # pip installation)
+  # pytest-azurepipelines
   - script: |
       $(conda.activate) pycraf-env
-      mamba install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython "h5py>=3.6" matplotlib numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pytest$(pytest.version)" pytest-astropy pytest-azurepipelines "pytest-doctestplus$(doctestplus.version)" pytest-remotedata hypothesis rasterio scipy "sgp4>2" twine wheel extension-helpers setuptools-scm $(extra.packages) build
+      mamba install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython "h5py>=3.6" matplotlib numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pytest$(pytest.version)" pytest-astropy "pytest-doctestplus$(doctestplus.version)" pytest-remotedata hypothesis rasterio scipy "sgp4>2" twine wheel extension-helpers setuptools-scm $(extra.packages) build
     displayName: Install Anaconda packages
 
   # IMPORTANT:
@@ -233,11 +234,11 @@ jobs:
     displayName: Fix another conda bug on Linux
     condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], 3.8))
 
-  - bash: |
-      $(conda.activate) pycraf-env
-      python -m pip install --no-build-isolation --no-deps 'pytest-doctestplus @ git+https://github.com/astropy/pytest-doctestplus@fe73a1717b30acc0e8cf1af2538dd5df49f4d008'
-    displayName: Install doctestplus from source
-    condition: succeeded()
+  # - bash: |
+  #     $(conda.activate) pycraf-env
+  #     python -m pip install --no-build-isolation --no-deps 'pytest-doctestplus @ git+https://github.com/astropy/pytest-doctestplus@fe73a1717b30acc0e8cf1af2538dd5df49f4d008'
+  #   displayName: Install doctestplus from source
+  #   condition: succeeded()
 
   # # need to fix cctools and ld64 to slightly older version, otherwise an
   # # error ("ld: library not found for -lSystem") occurs during build
