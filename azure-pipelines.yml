@@ -106,80 +106,42 @@ jobs:
         # independent
         build.tarball: ${{ true }}
         publish.tarball: ${{ eq(variables['is.tag'], true) }}
+        extra.packages: 'sysroot_linux-64 "jinja2<3.1"'
       linux310:
         imageName: 'ubuntu-latest'
         python.version: '3.10'
         py_whl: cp310-
         numpy.version: '1.22.0'
-      # mac35:
-      #   imageName: 'macos-10.14'
-      #   python.version: '3.5'
-      #   numpy.version: '1.13.1'
-      #   astropy.version: '2'
-      #   sphinx.version: '<3.0'
-      # mac36:
-      #   imageName: 'macos-10.14'
-      #   python.version: '3.6'
-      #   numpy.version: '1.13.1'
-      #   astropy.version: '3'
-      # None of the mac-os builds work!
-      # (can only rely on conda-forge build system but not test anymore...)
-      # mac37:
-      #   imageName: 'macos-10.15'
-      #   python.version: '3.7'
-      #   numpy.version: '1.14.5'
-      #   astropy.version: '3'
-      # mac 3.8 leads to anaconda conflicts
-      mac38:
-        imageName: 'macos-latest'
-        python.version: '3.8'
-        numpy.version: '1.18.1'
-        astropy.version: '5'
-        pyproj.version: '>=2.2,<3'
-      mac39:
-        imageName: 'macos-latest'
-        python.version: '3.9'
-        numpy.version: '1.20.0'
-      mac310:
-        imageName: 'macos-latest'
-        python.version: '3.10'
-        numpy.version: '1.22.0'
+      # mac38:
+      #   imageName: 'macos-latest'
+      #   python.version: '3.8'
+      #   numpy.version: '1.18.1'
+      #   astropy.version: '5'
+      #   pyproj.version: '>=2.2,<3'
+      # mac39:
+      #   imageName: 'macos-latest'
+      #   python.version: '3.9'
+      #   numpy.version: '1.20.0'
       # mac310:
-      #   imageName: 'macos-10.15'
+      #   imageName: 'macos-latest'
       #   python.version: '3.10'
       #   numpy.version: '1.22.0'
-      # win36:
-      #   imageName: 'vs2017-win2016'
-      #   python.version: '3.6'
-      #   numpy.version: '1.13.1'
-      #   astropy.version: '3'
-      #   pytest.version: '<6'
-      #   doctestplus.version: '<0.6.1'
-      #   pyproj.version: '==1.9.5.1'
-      # win37:
+      # win38:
       #   imageName: 'windows-latest'
-      #   python.version: '3.7'
-      #   numpy.version: '1.14.5'
-      #   astropy.version: '3'
+      #   python.version: '3.8'
+      #   # numpy.version: '1.17.4'
+      #   numpy.version: '1.18.1'
+      #   astropy.version: '4'
       #   pyproj.version: '>=2.2,<3'
-      #   pytest.version: '<6'
-      #   doctestplus.version: '<0.6.1'
-      win38:
-        imageName: 'windows-latest'
-        python.version: '3.8'
-        # numpy.version: '1.17.4'
-        numpy.version: '1.18.1'
-        astropy.version: '4'
-        pyproj.version: '>=2.2,<3'
-      win39:
-        imageName: 'windows-latest'
-        python.version: '3.9'
-        numpy.version: '1.20.0'
-      win310:
-        imageName: 'windows-latest'
-        python.version: '3.10'
-        py_whl: cp310-
-        numpy.version: '1.22.0'
+      # win39:
+      #   imageName: 'windows-latest'
+      #   python.version: '3.9'
+      #   numpy.version: '1.20.0'
+      # win310:
+      #   imageName: 'windows-latest'
+      #   python.version: '3.10'
+      #   py_whl: cp310-
+      #   numpy.version: '1.22.0'
 
   pool:
     vmImage: $(imageName)
@@ -265,10 +227,17 @@ jobs:
   # installed already, but on PRs building wheels and the tarball still fails
   # for some reason!? therefore, we add it here (should also be faster than
   # pip installation)
+  # "pytest-doctestplus$(doctestplus.version)"
   - script: |
       $(conda.activate) pycraf-env
-      mamba install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython "h5py>=3.6" matplotlib numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pytest$(pytest.version)" pytest-astropy pytest-azurepipelines "pytest-doctestplus$(doctestplus.version)" pytest-remotedata hypothesis rasterio scipy "sgp4>2" twine wheel extension-helpers setuptools-scm $(extra.packages) build
+      mamba install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython "h5py>=3.6" matplotlib numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pytest$(pytest.version)" pytest-astropy pytest-azurepipelines pytest-remotedata hypothesis rasterio scipy "sgp4>2" twine wheel extension-helpers setuptools-scm $(extra.packages) build
     displayName: Install Anaconda packages
+
+  - bash: |
+      $(conda.activate) pycraf-env
+      python -m pip install --no-build-isolation --no-deps 'pytest-doctestplus @ git+https://github.com/astropy/pytest-doctestplus@fe73a1717b30acc0e8cf1af2538dd5df49f4d008'
+    displayName: Install doctestplus from source
+    condition: succeeded()
 
   # IMPORTANT:
   # condition: and(succeeded(), ge(variables['python.version'], 3.8))
