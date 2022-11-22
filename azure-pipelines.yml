@@ -233,6 +233,12 @@ jobs:
     displayName: Fix another conda bug on Linux
     condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], 3.8))
 
+  - bash: |
+      $(conda.activate) pycraf-env
+      python -m pip install --no-build-isolation --no-deps 'pytest-doctestplus @ git+https://github.com/astropy/pytest-doctestplus@fe73a1717b30acc0e8cf1af2538dd5df49f4d008'
+    displayName: Install doctestplus from source
+    condition: succeeded()
+
   # # need to fix cctools and ld64 to slightly older version, otherwise an
   # # error ("ld: library not found for -lSystem") occurs during build
   # - script: |
