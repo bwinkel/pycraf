@@ -161,6 +161,31 @@ def test_regrid_from_geotiff():
                 ),
             )
 
+        geodata_regridded, geodata_raw = tfunc(lons, lats, return_raw=True)
+
+        np.testing.assert_equal(
+            geodata_regridded, np.array([
+                [211, 311, 311, 231, 231],
+                [231, 311, 112, 312, 312],
+                [312, 231, 112, 312, 312],
+                [211, 312, 312, 211, 231],
+                [311, 211, 311, 312, 312],
+                ],
+                dtype=np.int16,
+                ),
+            )
+        # print(geodata_raw[::80, ::80])
+        np.testing.assert_equal(
+            geodata_raw[::80, ::80], np.array([
+                [211, 312, 211, 211, 311],
+                [311, 312, 312, 231, 211],
+                [231, 312, 231, 311, 311],
+                [311, 231, 311, 312, 312],
+                ],
+                dtype=np.int16,
+                ),
+            )
+
 
 @skip_rio
 def test_regrid_from_geotiff_degenerated():
