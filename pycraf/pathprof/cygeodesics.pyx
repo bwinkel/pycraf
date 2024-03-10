@@ -14,7 +14,9 @@ from cython.parallel import prange, parallel
 cimport numpy as np
 from numpy cimport PyArray_MultiIter_DATA as Py_Iter_DATA
 from libc.math cimport (
-    exp, sqrt, fabs, M_PI, sin, cos, tan, asin, acos, atan2, fmod
+    exp, sqrt, fabs, M_PI, sin, cos, tan, asin, acos, atan2, fmod,
+    pow as cpower  # use for floating point exponents as appropriate!
+    # see https://cython.readthedocs.io/en/latest/src/userguide/source_files_and_compilation.html#compiler-directives
     )
 import numpy as np
 
@@ -39,7 +41,7 @@ cdef (double, double, double) _inverse(
         double lon2_rad, double lat2_rad,
         double eps,
         int maxiter,
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
         # note: "a" is short for alpha, "s" for sigma in this function
@@ -201,7 +203,7 @@ cdef (double, double, double) _direct(
         double eps,
         int maxiter,
         int cwrap
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
         # note: "a" is short for alpha, "s" for sigma in this function
@@ -372,7 +374,7 @@ def direct_cython(
     return it.operands[4:7]
 
 
-cdef double ellipse_radius(double phi_rad, double a, double b) nogil:
+cdef double ellipse_radius(double phi_rad, double a, double b) noexcept nogil:
 
     return a * b / sqrt(
         (a * sin(phi_rad)) ** 2 + (b * cos(phi_rad)) ** 2
@@ -382,7 +384,7 @@ cdef double ellipse_radius(double phi_rad, double a, double b) nogil:
 cdef double _area_wgs84(
         double lon1_rad, double lon2_rad,
         double lat1_rad, double lat2_rad
-        ) nogil:
+        ) noexcept nogil:
     '''
     Adapted from https://math.stackexchange.com/questions/1379341/how-to-find-the-surface-area-of-revolution-of-an-ellipsoid-from-ellipse-rotating
     '''
@@ -459,7 +461,7 @@ def area_wgs84_cython(lon1_rad, lon2_rad, lat1_rad, lat2_rad, out_area=None):
 cdef inline int find_in_ordered(
         cython.floating[:] x,
         cython.floating x0,
-        ) nogil:
+        ) noexcept nogil:
     '''
     Find index of x0 in ordered vector x.
 
@@ -487,7 +489,7 @@ cdef inline int find_in_ordered(
     return i
 
 
-cdef inline double gauss1d(double offset, double s) nogil:
+cdef inline double gauss1d(double offset, double s) noexcept nogil:
 
     return exp(-0.5 * offset * offset / s / s)
 

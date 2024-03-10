@@ -13,7 +13,10 @@ cimport cython
 cimport numpy as np
 from numpy cimport PyArray_MultiIter_DATA as Py_Iter_DATA
 from libc.math cimport (
-    exp, sqrt, fabs, M_PI, M_PI_2, NAN, sin, cos, tan, asin, acos, atan2, fmod
+    exp, sqrt, fabs, M_PI, M_PI_2, NAN,
+    sin, cos, tan, asin, acos, atan2, fmod,
+    pow as cpower  # use for floating point exponents as appropriate!
+    # see https://cython.readthedocs.io/en/latest/src/userguide/source_files_and_compilation.html#compiler-directives
     )
 import numpy as np
 
@@ -44,7 +47,7 @@ LAYER_EDGE_RIGHT_IDX = np.zeros((MAX_COUNT, ), dtype=np.int32)
 cdef (double, double, double) crossing_point(
         double r_1, double r_2,
         double beta_n, double delta_n
-        ) nogil:
+        ) noexcept nogil:
     '''
     Find crossing point (having smallest delta_n > 0 step) for a ray from
     radius r_1 with slope pi/2 - beta_n - delta_n and circle of radius r_2
@@ -97,7 +100,7 @@ cdef (
         double beta_n, double delta_n, double path_length,
         double x_old, double y_old,
         bint first_iter, double max_delta_n, double max_path_length
-        ) nogil:
+        ) noexcept nogil:
     '''
     Find next crossing point (having smallest delta_n > 0 step) with
     radius below, current radius, or radius above.

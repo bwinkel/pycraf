@@ -32,20 +32,21 @@ jobs:
     sphinx.version: '>=3.0'
     astropy.version: ''
     pyproj.version: ''
-    pytest.version: ''
+    pytest.version: '<=8.1'  # remove this as soon as doc-test-plus works
+    # see https://github.com/scientific-python/pytest-doctestplus/issues/243
     doctestplus.version: ''
     extra.packages: ''
 
   strategy:
     matrix:
-      linux38:
-        imageName: 'ubuntu-latest'
-        python.version: '3.8'
-        py_whl: cp38-
-        numpy.version: '1.18.1'
-        astropy.version: '4'
-        pyproj.version: '>=2.2,<3'
-        extra.packages: 'sysroot_linux-64'  #  "jinja2<3.1"
+      # linux38:
+      #   imageName: 'ubuntu-latest'
+      #   python.version: '3.8'
+      #   py_whl: cp38-
+      #   numpy.version: '1.18.1'
+      #   astropy.version: '4'
+      #   pyproj.version: '>=2.2,<3'
+      #   extra.packages: 'sysroot_linux-64'  #  "jinja2<3.1"
       linux39:
         imageName: 'ubuntu-latest'
         python.version: '3.9'
@@ -70,12 +71,17 @@ jobs:
         python.version: '3.11'
         py_whl: cp311-
         numpy.version: '1.23.4'
-      mac38:
-        imageName: 'macos-latest'
-        python.version: '3.8'
-        numpy.version: '1.18.1'
-        astropy.version: '5'
-        pyproj.version: '>=2.2,<3'
+      linux312:
+        imageName: 'ubuntu-latest'
+        python.version: '3.12'
+        py_whl: cp312-
+        numpy.version: '1.26.4'
+      # mac38:
+      #   imageName: 'macos-latest'
+      #   python.version: '3.8'
+      #   numpy.version: '1.18.1'
+      #   astropy.version: '5'
+      #   pyproj.version: '>=2.2,<3'
       mac39:
         imageName: 'macos-latest'
         python.version: '3.9'
@@ -88,12 +94,16 @@ jobs:
         imageName: 'macos-latest'
         python.version: '3.11'
         numpy.version: '1.23.4'
-      win38:
-        imageName: 'windows-latest'
-        python.version: '3.8'
-        numpy.version: '1.18.1'
-        astropy.version: '4'
-        pyproj.version: '>=2.2,<3'
+      mac312:
+        imageName: 'macos-latest'
+        python.version: '3.12'
+        numpy.version: '1.26.4'
+      # win38:
+      #   imageName: 'windows-latest'
+      #   python.version: '3.8'
+      #   numpy.version: '1.18.1'
+      #   astropy.version: '4'
+      #   pyproj.version: '>=2.2,<3'
       win39:
         imageName: 'windows-latest'
         python.version: '3.9'
@@ -106,6 +116,10 @@ jobs:
         imageName: 'windows-latest'
         python.version: '3.11'
         numpy.version: '1.23.4'
+      win312:
+        imageName: 'windows-latest'
+        python.version: '3.12'
+        numpy.version: '1.26.4'
 
   pool:
     vmImage: $(imageName)
@@ -184,6 +198,7 @@ jobs:
   - script: |
       conda install --yes -c conda-forge mamba
       conda create --yes --quiet --name pycraf-env -c conda-forge
+      conda list
     displayName: Create Anaconda environment
 
   # note: with project.toml it should not be necessary to have cython
@@ -193,6 +208,7 @@ jobs:
   - script: |
       $(conda.activate) pycraf-env
       mamba install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython "h5py>=3.6" matplotlib-base numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pytest$(pytest.version)" pytest-astropy pytest-doctestplus pytest-remotedata hypothesis rasterio scipy "sgp4>2" twine wheel extension-helpers setuptools-scm $(extra.packages) build
+      mamba list
     displayName: Install Anaconda packages
 
   # IMPORTANT:

@@ -15,8 +15,10 @@ from libc.stdlib cimport abort, malloc, free
 cimport numpy as np
 cimport openmp
 from libc.math cimport (
-    exp, log, log10, sqrt, fabs, M_PI, floor, pow as cpower,
-    sin, cos, tan, asin, acos, atan, atan2, tanh
+    exp, log, log10, sqrt, fabs, M_PI, floor,
+    sin, cos, tan, asin, acos, atan, atan2, tanh,
+    pow as cpower  # use for floating point exponents as appropriate!
+    # see https://cython.readthedocs.io/en/latest/src/userguide/source_files_and_compilation.html#compiler-directives
     )
 import numpy as np
 from astropy import units as apu
@@ -543,7 +545,7 @@ cdef class _PathProp(object):
 
 cdef double _beta_from_DN_N0(
         double lat_mid, double DN, double N0, double d_tm, double d_lm
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
         double tau, a, b, mu1, log_mu1, mu4, beta0
@@ -617,7 +619,7 @@ cdef void _process_path(
         # double bearing,
         # double back_bearing,
         # double distance,
-        ) nogil:
+        ) noexcept nogil:
 
     # TODO: write down, which entries "pp" MUST have already
 
@@ -766,7 +768,7 @@ cdef (double, double) _smooth_earth_heights(
         double distance,
         double[::1] d_v,
         double[::1] h_v,
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
         int i, dsize
@@ -797,7 +799,7 @@ cdef (double, double) _effective_antenna_heights(
         double[::1] h_v,
         double h_ts, double h_rs,
         double h_st, double h_sr,
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
         int i, dsize
@@ -860,7 +862,7 @@ cdef (
         double[::1] h_v,
         double h_ts, double h_rs,
         double wavelen,
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
         int i, dsize
@@ -961,7 +963,7 @@ cdef (
         double[::1] h_v,
         double h_ts, double h_rs,
         double wavelen,
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
         int i, dsize
@@ -1123,7 +1125,7 @@ cdef (int, double, double, double, double, double, double, double, double) _path
         double[::1] h_v,
         double h_ts, double h_rs, double h_st,
         int nu_bull_idx, double duct_slope,
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
         int i, dsize
@@ -1227,7 +1229,7 @@ cdef (int, double, double, double, double, double, double, double, double) _path
 
 cdef (double, double, double) _free_space_loss_bfsg(
         ppstruct pp,
-        ) nogil:
+        ) noexcept nogil:
     # Better make this a member function?
 
     cdef:
@@ -1294,7 +1296,7 @@ def free_space_loss_bfsg_cython(
 
 cdef double _tropospheric_scatter_loss_bs(
         ppstruct pp, double G_t, double G_r
-        ) nogil:
+        ) noexcept nogil:
     # Better make this a member function?
 
     cdef:
@@ -1316,7 +1318,7 @@ cdef double _tropospheric_scatter_loss_bs(
     L_bs = (
         190. + L_f + 20 * log10(pp.distance) +
         0.573 * pp.theta - 0.15 * pp.N0 + L_c + A_g -
-        10.1 * (-log10(pp.time_percent / 50.)) ** 0.7
+        10.1 * cpower(-log10(pp.time_percent / 50.), 0.7)
         )
 
     return L_bs
@@ -1353,7 +1355,7 @@ def tropospheric_scatter_loss_bs_cython(
 
 cdef double _ducting_loss_ba(
         ppstruct pp
-        ) nogil:
+        ) noexcept nogil:
     # Better make this a member function?
 
     cdef:
@@ -1504,7 +1506,7 @@ def ducting_loss_ba_cython(
     return _ducting_loss_ba(pathprop._pp)
 
 
-cdef inline double _J_edgeknife(double nu) nogil:
+cdef inline double _J_edgeknife(double nu) noexcept nogil:
 
     if nu < -0.78:
         return 0.
@@ -1518,7 +1520,7 @@ cdef inline double _J_edgeknife(double nu) nogil:
 
 cdef inline double _diffraction_deygout_helper(
         double dist, double nu_m, double nu_t, double nu_r
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
         double L_d
@@ -1533,7 +1535,7 @@ cdef inline double _diffraction_deygout_helper(
 
 cdef inline double _diffraction_bullington_helper(
         double dist, double nu_bull
-        ) nogil:
+        ) noexcept nogil:
 
     cdef double L_uc = _J_edgeknife(nu_bull), L_bull
 
@@ -1544,7 +1546,7 @@ cdef inline double _diffraction_bullington_helper(
 
 cdef double _L_dft_G_helper(
         double beta_dft, double Y, double K,
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
 
@@ -1569,7 +1571,7 @@ cdef double _L_dft_helper(
         double h_te, double h_re,
         int pol,
         double eps_r, double sigma
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
 
@@ -1612,7 +1614,7 @@ cdef double _L_dft(
         double h_te, double h_re,
         double omega_frac,
         int pol
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
 
@@ -1636,7 +1638,7 @@ cdef double _diffraction_spherical_earth_loss_helper(
         double h_te, double h_re,
         double omega_frac,
         int pol
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
 
@@ -1691,7 +1693,7 @@ cdef double _diffraction_spherical_earth_loss_helper(
 cdef double _delta_bullington_loss(
         ppstruct pp,
         int do_beta,
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
 
@@ -1731,7 +1733,7 @@ cdef double _delta_bullington_loss(
 
 
 cdef inline double _I_helper(
-        double x) nogil:
+        double x) noexcept nogil:
 
     cdef:
 
@@ -1752,7 +1754,7 @@ cdef inline double _I_helper(
 
 cdef (double, double, double, double, double) _diffraction_loss_complete(
         ppstruct pp,
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
 
@@ -1847,7 +1849,7 @@ def diffraction_loss_complete_cython(
 cdef (double, double, double, double, double, double, double) _path_attenuation_complete(
         ppstruct pp,
         double G_t, double G_r,
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
 
@@ -1955,7 +1957,7 @@ def path_attenuation_complete_cython(
 
 cdef double _clutter_correction(
         double h_g, int zone, double freq
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
 
@@ -2273,7 +2275,7 @@ def height_map_data_cython(
         np.float64_t[:, ::1] _dist_map
         np.float64_t[:, ::1] _bearing_map, _backbearing_map
 
-    # print('using hprof_step = {:.1f} m'.format(hprof_step))
+    print('using hprof_step = {:.1f} m'.format(hprof_step))
 
     cosdelta = 1. / cos(DEG2RAD * lat_t) if do_cos_delta else 1.
 
@@ -2291,10 +2293,10 @@ def height_map_data_cython(
     lon_t_rad, lat_t_rad = DEG2RAD * lon_t, DEG2RAD * lat_t
     xcoords_rad = np.radians(xcoords)
     ycoords_rad = np.radians(ycoords)
-    # print(
-    #     xcoords[0], xcoords[len(xcoords) - 1],
-    #     ycoords[0], ycoords[len(ycoords) - 1]
-    #     )
+    print(
+        xcoords[0], xcoords[len(xcoords) - 1],
+        ycoords[0], ycoords[len(ycoords) - 1]
+        )
 
     # find max distance (will be one of the edges)
     max_distance = max([
@@ -2327,7 +2329,7 @@ def height_map_data_cython(
             (xcoords_rad.size - 1, xcoords_rad.size - 2, ycoords_rad.size - 1)
             ]
         ]) / 2  # rad
-    # print('min pos angle resolution (at corner coords)', min_pa_res)
+    print('min pos angle resolution (at corner coords)', min_pa_res)
 
 
     # path_idx_map stores the index of the edge-path that is closest
@@ -2378,6 +2380,7 @@ def height_map_data_cython(
         0, max_distance + hprof_step, hprof_step
         )
 
+    print('get geoid positions and bearings')
     lons_rad, lats_rad, back_bearings_rad = cygeodesics.direct_cython(
         lon_t_rad, lat_t_rad,
         start_bearings[:, np.newaxis],
@@ -2389,6 +2392,7 @@ def height_map_data_cython(
     # print(xcoords, ycoords)
     # print(lons.min(), lons.max(), lats.min(), lats.max())
 
+    print('srtm query')
     # hgt_res may not be set correctly yet, if no call to srtm was made before
     # let's do a simple query to make sure, it is set
     srtm._srtm_height_data(lon_t, lat_t)
@@ -2423,6 +2427,8 @@ def height_map_data_cython(
     _distances = distances
 
     refx, refy = _xcoords[0], _ycoords[0]
+
+    print('nogil loops')
 
     with nogil:
         for bidx in range(_start_bearings.shape[0]):
@@ -3314,16 +3320,16 @@ def losses_complete_cython(
 cdef inline double _phi_helper(
         double r_p, double r_t, double phi0,
         double a, double b, double c, double d,
-        ) nogil:
+        ) noexcept nogil:
 
-    return phi0 * r_p ** a * r_t ** b * exp(
+    return phi0 * cpower(r_p, a) * cpower(r_t, b) * exp(
         c * (1. - r_p) + d * (1. - r_t)
         )
 
 
 cdef inline double _g_helper(
         double f, double f_i,
-        ) nogil:
+        ) noexcept nogil:
 
     return 1. + ((f - f_i) / (f + f_i)) ** 2
 
@@ -3331,7 +3337,7 @@ cdef inline double _g_helper(
 cdef inline double _eta_helper1(
         double f, double r_t,
         double a, double eta, double b, double c, double d
-        ) nogil:
+        ) noexcept nogil:
     # applies g_correction
 
     return (
@@ -3344,7 +3350,7 @@ cdef inline double _eta_helper1(
 cdef inline double _eta_helper2(
         double f, double r_t,
         double a, double eta, double b, double c, double d
-        ) nogil:
+        ) noexcept nogil:
 
     return (
         a * eta * exp(b * (1 - r_t)) /
@@ -3354,7 +3360,7 @@ cdef inline double _eta_helper2(
 
 cdef (double, double) _specific_attenuation_annex2(
         double freq, double pressure, double rho_water, double temperature
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
 
@@ -3376,8 +3382,8 @@ cdef (double, double) _specific_attenuation_annex2(
         xi3 = _phi_helper(r_p, r_t, 1., 0.3414, -6.5851, 0.2130, -8.5854)
 
         atten_dry = freq ** 2 * r_p ** 2 * 1.e-3 * (
-            7.2 * r_t ** 2.8 / (freq ** 2 + 0.34 * r_p ** 2 * r_t ** 1.6) +
-            0.62 * xi3 / ((54. - freq) ** (1.16 * xi1) + 0.83 * xi2)
+            7.2 * cpower(r_t, 2.8) / (freq ** 2 + 0.34 * r_p ** 2 * cpower(r_t, 1.6)) +
+            0.62 * xi3 / (cpower(54. - freq, 1.16 * xi1) + 0.83 * xi2)
             )
 
     elif freq <= 60.:
@@ -3434,12 +3440,12 @@ cdef (double, double) _specific_attenuation_annex2(
         xi7 = _phi_helper(r_p, r_t, 1., -0.1833, 6.5589, -0.2402, 6.131)
 
         atten_dry = freq ** 2 * r_p ** 2 * 1.e-3 * (
-            3.02e-4 * r_t ** 3.5 +
-            0.283 * r_t ** 3.8 / (
-                (freq - 118.75) ** 2 + 2.91 * r_p ** 2 * r_t ** 1.6
+            3.02e-4 * cpower(r_t, 3.5) +
+            0.283 * cpower(r_t, 3.8) / (
+                (freq - 118.75) ** 2 + 2.91 * r_p ** 2 * cpower(r_t, 1.6)
                 ) +
             0.502 * xi6 * (1. - 0.0163 * xi7 * (freq - 66.)) / (
-                (freq - 66.) ** (1.4346 * xi4) + 1.15 * xi5
+                cpower(freq - 66., 1.4346 * xi4) + 1.15 * xi5
                 )
             )
 
@@ -3447,10 +3453,10 @@ cdef (double, double) _specific_attenuation_annex2(
 
         delta = _phi_helper(r_p, r_t, -0.00306, 3.211, -14.94, 1.583, -16.37)
 
-        atten_dry = delta + freq ** 2 * r_p ** 3.5 * 1.e-3 * (
-            3.02e-4 / (1. + 1.9e-5 * freq ** 1.5) +
-            0.283 * r_t ** 0.3 / (
-                (freq - 118.75) ** 2 + 2.91 * r_p ** 2 * r_t ** 1.6
+        atten_dry = delta + freq ** 2 * cpower(r_p, 3.5) * 1.e-3 * (
+            3.02e-4 / (1. + 1.9e-5 * cpower(freq, 1.5)) +
+            0.283 * cpower(r_t, 0.3) / (
+                (freq - 118.75) ** 2 + 2.91 * r_p ** 2 * cpower(r_t, 1.6)
                 )
             )
     else:
@@ -3458,8 +3464,8 @@ cdef (double, double) _specific_attenuation_annex2(
         # annex2 model only valid up to 350. GHz
         atten_dry = NAN
 
-    eta_1 = 0.955 * r_p * r_t ** 0.68 + 0.006 * rho_water
-    eta_2 = 0.735 * r_p * r_t ** 0.5 + 0.0353 * r_t ** 4 * rho_water
+    eta_1 = 0.955 * r_p * cpower(r_t, 0.68) + 0.006 * rho_water
+    eta_2 = 0.735 * r_p * cpower(r_t, 0.5) + 0.0353 * r_t ** 4 * rho_water
 
     atten_wet = (
         _eta_helper1(freq, r_t, 3.98, eta_1, 2.23, 22.235, 9.42) +
@@ -3473,7 +3479,7 @@ cdef (double, double) _specific_attenuation_annex2(
         _eta_helper1(freq, r_t, 83328., eta_2, 0.99, 1780, 0)
         )
 
-    atten_wet *= freq ** 2 * r_t ** 2.5 * rho_water * 1.e-4
+    atten_wet *= freq ** 2 * cpower(r_t, 2.5) * rho_water * 1.e-4
 
     return atten_dry, atten_wet
 
@@ -3504,7 +3510,7 @@ def specific_attenuation_annex2(
 
 cdef double true_angular_distance(
         double l1, double b1, double l2, double b2
-        ) nogil:
+        ) noexcept nogil:
     '''
     Calculate true angular distance between two points on the sphere.
 

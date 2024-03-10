@@ -14,7 +14,9 @@ from cython.parallel import prange, parallel
 cimport numpy as np
 from numpy cimport PyArray_MultiIter_DATA as Py_Iter_DATA
 from libc.math cimport (
-    exp, sqrt, fabs, M_PI, sin, cos, tan, asin, acos, atan2, fmod, log, log10
+    exp, sqrt, fabs, M_PI, sin, cos, tan, asin, acos, atan2, fmod, log, log10,
+    pow as cpower  # use for floating point exponents as appropriate!
+    # see https://cython.readthedocs.io/en/latest/src/userguide/source_files_and_compilation.html#compiler-directives
     )
 import numpy as np
 
@@ -30,14 +32,14 @@ cdef double M_2PI = 2 * M_PI
 cdef double C = 3e8  # m/s
 
 
-cdef inline double _min(double a, double b) nogil:
+cdef inline double _min(double a, double b) noexcept nogil:
     if a < b:
         return a
     else:
         return b
 
 
-cdef inline double _max(double a, double b) nogil:
+cdef inline double _max(double a, double b) noexcept nogil:
     if a > b:
         return a
     else:
@@ -48,7 +50,7 @@ cdef (double, double) _rural_macro_losses(
         double fc_ghz, double d_2d,
         double h_bs, double h_ue,
         double W, double h,
-        ) nogil:
+        ) noexcept nogil:
     # all parameters (except freq) in meters;
     # see 3GPP TR 38.901 version 16.1.0 Release 16;
     # Table 7.4.1-1: Pathloss models; "RMa"
@@ -67,15 +69,15 @@ cdef (double, double) _rural_macro_losses(
     if d_2d <= d_bp:
         PL_los = PL1 = (
             20 * log10(40 * M_PI * d_3d * fc_ghz / 3) +
-            _min(0.03 * h ** 1.72, 10) * log10(d_3d) -
-            _min(0.044 * h ** 1.72, 14.77) +
+            _min(0.03 * cpower(h, 1.72), 10) * log10(d_3d) -
+            _min(0.044 * cpower(h, 1.72), 14.77) +
             0.002 * log10(h) * d_3d
             )
     else:
         PL1 = (
                 20 * log10(40 * M_PI * d_bp_3d * fc_ghz / 3) +
-                _min(0.03 * h ** 1.72, 10) * log10(d_bp_3d) -
-                _min(0.044 * h ** 1.72, 14.77) +
+                _min(0.03 * cpower(h, 1.72), 10) * log10(d_bp_3d) -
+                _min(0.044 * cpower(h, 1.72), 14.77) +
                 0.002 * log10(h) * d_bp_3d
                 )
         PL_los = PL2 = PL1 + 40 * log10(d_3d / d_bp)
@@ -96,7 +98,7 @@ cdef (double, double) _urban_macro_losses(
         double fc_ghz, double d_2d,
         double h_bs, double h_ue,
         double h_e,
-        ) nogil:
+        ) noexcept nogil:
     # all parameters (except freq) in meters;
     # see 3GPP TR 38.901 version 16.1.0 Release 16;
     # Table 7.4.1-1: Pathloss models; "UMa"
@@ -136,7 +138,7 @@ cdef (double, double) _urban_macro_losses(
 cdef (double, double) _urban_micro_losses(
         double fc_ghz, double d_2d,
         double h_bs, double h_ue,
-        ) nogil:
+        ) noexcept nogil:
     # all parameters (except freq) in meters;
     # see 3GPP TR 38.901 version 16.1.0 Release 16;
     # Table 7.4.1-1: Pathloss models; "UMi - Street Canyon"
