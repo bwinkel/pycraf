@@ -233,7 +233,7 @@ def wgs84_to_geotiff_pixels(geotiff, lons, lats):
     strip_input_units=False,
     output_unit=None,
     )
-def regrid_from_geotiff(geotiff, lons, lats, band=1):
+def regrid_from_geotiff(geotiff, lons, lats, band=1, return_raw=False):
     '''
     Retrieve interpolated GeoTiff raster values for given WGS84 coordinates
     (longitude, latitude).
@@ -254,6 +254,10 @@ def regrid_from_geotiff(geotiff, lons, lats, band=1):
         Geographic longitudes/latitudes (WGS84) [deg]
     band : int, Optional (default: 1)
         The GeoTiff band to use.
+    return_raw : Boolean, Optional (default: False)
+        Also return the original data (in the same window). This may be
+        useful if the normalization of the data is important (e.g., for
+        a population map rather than a population density map).
 
     Returns
     -------
@@ -262,6 +266,10 @@ def regrid_from_geotiff(geotiff, lons, lats, band=1):
         latitude positions. If the input GeoTiff has more than one band and
         you need to regrid several of the bands, please run the function
         repeatedly, specifying the band parameter.
+    geo_data_raw : `~numpy.ndarray`
+        Only returned when `return_raw == True`
+        Original/raw values of the input raster map in the the same window
+        that was queried with this function.
 
     Notes
     -----
@@ -305,4 +313,10 @@ def regrid_from_geotiff(geotiff, lons, lats, band=1):
 
     geo_data_regridded = geo_interp((geo_x - col_off, geo_y - row_off))
 
-    return geo_data_regridded.astype(geo_data.dtype, copy=False)
+    if return_raw:
+        return (
+          geo_data_regridded.astype(geo_data.dtype, copy=False),
+          geo_data[5:-5, 5:-5]
+          )
+    else:
+        return geo_data_regridded.astype(geo_data.dtype, copy=False)
