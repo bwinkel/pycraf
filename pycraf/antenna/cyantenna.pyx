@@ -16,7 +16,9 @@ from cython.parallel import prange, parallel
 from numpy cimport PyArray_MultiIter_DATA as Py_Iter_DATA
 from libc.math cimport M_PI, NAN
 from libc.math cimport (
-    exp, sqrt, fabs, sin, cos, tan, asin, acos, atan2, fmod, log10
+    exp, sqrt, fabs, sin, cos, tan, asin, acos, atan2, fmod, log10,
+    pow as cpower  # use for floating point exponents as appropriate!
+    # see https://cython.readthedocs.io/en/latest/src/userguide/source_files_and_compilation.html#compiler-directives
     )
 import numpy as np
 
@@ -39,7 +41,7 @@ cdef inline float64_t _ras_pattern(
         float64_t phi, float64_t d_wlen,
         float64_t gmax, float64_t g1,
         float64_t phi_m, float64_t phi_r,
-        ) nogil:
+        ) noexcept nogil:
 
     if (120. <= phi) and (phi <= 180.):
         return -12.
@@ -125,7 +127,7 @@ def ras_pattern_cython(
 
 cdef inline float64_t _A_EH(
         float64_t phi, float64_t A_m, float64_t phi_3db, float64_t k
-        ) nogil:
+        ) noexcept nogil:
 
     cdef float64_t gain = k * (phi / phi_3db) ** 2
 
@@ -137,7 +139,7 @@ cdef inline float64_t _A_EH(
 
 cdef inline float64_t _A_EV(
         float64_t theta, float64_t SLA_nu, float64_t theta_3db, float64_t k
-        ) nogil:
+        ) noexcept nogil:
 
     cdef float64_t gain = k * ((theta - 90.) / theta_3db) ** 2
 
@@ -153,7 +155,7 @@ cdef inline float64_t  _imt2020_single_element_pattern(
         float64_t A_m, float64_t SLA_nu,
         float64_t phi_3db, float64_t theta_3db,
         float64_t k,
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
         float64_t phi = azim
@@ -523,15 +525,15 @@ def imt2020_composite_pattern_extended_cython(
 
 cdef float64_t  _G_hr(
         float64_t x_h, float64_t k_h, float64_t G180
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
 
-        float64_t lambda_kh = 3 * (1 - 0.5 ** -k_h)
         float64_t G = -12 * x_h ** 2
+        float64_t lambda_kh = 3 * (1 - cpower(0.5, -k_h))
 
     if x_h > 0.5:
-        G *= x_h ** -k_h
+        G *= cpower(x_h, -k_h)
         G -= lambda_kh
 
     if G < G180:
@@ -543,23 +545,23 @@ cdef float64_t  _G_hr(
 cdef float64_t  _G_vr_peak(
         float64_t x_v, float64_t k_v, float64_t k_p,
         float64_t theta_3db, float64_t G180
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
 
         float64_t x_k = sqrt(1 - 0.36 * k_v)
         float64_t C = (
             10 * log10(
-                (180. / theta_3db) ** 1.5 * (4 ** -1.5) / (1 + 8 * k_p)
+                cpower(180. / theta_3db, 1.5) * cpower(4, -1.5) / (1 + 8 * k_p)
                 ) /
             log10(22.5 / theta_3db)
             )
-        float64_t lambda_kv = 12 - C * log10(4.) - 10 * log10(4 ** -1.5 + k_v)
+        float64_t lambda_kv = 12 - C * log10(4.) - 10 * log10(cpower(4, -1.5) + k_v)
 
     if x_v < x_k:
         return -12 * x_v ** 2
     elif x_k <= x_v and x_v < 4:
-        return -12 + 10 * log10(x_v ** -1.5 + k_v)
+        return -12 + 10 * log10(cpower(x_v, -1.5) + k_v)
     elif 4 <= x_v and x_v < 90 / theta_3db:
         return -lambda_kv - C * log10(x_v)
     else:
@@ -570,23 +572,23 @@ cdef float64_t  _G_vr_peak(
 cdef float64_t  _G_vr_avg(
         float64_t x_v, float64_t k_v, float64_t k_a,
         float64_t theta_3db, float64_t G180
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
 
         float64_t x_k = sqrt(1.33 - 0.33 * k_v)
         float64_t C = (
             10 * log10(
-                (180. / theta_3db) ** 1.5 * (4 ** -1.5 + k_v) / (1 + 8 * k_a)
+                cpower(180. / theta_3db, 1.5) * (cpower(4, -1.5) + k_v) / (1 + 8 * k_a)
                 ) /
             log10(22.5 / theta_3db)
             )
-        float64_t lambda_kv = 12 - C * log10(4.) - 10 * log10(4 ** -1.5 + k_v)
+        float64_t lambda_kv = 12 - C * log10(4.) - 10 * log10(cpower(4, -1.5) + k_v)
 
     if x_v < x_k:
         return -12 * x_v ** 2
     elif x_k <= x_v and x_v < 4:
-        return -15 + 10 * log10(x_v ** -1.5 + k_v)
+        return -15 + 10 * log10(cpower(x_v, -1.5) + k_v)
     elif 4 <= x_v and x_v < 90 / theta_3db:
         return -lambda_kv - 3 - C * log10(x_v)
     else:
@@ -599,7 +601,7 @@ cdef float64_t _imt_advanced_sectoral_peak_sidelobe_pattern(
         float64_t G0, float64_t phi_3db, float64_t theta_3db,
         float64_t k_p, float64_t k_h, float64_t k_v,
         float64_t tilt_m, float64_t tilt_e,
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
 
@@ -748,7 +750,7 @@ cdef float64_t _imt_advanced_sectoral_avg_sidelobe_pattern(
         float64_t G0, float64_t phi_3db, float64_t theta_3db,
         float64_t k_a, float64_t k_h, float64_t k_v,
         float64_t tilt_m, float64_t tilt_e,
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
 
@@ -895,13 +897,13 @@ def imt_advanced_sectoral_avg_sidelobe_pattern_cython(
 # d_wlen = diameter / wavelength
 cdef float64_t _fl_pattern_2_1(
         float64_t phi, float64_t d_wlen, float64_t G_max
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
 
         float64_t g1 = 2. + 15. * log10(d_wlen)  # gain of first side-lobe
         float64_t phi_m = 20. / d_wlen * sqrt(G_max - g1)
-        float64_t phi_r = 15.85 * d_wlen ** -0.6
+        float64_t phi_r = 15.85 * cpower(d_wlen, -0.6)
 
     phi = fabs(phi)
 
@@ -918,13 +920,13 @@ cdef float64_t _fl_pattern_2_1(
 
 cdef float64_t _fl_pattern_2_2(
         float64_t phi, float64_t d_wlen, float64_t G_max
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
 
         float64_t g1 = 2. + 15. * log10(d_wlen)  # gain of first side-lobe
         float64_t phi_m = 20. / d_wlen * sqrt(G_max - g1)
-        float64_t phi_r = 15.85 * d_wlen ** -0.6
+        float64_t phi_r = 15.85 * cpower(d_wlen, -0.6)
 
     phi = fabs(phi)
 
@@ -941,14 +943,14 @@ cdef float64_t _fl_pattern_2_2(
 
 cdef float64_t _fl_pattern_2_3(
         float64_t phi, float64_t d_wlen, float64_t G_max
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
 
         float64_t g1 = 2. + 15. * log10(d_wlen)  # gain of first side-lobe
         float64_t phi_m = 20. / d_wlen * sqrt(G_max - g1)
         float64_t phi_t = 100. / d_wlen
-        float64_t phi_s = 144.5 * d_wlen ** -0.2
+        float64_t phi_s = 144.5 * cpower(d_wlen, -0.2)
 
     phi = fabs(phi)
 
@@ -966,7 +968,7 @@ cdef float64_t _fl_pattern_2_3(
 cdef float64_t _fl_pattern(
         float64_t phi, float64_t diameter, float64_t wavelength,
         float64_t G_max
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
         float64_t d_wlen = diameter / wavelength

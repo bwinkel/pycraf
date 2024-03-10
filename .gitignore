@@ -56,7 +56,9 @@ distribute-*.tar.gz
 *~
 .project
 .pydevproject
+.nfs*
 .settings
+deprecated
 
 # Mac OSX
 .DS_Store

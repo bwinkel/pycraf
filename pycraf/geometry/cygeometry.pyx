@@ -14,7 +14,9 @@ from cython.parallel import prange, parallel
 cimport numpy as np
 from numpy cimport PyArray_MultiIter_DATA as Py_Iter_DATA
 from libc.math cimport (
-    exp, sqrt, fabs, M_PI, sin, cos, tan, asin, acos, atan2, fmod
+    exp, sqrt, fabs, M_PI, sin, cos, tan, asin, acos, atan2, fmod,
+    pow as cpower  # use for floating point exponents as appropriate!
+    # see https://cython.readthedocs.io/en/latest/src/userguide/source_files_and_compilation.html#compiler-directives
     )
 import numpy as np
 
@@ -32,7 +34,7 @@ cdef double M_2PI = 2 * M_PI
 cdef inline double _true_angular_distance(
         double lon1_rad, double lat1_rad,
         double lon2_rad, double lat2_rad,
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
         double sin_diff_lon = sin(lon2_rad - lon1_rad)
@@ -55,7 +57,7 @@ cdef inline double _true_angular_distance(
 cdef inline double _great_circle_bearing(
         double lon1_rad, double lat1_rad,
         double lon2_rad, double lat2_rad,
-        ) nogil:
+        ) noexcept nogil:
 
     cdef:
         double sin_diff_lon = sin(lon2_rad - lon1_rad)

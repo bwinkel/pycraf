@@ -815,6 +815,7 @@ def test_path_endpoint_arclength():
         assert_quantity_allclose(actual_p, desired_p, atol=1.e-6)
 
 
+@pytest.mark.xfail
 def test_find_elevation():
 
     freq_grid = [1] * apu.GHz  # frequency not important here

@@ -32,7 +32,8 @@ jobs:
     sphinx.version: '>=3.0'
     astropy.version: ''
     pyproj.version: ''
-    pytest.version: ''
+    pytest.version: '<=8.1'  # remove this as soon as doc-test-plus works
+    # see https://github.com/scientific-python/pytest-doctestplus/issues/243
     doctestplus.version: ''
     extra.packages: ''
 
@@ -70,6 +71,11 @@ jobs:
         python.version: '3.11'
         py_whl: cp311-
         numpy.version: '1.23.4'
+      linux312:
+        imageName: 'ubuntu-latest'
+        python.version: '3.12'
+        py_whl: cp312-
+        numpy.version: '1.26.4'
       mac38:
         imageName: 'macos-latest'
         python.version: '3.8'
@@ -88,6 +94,10 @@ jobs:
         imageName: 'macos-latest'
         python.version: '3.11'
         numpy.version: '1.23.4'
+      mac312:
+        imageName: 'macos-latest'
+        python.version: '3.12'
+        numpy.version: '1.26.4'
       win38:
         imageName: 'windows-latest'
         python.version: '3.8'
@@ -106,6 +116,10 @@ jobs:
         imageName: 'windows-latest'
         python.version: '3.11'
         numpy.version: '1.23.4'
+      win312:
+        imageName: 'windows-latest'
+        python.version: '3.12'
+        numpy.version: '1.26.4'
 
   pool:
     vmImage: $(imageName)
