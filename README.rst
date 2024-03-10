@@ -119,7 +119,7 @@ Anaconda/Miniconda, one can use the `conda` package manager to install it::
 Of course, it is always a good idea to do this in its own environment, such
 that you don't mess up with your standard environment, e.g.::
 
-    conda create -n pycraf-env python=3.9 pycraf
+    conda create -n pycraf-env python=3.10 pycraf
 
 If you don't like Anaconda, the easiest way to install pycraf is via pip::
 
@@ -136,10 +136,10 @@ Dependencies
 We kept the dependencies as minimal as possible. The following packages are
 required:
 
-* Python 3.8 or later
+* Python 3.9 or later
 * setuptools
 * cython 0.29 or later
-* numpy 1.18 or later
+* numpy 1.20 or later
 * astropy 4.0 or later
 * scipy 1.7 or later
 * pytest 5.4 or later
