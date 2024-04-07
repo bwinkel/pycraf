@@ -502,6 +502,7 @@ def height_map_data(
         d_tm=None, d_lm=None,
         d_ct=None, d_cr=None,
         omega_percent=0 * apu.percent,
+        do_lonlat_profs=False,
         cache_path=None, clobber=False,
         ):
 
@@ -561,6 +562,9 @@ def height_map_data(
     omega_percent : `~astropy.units.Quantity`, optional
         Fraction of the path over water [%] (see Table 3)
         (default: 0%)
+    do_lonlat_profs : bool, optional
+        If True, also add `lons_profs` and `lats_profs` to output dict.
+        (See below for further information. Default: False)
     cache_path : str, optional
         If set, the `joblib package
         <https://joblib.readthedocs.io/en/latest/>`_ is used to cache
@@ -671,6 +675,16 @@ def height_map_data(
           Zero-valued array of the same length as `height_profs` for
           convenience.
 
+        - "lons_profs" : `~numpy.ndarray` 2D (float, (me, mh))
+
+          Longitude (profiles) to each of the pixels on the map edge,
+          zero padded. This can be useful, if one wants to tinker with
+          the `height_profs` based on the coordinates of its values.
+          (An example would be to add clutter heights.)
+
+        - "lons_profs" : `~numpy.ndarray` 2D (float, (me, mh))
+          As `lats_profs` but for latitudes.
+
     Notes
     -----
     - Path attenuation is completely symmetric, i.e., it doesn't matter if
@@ -695,6 +709,7 @@ def height_map_data(
         d_tm=d_tm, d_lm=d_lm,
         d_ct=d_ct, d_cr=d_cr,
         omega=omega_percent,
+        do_lonlat_profs=do_lonlat_profs,
         )
 
     joblib_available = True

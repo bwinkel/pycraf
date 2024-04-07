@@ -2100,6 +2100,7 @@ def height_map_data_cython(
         d_tm=None, d_lm=None,
         d_ct=None, d_cr=None,
         omega=None,
+        int do_lonlat_profs=0,
         ):
 
     '''
@@ -2137,6 +2138,9 @@ def height_map_data_cython(
     omega : double, optional
         Fraction of the path over water [%] (see Table 3)
         (default: 0%)
+    do_lonlat_profs : int, optional
+        If True, also add `lons_profs` and `lats_profs` to output dict.
+        (See below for further information.)
 
     Returns
     -------
@@ -2240,6 +2244,16 @@ def height_map_data_cython(
 
           Zero-valued array of the same length as `height_profs` for
           convenience.
+
+        - "lons_profs" : `~numpy.ndarray` 2D (float, (me, mh))
+
+          Longitude (profiles) to each of the pixels on the map edge,
+          zero padded. This can be useful, if one wants to tinker with
+          the `height_profs` based on the coordinates of its values.
+          (An example would be to add clutter heights.)
+
+        - "lons_profs" : `~numpy.ndarray` 2D (float, (me, mh))
+          As `lats_profs` but for latitudes.
 
     Notes
     -----
@@ -2543,6 +2557,10 @@ def height_map_data_cython(
         )
     hprof_data['height_profs'] = height_profs
     hprof_data['zheight_prof'] = zheight_prof
+
+    if do_lonlat_profs:
+        hprof_data['lons_profs'] = lons
+        hprof_data['lats_profs'] = lats
 
     return hprof_data
 
