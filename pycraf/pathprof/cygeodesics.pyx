@@ -210,7 +210,7 @@ cdef (double, double, double) _direct(
         double U1, L, lam, a, s, s1, last_s
         double sin_U1, cos_U1, tan_U1, sin_a1, cos_a1
         double sin_lam, cos_lam
-        double sin_s, cos_s, sin_a, cos2_a, cos_2sm, cos2_2sm
+        double sin_s, cos_s, sin_a, sin2_a, cos2_a, cos_2sm, cos2_2sm
         double C, u2, A, B, ds
 
         double lon2_rad, lat2_rad, bearing2_rad
