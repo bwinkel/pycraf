@@ -238,6 +238,7 @@ to produce terrain maps of a region:
     :include-source:
 
     import matplotlib.pyplot as plt
+    import numpy as np
     from pycraf import pathprof
     from astropy import units as u
 
@@ -371,6 +372,7 @@ Therefore, we added a faster alternative, `~pycraf.pathprof.atten_map_fast`. The
 
     def plot_atten_map(lons, lats, total_atten):
 
+        import numpy as np
         import matplotlib.pyplot as plt
 
         vmin, vmax = -5, 195

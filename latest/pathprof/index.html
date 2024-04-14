@@ -1,85 +1,444 @@
+
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../">
+
+<html lang="en" data-content_root="../" data-theme="light">
+
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v2.0.2.dev12+gb31305fe</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css?v=7f123859" />
+    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v2.0.2.dev18</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../_static/_static/pycraf.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
     <script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=6010f362"></script>
+    <script src="../_static/documentation_options.js?v=081eae4c"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=30646c52"></script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script type="text/javascript" src="../_static/sidebar.js"></script>
-    <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <link rel="icon" href="../_static/astropy_logo.ico"/>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pathprof/index';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="P_pusch" href="../api/pycraf.pathprof.P_pusch.html" />
     <link rel="prev" title="saturation_water_pressure" href="../api/pycraf.atm.saturation_water_pressure.html" />
-    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="14 Apr 2024"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
 
-  </head><body>
-<div class="topbar">
-  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">py</span><span id="logotext2">craf</span><span id="logotext3">:docs</span></a>
-  <ul>
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
     
-    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
-    <li><a title="General Index" href="../genindex.html">Index</a></li>
-    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
-    <li>
-      
-      
-<form action="../search.html" method="get">
-  <input type="text" name="q" placeholder="Search" />
-  <input type="hidden" name="check_keywords" value="yes" />
-  <input type="hidden" name="area" value="default" />
-</form>
-      
-    </li>
-  </ul>
-</div>
+      <div class="navbar-item">
 
-<div class="related">
-    <h3>Navigation</h3>
-    <ul>
-      <li class="right">
-	<a href="../api/pycraf.pathprof.P_pusch.html" title="P_pusch">
-	  next &raquo;
-	</a>
-      </li>
-      <li class="right">
-	<a href="../api/pycraf.atm.saturation_water_pressure.html" title="saturation_water_pressure">
-	  &laquo; previous
-	</a>
-	 |
-      </li>
-      <li>
-	<a href="../index.html">pycraf v2.0.2.dev12+gb31305fe</a>
-	 &#187;
-      </li>
-      
-      <li>Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</li> 
-    </ul>
-</div>
   
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pycraf v2.0.2.dev18</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index_getting_started.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index_user_guide.html">
+                        User Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index_project_details.html">
+                        Project details
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index_acknowledgements.html">
+                        Acknowledgments
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://github.com/bwinkel/pycraf/tree/master/notebooks">
+                    Tutorials
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/bwinkel/pycraf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index_getting_started.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index_user_guide.html">
+                        User Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index_project_details.html">
+                        Project details
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index_acknowledgements.html">
+                        Acknowledgments
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://github.com/bwinkel/pycraf/tree/master/notebooks">
+                    Tutorials
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/bwinkel/pycraf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../conversions/index.html">Conversions (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.conversions</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../atm/index.html">Atmospheric models (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.atm</span></code>)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../antenna/index.html">Antenna patterns (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.antenna</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../protection/index.html">Protection levels (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.protection</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../geospatial/index.html">Geographical frames (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geospatial</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../satellite/index.html">Satellites (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.satellite</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../geometry/index.html">Geometry helpers (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geometry</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mc/index.html">Monte-Carlo helpers (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.mc</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/index.html">Utilities (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.utils</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gui/index.html">Graphical user interface (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf-gui</span></code>)</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item"><nav class="sidebar-indices-items" aria-labelledby="pst-indices-navigation-heading-2">
+  <p id="pst-indices-navigation-heading-2" class="sidebar-indices-items__title" role="heading" aria-level="1">Indices</p>
+  <ul class="indices-link">
+        <li class="toctree-l1">
+          <a class="reference internal"
+             href="../genindex.html"
+             accesskey="I">General Index</a>
+        </li>
+        <li class="toctree-l1">
+          <a class="reference internal" href="../py-modindex.html">Python Module Index</a>
+        </li>
+  </ul>
+</nav></div>
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index_user_guide.html" class="nav-link">User Documentation</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Path...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
   <section id="path-attenuation-terrain-data-and-geodesics-pycraf-pathprof">
-<h1>Path attenuation, terrain data, and geodesics (<a class="reference internal" href="#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code></a>)<a class="headerlink" href="#path-attenuation-terrain-data-and-geodesics-pycraf-pathprof" title="Link to this heading">¶</a></h1>
+<h1>Path attenuation, terrain data, and geodesics (<a class="reference internal" href="#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code></a>)<a class="headerlink" href="#path-attenuation-terrain-data-and-geodesics-pycraf-pathprof" title="Link to this heading">#</a></h1>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
 <p>The <a class="reference internal" href="#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pathprof</span></code></a> subpackage is probably the most important piece of
 pycraf. It offers tools to calculate so-call path attenuation (propagation
 loss), which is a key ingredient for compatibility studies in Radio spectrum
@@ -132,9 +491,9 @@ SRTM tile data; see <a class="reference internal" href="working_with_srtm.html#w
 </div>
 </section>
 <section id="getting-started">
-<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h2>
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
 <section id="height-profiles">
-<span id="pathprof-getting-started-height-profile"></span><h3>Height profiles<a class="headerlink" href="#height-profiles" title="Link to this heading">¶</a></h3>
+<span id="pathprof-getting-started-height-profile"></span><h3>Height profiles<a class="headerlink" href="#height-profiles" title="Link to this heading">#</a></h3>
 <p>Let’s start with querying <code class="xref py py-obj docutils literal notranslate"><span class="pre">SRTM</span> <span class="pre">data</span></code> and plot a height profile.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">pathprof</span>
@@ -165,7 +524,7 @@ SRTM tile data; see <a class="reference internal" href="working_with_srtm.html#w
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference download internal" download="" href="../_downloads/a0eba1f732b3447deac0d90ace693e72/index-1.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/f642428d94a45169220a6348b76ee589/index-1.svg"><code class="xref download docutils literal notranslate"><span class="pre">svg</span></code></a>, <a class="reference download internal" download="" href="../_downloads/acc28e535007ccbc7ba62ccd6f0c0b7a/index-1.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<p>(<a class="reference external" href="../pathprof/index-1.png">png</a>, <a class="reference external" href="../pathprof/index-1.svg">svg</a>, <a class="reference external" href="../pathprof/index-1.pdf">pdf</a>)</p>
 <figure class="align-default">
 <img alt="../_images/index-12.png" class="plot-directive" src="../_images/index-12.png" />
 </figure>
@@ -176,7 +535,7 @@ Gaussian smoothing is applied to avoid aliasing effects.</p>
 </div>
 </section>
 <section id="path-attenuation">
-<span id="pathprof-getting-started-path-attenuation"></span><h3>Path attenuation<a class="headerlink" href="#path-attenuation" title="Link to this heading">¶</a></h3>
+<span id="pathprof-getting-started-path-attenuation"></span><h3>Path attenuation<a class="headerlink" href="#path-attenuation" title="Link to this heading">#</a></h3>
 <p>The <a class="reference internal" href="#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pathprof</span></code></a> package implements <a class="reference external" href="https://www.itu.int/rec/R-REC-P.452-16-201507-I/en">ITU-R Recommendation P.452-16</a> for path propagation
 loss calculations. In <a class="reference internal" href="#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pathprof</span></code></a> this is a two-step procedure.
 First a helper object, a <a class="reference internal" href="../api/pycraf.pathprof.PathProp.html#pycraf.pathprof.PathProp" title="pycraf.pathprof.PathProp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PathProp</span></code></a> object, has to be
@@ -198,7 +557,7 @@ pathprof.complete_loss function also returns the most important constituents,
 it is usually sufficient to use that. The individual functions are only
 provided for reasons of computing speed, if one is really only interested in
 one component:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">pathprof</span><span class="p">,</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">pathprof</span><span class="p">,</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pathprof</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>  
@@ -235,7 +594,7 @@ one component:</p>
 to create a new instance. This is, because, many member attributes are
 dependent on each other and by just changing one value one could easily create
 inconsistencies. It is easily possible to access the parameters:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">pprop</span><span class="p">))</span>  
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">pprop</span><span class="p">))</span>  
 <span class="go">PathProp&lt;Freq: 1.000 GHz&gt;</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pprop</span><span class="p">)</span>  
@@ -269,7 +628,7 @@ inconsistencies. It is easily possible to access the parameters:</p>
 </div>
 <p>With the PathProp object, it is now just one function call to get the path
 loss:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tot_loss</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">loss_complete</span><span class="p">(</span><span class="n">pprop</span><span class="p">,</span> <span class="n">G_t</span><span class="p">,</span> <span class="n">G_r</span><span class="p">)</span>  
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tot_loss</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">loss_complete</span><span class="p">(</span><span class="n">pprop</span><span class="p">,</span> <span class="n">G_t</span><span class="p">,</span> <span class="n">G_r</span><span class="p">)</span>  
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;L_b0p:   </span><span class="si">{:5.2f}</span><span class="s1"> - Free-space loss</span><span class="se">\n</span><span class="s1">&#39;</span>  
 <span class="gp">... </span>      <span class="s1">&#39;L_bd:     </span><span class="si">{:5.2f}</span><span class="s1"> - Basic transmission loss associated &#39;</span>
 <span class="gp">... </span>      <span class="s1">&#39;with diffraction</span><span class="se">\n</span><span class="s1">&#39;</span>
@@ -292,13 +651,14 @@ loss:</p>
 </section>
 </section>
 <section id="using-pycraf-pathprof">
-<h2>Using <a class="reference internal" href="#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code></a><a class="headerlink" href="#using-pycraf-pathprof" title="Link to this heading">¶</a></h2>
+<h2>Using <a class="reference internal" href="#module-pycraf.pathprof" title="pycraf.pathprof"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code></a><a class="headerlink" href="#using-pycraf-pathprof" title="Link to this heading">#</a></h2>
 <section id="geodesics-height-profiles-and-terrain-maps">
-<span id="pathprof-using-terrain"></span><h3>Geodesics, height profiles and terrain maps<a class="headerlink" href="#geodesics-height-profiles-and-terrain-maps" title="Link to this heading">¶</a></h3>
+<span id="pathprof-using-terrain"></span><h3>Geodesics, height profiles and terrain maps<a class="headerlink" href="#geodesics-height-profiles-and-terrain-maps" title="Link to this heading">#</a></h3>
 <p>In the <a class="reference internal" href="#pathprof-getting-started-height-profile"><span class="std std-ref">Height profiles</span></a> section, we have already
 seen, how one can query a height profile from <code class="xref py py-obj docutils literal notranslate"><span class="pre">SRTM</span> <span class="pre">data</span></code>. It is also easy
 to produce terrain maps of a region:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">pycraf</span> <span class="kn">import</span> <span class="n">pathprof</span>
 <span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
 
@@ -349,7 +709,7 @@ to produce terrain maps of a region:</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Latitude [deg]&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(<a class="reference download internal" download="" href="../_downloads/b742ed5905e903db7983e3ac96baa9d7/index-2.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/8117ac9d50e4d5fdd35648f0083263fe/index-2.svg"><code class="xref download docutils literal notranslate"><span class="pre">svg</span></code></a>, <a class="reference download internal" download="" href="../_downloads/6a7c4c23a5557a1fbdcf2a88ea2ae9d7/index-2.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<p>(<a class="reference external" href="../pathprof/index-2.png">png</a>, <a class="reference external" href="../pathprof/index-2.svg">svg</a>, <a class="reference external" href="../pathprof/index-2.pdf">pdf</a>)</p>
 <figure class="align-default">
 <img alt="../_images/index-21.png" class="plot-directive" src="../_images/index-21.png" />
 </figure>
@@ -401,7 +761,7 @@ it’s different:</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference download internal" download="" href="../_downloads/21cf13b68d8dce6e5588194b29f168fb/index-3.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/907dbde28cf2a5b6a14b5d37df194970/index-3.svg"><code class="xref download docutils literal notranslate"><span class="pre">svg</span></code></a>, <a class="reference download internal" download="" href="../_downloads/1b40bf78d50fcd3659a8928415136f6b/index-3.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<p>(<a class="reference external" href="../pathprof/index-3.png">png</a>, <a class="reference external" href="../pathprof/index-3.svg">svg</a>, <a class="reference external" href="../pathprof/index-3.pdf">pdf</a>)</p>
 <figure class="align-default">
 <img alt="../_images/index-31.png" class="plot-directive" src="../_images/index-31.png" />
 </figure>
@@ -415,7 +775,7 @@ needed it will be sufficient to treat the Geoid as a normal sphere.</p>
 </div>
 </section>
 <section id="producing-maps-of-path-propagation-loss">
-<span id="pathprof-using-attenmaps"></span><h3>Producing maps of path propagation loss<a class="headerlink" href="#producing-maps-of-path-propagation-loss" title="Link to this heading">¶</a></h3>
+<span id="pathprof-using-attenmaps"></span><h3>Producing maps of path propagation loss<a class="headerlink" href="#producing-maps-of-path-propagation-loss" title="Link to this heading">#</a></h3>
 <p>Often it is desired to generate maps of path attenuation values, e.g., to
 quickly determine regions where the necessary separations between a
 potential interferer and the victim terminal would be too small, potentially
@@ -429,6 +789,7 @@ Therefore, we added a faster alternative, <a class="reference internal" href="..
 
 <span class="k">def</span> <span class="nf">plot_atten_map</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">,</span> <span class="n">total_atten</span><span class="p">):</span>
 
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
     <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
     <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">195</span>
@@ -458,9 +819,9 @@ Therefore, we added a faster alternative, <a class="reference internal" href="..
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Latitude [deg]&#39;</span><span class="p">)</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-
-<span class="n">pathprof</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pathprof</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>
 
 <span class="n">lon_tx</span><span class="p">,</span> <span class="n">lat_tx</span> <span class="o">=</span> <span class="mf">6.88361</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">50.52483</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
 <span class="n">map_size_lon</span><span class="p">,</span> <span class="n">map_size_lat</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span>
@@ -500,15 +861,15 @@ Therefore, we added a faster alternative, <a class="reference internal" href="..
 <span class="n">plot_atten_map</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">,</span> <span class="n">total_atten</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(<a class="reference download internal" download="" href="../_downloads/85e8b95be772d88db33a5f464af2dd8f/index-4.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/d8a2a321da41a617f2c2040c19126dd0/index-4.svg"><code class="xref download docutils literal notranslate"><span class="pre">svg</span></code></a>, <a class="reference download internal" download="" href="../_downloads/6a48f226ceb66df2883386111fca7b7c/index-4.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<p>(<a class="reference external" href="../pathprof/index-4_01_00.png">png</a>, <a class="reference external" href="../pathprof/index-4_01_00.svg">svg</a>, <a class="reference external" href="../pathprof/index-4_01_00.pdf">pdf</a>)</p>
 <figure class="align-default">
-<img alt="../_images/index-42.png" class="plot-directive" src="../_images/index-42.png" />
+<img alt="../_images/index-4_01_00.png" class="plot-directive" src="../_images/index-4_01_00.png" />
 </figure>
 <p>For a more illustrative example, have a look at the Jupyter <a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/notebooks/03c_attenuation_maps.ipynb">tutorial notebook</a>
 on this topic.</p>
 </section>
 <section id="quick-analysis-of-a-single-path">
-<h3>Quick analysis of a single path<a class="headerlink" href="#quick-analysis-of-a-single-path" title="Link to this heading">¶</a></h3>
+<h3>Quick analysis of a single path<a class="headerlink" href="#quick-analysis-of-a-single-path" title="Link to this heading">#</a></h3>
 <p>Sometimes, one needs to analyse a single path (i.e., fixed transmitter and
 receiver location), which means one wants to know the propagation losses
 as a function of various parameters, such as frequency, time-percentages,
@@ -519,7 +880,7 @@ the loss-functions on it (see
 <p>Therefore, another convenience function is provided,
 <a class="reference internal" href="../api/pycraf.pathprof.losses_complete.html#pycraf.pathprof.losses_complete" title="pycraf.pathprof.losses_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losses_complete</span></code></a>, which has a very similar function
 signature as <a class="reference internal" href="../api/pycraf.pathprof.PathProp.html#pycraf.pathprof.PathProp" title="pycraf.pathprof.PathProp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PathProp</span></code></a>, but accepts <code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarrays</span></code>
-(or rather arrays of <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v6.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>) for most of the inputs.
+(or rather arrays of <a class="reference external" href="https://docs.astropy.org/en/latest/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v7.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>) for most of the inputs.
 Obviously, parameters such as Tx and Rx location cannot be arrays, and
 as a consequence, the terrain height profile can only be a 1D array.</p>
 <p>The following shows a typical use case (which is also contained in the
@@ -575,7 +936,7 @@ as a consequence, the terrain height profile can only be a 1D array.</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;L_b_corr [dB]&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(<a class="reference download internal" download="" href="../_downloads/178c36423d1199e053431d6f30fbc554/index-5.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/e0c1389f9c1035f7fcf588514c8a3bb6/index-5.svg"><code class="xref download docutils literal notranslate"><span class="pre">svg</span></code></a>, <a class="reference download internal" download="" href="../_downloads/903d1a0365ce4ae770cb7f1a27e89164/index-5.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<p>(<a class="reference external" href="../pathprof/index-5.png">png</a>, <a class="reference external" href="../pathprof/index-5.svg">svg</a>, <a class="reference external" href="../pathprof/index-5.pdf">pdf</a>)</p>
 <figure class="align-default">
 <img alt="../_images/index-51.png" class="plot-directive" src="../_images/index-51.png" />
 </figure>
@@ -597,7 +958,7 @@ slower!</p>
 </section>
 </section>
 <section id="see-also">
-<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">Astropy Units and Quantities package</a>, which is used extensively in pycraf.</p></li>
 <li><p><a class="reference external" href="https://www.itu.int/rec/R-REC-P.452-16-201507-I/en">Recommendation ITU-R P.452-16</a></p></li>
@@ -605,15 +966,15 @@ slower!</p>
 </ul>
 </section>
 <section id="reference-api">
-<h2>Reference/API<a class="headerlink" href="#reference-api" title="Link to this heading">¶</a></h2>
+<h2>Reference/API<a class="headerlink" href="#reference-api" title="Link to this heading">#</a></h2>
 <section id="module-pycraf.pathprof">
-<span id="pycraf-pathprof-package"></span><h3>pycraf.pathprof Package<a class="headerlink" href="#module-pycraf.pathprof" title="Link to this heading">¶</a></h3>
+<span id="pycraf-pathprof-package"></span><h3>pycraf.pathprof Package<a class="headerlink" href="#module-pycraf.pathprof" title="Link to this heading">#</a></h3>
 <p>Contains functions to construct height profiles and terrain maps from <a class="reference external" href="https://www2.jpl.nasa.gov/srtm/">SRTM</a> data, calculate shortest path on the
 Geoid - so-called geodesics -, and perform path propagation/attenuation
 estimation.</p>
 <section id="functions">
-<h4>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h4>
-<table class="autosummary longtable docutils align-default">
+<h4>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h4>
+<table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.P_pusch.html#pycraf.pathprof.P_pusch" title="pycraf.pathprof.P_pusch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">P_pusch</span></code></a>(P_cmax, M_pusch, P_0_pusch, alpha, PL)</p></td>
 <td><p>Calculate power output level after UE power control.</p></td>
@@ -730,13 +1091,13 @@ estimation.</p>
 </table>
 </section>
 <section id="classes">
-<h4>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h4>
-<table class="autosummary longtable docutils align-default">
+<h4>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h4>
+<table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.BuildingType.html#pycraf.pathprof.BuildingType" title="pycraf.pathprof.BuildingType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BuildingType</span></code></a>(value)</p></td>
-<td><p>An enumeration.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.BuildingType.html#pycraf.pathprof.BuildingType" title="pycraf.pathprof.BuildingType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BuildingType</span></code></a>(value[, names, module, ...])</p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.CLUTTER.html#pycraf.pathprof.CLUTTER" title="pycraf.pathprof.CLUTTER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CLUTTER</span></code></a>(value)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.CLUTTER.html#pycraf.pathprof.CLUTTER" title="pycraf.pathprof.CLUTTER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CLUTTER</span></code></a>(value[, names, module, qualname, ...])</p></td>
 <td><p><p>Clutter types are defined according to <a class="reference external" href="https://www.itu.int/rec/R-REC-P.452-16-201507-I/en">ITU-R Recommendation P.452-16</a>.</p>
 </p></td>
 </tr>
@@ -762,8 +1123,8 @@ estimation.</p>
 </table>
 </section>
 <section id="variables">
-<h4>Variables<a class="headerlink" href="#variables" title="Link to this heading">¶</a></h4>
-<table class="autosummary longtable docutils align-default">
+<h4>Variables<a class="headerlink" href="#variables" title="Link to this heading">#</a></h4>
+<table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.A_BETA.html#pycraf.pathprof.A_BETA" title="pycraf.pathprof.A_BETA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">A_BETA</span></code></a></p></td>
 <td><p>Effective Earth radius for beta_0 percent</p></td>
@@ -794,8 +1155,8 @@ estimation.</p>
 </section>
 </section>
 <section id="available-clutter-types-in-rec-itu-r-p-452-16">
-<h3>Available clutter types in Rec. ITU-R P.452-16<a class="headerlink" href="#available-clutter-types-in-rec-itu-r-p-452-16" title="Link to this heading">¶</a></h3>
-<table class="docutils align-default">
+<h3>Available clutter types in Rec. ITU-R P.452-16<a class="headerlink" href="#available-clutter-types-in-rec-itu-r-p-452-16" title="Link to this heading">#</a></h3>
+<table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Value</p></th>
 <th class="head"><p>Alias</p></th>
@@ -868,13 +1229,13 @@ estimation.</p>
 </table>
 </section>
 <section id="conversion-between-landcover-classes-and-p-452-clutter-types">
-<h3>Conversion between Landcover classes and P.452 clutter types<a class="headerlink" href="#conversion-between-landcover-classes-and-p-452-clutter-types" title="Link to this heading">¶</a></h3>
+<h3>Conversion between Landcover classes and P.452 clutter types<a class="headerlink" href="#conversion-between-landcover-classes-and-p-452-clutter-types" title="Link to this heading">#</a></h3>
 <p>The following tables provide a mapping between Corine and IGBP Landcover
 classes and P.452 clutter types. It is based on common sense, but unofficial!
 Note, that ITU-R also provides clutter information in its
 <a class="reference external" href="https://www.itu.int/pub/R-SOFT-IDWM">ITU Digitized World Map (IDWM) and Subroutine Library (32-bit)</a> but it’s available for (old versions
 of) Windows, only, and comes with a steep price tag.</p>
-<table class="docutils align-default">
+<table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Corine ID</p></th>
 <th class="head"><p>Explanation</p></th>
@@ -1060,7 +1421,7 @@ of) Windows, only, and comes with a steep price tag.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default">
+<table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>IGBP ID</p></th>
 <th class="head"><p>Explanation</p></th>
@@ -1143,58 +1504,157 @@ of) Windows, only, and comes with a steep price tag.</p>
 </section>
 
 
-            <div class="clearer"></div>
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../api/pycraf.atm.saturation_water_pressure.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">saturation_water_pressure</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../api/pycraf.pathprof.P_pusch.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">P_pusch</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#height-profiles">Height profiles</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#path-attenuation">Path attenuation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-pycraf-pathprof">Using <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geodesics-height-profiles-and-terrain-maps">Geodesics, height profiles and terrain maps</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#producing-maps-of-path-propagation-loss">Producing maps of path propagation loss</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-analysis-of-a-single-path">Quick analysis of a single path</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#see-also">See Also</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-api">Reference/API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pycraf.pathprof">pycraf.pathprof Package</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#variables">Variables</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-clutter-types-in-rec-itu-r-p-452-16">Available clutter types in Rec. ITU-R P.452-16</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conversion-between-landcover-classes-and-p-452-clutter-types">Conversion between Landcover classes and P.452 clutter types</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/bwinkel/pycraf/edit/master/docs/pathprof/index.rst">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/pathprof/index.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
-<ul>
-<li><a class="reference internal" href="#">Path attenuation, terrain data, and geodesics (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code>)</a><ul>
-<li><a class="reference internal" href="#introduction">Introduction</a></li>
-<li><a class="reference internal" href="#getting-started">Getting Started</a><ul>
-<li><a class="reference internal" href="#height-profiles">Height profiles</a></li>
-<li><a class="reference internal" href="#path-attenuation">Path attenuation</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#using-pycraf-pathprof">Using <code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.pathprof</span></code></a><ul>
-<li><a class="reference internal" href="#geodesics-height-profiles-and-terrain-maps">Geodesics, height profiles and terrain maps</a></li>
-<li><a class="reference internal" href="#producing-maps-of-path-propagation-loss">Producing maps of path propagation loss</a></li>
-<li><a class="reference internal" href="#quick-analysis-of-a-single-path">Quick analysis of a single path</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#see-also">See Also</a></li>
-<li><a class="reference internal" href="#reference-api">Reference/API</a><ul>
-<li><a class="reference internal" href="#module-pycraf.pathprof">pycraf.pathprof Package</a><ul>
-<li><a class="reference internal" href="#functions">Functions</a></li>
-<li><a class="reference internal" href="#classes">Classes</a></li>
-<li><a class="reference internal" href="#variables">Variables</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#available-clutter-types-in-rec-itu-r-p-452-16">Available clutter types in Rec. ITU-R P.452-16</a></li>
-<li><a class="reference internal" href="#conversion-between-landcover-classes-and-p-452-clutter-types">Conversion between Landcover classes and P.452 clutter types</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
     </div>
-<footer class="footer">
-  <p class="pull-right">
-    <a href="https://github.com/bwinkel/pycraf/tree/master/docs/pathprof/index.rst">Edit This Page on Github</a> &nbsp;
-    <a href="../_sources/pathprof/index.rst.txt"
-       rel="nofollow">Page Source</a> &nbsp;
-    <a href="#">Back to Top</a></p>
-  <p>
-    &copy; Copyright 2024, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 7.2.6. &nbsp;
-    Last built 14 Apr 2024. <br/>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015–2024, Benjamin Winkel.
+      <br/>
+    
   </p>
-</footer>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
   </body>
 </html>
