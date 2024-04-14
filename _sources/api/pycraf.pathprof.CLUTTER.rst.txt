@@ -1,0 +1,39 @@
+CLUTTER
+=======
+
+.. currentmodule:: pycraf.pathprof
+
+.. autoclass:: CLUTTER
+   :show-inheritance:
+
+   .. rubric:: Attributes Summary
+
+   .. autosummary::
+
+      ~CLUTTER.CONIFEROUS_TREES
+      ~CLUTTER.DECIDIOUS_TREES
+      ~CLUTTER.DENSE_SUBURBAN
+      ~CLUTTER.DENSE_URBAN
+      ~CLUTTER.HIGH_URBAN
+      ~CLUTTER.INDUSTRIAL_ZONE
+      ~CLUTTER.SPARSE
+      ~CLUTTER.SUBURBAN
+      ~CLUTTER.TROPICAL_FOREST
+      ~CLUTTER.UNKNOWN
+      ~CLUTTER.URBAN
+      ~CLUTTER.VILLAGE
+
+   .. rubric:: Attributes Documentation
+
+   .. autoattribute:: CONIFEROUS_TREES
+   .. autoattribute:: DECIDIOUS_TREES
+   .. autoattribute:: DENSE_SUBURBAN
+   .. autoattribute:: DENSE_URBAN
+   .. autoattribute:: HIGH_URBAN
+   .. autoattribute:: INDUSTRIAL_ZONE
+   .. autoattribute:: SPARSE
+   .. autoattribute:: SUBURBAN
+   .. autoattribute:: TROPICAL_FOREST
+   .. autoattribute:: UNKNOWN
+   .. autoattribute:: URBAN
+   .. autoattribute:: VILLAGE
