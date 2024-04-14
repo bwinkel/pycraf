@@ -38,17 +38,17 @@ jobs:
 
   strategy:
     matrix:
-      linux38:
-        imageName: 'ubuntu-latest'
-        python.version: '3.8'
-        astropy.version: '==4'
-        py_whl: cp38-
-        numpy.version: '1.18.1'
-        pyproj.version: '>=2.2,<3'
-        pytest.version: '<6'
-        doctestplus.version: '<0.6.1'
-        # extra.packages: 'sysroot_linux-64 # "jinja2<3.1"'
-        extra.packages: 'gcc_linux-64 sysroot_linux-64 "jinja2<3.1"'
+      # linux38:
+      #   imageName: 'ubuntu-latest'
+      #   python.version: '3.8'
+      #   astropy.version: '==4'
+      #   py_whl: cp38-
+      #   numpy.version: '1.18.1'
+      #   pyproj.version: '>=2.2,<3'
+      #   pytest.version: '<6'
+      #   doctestplus.version: '<0.6.1'
+      #   # extra.packages: 'sysroot_linux-64 # "jinja2<3.1"'
+      #   extra.packages: 'gcc_linux-64 sysroot_linux-64 "jinja2<3.1"'
       linux39:
         imageName: 'ubuntu-latest'
         python.version: '3.9'
@@ -82,18 +82,18 @@ jobs:
         py_whl: cp312-
         numpy.version: '1.26.4'
         extra.packages: 'gcc_linux-64 sysroot_linux-64'
-      mac38:
-        imageName: 'macos-latest'
-        python.version: '3.8'
-        numpy.version: '1.18.1'
-        astropy.version: '==4'
-        pyproj.version: '>=2.2,<3'
-        extra.packages: 'compilers llvm-openmp clang_osx-64'  #  clangxx_osx-64
-      mac39:
-        imageName: 'macos-latest'
-        python.version: '3.9'
-        numpy.version: '1.20.3'
-        extra.packages: 'compilers llvm-openmp clang_osx-64'  #  clangxx_osx-64
+      # mac38:
+      #   imageName: 'macos-latest'
+      #   python.version: '3.8'
+      #   numpy.version: '1.18.1'
+      #   astropy.version: '==4'
+      #   pyproj.version: '>=2.2,<3'
+      #   extra.packages: 'compilers llvm-openmp clang_osx-64 openblas==0.3.3'  #  clangxx_osx-64
+      # mac39:
+      #   imageName: 'macos-latest'
+      #   python.version: '3.9'
+      #   numpy.version: '1.20.3'
+      #   extra.packages: 'compilers llvm-openmp clang_osx-64'  #  clangxx_osx-64
       mac310:
         imageName: 'macos-latest'
         python.version: '3.10'

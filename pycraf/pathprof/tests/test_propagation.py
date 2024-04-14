@@ -419,8 +419,10 @@ class TestPropagation:
         # fileobjects in ZipFile don't support seek; need to write to tmpdir
         zipdir = tmp_path_factory.mktemp('zip')
         tfile = Path('fastmap') / 'hprof.hdf5'
+        # under windows, the Path object cannot be used to extract from zip
+        tfile_str = 'fastmap/hprof.hdf5'
         with ZipFile(self.fastmap_zip_name) as myzip:
-            myzip.extract(str(tfile), str(zipdir))
+            myzip.extract(tfile_str, str(zipdir))
 
         hprof_data_cache_true = h5py.File(zipdir / tfile, 'r')
 
@@ -447,8 +449,10 @@ class TestPropagation:
 
         zipdir = tmp_path_factory.mktemp('zip')
         tfile = Path('fastmap') / 'hprof.hdf5'
+        # under windows, the Path object cannot be used to extract from zip
+        tfile_str = 'fastmap/hprof.hdf5'
         with ZipFile(self.fastmap_zip_name) as myzip:
-            myzip.extract(str(tfile), str(zipdir))
+            myzip.extract(tfile_str, str(zipdir))
 
         hprof_data_cache = h5py.File(zipdir / tfile, 'r')
 
@@ -537,8 +541,10 @@ class TestPropagation:
         # fileobjects in ZipFile don't support seek; need to write to tmpdir
         zipdir = tmp_path_factory.mktemp('zip')
         tfile = Path('fastmap') / 'hprof.npz'
+        # under windows, the Path object cannot be used to extract from zip
+        tfile_str = 'fastmap/hprof.npz'
         with ZipFile(self.fastmap_zip_name) as myzip:
-            myzip.extract(str(tfile), str(zipdir))
+            myzip.extract(tfile_str, str(zipdir))
 
         hprof_data_cache_true = np.load(zipdir / tfile)
 
@@ -566,8 +572,10 @@ class TestPropagation:
 
         zipdir = tmp_path_factory.mktemp('zip')
         tfile = Path('fastmap') / 'hprof.npz'
+        # under windows, the Path object cannot be used to extract from zip
+        tfile_str = 'fastmap/hprof.npz'
         with ZipFile(self.fastmap_zip_name) as myzip:
-            myzip.extract(str(tfile), str(zipdir))
+            myzip.extract(tfile_str, str(zipdir))
 
         hprof_data_cache = np.load(zipdir / tfile)
 
