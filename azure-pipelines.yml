@@ -261,11 +261,12 @@ jobs:
 
   - task: DownloadSecureFile@1
     inputs:
-      secureFile: ghpages_deploykey_azure
+      secureFile: ghpages_deploy_pycraf
     displayName: 'Get the deploy key'
     condition: and(succeeded(), eq(variables['publish.docs'], true))
 
   - bash: |
+      $(conda.activate) pycraf-env
       mkdir ~/.ssh && mv $DOWNLOADSECUREFILE_SECUREFILEPATH ~/.ssh/id_rsa
       chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa
       ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
