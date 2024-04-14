@@ -32,8 +32,7 @@ jobs:
     sphinx.version: '>=3.0'
     astropy.version: ''
     pyproj.version: ''
-    pytest.version: '<=8.1'  # remove this as soon as doc-test-plus works
-    # see https://github.com/scientific-python/pytest-doctestplus/issues/243
+    pytest.version: ''
     doctestplus.version: ''
     extra.packages: ''
 
@@ -42,21 +41,31 @@ jobs:
       # linux38:
       #   imageName: 'ubuntu-latest'
       #   python.version: '3.8'
+      #   astropy.version: '==4'
       #   py_whl: cp38-
       #   numpy.version: '1.18.1'
-      #   astropy.version: '4'
       #   pyproj.version: '>=2.2,<3'
-      #   extra.packages: 'sysroot_linux-64'  #  "jinja2<3.1"
+      #   pytest.version: '<6'
+      #   doctestplus.version: '<0.6.1'
+      #   # extra.packages: 'sysroot_linux-64 # "jinja2<3.1"'
+      #   extra.packages: 'gcc_linux-64 sysroot_linux-64 "jinja2<3.1"'
       linux39:
         imageName: 'ubuntu-latest'
         python.version: '3.9'
         py_whl: cp39-
         numpy.version: '1.20.3'
+        extra.packages: 'gcc_linux-64 sysroot_linux-64'
       linux310:
         imageName: 'ubuntu-latest'
         python.version: '3.10'
         py_whl: cp310-
         numpy.version: '1.21.6'
+        extra.packages: 'gcc_linux-64 sysroot_linux-64'
+      linux311:
+        imageName: 'ubuntu-latest'
+        python.version: '3.11'
+        py_whl: cp311-
+        numpy.version: '1.23.4'
         publish.docs: ${{ or(eq(variables['is.master'], true), eq(variables['is.tag'], true)) }}
         ${{ if eq(variables['is.tag'], true) }}:
           docs.target: '.'
@@ -66,44 +75,46 @@ jobs:
         # independent
         build.tarball: ${{ true }}
         publish.tarball: ${{ eq(variables['is.tag'], true) }}
-      linux311:
-        imageName: 'ubuntu-latest'
-        python.version: '3.11'
-        py_whl: cp311-
-        numpy.version: '1.23.4'
+        extra.packages: 'gcc_linux-64 sysroot_linux-64'
       linux312:
         imageName: 'ubuntu-latest'
         python.version: '3.12'
         py_whl: cp312-
         numpy.version: '1.26.4'
+        extra.packages: 'gcc_linux-64 sysroot_linux-64'
       # mac38:
       #   imageName: 'macos-latest'
       #   python.version: '3.8'
       #   numpy.version: '1.18.1'
-      #   astropy.version: '5'
+      #   astropy.version: '==4'
       #   pyproj.version: '>=2.2,<3'
-      mac39:
-        imageName: 'macos-latest'
-        python.version: '3.9'
-        numpy.version: '1.20.3'
+      #   extra.packages: 'compilers llvm-openmp clang_osx-64 openblas==0.3.3'  #  clangxx_osx-64
+      # mac39:
+      #   imageName: 'macos-latest'
+      #   python.version: '3.9'
+      #   numpy.version: '1.20.3'
+      #   extra.packages: 'compilers llvm-openmp clang_osx-64'  #  clangxx_osx-64
       mac310:
         imageName: 'macos-latest'
         python.version: '3.10'
         numpy.version: '1.21.6'
+        extra.packages: 'compilers llvm-openmp clang_osx-64'  #  clangxx_osx-64
       mac311:
         imageName: 'macos-latest'
         python.version: '3.11'
         numpy.version: '1.23.4'
+        extra.packages: 'compilers llvm-openmp clang_osx-64'  #  clangxx_osx-64
       mac312:
         imageName: 'macos-latest'
         python.version: '3.12'
         numpy.version: '1.26.4'
-      # win38:
-      #   imageName: 'windows-latest'
-      #   python.version: '3.8'
-      #   numpy.version: '1.18.1'
-      #   astropy.version: '4'
-      #   pyproj.version: '>=2.2,<3'
+        extra.packages: 'compilers llvm-openmp clang_osx-64'  #  clangxx_osx-64
+      win38:
+        imageName: 'windows-latest'
+        python.version: '3.8'
+        numpy.version: '1.18.1'
+        astropy.version: '==4'
+        pyproj.version: '>=2.2,<3'
       win39:
         imageName: 'windows-latest'
         python.version: '3.9'
@@ -131,7 +142,7 @@ jobs:
     displayName: Fix a conda bug on MacOS
     condition: startsWith(variables['Agent.OS'], 'Darwin')
 
-  # see https://github.com/mamba-org/mamba/issues/488
+  # see https://github.com/conda-org/conda/issues/488
   # and https://github.com/MPAS-Dev/compass/pull/320
   - bash: |
       rm /usr/share/miniconda/pkgs/cache/*.json
@@ -195,40 +206,27 @@ jobs:
       mkdir $(srtmdata)
     displayName: Create SRTM directory
 
-  - script: |
-      conda install --yes -c conda-forge mamba
-      conda create --yes --quiet --name pycraf-env -c conda-forge
-      conda list
-    displayName: Create Anaconda environment
-
   # note: with project.toml it should not be necessary to have cython
   # installed already, but on PRs building wheels and the tarball still fails
   # for some reason!? therefore, we add it here (should also be faster than
   # pip installation)
   - script: |
       $(conda.activate) pycraf-env
-      mamba install --yes --quiet -c conda-forge python=$(python.version) astropy=$(astropy.version) cython "h5py>=3.6" matplotlib-base numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pytest$(pytest.version)" pytest-astropy pytest-doctestplus pytest-remotedata hypothesis rasterio scipy "sgp4>2" twine wheel extension-helpers setuptools-scm $(extra.packages) build
-      mamba list
+      conda create --yes --quiet -c conda-forge -n pycraf-env python=$(python.version) "astropy$(astropy.version)" build cython extension-helpers "h5py>=3.6" hypothesis matplotlib-base numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pytest$(pytest.version)" pytest-astropy pytest-doctestplus pytest-remotedata rasterio scipy setuptools setuptools-scm "sgp4>2" twine wheel $(extra.packages)
+      conda list
     displayName: Install Anaconda packages
 
   # IMPORTANT:
-  # condition: and(succeeded(), ge(variables['python.version'], 3.8))
+  # condition: and(succeeded(), ge(variables['python.version'], '3.8'))
   # will be false for python 3.10
-  # TODO: Use and(succeeded(), in(variables['python.version'], '3.8', 3.9', '3.10'))
+  # TODO: Use and(succeeded(), in(variables['python.version'], '3.8', '3.9', '3.10'))
 
   # see Issue #55
   - bash: |
       rm /usr/share/miniconda/envs/pycraf-env/x86_64-conda-linux-gnu/sysroot/lib64/librt.so.1
     displayName: Fix another conda bug on Linux
-    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], 3.8))
+    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], '3.8'))
 
-  - script: |
-      $(conda.activate) pycraf-env
-      mamba install --yes --quiet --name pycraf-env -c conda-forge compilers llvm-openmp clang_osx-64 clangxx_osx-64
-    displayName: Prepare clang, MacOS
-    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Darwin'))
-
-  # see Issue #55
   - script: |
       $(conda.activate) pycraf-env
       python -m pip install --no-build-isolation --no-deps -v -v -v -e .
@@ -252,11 +250,11 @@ jobs:
 
   - script: |
       $(conda.activate) pycraf-env
-      conda install --yes --quiet --name pycraf-env -c conda-forge "sphinx$(sphinx.version)" sphinx-astropy
+      conda install --yes --quiet --name pycraf-env -c conda-forge "sphinx$(sphinx.version)" sphinx-astropy[confv2] sphinx-copybutton pydata-sphinx-theme sphinx-design
       cd docs
       sphinx-build . _build/html -b html
     displayName: Make docs
-    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], '3.10'))
+    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], '3.11'))
     # condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'))
 
   - task: DownloadSecureFile@1
@@ -266,12 +264,10 @@ jobs:
     condition: and(succeeded(), eq(variables['publish.docs'], true))
 
   - bash: |
-      $(conda.activate) pycraf-env
       mkdir ~/.ssh && mv $DOWNLOADSECUREFILE_SECUREFILEPATH ~/.ssh/id_rsa
       chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa
       ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
       $(conda.activate) pycraf-env
-      pip install .
       mkdir gh_pages && cd gh_pages
       git init
       git config --local user.name "Benjamin Winkel"

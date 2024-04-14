@@ -1,29 +1,170 @@
+[project]
+name = "pycraf"
+dynamic = [
+    "version"
+]
+description = "pycraf - compatibility studies for radio astronomy spectrum management"
+readme = "README.rst"
+authors = [
+    { name = "Benjamin Winkel", email = "bwinkel@mpifr.de" }
+]
+license = { text = "GPLv3" }
+requires-python = ">=3.8"
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "License :: OSI Approved :: Apache Software License",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: C",
+    "Programming Language :: Cython",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Scientific/Engineering :: Astronomy",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: GIS",
+]
+keywords = [
+    "astronomy",
+    "astrophysics",
+    "radio astronomy",
+    "spectrum management",
+    "compatibility studies",
+]
+dependencies = [
+  "astropy",
+  "build",
+  "imagemagick",
+  "ipdb",
+  "matplotlib",
+  "numpy==1.23.4",
+  "pip",
+  "pyproj",
+  "pytest",
+  "pytest-astropy",
+  "pytest-doctestplus",
+  "pytest-remotedata",
+  "rasterio",
+  "scipy",
+  "setuptools",
+  "setuptools-scm",
+  "sgp4",
+  "twine",
+  "wheel",
+
+]
+
+[project.urls]
+Homepage = "https://pypi.org/project/pycraf/"
+Documentation = "https://bwinkel.github.io/pycraf/"
+Repository = "https://github.com/bwinkel/pycraf"
+Issues = "https://github.com/bwinkel/pycraf/issues"
+Changelog = "https://github.com/bwinkel/pycraf/CHANGES.rst"
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.0",
+    "pytest-astropy>=0.10",
+    "pytest-doctestplus",
+    "pytest-remotedata",
+]
+recommended = [
+  "cartopy",
+  "ffmpeg",
+  "fiona",
+  "geopandas",
+  "h5py",
+  "openpyxl",
+  "osmnx",
+  "pandas",
+  "reproject",
+  "shapely",
+  "tqdm",
+]
+docs = [
+    "sphinx",
+    "sphinx-astropy[confv2]",
+    "sphinx-copybutton",
+    "pydata-sphinx-theme",
+    "sphinx-design",
+    "pytest>=7.0",
+]
+
 [build-system]
 requires = [
-    "setuptools>=30.3.0",
-    "setuptools_scm>=6.2",
+    "setuptools",
     "wheel",
-    "cython>=0.29",
+    "setuptools_scm",
+    "cython",
     "numpy==1.13.1; python_version<'3.7'",
     "numpy==1.14.5; python_version=='3.7'",
     "numpy==1.18.1; python_version=='3.8'",
     "numpy==1.20.3; python_version=='3.9'",
     "numpy==1.21.6; python_version=='3.10'",
-    #"numpy==1.22.0; python_version=='3.10'",
     "numpy==1.23.4; python_version=='3.11'",
     "numpy==1.26.4; python_version=='3.12'",
-    # "oldest-supported-numpy",
     "extension-helpers",
     ]
 build-backend = "setuptools.build_meta"
 
+[tool.extension-helpers]
+use_extension_helpers = true
+
+[tool.setuptools]
+include-package-data = true
+license-files = ["licenses/*"]
+
+[tool.setuptools.packages.find]
+include = ["pycraf*"]
+namespaces = true
+
+[tool.setuptools.package-data]
+"*" = [
+    "data/*",
+    "data/*/*",
+    "data/*/*/*",
+    "data/*/*/*/*",
+    "data/*/*/*/*/*",
+    "data/*/*/*/*/*/*",
+    "itudata/*",
+    "itudata/*/*",
+    "itudata/*/*/*",
+    "itudata/*/*/*/*",
+    "corine/*",
+    "geolib/*",
+    "pp/*",
+]
+"pycraf" = ["*.c"]
+
 [tool.setuptools_scm]
 write_to = "pycraf/version.py"
 
-# [tool.pytest.ini_options]
-# minversion = "6.0"
-# addopts = '-rsx --doctest-rst  --doctest-modules --ignore-glob="*/setup_package.py"'
-# testpaths = [
-#     "pycraf",
-#     "docs",
-# ]
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = [
+    "pycraf",
+    "docs",
+]
+norecursedirs = [
+    "docs[\\/]_build",
+    "docs[\\/]generated",
+    "pycraf[\\/]extern",
+    "pycraf[\\/]_dev",
+]
+astropy_header = true
+doctest_plus = "enabled"
+filterwarnings = "ignore::pytest.PytestUnknownMarkWarning"
+text_file_format = "rst"
+remote_data_strict = true
+addopts = [
+    "--doctest-rst",
+    "-p no:legacypath",
+]
+doctest_optionflags = [
+    "NORMALIZE_WHITESPACE",
+    "ELLIPSIS",
+    "FLOAT_CMP",
+]
+doctest_norecursedirs = [
+    "*/setup_package.py",
+]

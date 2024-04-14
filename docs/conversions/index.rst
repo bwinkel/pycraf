@@ -6,8 +6,10 @@ Conversions (`pycraf.conversions`)
 
 .. currentmodule:: pycraf.conversions
 
+.. cnv_introduction:
+
 Introduction
-============
+************
 
 The `~pycraf.conversions` sub-package contains various functions to convert
 and calculate power flux densities, electrical field strengths, transmitted
@@ -17,8 +19,10 @@ one can determine the free-space loss for a given frequency and distance
 between transmitter (Tx) and receiver (Rx). Furthermore, several useful
 Decibel units are defined (see `Reference/API`_).
 
+.. cnv_get_started:
+
 Getting Started
-===============
+***************
 
 Using the `~pycraf.conversions` package is really simple::
 
@@ -71,10 +75,10 @@ Because all function parameters and return values are Astropy Quantities
     provided in the `pycraf repository <https://github.com/bwinkel/pycraf/blob/master/notebooks/01_conversions.ipynb>`_ on GitHub.
 
 Using `pycraf.conversions`
-==========================
+**************************
 
 Decibel units
--------------
+=============
 In the `~pycraf.conversions` module, several Decibel units are defined
 that often occur in spectrum-management tasks. Examples are the
 :math:`\mathrm{dB}` unit or :math:`\mathrm{dBm}\equiv\mathrm{dB[mW]}`. In
@@ -135,7 +139,7 @@ Astropy `~astropy.units` provide even some additional formatting options::
 
 
 Conversion formulae
--------------------
+===================
 
 For a complete list of the functions provided in the `~pycraf.conversions`
 package, see the `Reference/API`_ section below. All functions expect
@@ -208,12 +212,14 @@ A few examples::
     <Decibel 62.44778322188338 dB(W)>
 
 See Also
-========
+********
 
 - `Astropy Units and Quantities package <http://docs.astropy.org/en/stable/
   units/index.html>`_, which is used extensively in pycraf.
 
+
+
 Reference/API
-=============
+*************
 
 .. automodapi:: pycraf.conversions

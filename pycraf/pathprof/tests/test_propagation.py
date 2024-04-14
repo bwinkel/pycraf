@@ -7,6 +7,7 @@
 # from __future__ import unicode_literals
 
 import os
+from pathlib import Path
 import pytest
 from functools import partial
 import numpy as np
@@ -383,7 +384,7 @@ class TestPropagation:
                     assert_quantity_allclose(tup[i + 7], loss_true[k + '_t'])
 
     @skip_h5py
-    def test_height_map_data_h5py(self, tmpdir_factory):
+    def test_height_map_data_h5py(self, tmp_path_factory):
 
         import h5py
 
@@ -394,8 +395,8 @@ class TestPropagation:
             )
 
         # also testing reading/writing from hdf5
-        tdir = tmpdir_factory.mktemp('hdata')
-        tfile = str(tdir.join('hprof.hdf5'))
+        tdir = tmp_path_factory.mktemp('hdata')
+        tfile = tdir / 'hprof.hdf5'
         print('writing temporary files to', tdir)
 
         # saving
@@ -416,12 +417,14 @@ class TestPropagation:
         # also test versus true results
 
         # fileobjects in ZipFile don't support seek; need to write to tmpdir
-        zipdir = tmpdir_factory.mktemp('zip')
-        tfile = 'fastmap/hprof.hdf5'
+        zipdir = tmp_path_factory.mktemp('zip')
+        tfile = Path('fastmap') / 'hprof.hdf5'
+        # under windows, the Path object cannot be used to extract from zip
+        tfile_str = 'fastmap/hprof.hdf5'
         with ZipFile(self.fastmap_zip_name) as myzip:
-            myzip.extract(tfile, str(zipdir))
+            myzip.extract(tfile_str, str(zipdir))
 
-        hprof_data_cache_true = h5py.File(str(zipdir.join(tfile)), 'r')
+        hprof_data_cache_true = h5py.File(zipdir / tfile, 'r')
 
         for k in hprof_data_cache:
             # Note conversion to some ndarray type necessary, as h5py
@@ -440,16 +443,18 @@ class TestPropagation:
                 assert_quantity_allclose(q1, q2, atol=1.e-6)
 
     @skip_h5py
-    def test_fast_atten_map_h5py(self, tmpdir_factory):
+    def test_fast_atten_map_h5py(self, tmp_path_factory):
 
         import h5py
 
-        zipdir = tmpdir_factory.mktemp('zip')
-        tfile = 'fastmap/hprof.hdf5'
+        zipdir = tmp_path_factory.mktemp('zip')
+        tfile = Path('fastmap') / 'hprof.hdf5'
+        # under windows, the Path object cannot be used to extract from zip
+        tfile_str = 'fastmap/hprof.hdf5'
         with ZipFile(self.fastmap_zip_name) as myzip:
-            myzip.extract(tfile, str(zipdir))
+            myzip.extract(tfile_str, str(zipdir))
 
-        hprof_data_cache = h5py.File(str(zipdir.join(tfile)), 'r')
+        hprof_data_cache = h5py.File(zipdir / tfile, 'r')
 
         for case in self.fast_cases:
 
@@ -489,8 +494,8 @@ class TestPropagation:
             with ZipFile(self.fastmap_zip_name) as myzip:
                 myzip.extract(fname, str(zipdir))
 
-            print(str(zipdir.join(fname)))
-            h5f = h5py.File(str(zipdir.join(fname)), 'r')
+            print(zipdir / Path(fname))
+            h5f = h5py.File(zipdir / Path(fname), 'r')
 
             # Note conversion to some ndarray type necessary, as h5py
             # returns <HDF5 dataset> types
@@ -507,7 +512,7 @@ class TestPropagation:
             # for i, y, x in zip(*idx):
             #     print(i, y, x, h5_atten_map[i, y, x], atten_map[i, y, x])
 
-    def test_height_map_data_npz(self, tmpdir_factory):
+    def test_height_map_data_npz(self, tmp_path_factory):
 
         hprof_data_cache = pathprof.height_map_data(
             6.5 * apu.deg, 50.5 * apu.deg,
@@ -516,8 +521,8 @@ class TestPropagation:
             )
 
         # also testing reading/writing from hdf5
-        tdir = tmpdir_factory.mktemp('hdata')
-        tfile = str(tdir.join('hprof.npz'))
+        tdir = tmp_path_factory.mktemp('hdata')
+        tfile = tdir / 'hprof.npz'
         print('writing temporary files to', tdir)
 
         # saving
@@ -534,12 +539,14 @@ class TestPropagation:
         # also test versus true results
 
         # fileobjects in ZipFile don't support seek; need to write to tmpdir
-        zipdir = tmpdir_factory.mktemp('zip')
-        tfile = 'fastmap/hprof.npz'
+        zipdir = tmp_path_factory.mktemp('zip')
+        tfile = Path('fastmap') / 'hprof.npz'
+        # under windows, the Path object cannot be used to extract from zip
+        tfile_str = 'fastmap/hprof.npz'
         with ZipFile(self.fastmap_zip_name) as myzip:
-            myzip.extract(tfile, str(zipdir))
+            myzip.extract(tfile_str, str(zipdir))
 
-        hprof_data_cache_true = np.load(str(zipdir.join(tfile)))
+        hprof_data_cache_true = np.load(zipdir / tfile)
 
         for k in hprof_data_cache:
             q1 = np.squeeze(hprof_data_cache[k])
@@ -561,14 +568,16 @@ class TestPropagation:
             else:
                 assert_quantity_allclose(q1, q2, atol=1.e-6)
 
-    def test_fast_atten_map_npz(self, tmpdir_factory):
+    def test_fast_atten_map_npz(self, tmp_path_factory):
 
-        zipdir = tmpdir_factory.mktemp('zip')
-        tfile = 'fastmap/hprof.npz'
+        zipdir = tmp_path_factory.mktemp('zip')
+        tfile = Path('fastmap') / 'hprof.npz'
+        # under windows, the Path object cannot be used to extract from zip
+        tfile_str = 'fastmap/hprof.npz'
         with ZipFile(self.fastmap_zip_name) as myzip:
-            myzip.extract(tfile, str(zipdir))
+            myzip.extract(tfile_str, str(zipdir))
 
-        hprof_data_cache = np.load(str(zipdir.join(tfile)))
+        hprof_data_cache = np.load(zipdir / tfile)
 
         for case in self.fast_cases:
 
@@ -606,8 +615,8 @@ class TestPropagation:
             with ZipFile(self.fastmap_zip_name) as myzip:
                 myzip.extract(fname, str(zipdir))
 
-            print(str(zipdir.join(fname)))
-            true_dat = np.load(str(zipdir.join(fname)))
+            print(zipdir / Path(fname))
+            true_dat = np.load(zipdir / Path(fname))
 
             # Note conversion to some ndarray type necessary, as h5py
             # returns <HDF5 dataset> types

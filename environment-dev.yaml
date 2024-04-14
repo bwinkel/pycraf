@@ -1,0 +1,47 @@
+name: pycraf-dev-env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - astropy
+  - build
+  - cartopy
+  - cython
+  - extension-helpers
+  - ffmpeg
+  - fiona
+  - gcc_linux-64
+  - gxx_linux-64
+  - geopandas
+  - h5py
+  - imagemagick
+  - ipdb
+  - matplotlib
+  - numpy==1.23.4
+  - openpyxl
+  - osmnx
+  - pandas
+  - pip
+  - pyproj
+  - pyqt
+  - pytest
+  - pytest-astropy
+  - pytest-doctestplus
+  - pytest-qt
+  - pytest-remotedata
+  - rasterio
+  - reproject
+  - scipy
+  - setuptools
+  - setuptools-scm
+  - sgp4
+  - shapely
+  - sphinx
+  - sphinx-astropy[confv2]
+  - sphinx-copybutton  # should be pulled in via [confv2], but isn't?
+  - pydata-sphinx-theme  # should be pulled in via [confv2], but isn't?
+  - sphinx-design
+  - tqdm
+  - twine
+  - wheel

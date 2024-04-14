@@ -47,9 +47,9 @@ from . import pathprof
 
 
 @pytest.fixture(scope='session')
-def srtm_temp_dir(tmpdir_factory):
+def srtm_temp_dir(tmp_path_factory):
 
-    tdir = tmpdir_factory.mktemp('srtmdata')
+    tdir = tmp_path_factory.mktemp('srtmdata')
     return str(tdir)
 
 
