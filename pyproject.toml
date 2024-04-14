@@ -86,6 +86,7 @@ docs = [
     "sphinx-astropy[confv2]",
     "sphinx-copybutton",
     "pydata-sphinx-theme",
+    "sphinx-design",
     "pytest>=7.0",
 ]
 

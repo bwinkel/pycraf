@@ -41,6 +41,7 @@ dependencies:
   - sphinx-astropy[confv2]
   - sphinx-copybutton  # should be pulled in via [confv2], but isn't?
   - pydata-sphinx-theme  # should be pulled in via [confv2], but isn't?
+  - sphinx-design
   - tqdm
   - twine
   - wheel

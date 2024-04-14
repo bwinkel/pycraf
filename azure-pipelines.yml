@@ -250,7 +250,7 @@ jobs:
 
   - script: |
       $(conda.activate) pycraf-env
-      conda install --yes --quiet --name pycraf-env -c conda-forge "sphinx$(sphinx.version)" sphinx-astropy[confv2] sphinx-copybutton pydata-sphinx-theme
+      conda install --yes --quiet --name pycraf-env -c conda-forge "sphinx$(sphinx.version)" sphinx-astropy[confv2] sphinx-copybutton pydata-sphinx-theme sphinx-design
       cd docs
       sphinx-build . _build/html -b html
     displayName: Make docs

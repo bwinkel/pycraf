@@ -137,6 +137,7 @@ if "templates_path" not in locals():  # in case parent conf.py defines it
 templates_path.append("_templates")
 
 # extensions += ["sphinx_changelog", "sphinx_design", "sphinxcontrib.globalsubs"]
+extensions += ["sphinx_design"]
 
 # Grab minversion from pyproject.toml
 with (Path(__file__).parents[1] / "pyproject.toml").open("rb") as f:
@@ -242,7 +243,9 @@ html_theme_options.update(
         # },
         # https://github.com/pydata/pydata-sphinx-theme/issues/1492
         "navigation_with_keys": False,
-        "show_toc_level": 2,
+        "show_nav_level": 0,
+        "navigation_depth": 0,
+        "collapse_navigation": True,
         "primary_sidebar_end": ["indices.html"],
     }
 )
