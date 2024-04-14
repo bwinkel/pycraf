@@ -26,8 +26,8 @@ jobs:
 
   variables:
     arch: x86_64
-    plat: manylinux2010_x86_64
-    image: quay.io/pypa/manylinux2010_x86_64
+    plat: manylinux_2_28_x86_64
+    image: quay.io/pypa/manylinux_2_28_x86_64
     python.architecture: x64
     sphinx.version: '>=3.0'
     astropy.version: ''
@@ -310,14 +310,14 @@ jobs:
   - script: |
       pip install twine
       ls dist/*.whl
-      python -m twine upload -r "pypi_pycraf" --config-file $(PYPIRC_PATH) dist/*.whl
+      python -m twine upload -r "pypi_pycraf" --skip-existing --config-file $(PYPIRC_PATH) dist/*.whl
     displayName: Upload wheels, Linux/MacOS
     condition: and(succeeded(), eq(variables['publish.wheels'], true), not(startsWith(variables['Agent.OS'], 'Windows')))
 
   - script: |
       pip install twine
       ls dist/*.whl
-      python -m twine upload -r "pypi_pycraf" --config-file %PYPIRC_PATH% dist/*.whl
+      python -m twine upload -r "pypi_pycraf" --skip-existing --config-file %PYPIRC_PATH% dist/*.whl
     displayName: Upload wheels, Windows
     condition: and(succeeded(), eq(variables['publish.wheels'], true), startsWith(variables['Agent.OS'], 'Windows'))
 

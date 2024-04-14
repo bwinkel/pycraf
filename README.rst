@@ -2,7 +2,7 @@
 pycraf
 ******
 
-- *Version:* 2.0.1
+- *Version:* 2.0.2
 - *Authors:* Benjamin Winkel, Marta Bautista, Federico Di Vruno,
   Gyula I. G. Józsa
 - *User manual:* `stable <https://bwinkel.github.io/pycraf/>`__ |
@@ -40,10 +40,10 @@ Project Status
 Features
 ========
 
-- Full implementation of `ITU-R Rec. P.452-16 <https://www.itu.int/rec/R-REC-P.452-16-201507-I/en>`_ that allows to calculate path
-  attenuation for the distance between interferer and victim service. Supports
+- Full implementation of `ITU-R Rec. P.452-17 <https://www.itu.int/rec/R-REC-P.452-17-202109-I/en>`_ that allows to calculate path
+  attenuation for the distance between interferer and victim service (`ITU-R Rec. P.452-18 <https://www.itu.int/rec/R-REC-P.452-18-202310-I/en>`_ is possible with adding clutter heights manually.). Supports
   to load NASA's `Shuttle Radar Topography Mission (SRTM) <https://www2.jpl.nasa.gov/srtm/>`_ data for height-profile generation.
-- Full implementation of `ITU-R Rec. P.676-10 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_, which provides two atmospheric
+- Full implementation of `ITU-R Rec. P.676-13 <https://www.itu.int/rec/R-REC-P.676-13-202208-I/en>`_, which provides two atmospheric
   models to calculate the attenuation for paths through Earth's atmosphere.
 - Provides various antenna patterns necessary for compatibility studies (e.g.,
   RAS, IMT, fixed-service links).
@@ -87,11 +87,11 @@ itself is published under `GPL v3 <https://github.com/bwinkel/pycraf/blob/master
 
 For some of the functionality provided in pycraf, data files provided by the
 ITU are necessary. For example, the atmospheric model in the *pycraf.atm*
-subpackage implements the algorithm described in `ITU-R Recommendation P.676 <https://www.itu.int/rec/R-REC-P.676-10-201309-S/en>`_.
+subpackage implements the algorithm described in `ITU-R Recommendation P.676 <https://www.itu.int/rec/R-REC-P.676-13-202208-I/en>`_.
 Annex 1 of this Recommendation makes use of spectroscopic information of the
 oxygen and water vapour lines given in Tables 1 and 2 of P.676. Another
 example are the radiometeorological data files that are distributed alongside
-`ITU-R Rec. P.452-16 <https://www.itu.int/rec/R-REC-P.452-16-201507-I/en>`_
+`ITU-R Rec. P.452-17 <https://www.itu.int/rec/R-REC-P.452-17-202109-I/en>`_
 
 ITU kindly gave us permission to include data files into pycraf that are
 distributed with the Recommendations on the ITU servers. This makes it possible
@@ -130,30 +130,6 @@ extract (or clone from GitHub) and simply execute::
 
     python -m pip install .
 
-Dependencies
-------------
-
-We kept the dependencies as minimal as possible. The following packages are
-required:
-
-* Python 3.9 or later
-* setuptools
-* cython 0.29 or later
-* numpy 1.20 or later
-* astropy 4.0 or later
-* scipy 1.7 or later
-* pytest 5.4 or later
-* pytest-remotedata 0.3.3 or later
-
-The following packages are optional, and you will need them for certain
-features and to build the docs:
-
-* h5py 3.3 or later; for caching
-* matplotlib 3.4 or later; for some plot helpers
-* pyproj 2.6 or later; for the `geospatial` subpackage
-* sgp4 2.0 or later; for the `satellite` subpackage
-* rasterio 1.2 or later; for the `satellite` subpackage
-
 For further details, we refer to the online documention `installation
 instructions <https://bwinkel.github.io/pycraf/install.html>`_. It also
 includes some hints for running pycraf on Windows or MacOS. Older versions
@@ -163,7 +139,7 @@ SRTM data
 ---------
 
 To make full use of the path attenuation calculations provided by pycraf
-(implements `ITU-R Rec. P.452 <https://www.itu.int/rec/R-REC-P.452-16-201507-I/en>`_), we recommend to use NASA's
+(implements `ITU-R Rec. P.452 <https://www.itu.int/rec/R-REC-P.452-17-202109-I/en>`_), we recommend to use NASA's
 `Shuttle Radar Topography Mission (SRTM) <https://www2.jpl.nasa.gov/srtm/>`_
 data for height-profile generation. pycraf can work with so-called *.hgt*
 files, a very simple binary format. Each *.hgt* file, a so-called tile, just

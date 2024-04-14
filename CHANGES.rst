@@ -1,3 +1,22 @@
+2.0.2 (2024-04-14)
+=======================
+
+New Features
+------------
+pycraf.pathprof
+^^^^^^^^^^^^^^
+- Add an option to `pycraf.pathprof.height_map_data`, which allows to
+  retrieve longitude and latitude profiles to each pixel in a map. This
+  could, for example, be used for adding clutter heights along the paths.
+  [#de42379]
+- Add an option to return raw data from `pathprof.gis.regrid_from_geotiff`.
+  (May be needed for cases where proper normalisation is required.) [#64]
+
+Various
+-------
+- Migrate to Cython v3. [#63]
+- Use new package structure (`pyproject.toml`-only). [#65]
+
 2.0.1 (2022-11-19)
 =======================
 
