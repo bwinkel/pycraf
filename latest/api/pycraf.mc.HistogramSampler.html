@@ -1,26 +1,24 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>HistogramSampler &#8212; pycraf v2.0.2.dev4+gc2e756c0</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <title>HistogramSampler &#8212; pycraf v2.0.2.dev12+gb31305fe</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css?v=7f123859" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../_static/documentation_options.js?v=6010f362"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Utilities (pycraf.utils)" href="../utils/index.html" />
@@ -63,7 +61,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v2.0.2.dev4+gc2e756c0</a>
+	<a href="../index.html">pycraf v2.0.2.dev12+gb31305fe</a>
 	 &#187;
       </li>
       <li><a href="../mc/index.html" accesskey="U">Monte-Carlo helpers (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.mc</span></code>)</a> &#187;</li>
@@ -79,11 +77,11 @@
           <div class="body" role="main">
             
   <section id="histogramsampler">
-<h1>HistogramSampler<a class="headerlink" href="#histogramsampler" title="Permalink to this heading">¶</a></h1>
+<h1>HistogramSampler<a class="headerlink" href="#histogramsampler" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pycraf.mc.HistogramSampler">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycraf.mc.</span></span><span class="sig-name descname"><span class="pre">HistogramSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">histvals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/mc/sampler.py#L10" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycraf.mc.</span></span><span class="sig-name descname"><span class="pre">HistogramSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">histvals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/mc/sampler.py#L10" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Sampler to get random values obeying a discrete(!) density distribution.</p>
 <p>With this class, one can use discrete densities (think of them as
 binned entities, aka histograms) to get random samples that follow
@@ -94,8 +92,8 @@ to physical values (see examples, below).</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>histvals</strong><span class="classifier">N-D <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>Discrete density distribution. (This is the histogram array, which
-one would get out of <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.histogram.html#numpy.histogram" title="(in NumPy v1.23)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">histogram</span></code></a> functions.)</p>
+<dt><strong>histvals</strong><span class="classifier">N-D <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>Discrete density distribution. (This is the histogram array, which
+one would get out of <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.histogram.html#numpy.histogram" title="(in NumPy v1.26)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">histogram</span></code></a> functions.)</p>
 </dd>
 </dl>
 </dd>
@@ -114,8 +112,8 @@ The resulting samples will always be just be able to work
 out the bin, but no continuous quantity can be reconstructed.
 For many use cases this is probably fine, but in others one
 might be better of by using Kernel Density Estimation.
-There is a function for this in <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/stats.html#module-scipy.stats" title="(in SciPy v1.9.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stats</span></code></a>
-(<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gaussian_kde.html#scipy.stats.gaussian_kde" title="(in SciPy v1.9.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_kde</span></code></a>), which even allows works with
+There is a function for this in <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/stats.html#module-scipy.stats" title="(in SciPy v1.13.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stats</span></code></a>
+(<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gaussian_kde.html#scipy.stats.gaussian_kde" title="(in SciPy v1.13.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_kde</span></code></a>), which even allows works with
 multi-variate data and allows one to sample from the KDE PDF
 (see also the examples). Unfortunately, one cannot work with
 weighted data.</p>
@@ -199,7 +197,7 @@ be the better tool:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>  
 <span class="go">[(-1.4708084392424643, 0.73081055816321849),</span>
 <span class="go"> (0.088396607804818894, 3.4075844477993105),</span>
-<span class="gp">...</span>
+<span class="go">...</span>
 <span class="go"> (-2.0977896525658681, -0.2514770710536518),</span>
 <span class="go"> (0.26194085609813555, -0.93622928331194344)]</span>
 </pre></div>
@@ -218,7 +216,7 @@ be the better tool:</p>
 <p class="rubric">Methods Documentation</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pycraf.mc.HistogramSampler.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/mc/sampler.py#L175" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler.__call__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/mc/sampler.py#L175" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler.__call__" title="Link to this definition">¶</a></dt>
 <dd><p>Convenience method to allow using an <em>instance</em> of
 <a class="reference internal" href="#pycraf.mc.HistogramSampler" title="pycraf.mc.HistogramSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HistogramSampler</span></code></a> like a function:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">my_sampler</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">HistogramSampler</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
@@ -230,7 +228,7 @@ be the better tool:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycraf.mc.HistogramSampler.sample">
-<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/mc/sampler.py#L148" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler.sample" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/mc/sampler.html#HistogramSampler.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/mc/sampler.py#L148" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.mc.HistogramSampler.sample" title="Link to this definition">¶</a></dt>
 <dd><p>Sample from the (discrete) density distribution.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -241,7 +239,7 @@ be the better tool:</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
-<dt><strong>Indices</strong><span class="classifier">tuple of <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>The indices of the drawn samples with respect to the
+<dt><strong>Indices</strong><span class="classifier">tuple of <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>The indices of the drawn samples with respect to the
 discrete density array (aka histogram object). See
 <a class="reference internal" href="#pycraf.mc.HistogramSampler" title="pycraf.mc.HistogramSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HistogramSampler</span></code></a> for examples of use.</p>
 </dd>
@@ -284,9 +282,9 @@ discrete density array (aka histogram object). See
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.3.0. &nbsp;
-    Last built 22 Nov 2022. <br/>
+    &copy; Copyright 2024, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 7.2.6. &nbsp;
+    Last built 14 Apr 2024. <br/>
   </p>
 </footer>
   </body>

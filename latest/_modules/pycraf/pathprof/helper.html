@@ -1,25 +1,23 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pycraf.pathprof.helper &#8212; pycraf v2.0.2.dev4+gc2e756c0</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/pycraf.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <title>pycraf.pathprof.helper &#8212; pycraf v2.0.2.dev12+gb31305fe</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pycraf.css?v=7f123859" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../../../_static/documentation_options.js?v=6010f362"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script type="text/javascript" src="../../../_static/sidebar.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
+    <link rel="icon" href="../../../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
@@ -49,7 +47,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v2.0.2.dev4+gc2e756c0</a>
+	<a href="../../../index.html">pycraf v2.0.2.dev12+gb31305fe</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -159,7 +157,9 @@
     <span class="p">)</span>
 
 
-<div class="viewcode-block" id="annual_timepercent_from_worst_month"><a class="viewcode-back" href="../../../api/pycraf.pathprof.annual_timepercent_from_worst_month.html#pycraf.pathprof.annual_timepercent_from_worst_month">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="annual_timepercent_from_worst_month">
+<a class="viewcode-back" href="../../../api/pycraf.pathprof.annual_timepercent_from_worst_month.html#pycraf.pathprof.annual_timepercent_from_worst_month">[docs]</a>
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">p_w</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
     <span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">omega</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
@@ -168,7 +168,7 @@
 <span class="k">def</span> <span class="nf">annual_timepercent_from_worst_month</span><span class="p">(</span>
         <span class="n">p_w</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">omega</span>
         <span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate annual equivalent time percentage, p, from worst-month time</span>
 <span class="sd">    percentage, p_w, according to ITU-R P.452-16 Eq (1).</span>
 
@@ -210,6 +210,7 @@
     <span class="k">return</span> <span class="n">p</span></div>
 
 
+
 <span class="k">def</span> <span class="nf">_DN_N0_from_map</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">):</span>
 
     <span class="n">_DN</span> <span class="o">=</span> <span class="n">_DN_interpolator</span><span class="p">((</span><span class="n">lon</span> <span class="o">%</span> <span class="mi">360</span><span class="p">,</span> <span class="n">lat</span><span class="p">))</span>
@@ -218,14 +219,16 @@
     <span class="k">return</span> <span class="n">_DN</span><span class="p">,</span> <span class="n">_N0</span>
 
 
-<div class="viewcode-block" id="deltaN_N0_from_map"><a class="viewcode-back" href="../../../api/pycraf.pathprof.deltaN_N0_from_map.html#pycraf.pathprof.deltaN_N0_from_map">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="deltaN_N0_from_map">
+<a class="viewcode-back" href="../../../api/pycraf.pathprof.deltaN_N0_from_map.html#pycraf.pathprof.deltaN_N0_from_map">[docs]</a>
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">lon</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">lat</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">deltaN_N0_from_map</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Query delta_N and N_0 values from digitized maps by means of bilinear</span>
 <span class="sd">    interpolation.</span>
 
@@ -250,6 +253,7 @@
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">return</span> <span class="n">_DN_N0_from_map</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">)</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">_radiomet_data_for_pathcenter</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">d_tm</span><span class="p">,</span> <span class="n">d_lm</span><span class="p">):</span>
@@ -281,7 +285,9 @@
     <span class="k">return</span> <span class="n">_DN</span><span class="p">,</span> <span class="n">beta_0</span><span class="p">,</span> <span class="n">_N0</span>
 
 
-<div class="viewcode-block" id="radiomet_data_for_pathcenter"><a class="viewcode-back" href="../../../api/pycraf.pathprof.radiomet_data_for_pathcenter.html#pycraf.pathprof.radiomet_data_for_pathcenter">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="radiomet_data_for_pathcenter">
+<a class="viewcode-back" href="../../../api/pycraf.pathprof.radiomet_data_for_pathcenter.html#pycraf.pathprof.radiomet_data_for_pathcenter">[docs]</a>
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">lon</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">lat</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">d_tm</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
@@ -290,7 +296,7 @@
     <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">radiomet_data_for_pathcenter</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">d_tm</span><span class="p">,</span> <span class="n">d_lm</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate delta_N, beta_0, and N_0 values from digitized maps, according</span>
 <span class="sd">    to ITU-R P.452-16 Eq (2-4).</span>
 
@@ -331,14 +337,17 @@
     <span class="k">return</span> <span class="n">_radiomet_data_for_pathcenter</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">d_tm</span><span class="p">,</span> <span class="n">d_lm</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="eff_earth_radius_factor_median"><a class="viewcode-back" href="../../../api/pycraf.pathprof.eff_earth_radius_factor_median.html#pycraf.pathprof.eff_earth_radius_factor_median">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+
+<div class="viewcode-block" id="eff_earth_radius_factor_median">
+<a class="viewcode-back" href="../../../api/pycraf.pathprof.eff_earth_radius_factor_median.html#pycraf.pathprof.eff_earth_radius_factor_median">[docs]</a>
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">lon</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">lat</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">,</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">eff_earth_radius_factor_median</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate median effective Earth radius factor, k_50, according to</span>
 <span class="sd">    ITU-R P.452-16 Eq (5).</span>
 
@@ -362,12 +371,15 @@
     <span class="k">return</span> <span class="mf">157.</span> <span class="o">/</span> <span class="p">(</span><span class="mf">157.</span> <span class="o">-</span> <span class="n">_DN_interpolator</span><span class="p">((</span><span class="n">lon</span> <span class="o">%</span> <span class="mi">360</span><span class="p">,</span> <span class="n">lat</span><span class="p">)))</span></div>
 
 
-<div class="viewcode-block" id="eff_earth_radius_factor_beta"><a class="viewcode-back" href="../../../api/pycraf.pathprof.eff_earth_radius_factor_beta.html#pycraf.pathprof.eff_earth_radius_factor_beta">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+
+<div class="viewcode-block" id="eff_earth_radius_factor_beta">
+<a class="viewcode-back" href="../../../api/pycraf.pathprof.eff_earth_radius_factor_beta.html#pycraf.pathprof.eff_earth_radius_factor_beta">[docs]</a>
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">,</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">eff_earth_radius_factor_beta</span><span class="p">():</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate effective Earth radius factor exceeded for beta_0 percent</span>
 <span class="sd">    of time, k_beta, according to ITU-R P.452-16.</span>
 
@@ -385,19 +397,22 @@
     <span class="k">return</span> <span class="n">K_BETA_VALUE</span></div>
 
 
+
 <span class="k">def</span> <span class="nf">_eff_earth_radius_median</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">):</span>
 
     <span class="k">return</span> <span class="n">R_E_VALUE</span> <span class="o">*</span> <span class="mf">157.</span> <span class="o">/</span> <span class="p">(</span><span class="mf">157.</span> <span class="o">-</span> <span class="n">_DN_interpolator</span><span class="p">((</span><span class="n">lon</span> <span class="o">%</span> <span class="mi">360</span><span class="p">,</span> <span class="n">lat</span><span class="p">)))</span>
 
 
-<div class="viewcode-block" id="eff_earth_radius_median"><a class="viewcode-back" href="../../../api/pycraf.pathprof.eff_earth_radius_median.html#pycraf.pathprof.eff_earth_radius_median">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="eff_earth_radius_median">
+<a class="viewcode-back" href="../../../api/pycraf.pathprof.eff_earth_radius_median.html#pycraf.pathprof.eff_earth_radius_median">[docs]</a>
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">lon</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">lat</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">eff_earth_radius_median</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate median effective Earth radius, a_e, according to</span>
 <span class="sd">    ITU-R P.452-16 Eq (6a).</span>
 
@@ -421,12 +436,15 @@
     <span class="k">return</span> <span class="n">_eff_earth_radius_median</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="eff_earth_radius_beta"><a class="viewcode-back" href="../../../api/pycraf.pathprof.eff_earth_radius_beta.html#pycraf.pathprof.eff_earth_radius_beta">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+
+<div class="viewcode-block" id="eff_earth_radius_beta">
+<a class="viewcode-back" href="../../../api/pycraf.pathprof.eff_earth_radius_beta.html#pycraf.pathprof.eff_earth_radius_beta">[docs]</a>
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span>
     <span class="p">)</span>
 <span class="k">def</span> <span class="nf">eff_earth_radius_beta</span><span class="p">():</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate effective Earth radius exceeded for beta_0 percent of time,</span>
 <span class="sd">    a_beta, according to ITU-R P.452-16 Eq (6b).</span>
 
@@ -443,10 +461,13 @@
     <span class="k">return</span> <span class="n">A_BETA_VALUE</span></div>
 
 
-<div class="viewcode-block" id="make_kmz"><a class="viewcode-back" href="../../../api/pycraf.pathprof.make_kmz.html#pycraf.pathprof.make_kmz">[docs]</a><span class="k">def</span> <span class="nf">make_kmz</span><span class="p">(</span>
+
+<div class="viewcode-block" id="make_kmz">
+<a class="viewcode-back" href="../../../api/pycraf.pathprof.make_kmz.html#pycraf.pathprof.make_kmz">[docs]</a>
+<span class="k">def</span> <span class="nf">make_kmz</span><span class="p">(</span>
         <span class="n">kmz_filename</span><span class="p">,</span> <span class="n">atten_map</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno_r&#39;</span>
         <span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Produce kmz file for use in GIS software (e.g., Google Earth).</span>
 
 <span class="sd">    Parameters</span>
@@ -508,8 +529,9 @@
         <span class="n">myzip</span><span class="o">.</span><span class="n">writestr</span><span class="p">(</span><span class="s1">&#39;doc.kml&#39;</span><span class="p">,</span> <span class="n">kml</span><span class="p">)</span></div>
 
 
+
 <span class="k">class</span> <span class="nc">FixPointNormalize</span><span class="p">(</span><span class="n">Normalize</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    From http://stackoverflow.com/questions/40895021/python-equivalent-for-matlabs-demcmap-elevation-appropriate-colormap</span>
 <span class="sd">    by ImportanceOfBeingErnest</span>
 
@@ -540,8 +562,10 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="terrain_cmap_factory"><a class="viewcode-back" href="../../../api/pycraf.pathprof.terrain_cmap_factory.html#pycraf.pathprof.terrain_cmap_factory">[docs]</a><span class="k">def</span> <span class="nf">terrain_cmap_factory</span><span class="p">(</span><span class="n">sealevel</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">50</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1200</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<div class="viewcode-block" id="terrain_cmap_factory">
+<a class="viewcode-back" href="../../../api/pycraf.pathprof.terrain_cmap_factory.html#pycraf.pathprof.terrain_cmap_factory">[docs]</a>
+<span class="k">def</span> <span class="nf">terrain_cmap_factory</span><span class="p">(</span><span class="n">sealevel</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">50</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1200</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Produce terrain colormap and norm to be used in plt.imshow.</span>
 
 <span class="sd">    With this, one can adjust the colors in the cmap such that the sea level</span>
@@ -606,6 +630,7 @@
     <span class="k">return</span> <span class="n">terrain_cmap</span><span class="p">,</span> <span class="n">terrain_norm</span></div>
 
 
+
 <span class="k">def</span> <span class="nf">_Qinv</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="c1"># Note, this seems to be identical to cyprop._I_helper</span>
     <span class="c1"># only good between 1.e-6 and 0.5</span>
@@ -668,9 +693,9 @@
   <p class="pull-right"> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.3.0. &nbsp;
-    Last built 22 Nov 2022. <br/>
+    &copy; Copyright 2024, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 7.2.6. &nbsp;
+    Last built 14 Apr 2024. <br/>
   </p>
 </footer>
   </body>

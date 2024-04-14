@@ -7,14 +7,14 @@ Requirements
 
 pycraf has the following strict requirements:
 
-- `Python <http://www.python.org/>`__ 3.8 or later
+- `Python <http://www.python.org/>`__ 3.9 or later
 
 - `setuptools <https://pythonhosted.org/setuptools/>`__: Used for the package
   installation.
 
 - `Cython <http://cython.org/>`__ 0.29 or later
 
-- `NumPy <http://www.numpy.org/>`__ 1.18 or later
+- `NumPy <http://www.numpy.org/>`__ 1.20 or later
 
 - `SciPy <https://scipy.org/>`__: 1.7 or later
 
@@ -75,7 +75,7 @@ After installing Anaconda, one can run the `conda package manager
 
     Ideally, one would install all dependencies together with pycraf::
 
-        conda create -n pycraf-env -c conda-forge python=3.9 astropy cython h5py matplotlib numpy pycraf 'pyproj>=2.6' pytest pytest-remotedata rasterio scipy 'sgp4>2'
+        conda create -n pycraf-env -c conda-forge python=3.11 astropy cython h5py matplotlib numpy pycraf 'pyproj>=2.6' pytest pytest-remotedata rasterio scipy 'sgp4>2'
 
 
 Using pip
@@ -149,7 +149,13 @@ the system-wide Python installation.
     On Anaconda, the following would install all packages needed for
     properly working with the sources::
 
-        conda create -n pycraf-dev -c conda-forge python=3.9 astropy cython  h5py matplotlib "numpy==1.20" pip "pyproj>=3" pytest pytest-astropy pytest-doctestplus pytest-remotedata rasterio scipy "sgp4>2" sphinx sphinx-astropy twine wheel
+        conda create -n pycraf3.10dev python=3.10 'astropy>=5' build cartopy
+        cython extension-helpers ffmpeg fiona geopandas h5py imagemagick ipdb
+        ipykernel ipywidgets "matplotlib>=3.3" "numpy==1.21.6" openpyxl osmnx
+        pandas pip "pyproj>=3" "pyqt>=5.11" pytest pytest-astropy
+        pytest-doctestplus pytest-qt pytest-remotedata rasterio reproject
+        scipy setuptools setuptools-scm "sgp4>2" shapely sphinx
+        sphinx-astropy tqdm twine wheel
 
 .. _windows_install:
 
@@ -159,7 +165,7 @@ Windows
 If you are desperate, you can install pycraf from source even on Windows.
 You'll need to install a suitable C-compiler; <see here
 <https://wiki.python.org/moin/WindowsCompilers>`__. The pycraf
-package needs Python 3.8 or later, which means VC++ Version 14 or later is
+package needs Python 3.9 or later, which means VC++ Version 14 or later is
 mandatory. The easiest way to obtain it, is by installing the
 `Build Tools For Visual Studio
 <https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022>`__. Once installed and

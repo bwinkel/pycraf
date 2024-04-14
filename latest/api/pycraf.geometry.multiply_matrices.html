@@ -1,26 +1,24 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>multiply_matrices &#8212; pycraf v2.0.2.dev4+gc2e756c0</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <title>multiply_matrices &#8212; pycraf v2.0.2.dev12+gb31305fe</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pycraf.css?v=7f123859" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../_static/documentation_options.js?v=6010f362"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="icon" href="../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="rotaxis_from_rotmat" href="pycraf.geometry.rotaxis_from_rotmat.html" />
@@ -63,7 +61,7 @@
 	 |
       </li>
       <li>
-	<a href="../index.html">pycraf v2.0.2.dev4+gc2e756c0</a>
+	<a href="../index.html">pycraf v2.0.2.dev12+gb31305fe</a>
 	 &#187;
       </li>
       <li><a href="../geometry/index.html" accesskey="U">Geometry helpers (<code class="xref py py-obj docutils literal notranslate"><span class="pre">pycraf.geometry</span></code>)</a> &#187;</li>
@@ -79,15 +77,15 @@
           <div class="body" role="main">
             
   <section id="multiply-matrices">
-<h1>multiply_matrices<a class="headerlink" href="#multiply-matrices" title="Permalink to this heading">¶</a></h1>
+<h1>multiply_matrices<a class="headerlink" href="#multiply-matrices" title="Link to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pycraf.geometry.multiply_matrices">
-<span class="sig-prename descclassname"><span class="pre">pycraf.geometry.</span></span><span class="sig-name descname"><span class="pre">multiply_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">matrices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geometry/geometry.html#multiply_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/geometry/geometry.py#L334" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.geometry.multiply_matrices" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pycraf.geometry.</span></span><span class="sig-name descname"><span class="pre">multiply_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">matrices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/geometry/geometry.html#multiply_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/bwinkel/pycraf/tree/master/pycraf/geometry/geometry.py#L334" title="Push the Edit button on the next page"><span class="edit-on-github viewcode-link">&nbsp;<span class="pre">[edit</span> <span class="pre">on</span> <span class="pre">github]</span></span></a><a class="headerlink" href="#pycraf.geometry.multiply_matrices" title="Link to this definition">¶</a></dt>
 <dd><p>Matrix-multiply the matrices in the given list.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>matrices</strong><span class="classifier">list of <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.23)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt><dd><p>List of (stacks of) rotation matrices. The order of the
+<dt><strong>matrices</strong><span class="classifier">list of <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.26)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt><dd><p>List of (stacks of) rotation matrices. The order of the
 multiplication is <code class="xref py py-obj docutils literal notranslate"><span class="pre">R</span> <span class="pre">=</span> <span class="pre">R1.R2.R3</span></code>, if <code class="xref py py-obj docutils literal notranslate"><span class="pre">*matrices</span> <span class="pre">=</span> <span class="pre">(R1,</span> <span class="pre">R2,</span> <span class="pre">R3)</span></code>.
 (This means, that <code class="xref py py-obj docutils literal notranslate"><span class="pre">R3</span></code> is applied first.)</p>
 </dd>
@@ -95,7 +93,7 @@ multiplication is <code class="xref py py-obj docutils literal notranslate"><spa
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
-<dt><strong>R</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.23)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt><dd><p>Resulting rotation matrix [no units!]</p>
+<dt><strong>R</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.26)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a></span></dt><dd><p>Resulting rotation matrix [no units!]</p>
 </dd>
 </dl>
 </dd>
@@ -134,9 +132,9 @@ internally).</p>
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.3.0. &nbsp;
-    Last built 22 Nov 2022. <br/>
+    &copy; Copyright 2024, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 7.2.6. &nbsp;
+    Last built 14 Apr 2024. <br/>
   </p>
 </footer>
   </body>

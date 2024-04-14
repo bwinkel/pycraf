@@ -1,25 +1,23 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pycraf.protection.ra769 &#8212; pycraf v2.0.2.dev4+gc2e756c0</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/pycraf.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <title>pycraf.protection.ra769 &#8212; pycraf v2.0.2.dev12+gb31305fe</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pycraf.css?v=7f123859" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../../../_static/documentation_options.js?v=6010f362"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script type="text/javascript" src="../../../_static/sidebar.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <link rel="shortcut icon" href="../../../_static/astropy_logo.ico"/>
+    <link rel="icon" href="../../../_static/astropy_logo.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
@@ -49,7 +47,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../../index.html">pycraf v2.0.2.dev4+gc2e756c0</a>
+	<a href="../../../index.html">pycraf v2.0.2.dev12+gb31305fe</a>
 	 &#187;
       </li>
       <li><a href="../../index.html" >Module code</a> &#187;</li>
@@ -87,7 +85,9 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ra769_calculate_entry&#39;</span><span class="p">,</span> <span class="s1">&#39;ra769_limits&#39;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="ra769_calculate_entry"><a class="viewcode-back" href="../../../api/pycraf.protection.ra769_calculate_entry.html#pycraf.protection.ra769_calculate_entry">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
+<div class="viewcode-block" id="ra769_calculate_entry">
+<a class="viewcode-back" href="../../../api/pycraf.protection.ra769_calculate_entry.html#pycraf.protection.ra769_calculate_entry">[docs]</a>
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span>
     <span class="n">frequency</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-9</span><span class="p">,</span> <span class="mf">1.e12</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span><span class="p">),</span>
     <span class="n">bandwidth</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-9</span><span class="p">,</span> <span class="mf">1.e11</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">Hz</span><span class="p">),</span>
     <span class="n">T_A</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-9</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
@@ -98,7 +98,7 @@
         <span class="n">frequency</span><span class="p">,</span> <span class="n">bandwidth</span><span class="p">,</span> <span class="n">T_A</span><span class="p">,</span> <span class="n">T_rx</span><span class="p">,</span>
         <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;continuum&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;dB&#39;</span><span class="p">,</span> <span class="n">integ_time</span><span class="o">=</span><span class="mf">2000.</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">s</span><span class="p">,</span>
         <span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Limits (single entry) for spectral line, continuum, and VLBI observations</span>
 <span class="sd">    according to</span>
 <span class="sd">    `ITU-R Rec RA.769 &lt;https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en&gt;`_.</span>
@@ -228,9 +228,12 @@
         <span class="k">return</span> <span class="n">Slim_nu</span></div>
 
 
-<div class="viewcode-block" id="ra769_limits"><a class="viewcode-back" href="../../../api/pycraf.protection.ra769_limits.html#pycraf.protection.ra769_limits">[docs]</a><span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span><span class="n">integ_time</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-9</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">s</span><span class="p">))</span>
+
+<div class="viewcode-block" id="ra769_limits">
+<a class="viewcode-back" href="../../../api/pycraf.protection.ra769_limits.html#pycraf.protection.ra769_limits">[docs]</a>
+<span class="nd">@utils</span><span class="o">.</span><span class="n">ranged_quantity_input</span><span class="p">(</span><span class="n">integ_time</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-9</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">s</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">ra769_limits</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;continuum&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;dB&#39;</span><span class="p">,</span> <span class="n">integ_time</span><span class="o">=</span><span class="mf">2000.</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">s</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Limits for spectral line, continuum, and VLBI observations according to</span>
 <span class="sd">    `ITU-R Rec RA.769 &lt;https://www.itu.int/rec/R-REC-RA.769-2-200305-I/en&gt;`_.</span>
 
@@ -363,6 +366,7 @@
             <span class="k">pass</span>
 
     <span class="k">return</span> <span class="n">QTable</span><span class="p">(</span><span class="n">tab</span><span class="p">)</span></div>
+
 </pre></div>
 
             <div class="clearer"></div>
@@ -381,9 +385,9 @@
   <p class="pull-right"> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>
-    &copy; Copyright 2022, Benjamin Winkel.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 5.3.0. &nbsp;
-    Last built 22 Nov 2022. <br/>
+    &copy; Copyright 2024, Benjamin Winkel.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 7.2.6. &nbsp;
+    Last built 14 Apr 2024. <br/>
   </p>
 </footer>
   </body>
