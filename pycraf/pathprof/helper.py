@@ -91,6 +91,103 @@ _N0_interpolator = RegularGridInterpolator(
     )
 
 
+_refract_data_p2001 = np.load(get_pkg_data_filename(
+    '../itudata/p.2001-3/refract_map.npz'
+    ))
+
+_dn_median_interpolator = RegularGridInterpolator(
+    (_refract_data_p2001['lons'][0], _refract_data_p2001['lats'][::-1, 0]),
+    _refract_data_p2001['dn_median'][::-1].T
+    )
+_dn_supslope_interpolator = RegularGridInterpolator(
+    (_refract_data_p2001['lons'][0], _refract_data_p2001['lats'][::-1, 0]),
+    _refract_data_p2001['dn_supslope'][::-1].T
+    )
+_dn_subslope_interpolator = RegularGridInterpolator(
+    (_refract_data_p2001['lons'][0], _refract_data_p2001['lats'][::-1, 0]),
+    _refract_data_p2001['dn_subslope'][::-1].T
+    )
+_dn_dz_interpolator = RegularGridInterpolator(
+    (_refract_data_p2001['lons'][0], _refract_data_p2001['lats'][::-1, 0]),
+    _refract_data_p2001['dn_dz'][::-1].T
+    )
+
+_wv_data_p2001 = np.load(get_pkg_data_filename(
+    '../itudata/p.2001-3/wv_map.npz'
+    ))
+
+_surfwv_50_interpolator = RegularGridInterpolator(
+    (_wv_data_p2001['lons'][0], _wv_data_p2001['lats'][::-1, 0]),
+    _wv_data_p2001['surfwv_50'][::-1].T
+    )
+
+_h0_data_p2001 = np.load(get_pkg_data_filename(
+    '../itudata/p.2001-3/h0_map.npz'
+    ))
+
+_h0_interpolator = RegularGridInterpolator(
+    (_h0_data_p2001['lons'][0], _h0_data_p2001['lats'][::-1, 0]),
+    _h0_data_p2001['h0'][::-1].T
+    )
+
+_spo_e_data_p2001 = np.load(get_pkg_data_filename(
+    '../itudata/p.2001-3/sporadic_e_map.npz'
+    ))
+
+_foes_50_interpolator = RegularGridInterpolator(
+    (_spo_e_data_p2001['lons'][0], _spo_e_data_p2001['lats'][::-1, 0]),
+    _spo_e_data_p2001['foes_50'][::-1].T
+    )
+_foes_10_interpolator = RegularGridInterpolator(
+    (_spo_e_data_p2001['lons'][0], _spo_e_data_p2001['lats'][::-1, 0]),
+    _spo_e_data_p2001['foes_10'][::-1].T
+    )
+_foes_1_interpolator = RegularGridInterpolator(
+    (_spo_e_data_p2001['lons'][0], _spo_e_data_p2001['lats'][::-1, 0]),
+    _spo_e_data_p2001['foes_1'][::-1].T
+    )
+_foes_01_interpolator = RegularGridInterpolator(
+    (_spo_e_data_p2001['lons'][0], _spo_e_data_p2001['lats'][::-1, 0]),
+    _spo_e_data_p2001['foes_01'][::-1].T
+    )
+
+_rain_data_p2001 = np.load(get_pkg_data_filename(
+    '../itudata/p.2001-3/rain_map.npz'
+    ))
+
+_pr6_interpolator = RegularGridInterpolator(
+    (_rain_data_p2001['lons'][0], _rain_data_p2001['lats'][::-1, 0]),
+    _rain_data_p2001['pr6'][::-1].T
+    )
+_mt_interpolator = RegularGridInterpolator(
+    (_rain_data_p2001['lons'][0], _rain_data_p2001['lats'][::-1, 0]),
+    _rain_data_p2001['mt'][::-1].T
+    )
+_beta_interpolator = RegularGridInterpolator(
+    (_rain_data_p2001['lons'][0], _rain_data_p2001['lats'][::-1, 0]),
+    _rain_data_p2001['beta'][::-1].T
+    )
+
+_tclim_data_p2001 = np.load(get_pkg_data_filename(
+    '../itudata/p.2001-3/tropoclim_map.npz'
+    ))
+
+# BEWARE: UNLIKE FOR THE OTHER INTERPOLATORS, LONS ARE IN [-180, 180]
+_tropoclim_interpolator = RegularGridInterpolator(
+    (_tclim_data_p2001['lons'][0], _tclim_data_p2001['lats'][::-1, 0]),
+    _tclim_data_p2001['tropoclim'][::-1].T, method='nearest',
+    )
+
+
+_rain_probs = np.genfromtxt(
+    get_pkg_data_filename(
+        '../itudata/p.2001-3/table_c.2.1.txt'
+        ),
+    dtype=(np.int8, np.float64, np.float64),
+    names=True,
+    )
+
+
 @utils.ranged_quantity_input(
     p_w=(0, 100, apu.percent),
     phi=(-90, 90, apu.deg),
@@ -148,6 +245,47 @@ def _DN_N0_from_map(lon, lat):
     _N0 = _N0_interpolator((lon % 360, lat))
 
     return _DN, _N0
+
+
+def _DN_P2001_from_map(lon, lat):
+
+    dn_median = _dn_median_interpolator((lon % 360, lat))
+    dn_supslope = _dn_supslope_interpolator((lon % 360, lat))
+    dn_subslope = _dn_subslope_interpolator((lon % 360, lat))
+    dn_dz = _dn_dz_interpolator((lon % 360, lat))
+
+    return dn_median, dn_supslope, dn_subslope, dn_dz
+
+
+def _sporadic_E_P2001_from_map(lon, lat, p):
+
+    lon, lat, p = np.broadcast_arrays(lon, lat, p)
+    f_oes1 = np.empty(lon.shape, dtype=np.float64)
+    f_oes2 = np.empty(lon.shape, dtype=np.float64)
+    p1 = np.empty(lon.shape, dtype=np.float64)
+    p2 = np.empty(lon.shape, dtype=np.float64)
+
+    mask01 = p < 0.01
+    mask10 = p > 0.1
+    mask_m = (~mask01) & (~mask10)  # 1% <= p <= 10%
+    f_oes1[mask01] = _foes_01_interpolator((lon % 360, lat))
+    f_oes2[mask01] = _foes_1_interpolator((lon % 360, lat))
+    p1[mask01] = 0.001
+    p2[mask01] = 0.01
+
+    f_oes1[mask_m] = _foes_1_interpolator((lon % 360, lat))
+    f_oes2[mask_m] = _foes_10_interpolator((lon % 360, lat))
+    p1[mask_m] = 0.01
+    p2[mask_m] = 0.1
+
+    f_oes1[mask10] = _foes_10_interpolator((lon % 360, lat))
+    f_oes2[mask10] = _foes_50_interpolator((lon % 360, lat))
+    p1[mask10] = 0.1
+    p2[mask10] = 0.5
+
+    f_oes = f_oes1 + (f_oes2 - f_oes1) * np.log10(p / p1) / np.log10(p2 / p1)
+
+    return f_oes
 
 
 @utils.ranged_quantity_input(
