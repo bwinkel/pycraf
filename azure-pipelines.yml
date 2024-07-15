@@ -333,7 +333,7 @@ jobs:
   - script: |
       $(conda.activate) pycraf-env
       ls dist/*.tar.gz
-      python -m twine upload -r "pypi_pycraf" --config-file $(PYPIRC_PATH) dist/*.tar.gz
+      python -m twine upload -r "pypi_pycraf" --skip-existing --config-file $(PYPIRC_PATH) dist/*.tar.gz
     displayName: Upload tarball
     condition: and(succeeded(), eq(variables['publish.tarball'], true))
 
