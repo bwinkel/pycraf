@@ -25,7 +25,7 @@ np.import_array()
 # __all__ = ['inverse', 'direct']
 
 
-cdef double NAN = np.NAN
+cdef double NAN = np.nan
 cdef double DEG2RAD = M_PI / 180.
 cdef double RAD2DEG = 180. / M_PI
 cdef double M_2PI = 2 * M_PI

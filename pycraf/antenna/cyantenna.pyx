@@ -274,6 +274,8 @@ def imt2020_composite_pattern_cython(
 
         int i, size, m, n
 
+    # numpy 2.0 needs safer type-casting
+    N_H, N_V = np.asarray(N_H, np.uint16), np.asarray(N_V, np.uint16)
     # pre-compute some quantities
 
     A_E = imt2020_single_element_pattern_cython(
@@ -318,7 +320,8 @@ def imt2020_composite_pattern_cython(
             FLOAT64, FLOAT64, FLOAT64, FLOAT64,
             UINT16, UINT16,
             FLOAT64,
-            ]
+            ],
+        # casting='same_kind',
         )
 
     # it would be better to use the context manager but
@@ -400,6 +403,9 @@ def imt2020_composite_pattern_extended_cython(
 
         int i, size, m, n
 
+    # numpy 2.0 needs safer type-casting
+    N_H, N_V = np.asarray(N_H, np.uint16), np.asarray(N_V, np.uint16)
+    M_sub = np.asarray(M_sub, np.uint16)
     # pre-compute some quantities
 
     A_E = imt2020_single_element_pattern_cython(

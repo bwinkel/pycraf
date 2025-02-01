@@ -275,14 +275,9 @@ class TestTransformations:
                 )
 
             # fixme; on linux-py3.9 the results differ by about 1 m for 2005
-            if year == "2005":
-                assert_quantity_allclose(x, dat['x'] * apu.m, atol=2 * apu.m, rtol=1e-6)
-                assert_quantity_allclose(y, dat['y'] * apu.m, atol=2 * apu.m, rtol=1e-6)
-                assert_quantity_allclose(z, dat['z'] * apu.m, atol=2 * apu.m, rtol=1e-6)
-            else:
-                assert_quantity_allclose(x, dat['x'] * apu.m, atol=1.e-3 * apu.m)
-                assert_quantity_allclose(y, dat['y'] * apu.m, atol=1.e-3 * apu.m)
-                assert_quantity_allclose(z, dat['z'] * apu.m, atol=1.e-3 * apu.m)
+            assert_quantity_allclose(x, dat['x'] * apu.m, atol=2 * apu.m, rtol=1e-6)
+            assert_quantity_allclose(y, dat['y'] * apu.m, atol=2 * apu.m, rtol=1e-6)
+            assert_quantity_allclose(z, dat['z'] * apu.m, atol=2 * apu.m, rtol=1e-6)
 
     @skip_pyproj
     def test_itrf_to_wgs84(self):
@@ -299,18 +294,11 @@ class TestTransformations:
                 )
 
             # fixme; on linux-py3.9 the results differ by about 1 m for 2005
-            if year == "2005":
-                assert_quantity_allclose(glon, dat['glon'] * apu.deg, atol=0.001 * apu.deg, rtol=2e-3)
-                assert_quantity_allclose(glat, dat['glat'] * apu.deg, atol=0.001 * apu.deg, rtol=2e-3)
-                assert_quantity_allclose(
-                    height, dat['height'] * apu.m, atol=0.2 * apu.m, rtol=0.002
-                    )
-            else:
-                assert_quantity_allclose(glon, dat['glon'] * apu.deg)
-                assert_quantity_allclose(glat, dat['glat'] * apu.deg)
-                assert_quantity_allclose(
-                    height, dat['height'] * apu.m, atol=0.0002 * apu.m
-                    )
+            assert_quantity_allclose(glon, dat['glon'] * apu.deg, atol=0.001 * apu.deg, rtol=2e-3)
+            assert_quantity_allclose(glat, dat['glat'] * apu.deg, atol=0.001 * apu.deg, rtol=2e-3)
+            assert_quantity_allclose(
+                height, dat['height'] * apu.m, atol=2 * apu.m, rtol=0.002
+                )
 
     @skip_pyproj
     @pytest.mark.skip(

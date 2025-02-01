@@ -138,7 +138,7 @@ class RangedQuantityInput(object):
             >>> #    )(_func)
 
             >>> func(0.5 * u.m)  # doctest: +FLOAT_CMP
-            0.25
+            np.float64(0.25)
 
         However, by doing this there are still no units for the output.
         We can fix this with the `output_unit` option::
@@ -193,13 +193,31 @@ class RangedQuantityInput(object):
         and of course, the unit check still works,  if a something other
         than `None` is provided::
 
-            >>> func(1 * u.s)
+            >>> func(1 * u.s)  # doctest: +IGNORE_EXCEPTION_DETAIL
             Traceback (most recent call last):
             ...
-            astropy.units.core.UnitsError: Argument 'a' to function
+            UnitsError: Argument 'a' to function
             'func' must be in units convertible to 'm'.
 
         """
+
+        # Note: in docstring, under astropy>=7 the last test returns
+        # "astropy.units.errors.UnitsError"
+        # the requires directive should circumvent this, but it does not work
+
+        # .. doctest-requires:: astropy<7
+        #     >>> func(1 * u.s)
+        #     Traceback (most recent call last):
+        #     ...
+        #     astropy.units.core.UnitsError: Argument 'a' to function
+        #     'func' must be in units convertible to 'm'.
+
+        # .. doctest-requires:: astropy>=7
+        #     >>> func(1 * u.s)
+        #     Traceback (most recent call last):
+        #     ...
+        #     astropy.units.errors.UnitsError: Argument 'a' to function
+        #     'func' must be in units convertible to 'm'.
 
         self = cls(**kwargs)
         if func is not None and not kwargs:

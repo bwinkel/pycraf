@@ -490,7 +490,7 @@ def get_tile_data(ilon, ilat):
         SrtmConf.set(hgt_res=hgt_res, _do_validate=False)
         tile = tile.reshape((tile_size, tile_size))[::-1]
 
-        bad_mask = (tile == 32768) | (tile == -32768)
+        bad_mask = (tile == 32767) | (tile == -32767)
         tile = tile.astype(np.float32)
         tile[bad_mask] = np.nan
 

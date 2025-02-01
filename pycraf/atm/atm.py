@@ -595,7 +595,7 @@ def _profile_standard(height):
     pressures = np.empty_like(temperatures)
 
     # gradient zero
-    mask = np.in1d(indices, [1, 4])
+    mask = np.isin(indices, [1, 4])
     indm = indices[mask]
     dhm = (_height[mask] - layer_heights[indm])
     pressures[mask] = (

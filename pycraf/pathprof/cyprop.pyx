@@ -3167,6 +3167,11 @@ def losses_complete_cython(
     # these entities are:
     # frequency, h_tg, h_rg, version, zone_t, zone_r
 
+    version = np.asarray(version, np.int32)
+    zone_t = np.asarray(zone_t, np.int32)
+    zone_r = np.asarray(zone_r, np.int32)
+    polarization = np.asarray(polarization, np.int32)
+
     it = np.nditer(
         [
             frequency, h_tg, h_rg, G_t, G_r, version, zone_t, zone_r,
