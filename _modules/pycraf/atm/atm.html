@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pycraf.atm.atm &#8212; pycraf v2.0.2</title>
+    <title>pycraf.atm.atm &#8212; pycraf v2.1.0</title>
   
   
   
@@ -15,44 +15,48 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-  
-  <link href="../../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/_static/pycraf.css" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
-  <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/jquery.js?v=5d32c60e"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../../../_static/documentation_options.js?v=c2377ec0"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/documentation_options.js?v=20623aea"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=30646c52"></script>
-    <script src="../../../_static/design-tabs.js?v=36754332"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pycraf/atm/atm';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="14 Apr 2024"/>
+  <meta name="docsearch:version" content="2.1" />
+    <meta name="docbuild:last-update" content="01 Feb 2025"/>
   </head>
   
   
@@ -60,31 +64,16 @@
 
   
   
-  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>
-    Back to top
-  </button>
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../../search.html"
       method="get">
@@ -92,7 +81,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -100,20 +88,27 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <label class="sidebar-toggle primary-toggle" for="__primary">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
-  </label>
+  </button>
   
   
   <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
 
+  
+    
   
 
 <a class="navbar-brand logo" href="../../../index.html">
@@ -123,7 +118,7 @@
   
   
   
-    <p class="title logo__title">pycraf v2.0.2</p>
+    <p class="title logo__title">pycraf v2.1.0</p>
   
 </a></div>
     
@@ -134,43 +129,43 @@
     <div class="me-auto navbar-header-items__center">
       
         <div class="navbar-item">
-<nav class="navbar-nav">
+<nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../index_getting_started.html">
-                        Getting Started
-                      </a>
-                    </li>
-                
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index_getting_started.html">
+    Getting Started
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../index_user_guide.html">
-                        User Documentation
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../index_project_details.html">
-                        Project details
-                      </a>
-                    </li>
-                
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index_user_guide.html">
+    User Documentation
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../index_acknowledgements.html">
-                        Acknowledgments
-                      </a>
-                    </li>
-                
 
-                <li class="nav-item">
-                  <a class="nav-link nav-external" href="https://github.com/bwinkel/pycraf/tree/master/notebooks">
-                    Tutorials
-                  </a>
-                </li>
-                
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index_project_details.html">
+    Project details
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index_acknowledgements.html">
+    Acknowledgments
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://github.com/bwinkel/pycraf/tree/master/notebooks">
+    Tutorials
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -182,31 +177,23 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
-        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+        <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
         <li class="nav-item">
           
@@ -217,7 +204,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/bwinkel/pycraf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+          <a href="https://github.com/bwinkel/pycraf" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -229,15 +216,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -254,7 +237,8 @@ document.write(`
       
         
       
-      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
 
   
@@ -263,46 +247,49 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item">
-<nav class="navbar-nav">
+          
+          
+            <div class="navbar-item">
+<nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../index_getting_started.html">
-                        Getting Started
-                      </a>
-                    </li>
-                
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index_getting_started.html">
+    Getting Started
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../index_user_guide.html">
-                        User Documentation
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../index_project_details.html">
-                        Project details
-                      </a>
-                    </li>
-                
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index_user_guide.html">
+    User Documentation
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../index_acknowledgements.html">
-                        Acknowledgments
-                      </a>
-                    </li>
-                
 
-                <li class="nav-item">
-                  <a class="nav-link nav-external" href="https://github.com/bwinkel/pycraf/tree/master/notebooks">
-                    Tutorials
-                  </a>
-                </li>
-                
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index_project_details.html">
+    Project details
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index_acknowledgements.html">
+    Acknowledgments
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://github.com/bwinkel/pycraf/tree/master/notebooks">
+    Tutorials
+  </a>
+</li>
+
   </ul>
 </nav></div>
+          
         
       </div>
     
@@ -312,17 +299,13 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
-          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+          <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
         <li class="nav-item">
           
@@ -333,7 +316,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/bwinkel/pycraf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+          <a href="https://github.com/bwinkel/pycraf" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -358,28 +341,24 @@ document.write(`
   </ul>
 </nav></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
         <div class="header-article-item">
 
-
-
-<nav aria-label="Breadcrumb">
+<nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
@@ -390,7 +369,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">pycraf.atm.atm</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pycraf.atm.atm</span></li>
   </ul>
 </nav>
 </div>
@@ -411,20 +390,20 @@ document.write(`
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">absolute_import</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
     <span class="p">)</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span><span class="p">,</span> <span class="n">lru_cache</span>
-<span class="kn">import</span> <span class="nn">numbers</span>
-<span class="kn">import</span> <span class="nn">collections</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
-<span class="kn">from</span> <span class="nn">astropy.utils.data</span> <span class="kn">import</span> <span class="n">get_pkg_data_filename</span>
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">utils</span>
-<span class="kn">from</span> <span class="nn">.atm_helper</span> <span class="kn">import</span> <span class="n">path_helper_cython</span><span class="p">,</span> <span class="n">path_endpoint_cython</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span><span class="p">,</span> <span class="n">lru_cache</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numbers</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">collections</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">astropy</span><span class="w"> </span><span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">apu</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">astropy.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_pkg_data_filename</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.atm_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">path_helper_cython</span><span class="p">,</span> <span class="n">path_endpoint_cython</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -499,7 +478,7 @@ document.write(`
     <span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">_airmass_from_elevation</span><span class="p">(</span><span class="n">elev</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_airmass_from_elevation</span><span class="p">(</span><span class="n">elev</span><span class="p">):</span>
 
     <span class="n">elev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">elev</span><span class="p">)</span>
     <span class="n">elev_shape</span> <span class="o">=</span> <span class="n">elev</span><span class="o">.</span><span class="n">shape</span>
@@ -522,7 +501,7 @@ document.write(`
     <span class="n">elev</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">airmass_from_elevation</span><span class="p">(</span><span class="n">elev</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">airmass_from_elevation</span><span class="p">(</span><span class="n">elev</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Airmass derived from elevation using extrapolation by Maddalena &amp; Johnson.</span>
 
@@ -555,7 +534,7 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">_elevation_from_airmass</span><span class="p">(</span><span class="n">airmass</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_elevation_from_airmass</span><span class="p">(</span><span class="n">airmass</span><span class="p">):</span>
 
     <span class="n">airmass</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">airmass</span><span class="p">)</span>
     <span class="n">airmass_shape</span> <span class="o">=</span> <span class="n">airmass</span><span class="o">.</span><span class="n">shape</span>
@@ -584,7 +563,7 @@ document.write(`
     <span class="n">airmass</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">deg</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">elevation_from_airmass</span><span class="p">(</span><span class="n">airmass</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">elevation_from_airmass</span><span class="p">(</span><span class="n">airmass</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Airmass derived from elevation using extrapolation by Maddalena &amp; Johnson.</span>
 
@@ -633,7 +612,7 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">_opacity_from_atten</span><span class="p">(</span><span class="n">atten</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_opacity_from_atten</span><span class="p">(</span><span class="n">atten</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
     <span class="k">if</span> <span class="n">elev</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 
@@ -650,7 +629,7 @@ document.write(`
     <span class="n">atten</span><span class="o">=</span><span class="p">(</span><span class="mf">1.000000000001</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span> <span class="n">elev</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">opacity_from_atten</span><span class="p">(</span><span class="n">atten</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">opacity_from_atten</span><span class="p">(</span><span class="n">atten</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Atmospheric opacity derived from attenuation.</span>
 
@@ -674,7 +653,7 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">_atten_from_opacity</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_atten_from_opacity</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
     <span class="k">if</span> <span class="n">elev</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 
@@ -691,7 +670,7 @@ document.write(`
     <span class="n">tau</span><span class="o">=</span><span class="p">(</span><span class="mf">0.000000000001</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">),</span> <span class="n">elev</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">atten_from_opacity</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">atten_from_opacity</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Atmospheric attenuation derived from opacity.</span>
 
@@ -715,7 +694,7 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">_refractive_index</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">press_w</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_refractive_index</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">press_w</span><span class="p">):</span>
 
     <span class="k">return</span> <span class="p">(</span>
         <span class="mi">1</span> <span class="o">+</span> <span class="mf">1e-6</span> <span class="o">/</span> <span class="n">temp</span> <span class="o">*</span> <span class="p">(</span>
@@ -733,7 +712,7 @@ document.write(`
     <span class="n">press_w</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">refractive_index</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">press_w</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">refractive_index</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">press_w</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Refractive index according to `ITU-R P.453-12</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.453-12-201609-I/en&gt;`_.</span>
@@ -757,7 +736,7 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">_saturation_water_pressure</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">wet_type</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_saturation_water_pressure</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">wet_type</span><span class="p">):</span>
     <span class="c1"># temp_C is temperature in Celcius</span>
     <span class="n">temp_C</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">-</span> <span class="mf">273.15</span>
 
@@ -786,7 +765,7 @@ document.write(`
     <span class="n">press</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">hPa</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">saturation_water_pressure</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="s1">&#39;water&#39;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">saturation_water_pressure</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="s1">&#39;water&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Saturation water pressure according to `ITU-R P.453-12</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.453-12-201609-I/en&gt;`_.</span>
@@ -812,7 +791,7 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">_pressure_water_from_humidity</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_pressure_water_from_humidity</span><span class="p">(</span>
         <span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">humidity</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="s1">&#39;water&#39;</span>
         <span class="p">):</span>
 
@@ -833,7 +812,7 @@ document.write(`
     <span class="n">humidity</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">percent</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">hPa</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">pressure_water_from_humidity</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">pressure_water_from_humidity</span><span class="p">(</span>
         <span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">humidity</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="s1">&#39;water&#39;</span>
         <span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
@@ -863,7 +842,7 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">_humidity_from_pressure_water</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_humidity_from_pressure_water</span><span class="p">(</span>
         <span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">press_w</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="s1">&#39;water&#39;</span>
         <span class="p">):</span>
 
@@ -884,7 +863,7 @@ document.write(`
     <span class="n">press_w</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">percent</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">humidity_from_pressure_water</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">humidity_from_pressure_water</span><span class="p">(</span>
         <span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">press_w</span><span class="p">,</span> <span class="n">wet_type</span><span class="o">=</span><span class="s1">&#39;water&#39;</span>
         <span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
@@ -916,7 +895,7 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">_pressure_water_from_rho_water</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">rho_w</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_pressure_water_from_rho_water</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">rho_w</span><span class="p">):</span>
 
     <span class="n">press_w</span> <span class="o">=</span> <span class="n">rho_w</span> <span class="o">*</span> <span class="n">temp</span> <span class="o">/</span> <span class="mf">216.7</span>
 
@@ -930,7 +909,7 @@ document.write(`
     <span class="n">rho_w</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">hPa</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">pressure_water_from_rho_water</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">rho_w</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">pressure_water_from_rho_water</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">rho_w</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Water pressure according to `ITU-R P.453-12</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.453-12-201609-I/en&gt;`_.</span>
@@ -952,7 +931,7 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">_rho_water_from_pressure_water</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press_w</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_rho_water_from_pressure_water</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press_w</span><span class="p">):</span>
 
     <span class="n">rho_w</span> <span class="o">=</span> <span class="n">press_w</span> <span class="o">*</span> <span class="mf">216.7</span> <span class="o">/</span> <span class="n">temp</span>
 
@@ -966,7 +945,7 @@ document.write(`
     <span class="n">press_w</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">3</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">rho_water_from_pressure_water</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press_w</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rho_water_from_pressure_water</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">press_w</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Water density according to `ITU-R P.453-12</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.453-12-201609-I/en&gt;`_.</span>
@@ -988,7 +967,7 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">_profile_standard</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_profile_standard</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
 
     <span class="c1"># height = np.asarray(height)  # this is not sufficient for masking :-(</span>
     <span class="n">height</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
@@ -1035,7 +1014,7 @@ document.write(`
     <span class="n">pressures</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">temperatures</span><span class="p">)</span>
 
     <span class="c1"># gradient zero</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
     <span class="n">indm</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
     <span class="n">dhm</span> <span class="o">=</span> <span class="p">(</span><span class="n">_height</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">layer_heights</span><span class="p">[</span><span class="n">indm</span><span class="p">])</span>
     <span class="n">pressures</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
@@ -1089,7 +1068,7 @@ document.write(`
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">output_unit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">profile_standard</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">profile_standard</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Standard height profiles according to `ITU-R P.835-5</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.835-5-201202-I/en&gt;`_, Annex 1.</span>
@@ -1151,7 +1130,7 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">_profile_helper</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_profile_helper</span><span class="p">(</span>
         <span class="n">height</span><span class="p">,</span>
         <span class="n">temp_heights</span><span class="p">,</span> <span class="n">temp_funcs</span><span class="p">,</span>
         <span class="n">press_heights</span><span class="p">,</span> <span class="n">press_funcs</span><span class="p">,</span>
@@ -1255,7 +1234,7 @@ document.write(`
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">output_unit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">profile_lowlat</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">profile_lowlat</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Low latitude height profiles according to `ITU-R P.835-5</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.835-5-201202-I/en&gt;`_.</span>
@@ -1358,7 +1337,7 @@ document.write(`
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">output_unit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">profile_midlat_summer</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">profile_midlat_summer</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Mid latitude summer height profiles according to `ITU-R P.835-5</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.835-5-201202-I/en&gt;`_.</span>
@@ -1459,7 +1438,7 @@ document.write(`
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">output_unit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">profile_midlat_winter</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">profile_midlat_winter</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Mid latitude winter height profiles according to `ITU-R P.835-5</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.835-5-201202-I/en&gt;`_.</span>
@@ -1560,7 +1539,7 @@ document.write(`
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">output_unit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">profile_highlat_summer</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">profile_highlat_summer</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    High latitude summer height profiles according to `ITU-R P.835-5</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.835-5-201202-I/en&gt;`_.</span>
@@ -1661,7 +1640,7 @@ document.write(`
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">output_unit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">profile_highlat_winter</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">profile_highlat_winter</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    High latitude winter height profiles according to `ITU-R P.835-5</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.835-5-201202-I/en&gt;`_.</span>
@@ -1754,7 +1733,7 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">_S_oxygen</span><span class="p">(</span><span class="n">press_dry</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_S_oxygen</span><span class="p">(</span><span class="n">press_dry</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Line strengths of all oxygen resonances according to `ITU-R P.676-11</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.676-11-201609-I/en&gt;`_, Eq (3).</span>
@@ -1786,7 +1765,7 @@ document.write(`
         <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_S_water</span><span class="p">(</span><span class="n">press_w</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_S_water</span><span class="p">(</span><span class="n">press_w</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Line strengths of all water resonances according to `ITU-R P.676-11</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.676-11-201609-I/en&gt;`_, Eq (3).</span>
@@ -1818,7 +1797,7 @@ document.write(`
         <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_Delta_f_oxygen</span><span class="p">(</span><span class="n">press_dry</span><span class="p">,</span> <span class="n">press_w</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_Delta_f_oxygen</span><span class="p">(</span><span class="n">press_dry</span><span class="p">,</span> <span class="n">press_w</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Line widths for all oxygen resonances according to `ITU-R P.676-11</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.676-11-201609-I/en&gt;`_, Eq (6a/b).</span>
@@ -1850,7 +1829,7 @@ document.write(`
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">df</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">2.25e-6</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_Delta_f_water</span><span class="p">(</span><span class="n">press_dry</span><span class="p">,</span> <span class="n">press_w</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_Delta_f_water</span><span class="p">(</span><span class="n">press_dry</span><span class="p">,</span> <span class="n">press_w</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Line widths for all water resonances according to</span>
 <span class="sd">    `ITU-R P.676-11 &lt;https://www.itu.int/rec/R-REC-P.676-11-201609-I/en&gt;`_,</span>
@@ -1890,7 +1869,7 @@ document.write(`
         <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_delta_oxygen</span><span class="p">(</span><span class="n">press_dry</span><span class="p">,</span> <span class="n">press_w</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_delta_oxygen</span><span class="p">(</span><span class="n">press_dry</span><span class="p">,</span> <span class="n">press_w</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Shape correction for all oxygen resonances according to</span>
 <span class="sd">    `ITU-R P.676-11 &lt;https://www.itu.int/rec/R-REC-P.676-11-201609-I/en&gt;`_,</span>
@@ -1922,7 +1901,7 @@ document.write(`
         <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_delta_water</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_delta_water</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Shape correction factor for all water vapor resonances (all-zero).</span>
 
@@ -1940,7 +1919,7 @@ document.write(`
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">resonances_water</span><span class="p">[</span><span class="s1">&#39;f0&#39;</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_F</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">f_i</span><span class="p">,</span> <span class="n">Delta_f</span><span class="p">,</span> <span class="n">delta</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_F</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">f_i</span><span class="p">,</span> <span class="n">Delta_f</span><span class="p">,</span> <span class="n">delta</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Line-profiles for all resonances at the freq_grid positions according to</span>
 <span class="sd">    `ITU-R P.676-11 &lt;https://www.itu.int/rec/R-REC-P.676-11-201609-I/en&gt;`_,</span>
@@ -1983,7 +1962,7 @@ document.write(`
     <span class="k">return</span> <span class="n">_freq_grid</span> <span class="o">/</span> <span class="n">_f_i</span> <span class="o">*</span> <span class="p">(</span><span class="n">sum_1</span> <span class="o">+</span> <span class="n">sum_2</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_N_D_prime2</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">press_dry</span><span class="p">,</span> <span class="n">press_w</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_N_D_prime2</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">press_dry</span><span class="p">,</span> <span class="n">press_w</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Dry air continuum absorption (Debye spectrum) according to</span>
 <span class="sd">    `ITU-R P.676-11 &lt;https://www.itu.int/rec/R-REC-P.676-11-201609-I/en&gt;`_,</span>
@@ -2017,7 +1996,7 @@ document.write(`
     <span class="k">return</span> <span class="n">freq_grid</span> <span class="o">*</span> <span class="n">press_dry</span> <span class="o">*</span> <span class="n">theta</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">sum_1</span> <span class="o">+</span> <span class="n">sum_2</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_atten_specific_annex1</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_atten_specific_annex1</span><span class="p">(</span>
         <span class="n">freq_grid</span><span class="p">,</span> <span class="n">press_dry</span><span class="p">,</span> <span class="n">press_w</span><span class="p">,</span> <span class="n">temp</span>
         <span class="p">):</span>
 
@@ -2063,7 +2042,7 @@ document.write(`
     <span class="n">temp</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">)</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">atten_specific_annex1</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">atten_specific_annex1</span><span class="p">(</span>
         <span class="n">freq_grid</span><span class="p">,</span> <span class="n">press_dry</span><span class="p">,</span> <span class="n">press_w</span><span class="p">,</span> <span class="n">temp</span>
         <span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
@@ -2108,7 +2087,7 @@ document.write(`
     <span class="n">path_length</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">atten_terrestrial</span><span class="p">(</span><span class="n">specific_atten</span><span class="p">,</span> <span class="n">path_length</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">atten_terrestrial</span><span class="p">(</span><span class="n">specific_atten</span><span class="p">,</span> <span class="n">path_length</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Total path attenuation for a path close to the ground (i.e., one layer),</span>
 <span class="sd">    according to `ITU-R P.676-11</span>
@@ -2138,7 +2117,7 @@ document.write(`
     <span class="n">heights</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">atm_layers</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">profile_func</span><span class="p">,</span> <span class="n">heights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">atm_layers</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">profile_func</span><span class="p">,</span> <span class="n">heights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate physical parameters for atmospheric layers to be used with</span>
 <span class="sd">    `~pycraf.atm.atten_slant_annex1` and other functions of the `~pycraf.atm`</span>
@@ -2313,7 +2292,7 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">_raytrace_path</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_raytrace_path</span><span class="p">(</span>
         <span class="n">elev</span><span class="p">,</span> <span class="n">obs_alt</span><span class="p">,</span>
         <span class="n">atm_layers_cache</span><span class="p">,</span>
         <span class="n">max_arc_length</span><span class="o">=</span><span class="mf">180.</span><span class="p">,</span>
@@ -2358,7 +2337,7 @@ document.write(`
     <span class="n">max_path_length</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">raytrace_path</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">raytrace_path</span><span class="p">(</span>
         <span class="n">elevation</span><span class="p">,</span> <span class="n">obs_alt</span><span class="p">,</span>
         <span class="n">atm_layers_cache</span><span class="p">,</span>
         <span class="n">max_arc_length</span><span class="o">=</span><span class="mf">180.</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span>
@@ -2480,7 +2459,7 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">_path_endpoint</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_path_endpoint</span><span class="p">(</span>
         <span class="n">elev</span><span class="p">,</span> <span class="n">obs_alt</span><span class="p">,</span>
         <span class="n">atm_layers_cache</span><span class="p">,</span>
         <span class="n">max_arc_length</span><span class="o">=</span><span class="mf">180.</span><span class="p">,</span>
@@ -2532,7 +2511,7 @@ document.write(`
     <span class="n">max_path_length</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">path_endpoint</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">path_endpoint</span><span class="p">(</span>
         <span class="n">elevation</span><span class="p">,</span> <span class="n">obs_alt</span><span class="p">,</span>
         <span class="n">atm_layers_cache</span><span class="p">,</span>
         <span class="n">max_arc_length</span><span class="o">=</span><span class="mf">180.</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span>
@@ -2625,7 +2604,7 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">_find_elevation</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_find_elevation</span><span class="p">(</span>
         <span class="n">obs_alt</span><span class="p">,</span> <span class="n">target_alt</span><span class="p">,</span> <span class="n">arc_length</span><span class="p">,</span>
         <span class="n">atm_layers_cache</span><span class="p">,</span>
         <span class="n">niter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">stepsize</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
@@ -2638,7 +2617,7 @@ document.write(`
     <span class="n">space_i</span> <span class="o">=</span> <span class="n">atm_layers_cache</span><span class="p">[</span><span class="s1">&#39;space_i&#39;</span><span class="p">]</span>
     <span class="n">max_i</span> <span class="o">=</span> <span class="n">atm_layers_cache</span><span class="p">[</span><span class="s1">&#39;max_i&#39;</span><span class="p">]</span>
 
-    <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">basinhopping</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">basinhopping</span>
 
     <span class="c1"># estimate elev_init (from path geometry neglecting refraction)</span>
     <span class="c1"># why is the formular from cyprop.pyx not working???</span>
@@ -2671,7 +2650,7 @@ document.write(`
     <span class="n">obs_alt</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="mf">1.e-9</span><span class="p">,</span> <span class="n">obs_alt</span><span class="p">])</span>
     <span class="n">start_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">heights</span><span class="p">,</span> <span class="n">obs_alt</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 
         <span class="n">elev</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="n">path_endpoint_cython</span><span class="p">(</span>
@@ -2691,7 +2670,7 @@ document.write(`
 
         <span class="k">return</span> <span class="n">h_n</span><span class="p">,</span> <span class="n">arc_len</span><span class="p">,</span> <span class="n">a_tot</span>
 
-    <span class="k">def</span> <span class="nf">opt_func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">opt_func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 
         <span class="n">elev</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">elev</span> <span class="o">&gt;</span> <span class="mi">90</span><span class="p">:</span>
@@ -2735,7 +2714,7 @@ document.write(`
     <span class="n">arc_length</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="mf">180.</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">)</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">find_elevation</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_elevation</span><span class="p">(</span>
         <span class="n">obs_alt</span><span class="p">,</span> <span class="n">target_alt</span><span class="p">,</span> <span class="n">arc_length</span><span class="p">,</span>
         <span class="n">atm_layers_cache</span><span class="p">,</span>
         <span class="n">niter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">stepsize</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
@@ -2797,7 +2776,7 @@ document.write(`
     <span class="n">max_path_length</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">)</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">atten_slant_annex1</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">atten_slant_annex1</span><span class="p">(</span>
         <span class="n">elevation</span><span class="p">,</span> <span class="n">obs_alt</span><span class="p">,</span> <span class="n">atm_layers_dict</span><span class="p">,</span> <span class="n">do_tebb</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">t_bg</span><span class="o">=</span><span class="mf">2.73</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">,</span>
         <span class="n">max_arc_length</span><span class="o">=</span><span class="mf">180.</span> <span class="o">*</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span>
@@ -2907,7 +2886,7 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">_phi_helper</span><span class="p">(</span><span class="n">r_p</span><span class="p">,</span> <span class="n">r_t</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_phi_helper</span><span class="p">(</span><span class="n">r_p</span><span class="p">,</span> <span class="n">r_t</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Helper function according to `ITU-R P.676-10</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.676-10-201309-S/en&gt;`_ Eq (22u).</span>
@@ -2943,7 +2922,7 @@ document.write(`
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_atten_specific_annex2</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">rho_w</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_atten_specific_annex2</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">rho_w</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
 
     <span class="n">freq_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">)</span>
 
@@ -3028,11 +3007,11 @@ document.write(`
 
     <span class="n">f</span> <span class="o">=</span> <span class="n">_freq</span>
 
-    <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">f_i</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">g</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">f_i</span><span class="p">):</span>
 
         <span class="k">return</span> <span class="mf">1.</span> <span class="o">+</span> <span class="p">((</span><span class="n">f</span> <span class="o">-</span> <span class="n">f_i</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">f</span> <span class="o">+</span> <span class="n">f_i</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
 
-    <span class="k">def</span> <span class="nf">_helper</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">eta</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">do_g</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_helper</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">eta</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">do_g</span><span class="p">):</span>
 
         <span class="k">return</span> <span class="p">(</span>
             <span class="n">a</span> <span class="o">*</span> <span class="n">eta</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">r_t</span><span class="p">))</span> <span class="o">/</span>
@@ -3068,7 +3047,7 @@ document.write(`
     <span class="n">temp</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">K</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">,</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB</span> <span class="o">/</span> <span class="n">apu</span><span class="o">.</span><span class="n">km</span><span class="p">)</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">atten_specific_annex2</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">rho_w</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">atten_specific_annex2</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">rho_w</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Specific (one layer) atmospheric attenuation based on a simplified</span>
 <span class="sd">    algorithm according to `ITU-R P.676-10</span>
@@ -3110,7 +3089,7 @@ document.write(`
     <span class="n">press</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">km</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">equivalent_height_dry</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">press</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">equivalent_height_dry</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">press</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Equivalent height for dry air according to `ITU-R P.676-10</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.676-10-201309-S/en&gt;`_, Annex 2.2.</span>
@@ -3160,7 +3139,7 @@ document.write(`
     <span class="n">press</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e-30</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">hPa</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">apu</span><span class="o">.</span><span class="n">km</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">equivalent_height_wet</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">press</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">equivalent_height_wet</span><span class="p">(</span><span class="n">freq_grid</span><span class="p">,</span> <span class="n">press</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Equivalent height for wet air according to `ITU-R P.676-10</span>
 <span class="sd">    &lt;https://www.itu.int/rec/R-REC-P.676-10-201309-S/en&gt;`_, Annex 2.2.</span>
@@ -3184,7 +3163,7 @@ document.write(`
 
     <span class="n">s_w</span> <span class="o">=</span> <span class="mf">1.013</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">8.6</span> <span class="o">*</span> <span class="p">(</span><span class="n">r_p</span> <span class="o">-</span> <span class="mf">0.57</span><span class="p">)))</span>
 
-    <span class="k">def</span> <span class="nf">_helper</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_helper</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">s_w</span> <span class="o">/</span> <span class="p">((</span><span class="n">f</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">c</span> <span class="o">*</span> <span class="n">s_w</span><span class="p">)</span>
 
     <span class="n">h_w</span> <span class="o">=</span> <span class="mf">1.66</span> <span class="o">*</span> <span class="p">(</span>
@@ -3208,7 +3187,7 @@ document.write(`
     <span class="n">elev</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">apu</span><span class="o">.</span><span class="n">deg</span><span class="p">),</span>
     <span class="n">strip_input_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_unit</span><span class="o">=</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB</span>
     <span class="p">)</span>
-<span class="k">def</span> <span class="nf">atten_slant_annex2</span><span class="p">(</span><span class="n">atten_dry</span><span class="p">,</span> <span class="n">atten_wet</span><span class="p">,</span> <span class="n">h_dry</span><span class="p">,</span> <span class="n">h_wet</span><span class="p">,</span> <span class="n">elev</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">atten_slant_annex2</span><span class="p">(</span><span class="n">atten_dry</span><span class="p">,</span> <span class="n">atten_wet</span><span class="p">,</span> <span class="n">h_dry</span><span class="p">,</span> <span class="n">h_wet</span><span class="p">,</span> <span class="n">elev</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Simple path attenuation for slant path through full atmosphere according to</span>
 <span class="sd">    `ITU-R P.676-10 &lt;https://www.itu.int/rec/R-REC-P.676-10-201309-S/en&gt;`_,</span>
@@ -3251,7 +3230,7 @@ document.write(`
               
               
               
-                <footer class="prev-next-footer">
+                <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
 </div>
@@ -3260,8 +3239,6 @@ document.write(`
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"></div>
               
             
           </div>
@@ -3274,8 +3251,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -3286,7 +3263,7 @@ document.write(`
 
   <p class="copyright">
     
-      © Copyright 2015–2024, Benjamin Winkel.
+      © Copyright 2015–2025, Benjamin Winkel.
       <br/>
     
   </p>
@@ -3295,7 +3272,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     <br/>
   </p>
 </div>
@@ -3308,7 +3285,8 @@ document.write(`
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>
