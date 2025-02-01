@@ -373,7 +373,8 @@ def path_helper_cython(
     # _beta_n[counter - 1] = NAN
 
     return (
-        np.core.records.fromarrays(
+        # np.core.records.fromarrays(
+        np.rec.fromarrays(
             [
                 A_N[:counter],
                 R_N[:counter],

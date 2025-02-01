@@ -8,7 +8,7 @@ __all__ = ['HistogramSampler']
 
 
 class HistogramSampler(object):
-    '''
+    """
     Sampler to get random values obeying a discrete(!) density distribution.
 
     With this class, one can use discrete densities (think of them as
@@ -71,13 +71,28 @@ class HistogramSampler(object):
         >>> with NumpyRNGContext(1):
         ...     indices = my_sampler.sample(10)
         >>> print(list(zip(*indices)))
-        [(7, 8), (9, 6), (1, 7), (7, 5), (6, 4),
-         (5, 7), (6, 7), (7, 6), (7, 8), (8, 6)]
+        [(np.int64(7), np.int64(8)),
+         (np.int64(9), np.int64(6)),
+         (np.int64(1), np.int64(7)),
+         (np.int64(7), np.int64(5)),
+         (np.int64(6), np.int64(4)),
+         (np.int64(5), np.int64(7)),
+         (np.int64(6), np.int64(7)),
+         (np.int64(7), np.int64(6)),
+         (np.int64(7), np.int64(8)),
+         (np.int64(8), np.int64(6))]
 
         >>> print(list(zip(xmids[indices[0]], ymids[indices[1]])))  # doctest: +FLOAT_CMP
-        [(-0.25, 2.5), (0.75, 0.5), (-3.25, 1.5), (-0.25, -0.5),
-         (-0.75, -1.5), (-1.25, 1.5), (-0.75, 1.5), (-0.25, 0.5),
-         (-0.25, 2.5), (0.25, 0.5)]
+        [(np.float64(-0.25), np.float64(2.5)),
+         (np.float64(0.75), np.float64(0.5)),
+         (np.float64(-3.25), np.float64(1.5)),
+         (np.float64(-0.25), np.float64(-0.5)),
+         (np.float64(-0.75), np.float64(-1.5)),
+         (np.float64(-1.25), np.float64(1.5)),
+         (np.float64(-0.75), np.float64(1.5)),
+         (np.float64(-0.25), np.float64(0.5)),
+         (np.float64(-0.25), np.float64(2.5)),
+         (np.float64(0.25), np.float64(0.5))]
 
     It is also easily possible to apply weights. Just assume
     that one bin was observed exceptionally frequent::
@@ -94,9 +109,16 @@ class HistogramSampler(object):
         >>> with NumpyRNGContext(1):
         ...     indices = my_sampler.sample(10)
         >>> print(list(zip(xmids[indices[0]], ymids[indices[1]])))  # doctest: +FLOAT_CMP
-        [(-1.75, 4.5), (-0.25, 3.5), (-3.25, 1.5), (-1.75, 4.5),
-         (-1.75, 4.5), (-1.75, 4.5), (-1.75, 4.5), (-1.75, 4.5),
-         (-1.75, 4.5), (-1.25, 0.5)]
+        [(np.float64(-1.75), np.float64(4.5)),
+         (np.float64(-0.25), np.float64(3.5)),
+         (np.float64(-3.25), np.float64(1.5)),
+         (np.float64(-1.75), np.float64(4.5)),
+         (np.float64(-1.75), np.float64(4.5)),
+         (np.float64(-1.75), np.float64(4.5)),
+         (np.float64(-1.75), np.float64(4.5)),
+         (np.float64(-1.75), np.float64(4.5)),
+         (np.float64(-1.75), np.float64(4.5)),
+         (np.float64(-1.25), np.float64(0.5))]
 
     As can be seen, the value `((1.25, -1.5))` is now exceptionally
     often sampled from the distribution.
@@ -131,7 +153,7 @@ class HistogramSampler(object):
     multi-variate data and allows one to sample from the KDE PDF
     (see also the examples). Unfortunately, one cannot work with
     weighted data.
-    '''
+    """
 
     def __init__(self, histvals):
 

@@ -38,34 +38,26 @@ jobs:
 
   strategy:
     matrix:
-      # linux38:
+    # Note: numpy ABI compatibility is not an issue anymore; can now use
+    # the latest numpy version for each python version and it will
+    # be backwards compatible
+      # linux39:
       #   imageName: 'ubuntu-latest'
-      #   python.version: '3.8'
-      #   astropy.version: '==4'
-      #   py_whl: cp38-
-      #   numpy.version: '1.18.1'
-      #   pyproj.version: '>=2.2,<3'
-      #   pytest.version: '<6'
-      #   doctestplus.version: '<0.6.1'
-      #   # extra.packages: 'sysroot_linux-64 # "jinja2<3.1"'
-      #   extra.packages: 'gcc_linux-64 sysroot_linux-64 "jinja2<3.1"'
-      linux39:
-        imageName: 'ubuntu-latest'
-        python.version: '3.9'
-        py_whl: cp39-
-        numpy.version: '1.20.3'
-        extra.packages: 'gcc_linux-64 sysroot_linux-64'
+      #   python.version: '3.9'
+      #   py_whl: cp39-
+      #   numpy.version: '=2.1'
+      #   extra.packages: 'gcc_linux-64 sysroot_linux-64'
       linux310:
         imageName: 'ubuntu-latest'
         python.version: '3.10'
         py_whl: cp310-
-        numpy.version: '1.21.6'
+        numpy.version: '=2.1'
         extra.packages: 'gcc_linux-64 sysroot_linux-64'
       linux311:
         imageName: 'ubuntu-latest'
         python.version: '3.11'
         py_whl: cp311-
-        numpy.version: '1.23.4'
+        numpy.version: '=2.2'
         publish.docs: ${{ or(eq(variables['is.master'], true), eq(variables['is.tag'], true)) }}
         ${{ if eq(variables['is.tag'], true) }}:
           docs.target: '.'
@@ -80,67 +72,66 @@ jobs:
         imageName: 'ubuntu-latest'
         python.version: '3.12'
         py_whl: cp312-
-        numpy.version: '1.26.4'
+        numpy.version: '>=2.2'  # use latest numpy version
         extra.packages: 'gcc_linux-64 sysroot_linux-64'
-      # mac38:
-      #   imageName: 'macos-latest'
-      #   python.version: '3.8'
-      #   numpy.version: '1.18.1'
-      #   astropy.version: '==4'
-      #   pyproj.version: '>=2.2,<3'
-      #   extra.packages: 'compilers llvm-openmp clang_osx-64 openblas==0.3.3'  #  clangxx_osx-64
-      # mac39:
-      #   imageName: 'macos-latest'
-      #   python.version: '3.9'
-      #   numpy.version: '1.20.3'
-      #   extra.packages: 'compilers llvm-openmp clang_osx-64'  #  clangxx_osx-64
       mac310:
-        imageName: 'macos-latest'
+        imageName: 'macos-latest'  # $CONDA variable not set???
         python.version: '3.10'
-        numpy.version: '1.21.6'
+        numpy.version: '=2.1'
         extra.packages: 'compilers llvm-openmp clang_osx-64'  #  clangxx_osx-64
       mac311:
         imageName: 'macos-latest'
         python.version: '3.11'
-        numpy.version: '1.23.4'
+        numpy.version: '=2.2'
         extra.packages: 'compilers llvm-openmp clang_osx-64'  #  clangxx_osx-64
       mac312:
         imageName: 'macos-latest'
         python.version: '3.12'
-        numpy.version: '1.26.4'
+        numpy.version: '>=2.2'
         extra.packages: 'compilers llvm-openmp clang_osx-64'  #  clangxx_osx-64
-      win38:
-        imageName: 'windows-latest'
-        python.version: '3.8'
-        numpy.version: '1.18.1'
-        astropy.version: '==4'
-        pyproj.version: '>=2.2,<3'
-      win39:
-        imageName: 'windows-latest'
-        python.version: '3.9'
-        numpy.version: '1.20.3'
+      # win39:
+      #   imageName: 'windows-latest'
+      #   python.version: '3.9'
+      #   numpy.version: '=2.1'
       win310:
         imageName: 'windows-latest'
         python.version: '3.10'
-        numpy.version: '1.21.6'
+        numpy.version: '=2.1'
       win311:
         imageName: 'windows-latest'
         python.version: '3.11'
-        numpy.version: '1.23.4'
+        numpy.version: '=2.2'
       win312:
         imageName: 'windows-latest'
         python.version: '3.12'
-        numpy.version: '1.26.4'
+        numpy.version: '>=2.2'
 
   pool:
     vmImage: $(imageName)
 
   steps:
 
+  # miniconda was removed from macos images...
+  # - bash: |
+  #     env
+  #     echo "USER" $USER
+  #     echo "CONDA" $CONDA
+  #     echo "sudo chown -R $USER $CONDA"
+  #     sudo chown -R $USER $CONDA
+  #   displayName: Fix a conda bug on MacOS
+  #   condition: startsWith(variables['Agent.OS'], 'Darwin')
+
   - bash: |
-      sudo chown -R $USER $CONDA
-    displayName: Fix a conda bug on MacOS
+      mkdir -p ~/miniconda && cd ~/miniconda
+      curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh" && cd ..
+      ls ~/miniconda
+      bash ~/miniconda/Miniforge3-$(uname)-$(uname -m).sh -b -u -p ~/miniconda
+      rm ~/miniconda/miniconda.sh
+      ~/miniconda/bin/conda init bash
+      echo "##vso[task.setvariable variable=CONDA]~/miniconda/"
+    displayName: Install miniconda in runner
     condition: startsWith(variables['Agent.OS'], 'Darwin')
+
 
   # see https://github.com/conda-org/conda/issues/488
   # and https://github.com/MPAS-Dev/compass/pull/320
@@ -211,8 +202,8 @@ jobs:
   # for some reason!? therefore, we add it here (should also be faster than
   # pip installation)
   - script: |
-      $(conda.activate) pycraf-env
-      conda create --yes --quiet -c conda-forge -n pycraf-env python=$(python.version) "astropy$(astropy.version)" build cython extension-helpers "h5py>=3.6" hypothesis matplotlib-base numpy==$(numpy.version) pip "pyproj$(pyproj.version)" "pytest$(pytest.version)" pytest-astropy pytest-doctestplus pytest-remotedata rasterio scipy setuptools setuptools-scm "sgp4>2" twine wheel $(extra.packages)
+      # $(conda.activate) pycraf-env
+      conda create --yes --quiet -c conda-forge -n pycraf-env python=$(python.version) "astropy$(astropy.version)" cython extension-helpers "h5py>=3.6" hypothesis matplotlib-base numpy$(numpy.version) pip "pyproj$(pyproj.version)" "pytest$(pytest.version)" pytest-astropy pytest-doctestplus pytest-remotedata python-build rasterio scipy setuptools setuptools-scm "sgp4>2" twine wheel $(extra.packages)
       conda list
     displayName: Install Anaconda packages
 
@@ -333,7 +324,7 @@ jobs:
   - script: |
       $(conda.activate) pycraf-env
       ls dist/*.tar.gz
-      python -m twine upload -r "pypi_pycraf" --config-file $(PYPIRC_PATH) dist/*.tar.gz
+      python -m twine upload -r "pypi_pycraf" --skip-existing --config-file $(PYPIRC_PATH) dist/*.tar.gz
     displayName: Upload tarball
     condition: and(succeeded(), eq(variables['publish.tarball'], true))
 

@@ -297,6 +297,15 @@ def regrid_from_geotiff(geotiff, lons, lats, band=1, return_raw=False):
     # slightly enlarge box to avoid edge effects
     col_off, row_off = xmin - 5, ymin - 5
     col_width, row_width = xmax - xmin + 10, ymax - ymin + 10
+    # actual dataset may be smaller, though
+    gsh = geotiff.shape
+    col_off = max(0, col_off)
+    row_off = max(0, row_off)
+    col_width = min(col_width, gsh[1] - col_off)
+    row_width = min(row_width, gsh[0] - row_off)
+    if col_width <= 0 or row_width <= 0:
+        raise ValueError('Requested region outside geotiff area.')
+
     window = rio.windows.Window(col_off, row_off, col_width, row_width)
 
     geo_data = geotiff.read(band, window=window)
@@ -308,7 +317,8 @@ def regrid_from_geotiff(geotiff, lons, lats, band=1, return_raw=False):
     geo_interp = RegularGridInterpolator(
         (np.arange(col_width), np.arange(row_width)),
         geo_data.T,
-        method='nearest', bounds_error=True,
+        # method='nearest', bounds_error=True,
+        method='nearest', bounds_error=False,
         )
 
     geo_data_regridded = geo_interp((geo_x - col_off, geo_y - row_off))
