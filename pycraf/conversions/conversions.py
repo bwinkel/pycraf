@@ -57,6 +57,7 @@ dB_Jy_Hz = apu.dB(apu.Jy * apu.Hz)
 dBm = dB_mW = apu.dB(apu.mW)
 dBm_MHz = dB_mW_MHz = apu.dB(apu.mW / apu.MHz)
 dB_uV_m = apu.dB(apu.uV ** 2 / apu.m ** 2)
+dB_uA_m = apu.dB(apu.uA ** 2 / apu.m ** 2)
 dB_1_m = apu.dB(1. / apu.m)  # for antenna factor
 
 # Astropy.unit equivalency between linear and logscale field strength
@@ -94,8 +95,29 @@ def efield_equivalency():
         )]
 
 
+def magfield_equivalency():
+    '''
+    `~astropy.units` equivalency to handle log-scale magnetic field units.
+
+    For magnetic fields, the Decibel scale is define via the amplitude
+    of the field squared, :math:`{\\vert\\vec B\\vert}^2` which is
+    proportional to the power.
+
+    Returns
+    -------
+    equivalency : list
+        The returned list contains one tuple with the equivalency.
+    '''
+    return [(
+        apu.uA / apu.m,
+        (apu.uA / apu.m) ** 2,
+        lambda x: x ** 2,
+        lambda x: x ** 0.5
+        )]
+
 # apu.add_enabled_equivalencies(apu.logarithmic())
 apu.add_enabled_equivalencies(efield_equivalency())
+apu.add_enabled_equivalencies(magfield_equivalency())
 
 # define some useful constants
 MU0_VALUE = 1.2566370614359173e-06
