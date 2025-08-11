@@ -29,7 +29,7 @@ jobs:
     plat: manylinux_2_28_x86_64
     image: quay.io/pypa/manylinux_2_28_x86_64
     python.architecture: x64
-    sphinx.version: '>=3.0'
+    sphinx.version: '>7.1'
     astropy.version: ''
     pyproj.version: ''
     pytest.version: ''
@@ -245,7 +245,7 @@ jobs:
       cd docs
       sphinx-build . _build/html -b html
     displayName: Make docs
-    condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], '3.11'))
+    # condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'), eq(variables['python.version'], '3.11'))
     # condition: and(succeeded(), startsWith(variables['Agent.OS'], 'Linux'))
 
   - task: DownloadSecureFile@1

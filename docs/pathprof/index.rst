@@ -331,8 +331,8 @@ it's different:
     ax = fig.add_axes((0.1, 0.1, 0.8, 0.8))
     cax = fig.add_axes((0.9, 0.1, 0.02, 0.8))
     sc = ax.scatter(
-        lons.to(u.deg), lats.to(u.deg),
-        c=ang_dist.to(u.deg), cmap='viridis'
+        lons.to_value(u.deg), lats.to_value(u.deg),
+        c=ang_dist.to_value(u.deg), cmap='viridis'
         )
     cbar = plt.colorbar(sc, cax=cax)
     cbar.set_label('Angular distance [deg]')

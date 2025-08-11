@@ -94,7 +94,7 @@ def building_entry_loss(
         prob,
         building_type,
         ):
-    '''
+    """
     Calculate building entry loss (BEL).
 
     The BEL model is according to `Rec. ITU-R P.2109-1
@@ -127,6 +127,7 @@ def building_entry_loss(
         :include-source:
 
         import matplotlib.pyplot as plt
+        import numpy as np
         from pycraf import conversions as cnv
         from pycraf import pathprof
         from astropy import units as u
@@ -158,6 +159,7 @@ def building_entry_loss(
         :include-source:
 
         import matplotlib.pyplot as plt
+        import numpy as np
         from pycraf import conversions as cnv
         from pycraf import pathprof
         from astropy import units as u
@@ -200,7 +202,7 @@ def building_entry_loss(
       will therefore be lower than `L_bel`. The smaller `prob`,
       the smaller the returned `L_bel`, i.e., low BELs
       are more unlikely.
-    '''
+    """
 
     return _building_entry_loss_p2109(
         freq,
