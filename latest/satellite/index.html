@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Satellites (pycraf.satellite) &#8212; pycraf v2.0.3.dev4</title>
+    <title>Satellites (pycraf.satellite) &#8212; pycraf v2.1.1.dev1</title>
   
   
   
@@ -45,7 +45,7 @@
 
     <script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=85135d70"></script>
+    <script src="../_static/documentation_options.js?v=e3254a9f"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -58,8 +58,8 @@
     <link rel="prev" title="ESRI" href="../api/pycraf.geospatial.ESRI.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.0" />
-    <meta name="docbuild:last-update" content="01 Feb 2025"/>
+  <meta name="docsearch:version" content="2.1" />
+    <meta name="docbuild:last-update" content="11 Aug 2025"/>
   </head>
   
   
@@ -121,7 +121,7 @@
   
   
   
-    <p class="title logo__title">pycraf v2.0.3.dev4</p>
+    <p class="title logo__title">pycraf v2.1.1.dev1</p>
   
 </a></div>
     
@@ -462,20 +462,20 @@ coordinates of the ISS at a given time, download the current TLE and do:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2010</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">57</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obstime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">Time</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">sat_obs</span><span class="o">.</span><span class="n">azel_from_sat</span><span class="p">(</span><span class="n">tle_string</span><span class="p">,</span> <span class="n">obstime</span><span class="p">)</span>  
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;az, el, dist: </span><span class="si">{:.1f}</span><span class="s1">, </span><span class="si">{:.1f}</span><span class="s1">, </span><span class="si">{:.0f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">dist</span><span class="p">))</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">sat_obs</span><span class="o">.</span><span class="n">azel_from_sat</span><span class="p">(</span><span class="n">tle_string</span><span class="p">,</span> <span class="n">obstime</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;az, el, dist: </span><span class="si">{:.1f}</span><span class="s1">, </span><span class="si">{:.1f}</span><span class="s1">, </span><span class="si">{:.0f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">dist</span><span class="p">))</span>
 <span class="go">az, el, dist: -165.5 deg, 7.4 deg, 1713 km</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># can also use arrays of obstime</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mjd</span> <span class="o">=</span> <span class="mf">55123.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.123</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">,</span> <span class="mf">50.3</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obstime2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">Time</span><span class="p">(</span><span class="n">mjd</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;mjd&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">sat_obs</span><span class="o">.</span><span class="n">azel_from_sat</span><span class="p">(</span><span class="n">tle_string</span><span class="p">,</span> <span class="n">obstime2</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">sat_obs</span><span class="o">.</span><span class="n">azel_from_sat</span><span class="p">(</span><span class="n">tle_string</span><span class="p">,</span> <span class="n">obstime2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">az</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">az</span>
 <span class="go">&lt;Quantity [  28.397, -143.170,  -6.974] deg&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">el</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">el</span>
 <span class="go">&lt;Quantity [-43.169, -21.468, -36.773] deg&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span>
 <span class="go">&lt;Quantity [ 9388.292, 5675.039, 8361.284] km&gt;</span>
 </pre></div>
 </div>
@@ -502,9 +502,9 @@ be processed:</p>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">jd</span><span class="p">,</span> <span class="n">fr</span> <span class="o">=</span> <span class="n">jday</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">19</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">err_code</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">velocity</span> <span class="o">=</span> <span class="n">sat</span><span class="o">.</span><span class="n">sgp4</span><span class="p">(</span><span class="n">jd</span><span class="p">,</span> <span class="n">fr</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">position</span>  <span class="c1"># km  </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">position</span>  <span class="c1"># km</span>
 <span class="go">(3289.302521216188, 3816.880925531413, 4443.175627001508)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">velocity</span>  <span class="c1"># km/s  </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">velocity</span>  <span class="c1"># km/s</span>
 <span class="go">(-2.958995807371371, 6.335950621185331, -3.241778555003016)</span>
 </pre></div>
 </div>
@@ -529,7 +529,7 @@ string (TLE).</p>
 <a class="reference external" href="https://pypi.python.org/pypi/sgp4/">sgp4 Python package</a>.</p>
 <section id="functions">
 <h4>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h4>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.satellite.get_sat.html#pycraf.satellite.get_sat" title="pycraf.satellite.get_sat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sat</span></code></a>(tle_string)</p></td>
 <td><p>Construct a satellite instance (<code class="xref py py-obj docutils literal notranslate"><span class="pre">sgp4.io.Satellite</span></code>) from TLE string.</p></td>
@@ -540,7 +540,7 @@ string (TLE).</p>
 </section>
 <section id="classes">
 <h4>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h4>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.satellite.SatelliteObserver.html#pycraf.satellite.SatelliteObserver" title="pycraf.satellite.SatelliteObserver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SatelliteObserver</span></code></a>(obs_location)</p></td>
 <td><p>Calculate position of a satellite relative to an observer on Earth.</p></td>
@@ -673,7 +673,7 @@ string (TLE).</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Conversions (pycraf.conversions) &#8212; pycraf v2.0.3.dev4</title>
+    <title>Conversions (pycraf.conversions) &#8212; pycraf v2.1.1.dev1</title>
   
   
   
@@ -45,7 +45,7 @@
 
     <script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=85135d70"></script>
+    <script src="../_static/documentation_options.js?v=e3254a9f"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -59,8 +59,8 @@
     <link rel="prev" title="User Documentation" href="../index_user_guide.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.0" />
-    <meta name="docbuild:last-update" content="01 Feb 2025"/>
+  <meta name="docsearch:version" content="2.1" />
+    <meta name="docbuild:last-update" content="11 Aug 2025"/>
   </head>
   
   
@@ -122,7 +122,7 @@
   
   
   
-    <p class="title logo__title">pycraf v2.0.3.dev4</p>
+    <p class="title logo__title">pycraf v2.1.1.dev1</p>
   
 </a></div>
     
@@ -448,14 +448,14 @@ Decibel units are defined (see <a class="reference internal" href="#reference-ap
 </pre></div>
 </div>
 <p>Because all function parameters and return values are Astropy Quantities
-(see <a class="reference external" href="https://docs.astropy.org/en/latest/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v7.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>), unit conversion is automatically performed:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">50</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span><span class="p">)</span>  
+(see <a class="reference external" href="https://docs.astropy.org/en/latest/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v7.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>), unit conversion is automatically performed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">50</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span><span class="p">)</span>
 <span class="go">&lt;Quantity 5.0 m2&gt;</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dimless</span><span class="p">)</span>
 <span class="go">&lt;Quantity 5.0 m2&gt;</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">km</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">percent</span><span class="p">)</span>
 <span class="go">&lt;Quantity 100000.0 m2&gt;</span>
 </pre></div>
 </div>
@@ -463,7 +463,7 @@ Decibel units are defined (see <a class="reference internal" href="#reference-ap
 <p class="admonition-title">Warning</p>
 <p>It is not possible to omit the unit, even if a quantity is dimensionless!</p>
 <p>pycraf would raise an exception if one tried:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>  
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">eff_from_geom_area</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
 <span class="gt">Traceback (most recent call last):</span>
 <span class="w">  </span><span class="c">...</span>
 <span class="gr">TypeError</span>: <span class="n">Argument &#39;eta_a&#39; to function &#39;eff_from_geom_area&#39; has no</span>
@@ -484,7 +484,7 @@ provided in the <a class="reference external" href="https://github.com/bwinkel/p
 <p>In the <a class="reference internal" href="#module-pycraf.conversions" title="pycraf.conversions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conversions</span></code></a> module, several Decibel units are defined
 that often occur in spectrum-management tasks. Examples are the
 <span class="math notranslate nohighlight">\(\mathrm{dB}\)</span> unit or <span class="math notranslate nohighlight">\(\mathrm{dBm}\equiv\mathrm{dB[mW]}\)</span>. In
-Python these are defined with the help of the <a class="reference external" href="https://docs.astropy.org/en/latest/units/ref_api.html#module-astropy.units" title="(in Astropy v7.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> package, e.g.:</p>
+Python these are defined with the help of the <a class="reference external" href="https://docs.astropy.org/en/latest/units/ref_api.html#module-astropy.units" title="(in Astropy v7.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> package, e.g.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">astropy</span><span class="w"> </span><span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dB_W</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">dB</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
@@ -500,19 +500,19 @@ special. Engineers will usually call this symbol
 it is the power of the electrical field which is referred to,
 which means that the amplitude of the E-field has to be squared.</p>
 <p>In fact, if one would omit the squaring from the definition, the unit
-would not work in the equations, because the <a class="reference external" href="https://docs.astropy.org/en/latest/units/ref_api.html#module-astropy.units" title="(in Astropy v7.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> framework
+would not work in the equations, because the <a class="reference external" href="https://docs.astropy.org/en/latest/units/ref_api.html#module-astropy.units" title="(in Astropy v7.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> framework
 would notice an inconsistency of the units.</p>
 </div>
 <p>Working with the Decibel units is easy:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pycraf</span><span class="w"> </span><span class="kn">import</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">power</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">power</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">power</span>
 <span class="go">&lt;Decibel 1.0 dB(W)&gt;</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">power</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">power</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
 <span class="go">&lt;Quantity 1.2589254117941673 W&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">power</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span><span class="p">))</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">power</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span><span class="p">))</span>
 <span class="go">1.2589254117941673 W</span>
 </pre></div>
 </div>
@@ -522,7 +522,7 @@ usual:</p>
 <span class="go">1.3 W</span>
 </pre></div>
 </div>
-<p>Astropy <a class="reference external" href="https://docs.astropy.org/en/latest/units/ref_api.html#module-astropy.units" title="(in Astropy v7.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> provide even some additional formatting options:</p>
+<p>Astropy <a class="reference external" href="https://docs.astropy.org/en/latest/units/ref_api.html#module-astropy.units" title="(in Astropy v7.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> provide even some additional formatting options:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0.value:.1f}</span><span class="s1"> </span><span class="si">{0.unit}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">power</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">W</span><span class="p">)))</span>
 <span class="go">1.3 W</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0.value:.1f}</span><span class="s1"> {0.unit:FITS}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">s</span><span class="p">))</span>
@@ -534,7 +534,7 @@ usual:</p>
 <p>Under some circumstances, the automatic conversion from the Decibel
 to the associated linear unit <a class="reference external" href="https://github.com/astropy/astropy/issues/6319">can fail</a>. This may get fixed in a future
 version of Astropy. It helps to construct the Quantities via
-multiplication, avoiding the <a class="reference external" href="https://docs.astropy.org/en/latest/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v7.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a> constructor, i.e.,
+multiplication, avoiding the <a class="reference external" href="https://docs.astropy.org/en/latest/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v7.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a> constructor, i.e.,
 <code class="code docutils literal notranslate"><span class="pre">1</span> <span class="pre">*</span> <span class="pre">cnv.dB</span></code> instead of <code class="code docutils literal notranslate"><span class="pre">u.Quantity(1,</span> <span class="pre">cnv.dB)</span></code>.</p>
 </div>
 </section>
@@ -543,7 +543,7 @@ multiplication, avoiding the <a class="reference external" href="https://docs.as
 <p>For a complete list of the functions provided in the <a class="reference internal" href="#module-pycraf.conversions" title="pycraf.conversions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conversions</span></code></a>
 package, see the <a class="reference internal" href="#reference-api">Reference/API</a> section below. All functions expect
 the parameters to have appropriate units, and will return a
-<a class="reference external" href="https://docs.astropy.org/en/latest/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v7.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, i.e. a value with a unit. This makes it sometimes
+<a class="reference external" href="https://docs.astropy.org/en/latest/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v7.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>, i.e. a value with a unit. This makes it sometimes
 a bit verbose to write code, but has the invaluable advantage that one
 avoids mistakes in the calculations that come from using the wrong units.</p>
 <p>For example, in the various ITU-R Recommendations, the described algorithms
@@ -584,27 +584,27 @@ with <span class="math notranslate nohighlight">\(R_0 \equiv \sqrt{\frac{\vareps
 <span class="gp">&gt;&gt;&gt; </span><span class="n">P_rx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBm</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">P_tx</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">cnv</span><span class="o">.</span><span class="n">dBm</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">efield_from_powerflux</span><span class="p">(</span><span class="n">S</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_uV_m</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">efield_from_powerflux</span><span class="p">(</span><span class="n">S</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_uV_m</span><span class="p">)</span>
 <span class="go">&lt;Decibel -44.23969433034762 dB(uV2 / m2)&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">powerflux_from_efield</span><span class="p">(</span><span class="n">E_rx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">powerflux_from_efield</span><span class="p">(</span><span class="n">E_rx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2</span><span class="p">)</span>
 <span class="go">&lt;Decibel -175.7603056696524 dB(W / m2)&gt;</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">ptx_from_powerflux</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">ptx_from_powerflux</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>
 <span class="go">&lt;Decibel -119.00790135977903 dB(W)&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">powerflux_from_ptx</span><span class="p">(</span><span class="n">P_tx</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">powerflux_from_ptx</span><span class="p">(</span><span class="n">P_tx</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2</span><span class="p">)</span>
 <span class="go">&lt;Decibel -80.99209864022097 dB(W / m2)&gt;</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">prx_from_powerflux</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">prx_from_powerflux</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>
 <span class="go">&lt;Decibel -221.4556845816624 dB(W)&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">powerflux_from_prx</span><span class="p">(</span><span class="n">P_rx</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">powerflux_from_prx</span><span class="p">(</span><span class="n">P_rx</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W_m2</span><span class="p">)</span>
 <span class="go">&lt;Decibel -8.544315418337588 dB(W / m2)&gt;</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">free_space_loss</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">free_space_loss</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>
 <span class="go">&lt;Decibel -132.44778322188336 dB&gt;</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">prx_from_ptx</span><span class="p">(</span><span class="n">P_tx</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">prx_from_ptx</span><span class="p">(</span><span class="n">P_tx</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>
 <span class="go">&lt;Decibel -112.44778322188337 dB(W)&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">ptx_from_prx</span><span class="p">(</span><span class="n">P_rx</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cnv</span><span class="o">.</span><span class="n">ptx_from_prx</span><span class="p">(</span><span class="n">P_rx</span><span class="p">,</span> <span class="n">G_tx</span><span class="p">,</span> <span class="n">G_rx</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cnv</span><span class="o">.</span><span class="n">dB_W</span><span class="p">)</span>
 <span class="go">&lt;Decibel 62.44778322188338 dB(W)&gt;</span>
 </pre></div>
 </div>
@@ -678,7 +678,7 @@ other. Furthermore, some convenience decibel-Scales are defined.</p>
 </table>
 </div>
 <p>u = <a class="reference external" href="http://docs.astropy.org/en/stable/units/index.html">astropy.units</a></p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.conversions.antfactor_from_gain.html#pycraf.conversions.antfactor_from_gain" title="pycraf.conversions.antfactor_from_gain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">antfactor_from_gain</span></code></a>(gain, freq, zi)</p></td>
 <td><p>Antenna factor from antenna gain, given frequency and impedance.</p></td>
@@ -693,7 +693,7 @@ other. Furthermore, some convenience decibel-Scales are defined.</p>
 <td><p>Effective antenna area from geometric area, given antenna efficiency.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.conversions.efield_equivalency.html#pycraf.conversions.efield_equivalency" title="pycraf.conversions.efield_equivalency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">efield_equivalency</span></code></a>()</p></td>
-<td><p><a class="reference external" href="https://docs.astropy.org/en/latest/units/ref_api.html#module-astropy.units" title="(in Astropy v7.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> equivalency to handle log-scale E-field units.</p></td>
+<td><p><a class="reference external" href="https://docs.astropy.org/en/latest/units/ref_api.html#module-astropy.units" title="(in Astropy v7.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a> equivalency to handle log-scale E-field units.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.conversions.efield_from_powerflux.html#pycraf.conversions.efield_from_powerflux" title="pycraf.conversions.efield_from_powerflux"><code class="xref py py-obj docutils literal notranslate"><span class="pre">efield_from_powerflux</span></code></a>(powerflux)</p></td>
 <td><p>E-field strength from power flux density.</p></td>
@@ -882,7 +882,7 @@ other. Furthermore, some convenience decibel-Scales are defined.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>

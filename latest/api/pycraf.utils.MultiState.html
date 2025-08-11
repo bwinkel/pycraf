@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>MultiState &#8212; pycraf v2.0.3.dev4</title>
+    <title>MultiState &#8212; pycraf v2.1.1.dev1</title>
   
   
   
@@ -45,7 +45,7 @@
 
     <script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=85135d70"></script>
+    <script src="../_static/documentation_options.js?v=e3254a9f"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -58,8 +58,8 @@
     <link rel="prev" title="ranged_quantity_input" href="pycraf.utils.ranged_quantity_input.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.0" />
-    <meta name="docbuild:last-update" content="01 Feb 2025"/>
+  <meta name="docsearch:version" content="2.1" />
+    <meta name="docbuild:last-update" content="11 Aug 2025"/>
   </head>
   
   
@@ -121,7 +121,7 @@
   
   
   
-    <p class="title logo__title">pycraf v2.0.3.dev4</p>
+    <p class="title logo__title">pycraf v2.1.1.dev1</p>
   
 </a></div>
     
@@ -420,7 +420,7 @@
 <h1>MultiState<a class="headerlink" href="#multistate" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pycraf.utils.MultiState">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycraf.utils.</span></span><span class="sig-name descname"><span class="pre">MultiState</span></span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycraf.utils.MultiState" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycraf.utils.</span></span><span class="sig-name descname"><span class="pre">MultiState</span></span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycraf.utils.MultiState" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Multi state subclasses are used to manage global items.</p>
 <p><a class="reference internal" href="#pycraf.utils.MultiState" title="pycraf.utils.MultiState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiState</span></code></a> is a so-called Singleton, which means that no instances
@@ -493,9 +493,9 @@ internal objects:</p>
 </pre></div>
 </div>
 <p class="rubric">Notes</p>
-<p>This class was adapted from the <a class="reference external" href="https://docs.astropy.org/en/latest/api/astropy.utils.state.ScienceState.html#astropy.utils.state.ScienceState" title="(in Astropy v7.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScienceState</span></code></a> class.</p>
+<p>This class was adapted from the <a class="reference external" href="https://docs.astropy.org/en/latest/api/astropy.utils.state.ScienceState.html#astropy.utils.state.ScienceState" title="(in Astropy v7.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScienceState</span></code></a> class.</p>
 <p class="rubric">Methods Summary</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pycraf.utils.MultiState.hook" title="pycraf.utils.MultiState.hook"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hook</span></code></a>(**kwargs)</p></td>
 <td><p>A hook which is called everytime when attributes are about to change.</p></td>
@@ -512,7 +512,7 @@ internal objects:</p>
 <p class="rubric">Methods Documentation</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pycraf.utils.MultiState.hook">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState.hook"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycraf.utils.MultiState.hook" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState.hook"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycraf.utils.MultiState.hook" title="Link to this definition">#</a></dt>
 <dd><p>A hook which is called everytime when attributes are about to change.</p>
 <p>You should override this method if you want to enable pre-processing
 or monitoring of your attributes. For example, one could use this
@@ -550,13 +550,13 @@ to react to attribute changes:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycraf.utils.MultiState.set">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_do_validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState.set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycraf.utils.MultiState.set" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">_do_validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState.set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycraf.utils.MultiState.set" title="Link to this definition">#</a></dt>
 <dd><p>Set the current science state value.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycraf.utils.MultiState.validate">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState.validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycraf.utils.MultiState.validate" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycraf/utils/multistate.html#MultiState.validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycraf.utils.MultiState.validate" title="Link to this definition">#</a></dt>
 <dd><p>Validate the keyword arguments and return the (converted) kwargs
 dictionary.</p>
 <p>You should override this method if you want to enable validation
@@ -672,7 +672,7 @@ take care of by the <a class="reference internal" href="#pycraf.utils.MultiState
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>

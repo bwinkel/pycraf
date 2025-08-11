@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v2.0.3.dev4</title>
+    <title>Path attenuation, terrain data, and geodesics (pycraf.pathprof) &#8212; pycraf v2.1.1.dev1</title>
   
   
   
@@ -45,7 +45,7 @@
 
     <script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=85135d70"></script>
+    <script src="../_static/documentation_options.js?v=e3254a9f"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -59,8 +59,8 @@
     <link rel="prev" title="saturation_water_pressure" href="../api/pycraf.atm.saturation_water_pressure.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.0" />
-    <meta name="docbuild:last-update" content="01 Feb 2025"/>
+  <meta name="docsearch:version" content="2.1" />
+    <meta name="docbuild:last-update" content="11 Aug 2025"/>
   </head>
   
   
@@ -122,7 +122,7 @@
   
   
   
-    <p class="title logo__title">pycraf v2.0.3.dev4</p>
+    <p class="title logo__title">pycraf v2.1.1.dev1</p>
   
 </a></div>
     
@@ -539,7 +539,7 @@ one component:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pycraf</span><span class="w"> </span><span class="kn">import</span> <span class="n">pathprof</span><span class="p">,</span> <span class="n">conversions</span> <span class="k">as</span> <span class="n">cnv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">astropy</span><span class="w"> </span><span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pathprof</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pathprof</span><span class="o">.</span><span class="n">SrtmConf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s1">&#39;missing&#39;</span><span class="p">)</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">freq</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">GHz</span>
 
@@ -557,7 +557,7 @@ one component:</p>
 <span class="go"># clutter zones</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">zone_t</span><span class="p">,</span> <span class="n">zone_r</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">CLUTTER</span><span class="o">.</span><span class="n">URBAN</span><span class="p">,</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">CLUTTER</span><span class="o">.</span><span class="n">SUBURBAN</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pprop</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">PathProp</span><span class="p">(</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprop</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">PathProp</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">freq</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">lon_tx</span><span class="p">,</span> <span class="n">lat_tx</span><span class="p">,</span>
@@ -573,10 +573,10 @@ one component:</p>
 to create a new instance. This is, because, many member attributes are
 dependent on each other and by just changing one value one could easily create
 inconsistencies. It is easily possible to access the parameters:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">pprop</span><span class="p">))</span>  
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">pprop</span><span class="p">))</span>
 <span class="go">PathProp&lt;Freq: 1.000 GHz&gt;</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pprop</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pprop</span><span class="p">)</span>
 <span class="go">version        :           16 (P.452 version; 14 or 16)</span>
 <span class="go">freq           :     1.000000 GHz</span>
 <span class="go">wavelen        :     0.299792 m</span>
@@ -601,14 +601,14 @@ inconsistencies. It is easily possible to access the parameters:</p>
 <span class="go">...</span>
 
 <span class="go"># path elevation angles as seen from Tx, Rx</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.3f}</span><span class="s1"> </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pprop</span><span class="o">.</span><span class="n">eps_pt</span><span class="p">,</span> <span class="n">pprop</span><span class="o">.</span><span class="n">eps_pr</span><span class="p">))</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.3f}</span><span class="s1"> </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pprop</span><span class="o">.</span><span class="n">eps_pt</span><span class="p">,</span> <span class="n">pprop</span><span class="o">.</span><span class="n">eps_pr</span><span class="p">))</span>
 <span class="go">4.530 deg 1.883 deg</span>
 </pre></div>
 </div>
 <p>With the PathProp object, it is now just one function call to get the path
 loss:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tot_loss</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">loss_complete</span><span class="p">(</span><span class="n">pprop</span><span class="p">,</span> <span class="n">G_t</span><span class="p">,</span> <span class="n">G_r</span><span class="p">)</span>  
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;L_b0p:   </span><span class="si">{:5.2f}</span><span class="s1"> - Free-space loss</span><span class="se">\n</span><span class="s1">&#39;</span>  
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tot_loss</span> <span class="o">=</span> <span class="n">pathprof</span><span class="o">.</span><span class="n">loss_complete</span><span class="p">(</span><span class="n">pprop</span><span class="p">,</span> <span class="n">G_t</span><span class="p">,</span> <span class="n">G_r</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;L_b0p:   </span><span class="si">{:5.2f}</span><span class="s1"> - Free-space loss</span><span class="se">\n</span><span class="s1">&#39;</span>
 <span class="gp">... </span>      <span class="s1">&#39;L_bd:     </span><span class="si">{:5.2f}</span><span class="s1"> - Basic transmission loss associated &#39;</span>
 <span class="gp">... </span>      <span class="s1">&#39;with diffraction</span><span class="se">\n</span><span class="s1">&#39;</span>
 <span class="gp">... </span>      <span class="s1">&#39;L_bs:     </span><span class="si">{:5.2f}</span><span class="s1"> - Tropospheric scatter loss</span><span class="se">\n</span><span class="s1">&#39;</span>
@@ -692,7 +692,7 @@ to produce terrain maps of a region:</p>
 <figure class="align-default">
 <img alt="../_images/index-21.png" class="plot-directive" src="../_images/index-21.png" />
 </figure>
-<p>Here, we made use of a special <a class="reference external" href="https://matplotlib.org/stable/index.html#module-matplotlib" title="(in Matplotlib v3.10.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matplotlib</span></code></a> colormap, which can be produced
+<p>Here, we made use of a special <a class="reference external" href="https://matplotlib.org/stable/index.html#module-matplotlib" title="(in Matplotlib v3.10.5)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matplotlib</span></code></a> colormap, which can be produced
 using <a class="reference internal" href="../api/pycraf.pathprof.terrain_cmap_factory.html#pycraf.pathprof.terrain_cmap_factory" title="pycraf.pathprof.terrain_cmap_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">terrain_cmap_factory</span></code></a>. It returns a <code class="xref py py-obj docutils literal notranslate"><span class="pre">cmap</span></code> and a
 <code class="xref py py-obj docutils literal notranslate"><span class="pre">norm</span></code>, which make it so that blue colors always start below a height of 0 m
 (i.e., the sea level).</p>
@@ -855,7 +855,7 @@ the loss-functions on it (see
 <p>Therefore, another convenience function is provided,
 <a class="reference internal" href="../api/pycraf.pathprof.losses_complete.html#pycraf.pathprof.losses_complete" title="pycraf.pathprof.losses_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losses_complete</span></code></a>, which has a very similar function
 signature as <a class="reference internal" href="../api/pycraf.pathprof.PathProp.html#pycraf.pathprof.PathProp" title="pycraf.pathprof.PathProp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PathProp</span></code></a>, but accepts <code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarrays</span></code>
-(or rather arrays of <a class="reference external" href="https://docs.astropy.org/en/latest/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v7.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>) for most of the inputs.
+(or rather arrays of <a class="reference external" href="https://docs.astropy.org/en/latest/api/astropy.units.Quantity.html#astropy.units.Quantity" title="(in Astropy v7.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantity</span></code></a>) for most of the inputs.
 Obviously, parameters such as Tx and Rx location cannot be arrays, and
 as a consequence, the terrain height profile can only be a 1D array.</p>
 <p>The following shows a typical use case (which is also contained in the
@@ -949,7 +949,7 @@ Geoid - so-called geodesics -, and perform path propagation/attenuation
 estimation.</p>
 <section id="functions">
 <h4>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h4>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.P_pusch.html#pycraf.pathprof.P_pusch" title="pycraf.pathprof.P_pusch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">P_pusch</span></code></a>(P_cmax, M_pusch, P_0_pusch, alpha, PL)</p></td>
 <td><p>Calculate power output level after UE power control.</p></td>
@@ -1068,12 +1068,12 @@ estimation.</p>
 </section>
 <section id="classes">
 <h4>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h4>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.BuildingType.html#pycraf.pathprof.BuildingType" title="pycraf.pathprof.BuildingType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BuildingType</span></code></a>(value[, names, module, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.BuildingType.html#pycraf.pathprof.BuildingType" title="pycraf.pathprof.BuildingType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BuildingType</span></code></a>(value)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.CLUTTER.html#pycraf.pathprof.CLUTTER" title="pycraf.pathprof.CLUTTER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CLUTTER</span></code></a>(value[, names, module, qualname, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/pycraf.pathprof.CLUTTER.html#pycraf.pathprof.CLUTTER" title="pycraf.pathprof.CLUTTER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CLUTTER</span></code></a>(value)</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.PathProp.html#pycraf.pathprof.PathProp" title="pycraf.pathprof.PathProp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PathProp</span></code></a>(freq, temperature, pressure, lon_t, ...)</p></td>
@@ -1100,7 +1100,7 @@ estimation.</p>
 </section>
 <section id="variables">
 <h4>Variables<a class="headerlink" href="#variables" title="Link to this heading">#</a></h4>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../api/pycraf.pathprof.A_BETA.html#pycraf.pathprof.A_BETA" title="pycraf.pathprof.A_BETA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">A_BETA</span></code></a></p></td>
 <td><p>Effective Earth radius for beta_0 percent</p></td>
@@ -1616,7 +1616,7 @@ of) Windows, only, and comes with a steep price tag.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>

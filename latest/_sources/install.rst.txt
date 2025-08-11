@@ -7,18 +7,18 @@ Requirements
 
 pycraf has the following strict requirements:
 
-- `Python <http://www.python.org/>`__ 3.9 or later
+- `Python <http://www.python.org/>`__ 3.10 or later
 
 - `setuptools <https://pythonhosted.org/setuptools/>`__: Used for the package
   installation.
 
-- `Cython <http://cython.org/>`__ 0.29 or later
+- `Cython <http://cython.org/>`__ 3.0 or later
 
-- `NumPy <http://www.numpy.org/>`__ 1.20 or later
+- `NumPy <http://www.numpy.org/>`__ 2.0 or later
 
 - `SciPy <https://scipy.org/>`__: 1.7 or later
 
-- `astropy <http://www.astropy.org/>`__: 4.0 or later
+- `astropy <http://www.astropy.org/>`__: 6.0 or later
 
 - `pytest <https://pypi.python.org/pypi/pytest>`__ 5.4 or later
 -
@@ -29,10 +29,10 @@ There are a few optional packages, which are necessary for some functionality:
 
 - `h5py <https://www.h5py.org/>`__ 3.3 or later: for caching.
 
-- `matplotlib <http://matplotlib.org/>`__ 3.4 or later: To provide plotting
+- `matplotlib <http://matplotlib.org/>`__ 3.6 or later: To provide plotting
   functionality that `~pycraf.pathprof` enhances.
 
-- `pyproj <https://pypi.python.org/pypi/pyproj>`__ 2.6 or later: This is a
+- `pyproj <https://pypi.python.org/pypi/pyproj>`__ 3.0 or later: This is a
   requirement for the `~pycraf.geospatial` sub-package.
 
 - `sgp4 <https://pypi.python.org/pypi/sgp4>`__ 2.0 or later: This is a
@@ -149,13 +149,13 @@ the system-wide Python installation.
     On Anaconda, the following would install all packages needed for
     properly working with the sources::
 
-        conda create -n pycraf3.10dev python=3.10 'astropy>=5' build cartopy
-        cython extension-helpers ffmpeg fiona geopandas h5py imagemagick ipdb
-        ipykernel ipywidgets "matplotlib>=3.3" "numpy==1.21.6" openpyxl osmnx
+        conda create -n pycraf3.11dev python=3.11 'astropy>=6' cartopy
+        cython extension-helpers ffmpeg fiona geopandas h5py ipdb
+        ipykernel ipywidgets "matplotlib>=3.6" "numpy>=2" openpyxl osmnx
         pandas pip "pyproj>=3" "pyqt>=5.11" pytest pytest-astropy
-        pytest-doctestplus pytest-qt pytest-remotedata rasterio reproject
-        scipy setuptools setuptools-scm "sgp4>2" shapely sphinx
-        sphinx-astropy tqdm twine wheel
+        pytest-doctestplus pytest-qt pytest-remotedata python-build
+        rasterio reproject scipy setuptools setuptools-scm "sgp4>2"
+        shapely sphinx sphinx-astropy tqdm twine wheel
 
 .. _windows_install:
 
