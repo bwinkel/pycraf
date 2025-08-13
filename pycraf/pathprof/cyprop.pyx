@@ -150,7 +150,7 @@ PARAMETERS_BASIC = [
     ]
 
 
-PARAMETERS_V16 = [
+PARAMETERS_V18 = PARAMETERS_V16 = [
     ('path_type_50', '12d', '(0 - LOS, 1 - transhoriz)', cnv.dimless),
     ('d_bp_50', '12.6f', 'km', apu.km),
     ('h_bp_50', '12.6f', 'm', apu.m),
@@ -190,6 +190,9 @@ PARAMETERS_V16 = [
     ('S_rim_zh_b0', '12.6f', 'm / km', apu.m / apu.km),
     ('S_tr_zh_b0', '12.6f', 'm / km', apu.m / apu.km),
     ]
+
+PARAMETERS_V18.append(('hS_tim_50', '12.6f', 'm / km', apu.m / apu.km))
+PARAMETERS_V18.append(('hS_tim_b0', '12.6f', 'm / km', apu.m / apu.km))
 
 
 PARAMETERS_V14 = [
@@ -286,6 +289,7 @@ cdef struct ppstruct:
     double nu_bull_50  # dimless
     int nu_bull_idx_50  # dimless
     double S_tim_50  # m / km
+    double hS_tim_50  # m / km  # version 18 only
     double S_rim_50  # m / km
     double S_tr_50  # m / km
 
@@ -296,6 +300,7 @@ cdef struct ppstruct:
     double nu_bull_b0  # dimless
     int nu_bull_idx_b0  # dimless
     double S_tim_b0  # m / km
+    double hS_tim_b0  # m / km  # version 18 only
     double S_rim_b0  # m / km
     double S_tr_b0  # m / km
     # double a_e_zh_50  # km
@@ -398,8 +403,11 @@ cdef class _PathProp(object):
             # override if you don't want builtin method:
             delta_N, N0,
             # override if you don't want builtin method:
-            hprof_dists, hprof_heights,
-            hprof_bearing, hprof_backbearing,
+            # hprof_dists, hprof_heights,
+            # hprof_bearing, hprof_backbearing,
+            hprof_data=None,
+            # allow to define a clutter height function for version 18
+            clutter_height_func=None,
             # set terrain heights to zero if desired
             # (only if hprof_xxx set to None aka automatic)
             bint generic_heights=False,
@@ -407,7 +415,12 @@ cdef class _PathProp(object):
             ):
 
         assert time_percent <= 50.
-        assert version == 14 or version == 16
+        assert version == 14 or version == 16 or version == 18
+        if version == 18 and hprof_data is None:
+            assert clutter_height_func is not None, (
+                'for version 18, a "clutter_height_func" must be provided, '
+                'alternatively, "hprof_data" can be used with "cl_heights"'
+            )
 
         assert zone_t >= -1 and zone_t <= 11
         assert zone_r >= -1 and zone_r <= 11
@@ -416,13 +429,18 @@ cdef class _PathProp(object):
             'delta_N and N0 must both be None or both be provided'
             )
 
-        assert (
-            (hprof_dists is None) == (hprof_heights is None) ==
-            (hprof_bearing is None) == (hprof_backbearing is None)
-            ), (
-                'hprof_dists, hprof_heights, bearing, and back_bearing '
-                'must all be None or all be provided'
-                )
+        if hprof_data is not None:
+            assert 'dists' in hprof_data, (
+                '"hprof_data" needs to include a "dists" array')
+            assert 'heights' in hprof_data, (
+                '"hprof_data" needs to include a "heights" array')
+            assert 'bearing' in hprof_data, (
+                '"hprof_data" needs to include a "bearing" array')
+            assert 'backbearing' in hprof_data, (
+                '"hprof_data" needs to include a "backbearing" array')
+            if version == 18:
+                assert 'cl_heights' in hprof_data, (
+                    '"hprof_data" needs to include a "cl_heights" array')
 
         self._pp.version = version
         self._pp.freq = freq
@@ -450,7 +468,7 @@ cdef class _PathProp(object):
         self._pp.time_percent = time_percent
         self._pp.polarization = polarization
 
-        if hprof_dists is None:
+        if hprof_data is None:
             (
                 lons,
                 lats,
@@ -466,13 +484,19 @@ cdef class _PathProp(object):
                     hprof_step,
                     generic_heights=generic_heights
                     )
+            if version == 18 and not generic_heights:
+                clheights = clutter_height_func(lons, lats)
+            else:
+                clheights = np.zeros_like(heights)
         else:
-            distances = hprof_dists.astype(np.float64, order='C', copy=False)
-            heights = hprof_heights.astype(np.float64, order='C', copy=False)
+            distances = hprof_data['dists'].astype(np.float64, order='C', copy=False)
+            heights = hprof_data['heights'].astype(np.float64, order='C', copy=False)
             hsize = distances.size
             distance = distances[hsize - 1]
-            bearing = hprof_bearing
-            back_bearing = hprof_backbearing
+            bearing = hprof_data['bearing']
+            back_bearing = hprof_data['backbearing']
+            if 'cl_heights' in hprof_data:
+                clheights = hprof_data['cl_heights']
 
         if len(distances) < 5:
             raise ValueError('Height profile must have at least 5 steps.')
@@ -509,7 +533,7 @@ cdef class _PathProp(object):
         hsize = distances.size
         mid_idx = hsize // 2
 
-        if hprof_dists is None:
+        if hprof_data is None:
             self._pp.lon_mid = lons[mid_idx]
             self._pp.lat_mid = lats[mid_idx]
         else:
@@ -540,6 +564,7 @@ cdef class _PathProp(object):
             distances,
             heights,
             zheights,
+            clheights,
             )
 
 
@@ -616,6 +641,7 @@ cdef void _process_path(
         double[::1] distances_view,
         double[::1] heights_view,
         double[::1] zheights_view,
+        double[::1] clheights_view,
         # double bearing,
         # double back_bearing,
         # double distance,
@@ -669,6 +695,29 @@ cdef void _process_path(
     pp.a_e_50 = 6371. * 157. / (157. - pp.delta_N)
     pp.a_e_b0 = 6371. * 3.
 
+    if pp.version == 18:
+        (
+            pp.path_type_50, pp.d_bp_50, pp.h_bp_50, pp.h_eff_50,
+            pp.nu_bull_50, pp.nu_bull_idx_50,
+            pp.S_tim_50, pp.hS_tim_50, pp.S_rim_50, pp.S_tr_50
+            ) = _diffraction_helper_v18(
+            pp.a_e_50, pp.distance,
+            distances_view, heights_view, clheights_view,
+            pp.h_ts, pp.h_rs,
+            pp.wavelen,
+            )
+
+        (
+            pp.path_type_b0, pp.d_bp_b0, pp.h_bp_b0, pp.h_eff_b0,
+            pp.nu_bull_b0, pp.nu_bull_idx_b0,
+            pp.S_tim_b0, pp.hS_tim_b0, pp.S_rim_b0, pp.S_tr_b0
+            ) = _diffraction_helper_v18(
+            pp.a_e_b0, pp.distance,
+            distances_view, heights_view, clheights_view,
+            pp.h_ts, pp.h_rs,
+            pp.wavelen,
+            )
+
     if pp.version == 16:
         (
             pp.path_type_50, pp.d_bp_50, pp.h_bp_50, pp.h_eff_50,
@@ -693,6 +742,7 @@ cdef void _process_path(
             )
 
         # similarly, we have to repeat the game with heights set to zero
+    if pp.version == 16 or pp.version == 18:
 
         (
             pp.path_type_zh_50, pp.d_bp_zh_50, pp.h_bp_zh_50, pp.h_eff_zh_50,
@@ -744,7 +794,7 @@ cdef void _process_path(
 
     if pp.version == 14:
         diff_edge_idx = pp.i_m50
-    elif pp.version == 16:
+    elif pp.version == 16 or pp.version == 18:
         diff_edge_idx = pp.nu_bull_idx_50
 
     (
@@ -851,6 +901,125 @@ cdef (double, double) _effective_antenna_heights(
         h_srd = h_srp
 
     return (h_std, h_srd)
+
+
+cdef (
+    int, double, double, double, double, int, double, double, double, double
+    ) _diffraction_helper_v18(
+        double a_p,
+        double distance,
+        double[::1] d_v,
+        double[::1] h_v,
+        double[::1] c_v,  # clutter heights
+        double h_ts, double h_rs,
+        double wavelen,
+        ) noexcept nogil:
+
+    cdef:
+        int i, dsize
+        double d = distance, lam = wavelen, C_e500 = 500. / a_p
+        int path_type
+
+        # heights with clutter ("g[i]" in P.452-18)
+        double slope_i, slope_j, S_tim = -1.e31, S_tr, S_rim = -1.e31
+        # heights without clutter ("h[i]" in P.452-18)
+        double hslope_i, hS_tim = -1.e31
+
+        int nu_bull_idx
+        double d_bp, nu_bull = -1.e31, nu_i
+        double h_bp, h_eff, h_eff_i
+        double x, y  # temporary vars
+
+    dsize = d_v.shape[0]
+
+    for i in range(1, dsize - 1):
+
+        hslope_i = (
+            h_v[i] + C_e500 * d_v[i] * (d - d_v[i]) - h_ts
+            ) / d_v[i]
+        if (d_v[i] - d_v[0] > 0.05) and (d_v[dsize - 1] - d_v[i] > 0.05):
+            slope_i = (
+                h_v[i] + c_v[i] + C_e500 * d_v[i] * (d - d_v[i]) - h_ts
+                ) / d_v[i]
+        else:
+            slope_i = hslope_i
+
+
+        if slope_i > S_tim:
+            S_tim = slope_i
+
+        if hslope_i > hS_tim:
+            hS_tim = hslope_i
+
+    S_tr = (h_rs - h_ts) / d
+
+    if S_tim < S_tr:
+        path_type = 0
+    else:
+        path_type = 1
+
+    if path_type == 1:
+        # transhorizon
+        # find Bullington point, etc.
+        for i in range(1, dsize - 1):
+
+            if (d_v[i] - d_v[0] > 0.05) and (d_v[dsize - 1] - d_v[i] > 0.05):
+                slope_j = (
+                    h_v[i] + c_v[i] + C_e500 * d_v[i] * (d - d_v[i]) - h_rs
+                    ) / (d - d_v[i])
+            else:
+                slope_j = (
+                    h_v[i] + C_e500 * d_v[i] * (d - d_v[i]) - h_rs
+                    ) / (d - d_v[i])
+
+            if slope_j > S_rim:
+                S_rim = slope_j
+
+        d_bp = x = (h_rs - h_ts + S_rim * d) / (S_tim + S_rim)
+        y = a_p + h_ts / 1000 + d_bp * (S_tim / 1000 - d / 2 / a_p)
+        h_bp = 1000 * (sqrt(x ** 2 + y ** 2) - a_p)
+
+        h_eff = (
+            h_ts + S_tim * d_bp -
+            (
+                h_ts * (d - d_bp) + h_rs * d_bp
+                ) / d
+            )
+
+        nu_bull = h_eff * sqrt(
+            0.002 * d / lam / d_bp / (d - d_bp)
+            )  # == nu_b in Eq. 20
+        nu_bull_idx = -1  # dummy value
+
+    else:
+        # LOS
+
+        # find Bullington point, etc.
+
+        S_rim = NAN
+
+        # diffraction parameter
+        for i in range(1, dsize - 1):
+            h_eff_i = (
+                h_v[i] +
+                C_e500 * d_v[i] * (d - d_v[i]) -
+                (h_ts * (d - d_v[i]) + h_rs * d_v[i]) / d
+                )
+            nu_i = h_eff_i * sqrt(
+                0.002 * d / lam / d_v[i] / (d - d_v[i])
+                )
+            if nu_i > nu_bull:
+                nu_bull = nu_i
+                nu_bull_idx = i
+                h_eff = h_eff_i
+
+        d_bp = x = d_v[nu_bull_idx]
+        y = a_p + h_ts / 1000 + d_bp * (S_tr / 1000 - d / 2 / a_p)
+        h_bp = 1000 * (sqrt(x ** 2 + y ** 2) - a_p)
+
+    return (
+        path_type, d_bp, h_bp, h_eff, nu_bull, nu_bull_idx, S_tim, hS_tim, S_rim, S_tr
+        )
 
 
 cdef (
@@ -1762,7 +1931,7 @@ cdef (double, double, double, double, double) _diffraction_loss_complete(
         double L_bfsg, E_sp, E_sbeta, L_min_b0p
         double F_i
 
-    if pp.version == 16:
+    if pp.version == 16 or pp.version == 18:
         L_d_50 = _delta_bullington_loss(pp, 0)
     elif pp.version == 14:
         L_d_50 = _diffraction_deygout_helper(
@@ -1780,7 +1949,7 @@ cdef (double, double, double, double, double) _diffraction_loss_complete(
 
     else:
 
-        if pp.version == 16:
+        if pp.version == 16 or pp.version == 18:
             L_d_beta = _delta_bullington_loss(pp, 1)
         elif pp.version == 14:
             L_d_beta = _diffraction_deygout_helper(
@@ -1868,6 +2037,7 @@ cdef (double, double, double, double, double, double, double) _path_attenuation_
         double L_min_bap, L_bam, L_b, L_b_corr
 
         double A_ht = 0., A_hr = 0.
+        double S_tim_tmp, S_tr_tmp
 
     if pp.zone_t != CLUTTER.UNKNOWN:
         A_ht = _clutter_correction(
@@ -1879,14 +2049,37 @@ cdef (double, double, double, double, double, double, double) _path_attenuation_
             )
 
     # not sure, if the 50% S_tim and S_tr values are to be used here...
-    if pp.version == 16:
+    if pp.version == 18:
+
+        if pp.time_percent > pp.beta0:
+            S_tim_tmp = pp.hS_tim_50
+            S_tr_tmp = pp.S_tr_50
+        else:
+            S_tim_tmp = pp.hS_tim_b0
+            S_tr_tmp = pp.S_tr_b0
+
         F_j = 1 - 0.5 * (1. + tanh(
-            3. * _XI * (pp.S_tim_50 - pp.S_tr_50) / _THETA
+            3. * _XI * (S_tim_tmp - S_tr_tmp) / _THETA
             ))
+
+    elif pp.version == 16:
+
+        if pp.time_percent > pp.beta0:
+            S_tim_tmp = pp.S_tim_50
+            S_tr_tmp = pp.S_tr_50
+        else:
+            S_tim_tmp = pp.S_tim_b0
+            S_tr_tmp = pp.S_tr_b0
+
+        F_j = 1 - 0.5 * (1. + tanh(
+            3. * _XI * (S_tim_tmp - S_tr_tmp) / _THETA
+            ))
+
     elif pp.version == 14:
         F_j = 1 - 0.5 * (1. + tanh(
             3. * _XI * (pp.theta - _THETA) / _THETA
             ))
+
     F_k = 1 - 0.5 * (1. + tanh(
         3. * _KAPPA * (pp.distance - _D_SW) / _D_SW
         ))
@@ -2101,6 +2294,7 @@ def height_map_data_cython(
         d_ct=None, d_cr=None,
         omega=None,
         int do_lonlat_profs=0,
+        clutter_height_func=None,
         ):
 
     '''
@@ -2141,6 +2335,15 @@ def height_map_data_cython(
     do_lonlat_profs : int, optional
         If True, also add `lons_profs` and `lats_profs` to output dict.
         (See below for further information.)
+    clutter_height_func : function, optional
+        If provided, the function is called with location data (lon and lat
+        of each pixel) in order to store effective clutter heights into
+        `hprof_data` for further use (it's also possible to add that
+        manually later). Must have the following signature
+
+            clutter_height_func(double lons_deg, double lats_deg) --> double
+
+        and support numpy broadcasting for lons and lats.
 
     Returns
     -------
@@ -2245,6 +2448,16 @@ def height_map_data_cython(
           Zero-valued array of the same length as `height_profs` for
           convenience.
 
+        - "cl_height_profs" : `~numpy.ndarray` 2D (float, (me, mh))
+
+          Clutter heights array of the same dimension as `height_profs`.
+          Only stored if `clutter_height_func` was provided as an argument.
+          This is required to perform P.452-18 calculations (where clutter
+          heights are added to the terrain heights).
+
+          This array can also be added manually before calling
+          `atten_map_fast`.
+
         - "lons_profs" : `~numpy.ndarray` 2D (float, (me, mh))
 
           Longitude (profiles) to each of the pixels on the map edge,
@@ -2289,7 +2502,7 @@ def height_map_data_cython(
         np.float64_t[:, ::1] _dist_map
         np.float64_t[:, ::1] _bearing_map, _backbearing_map
 
-    print('using hprof_step = {:.1f} m'.format(hprof_step))
+    # print('using hprof_step = {:.1f} m'.format(hprof_step))
 
     cosdelta = 1. / cos(DEG2RAD * lat_t) if do_cos_delta else 1.
 
@@ -2307,10 +2520,10 @@ def height_map_data_cython(
     lon_t_rad, lat_t_rad = DEG2RAD * lon_t, DEG2RAD * lat_t
     xcoords_rad = np.radians(xcoords)
     ycoords_rad = np.radians(ycoords)
-    print(
-        xcoords[0], xcoords[len(xcoords) - 1],
-        ycoords[0], ycoords[len(ycoords) - 1]
-        )
+    # print(
+    #     xcoords[0], xcoords[len(xcoords) - 1],
+    #     ycoords[0], ycoords[len(ycoords) - 1]
+    #     )
 
     # find max distance (will be one of the edges)
     max_distance = max([
@@ -2343,7 +2556,7 @@ def height_map_data_cython(
             (xcoords_rad.size - 1, xcoords_rad.size - 2, ycoords_rad.size - 1)
             ]
         ]) / 2  # rad
-    print('min pos angle resolution (at corner coords)', min_pa_res)
+    # print('min pos angle resolution (at corner coords)', min_pa_res)
 
 
     # path_idx_map stores the index of the edge-path that is closest
@@ -2394,7 +2607,7 @@ def height_map_data_cython(
         0, max_distance + hprof_step, hprof_step
         )
 
-    print('get geoid positions and bearings')
+    # print('get geoid positions and bearings')
     lons_rad, lats_rad, back_bearings_rad = cygeodesics.direct_cython(
         lon_t_rad, lat_t_rad,
         start_bearings[:, np.newaxis],
@@ -2406,7 +2619,7 @@ def height_map_data_cython(
     # print(xcoords, ycoords)
     # print(lons.min(), lons.max(), lats.min(), lats.max())
 
-    print('srtm query')
+    # print('srtm query')
     # hgt_res may not be set correctly yet, if no call to srtm was made before
     # let's do a simple query to make sure, it is set
     srtm._srtm_height_data(lon_t, lat_t)
@@ -2442,7 +2655,7 @@ def height_map_data_cython(
 
     refx, refy = _xcoords[0], _ycoords[0]
 
-    print('nogil loops')
+    # print('nogil loops')
 
     with nogil:
         for bidx in range(_start_bearings.shape[0]):
@@ -2558,6 +2771,9 @@ def height_map_data_cython(
     hprof_data['height_profs'] = height_profs
     hprof_data['zheight_prof'] = zheight_prof
 
+    if clutter_height_func is not None:
+        hprof_data['cl_height_profs'] = clutter_height_func(lons, lats)
+
     if do_lonlat_profs:
         hprof_data['lons_profs'] = lons
         hprof_data['lats_profs'] = lats
@@ -2598,7 +2814,9 @@ def atten_map_fast_cython(
         Polarization (default: 0)
         Allowed values are: 0 - horizontal, 1 - vertical
     version : int, optional
-        ITU-R Rec. P.452 version. Allowed values are: 14, 16
+        ITU-R Rec. P.452 version. Allowed values are: 14, 16, 18
+        If version 18 is used, `hprof_data` must have clutter heights
+        (`cl_height_profs`)
     base_water_density : double, optional
         Set base water level density (default: 7.5 g / m^3)
         See Rec. ITU-R P.452, Eq. (9a)
@@ -2647,7 +2865,7 @@ def atten_map_fast_cython(
     # clutter zone type is possible for each of Tx and Rx
 
     assert time_percent <= 50.
-    assert version == 14 or version == 16
+    assert version == 14 or version == 16 or version == 18
 
     cdef:
         # must set gains to zero, because gain is direction dependent
@@ -2698,10 +2916,14 @@ def atten_map_fast_cython(
 
         double[::1] dist_prof_v = _cf(hprof_data['dist_prof'])
         double[:, ::1] height_profs_v = _cf(hprof_data['height_profs'])
+        double[:, ::1] cl_height_profs_v
         double[::1] zheight_prof_v = _cf(hprof_data['zheight_prof'])
 
     xlen = len(xcoords)
     ylen = len(ycoords)
+
+    if version == 18:
+        cl_height_profs_v = _cf(hprof_data['cl_height_profs'])
 
     with nogil, parallel():
 
@@ -2770,15 +2992,23 @@ def atten_map_fast_cython(
                 # heights_v = height_profs_v[eidx, 0:didx + 1]
                 # zheights_v = zheight_prof_v[0:didx + 1]
 
-                _process_path(
-                    pp,
-                    # dists_v,
-                    # heights_v,
-                    # zheights_v,
-                    dist_prof_v[0:didx + 1],
-                    height_profs_v[eidx, 0:didx + 1],
-                    zheight_prof_v[0:didx + 1],
-                    )
+                if pp.version == 18:
+                    _process_path(
+                        pp,
+                        dist_prof_v[0:didx + 1],
+                        height_profs_v[eidx, 0:didx + 1],
+                        zheight_prof_v[0:didx + 1],
+                        cl_height_profs_v[eidx, 0:didx + 1],
+                        )
+                else:
+                    _process_path(
+                        pp,
+                        dist_prof_v[0:didx + 1],
+                        height_profs_v[eidx, 0:didx + 1],
+                        zheight_prof_v[0:didx + 1],
+                        zheight_prof_v[0:didx + 1],  # dummy
+                        )
+
 
                 (
                     L_b0p, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
@@ -2836,7 +3066,9 @@ def atten_path_fast_cython(
         Polarization (default: 0)
         Allowed values are: 0 - horizontal, 1 - vertical
     version : int, optional
-        ITU-R Rec. P.452 version. Allowed values are: 14, 16
+        ITU-R Rec. P.452 version. Allowed values are: 14, 16, 18
+        If version 18 is used, `hprof_data` must have clutter heights
+        (`cl_heights`)
     base_water_density : double, optional
         Set base water level density (default: 7.5 g / m^3)
         See Rec. ITU-R P.452, Eq. (9a)
@@ -2884,7 +3116,7 @@ def atten_path_fast_cython(
     # clutter zone type is possible for each of Tx and Rx
 
     assert time_percent <= 50.
-    assert version == 14 or version == 16
+    assert version == 14 or version == 16 or version == 18
 
     cdef:
         # must set gains to zero, because gain is direction dependent
@@ -2899,6 +3131,7 @@ def atten_path_fast_cython(
 
         double[::1] distances_v = _cf(hprof_data['distances'])
         double[::1] heights_v = _cf(hprof_data['heights'])
+        double[::1] cl_heights_v
         double[::1] zheights_v = np.zeros_like(_cf(hprof_data['heights']))
         double[::1] omega_v = _cf(hprof_data['omega'])
         double[::1] d_tm_v = _cf(hprof_data['d_tm'])
@@ -2915,6 +3148,9 @@ def atten_path_fast_cython(
 
     float_res = np.zeros((10, max_path_length), dtype=np.float64)
     int_res = np.zeros((1, max_path_length), dtype=np.int32)
+
+    if version == 18:
+        cl_heights_v = _cf(hprof_data['cl_heights'])
 
     cdef:
         double[:, :] float_res_v = float_res
@@ -2980,12 +3216,22 @@ def atten_path_fast_cython(
 
             pp.distance = distances_v[i]
 
-            _process_path(
-                pp,
-                distances_v[0:i + 1],
-                heights_v[0:i + 1],
-                zheights_v[0:i + 1],
-                )
+            if pp.version == 18:
+                _process_path(
+                    pp,
+                    distances_v[0:i + 1],
+                    heights_v[0:i + 1],
+                    zheights_v[0:i + 1],
+                    cl_heights_v[0:i + 1],
+                    )
+            else:
+                _process_path(
+                    pp,
+                    distances_v[0:i + 1],
+                    heights_v[0:i + 1],
+                    zheights_v[0:i + 1],
+                    zheights_v[0:i + 1],  # dummy
+                    )
 
             (
                 L_b0p, L_bd, L_bs, L_ba, L_b, L_b_corr, L_dummy
@@ -3028,9 +3274,11 @@ def losses_complete_cython(
         # override if you don't want builtin method:
         delta_N=None, N0=None,
         # override if you don't want builtin method:
-        hprof_dists=None,
-        hprof_heights=None,
-        hprof_bearing=None, hprof_backbearing=None,
+        # hprof_dists=None,
+        # hprof_heights=None,
+        # hprof_bearing=None, hprof_backbearing=None,
+        hprof_data=None,
+        clutter_height_func=None,
         generic_heights=False,
         double base_water_density=7.5,  # g/m^3
         ):
@@ -3050,8 +3298,8 @@ def losses_complete_cython(
 
         # other
 
-        np.ndarray[double] lons, lats, distances, heights, zheights
-        double[::1] distances_v, heights_v, zheights_v
+        np.ndarray[double] lons, lats, distances, heights, zheights, clheights
+        double[::1] distances_v, heights_v, zheights_v, clheights_v
         double distance, bearing, back_bearing
         double lon_mid, lat_mid
         double _delta_N, _N0
@@ -3074,7 +3322,12 @@ def losses_complete_cython(
         int i, size
 
     assert np.all(time_percent <= 50.)
-    assert np.all((version == 14) | (version == 16))
+    assert np.all((version == 14) | (version == 16) | (version == 18))
+    if np.any(version == 18) and hprof_data is None:
+        assert clutter_height_func is not None, (
+            'for version 18, a "clutter_height_func" must be provided, '
+            'alternatively, "hprof_data" can be used with "cl_heights"'
+        )
 
     assert np.all((zone_t >= -1) & (zone_t <= 11))
     assert np.all((zone_r >= -1) & (zone_r <= 11))
@@ -3083,15 +3336,20 @@ def losses_complete_cython(
         'delta_N and N0 must both be None or both be provided'
         )
 
-    assert (
-        (hprof_dists is None) == (hprof_heights is None) ==
-        (hprof_bearing is None) == (hprof_backbearing is None)
-        ), (
-            'hprof_dists, hprof_heights, bearing, and back_bearing '
-            'must all be None or all be provided'
-            )
+    if hprof_data is not None:
+        assert 'dists' in hprof_data, (
+            '"hprof_data" needs to include a "dists" array')
+        assert 'heights' in hprof_data, (
+            '"hprof_data" needs to include a "heights" array')
+        assert 'bearing' in hprof_data, (
+            '"hprof_data" needs to include a "bearing" array')
+        assert 'backbearing' in hprof_data, (
+            '"hprof_data" needs to include a "backbearing" array')
+        if np.any(version == 18):
+            assert 'cl_heights' in hprof_data, (
+                '"hprof_data" needs to include a "cl_heights" array')
 
-    if hprof_dists is None:
+    if hprof_data is None:
         (
             lons, lats, distance, distances, heights,
             bearing, back_bearing, _,
@@ -3101,13 +3359,19 @@ def losses_complete_cython(
                 hprof_step,
                 generic_heights=generic_heights,
                 )
+        if np.any(version == 18) and not generic_heights:
+            clheights = clutter_height_func(lons, lats)
+        else:
+            clheights = np.zeros_like(heights)
     else:
-        distances = hprof_dists.astype(np.float64, order='C', copy=False)
-        heights = hprof_heights.astype(np.float64, order='C', copy=False)
+        distances = hprof_data['dists'].astype(np.float64, order='C', copy=False)
+        heights = hprof_data['heights'].astype(np.float64, order='C', copy=False)
         hsize = distances.size
         distance = distances[hsize - 1]
-        bearing = hprof_bearing
-        back_bearing = hprof_backbearing
+        bearing = hprof_data['bearing']
+        back_bearing = hprof_data['backbearing']
+        if 'cl_heights' in hprof_data:
+            clheights = hprof_data['cl_heights']
 
     if len(distances) < 5:
         raise ValueError('Height profile must have at least 5 steps.')
@@ -3116,12 +3380,13 @@ def losses_complete_cython(
 
     distances_v = distances
     heights_v = heights
+    clheights_v = clheights
     zheights_v = zheights
 
     hsize = distances.size
     mid_idx = hsize // 2
 
-    if hprof_dists is None:
+    if hprof_data is None:
         lon_mid = lons[mid_idx]
         lat_mid = lats[mid_idx]
     else:
@@ -3292,6 +3557,7 @@ def losses_complete_cython(
                         distances_v,
                         heights_v,
                         zheights_v,
+                        clheights_v,
                         )
 
                 pp.temperature = _temp[i]

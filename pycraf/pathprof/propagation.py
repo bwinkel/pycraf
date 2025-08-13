@@ -36,7 +36,7 @@ __all__ = [
 # This is a wrapper class to expose the ppstruct members as attributes
 # (unfortunately, one cannot do dynamical attributes on cdef-classes)
 class PathProp(cyprop._PathProp):
-    '''
+    """
     Container class that holds all path profile properties.
 
     Parameters
@@ -78,7 +78,8 @@ class PathProp(cyprop._PathProp):
         Polarization (default: 0)
         Allowed values are: 0 - horizontal, 1 - vertical
     version : int, optional
-        ITU-R Rec. P.452 version. Allowed values are: 14, 16
+        ITU-R Rec. P.452 version. Allowed values are: 14, 16, 18
+        (With version 18, user has to provide clutter heights for the path)
     delta_N : `~astropy.units.Quantity`, optional
         Average radio-refractive index lapse-rate through the lowest 1 km of
         the atmosphere [N-units/km = 1/km]
@@ -86,22 +87,37 @@ class PathProp(cyprop._PathProp):
     N_0 : `~astropy.units.Quantity`, optional
         Sea-level surface refractivity [N-units = dimless]
         (default: query `~pycraf.pathprof.deltaN_N0_from_map`)
-    hprof_dists : `~astropy.units.Quantity`, optional
-        Distance vector associated with the height profile `hprof_heights`.
-        (default: query `~pycraf.pathprof.srtm_height_profile`)
-    hprof_heights : `~astropy.units.Quantity`, optional
-        Terrain heights profile for the distances in `hprof_dists`.
-        (default: query `~pycraf.pathprof.srtm_height_profile`)
-    hprof_bearing : `~astropy.units.Quantity`, optional
-        Start bearing of the height profile path.
-        (default: query `~pycraf.pathprof.srtm_height_profile`)
-    hprof_backbearing : `~astropy.units.Quantity`, optional
-        Back-bearing of the height profile path.
-        (default: query `~pycraf.pathprof.srtm_height_profile`)
+    hprof_data : dict, optional
+        This dictionary can be used to provide path profile data manually,
+        which can be more convenient (and in some cases faster) than
+        letting `PathProp` querying those data during instantiation
+        (with `~pycraf.pathprof.srtm_height_profile`). If provided, the
+        `hprof_data` takes precedence over other means to query profile data.
+        The dictionary must have the following entries:
+        - `dists` : `~numpy.array`
+            Distance vector associated with the height profile. [km]
+        - `heights` : `~numpy.array`
+            Terrain heights profile for the distances in `dists`. [m]
+        - `cl_heights` : `~numpy.array`, optional
+            Effective clutter heights associated with `heights` array. [m]
+            This is only required, if version 18 of P.452 is desired.
+        - `bearing` : double
+            Start bearing of the height profile path. [deg]
+        - `backbearing` : double
+            Back-bearing of the height profile path. [deg]
+    clutter_height_func : function, optional
+        If provided, the function is called with location data (lon and lat
+        of each pixel) in order to store effective clutter heights into
+        `hprof_data` for further use (it's also possible to add that
+        manually later). Must have the following signature
+
+            clutter_height_func(double lons_deg, double lats_deg) --> double
+
+        and support numpy broadcasting for lons and lats.
     generic_heights : bool
         If `generic_heights` is set to True, heights will be set to zero.
         This can be useful for generic (aka flat-Earth) computations.
-        The option is only meaningful, if the hprof_xxx parameters are set
+        The option is only meaningful, if `hprof_data` is set
         to `None` (which means automatic querying of the profiles).
         (Default: False)
     base_water_density : `~astropy.units.Quantity`, optional
@@ -117,7 +133,10 @@ class PathProp(cyprop._PathProp):
     -----
     - The diffraction-loss algorithm was changed between ITU-R P.452
       version 14 and 15. The former used a Deygout method, the new one
-      is based on a Bullington calculation with correction terms.
+      is based on a Bullington calculation with correction terms. Since
+      version 18, clutter heights are added to the terrain heights. The
+      user has to provide such data in the form of a function that
+      returns the requested heights for longitudes and latitudes.
 
     - Set `d_ct` and `d_cr` to zero for a terminal on ship or on a sea
       platform; only relevant if less than 5 km.
@@ -153,7 +172,7 @@ class PathProp(cyprop._PathProp):
       additional features such as automatic downloading of missing
       tiles or applying different interpolation methods (e.g., splines).
       For details see :ref:`working_with_srtm`.
-    '''
+    """
 
     @utils.ranged_quantity_input(
         freq=(0.1, 100, apu.GHz),
@@ -174,10 +193,10 @@ class PathProp(cyprop._PathProp):
         d_cr=(None, None, apu.m),
         delta_N=(None, None, cnv.dimless / apu.km),
         N0=(None, None, cnv.dimless),
-        hprof_dists=(None, None, apu.km),
-        hprof_heights=(None, None, apu.m),
-        hprof_bearing=(None, None, apu.deg),
-        hprof_backbearing=(None, None, apu.deg),
+        # hprof_dists=(None, None, apu.km),
+        # hprof_heights=(None, None, apu.m),
+        # hprof_bearing=(None, None, apu.deg),
+        # hprof_backbearing=(None, None, apu.deg),
         base_water_density=(0.5, 100, apu.g / apu.m ** 3),
         strip_input_units=True, allow_none=True, output_unit=None
         )
@@ -200,8 +219,10 @@ class PathProp(cyprop._PathProp):
             # override if you don't want builtin method:
             delta_N=None, N0=None,
             # override if you don't want builtin method:
-            hprof_dists=None, hprof_heights=None,
-            hprof_bearing=None, hprof_backbearing=None,
+            # hprof_dists=None, hprof_heights=None,
+            # hprof_bearing=None, hprof_backbearing=None,
+            hprof_data=None,
+            clutter_height_func=None,
             generic_heights=False,
             base_water_density=7.5 * apu.g / apu.m ** 3
             ):
@@ -222,10 +243,12 @@ class PathProp(cyprop._PathProp):
             polarization=polarization,
             version=version,
             delta_N=delta_N, N0=N0,
-            hprof_dists=hprof_dists,
-            hprof_heights=hprof_heights,
-            hprof_bearing=hprof_bearing,
-            hprof_backbearing=hprof_backbearing,
+            # hprof_dists=hprof_dists,
+            # hprof_heights=hprof_heights,
+            # hprof_bearing=hprof_bearing,
+            # hprof_backbearing=hprof_backbearing,
+            hprof_data=hprof_data,
+            clutter_height_func=clutter_height_func,
             generic_heights=generic_heights,
             base_water_density=base_water_density,
             )
@@ -235,6 +258,8 @@ class PathProp(cyprop._PathProp):
             self.__params += cyprop.PARAMETERS_V14
         elif self._pp['version'] == 16:
             self.__params += cyprop.PARAMETERS_V16
+        elif self._pp['version'] == 18:
+            self.__params += cyprop.PARAMETERS_V18
 
         # no need to set property, as readonly and immutable
         # can just copy to __dict__
@@ -503,10 +528,11 @@ def height_map_data(
         d_ct=None, d_cr=None,
         omega_percent=0 * apu.percent,
         do_lonlat_profs=False,
+        clutter_height_func=None,
         cache_path=None, clobber=False,
         ):
 
-    '''
+    """
     Calculate height profiles and auxillary maps needed for
     `~pycraf.pathprof.atten_map_fast`.
 
@@ -565,6 +591,15 @@ def height_map_data(
     do_lonlat_profs : bool, optional
         If True, also add `lons_profs` and `lats_profs` to output dict.
         (See below for further information. Default: False)
+    clutter_height_func : function, optional
+        If provided, the function is called with location data (lon and lat
+        of each pixel) in order to store effective clutter heights into
+        `hprof_data` for further use (it's also possible to add that
+        manually later). Must have the following signature
+
+            clutter_height_func(double lons_deg, double lats_deg) --> double
+
+        and support numpy broadcasting for lons and lats.
     cache_path : str, optional
         If set, the `joblib package
         <https://joblib.readthedocs.io/en/latest/>`_ is used to cache
@@ -675,6 +710,16 @@ def height_map_data(
           Zero-valued array of the same length as `height_profs` for
           convenience.
 
+        - "cl_height_profs" : `~numpy.ndarray` 2D (float, (me, mh))
+
+          Clutter heights array of the same dimension as `height_profs`.
+          Only stored if `clutter_height_func` was provided as an argument.
+          This is required to perform P.452-18 calculations (where clutter
+          heights are added to the terrain heights).
+
+          This array can also be added manually before calling
+          `atten_map_fast`.
+
         - "lons_profs" : `~numpy.ndarray` 2D (float, (me, mh))
 
           Longitude (profiles) to each of the pixels on the map edge,
@@ -699,7 +744,7 @@ def height_map_data(
       additional features such as automatic downloading of missing
       tiles or applying different interpolation methods (e.g., splines).
       For details see :ref:`working_with_srtm`.
-    '''
+    """
 
     args = lon_t, lat_t, map_size_lon, map_size_lat
     kwargs = dict(
@@ -710,6 +755,7 @@ def height_map_data(
         d_ct=d_ct, d_cr=d_cr,
         omega=omega_percent,
         do_lonlat_profs=do_lonlat_profs,
+        clutter_height_func=clutter_height_func,
         )
 
     joblib_available = True
@@ -774,7 +820,7 @@ def atten_map_fast(
         version=16,
         base_water_density=7.5 * apu.g / apu.m ** 3,
         ):
-    '''
+    """
     Calculate attenuation maps using a fast method.
 
     Parameters
@@ -797,7 +843,9 @@ def atten_map_fast(
         Polarization (default: 0)
         Allowed values are: 0 - horizontal, 1 - vertical
     version : int, optional
-        ITU-R Rec. P.452 version. Allowed values are: 14, 16
+        ITU-R Rec. P.452 version. Allowed values are: 14, 16, 18
+        If version 18 is used, `hprof_data` must have clutter heights
+        (`cl_height_profs`)
     base_water_density : `~astropy.units.Quantity`, optional
         For atmospheric attenuation, the water vapor content plays a role.
         In Rec. ITU-R P.452, Eq. (9a), the water content is variable (depending on the fraction of the path over the water). However, the base level is set to :math:`7.5~\\mathrm{g}/\\mathrm{m}^3`. For extraordinarily dry places, which are often used for radio astronomy, this value can be too high.
@@ -842,7 +890,7 @@ def atten_map_fast(
       is based on a Bullington calculation with correction terms.
     - In future versions, more entries may be added to the results
       dictionary.
-    '''
+    """
 
     float_res, int_res = cyprop.atten_map_fast_cython(
         freq,
@@ -884,9 +932,10 @@ def height_path_data(
         lon_r, lat_r,
         step,
         zone_t=cyprop.CLUTTER.UNKNOWN, zone_r=cyprop.CLUTTER.UNKNOWN,
+        clutter_height_func=None,
         ):
 
-    '''
+    """
     Calculate height profile auxillary data needed for
     `~pycraf.pathprof.atten_path_fast`.
 
@@ -908,6 +957,15 @@ def height_path_data(
     zone_t, zone_r : CLUTTER enum, optional
         Clutter type for transmitter/receiver terminal.
         (default: CLUTTER.UNKNOWN)
+    clutter_height_func : function, optional
+        If provided, the function is called with location data (lon and lat
+        of each pixel) in order to store effective clutter heights into
+        `hprof_data` for further use (it's also possible to add that
+        manually later). Must have the following signature
+
+            clutter_height_func(double lons_deg, double lats_deg) --> double
+
+        and support numpy broadcasting for lons and lats.
 
     Returns
     -------
@@ -941,6 +999,16 @@ def height_path_data(
 
           Height profile.
 
+
+        - "cl_heights" : `~numpy.ndarray` 2D (float, (me, mh))
+
+          Clutter heights array of the same dimension as `heights`.
+          Only stored if `clutter_height_func` was provided as an argument.
+          This is required to perform P.452-18 calculations (where clutter
+          heights are added to the terrain heights).
+
+          This array can also be added manually before calling
+          `atten_path_fast`.
         - "bearing" : float
 
           Start bearing of path.
@@ -986,7 +1054,7 @@ def height_path_data(
     different clutter types (in the array). You can modify the returned
     arrays in `hprof_data`, of course, before feeding into
     `~pycraf.pathprof.atten_path_fast`.
-    '''
+    """
 
     (
         lons, lats, distance, distances, heights,
@@ -1033,6 +1101,10 @@ def height_path_data(
     hprof_data['delta_N'] = delta_N
     hprof_data['N0'] = N0
     hprof_data['beta0'] = beta0
+
+    if clutter_height_func is not None:
+        hprof_data['cl_heights'] = clutter_height_func(lons, lats)
+
 
     return hprof_data
 
@@ -1188,6 +1260,9 @@ def height_path_data_generic(
     hprof_data['delta_N'] = delta_N
     hprof_data['N0'] = N0
     hprof_data['beta0'] = beta0
+
+    # make sure that version 18 is working
+    hprof_data['cl_heights'] = np.zeros_like(heights)
 
     return hprof_data
 
@@ -1383,10 +1458,10 @@ def atten_path_fast(
     d_cr=(None, None, apu.m),
     delta_N=(None, None, cnv.dimless / apu.km),
     N0=(None, None, cnv.dimless),
-    hprof_dists=(None, None, apu.km),
-    hprof_heights=(None, None, apu.m),
-    hprof_bearing=(None, None, apu.deg),
-    hprof_backbearing=(None, None, apu.deg),
+    # hprof_dists=(None, None, apu.km),
+    # hprof_heights=(None, None, apu.m),
+    # hprof_bearing=(None, None, apu.deg),
+    # hprof_backbearing=(None, None, apu.deg),
     base_water_density=(0.5, 100, apu.g / apu.m ** 3),
     strip_input_units=True, allow_none=True, output_unit=None
     )
@@ -1409,12 +1484,14 @@ def losses_complete(
         # override if you don't want builtin method:
         delta_N=None, N0=None,
         # override if you don't want builtin method:
-        hprof_dists=None, hprof_heights=None,
-        hprof_bearing=None, hprof_backbearing=None,
+        # hprof_dists=None, hprof_heights=None,
+        # hprof_bearing=None, hprof_backbearing=None,
+        hprof_data=None,
+        clutter_height_func=None,
         generic_heights=False,
         base_water_density=7.5 * apu.g / apu.m ** 3,
         ):
-    '''
+    """
     Calculate propagation losses for a fixed path using a parallelized method.
 
     The difference to the usual `~pycraf.pathprof.PathProp` +
@@ -1475,18 +1552,33 @@ def losses_complete(
     N_0 : `~astropy.units.Quantity`, scalar, optional
         Sea-level surface refractivity [N-units = dimless]
         (default: query `~pycraf.pathprof.deltaN_N0_from_map`)
-    hprof_dists : `~astropy.units.Quantity`, optional
-        Distance vector associated with the height profile `hprof_heights`.
-        (default: query `~pycraf.pathprof.srtm_height_profile`)
-    hprof_heights : `~astropy.units.Quantity`, optional
-        Terrain heights profile for the distances in `hprof_dists`.
-        (default: query `~pycraf.pathprof.srtm_height_profile`)
-    hprof_bearing : `~astropy.units.Quantity`, optional
-        Start bearing of the height profile path.
-        (default: query `~pycraf.pathprof.srtm_height_profile`)
-    hprof_backbearing : `~astropy.units.Quantity`, optional
-        Back-bearing of the height profile path.
-        (default: query `~pycraf.pathprof.srtm_height_profile`)
+    hprof_data : dict, optional
+        This dictionary can be used to provide path profile data manually,
+        which can be more convenient (and in some cases faster) than
+        letting `PathProp` querying those data during instantiation
+        (with `~pycraf.pathprof.srtm_height_profile`). If provided, the
+        `hprof_data` takes precedence over other means to query profile data.
+        The dictionary must have the following entries:
+        - `dists` : `~numpy.array`
+            Distance vector associated with the height profile. [km]
+        - `heights` : `~numpy.array`
+            Terrain heights profile for the distances in `dists`. [m]
+        - `cl_heights` : `~numpy.array`, optional
+            Effective clutter heights associated with `heights` array. [m]
+            This is only required, if version 18 of P.452 is desired.
+        - `bearing` : double
+            Start bearing of the height profile path. [deg]
+        - `backbearing` : double
+            Back-bearing of the height profile path. [deg]
+    clutter_height_func : function, optional
+        If provided, the function is called with location data (lon and lat
+        of each pixel) in order to store effective clutter heights into
+        `hprof_data` for further use (it's also possible to add that
+        manually later). Must have the following signature
+
+            clutter_height_func(double lons_deg, double lats_deg) --> double
+
+        and support numpy broadcasting for lons and lats.
     generic_heights : bool
         If `generic_heights` is set to True, heights will be set to zero.
         This can be useful for generic (aka flat-Earth) computations.
@@ -1586,7 +1678,7 @@ def losses_complete(
     - In future versions, more entries may be added to the results
       dictionary.
 
-    '''
+    """
 
     res = cyprop.losses_complete_cython(
         freq,
@@ -1608,10 +1700,12 @@ def losses_complete(
         polarization=polarization,
         version=version,
         delta_N=delta_N, N0=N0,
-        hprof_dists=hprof_dists,
-        hprof_heights=hprof_heights,
-        hprof_bearing=hprof_bearing,
-        hprof_backbearing=hprof_backbearing,
+        # hprof_dists=hprof_dists,
+        # hprof_heights=hprof_heights,
+        # hprof_bearing=hprof_bearing,
+        # hprof_backbearing=hprof_backbearing,
+        hprof_data=hprof_data,
+        clutter_height_func=clutter_height_func,
         generic_heights=generic_heights,
         base_water_density=base_water_density,
         )

@@ -45,11 +45,24 @@ MAP_KEYS = [
     ]
 
 
+
+def dummy_clutter_heights(lons, lats, do_zero=False):
+    with NumpyRNGContext(seed=0):
+        rnd_idxs = np.random.randint(4, size=lons.size)
+    return np.array([0., 10., 15., 20.])[rnd_idxs].reshape(lons.shape)
+
+
+def dummy_clutter_zheights(lons, lats):
+    return np.zeros(lons.shape)
+
 @pytest.mark.remote_data
 @pytest.mark.usefixtures('srtm_handler')
 class TestPropagation:
 
     def setup_method(self):
+
+        def _dummy_clutter_heights(lons, lats):
+            return np.zeros(lons.shape)
 
         # TODO: add further test cases
 
@@ -70,7 +83,7 @@ class TestPropagation:
         self.cases_h_tgs = [50., 200.]
         self.cases_h_rgs = [50., 200.]
         self.cases_time_percents = [2, 10, 50]
-        self.cases_versions = [14, 16]
+        self.cases_versions = [14, 16, 18]
         self.cases_G_ts = [0, 20]
         self.cases_G_rs = [0, 30]
 
@@ -92,7 +105,7 @@ class TestPropagation:
                 [0.1, 1., 10.],
                 [(50, 50), (200, 200)],
                 [2, 10, 50],
-                [14, 16],
+                [14, 16, 18],
                 [(0, 0)],
             ))
 
@@ -119,6 +132,7 @@ class TestPropagation:
                 self.hprof_step,
                 time_percent * apu.percent,
                 version=version,
+                clutter_height_func=dummy_clutter_heights,
                 )
 
             self.pprops.append(pprop)
@@ -204,6 +218,7 @@ class TestPropagation:
                 self.hprof_step,
                 time_percent * apu.percent,
                 version=version,
+                clutter_height_func=dummy_clutter_heights,
                 )
 
             with ZipFile(self.cases_zip_name) as myzip:
@@ -360,6 +375,7 @@ class TestPropagation:
             G_r=G_rs * cnv.dBi,
             omega=self.omega,
             version=versions,
+            clutter_height_func=dummy_clutter_heights,
             )
 
         for tup in np.nditer([
@@ -392,6 +408,7 @@ class TestPropagation:
             6.5 * apu.deg, 50.5 * apu.deg,
             900 * apu.arcsec, 900 * apu.arcsec,
             map_resolution=30 * apu.arcsec,
+            clutter_height_func=dummy_clutter_heights,
             )
 
         # also testing reading/writing from hdf5
@@ -486,6 +503,7 @@ class TestPropagation:
             # "with ZipFile" below; results will be in the tmp-dir
             # and can be added manually to the zipfile
             # tfile = str(zipdir.join(fname))
+            # tfile = str(zipdir / fname)
             # print('writing temporary files to', zipdir)
             # with h5py.File(tfile, 'w') as h5f:
             #     for k, v in results.items():
@@ -518,6 +536,7 @@ class TestPropagation:
             6.5 * apu.deg, 50.5 * apu.deg,
             900 * apu.arcsec, 900 * apu.arcsec,
             map_resolution=30 * apu.arcsec,
+            clutter_height_func=dummy_clutter_heights,
             )
 
         # also testing reading/writing from hdf5
@@ -609,7 +628,7 @@ class TestPropagation:
             # Also, if you want to create all at once, comment-out the
             # "with ZipFile" below; results will be in the tmp-dir
             # and can be added manually to the zipfile
-            # tfile = str(zipdir.join(fname))
+            # tfile = str(zipdir / fname)
             # np.savez(tfile, **results)
 
             with ZipFile(self.fastmap_zip_name) as myzip:
@@ -667,6 +686,11 @@ class TestPropagation:
             ) = pathprof.srtm_height_profile(
                 lon_t, lat_t, lon_r, lat_r, hprof_step
                 )
+        distances = distances.to_value(apu.km)
+        heights = heights.to_value(apu.m)
+        bearing = bearing.to_value(apu.deg)
+        back_bearings = back_bearings.to_value(apu.deg)
+        cl_heights = dummy_clutter_heights(lons, lats)
 
         atten_path = np.zeros((6, len(distances)), dtype=np.float64)
         eps_pt_path = np.zeros((len(distances)), dtype=np.float64)
@@ -674,8 +698,16 @@ class TestPropagation:
         d_lt_path = np.zeros((len(distances)), dtype=np.float64)
         d_lr_path = np.zeros((len(distances)), dtype=np.float64)
 
+
         for idx in range(6, len(distances)):
 
+            hprof_data = {
+                "dists": distances[: idx + 1],
+                "heights": heights[: idx + 1],
+                "bearing": bearing,
+                "backbearing": back_bearings[idx],
+                "cl_heights": cl_heights[: idx + 1],
+                }
             pprop = pathprof.PathProp(
                 freq,
                 temperature, pressure,
@@ -685,10 +717,12 @@ class TestPropagation:
                 hprof_step,
                 time_percent,
                 zone_t=zone_t, zone_r=zone_r,
-                hprof_dists=distances[:idx + 1],
-                hprof_heights=heights[:idx + 1],
-                hprof_bearing=bearing,
-                hprof_backbearing=back_bearings[idx],
+                # hprof_dists=distances[:idx + 1],
+                # hprof_heights=heights[:idx + 1],
+                # hprof_bearing=bearing,
+                # hprof_backbearing=back_bearings[idx],
+                hprof_data=hprof_data,
+                # clutter_height_func=dummy_clutter_heights,
                 # delta_N=hprof_data['delta_N'][idx] * cnv.dimless / apu.km,
                 # N0=hprof_data['N0'][idx] * cnv.dimless,
                 )
@@ -735,7 +769,7 @@ class TestPropagationGeneric:
         self.cases_h_tgs = [50., 200.]
         self.cases_h_rgs = [50., 200.]
         self.cases_time_percents = [2, 10, 50]
-        self.cases_versions = [14, 16]
+        self.cases_versions = [14, 16, 18]
         self.cases_G_ts = [0, 20]
         self.cases_G_rs = [0, 30]
 
@@ -757,7 +791,7 @@ class TestPropagationGeneric:
                 [0.1, 1., 10.],
                 [(50, 50), (200, 200)],
                 [2, 10, 50],
-                [14, 16],
+                [14, 16, 18],
                 [(0, 0)],
             ))
 
@@ -782,6 +816,7 @@ class TestPropagationGeneric:
                 self.hprof_step,
                 time_percent * apu.percent,
                 version=version,
+                clutter_height_func=dummy_clutter_zheights,
                 generic_heights=True,
                 )
 
@@ -868,6 +903,7 @@ class TestPropagationGeneric:
                 self.hprof_step,
                 time_percent * apu.percent,
                 version=version,
+                clutter_height_func=dummy_clutter_zheights,
                 generic_heights=True,
                 )
 
@@ -1069,6 +1105,11 @@ class TestPropagationGeneric:
                 lon_t, lat_mid, lon_r, lat_mid, hprof_step,
                 generic_heights=True,
                 )
+        distances = distances.to_value(apu.km)
+        heights = heights.to_value(apu.m)
+        bearing = bearing.to_value(apu.deg)
+        back_bearings = back_bearings.to_value(apu.deg)
+        cl_heights = np.zeros_like(heights)
 
         zone_t, zone_r = pathprof.CLUTTER.URBAN, pathprof.CLUTTER.SUBURBAN
 
@@ -1091,6 +1132,14 @@ class TestPropagationGeneric:
 
         for idx in range(6, len(distances)):
 
+            this_hprof_data = {
+                "dists": distances[: idx + 1],
+                "heights": heights[: idx + 1],
+                "bearing": bearing,
+                "backbearing": back_bearings[idx],
+                "cl_heights": cl_heights[: idx + 1],
+                }
+
             pprop = pathprof.PathProp(
                 freq,
                 temperature, pressure,
@@ -1100,10 +1149,12 @@ class TestPropagationGeneric:
                 hprof_step,
                 time_percent,
                 zone_t=zone_t, zone_r=zone_r,
-                hprof_dists=distances[:idx + 1],
-                hprof_heights=0 * heights[:idx + 1],
-                hprof_bearing=bearing,
-                hprof_backbearing=back_bearings[idx],
+                # hprof_dists=distances[:idx + 1],
+                # hprof_heights=0 * heights[:idx + 1],
+                # hprof_bearing=bearing,
+                # hprof_backbearing=back_bearings[idx],
+                hprof_data=this_hprof_data,
+                # clutter_height_func=dummy_clutter_zheights,
                 delta_N=hprof_data['delta_N'][idx] * cnv.dimless / apu.km,
                 N0=hprof_data['N0'][idx] * cnv.dimless,
                 )
