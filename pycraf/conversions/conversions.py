@@ -25,6 +25,7 @@ UNITS = [
     'dB_mW_MHz', 'dBm_MHz',  # this is often used in engineering (dBm/MHz)
     'dB_1_m',
     'dB_uV_m',
+    'dB_uA_m',
     ]
 
 __all__ = [
