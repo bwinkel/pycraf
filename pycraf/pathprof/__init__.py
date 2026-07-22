@@ -17,6 +17,7 @@ from .propagation import *
 from .bel import *
 from .imt import *
 from .srtm import *
+from .low_freq_propagation import *
 
 _clutter_table = '''
 +-------+-------------------+------+------+

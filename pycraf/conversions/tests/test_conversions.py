@@ -74,6 +74,11 @@ class TestConversions:
                 _val
                 )
 
+            assert_quantity_allclose(
+                (_db * cnv.dB_uA_m).to((apu.uA / apu.m) ** 2).value,
+                _val
+                )
+
     def test_constants(self):
 
         assert_quantity_allclose(
