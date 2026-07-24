@@ -145,10 +145,87 @@ We refer to `~scipy.interpolate.RectBivariateSpline` description for
 further information.
 
 
+Copernicus DEM (GLO-90 / GLO-30)
+================================
+
+Besides the SRTM *.hgt* tiles, `~pycraf.pathprof` can use the `Copernicus DEM
+<https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model>`_
+(GLO-90 and GLO-30) as a terrain source. Compared to SRTM this has a number of
+advantages:
+
+- It is hosted as `Cloud-Optimised GeoTIFFs
+  <https://registry.opendata.aws/copernicus-dem/>`_ on the AWS Open Data
+  buckets (no authentication needed) and thus - unlike the retired SRTM
+  download servers - provides a reliably working automatic-download path.
+- It is global (pole-to-pole), whereas SRTM only covers 60 deg N to 56 deg S.
+- It is void-free over water (edited/flattened water bodies), avoiding the
+  data-gap artifacts that SRTM tiles can contain.
+
+To use it, select one of the two Copernicus servers::
+
+    >>> from pycraf.pathprof import SrtmConf
+    >>> SrtmConf.set(  # doctest: +SKIP
+    ...     srtm_dir='/path/to/copernicus',
+    ...     download='missing',
+    ...     server='copernicus_glo90',  # or 'copernicus_glo30'
+    ...     )
+
+The public API (`~pycraf.pathprof.srtm_height_data`,
+`~pycraf.pathprof.srtm_height_profile`, and the P.452 `~pycraf.pathprof.PathProp`
+engine) is unchanged; internally the reader accounts for the Copernicus tiles'
+pixel-centre (area) registration and their latitude-dependent longitude spacing
+(the tiles are not square above :math:`|\mathrm{lat}| = 50` deg).
+
+.. note::
+
+  Reading the GeoTIFF tiles requires the optional `rasterio
+  <https://rasterio.readthedocs.io/>`_ package. If a Copernicus server is
+  selected without it, a clear error is raised.
+
+.. note::
+
+  The Copernicus DEM uses the EGM2008 geoid as its vertical datum (SRTM uses
+  EGM96). The difference is at the metre level and is not converted, since
+  propagation profiles only depend on *relative* terrain heights.
+
+**Attribution.** When using or redistributing Copernicus DEM data, the
+following statement must be reproduced:
+
+  Produced using Copernicus WorldDEM-90 © DLR e.V. 2010-2014 and
+  © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by
+  the European Union and ESA; all rights reserved.
+
+
+Handling missing tiles and voids
+================================
+
+Two `~pycraf.pathprof.SrtmConf` options control what happens when data is
+missing or invalid. By default, if a tile that *should* exist on the chosen
+server is not found on disk (and is not downloaded), its terrain is set to
+zero and a `~pycraf.pathprof.TileNotAvailableOnDiskWarning` is emitted. To turn
+this into a hard error instead (so that computations never silently run over
+zero terrain), use::
+
+    >>> SrtmConf.set(on_missing='raise')  # doctest: +IGNORE_OUTPUT
+
+Void pixels (SRTM data gaps; the Copernicus DEM is void-free) are, by default,
+replaced with zero. They can instead be kept as ``NaN`` (to be detected
+downstream) or filled from the nearest valid pixels::
+
+    >>> SrtmConf.set(void_fill='interp')  # doctest: +IGNORE_OUTPUT
+
+.. note::
+
+  Restore the historic defaults with
+  ``SrtmConf.set(on_missing='zeros', void_fill='zero')``.
+
+
 Download links
 ==============
 - `NASA v2.1 <https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/>`__
 - `NASA v1.0 <https://dds.cr.usgs.gov/srtm/version1/>`__
 - `viewfinderpanoramas.org <http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm>`__
+- `Copernicus GLO-90 (AWS Open Data) <https://copernicus-dem-90m.s3.amazonaws.com/readme.html>`__
+- `Copernicus GLO-30 (AWS Open Data) <https://copernicus-dem-30m.s3.amazonaws.com/readme.html>`__
 
 

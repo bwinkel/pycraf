@@ -1,3 +1,34 @@
+unreleased
+=======================
+
+New Features
+------------
+pycraf.pathprof
+^^^^^^^^^^^^^^
+- Add support for the Copernicus DEM (GLO-90 and GLO-30) as a terrain
+  source, via two new `pycraf.pathprof.SrtmConf` servers,
+  ``'copernicus_glo90'`` and ``'copernicus_glo30'``. These are hosted as
+  Cloud-Optimised GeoTIFFs on the AWS Open Data buckets (no authentication),
+  are global (pole-to-pole) and void-free over water. The reader handles the
+  pixel-centre registration and latitude-dependent longitude spacing of the
+  Copernicus tiles, so the public API is unchanged. Reading the GeoTIFF tiles
+  needs the optional ``rasterio`` package.
+- Add a `pycraf.pathprof.SrtmConf` option ``on_missing`` (``'zeros'`` or
+  ``'raise'``) to control whether a tile that is missing on disk becomes zero
+  terrain (with a warning, the historic behaviour) or raises a
+  ``TileNotAvailableOnDiskError``.
+- Add a `pycraf.pathprof.SrtmConf` option ``void_fill`` (``'zero'``,
+  ``'nan'`` or ``'interp'``) to control how void pixels are handled.
+
+Bugfixes
+--------
+pycraf.pathprof
+^^^^^^^^^^^^^^
+- Mask the canonical SRTM void sentinel ``-32768`` when reading ``.hgt``
+  tiles. Previously only ``-32767``/``+32767`` were masked, so genuine
+  ``-32768`` voids leaked through and were linearly blended with valid
+  neighbours, producing spurious deep pits in height profiles.
+
 2.1.0 (2025-02-02)
 =======================
 This is a maintenance release. pycraf now uses numpy version 2.0.0 or higher.
