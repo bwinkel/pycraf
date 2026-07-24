@@ -18,6 +18,46 @@ is probably superior to 2.1 (maybe even to V4.1), but not official.
 
 V4.1 and viewfinderpanoramas forbid commercial use (without explicit
 permission).
+
+Copernicus DEM
+--------------
+
+In addition to the SRTM '.hgt' tiles, `pycraf` can use the Copernicus DEM
+(GLO-90 and GLO-30) as a terrain source. These are hosted as Cloud-Optimised
+GeoTIFFs on the AWS Open Data buckets (no authentication required) and, unlike
+the retired SRTM auto-download servers, provide a reliable download path. The
+Copernicus DEM is global (pole-to-pole, whereas SRTM only covers 60N to 56S)
+and is void-free over water. To use it::
+
+    from pycraf.pathprof import SrtmConf
+    SrtmConf.set(
+        srtm_dir='/path/to/copernicus', download='missing',
+        server='copernicus_glo90',
+        )
+
+Reading the GeoTIFF tiles requires the (optional) `rasterio` package.
+
+Model type: the Copernicus DEM is a Digital Surface Model (DSM), i.e. it
+"represents the surface of the Earth including buildings, infrastructure and
+vegetation" (source: Copernicus DEM readme,
+https://copernicus-dem-30m.s3.amazonaws.com/readme.html; see also the
+Copernicus DEM Product Handbook). It is derived from the TanDEM-X radar
+mission (X-band). It is therefore NOT a bare-earth terrain model; canopy and
+building heights are included. This matches SRTM, which is also a radar DSM
+(C-band), so the surface-vs-terrain character is unchanged when switching
+between the two. Note that P.452 additionally models clutter separately (via
+the `zone_t` / `zone_r` options), so assigning clutter over a DSM in built-up
+or forested terminals can double-count vegetation/building height.
+
+Attribution (required when using or redistributing Copernicus DEM data):
+
+    Produced using Copernicus WorldDEM-90 (c) DLR e.V. 2010-2014 and
+    (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by
+    the European Union and ESA; all rights reserved.
+
+Note, the Copernicus DEM uses the EGM2008 geoid as vertical datum (SRTM uses
+EGM96); the difference is at the metre level and is not converted here, as
+propagation profiles only depend on relative terrain heights.
 '''
 
 
@@ -57,6 +97,30 @@ with open(_NASA_JSON_NAME, 'r') as f:
     NASA_TILES = json.load(f)
 
 VIEWPANO_TILES = np.load(_VIEWPANO_NAME)
+
+
+# Copernicus DEM (GLO-90 / GLO-30) on the AWS Open Data buckets.
+# The "code" is the internal arc-second*10/3 identifier that appears in the
+# tile names ('30' -> GLO-90 = 3 arcsec, '10' -> GLO-30 = 1 arcsec); it is
+# *not* the resolution in metres. `hgt_res` is the nominal (equatorial)
+# latitude pixel spacing in metres, used to pick the height-profile sampling.
+COPERNICUS_SERVERS = {
+    'copernicus_glo90': {
+        'base_url': 'https://copernicus-dem-90m.s3.amazonaws.com/',
+        'code': '30',
+        'hgt_res': 90.,
+        },
+    'copernicus_glo30': {
+        'base_url': 'https://copernicus-dem-30m.s3.amazonaws.com/',
+        'code': '10',
+        'hgt_res': 30.,
+        },
+    }
+
+# cache of the authoritative tile inventories (server -> set of tile names),
+# lazily populated from a local copy of the bucket "tileList.txt" or, if
+# downloading is enabled, from the bucket root
+_COPERNICUS_TILE_LISTS = {}
 
 
 class TileNotAvailableOnServerError(Exception):
@@ -109,9 +173,31 @@ class SrtmConf(utils.MultiState):
     The default behavior is to not download anything (`download='never'`).
     There is even an option, to always force download (`download='always'`).
 
-    The default download server will be `server='nasa_v2.1'`. One could
-    also use the (very old) data (`server='nasa_v1.0'`) or inofficial
-    tiles from viewfinderpanorama (`server='viewpano'`).
+    The default download server is `server='viewpano'` (inofficial tiles
+    from viewfinderpanorama). Alternatively, one can use the Copernicus DEM
+    (`server='copernicus_glo90'` or `server='copernicus_glo30'`), which -
+    unlike the retired SRTM servers - offers a reliably working download
+    path (AWS Open Data, no authentication), is global (pole-to-pole) and
+    void-free over water. The Copernicus tiles are Cloud-Optimised GeoTIFFs
+    and require the optional `rasterio` package (a clear error is raised if
+    a Copernicus server is selected without it). See the module
+    documentation for the required attribution statement.
+
+    Two further options control the behaviour when data is missing or
+    invalid. `on_missing` decides what happens if a tile that *should*
+    exist on the chosen server is not found on disk (and cannot be
+    downloaded): `on_missing='zeros'` (default) sets the terrain of that
+    tile to zero and emits a `TileNotAvailableOnDiskWarning` (the historic
+    behaviour), whereas `on_missing='raise'` raises a
+    `TileNotAvailableOnDiskError` instead - useful to avoid silently
+    computing over zero-terrain. `void_fill` controls how void pixels
+    (SRTM data gaps; the Copernicus DEM is void-free) are treated:
+    `void_fill='zero'` (default) replaces voids with zero,
+    `void_fill='nan'` keeps them as `NaN` (so they can be detected
+    downstream), and `void_fill='interp'` fills them from the nearest
+    valid pixels. To change these use::
+
+        SrtmConf.set(on_missing='raise', void_fill='interp')
 
     Of course, one can set several of these options simultaneously::
 
@@ -156,7 +242,7 @@ class SrtmConf(utils.MultiState):
 
     _attributes = (
         'srtm_dir', 'download', 'server', 'interp', 'spline_opts',
-        'tile_size', 'hgt_res'
+        'on_missing', 'void_fill', 'tile_size', 'hgt_res'
         )
 
     srtm_dir = os.environ.get('SRTMDATA', '.')
@@ -164,6 +250,8 @@ class SrtmConf(utils.MultiState):
     server = 'viewpano'
     interp = 'linear'
     spline_opts = (3, 0)
+    on_missing = 'zeros'
+    void_fill = 'zero'
     tile_size = 1201
     hgt_res = 90.  # m; basic SRTM resolution (refers to 3 arcsec resolution)
 
@@ -195,10 +283,28 @@ class SrtmConf(utils.MultiState):
                         'are supported for "download" option.'
                         )
             if k == 'server':
-                if v not in ['viewpano']:
+                if v not in [
+                        'viewpano',
+                        'copernicus_glo90', 'copernicus_glo30',
+                        ]:
                     raise ValueError(
-                        'Only the value "viewpano" is currently '
-                        'supported for "server" option.'
+                        'Only the values "viewpano", "copernicus_glo90", '
+                        'and "copernicus_glo30" are currently supported for '
+                        'the "server" option.'
+                        )
+
+            if k == 'on_missing':
+                if v not in ['zeros', 'raise']:
+                    raise ValueError(
+                        'Only the values "zeros" and "raise" are supported '
+                        'for the "on_missing" option.'
+                        )
+
+            if k == 'void_fill':
+                if v not in ['zero', 'nan', 'interp']:
+                    raise ValueError(
+                        'Only the values "zero", "nan", and "interp" are '
+                        'supported for the "void_fill" option.'
                         )
 
             if k == 'interp':
@@ -244,6 +350,12 @@ class SrtmConf(utils.MultiState):
             # check if srtm_dir changed and clear cache
             if kwargs['srtm_dir'] != cls.srtm_dir:
                 get_tile_interpolator.cache_clear()
+                # the Copernicus tile inventory is per directory
+                _COPERNICUS_TILE_LISTS.clear()
+
+        if 'server' in kwargs and kwargs['server'] != cls.server:
+            # the cached Copernicus inventory is per server
+            _COPERNICUS_TILE_LISTS.clear()
 
         if 'download' in kwargs:
             # check if 'download' strategy was changed and clear cache
@@ -259,22 +371,35 @@ class SrtmConf(utils.MultiState):
             if kwargs['server'] != cls.server:
                 get_tile_interpolator.cache_clear()
 
+        if 'on_missing' in kwargs:
+            # changes whether a missing tile becomes zeros or an error,
+            # i.e. the cached tile data would differ
+            if kwargs['on_missing'] != cls.on_missing:
+                get_tile_interpolator.cache_clear()
+
+        if 'void_fill' in kwargs:
+            # changes how void pixels are filled in the cached interpolator
+            if kwargs['void_fill'] != cls.void_fill:
+                get_tile_interpolator.cache_clear()
+
     @classmethod
     def __repr__(cls):
         return (
             '<SrtmConf dir: {}, download: {}, server: {}, '
-            'interp: {}, spline_opts: {}>'.format(
+            'interp: {}, spline_opts: {}, on_missing: {}, void_fill: {}>'
+            ''.format(
                 cls.srtm_dir, cls.download, cls.server,
-                cls.interp, cls.spline_opts
+                cls.interp, cls.spline_opts, cls.on_missing, cls.void_fill
                 ))
 
     @classmethod
     def __str__(cls):
         return (
             'SrtmConf\n  directory: {}\n  download: {}\n  server: {}\n'
-            '  interp: {}\n  spline_opts: {}'.format(
+            '  interp: {}\n  spline_opts: {}\n  on_missing: {}\n'
+            '  void_fill: {}'.format(
                 cls.srtm_dir, cls.download, cls.server,
-                cls.interp, cls.spline_opts
+                cls.interp, cls.spline_opts, cls.on_missing, cls.void_fill
                 ))
 
 
@@ -289,6 +414,58 @@ def _hgt_filename(ilon, ilat):
         )
 
 
+def _copernicus_tilename(ilon, ilat, server=None):
+    # construct the Copernicus DEM tile (base) name for the tile whose
+    # south-west corner is at the integer degree (ilon, ilat)
+
+    if server is None:
+        server = SrtmConf.server
+    code = COPERNICUS_SERVERS[server]['code']
+
+    return (
+        'Copernicus_DSM_COG_{code}_{ns:1s}{ilat:02d}_00_{ew:1s}{ilon:03d}'
+        '_00_DEM'.format(
+            code=code,
+            ns='N' if ilat >= 0 else 'S', ilat=abs(ilat),
+            ew='E' if ilon >= 0 else 'W', ilon=abs(ilon),
+            )
+        )
+
+
+def _copernicus_tile_set(server=None):
+    # return the authoritative set of tile names for a Copernicus server,
+    # or None if the inventory is not available (and cannot be fetched)
+
+    if server is None:
+        server = SrtmConf.server
+
+    if server in _COPERNICUS_TILE_LISTS:
+        return _COPERNICUS_TILE_LISTS[server]
+
+    srtm_dir = SrtmConf.srtm_dir
+    list_name = os.path.join(srtm_dir, server + '_tileList.txt')
+
+    tiles = None
+    if os.path.exists(list_name):
+        with open(list_name, 'r') as f:
+            tiles = set(line.strip() for line in f if line.strip())
+    elif SrtmConf.download in ['missing', 'always']:
+        # fetch the authoritative list from the bucket root and cache it
+        base_url = COPERNICUS_SERVERS[server]['base_url']
+        tmp_path = download_file(base_url + 'tileList.txt')
+        try:
+            os.makedirs(srtm_dir, exist_ok=True)
+            shutil.copyfile(tmp_path, list_name)
+        except OSError:
+            # srtm_dir not writable - keep the in-memory copy only
+            pass
+        with open(tmp_path, 'r') as f:
+            tiles = set(line.strip() for line in f if line.strip())
+
+    _COPERNICUS_TILE_LISTS[server] = tiles
+    return tiles
+
+
 def _check_availability(ilon, ilat):
     # check availability of a tile on download servers
     # returns continent name (for NASA server) or zip file name (Pano)
@@ -296,7 +473,23 @@ def _check_availability(ilon, ilat):
     server = SrtmConf.server
     tile_name = _hgt_filename(ilon, ilat)
 
-    if server.startswith('nasa_v'):
+    if server.startswith('copernicus'):
+
+        cop_name = _copernicus_tilename(ilon, ilat)
+        tiles = _copernicus_tile_set()
+
+        # if the inventory is unknown (download='never' and no cached list),
+        # we cannot rule the tile out - defer the decision to the disk lookup
+        if tiles is not None and cop_name not in tiles:
+            raise TileNotAvailableOnServerError(
+                'No tile found for ({}d, {}d) in list of available '
+                'tiles.'.format(
+                    ilon, ilat
+                    ))
+
+        return cop_name
+
+    elif server.startswith('nasa_v'):
 
         for continent, tiles in NASA_TILES.items():
             if tile_name in tiles:
@@ -353,6 +546,21 @@ def _download(ilon, ilat):
 
     srtm_dir = SrtmConf.srtm_dir
     server = SrtmConf.server
+
+    if server.startswith('copernicus'):
+
+        # Copernicus tiles are single Cloud-Optimised GeoTIFFs, stored as
+        # "<TileName>/<TileName>.tif" in the bucket; we keep them flat on disk
+        base_url = COPERNICUS_SERVERS[server]['base_url']
+        cop_name = _copernicus_tilename(ilon, ilat)
+        full_url = base_url + cop_name + '/' + cop_name + '.tif'
+        tile_path = os.path.join(srtm_dir, cop_name + '.tif')
+
+        tmp_path = download_file(full_url)
+        os.makedirs(srtm_dir, exist_ok=True)
+        shutil.move(tmp_path, tile_path)
+
+        return
 
     tile_name = _hgt_filename(ilon, ilat)
     tile_path = os.path.join(srtm_dir, tile_name)
@@ -476,47 +684,137 @@ def get_hgt_file(ilon, ilat):
     return hgt_file
 
 
-def get_tile_data(ilon, ilat):
-    # angles in deg
+def get_copernicus_file(ilon, ilat):
+    # locate (and, if requested, download) the Copernicus GeoTIFF tile whose
+    # south-west corner is at the integer degree (ilon, ilat)
+
+    _check_availability(ilon, ilat)
+
+    srtm_dir = SrtmConf.srtm_dir
+    tif_name = _copernicus_tilename(ilon, ilat) + '.tif'
+    tif_file = _get_hgt_diskpath(tif_name)
+
+    download = SrtmConf.download
+    if download == 'always' or (tif_file is None and download == 'missing'):
+
+        _download(ilon, ilat)
+
+    tif_file = _get_hgt_diskpath(tif_name)
+    if tif_file is None:
+        raise TileNotAvailableOnDiskError(
+            'No Copernicus tile found for ({}d, {}d), was looking for {}\n'
+            'in directory: {}'.format(
+                ilon, ilat, tif_name, srtm_dir
+                ))
+
+    return tif_file
+
+
+# metres per degree of latitude (mean, spherical Earth); only used to turn the
+# tile's latitude pixel spacing into an approximate resolution for choosing the
+# height-profile sampling step
+_M_PER_DEG_LAT = 111120.
+
+
+def _read_copernicus_cog(tif_file):
+    # read a Copernicus DEM Cloud-Optimised GeoTIFF and return coordinate and
+    # height arrays in pycraf's tile convention:
+    #   lons  -> shape (nlon, 1), ascending west -> east
+    #   lats  -> shape (1, nlat), ascending south -> north
+    #   tile  -> shape (nlat, nlon), tile[lat_idx, lon_idx], voids set to NaN
+    # Copernicus tiles use pixel-centre (area) registration and their
+    # longitude spacing widens above |lat| 50 deg, so the actual geotransform
+    # is read from the file rather than assumed.
 
     try:
-        hgt_file = get_hgt_file(ilon, ilat)
-        # need to run check after get_hgt_file, because download could happen
-        _check_consistent_tile_sizes(SrtmConf.srtm_dir)
-        tile = np.fromfile(hgt_file, dtype='>i2')
-        tile_size = int(np.sqrt(tile.size) + 0.5)
-        hgt_res = 90. * 1200 / (tile_size - 1)
-        SrtmConf.set(tile_size=tile_size, _do_validate=False)
-        SrtmConf.set(hgt_res=hgt_res, _do_validate=False)
-        tile = tile.reshape((tile_size, tile_size))[::-1]
+        import rasterio
+    except ImportError as e:
+        raise ImportError(
+            'The "rasterio" package is required to read Copernicus DEM '
+            '(GeoTIFF) tiles. Install it (e.g. "pip install rasterio") or '
+            'select a different "server" in pycraf.pathprof.SrtmConf.'
+            ) from e
 
-        bad_mask = (tile == 32767) | (tile == -32767)
-        tile = tile.astype(np.float32)
-        tile[bad_mask] = np.nan
+    with rasterio.open(tif_file) as ds:
+        tile = ds.read(1).astype(np.float32)  # (nlat, nlon), row 0 = north
+        transf = ds.transform
+        nodata = ds.nodata
 
-    except TileNotAvailableOnServerError:
-        # always use very small tile size for zero tiles
-        # (just enough to make spline interpolation work)
-        tile_size = 5
-        tile = np.zeros((tile_size, tile_size), dtype=np.float32)
+    nlat, nlon = tile.shape
+    # pixel-centre coordinates from the affine transform
+    lon0 = transf.c + 0.5 * transf.a  # centre of column 0
+    lat0 = transf.f + 0.5 * transf.e  # centre of row 0 (northern-most)
+    lon_axis = lon0 + np.arange(nlon) * transf.a         # west -> east
+    lat_axis = lat0 + np.arange(nlat) * transf.e         # north -> south
 
-    except TileNotAvailableOnDiskError:
-        # also set to zero, but raise a warning
-        tile_size = 5
-        tile = np.zeros((tile_size, tile_size), dtype=np.float32)
+    # flip rows to go south -> north, matching the '.hgt' convention
+    tile = tile[::-1]
+    lat_axis = lat_axis[::-1]
 
-        tile_name = _hgt_filename(ilon, ilat)
-        srtm_dir = SrtmConf.srtm_dir
-        warnings.warn(
-            '''
-No hgt-file found for ({}d, {}d) - was looking for file {}
+    # NoData handling: Copernicus is void-free over water, but coastal tiles
+    # can carry NaN or negative sentinels; mask conservatively (sea -> 0 m is
+    # applied later via "void_fill", consistent with the SRTM convention)
+    bad_mask = ~np.isfinite(tile) | (tile < -500.)
+    if nodata is not None and np.isfinite(nodata):
+        bad_mask |= (tile == np.float32(nodata))
+    tile[bad_mask] = np.nan
+
+    hgt_res = abs(transf.e) * _M_PER_DEG_LAT
+    SrtmConf.set(tile_size=nlat, _do_validate=False)
+    SrtmConf.set(hgt_res=hgt_res, _do_validate=False)
+
+    lons = lon_axis[:, np.newaxis]
+    lats = lat_axis[np.newaxis, :]
+    return lons, lats, tile
+
+
+def _missing_tile_warning(ilon, ilat, tile_name):
+    # emit the historic "tile not on disk -> zeros" warning
+
+    srtm_dir = SrtmConf.srtm_dir
+    warnings.warn(
+        '''
+No tile found for ({}d, {}d) - was looking for file {}
 in directory: {}
 Will set terrain heights in this area to zero. Note, you can have pycraf
 download missing tiles automatically - just use "pycraf.pathprof.SrtmConf"
-(see its documentation).'''.format(ilon, ilat, tile_name, srtm_dir),
-            category=TileNotAvailableOnDiskWarning,
-            stacklevel=1,
-            )
+(see its documentation). To turn this into an error instead, set
+"SrtmConf.set(on_missing='raise')".'''.format(
+            ilon, ilat, tile_name, srtm_dir),
+        category=TileNotAvailableOnDiskWarning,
+        stacklevel=1,
+        )
+
+
+def _zero_tile(ilon, ilat):
+    # a minimal (5x5) zero tile, just big enough for spline interpolation
+    tile_size = 5
+    tile = np.zeros((tile_size, tile_size), dtype=np.float32)
+    dx = dy = 1. / (tile_size - 1)
+    x, y = np.ogrid[0:tile_size, 0:tile_size]
+    lons, lats = x * dx + ilon, y * dy + ilat
+    return lons, lats, tile
+
+
+def _get_srtm_tile_data(ilon, ilat):
+
+    hgt_file = get_hgt_file(ilon, ilat)
+    # need to run check after get_hgt_file, because download could happen
+    _check_consistent_tile_sizes(SrtmConf.srtm_dir)
+    tile = np.fromfile(hgt_file, dtype='>i2')
+    tile_size = int(np.sqrt(tile.size) + 0.5)
+    hgt_res = 90. * 1200 / (tile_size - 1)
+    SrtmConf.set(tile_size=tile_size, _do_validate=False)
+    SrtmConf.set(hgt_res=hgt_res, _do_validate=False)
+    tile = tile.reshape((tile_size, tile_size))[::-1]
+
+    # void/NoData sentinels: the canonical SRTM void is -32768 (0x8000);
+    # -32767 and +32767 are also seen in some products. (The historic code
+    # masked only -32767/+32767, so genuine -32768 voids leaked through and
+    # were linearly blended with valid neighbours, producing spurious pits.)
+    bad_mask = (tile == -32768) | (tile == -32767) | (tile == 32767)
+    tile = tile.astype(np.float32)
+    tile[bad_mask] = np.nan
 
     dx = dy = 1. / (tile_size - 1)
     x, y = np.ogrid[0:tile_size, 0:tile_size]
@@ -524,19 +822,83 @@ download missing tiles automatically - just use "pycraf.pathprof.SrtmConf"
     return lons, lats, tile
 
 
+def get_tile_data(ilon, ilat):
+    # angles in deg
+
+    server = SrtmConf.server
+
+    try:
+        if server.startswith('copernicus'):
+            tif_file = get_copernicus_file(ilon, ilat)
+            return _read_copernicus_cog(tif_file)
+        else:
+            return _get_srtm_tile_data(ilon, ilat)
+
+    except TileNotAvailableOnServerError:
+        # tile is genuinely absent from the server (ocean, polar cap): use a
+        # zero tile silently, as before
+        return _zero_tile(ilon, ilat)
+
+    except TileNotAvailableOnDiskError:
+        # tile should exist but is not on disk (and wasn't downloaded); either
+        # raise or fall back to zeros (+ warning), depending on "on_missing"
+        if SrtmConf.on_missing == 'raise':
+            raise
+
+        if server.startswith('copernicus'):
+            tile_name = _copernicus_tilename(ilon, ilat) + '.tif'
+        else:
+            tile_name = _hgt_filename(ilon, ilat)
+        _missing_tile_warning(ilon, ilat, tile_name)
+        return _zero_tile(ilon, ilat)
+
+
+def _fill_voids(tile, void_fill):
+    # resolve NaN void pixels in a tile according to the "void_fill" policy;
+    # returns a float array free of NaNs unless void_fill == 'nan'
+
+    if void_fill == 'nan':
+        return tile
+
+    bad_mask = ~np.isfinite(tile)
+    if not bad_mask.any():
+        return tile
+
+    if void_fill == 'interp':
+        if bad_mask.all():
+            return np.nan_to_num(tile)
+        from scipy import ndimage
+        # fill each void with the value of the nearest valid pixel
+        idx = ndimage.distance_transform_edt(
+            bad_mask, return_distances=False, return_indices=True
+            )
+        return tile[tuple(idx)]
+
+    # void_fill == 'zero'
+    return np.nan_to_num(tile)
+
+
 # cannot use SrtmConf inside to query interp and spline_opts, because
-# caching might cause problems
+# caching might cause problems (changing them does not clear this cache).
+# "void_fill" is safe to query here, because the SrtmConf.hook clears this
+# cache whenever "void_fill" (or the tile source) changes.
 @lru_cache(maxsize=36, typed=False)
 def get_tile_interpolator(ilon, ilat, interp, spline_opts):
     # angles in deg
 
     lons, lats, tile = get_tile_data(ilon, ilat)
-    # have to treat NaNs in some way; set to zero for now
-    tile = np.nan_to_num(tile)
+    # resolve voids (NaNs); default replaces them with zero
+    tile = _fill_voids(tile, SrtmConf.void_fill)
 
     if interp in ['nearest', 'linear']:
+        # bounds_error=False + fill_value=None extrapolates for query points
+        # that fall just outside the pixel-centre grid. This is needed for the
+        # Copernicus (area-registered) tiles, whose pixel centres do not reach
+        # the southern/eastern tile edge, and is a no-op for the (node-
+        # registered) SRTM tiles, which always cover the assigned degree cell.
         _tile_interpolator = RegularGridInterpolator(
             (lons[:, 0], lats[0]), tile.T, method=interp,
+            bounds_error=False, fill_value=None,
             )
     elif interp == 'spline':
         kx = ky = spline_opts[0]
